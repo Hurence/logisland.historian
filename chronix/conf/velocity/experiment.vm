@@ -100,20 +100,33 @@
     }
 </style>
 <script src="#{url_for_solr}/admin/file?file=/velocity/d3.v2.min.js" charset="utf-8"></script>
-<script src="#{url_for_solr}/admin/file?file=/velocity/cubism.v1.min.js"></script>
+<script src="#{url_for_solr}/admin/file?file=/velocity/cubism.v1.js"></script>
 <body id="demo">
     <script>
 
-
-//experiment:218 Mon Aug 26 2013 00:00:17 GMT+0200 (CEST) - Sun Sep 01 2013 23:59:18 GMT+0200 (CEST)
+        //experiment:218 Mon Aug 26 2013 00:00:17 GMT+0200 (CEST) - Sun Sep 01 2013 23:59:18 GMT+0200 (CEST)
         var context = cubism
-            .context()
-            //.serverDelay(new Date(2012, 4, 2) - Date.now())
-           // .serverDelay(new Date(2013, 7, 1) - new Date(2013, 10, 1))
-            .step(864e5)
-            .size(1280)
-          
-            .stop();
+                .context()
+                .serverDelay(5 * 1000)
+                .step(5000)
+                .size(1280);
+        // .stop();
+
+        var chronix = context.chronix(
+            {"host": 'http://localhost:8983', "uriPathPrefix": '/solr/chronix/select'}
+        );
+
+        var load_metrics = [
+            chronix
+                .metric({"metricName": "\\\\Load\\\\avg"})
+                .alias("load avg"),
+            chronix
+                .metric({"metricName": "\\\\Swap\\\\cached"})
+                .alias("swap cached"),
+            chronix
+                .metric({"metricName": "\\\\Tasks\\\\running"})
+                .alias("running tasks")
+        ];
 
         d3
             .select("#demo")
@@ -136,31 +149,14 @@
             .attr("class", "rule")
             .call(context.rule());
 
-        /* d3
-            .select("body")
-            .selectAll(".horizon")
-            .data([
-                "AAPL",
-                "BIDU",
-                "SINA",
-                "GOOG",
-                "MSFT",
-                "YHOO",
-                "ADBE"
-            ].map(stockCSV))
-            .enter()
-            .insert("div", ".bottom")
-            .attr("class", "horizon")
-            .call(context.horizon().format(d3.format("+,.2p")));*/
-
         d3
             .select("body")
             .selectAll(".horizon")
-            .data(["\\\\Load\\\\avg", "\\\\Swap\\\\cached", "\\\\Tasks\\\\running"].map(fromChronix))
+            .data(load_metrics)
             .enter()
             .insert("div", ".bottom")
             .attr("class", "horizon")
-            .call(context.horizon().format(d3.format("+,.2p")));
+            .call(context.horizon().height(30).format(d3.format("+,.2p")));
 
         context.on("focus", function (i) {
             d3
@@ -219,7 +215,9 @@
                     function (result) {
 
                         var numFound = result.response.numFound;
-console.log(new Date(result.response.docs[0].start) + " - " +new Date(result.response.docs[0].end));
+                        console.log(
+                            new Date(result.response.docs[0].start) + " - " + new Date(result.response.docs[0].end)
+                        );
                         if (numFound > 0) {
 
                             var data = eval(result.response.docs[0].dataAsJson)

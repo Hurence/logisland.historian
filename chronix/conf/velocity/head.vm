@@ -122,7 +122,7 @@
         src="#{url_for_solr}/admin/file?file=/velocity/jquery.autocomplete.js&contentType=text/javascript"></script>
 
     <script src="#{url_for_solr}/admin/file?file=/velocity/d3.v2.min.js" charset="utf-8"></script>
-    <script src="#{url_for_solr}/admin/file?file=/velocity/cubism.v1.min.js"></script>
+    <script src="#{url_for_solr}/admin/file?file=/velocity/cubism.v1.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -132,7 +132,8 @@
                 .append("p");
             $("\#q")
                 .autocomplete('#{url_for_solr}/terms', {
-                    ## backslash escaped #q as that is a macro defined in VM_global_library.vm extraParams: {
+                    ## backslash escaped #q as that is a macro defined in VM_global_library.vm 
+                    extraParams: {
                         'terms.prefix': function () {
                             console.log($("\#q").val());
                             return $("\#q").val();

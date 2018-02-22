@@ -15,7 +15,7 @@
       <div class="query-boost">
         <span #annTitle("Add fl=dataAsJson to the query")>
           <input type="checkbox" name="fl" value="dataAsJson"
-            #if($request.params.get('fl') == 'dataAsJson')checked="true"#end
+            #if($request.params.get('fl').contains('dataAsJson'))checked="true"#end
           >
             Retrieve data
           </input>

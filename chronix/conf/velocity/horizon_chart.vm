@@ -1,108 +1,62 @@
 
-azeaze
 <script>
 
-    var context = cubism.context()
-    // .serverDelay(new Date(2012, 4, 2) - Date.now()) .serverDelay(new Date(2013, 7, 1) - new
-    // Date(2013, 10, 1))
-        .step(864e5)
-        .size(1280)
-        .stop();
 
-    d3
-        .select("body")
-        .selectAll(".axis")
-        .data(["top", "bottom"])
-        .enter()
-        .append("div")
-        .attr("class", function (d) {
-            return d + " axis";
-        })
-        .each(function (d) {
+    var context = cubism
+        .context()
+        .serverDelay(5 * 1000)
+        .step(5000)
+        .size(1280);
+
+    var chronix = context.chronix(
+        {"host": 'http://localhost:8983', "uriPathPrefix": '/solr/chronix/select'}
+    );
+
+    var load_metrics = [
+            #foreach($doc in $response.results)chronix.metric({"metricName": "$doc.get('name').replace("\", "\\\\")"})
+.alias("$doc.get('name').replace("\", " ")"), #end];
+
+        d3
+            .select("body")
+            .selectAll(".axis")
+            .data(["top", "bottom"])
+            .enter()
+            .append("div")
+            .attr("class", function (d) {
+                return d + " axis";
+            })
+            .each(function (d) {
+                d3
+                    .select(this)
+                    .call(context.axis().ticks(12).orient(d));
+            });
+
+        d3
+            .select("#content")
+            .append("div")
+            .attr("class", "rule")
+            .call(context.rule());
+
+        d3
+            .select("#content")
+            .selectAll(".horizon")
+            .data(load_metrics)
+            .enter()
+            .insert("div", ".bottom")
+            .attr("class", "horizon")
+            .call(context.horizon().format(d3.format("+,.2p")))
+            .call(context.horizon().mode(offset));
+
+        context.on("focus", function (i) {
             d3
-                .select(this)
-                .call(context.axis().ticks(12).orient(d));
+                .selectAll(".value")
+                .style(
+                    "right",
+                    i == null
+                        ? null
+                        : context.size() - i + "px"
+                );
         });
 
-    d3
-        .select("#content")
-        .append("div")
-        .attr("class", "rule")
-        .call(context.rule());
-
-    d3
-        .select("#content")
-        .selectAll(".horizon")
-        .data([
-            #foreach($doc in $response.results)"$doc.get('name').replace("\", "\\\\")",
-            #end
-        ].map(fromChronix))
-        .enter()
-        .insert("div", ".bottom")
-        .attr("class", "horizon")
-        .call(context.horizon().format(d3.format("+,.2p")));
-
-    context.on("focus", function (i) {
-        d3
-            .selectAll(".value")
-            .style(
-                "right",
-                i == null
-                    ? null
-                    : context.size() - i + "px"
-            );
-    });
-
-    // Replace this with context.graphite and graphite.metric!
-    function fromChronix(name) {
-
-        var format = d3
-            .time
-            .format("%d-%b-%y");
-        return context.metric(function (start, stop, step, callback) {
-
-            d3.json(
-                "#{url_for_solr}/select?indent=on&q=name:\"" + name + "\"&wt=json&fl=dataAsJson",
-                function (result) {
-
-                    var numFound = result.response.numFound;
-                    console.log(result);
-                    if (numFound > 0) {
-
-                        var data = eval(result.response.docs[0].dataAsJson)
-
-                        var dates = data[0];
-                        var values = data[1];
-
-                        var rows = [];
-                        for (i = 0; i < dates.length; i++) {
-                            rows.push([
-                                new Date(dates[i]),
-                                values[i]
-                            ]);
-                        }
-
-                        rows = rows
-                            .filter(function (d) {
-                                return d[1];
-                            })
-                            .reverse();
-                        var date = rows[0][0],
-                            compare = rows[400][1],
-                            value = rows[0][1],
-                            finalValues = [value];
-                        rows.forEach(function (d) {
-                            while ((date = d3.time.day.offset(date, 1)) < d[0]) 
-                                finalValues.push(value);
-                            finalValues.push(value = (d[1] - compare) / compare);
-                        });
-                        callback(null, finalValues.slice(-context.size()));
-                    }
-
-                    //response.dataAsJson[0].length
-
-                }
-            );
-        }, name);
-    }
+     
 </script>
