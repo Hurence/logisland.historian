@@ -1,22 +1,28 @@
 #**
- *  Render the main Results List
- *#
+* Render the main Results List *# ## Usually displayed inside ##<div class="results">
 
-## Usually displayed inside <div class="results">
+    ## horizon charts
+    #if($request.params.get('queryOpts') == 'horizon')
+        <div><h2>horizon chart</h2> </div>
 
-#if($response.response.get('grouped'))
+            #parse("horizon_chart.vm")
+    
+    #else
 
-  #foreach($grouping in $response.response.get('grouped'))
-    #parse("hit_grouped.vm")
-  #end
+        #if($response.response.get('grouped'))
 
-#else
+            #foreach($grouping in $response.response.get('grouped'))
+                #parse("hit_grouped.vm")
+            #end
 
-  #foreach($doc in $response.results)
-    #parse("hit.vm")
-    ## Can get an extremely simple view of the doc
-    ## which might be nicer for debugging
-    ##parse("hit_plain.vm")
-  #end
+        #else
 
-#end
+            #foreach($doc in $response.results)
+                #parse("hit.vm")
+                ## Can get an extremely simple view of the doc
+                ## which might be nicer for debugging
+                ##parse("hit_plain.vm")
+            #end
+
+        #end
+    #end

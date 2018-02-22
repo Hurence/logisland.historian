@@ -12,7 +12,7 @@
 <div>Date range: [#field('start'), #field('end')]</div>
 <div>Host: #field('host')</div>
 <div>Group: #field('group')</div>
-<div>dataAsJson: #field('data')</div>
+<div>dataAsJson: #field('dataAsJson')</div>
 <div class="mlt">
   #set($mlt = $mltResults.get($docId))
   #set($mltOn = $params.getBool('mlt'))

@@ -36,14 +36,14 @@
     #end
   </span>
 
-  ## Group By Field
-  #set( $selected = ($queryOpts == "group") )
+  ## Horizon charting
+  #set( $selected = ($queryOpts == "horizon") )
   <span class="tab #if($selected)selected#end">
     #if($selected)
-      Group By
+      Horizon charting
     #else
-      <a href="#url_for_home?#debug#annotate&queryOpts=group&group=true&group.field=manu_exact">
-        Group By</a>
+      <a href="#url_for_home?#debug#annotate&queryOpts=horizon">
+        Horizon charting</a>
     #end
   </span>
 

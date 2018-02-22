@@ -1,8 +1,6 @@
-#**
- *  Overall HTML page layout
- *#
+<!DOCTYPE html>
 
-<html>
+
 <head>
   #parse("head.vm")
 </head>
