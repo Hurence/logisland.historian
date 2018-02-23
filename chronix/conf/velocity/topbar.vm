@@ -1,7 +1,7 @@
 <!-- START TOPBAR -->
 <div class='page-topbar '>
   <div class='logo-area'>
-
+<a href="#url_for_home#if($request.params.get('debugQuery'))?debugQuery=true#end"><img src="#{url_for_solr}/admin/file?file=/velocity/assets/images/logo.png" id="logo"/></a>
   </div>
 
 <div class="pull-left">

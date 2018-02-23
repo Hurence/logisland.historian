@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 
 
-<link rel="stylesheet" type="text/css" href="#{url_for_solr}/admin/file?file=/velocity/main.css&contentType=text/css" />
+
 ## <link rel="stylesheet" href="#{url_for_solr}/admin/file?file=/velocity/jquery.autocomplete.css&contentType=text/css" type="text/css" />
 <link rel="icon" type="image/x-icon" href="#{url_root}/img/favicon.ico" />
 <link rel="shortcut icon" type="image/x-icon" href="#{url_root}/img/favicon.ico" />
@@ -45,4 +45,5 @@
 
 <!-- CORE CSS TEMPLATE - START -->
 <link href="#{url_for_solr}/admin/file?file=/velocity/assets/css/style-logisland-historian.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="#{url_for_solr}/admin/file?file=/velocity/main.css&contentType=text/css" />
 <!-- CORE CSS TEMPLATE - END -->

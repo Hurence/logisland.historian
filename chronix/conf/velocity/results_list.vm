@@ -3,10 +3,9 @@
 
     ## horizon charts
     #if($request.params.get('queryOpts') == 'horizon')
-        <div><h2>horizon chart</h2> </div>
 
             #parse("horizon_chart.vm")
-    
+
     #else
 
         #if($response.response.get('grouped'))

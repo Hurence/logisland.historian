@@ -1,6 +1,7 @@
 /* logisland historian */
 .page-topbar .logo-area {
-  /* background-image: url('#{url_for_solr}/admin/file?file=/velocity/assets/images/logo.png'); */
+  /* background-image: url('/solr/chronix/admin/file?file=/velocity/assets/images/logo.png'); */
+  background-image: none;
   background-repeat: no-repeat;
   width: 150px;
   display: block;
