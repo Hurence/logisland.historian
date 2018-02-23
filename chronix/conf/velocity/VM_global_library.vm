@@ -180,3 +180,7 @@ $math.toDouble($math.add($inval,$gapval))##
 $math.add($inval,$gapval)##
 #end
 #end
+
+
+
+#macro(q_param)$params.get('q')#end

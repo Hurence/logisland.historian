@@ -144,8 +144,29 @@ jQuery(function ($) {
 
     ULTRA_SETTINGS.jsTreeINIT = function () {
 
-        var query = "#{url_for_solr}/select?indent=on&q=*:*&wt=json&facet=on&facet.field=name&fl=name";
-        var hardCodedQuery = "http://localhost:8983/solr/chronix/select?indent=on&q=*:*&wt=json&facet=on&facet.field=name&fl=name";
+        function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+
+                    if (sParameterName[1] == "*:*")
+                        return "*";
+                    else
+                        return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+
+        var hardCodedQuery = "/solr/chronix/select?indent=on&q=name:" + getUrlParameter("q") + "&wt=json&facet=on&facet.field=name&fl=name";
+
+        console.log(hardCodedQuery);
+        //  var hardCodedQuery = "http://localhost:8983/solr/chronix/select?indent=on&q=*:*&wt=json&facet=on&facet.field=name&fl=name";
 
 
         if ($.isFunction($.fn.jstree)) {
