@@ -158,7 +158,7 @@ jQuery(function($) {
                             },
                             'data': {
                                 'url': function(node) {
-                                    return node.id === '#' ? 'data/ajax_demo_roots_jstree-logisland.json' : 'data/ajax_demo_children_jstree.json';
+                                    return node.id === '#' ? '#{url_for_solr}/admin/file?file=/velocity/data/ajax_demo_roots_jstree-logisland.json' : '#{url_for_solr}/admin/file?file=/velocity/data/ajax_demo_children_jstree.json';
                                 },
                                 'data': function(node) {
                                     return {

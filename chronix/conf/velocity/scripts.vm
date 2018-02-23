@@ -98,13 +98,13 @@
             });
 
         d3
-            .select("#content")
+            .select("#graph")
             .append("div")
             .attr("class", "rule")
             .call(context.rule());
 
         d3
-            .select("#content")
+            .select("#graph")
             .selectAll(".horizon")
             .data(load_metrics)
             .enter()

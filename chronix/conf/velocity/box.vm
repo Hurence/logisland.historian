@@ -1,0 +1,177 @@
+  <div class="content-body">
+    <div class="row">
+      <div class="col-md-3 col-sm-4 col-xs-12">
+
+        <div class="input-group ">
+          <span class="input-group-addon">
+            <i class="fa fa-filter"></i>
+          </span>
+          <input type="text" value="" id="treedata_q" placeholder="Filter" class="form-control" />
+        </div>
+
+
+        <div id="jstree_treedata" class="treedata" style="min-height:200px;"></div>
+
+      </div>
+      <div class="col-md-9 col-sm-8 col-xs-12">
+        <div class="">
+
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a href="#tab-1" data-toggle="tab">
+                <i class="fa fa-area-chart"></i> Horizon chart
+              </a>
+            </li>
+            <li>
+              <a href="#tab-2" data-toggle="tab">
+                <i class="fa fa-search"></i> search result
+              </a>
+            </li>
+            <li>
+              <a href="#tab-3" data-toggle="tab">
+                <i class="fa fa-line-chart"></i> scatterplot
+              </a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div class="tab-pane fade in active" id="tab-1">
+              <div id="graph" /></div>
+            </div>
+            <div class="tab-pane fade" id="tab-2">
+
+              search result
+            </div>
+            <div class="tab-pane fade" id="tab-3">
+              scatterplot
+
+            </div>
+
+          </div>
+
+          <div class="">
+            <section class="box ">
+              <div class="content-body">
+                <div class="row">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+
+
+                    <table id="example-1" class="table table-striped dt-responsive display" cellspacing="0" width="100%">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Start data</th>
+                          <th>End date</th>
+                        </tr>
+                      </thead>
+
+                      <tfoot>
+                        <tr>
+                          <th>Name</th>
+                          <th>Start data</th>
+                          <th>End date</th>
+                        </tr>
+                      </tfoot>
+
+                      <tbody>
+                        <tr>
+                          <td>Tiger Nixon</td>
+                          <td>2011/04/25</td>
+                          <td>2011/04/26</td>
+                        </tr>
+                        <tr>
+                          <td>Garrett Winters</td>
+                          <td>2011/04/25</td>
+                          <td>2011/04/26</td>
+                        </tr>
+                        <tr>
+                          <td>Ashton Cox</td>
+                          <td>2011/04/25</td>
+                          <td>2011/04/26</td>
+                        </tr>
+                        <tr>
+                          <td>Cedric Kelly</td>
+                          <td>2011/04/25</td>
+                          <td>2011/04/26</td>
+                        </tr>
+                        <tr>
+                          <td>Airi Satou</td>
+                          <td>2011/04/25</td>
+                          <td>2011/04/26</td>
+                        </tr>
+                        <tr>
+                          <td>Brielle Williamson</td>
+                          <td>2011/04/25</td>
+                          <td>2011/04/26</td>
+                          <tr>
+                            <td>Herrod Chandler</td>
+                            <td>2011/04/25</td>
+                            <td>2011/04/26</td>
+                          </tr>
+                          <tr>
+                            <td>Rhona Davidson</td>
+                            <td>2011/04/25</td>
+                            <td>2011/04/26</td>
+                          </tr>
+
+                          <tr>
+                            <td>Tiger Nixon</td>
+                            <td>2011/04/25</td>
+                            <td>2011/04/26</td>
+                          </tr>
+                          <tr>
+                            <td>Garrett Winters</td>
+                            <td>2011/04/25</td>
+                            <td>2011/04/26</td>
+                          </tr>
+                          <tr>
+                            <td>Ashton Cox</td>
+                            <td>2011/04/25</td>
+                            <td>2011/04/26</td>
+                          </tr>
+                          <tr>
+                            <td>Cedric Kelly</td>
+                            <td>2011/04/25</td>
+                            <td>2011/04/26</td>
+                          </tr>
+                          <tr>
+                            <td>Airi Satou</td>
+                            <td>2011/04/25</td>
+                            <td>2011/04/26</td>
+                          </tr>
+                          <tr>
+                            <td>Brielle Williamson</td>
+                            <td>2011/04/25</td>
+                            <td>2011/04/26</td>
+                            <tr>
+                              <td>Herrod Chandler</td>
+                              <td>2011/04/25</td>
+                              <td>2011/04/26</td>
+                            </tr>
+                            <tr>
+                              <td>Rhona Davidson</td>
+                              <td>2011/04/25</td>
+                              <td>2011/04/26</td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+
+
+
+
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+
+
+
+          </div>
+
+
+        </div>
+      </div>

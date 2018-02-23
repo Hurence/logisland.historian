@@ -4153,7 +4153,7 @@ a.cke_button_off:hover, .cke_hc a.cke_button_off:focus, .cke_hc a.cke_button_off
     background-color: transparent;
     min-height: 92px;
     width: auto;
-    background-image: url("../images/login-logo.png");
+    background-image: url('#{url_for_solr}/admin/file?file=/velocity/assets/images/login-logo.png');
     background-position: center top;
     background-repeat: no-repeat;
     text-indent: -9999px;
