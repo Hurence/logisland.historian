@@ -1,0 +1,27 @@
+
+<div class="login_page">
+
+
+  <div class="login-wrapper">
+    <div id="login" class="login loginpage col-lg-offset-4 col-lg-3 col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-0 col-xs-12">
+      <h1><a href="#" title="Login Page" tabindex="-1">logisland historian</a></h1>
+
+      <form name="loginform" id="loginform" action="index.html" method="post" class="">
+        <p>
+          <label for="user_login">Username<br />
+            <input type="text" name="log" id="user_login" class="input" value="demo" size="20" /></label>
+        </p>
+        <p>
+          <label for="user_pass">Password<br />
+              <input type="password" name="pwd" id="user_pass" class="input" value="demo" size="20" /></label>
+        </p>
+        <p class="submit">
+          <a class="btn btn-info btn-block" href="index.html" role="button">Sign In</a>
+        </p>
+      </form>
+
+    </div>
+  </div>
+
+
+</div>
