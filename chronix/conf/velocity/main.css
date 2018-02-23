@@ -50,7 +50,9 @@ header {
 .group {
     margin-bottom: 1em;
 }
-
+#graph{
+color: #000000;
+}
 .axis {
     font: 10px sans-serif;
     /* position: fixed; */
@@ -60,7 +62,9 @@ header {
 .axis svg {
 width: 100% !important;
 }
-
+.horizon canvas {
+width: 100% !important;
+}
 .axis text {
     -webkit-transition: fill-opacity 250ms linear;
 }
