@@ -122,6 +122,8 @@
                         : context.size() - i + "px"
                 );
         });
-
-
+        $(document).ready(function() {
+          $('.top.axis').prependTo("#graph");
+          $('.bottom.axis').appendTo("#graph");
+        });
 </script>

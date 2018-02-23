@@ -32,9 +32,9 @@
   ## </div>
 
   ## Render Results, actual matching docs
-  <div class="results">
-    #parse("results_list.vm")
-  </div>
+  ## <div class="results">
+  ##   #parse("results_list.vm")
+  ## </div>
 
   ## <div class="pagination">
   ##   #parse("pagination_bottom.vm")
