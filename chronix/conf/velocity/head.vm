@@ -6,14 +6,14 @@
 
 
 ## <link rel="stylesheet" href="#{url_for_solr}/admin/file?file=/velocity/jquery.autocomplete.css&contentType=text/css" type="text/css" />
-<link rel="icon" type="image/x-icon" href="#{url_root}/img/favicon.ico" />
-<link rel="shortcut icon" type="image/x-icon" href="#{url_root}/img/favicon.ico" />
+<link rel="icon" type="image/x-icon" href="#{url_for_solr}/admin/file?file=/velocity/assets/images/favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="#{url_for_solr}/admin/file?file=/velocity/assets/images/favicon.ico" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta content="" name="description" />
 <meta content="" name="author" />
 
-<link rel="shortcut icon" href="#{url_for_solr}/admin/file?file=/velocity/assets/images/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="#{url_for_solr}/admin/assets/images/favicon.ico" type="image/x-icon" />
 <!-- Favicon -->
 <link rel="apple-touch-icon-precomposed" href="#{url_for_solr}/admin/file?file=/velocity/assets/images/favicon.ico">
 <!-- For iPhone -->
@@ -26,24 +26,24 @@
 
 
 <!-- CORE CSS FRAMEWORK - START -->
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/fonts/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/css/animate.min.css" rel="stylesheet" type="text/css" />
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" type="text/css" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/pace/pace-theme-flash.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/bootstrap/css/bootstrap.min.css&contentType=text/css" rel="stylesheet" type="text/css" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/bootstrap/css/bootstrap-theme.min.css&contentType=text/css" rel="stylesheet" type="text/css" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/fonts/font-awesome/css/font-awesome.css&contentType=text/css" rel="stylesheet" type="text/css" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/css/animate.min.css&contentType=text/css" rel="stylesheet" type="text/css" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/perfect-scrollbar/perfect-scrollbar.css&contentType=text/css" rel="stylesheet" type="text/css" />
 <!-- CORE CSS FRAMEWORK - END -->
 
 <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - START -->
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/jstree/themes/default/style.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/css/jquery.dataTables.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/TableTools/css/dataTables.tableTools.min.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/Responsive/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/jstree/themes/default/style.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/css/jquery.dataTables.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/TableTools/css/dataTables.tableTools.min.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/Responsive/bootstrap/3/dataTables.bootstrap.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
 <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END -->
 
 
 <!-- CORE CSS TEMPLATE - START -->
-<link href="#{url_for_solr}/admin/file?file=/velocity/assets/css/style-logisland-historian.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="#{url_for_solr}/admin/file?file=/velocity/main.css&contentType=text/css" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/css/style-logisland-historian.css&contentType=text/css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="#{url_for_solr}/admin/file?file=/velocity/main.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen"/>
 <!-- CORE CSS TEMPLATE - END -->
