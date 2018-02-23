@@ -44,8 +44,7 @@
             .enter()
             .insert("div", ".bottom")
             .attr("class", "horizon")
-            .call(context.horizon().format(d3.format("+,.2p")))
-            .call(context.horizon().mode(offset));
+            .call(context.horizon().format(d3.format("+,.2p")));
 
         context.on("focus", function (i) {
             d3

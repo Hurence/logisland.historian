@@ -1373,7 +1373,7 @@
                     function (result) {
     
                         var numFound = result.response.numFound;
-                        console.log(result);
+              
                         if (numFound > 0) {
     
                             var data = eval(result.response.docs[0].dataAsJson)
@@ -1395,7 +1395,7 @@
                                 })
                                 .reverse();
                             var date = rows[0][0],
-                                compare = rows[400][1],
+                                compare = rows[0][1],
                                 value = rows[0][1],
                                 finalValues = [value];
                             rows.forEach(function (d) {
