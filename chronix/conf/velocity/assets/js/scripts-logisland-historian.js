@@ -2,8 +2,7 @@
 logisland historian js
  */
 
-
-jQuery(function($) {
+jQuery(function ($) {
 
     'use strict';
 
@@ -13,8 +12,8 @@ jQuery(function($) {
     /*--------------------------------
          Top Bar
      --------------------------------*/
-    ULTRA_SETTINGS.pageTopBar = function() {
-        $('.page-topbar li.searchform .input-group-addon').click(function(e) {
+    ULTRA_SETTINGS.pageTopBar = function () {
+        $('.page-topbar li.searchform .input-group-addon').click(function (e) {
             $(this).parent().parent().toggleClass("focus");
             $(this).parent().find("input").focus();
         });
@@ -28,22 +27,22 @@ jQuery(function($) {
     /*--------------------------------
          Window Based Layout
      --------------------------------*/
-    ULTRA_SETTINGS.onLoadTopBar = function() {
+    ULTRA_SETTINGS.onLoadTopBar = function () {
 
-            $(".page-topbar .message-toggle-wrapper").addClass("showopacity");
-            $(".page-topbar .notify-toggle-wrapper").addClass("showopacity");
-            $(".page-topbar .searchform").addClass("showopacity");
-            $(".page-topbar li.profile").addClass("showopacity");
+        $(".page-topbar .message-toggle-wrapper").addClass("showopacity");
+        $(".page-topbar .notify-toggle-wrapper").addClass("showopacity");
+        $(".page-topbar .searchform").addClass("showopacity");
+        $(".page-topbar li.profile").addClass("showopacity");
     }
     /*--------------------------------
         Viewport Checker
      --------------------------------*/
-    ULTRA_SETTINGS.viewportElement = function() {
+    ULTRA_SETTINGS.viewportElement = function () {
 
         if ($.isFunction($.fn.viewportChecker)) {
 
             $('.inviewport').viewportChecker({
-                callbackFunction: function(elem, action) {
+                callbackFunction: function (elem, action) {
                     //setTimeout(function(){
                     //elem.html((action == "add") ? 'Callback with 500ms timeout: added class' : 'Callback with 500ms timeout: removed class');
                     //},500);
@@ -54,7 +53,7 @@ jQuery(function($) {
             $('.number_counter').viewportChecker({
                 classToAdd: 'start_timer',
                 offset: 10,
-                callbackFunction: function(elem) {
+                callbackFunction: function (elem) {
                     $('.start_timer:not(.counted)').each(count);
                     //$(elem).removeClass('number_counter');
                 }
@@ -73,7 +72,7 @@ jQuery(function($) {
     /*--------------------------------
         Sortable / Draggable Panels
      --------------------------------*/
-    ULTRA_SETTINGS.draggablePanels = function() {
+    ULTRA_SETTINGS.draggablePanels = function () {
 
         if ($.isFunction($.fn.sortable)) {
             $(".sort_panel").sortable({
@@ -88,9 +87,9 @@ jQuery(function($) {
     /*--------------------------------
          Section Box Actions
      --------------------------------*/
-    ULTRA_SETTINGS.sectionBoxActions = function() {
+    ULTRA_SETTINGS.sectionBoxActions = function () {
 
-        $('section.box .actions .box_toggle').on('click', function() {
+        $('section.box .actions .box_toggle').on('click', function () {
 
             var content = $(this).parent().parent().parent().find(".content-body");
             if (content.hasClass("collapsed")) {
@@ -103,7 +102,7 @@ jQuery(function($) {
 
         });
 
-        $('section.box .actions .box_close').on('click', function() {
+        $('section.box .actions .box_close').on('click', function () {
             content = $(this).parent().parent().parent().remove();
         });
 
@@ -114,7 +113,7 @@ jQuery(function($) {
     /*--------------------------------
          Login Page
      --------------------------------*/
-    ULTRA_SETTINGS.loginPage = function() {
+    ULTRA_SETTINGS.loginPage = function () {
 
         var height = window.innerHeight;
         var formheight = $("#login").height();
@@ -132,59 +131,179 @@ jQuery(function($) {
     /*--------------------------------
          js tree
      --------------------------------*/
-    ULTRA_SETTINGS.jsTreeINIT = function() {
+
+
+
+
+
+
+
+
+
+
+
+    ULTRA_SETTINGS.jsTreeINIT = function () {
+
+        var query = "#{url_for_solr}/select?indent=on&q=*:*&wt=json&facet=on&facet.field=name&fl=name";
+        var hardCodedQuery = "http://localhost:8983/solr/chronix/select?indent=on&q=*:*&wt=json&facet=on&facet.field=name&fl=name";
 
 
         if ($.isFunction($.fn.jstree)) {
-            $(function() {
-                var to = false;
-                $('#treedata_q').keyup(function() {
-                    if (to) {
-                        clearTimeout(to);
+            $(function () {
+
+                var treeNodes = {};
+                $.ajax({
+                    url: hardCodedQuery,
+                    cache: false,
+                    success: function (data1) {
+                        treeNodes = _buildTreeNodes(data1)
+                        _buildTree(); // call function that builds the tree
                     }
-                    to = setTimeout(function() {
-                        var v = $('#treedata_q').val();
-                        $('#jstree_treedata').jstree(true).search(v);
-                    }, 250);
+
+                }).done(function (data1) {
+                    console.log("done with tree loading");
                 });
 
-                $('#jstree_treedata')
-                    .jstree({
-                        "core": {
-                            "animation": 0,
-                            "check_callback": true,
-                            "themes": {
-                                "stripes": true
-                            },
-                            'data': {
-                                'url': function(node) {
-                                    return node.id === '#' ? 'data/ajax_demo_roots_jstree-logisland.json' : 'data/ajax_demo_children_jstree.json';
-                                },
-                                'data': function(node) {
-                                    return {
-                                        'id': node.id
-                                    };
+
+                //return an array of objects according to key, value, or key and value matching
+                function getObjects(obj, key, val) {
+                    var objects = [];
+                    for (var i in obj) {
+                        if (!obj.hasOwnProperty(i))
+                            continue;
+                        if (typeof obj[i] == 'object') {
+                            objects = objects.concat(getObjects(obj[i], key, val));
+                        } else
+                            // if key matches and value matches or if key matches and value is not passed (eliminating the case
+                            // where key matches but passed value does not)
+                            if (i == key && obj[i] == val || i == key && val == '') { //
+                                objects.push(obj);
+                            } else if (obj[i] == val && key == '') {
+                                //only add if the object is not already in the array
+                                if (objects.lastIndexOf(obj) == -1) {
+                                    objects.push(obj);
                                 }
                             }
-                        },
-                        "types": {
-                            "#": {
-                                "max_children": 1,
-                                "max_depth": 4,
-                                "valid_children": ["root"]
-                            },
-                            "default": {
-                                "valid_children": ["default", "file"]
-                            },
-                            "file": {
-                                "icon": "fa fa-file",
-                                "valid_children": []
-                            }
-                        },
-                        // "plugins": ["checkbox", "contextmenu", "dnd", "search", "sort", "state", "types", "unique", "wholerow"]
-                        "plugins": ["dnd", "search", "sort", "state", "types", "unique", "wholerow"]
+                    }
+                    return objects;
+                }
+
+                function objetExists(obj, key, val) {
+                    return getObjects(obj, key, val).length > 0
+                }
+
+                // function that builds the tree
+                function _buildTree() {
+                    var to = false;
+                    $('#treedata_q').keyup(function () {
+                        if (to) {
+                            clearTimeout(to);
+                        }
+                        to = setTimeout(function () {
+                            var v = $('#treedata_q').val();
+                            $('#jstree_treedata').jstree(true).search(v);
+                        }, 250);
                     });
+
+                    $('#jstree_treedata')
+                        .jstree({
+                            "core": {
+                                "animation": 0,
+                                "check_callback": true,
+                                "themes": {
+                                    "stripes": true
+                                },
+                                'data': treeNodes
+                            },
+                            "types": {
+                                "#": {
+                                    "max_children": 1,
+                                    "max_depth": 4,
+                                    "valid_children": ["root"]
+                                },
+                                "default": {
+                                    "valid_children": ["default", "file"]
+                                },
+                                "file": {
+                                    "icon": "fa fa-file",
+                                    "valid_children": []
+                                }
+                            },
+                            // "plugins": ["checkbox", "contextmenu", "dnd", "search", "sort", "state", "types", "unique", "wholerow"]
+                            "plugins": ["dnd", "search", "sort", "state", "types", "unique", "wholerow", "json_data"]
+                        });
+                }
+
+                function _buildTreeNodes(json) {
+
+                    var nodes = [
+                        {
+                            "text": "Historian",
+                            "state": {
+                                "opened": true
+                            },
+                            "children": [
+                                {
+                                    "text": "alerts",
+                                    "state": {
+                                        "disabled": true
+                                    },
+                                    "children": [],
+                                    "icon": "glyphicon glyphicon-flash"
+                                }, {
+                                    "text": "graphs",
+                                    "children": [],
+                                    "icon": "glyphicon glyphicon-flash"
+                                }, {
+                                    "text": "metrics",
+                                    "state": {
+                                        "selected": true,
+                                        "opened": true
+                                    },
+                                    "children": [],
+                                    "icon": "glyphicon glyphicon-flash"
+                                }
+                            ]
+                        }
+                    ];
+
+                    var facets = json.facet_counts.facet_fields.name;
+                    for (var i = 0; i < facets.length; i += 2) {
+                        if (facets[i + 1] > 0) {
+                            var tokens = facets[i].split(/[\s,\\\/]+/);
+                            var parentToken = 'metrics';
+                            tokens.forEach(function (token) {
+                                if (token != "") {
+                                    if (!objetExists(nodes, 'text', token)) {
+                                        if (objetExists(nodes, 'text', parentToken)) {
+                                            if (getObjects(nodes, 'text', parentToken)[0].children == undefined) {
+                                                getObjects(nodes, 'text', parentToken)[0].children = [{
+                                                    'text': token, "icon": "glyphicon glyphicon-flash", "state": {
+                                                        "opened": true
+                                                    }
+                                                }];
+                                            } else {
+                                                getObjects(nodes, 'text', parentToken)[0].children.push({
+                                                    'text': token, "icon": "glyphicon glyphicon-flash", "state": {
+                                                        "opened": true
+                                                    }
+                                                });
+                                            }
+                                        } else {
+                                            console.log("ERROR parentNode doesn't exists : " + parentToken)
+                                        }
+                                    }
+                                    parentToken = token;
+                                }
+                            });
+                        }
+                    }
+
+                    return nodes;
+                }
+
             });
+
 
         }
     };
@@ -192,7 +311,7 @@ jQuery(function($) {
     /*--------------------------------
          DataTables
      --------------------------------*/
-    ULTRA_SETTINGS.dataTablesInit = function() {
+    ULTRA_SETTINGS.dataTablesInit = function () {
 
         if ($.isFunction($.fn.dataTable)) {
 
@@ -233,7 +352,7 @@ jQuery(function($) {
 
 
             /* API method to get paging information */
-            $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings) {
+            $.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings) {
                 return {
                     "iStart": oSettings._iDisplayStart,
                     "iEnd": oSettings.fnDisplayEnd(),
@@ -251,9 +370,9 @@ jQuery(function($) {
             /* Bootstrap style pagination control */
             $.extend($.fn.dataTableExt.oPagination, {
                 "bootstrap": {
-                    "fnInit": function(oSettings, nPaging, fnDraw) {
+                    "fnInit": function (oSettings, nPaging, fnDraw) {
                         var oLang = oSettings.oLanguage.oPaginate;
-                        var fnClickHandler = function(e) {
+                        var fnClickHandler = function (e) {
                             e.preventDefault();
                             if (oSettings.oApi._fnPageChange(oSettings, e.data.action)) {
                                 fnDraw(oSettings);
@@ -275,7 +394,7 @@ jQuery(function($) {
                         }, fnClickHandler);
                     },
 
-                    "fnUpdate": function(oSettings, fnDraw) {
+                    "fnUpdate": function (oSettings, fnDraw) {
                         var iListLength = 5;
                         var oPaging = oSettings.oInstance.fnPagingInfo();
                         var an = oSettings.aanFeatures.p;
@@ -304,7 +423,7 @@ jQuery(function($) {
                                 sClass = (j == oPaging.iPage + 1) ? 'class="active"' : '';
                                 $('<li ' + sClass + '><a href="#">' + j + '</a></li>')
                                     .insertBefore($('li:last', an[i])[0])
-                                    .bind('click', function(e) {
+                                    .bind('click', function (e) {
                                         e.preventDefault();
                                         oSettings._iDisplayStart = (parseInt($('a', this).text(), 10) - 1) * oPaging.iLength;
                                         fnDraw(oSettings);
@@ -367,7 +486,7 @@ jQuery(function($) {
 
 
             /* Table initialisation */
-            $(document).ready(function() {
+            $(document).ready(function () {
                 var responsiveHelper = undefined;
                 var breakpointDefinition = {
                     tablet: 1024,
@@ -397,16 +516,16 @@ jQuery(function($) {
                         "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries"
                     },
                     bAutoWidth: false,
-                    fnPreDrawCallback: function() {
+                    fnPreDrawCallback: function () {
                         // Initialize the responsive datatables helper once.
                         if (!responsiveHelper) {
                             //responsiveHelper = new ResponsiveDatatablesHelper(tableElement, breakpointDefinition);
                         }
                     },
-                    fnRowCallback: function(nRow) {
+                    fnRowCallback: function (nRow) {
                         //responsiveHelper.createExpandIcon(nRow);
                     },
-                    fnDrawCallback: function(oSettings) {
+                    fnDrawCallback: function (oSettings) {
                         //responsiveHelper.respond();
                     }
                 });
@@ -416,7 +535,7 @@ jQuery(function($) {
 
 
 
-                $('#example input').click(function() {
+                $('#example input').click(function () {
                     $(this).parent().parent().parent().toggleClass('row_selected');
                 });
 
@@ -429,11 +548,11 @@ jQuery(function($) {
                 nCloneTd.innerHTML = '<i class="fa fa-plus-circle"></i>';
                 nCloneTd.className = "center";
 
-                $('#example2 thead tr').each(function() {
+                $('#example2 thead tr').each(function () {
                     this.insertBefore(nCloneTh, this.childNodes[0]);
                 });
 
-                $('#example2 tbody tr').each(function() {
+                $('#example2 tbody tr').each(function () {
                     this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
                 });
 
@@ -460,7 +579,7 @@ jQuery(function($) {
                  * Note that the indicator for showing which row is open is not controlled by DataTables,
                  * rather it is done here
                  */
-                $('#example2 tbody td i').on('click', function() {
+                $('#example2 tbody td i').on('click', function () {
                     var nTr = $(this).parents('tr')[0];
                     if (oTable.fnIsOpen(nTr)) {
                         /* This row is already open - close it */
@@ -501,7 +620,7 @@ jQuery(function($) {
     /******************************
      initialize respective scripts
      *****************************/
-    $(document).ready(function() {
+    $(document).ready(function () {
         ULTRA_SETTINGS.dataTablesInit();
 
         ULTRA_SETTINGS.pageTopBar();
@@ -510,16 +629,15 @@ jQuery(function($) {
         ULTRA_SETTINGS.draggablePanels();
         ULTRA_SETTINGS.viewportElement();
         ULTRA_SETTINGS.onLoadTopBar();
-
     });
 
-    $(window).resize(function() {
+    $(window).resize(function () {
 
-      ULTRA_SETTINGS.loginPage();
+        ULTRA_SETTINGS.loginPage();
     });
 
-    $(window).load(function() {
-    ULTRA_SETTINGS.loginPage();
+    $(window).load(function () {
+        ULTRA_SETTINGS.loginPage();
 
     });
 
