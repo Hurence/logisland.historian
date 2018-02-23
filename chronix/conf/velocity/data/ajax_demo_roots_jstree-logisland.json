@@ -1,0 +1,414 @@
+[{
+  "id": "1",
+  "name": "Alerts",
+  "text": "Alerts",
+  "parent_id": "0",
+  "children": [{
+    "id": "2",
+    "name": "Mobile",
+    "text": "Mobile",
+    "parent_id": "1",
+    "children": [{
+      "id": "7",
+      "name": "Samsung",
+      "text": "Samsung",
+      "parent_id": "2",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "8",
+      "name": "Apple",
+      "text": "Apple",
+      "parent_id": "2",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }],
+    "data": {},
+    "a_attr": {
+      "href": "google.com"
+    }
+  }, {
+    "id": "3",
+    "name": "Laptop",
+    "text": "Laptop",
+    "parent_id": "1",
+    "children": [{
+      "id": "4",
+      "name": "Keyboard",
+      "text": "Keyboard",
+      "parent_id": "3",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "5",
+      "name": "Computer Peripherals",
+      "text": "Computer Peripherals",
+      "parent_id": "3",
+      "children": [{
+        "id": "6",
+        "name": "Printers",
+        "text": "Printers",
+        "parent_id": "5",
+        "type": "file",
+        "children": [],
+        "data": {},
+        "a_attr": {
+          "href": "google.com"
+        }
+      }, {
+        "id": "10",
+        "name": "Monitors",
+        "text": "Monitors",
+        "parent_id": "5",
+        "type": "file",
+        "children": [],
+        "data": {},
+        "a_attr": {
+          "href": "google.com"
+        }
+      }],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "11",
+      "name": "Dell",
+      "text": "Dell",
+      "parent_id": "3",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }],
+    "data": {},
+    "a_attr": {
+      "href": "google.com"
+    }
+  }],
+  "data": {},
+  "a_attr": {
+    "href": "google.com"
+  }
+},
+{
+  "id": "111",
+  "name": "Metrics",
+  "text": "Metrics",
+  "parent_id": "110",
+  "children": [{
+    "id": "222",
+    "name": "Mobile",
+    "text": "Mobile",
+    "parent_id": "111",
+    "children": [{
+      "id": "7",
+      "name": "Samsung",
+      "text": "Samsung",
+      "parent_id": "222",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "8",
+      "name": "Apple",
+      "text": "Apple",
+      "parent_id": "222",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }],
+    "data": {},
+    "a_attr": {
+      "href": "google.com"
+    }
+  }, {
+    "id": "333",
+    "name": "Laptop",
+    "text": "Laptop",
+    "parent_id": "111",
+    "children": [{
+      "id": "4",
+      "name": "Keyboard",
+      "text": "Keyboard",
+      "parent_id": "333",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "555",
+      "name": "Computer Peripherals",
+      "text": "Computer Peripherals",
+      "parent_id": "333",
+      "children": [{
+        "id": "6",
+        "name": "Printers",
+        "text": "Printers",
+        "parent_id": "555",
+        "type": "file",
+        "children": [],
+        "data": {},
+        "a_attr": {
+          "href": "google.com"
+        }
+      }, {
+        "id": "10",
+        "name": "Monitors",
+        "text": "Monitors",
+        "parent_id": "555",
+        "type": "file",
+        "children": [],
+        "data": {},
+        "a_attr": {
+          "href": "google.com"
+        }
+      }],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "13",
+      "name": "Dell",
+      "text": "Dell",
+      "parent_id": "333",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }],
+    "data": {},
+    "a_attr": {
+      "href": "google.com"
+    }
+  }],
+  "data": {},
+  "a_attr": {
+    "href": "google.com"
+  }
+},
+{
+  "id": "1111",
+  "name": "Searches",
+  "text": "Searches",
+  "parent_id": "1100",
+  "children": [{
+    "id": "2222",
+    "name": "Mobile",
+    "text": "Mobile",
+    "parent_id": "1111",
+    "children": [{
+      "id": "7777",
+      "name": "Samsung",
+      "text": "Samsung",
+      "parent_id": "2222",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "8888",
+      "name": "Apple",
+      "text": "Apple",
+      "parent_id": "2222",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }],
+    "data": {},
+    "a_attr": {
+      "href": "google.com"
+    }
+  }, {
+    "id": "3333",
+    "name": "Laptop",
+    "text": "Laptop",
+    "parent_id": "1111",
+    "children": [{
+      "id": "4444",
+      "name": "Keyboard",
+      "text": "Keyboard",
+      "parent_id": "3333",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "5555",
+      "name": "Computer Peripherals",
+      "text": "Computer Peripherals",
+      "parent_id": "3333",
+      "children": [{
+        "id": "6",
+        "name": "Printers",
+        "text": "Printers",
+        "parent_id": "5555",
+        "type": "file",
+        "children": [],
+        "data": {},
+        "a_attr": {
+          "href": "google.com"
+        }
+      }, {
+        "id": "10",
+        "name": "Monitors",
+        "text": "Monitors",
+        "parent_id": "5555",
+        "type": "file",
+        "children": [],
+        "data": {},
+        "a_attr": {
+          "href": "google.com"
+        }
+      }],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "13",
+      "name": "Dell",
+      "text": "Dell",
+      "parent_id": "3333",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }],
+    "data": {},
+    "a_attr": {
+      "href": "google.com"
+    }
+  }],
+  "data": {},
+  "a_attr": {
+    "href": "google.com"
+  }
+},
+{
+  "id": "11111",
+  "name": "Plots",
+  "text": "Plots",
+  "parent_id": "11000",
+  "children": [{
+    "id": "22222",
+    "name": "Mobile",
+    "text": "Mobile",
+    "parent_id": "11111",
+    "children": [{
+      "id": "77777",
+      "name": "Samsung",
+      "text": "Samsung",
+      "parent_id": "22222",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "88888",
+      "name": "Apple",
+      "text": "Apple",
+      "parent_id": "22222",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }],
+    "data": {},
+    "a_attr": {
+      "href": "google.com"
+    }
+  }, {
+    "id": "33333",
+    "name": "Laptop",
+    "text": "Laptop",
+    "parent_id": "11111",
+    "children": [{
+      "id": "44444",
+      "name": "Keyboard",
+      "text": "Keyboard",
+      "parent_id": "33333",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "55555",
+      "name": "Computer Peripherals",
+      "text": "Computer Peripherals",
+      "parent_id": "33333",
+      "children": [{
+        "id": "66666",
+        "name": "Printers",
+        "text": "Printers",
+        "parent_id": "55555",
+        "type": "file",
+        "children": [],
+        "data": {},
+        "a_attr": {
+          "href": "google.com"
+        }
+      }, {
+        "id": "10",
+        "name": "Monitors",
+        "text": "Monitors",
+        "parent_id": "55555",
+        "type": "file",
+        "children": [],
+        "data": {},
+        "a_attr": {
+          "href": "google.com"
+        }
+      }],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }, {
+      "id": "1333",
+      "name": "Dell",
+      "text": "Dell",
+      "parent_id": "33333",
+      "children": [],
+      "data": {},
+      "a_attr": {
+        "href": "google.com"
+      }
+    }],
+    "data": {},
+    "a_attr": {
+      "href": "google.com"
+    }
+  }],
+  "data": {},
+  "a_attr": {
+    "href": "google.com"
+  }
+}
+
+]

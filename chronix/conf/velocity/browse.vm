@@ -10,6 +10,9 @@
 #parse('query_form.vm')
 #parse('did_you_mean.vm')
 
+<div class="topbar">
+  #parse("topbar.vm")
+</div>
 <div class="navigators">
   #parse("facets.vm")
 </div>

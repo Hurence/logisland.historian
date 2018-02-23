@@ -18,5 +18,8 @@
     <div id="footer">
       #parse("footer.vm")
     </div>
+    <div id="scripts">
+      #parse("scripts.vm")
+    </div>
   </body>
 </html>

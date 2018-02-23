@@ -1,0 +1,25 @@
+[{
+    "id": "demo_root_1",
+    "text": "Alerts",
+    "children": true,
+    "type": "root"
+  },
+  {
+    "id": "demo_root_2",
+    "text": "Searches",
+    "children": true,
+    "type": "root"
+  },
+  {
+    "id": "demo_root_3",
+    "text": "Metrics",
+    "children": true,
+    "type": "root"
+  },
+  {
+    "id": "demo_root_4",
+    "text": "Plots",
+    "children": true,
+    "type": "root"
+  }
+]

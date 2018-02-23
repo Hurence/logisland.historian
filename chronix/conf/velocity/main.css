@@ -1,6 +1,141 @@
+/* logisland historian */
+.page-topbar .logo-area {
+  /* background-image: url('#{url_for_solr}/admin/file?file=/velocity/assets/images/logo.png'); */
+  background-repeat: no-repeat;
+  width: 150px;
+  display: block;
+  min-height: 37px;
+  float: left;
+  margin: 10px 10px;
+  background-color: transparent;
+}
+
+.page-topbar h3.title {
+  margin: 15px 0;
+}
+
+section .content-body {
+  padding: 15px;
+}
+
+section.box {
+  margin: 0 0;
+}
+
+.jstree-default .jstree-search {
+  font-style: italic;
+  color: #000000;
+  font-weight: bold;
+  background-color: gold;
+}
+
+.dropdown-menu {
+  right: 0;
+  left: auto;
+}
+
+/* horizon chart */
+body {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    margin: 30px auto;
+    width: 1280px;
+    position: relative;
+}
+
+header {
+    padding: 6px 0;
+}
+
+.group {
+    margin-bottom: 1em;
+}
+
+.axis {
+    font: 10px sans-serif;
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.axis text {
+    -webkit-transition: fill-opacity 250ms linear;
+}
+
+.axis path {
+    display: none;
+}
+
+.axis line {
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis.top {
+    background-image: linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+    background-image: -o-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+    background-image: -moz-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+    background-image: -webkit-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+    background-image: -ms-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+    top: 0;
+    padding: 0 0 24px;
+}
+
+.axis.bottom {
+    background-image: linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+    background-image: -o-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+    background-image: -moz-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+    background-image: -webkit-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+    background-image: -ms-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+    bottom: 0;
+    padding: 24px 0 0;
+}
+
+.horizon {
+    border-bottom: solid 1px #000;
+    overflow: hidden;
+    position: relative;
+}
+
+.horizon {
+    border-top: solid 1px #000;
+    border-bottom: solid 1px #000;
+}
+
+.horizon + .horizon {
+    border-top: none;
+}
+
+.horizon canvas {
+    display: block;
+}
+
+.horizon .title,
+.horizon .value {
+    bottom: 0;
+    line-height: 30px;
+    margin: 0 6px;
+    position: absolute;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    white-space: nowrap;
+}
+
+.horizon .title {
+    left: 0;
+}
+
+.horizon .value {
+    right: 0;
+}
+
+.line {
+    background: #000;
+    z-index: 2;
+}
+
+/* admin */
 #admin{
   text-align: right;
-  vertical-align: top; 
+  vertical-align: top;
 }
 
 #head{
@@ -46,7 +181,7 @@ a {
   width: 185px;
   padding: 5px;
   top: -20px;
-  position: relative;  
+  position: relative;
 }
 
 .tabs-bar {
@@ -142,11 +277,11 @@ a {
 }
 
 .query-box {
-  
+
 }
 
 .query-boost {
-  
+
   top: 10px;
   left: 50px;
   position: relative;
@@ -156,7 +291,7 @@ a {
 .query-box .inputs{
   left: 180px;
   position: relative;
-  
+
 }
 
 #logo {
@@ -195,13 +330,13 @@ a {
 }
 
 .mlt{
-  
+
 }
 
 .map{
   float: right;
   position: relative;
-  top: -25px;  
+  top: -25px;
 }
 
 .result-document:nth-child(2n+1) {
