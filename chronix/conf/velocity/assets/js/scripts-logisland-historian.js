@@ -270,11 +270,11 @@ jQuery(function ($) {
                                         "disabled": true
                                     },
                                     "children": [],
-                                    "icon": "glyphicon glyphicon-flash"
+                                    "icon": "fa fa-folder"
                                 }, {
                                     "text": "graphs",
                                     "children": [],
-                                    "icon": "glyphicon glyphicon-flash"
+                                    "icon": "fa fa-folder"
                                 }, {
                                     "text": "metrics",
                                     "state": {
@@ -282,7 +282,7 @@ jQuery(function ($) {
                                         "opened": true
                                     },
                                     "children": [],
-                                    "icon": "glyphicon glyphicon-flash"
+                                    "icon": "fa fa-folder"
                                 }
                             ]
                         }
@@ -299,13 +299,13 @@ jQuery(function ($) {
                                         if (objetExists(nodes, 'text', parentToken)) {
                                             if (getObjects(nodes, 'text', parentToken)[0].children == undefined) {
                                                 getObjects(nodes, 'text', parentToken)[0].children = [{
-                                                    'text': token, "icon": "glyphicon glyphicon-flash", "state": {
+                                                    'text': token, "icon": "fa fa-file", "state": {
                                                         "opened": true
                                                     }
                                                 }];
                                             } else {
                                                 getObjects(nodes, 'text', parentToken)[0].children.push({
-                                                    'text': token, "icon": "glyphicon glyphicon-flash", "state": {
+                                                    'text': token, "icon": "fa fa-file", "state": {
                                                         "opened": true
                                                     }
                                                 });
