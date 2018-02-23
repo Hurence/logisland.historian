@@ -71,8 +71,8 @@
     var context = cubism
         .context()
         .serverDelay(5 * 1000)
-        .step(5000)
-        .size(1280);
+        .step(5000);
+        ## .size(1280);
 
     var chronix = context.chronix(
         {"host": 'http://localhost:8983', "uriPathPrefix": '/solr/chronix/select'}

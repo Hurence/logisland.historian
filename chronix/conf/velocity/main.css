@@ -36,12 +36,12 @@ section.box {
 }
 
 /* horizon chart */
-body {
+/* body {
     font-family: "Helvetica Neue", Helvetica, sans-serif;
     margin: 30px auto;
     width: 1280px;
     position: relative;
-}
+} */
 
 header {
     padding: 6px 0;
@@ -56,6 +56,9 @@ header {
     /* position: fixed; */
     pointer-events: none;
     z-index: 2000;
+}
+.axis svg {
+width: 100% !important;
 }
 
 .axis text {
@@ -78,6 +81,7 @@ header {
     background-image: -webkit-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
     background-image: -ms-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
     /* top: 0; */
+    display: block;
     padding: 0 0 24px;
 }
 
@@ -88,6 +92,7 @@ header {
     background-image: -webkit-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
     background-image: -ms-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
     /* bottom: 0; */
+    display: block;
     padding: 24px 0 0;
 }
 
