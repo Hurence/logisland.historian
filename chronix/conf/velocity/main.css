@@ -66,12 +66,12 @@ color: #000000;
     pointer-events: none;
     z-index: 2000;
 }
-.axis svg {
+/* .axis svg {
 width: 100% !important;
 }
 .horizon canvas {
 width: 100% !important;
-}
+} */
 .axis text {
     -webkit-transition: fill-opacity 250ms linear;
 }
