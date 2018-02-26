@@ -28,8 +28,7 @@
       <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END -->
 
       <!-- CORE TEMPLATE JS - START -->
-      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/scripts-logisland-historian.js&contentType=text/javascript" type="text/javascript"></script>
-     <script>
+      <script>
        #parse("assets/js/scripts-logisland-historian.js")
        </script>
       <!-- END CORE TEMPLATE JS - END -->

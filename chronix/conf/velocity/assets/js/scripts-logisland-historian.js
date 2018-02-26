@@ -117,39 +117,39 @@ jQuery(function ($) {
     };
 
 
-        /*--------------------------------
-             Top Bar
-         --------------------------------*/
-        ULTRA_SETTINGS.pageTopBar = function() {
-            $('.page-topbar li.searchform .input-group-addon').click(function(e) {
-                $(this).parent().parent().toggleClass("focus");
-                $(this).parent().find("input").focus();
-            });
+    /*--------------------------------
+         Top Bar
+     --------------------------------*/
+    ULTRA_SETTINGS.pageTopBar = function () {
+        $('.page-topbar li.searchform .input-group-addon').click(function (e) {
+            $(this).parent().parent().toggleClass("focus");
+            $(this).parent().find("input").focus();
+        });
 
-            $('.page-topbar li .dropdown-menu .list').perfectScrollbar({
-                suppressScrollX: true
-            });
+        $('.page-topbar li .dropdown-menu .list').perfectScrollbar({
+            suppressScrollX: true
+        });
 
-        };
+    };
 
 
-        /*--------------------------------
-             Extra form settings
-         --------------------------------*/
-        ULTRA_SETTINGS.extraFormSettings = function() {
+    /*--------------------------------
+         Extra form settings
+     --------------------------------*/
+    ULTRA_SETTINGS.extraFormSettings = function () {
 
-            // transparent input group focus/blur
-            $('.input-group .form-control').focus(function(e) {
-                $(this).parent().find(".input-group-addon").addClass("input-focus");
-                $(this).parent().find(".input-group-btn").addClass("input-focus");
-            });
+        // transparent input group focus/blur
+        $('.input-group .form-control').focus(function (e) {
+            $(this).parent().find(".input-group-addon").addClass("input-focus");
+            $(this).parent().find(".input-group-btn").addClass("input-focus");
+        });
 
-            $('.input-group .form-control').blur(function(e) {
-                $(this).parent().find(".input-group-addon").removeClass("input-focus");
-                $(this).parent().find(".input-group-btn").removeClass("input-focus");
-            });
+        $('.input-group .form-control').blur(function (e) {
+            $(this).parent().find(".input-group-addon").removeClass("input-focus");
+            $(this).parent().find(".input-group-btn").removeClass("input-focus");
+        });
 
-        };
+    };
     /*--------------------------------
          js tree
      --------------------------------*/
@@ -175,7 +175,7 @@ jQuery(function ($) {
             }
         };
 
-        var hardCodedQuery = "/solr/chronix/select?indent=on&q=name:" + getUrlParameter("q") + "&wt=json&facet=on&facet.field=name&fl=name";
+        var hardCodedQuery = "#{url_for_home}/../select?indent=on&q=name:" + getUrlParameter("q") + "&wt=json&facet=on&facet.field=name&fl=name";
 
         console.log(hardCodedQuery);
         //  var hardCodedQuery = "http://localhost:8983/solr/chronix/select?indent=on&q=*:*&wt=json&facet=on&facet.field=name&fl=name";
@@ -302,35 +302,35 @@ jQuery(function ($) {
 
                     var facets = json.facet_counts.facet_fields.name;
                     for (var i = 0; i < facets.length; i += 2) {
+                        var state = { "opened": false, "selected": false }
                         if (facets[i + 1] > 0) {
-                            var tokens = facets[i].split(/[\s,\\\/]+/);
-                            var parentToken = 'metrics';
-                            tokens.forEach(function (token) {
-                                if (token != "") {
-                                    if (!objetExists(nodes, 'text', token)) {
-                                        if (objetExists(nodes, 'text', parentToken)) {
-                                            if (getObjects(nodes, 'text', parentToken)[0].children == undefined) {
-                                                getObjects(nodes, 'text', parentToken)[0].children = [{
-                                                    'text': token, "icon": "fa fa-file", "state": {
-                                                        "opened": true
-                                                    }
-                                                }];
-                                            } else {
-                                                getObjects(nodes, 'text', parentToken)[0].children.push({
-                                                    'text': token, "icon": "fa fa-file", "state": {
-                                                        "opened": true
-                                                    }
-                                                });
-                                            }
-                                        } else {
-                                            console.log("ERROR parentNode doesn't exists : " + parentToken)
-                                        }
-                                    }
-                                    parentToken = token;
-                                }
-                            });
+                            state.opened = true;
+                            state.selected = true;
                         }
+                        var tokens = facets[i].split(/[\s,\\\/]+/);
+                        var parentToken = 'metrics';
+                        tokens.forEach(function (token) {
+                            if (token != "") {
+                                if (!objetExists(nodes, 'text', token)) {
+                                    if (objetExists(nodes, 'text', parentToken)) {
+                                        if (getObjects(nodes, 'text', parentToken)[0].children == undefined) {
+                                            getObjects(nodes, 'text', parentToken)[0].children = [{
+                                                'text': token, "icon": "fa fa-file", "state": state
+                                            }];
+                                        } else {
+                                            getObjects(nodes, 'text', parentToken)[0].children.push({
+                                                'text': token, "icon": "fa fa-file", "state": state
+                                            });
+                                        }
+                                    } else {
+                                        console.log("ERROR parentNode doesn't exists : " + parentToken)
+                                    }
+                                }
+                                parentToken = token;
+                            }
+                        });
                     }
+
 
                     return nodes;
                 }
