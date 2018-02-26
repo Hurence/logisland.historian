@@ -1394,16 +1394,20 @@
                                     return d[1];
                                 })
                                 .reverse();
-                            var date = rows[0][0],
-                                compare = rows[0][1],
-                                value = rows[0][1],
-                                finalValues = [value];
-                            rows.forEach(function (d) {
-                                while ((date = d3.time.day.offset(date, 1)) < d[0])
-                                    finalValues.push(value);
-                                finalValues.push(value = (d[1] - compare) / compare);
-                            });
-                            callback(null, finalValues.slice(-context.size()));
+
+                                if(rows.length !=0){
+                                  var date = rows[0][0],
+                                  compare = rows[0][1],
+                                  value = rows[0][1],
+                                  finalValues = [value];
+                              rows.forEach(function (d) {
+                                  while ((date = d3.time.day.offset(date, 1)) < d[0])
+                                      finalValues.push(value);
+                                  finalValues.push(value = (d[1] - compare) / compare);
+                              });
+                              callback(null, finalValues.slice(-context.size()));
+                                }
+                          
                         }
     
                         //response.dataAsJson[0].length
