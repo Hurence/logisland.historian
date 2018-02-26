@@ -28,9 +28,16 @@
       <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END -->
 
       <!-- CORE TEMPLATE JS - START -->
+<<<<<<< HEAD
       <script>
        #parse("assets/js/scripts-logisland-historian.js")
        </script>
+=======
+      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/scripts-logisland-historian.js&contentType=text/javascript" type="text/javascript"></script>
+     ## <script>
+     ##   #parse("assets/js/scripts-logisland-historian.js")
+     ##   </script>
+>>>>>>> 571cc4191a23a1cc0df335d8d37cbfa28ce52a1a
       <!-- END CORE TEMPLATE JS - END -->
 
 
@@ -69,12 +76,13 @@
 
 <script>
 
-
+    var graphWidth = $(".tab-content").width();
+    $("#graph").width(graphWidth);
     var context = cubism
         .context()
         .serverDelay(5 * 1000)
-        .step(5000);
-        ## .size(1280);
+        .step(5000)
+        .size(graphWidth);
 
     var chronix = context.chronix(
         {"host": 'http://localhost:8983', "uriPathPrefix": '/solr/chronix/select'}
@@ -85,7 +93,7 @@
 .alias("$doc.get('name').replace("\", " ")"), #end];
 
         d3
-            .select("body")
+            .select("#graph")
             .selectAll(".axis")
             .data(["top", "bottom"])
             .enter()
@@ -115,14 +123,8 @@
             .call(context.horizon().format(d3.format("+,.2p")));
 
         context.on("focus", function (i) {
-            d3
-                .selectAll(".value")
-                .style(
-                    "right",
-                    i == null
-                        ? null
-                        : context.size() - i + "px"
-                );
+          d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
+
         });
         $(document).ready(function() {
           $('.top.axis').prependTo("#graph");
@@ -132,5 +134,6 @@
               $(this).parent().parent().toggleClass("focus");
               $(this).parent().find("input").focus();
           });
+
         });
 </script>
