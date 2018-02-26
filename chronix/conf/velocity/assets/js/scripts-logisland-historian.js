@@ -9,20 +9,6 @@ jQuery(function ($) {
     var ULTRA_SETTINGS = window.ULTRA_SETTINGS || {};
 
 
-    /*--------------------------------
-         Top Bar
-     --------------------------------*/
-    ULTRA_SETTINGS.pageTopBar = function () {
-        $('.page-topbar li.searchform .input-group-addon').click(function (e) {
-            $(this).parent().parent().toggleClass("focus");
-            $(this).parent().find("input").focus();
-        });
-
-        $('.page-topbar li .dropdown-menu .list').perfectScrollbar({
-            suppressScrollX: true
-        });
-
-    };
 
     /*--------------------------------
          Window Based Layout
@@ -34,6 +20,8 @@ jQuery(function ($) {
         $(".page-topbar .searchform").addClass("showopacity");
         $(".page-topbar li.profile").addClass("showopacity");
     }
+
+
     /*--------------------------------
         Viewport Checker
      --------------------------------*/
@@ -128,19 +116,43 @@ jQuery(function ($) {
 
     };
 
+
+        /*--------------------------------
+             Top Bar
+         --------------------------------*/
+        ULTRA_SETTINGS.pageTopBar = function() {
+            $('.page-topbar li.searchform .input-group-addon').click(function(e) {
+                $(this).parent().parent().toggleClass("focus");
+                $(this).parent().find("input").focus();
+            });
+
+            $('.page-topbar li .dropdown-menu .list').perfectScrollbar({
+                suppressScrollX: true
+            });
+
+        };
+
+
+        /*--------------------------------
+             Extra form settings
+         --------------------------------*/
+        ULTRA_SETTINGS.extraFormSettings = function() {
+
+            // transparent input group focus/blur
+            $('.input-group .form-control').focus(function(e) {
+                $(this).parent().find(".input-group-addon").addClass("input-focus");
+                $(this).parent().find(".input-group-btn").addClass("input-focus");
+            });
+
+            $('.input-group .form-control').blur(function(e) {
+                $(this).parent().find(".input-group-addon").removeClass("input-focus");
+                $(this).parent().find(".input-group-btn").removeClass("input-focus");
+            });
+
+        };
     /*--------------------------------
          js tree
      --------------------------------*/
-
-
-
-
-
-
-
-
-
-
 
     ULTRA_SETTINGS.jsTreeINIT = function () {
 
@@ -643,8 +655,8 @@ jQuery(function ($) {
      *****************************/
     $(document).ready(function () {
         ULTRA_SETTINGS.dataTablesInit();
-
         ULTRA_SETTINGS.pageTopBar();
+        ULTRA_SETTINGS.extraFormSettings();
         ULTRA_SETTINGS.jsTreeINIT();
         ULTRA_SETTINGS.sectionBoxActions();
         ULTRA_SETTINGS.draggablePanels();
