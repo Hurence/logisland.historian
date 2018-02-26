@@ -50,7 +50,7 @@
               </a>
             </li>
             <li class="last">
-              <a href="ui-login.html">
+              <a href="#url_for_solr/login">
                 <i class="fa fa-lock"></i>
                 Logout
               </a>

@@ -16,7 +16,7 @@
               <input type="password" name="pwd" id="user_pass" class="input" value="demo" size="20" /></label>
         </p>
         <p class="submit">
-          <a class="btn btn-info btn-block" href="index.html" role="button">Sign In</a>
+          <a class="btn btn-info btn-block" href="#url_for_home#if($request.params.get('debugQuery'))?debugQuery=true#end" role="button">Sign In</a>
         </p>
       </form>
 

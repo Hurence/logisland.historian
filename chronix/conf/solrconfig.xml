@@ -15,9 +15,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<!-- 
+<!--
      For more details about configurations options that may appear in
-     this file, see http://wiki.apache.org/solr/SolrConfigXml. 
+     this file, see http://wiki.apache.org/solr/SolrConfigXml.
 -->
 <config>
     <!-- In all configuration below, a prefix of "solr." for class names
@@ -540,7 +540,7 @@
         <str name="template.base.dir">${velocity.template.base.dir:}</str>
     </queryResponseWriter>
     <requestHandler name="/browse" class="de.qaware.chronix.solr.query.ChronixQueryHandler">
-        <!-- 
+        <!--
        <requestHandler name="/browse" class="solr.SearchHandler">
         -->
         <lst name="defaults">
@@ -549,7 +549,7 @@
             <str name="wt">velocity</str>
             <str name="v.template">browse</str>
             <str name="v.layout">layout</str>
-            <str name="title">Logisland GRAPHER</str>
+            <str name="title">LogIsland data historian</str>
             <str name="df">name</str>
             <str name="q">*:*</str>
             <str name="qf">name^1.2 host^1.0</str>
@@ -574,14 +574,15 @@
             <str name="facet.pivot">group,host</str>
         </lst>
     </requestHandler>
-    <requestHandler name="/experiment" class="de.qaware.chronix.solr.query.ChronixQueryHandler">
-    
+    <requestHandler name="/login" class="de.qaware.chronix.solr.query.ChronixQueryHandler">
+
         <lst name="defaults">
             <str name="echoParams">explicit</str>
             <str name="wt">velocity</str>
-            <str name="v.template">experiment</str>
-          
-            <str name="title">Logisland GRAPHER</str>
+            <str name="v.template">login</str>
+            <str name="v.layout">layoutlogin</str>
+
+            <str name="title">LogIsland data historian</str>
         </lst>
     </requestHandler>
 </config>

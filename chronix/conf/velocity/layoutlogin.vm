@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+
+<head>
+  #parse("headlogin.vm")
+</head>
+  <body>
+  <div>
+    #parse("login.vm")
+    </div>
+    ## <div id="footer">
+    ##   #parse("footer.vm")
+    ## </div>
+    <div id="scripts">
+      #parse("scriptslogin.vm")
+    </div>
+
+  </body>
+</html>
