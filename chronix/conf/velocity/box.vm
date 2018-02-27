@@ -23,6 +23,11 @@
 
         <ul class="nav nav-tabs">
           <li class="active">
+            <a href="#tab-0" data-toggle="tab">
+                <i class="fa fa-info-circle"></i> information
+              </a>
+          </li>
+          <li>
             <a href="#tab-1" data-toggle="tab">
                 <i class="fa fa-area-chart"></i> Horizon chart
               </a>
@@ -39,8 +44,23 @@
           </li>
         </ul>
 
+
+
         <div class="tab-content">
-          <div class="tab-pane fade in active" id="tab-1">
+        <div class="tab-pane fade in active" id="tab-0">
+         <h4>Dataset: <small class="text-primary">http://localhost:8983/solr/chronix/select?indent=on&q=*:*&wt=json</small></h4>
+         <h4>Last modified: <small class="text-info">12 months ago</small></h4>
+         <h4>Num Docs: <small class="text-info">182</small></h4>
+         <h4>Max Doc: <small class="text-info">182</small></h4>
+         <h4>CWD: <small class="text-info">/opt/solr/server</small></h4>
+         <h4>Instance: <small class="text-info">/opt/solr/server/solr/chronix</small></h4>
+         <h4>Data: <small class="text-info">/opt/solr/server/solr/chronix/data</small></h4>
+         <h4>Index: <small class="text-info">/opt/solr/server/solr/chronix/data/index</small></h4>
+         <h4>Impl: <small class="text-info">org.apache.solr.core.NRTCachingDirectoryFactory</small></h4>
+
+
+        </div>
+          <div class="tab-pane fade in " id="tab-1">
             <div id="graph" /></div>
         </div>
         <div class="tab-pane fade" id="tab-2">
@@ -145,9 +165,6 @@
 
             </tbody>
           </table>
-
-
-
 
         </div>
         <div class="tab-pane fade" id="tab-3">
