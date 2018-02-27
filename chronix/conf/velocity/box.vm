@@ -24,7 +24,7 @@
             </li>
             <li>
               <a href="#tab-2" data-toggle="tab">
-                <i class="fa fa-search"></i> search result
+                <i class="fa fa-table"></i> table
               </a>
             </li>
             <li>
@@ -40,7 +40,110 @@
             </div>
             <div class="tab-pane fade" id="tab-2">
 
-              search result
+            <table id="example-1" class="table table-striped dt-responsive display" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Start data</th>
+                  <th>End date</th>
+                </tr>
+              </thead>
+
+              <tfoot>
+                <tr>
+                  <th>Name</th>
+                  <th>Start data</th>
+                  <th>End date</th>
+                </tr>
+              </tfoot>
+
+              <tbody>
+                <tr>
+                  <td>Tiger Nixon</td>
+                  <td>2011/04/25</td>
+                  <td>2011/04/26</td>
+                </tr>
+                <tr>
+                  <td>Garrett Winters</td>
+                  <td>2011/04/25</td>
+                  <td>2011/04/26</td>
+                </tr>
+                <tr>
+                  <td>Ashton Cox</td>
+                  <td>2011/04/25</td>
+                  <td>2011/04/26</td>
+                </tr>
+                <tr>
+                  <td>Cedric Kelly</td>
+                  <td>2011/04/25</td>
+                  <td>2011/04/26</td>
+                </tr>
+                <tr>
+                  <td>Airi Satou</td>
+                  <td>2011/04/25</td>
+                  <td>2011/04/26</td>
+                </tr>
+                <tr>
+                  <td>Brielle Williamson</td>
+                  <td>2011/04/25</td>
+                  <td>2011/04/26</td>
+                  <tr>
+                    <td>Herrod Chandler</td>
+                    <td>2011/04/25</td>
+                    <td>2011/04/26</td>
+                  </tr>
+                  <tr>
+                    <td>Rhona Davidson</td>
+                    <td>2011/04/25</td>
+                    <td>2011/04/26</td>
+                  </tr>
+
+                  <tr>
+                    <td>Tiger Nixon</td>
+                    <td>2011/04/25</td>
+                    <td>2011/04/26</td>
+                  </tr>
+                  <tr>
+                    <td>Garrett Winters</td>
+                    <td>2011/04/25</td>
+                    <td>2011/04/26</td>
+                  </tr>
+                  <tr>
+                    <td>Ashton Cox</td>
+                    <td>2011/04/25</td>
+                    <td>2011/04/26</td>
+                  </tr>
+                  <tr>
+                    <td>Cedric Kelly</td>
+                    <td>2011/04/25</td>
+                    <td>2011/04/26</td>
+                  </tr>
+                  <tr>
+                    <td>Airi Satou</td>
+                    <td>2011/04/25</td>
+                    <td>2011/04/26</td>
+                  </tr>
+                  <tr>
+                    <td>Brielle Williamson</td>
+                    <td>2011/04/25</td>
+                    <td>2011/04/26</td>
+                    <tr>
+                      <td>Herrod Chandler</td>
+                      <td>2011/04/25</td>
+                      <td>2011/04/26</td>
+                    </tr>
+                    <tr>
+                      <td>Rhona Davidson</td>
+                      <td>2011/04/25</td>
+                      <td>2011/04/26</td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+
+
+
             </div>
             <div class="tab-pane fade" id="tab-3">
               scatterplot
@@ -54,109 +157,6 @@
               <div class="content-body">
                 <div class="row">
                   <div class="col-md-12 col-sm-12 col-xs-12">
-
-
-                    <table id="example-1" class="table table-striped dt-responsive display" cellspacing="0" width="100%">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Start data</th>
-                          <th>End date</th>
-                        </tr>
-                      </thead>
-
-                      <tfoot>
-                        <tr>
-                          <th>Name</th>
-                          <th>Start data</th>
-                          <th>End date</th>
-                        </tr>
-                      </tfoot>
-
-                      <tbody>
-                        <tr>
-                          <td>Tiger Nixon</td>
-                          <td>2011/04/25</td>
-                          <td>2011/04/26</td>
-                        </tr>
-                        <tr>
-                          <td>Garrett Winters</td>
-                          <td>2011/04/25</td>
-                          <td>2011/04/26</td>
-                        </tr>
-                        <tr>
-                          <td>Ashton Cox</td>
-                          <td>2011/04/25</td>
-                          <td>2011/04/26</td>
-                        </tr>
-                        <tr>
-                          <td>Cedric Kelly</td>
-                          <td>2011/04/25</td>
-                          <td>2011/04/26</td>
-                        </tr>
-                        <tr>
-                          <td>Airi Satou</td>
-                          <td>2011/04/25</td>
-                          <td>2011/04/26</td>
-                        </tr>
-                        <tr>
-                          <td>Brielle Williamson</td>
-                          <td>2011/04/25</td>
-                          <td>2011/04/26</td>
-                          <tr>
-                            <td>Herrod Chandler</td>
-                            <td>2011/04/25</td>
-                            <td>2011/04/26</td>
-                          </tr>
-                          <tr>
-                            <td>Rhona Davidson</td>
-                            <td>2011/04/25</td>
-                            <td>2011/04/26</td>
-                          </tr>
-
-                          <tr>
-                            <td>Tiger Nixon</td>
-                            <td>2011/04/25</td>
-                            <td>2011/04/26</td>
-                          </tr>
-                          <tr>
-                            <td>Garrett Winters</td>
-                            <td>2011/04/25</td>
-                            <td>2011/04/26</td>
-                          </tr>
-                          <tr>
-                            <td>Ashton Cox</td>
-                            <td>2011/04/25</td>
-                            <td>2011/04/26</td>
-                          </tr>
-                          <tr>
-                            <td>Cedric Kelly</td>
-                            <td>2011/04/25</td>
-                            <td>2011/04/26</td>
-                          </tr>
-                          <tr>
-                            <td>Airi Satou</td>
-                            <td>2011/04/25</td>
-                            <td>2011/04/26</td>
-                          </tr>
-                          <tr>
-                            <td>Brielle Williamson</td>
-                            <td>2011/04/25</td>
-                            <td>2011/04/26</td>
-                            <tr>
-                              <td>Herrod Chandler</td>
-                              <td>2011/04/25</td>
-                              <td>2011/04/26</td>
-                            </tr>
-                            <tr>
-                              <td>Rhona Davidson</td>
-                              <td>2011/04/25</td>
-                              <td>2011/04/26</td>
-                            </tr>
-
-                          </tbody>
-                        </table>
-
 
 
 

@@ -70,7 +70,7 @@
 <script>
 
     var graphWidth = $(".tab-content").width();
-    $("#graph").width(graphWidth);
+    ## $("#graph").width(graphWidth);
     var context = cubism
         .context()
         .serverDelay(5 * 1000)
