@@ -12,6 +12,13 @@ section .content-body {
 .page-topbar li.datetimepicker .input-group {
     width: 370px;
     top: 12px;
+    background-color: #f4f5f7;
+
+}
+.page-topbar li.datetimepicker input {
+    background-color: #f4f5f7;
+    color: #919191;
+
 }
 
 section header {

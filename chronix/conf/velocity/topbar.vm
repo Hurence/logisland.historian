@@ -21,14 +21,6 @@
             </span>
             <input id="reportrange"  type="text" class="form-control pull-left" placeholder="">
         </div>
-
-      ## <div class="input-group">
-      ##   <input type="text" id="reportrange" class="form-control">
-      ##     ## <div id="reportrange" class="" style="background: #f4f5f7; cursor: pointer; width: 100%">
-      ##     <i class="fa fa-calendar daterange"></i>
-      ##     <span></span> <b class="caret"></b>
-      ##     ## </div>
-      ##     </div>
       </li>
       <li class="hidden-sm hidden-xs searchform focus">
           <div class="input-group">
