@@ -1,6 +1,24 @@
 /**
 logisland historian js
  */
+function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+
+            if (sParameterName[1] == "*:*")
+                return "*";
+            else
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
 
 jQuery(function ($) {
 
@@ -156,30 +174,9 @@ jQuery(function ($) {
 
     ULTRA_SETTINGS.jsTreeINIT = function () {
 
-        function getUrlParameter(sParam) {
-            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-                sURLVariables = sPageURL.split('&'),
-                sParameterName,
-                i;
 
-            for (i = 0; i < sURLVariables.length; i++) {
-                sParameterName = sURLVariables[i].split('=');
-
-                if (sParameterName[0] === sParam) {
-
-                    if (sParameterName[1] == "*:*")
-                        return "*";
-                    else
-                        return sParameterName[1] === undefined ? true : sParameterName[1];
-                }
-            }
-        };
 
         var hardCodedQuery = "#{url_for_home}/../select?indent=on&q=name:" + getUrlParameter("q") + "&wt=json&facet=on&facet.field=name&fl=name";
-
-        console.log(hardCodedQuery);
-        //  var hardCodedQuery = "http://localhost:8983/solr/chronix/select?indent=on&q=*:*&wt=json&facet=on&facet.field=name&fl=name";
-
 
         if ($.isFunction($.fn.jstree)) {
             $(function () {
@@ -227,6 +224,10 @@ jQuery(function ($) {
 
                 // function that builds the tree
                 function _buildTree() {
+
+                    var filter = "$params.get('q')".replace("\\", "").replace("*", "");
+                    $('#treedata_q').val(filter);
+
                     var to = false;
                     $('#treedata_q').keyup(function () {
                         if (to) {
@@ -238,7 +239,17 @@ jQuery(function ($) {
                         }, 250);
                     });
 
+
+
+
+
+
                     $('#jstree_treedata')
+                        .on("changed.jstree", function (e, data) {
+                            if (data.selected.length) {
+                                alert('The selected node is: ' + data.instance.get_node(data.selected[0]).text);
+                            }
+                        })
                         .jstree({
                             "core": {
                                 "animation": 0,
@@ -263,7 +274,7 @@ jQuery(function ($) {
                                 }
                             },
                             // "plugins": ["checkbox", "contextmenu", "dnd", "search", "sort", "state", "types", "unique", "wholerow"]
-                            "plugins": ["dnd", "search", "sort", "state", "types", "unique", "wholerow", "json_data"]
+                            "plugins": ["dnd", "search", "sort", "types", "unique", "wholerow", "json_data", "changed"]
                         });
                 }
 
@@ -271,6 +282,7 @@ jQuery(function ($) {
 
                     var nodes = [
                         {
+                            'cache': true,
                             "text": "Historian",
                             "state": {
                                 "opened": true
@@ -290,7 +302,7 @@ jQuery(function ($) {
                                 }, {
                                     "text": "metrics",
                                     "state": {
-                                        "selected": true,
+                                        "selected": false,
                                         "opened": true
                                     },
                                     "children": [],
@@ -301,11 +313,11 @@ jQuery(function ($) {
                     ];
 
                     var facets = json.facet_counts.facet_fields.name;
+
                     for (var i = 0; i < facets.length; i += 2) {
                         var state = { "opened": false, "selected": false }
                         if (facets[i + 1] > 0) {
                             state.opened = true;
-                            state.selected = true;
                         }
                         var tokens = facets[i].split(/[\s,\\\/]+/);
                         var parentToken = 'metrics';
@@ -315,11 +327,11 @@ jQuery(function ($) {
                                     if (objetExists(nodes, 'text', parentToken)) {
                                         if (getObjects(nodes, 'text', parentToken)[0].children == undefined) {
                                             getObjects(nodes, 'text', parentToken)[0].children = [{
-                                                'text': token, "icon": "fa fa-file", "state": state
+                                                'id': token, 'text': token, "icon": "fa fa-file", "state": state
                                             }];
                                         } else {
                                             getObjects(nodes, 'text', parentToken)[0].children.push({
-                                                'text': token, "icon": "fa fa-file", "state": state
+                                                'id': token, 'text': token, "icon": "fa fa-file", "state": state
                                             });
                                         }
                                     } else {
@@ -330,8 +342,6 @@ jQuery(function ($) {
                             }
                         });
                     }
-
-
                     return nodes;
                 }
 
@@ -348,23 +358,50 @@ jQuery(function ($) {
 
         if ($.isFunction($.fn.dataTable)) {
 
-            /*--- start ---*/
+            var chronixQuery = "#{url_for_home}/../select?indent=on&q=name:" + getUrlParameter("q") + "&wt=json&cf=metric{count;min;max;avg;dev;trend;outlier}";
 
-            $("#example-1").dataTable({
-                responsive: true,
-                aLengthMenu: [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, "All"]
-                ]
+            var dataNodes = [];
+            $.ajax({
+                url: chronixQuery,
+                cache: false,
+                success: function (s) {
+                    var count = s.response.numFound;
+
+                    for (var i = 0; i < count; i++) {
+                        var doc = s.response.docs[i];
+                        dataNodes.push([doc.name, new Date(doc.start).toUTCString(), new Date(doc.end).toUTCString(), doc['0_function_count'], doc['1_function_min'], doc['2_function_max'], doc['3_function_avg'], doc['4_function_dev'], doc['5_function_trend'], doc['6_function_outlier']]);
+                    }
+                    $("#example-1").dataTable({
+                        responsive: true,
+                        aLengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        data: dataNodes,
+                        columns: [
+                            { title: "Name" },
+                            { title: "Start" },
+                            { title: "End" },
+                            { title: "Count" },
+                            { title: "Min" },
+                            { title: "Max" },
+                            { title: "Avg" },
+                            { title: "Dev" },
+                            { title: "Trend" },
+                            { title: "Outlier" }
+                        ]
+                    });
+                }
+
+            }).done(function (data1) {
+                console.log("done with tree loading");
             });
 
-            /*--- end ---*/
 
-            /*--- start ---*/
 
-            $('#example-4').dataTable();
 
             /*--- end ---*/
+
 
 
 

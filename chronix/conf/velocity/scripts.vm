@@ -81,9 +81,20 @@
         {"host": 'http://localhost:8983', "uriPathPrefix": '/solr/chronix/select'}
     );
 
-    var load_metrics = [
-            #foreach($doc in $response.results)chronix.metric({"metricName": "$doc.get('name').replace("\", "\\\\")"})
-.alias("$doc.get('name').replace("\", " ")"), #end];
+function uniq(a) {
+    var seen = {};
+    return a.filter(function(item) {
+        return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+    });
+}
+
+
+var metrics_names = [ #foreach($doc in $response.results)"$doc.get('name').replace("\", "\\\\")",#end];
+
+var load_metrics = [];
+    metrics_names.forEach(function (metric_name){
+        load_metrics.push(chronix.metric({"metricName": metric_name}).alias(metric_name.replace("\\", " ")));
+    })
 
         d3
             .select("#graph")
@@ -109,7 +120,7 @@
         d3
             .select("#graph")
             .selectAll(".horizon")
-            .data(load_metrics)
+            .data(uniq(load_metrics))
             .enter()
             .insert("div", ".bottom")
             .attr("class", "horizon")
