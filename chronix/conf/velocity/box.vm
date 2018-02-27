@@ -26,13 +26,13 @@
                 <i class="fa fa-table"></i> summary
               </a>
           </li>
-         
+
           <li class="active">
             <a href="#tab-horizon-chart" data-toggle="tab">
                 <i class="fa fa-area-chart"></i> horizon
               </a>
           </li>
-          
+
           <li>
             <a href="#tab-scatterplot" data-toggle="tab">
                 <i class="fa fa-line-chart"></i> scatterplot
@@ -60,7 +60,7 @@
          <h4>Impl: <small class="text-info">org.apache.solr.core.NRTCachingDirectoryFactory</small></h4>
 
 
-            
+
         </div>
           <div class="tab-pane fade in active" id="tab-horizon-chart">
             <div id="graph" /></div>
@@ -72,7 +72,16 @@
 
         </div>
         <div class="tab-pane fade" id="tab-scatterplot">
-          scatterplot
+
+        <h4>Radar chart</h4>
+            <section class="box ">
+                <div class="content-body">    <div class="row">
+                        <div class="col-md-10 col-sm-10 col-xs-10 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+                            <canvas id="radar-chartjs" width="300" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
         </div>
 

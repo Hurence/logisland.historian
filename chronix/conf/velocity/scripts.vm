@@ -25,6 +25,10 @@
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js&contentType=text/javascript" type="text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js&contentType=text/javascript" type="text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/Responsive/bootstrap/3/dataTables.bootstrap.js&contentType=text/javascript" type="text/javascript"></script>
+      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/chartjs-chart/Chart.min.js" type="text/javascript"></script>
+      <script>
+      #parse("assets/js/chart-chartjs.js")
+        </script>
       <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END -->
 
       <!-- CORE TEMPLATE JS - START -->
