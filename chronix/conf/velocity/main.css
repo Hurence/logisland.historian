@@ -1,4 +1,18 @@
 /* logisland historian */
+section.box {
+    background-color: transparent !important;
+
+}
+section .content-body {
+    /* background-color: transparent !important; */
+}
+.page-topbar .quick-area .info-menu li a.toggle{
+  color: #ffffff;
+}
+
+.page-topbar {
+    background-color: #003C63;
+}
 .page-topbar .logo-area {
   /* background-image: url('/solr/chronix/admin/file?file=/velocity/assets/images/logo.png'); */
   background-image: none;
@@ -17,7 +31,17 @@
 .page-topbar h3.title {
   margin: 15px 0;
   font-weight: 600;
+  color: #ffffff;
 }
+.page-topbar {
+
+    right:  0px;
+  }
+  .page-topbar .dropdown-menu:after, .page-topbar .dropdown-menu:before {
+
+    right: 22px !important;
+    left: inherit;
+    }
 .page-topbar i.fa.fa-clock-o {
       font-size: inherit;
 }
@@ -185,6 +209,7 @@ width: 100% !important;
 body {
   font-family: Helvetica, Arial, sans-serif;
   font-size: 10pt;
+      background-color: #F5F5F5;
 }
 
 a {
