@@ -13,6 +13,10 @@ section header {
 
     border-bottom: 2px solid rgba(0, 60, 99, 1.0);
 }
+.pagination>.active>a{
+background-color: rgba(0, 60, 99, 1.0);
+border-color: rgba(0, 60, 99, 1.0);
+}
 .page-topbar {
     background-color: #003C63;
 }
