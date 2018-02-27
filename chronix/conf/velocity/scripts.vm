@@ -19,8 +19,8 @@
 
       <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - START -->
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/jstree/jstree.min.js&contentType=text/javascript" type="text/javascript"></script>
-      ## <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-      ## <script src="http://square.github.io/cubism/cubism.v1.js"></script>
+      <script type="text/javascript" src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/moment/moment.min.js"></script>
+      <script type="text/javascript" src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/daterangepicker/daterangepicker.js"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/js/jquery.dataTables.min.js&contentType=text/javascript" type="text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js&contentType=text/javascript" type="text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js&contentType=text/javascript" type="text/javascript"></script>
@@ -130,10 +130,45 @@ var load_metrics = [];
           d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
 
         });
-        ## $(document).ready(function() {
+        $(document).ready(function() {
+        $('i.daterange').daterangepicker();
         ##   $('.top.axis').prependTo("#graph");
         ##   $('.bottom.axis').appendTo("#graph");
         ##
         ##
-        ## });
+        });
+</script>
+
+<script type="text/javascript">
+$(function() {
+
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('MM/DD/YYYY h:mm:ss A') + ' - ' + end.format('MM/DD/YYYY h:mm:ss A'));
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        timePicker: true,
+        timePickerSeconds: true,
+        timePickerIncrement: 1,
+        locale: {
+            format: 'MM/DD/YYYY h:mm:ss A'
+        },
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+    cb(start, end);
+
+});
 </script>
