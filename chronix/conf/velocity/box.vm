@@ -22,22 +22,22 @@
 
         <ul class="nav nav-tabs">
           <li>
-            <a href="#tab-0" data-toggle="tab">
+            <a href="#tab-information" data-toggle="tab">
                 <i class="fa fa-info-circle"></i> information
               </a>
           </li>
           <li class="active">
-            <a href="#tab-1" data-toggle="tab">
+            <a href="#tab-horizon-chart" data-toggle="tab">
                 <i class="fa fa-area-chart"></i> Horizon chart
               </a>
           </li>
           <li>
-            <a href="#tab-2" data-toggle="tab">
+            <a href="#tab-table" data-toggle="tab">
                 <i class="fa fa-table"></i> table
               </a>
           </li>
           <li>
-            <a href="#tab-3" data-toggle="tab">
+            <a href="#tab-scatterplot" data-toggle="tab">
                 <i class="fa fa-line-chart"></i> scatterplot
               </a>
           </li>
@@ -46,7 +46,7 @@
 
 
         <div class="tab-content">
-        <div class="tab-pane fade in " id="tab-0">
+        <div class="tab-pane fade in " id="tab-information">
          <h4>Dataset: <small class="text-primary">http://localhost:8983/solr/chronix/select?indent=on&q=*:*&wt=json</small></h4>
          <h4>Last modified: <small class="text-info">12 months ago</small></h4>
          <h4>Num Docs: <small class="text-info">182</small></h4>
@@ -59,10 +59,10 @@
 
 
         </div>
-          <div class="tab-pane fade in active" id="tab-1">
+          <div class="tab-pane fade in active" id="tab-horizon-chart">
             <div id="graph" /></div>
         </div>
-        <div class="tab-pane fade" id="tab-2">
+        <div class="tab-pane fade" id="tab-table">
 
           <table id="example-1" class="table table-striped dt-responsive display" cellspacing="0" width="100%">
             <thead>
@@ -166,7 +166,7 @@
           </table>
 
         </div>
-        <div class="tab-pane fade" id="tab-3">
+        <div class="tab-pane fade" id="tab-scatterplot">
           scatterplot
 
         </div>
