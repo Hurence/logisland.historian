@@ -22,23 +22,25 @@
 
         <ul class="nav nav-tabs">
           <li>
-            <a href="#tab-information" data-toggle="tab">
-                <i class="fa fa-info-circle"></i> information
+            <a href="#tab-table" data-toggle="tab">
+                <i class="fa fa-table"></i> summary
               </a>
           </li>
+         
           <li class="active">
             <a href="#tab-horizon-chart" data-toggle="tab">
-                <i class="fa fa-area-chart"></i> Horizon chart
+                <i class="fa fa-area-chart"></i> horizon
               </a>
           </li>
-          <li>
-            <a href="#tab-table" data-toggle="tab">
-                <i class="fa fa-table"></i> table
-              </a>
-          </li>
+          
           <li>
             <a href="#tab-scatterplot" data-toggle="tab">
                 <i class="fa fa-line-chart"></i> scatterplot
+              </a>
+          </li>
+           <li>
+            <a href="#tab-information" data-toggle="tab">
+                <i class="fa fa-info-circle"></i> information
               </a>
           </li>
         </ul>
