@@ -3,6 +3,19 @@
 
       <section class="box ">
         <header class="panel_header">
+          <h2 class="title pull-left">dates</h2>
+        </header>
+        <div class="content-body">
+          <div class="row">
+
+
+
+
+          </div>
+        </div>
+      </section>
+      <section class="box ">
+        <header class="panel_header">
           <h2 class="title pull-left">Filters</h2>
         </header>
         <div class="content-body">

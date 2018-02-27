@@ -9,6 +9,11 @@ section .content-body {
 .page-topbar .quick-area .info-menu li a.toggle{
   color: #ffffff;
 }
+.page-topbar li.datetimepicker .input-group {
+    width: 370px;
+    top: 12px;
+}
+
 section header {
 
     border-bottom: 2px solid rgba(0, 60, 99, 1.0);
@@ -19,6 +24,10 @@ border-color: rgba(0, 60, 99, 1.0);
 }
 .page-topbar {
     background-color: #003C63;
+}
+.page-topbar li.datepicker .input-group {
+    width: 260px;
+    top: 12px;
 }
 .page-topbar .logo-area {
   /* background-image: url('/solr/chronix/admin/file?file=/velocity/assets/images/logo.png'); */
