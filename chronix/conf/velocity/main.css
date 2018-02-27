@@ -9,7 +9,10 @@ section .content-body {
 .page-topbar .quick-area .info-menu li a.toggle{
   color: #ffffff;
 }
+section header {
 
+    border-bottom: 2px solid rgba(0, 60, 99, 1.0);
+}
 .page-topbar {
     background-color: #003C63;
 }

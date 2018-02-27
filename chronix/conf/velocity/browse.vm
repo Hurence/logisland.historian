@@ -14,7 +14,7 @@
     #parse("topbar.vm")
   </div>
 
-  <section class="box">
+  <section class="wrapper main-wrapper">
     #parse("box.vm")
   </section>
 
