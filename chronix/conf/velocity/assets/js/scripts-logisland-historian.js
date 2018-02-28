@@ -12,12 +12,16 @@ function getUrlParameter(sParam) {
 
         if (sParameterName[0] === sParam) {
 
-            if (sParameterName[1] == "*:*")
+            if (sParameterName[1] == "*:*" || sParameterName[1] == "")
                 return "*";
-            else
+            else{
+                
                 return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+                
         }
     }
+
 };
 
 jQuery(function ($) {
