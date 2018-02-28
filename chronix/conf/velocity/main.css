@@ -18,6 +18,7 @@ section .content-body {
 .page-topbar li.datetimepicker input, .datetimepicker input{
     background-color: #f4f5f7;
     color: #919191;
+    font-size: 10px;
 
 }
 
