@@ -9,13 +9,13 @@ section .content-body {
 .page-topbar .quick-area .info-menu li a.toggle{
   color: #ffffff;
 }
-.page-topbar li.datetimepicker .input-group {
-    width: 370px;
-    top: 12px;
+.page-topbar li.datetimepicker .input-group, .datetimepicker .input-group {
+    /* width: 370px;
+    top: 12px; */
     background-color: #f4f5f7;
 
 }
-.page-topbar li.datetimepicker input {
+.page-topbar li.datetimepicker input, .datetimepicker input{
     background-color: #f4f5f7;
     color: #919191;
 
@@ -428,4 +428,48 @@ li.show {
   width:80%;
   position: relative;
 
+}
+
+
+
+/*--- Search Form ----*/
+
+.searchform {} .searchform .input-group {
+    top: 12px;
+    width: 30px;
+    cursor: hand;
+    cursor: pointer;
+}
+.searchform .input-group-addon {
+    border: none;
+    background: transparent;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    color: #919191;
+}
+.searchform .form-control {
+    border: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background: transparent;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    display: none;
+    color: #919191;
+}
+.searchform.focus .form-control {
+    display: block;
+}
+.searchform.focus .input-group {
+  width: 100%;
+      top: 0px;
+}
+.searchform.focus .input-group, .searchform .form-control:focus {
+    background: #f4f5f7;
+}
+.searchform input[type="submit"] {
+    display: none;
 }
