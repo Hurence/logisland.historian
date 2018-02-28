@@ -39,7 +39,7 @@ jQuery(function ($) {
 
         $(".page-topbar .message-toggle-wrapper").addClass("showopacity");
         $(".page-topbar .notify-toggle-wrapper").addClass("showopacity");
-        $(".page-topbar .searchform").addClass("showopacity");
+        $(".page-topbar .searchform, .searchform").addClass("showopacity");
         $(".page-topbar li.profile").addClass("showopacity");
     }
 
@@ -143,7 +143,7 @@ jQuery(function ($) {
          Top Bar
      --------------------------------*/
     ULTRA_SETTINGS.pageTopBar = function () {
-        $('.page-topbar li.searchform .input-group-addon').click(function (e) {
+        $('.page-topbar li.searchform .input-group-addon, .searchform .input-group-addon').click(function (e) {
             $(this).parent().parent().toggleClass("focus");
             $(this).parent().find("input").focus();
         });
