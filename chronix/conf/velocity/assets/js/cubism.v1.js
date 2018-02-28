@@ -28,8 +28,8 @@
           start1, stop1, // the start and stop for the next prepare event
           serverDelay = 5e3,
           clientDelay = 5e3,
-          event = d3.dispatch("prepare", "beforechange", "change", "focus"),
-          scale = context.scale = d3.time.scale().range([0, size]),
+          event = d3v2.dispatch("prepare", "beforechange", "change", "focus"),
+          scale = context.scale = d3v2.time.scale().range([0, size]),
           timeout,
           focus;
     
@@ -133,8 +133,8 @@
         return context;
       };
     
-      d3.select(window).on("keydown.context-" + ++cubism_id, function() {
-        switch (!d3.event.metaKey && d3.event.keyCode) {
+      d3v2.select(window).on("keydown.context-" + ++cubism_id, function() {
+        switch (!d3v2.event.metaKey && d3v2.event.keyCode) {
           case 37: // left
             if (focus == null) focus = size - 1;
             if (focus > 0) context.focus(--focus);
@@ -145,7 +145,7 @@
             break;
           default: return;
         }
-        d3.event.preventDefault();
+        d3v2.event.preventDefault();
       });
     
       return update();
@@ -165,7 +165,7 @@
     
       source.metric = function(expression) {
         return context.metric(function(start, stop, step, callback) {
-          d3.json(host + "/1.0/metric"
+          d3v2.json(host + "/1.0/metric"
               + "?expression=" + encodeURIComponent(expression)
               + "&start=" + cubism_cubeFormatDate(start)
               + "&stop=" + cubism_cubeFormatDate(stop)
@@ -184,7 +184,7 @@
       return source;
     };
     
-    var cubism_cubeFormatDate = d3.time.format.iso;
+    var cubism_cubeFormatDate = d3v2.time.format.iso;
     /* librato (http://dev.librato.com/v1/post/metrics) source
      * If you want to see an example of how to use this source, check: https://gist.github.com/drio/5792680
      */
@@ -315,7 +315,7 @@
            * for the interval we are working on.
            */
           function actual_request(full_url) {
-            d3.json(full_url)
+            d3v2.json(full_url)
               .header("X-Requested-With", "XMLHttpRequest")
               .header("Authorization", auth_string)
               .header("Librato-User-Agent", 'cubism/' + cubism.version)
@@ -386,7 +386,7 @@
               + (!(step % 36e5) ? step / 36e5 + "hour" : !(step % 6e4) ? step / 6e4 + "min" : step / 1e3 + "sec")
               + "','" + sum + "')";
     
-          d3.text(host + "/render?format=raw"
+          d3v2.text(host + "/render?format=raw"
               + "&target=" + encodeURIComponent("alias(" + target + ",'')")
               + "&from=" + cubism_graphiteFormatDate(start - 2 * step) // off-by-two?
               + "&until=" + cubism_graphiteFormatDate(stop - 1000), function(text) {
@@ -404,7 +404,7 @@
       };
     
       source.find = function(pattern, callback) {
-        d3.json(host + "/metrics/find?format=completer"
+        d3v2.json(host + "/metrics/find?format=completer"
             + "&query=" + encodeURIComponent(pattern), function(result) {
           if (!result) return callback(new Error("unable to find metrics"));
           callback(null, result.metrics.map(function(d) { return d.path; }));
@@ -494,7 +494,7 @@
                     '&cs=' + start/1000 + '&ce=' + stop/1000 + '&step=' + step/1000 + '&graphlot=1');
           }
     
-          d3.json(host + uriPathPrefix + 'graph.php?' + constructGangliaWebRequestQueryParams(),
+          d3v2.json(host + uriPathPrefix + 'graph.php?' + constructGangliaWebRequestQueryParams(),
             function(result) {
               if( !result ) {
                 return callback(new Error("Unable to fetch GangliaWeb data"));
@@ -585,7 +585,7 @@
           step = context.step(),
           size = context.size(),
           values = [],
-          event = d3.dispatch("change"),
+          event = d3v2.dispatch("change"),
           listening = 0,
           fetching;
     
@@ -738,17 +738,17 @@
           buffer = document.createElement("canvas"),
           width = buffer.width = context.size(),
           height = buffer.height = 30,
-          scale = d3.scale.linear().interpolate(d3.interpolateRound),
+          scale = d3v2.scale.linear().interpolate(d3v2.interpolateRound),
           metric = cubism_identity,
           extent = null,
           title = cubism_identity,
-          format = d3.format(".2s"),
+          format = d3v2.format(".2s"),
           colors = ["#08519c","#3182bd","#6baed6","#bdd7e7","#bae4b3","#74c476","#31a354","#006d2c"];
     
       function horizon(selection) {
     
         selection
-            .on("mousemove.horizon", function() { context.focus(Math.round(d3.mouse(this)[0])); })
+            .on("mousemove.horizon", function() { context.focus(Math.round(d3v2.mouse(this)[0])); })
             .on("mouseout.horizon", function() { context.focus(null); });
     
         selection.append("canvas")
@@ -770,8 +770,8 @@
               extent_ = typeof extent === "function" ? extent.call(that, d, i) : extent,
               start = -Infinity,
               step = context.step(),
-              canvas = d3.select(that).select("canvas"),
-              span = d3.select(that).select(".value"),
+              canvas = d3v2.select(that).select("canvas"),
+              span = d3v2.select(that).select(".value"),
               max_,
               m = colors_.length >> 1,
               ready;
@@ -952,7 +952,7 @@
       var context = this,
           width = context.size(),
           height = 120,
-          scale = d3.scale.linear().interpolate(d3.interpolateRound),
+          scale = d3v2.scale.linear().interpolate(d3v2.interpolateRound),
           primary = function(d) { return d[0]; },
           secondary = function(d) { return d[1]; },
           extent = null,
@@ -965,7 +965,7 @@
       function comparison(selection) {
     
         selection
-            .on("mousemove.comparison", function() { context.focus(Math.round(d3.mouse(this)[0])); })
+            .on("mousemove.comparison", function() { context.focus(Math.round(d3v2.mouse(this)[0])); })
             .on("mouseout.comparison", function() { context.focus(null); });
     
         selection.append("canvas")
@@ -988,7 +988,7 @@
               primary_ = typeof primary === "function" ? primary.call(that, d, i) : primary,
               secondary_ = typeof secondary === "function" ? secondary.call(that, d, i) : secondary,
               extent_ = typeof extent === "function" ? extent.call(that, d, i) : extent,
-              div = d3.select(that),
+              div = d3v2.select(that),
               canvas = div.select("canvas"),
               spanPrimary = div.select(".value.primary"),
               spanChange = div.select(".value.change"),
@@ -1168,8 +1168,8 @@
       return comparison;
     };
     
-    var cubism_comparisonPrimaryFormat = d3.format(".2s"),
-        cubism_comparisonChangeFormat = d3.format("+.0%");
+    var cubism_comparisonPrimaryFormat = d3v2.format(".2s"),
+        cubism_comparisonChangeFormat = d3v2.format("+.0%");
     
     function cubism_comparisonRoundEven(i) {
       return i & 0xfffffe;
@@ -1181,7 +1181,7 @@
     cubism_contextPrototype.axis = function() {
       var context = this,
           scale = context.scale,
-          axis_ = d3.svg.axis().scale(scale);
+          axis_ = d3v2.svg.axis().scale(scale);
     
       var formatDefault = context.step() < 6e4 ? cubism_axisFormatSeconds
           : context.step() < 864e5 ? cubism_axisFormatMinutes
@@ -1202,7 +1202,7 @@
     
         context.on("change.axis-" + id, function() {
           g.call(axis_);
-          if (!tick) tick = d3.select(g.node().appendChild(g.selectAll("text").node().cloneNode(true)))
+          if (!tick) tick = d3v2.select(g.node().appendChild(g.selectAll("text").node().cloneNode(true)))
               .style("display", "none")
               .text(null);
         });
@@ -1239,7 +1239,7 @@
         return axis;
       };
     
-      return d3.rebind(axis, axis_,
+      return d3v2.rebind(axis, axis_,
           "orient",
           "ticks",
           "tickSubdivide",
@@ -1248,9 +1248,9 @@
           "tickFormat");
     };
     
-    var cubism_axisFormatSeconds = d3.time.format("%I:%M:%S %p"),
-        cubism_axisFormatMinutes = d3.time.format("%I:%M %p"),
-        cubism_axisFormatDays = d3.time.format("%B %d");
+    var cubism_axisFormatSeconds = d3v2.time.format("%I:%M:%S %p"),
+        cubism_axisFormatMinutes = d3v2.time.format("%I:%M %p"),
+        cubism_axisFormatDays = d3v2.time.format("%B %d");
     cubism_contextPrototype.rule = function() {
       var context = this,
           metric = cubism_identity;
@@ -1369,7 +1369,7 @@
                     return ('q=name:' + metricName + '&fl=dataAsJson&wt=json');
                 }
     
-                d3.json(host + uriPathPrefix + '?' + constructChronixWebRequestQueryParams(),
+                d3v2.json(host + uriPathPrefix + '?' + constructChronixWebRequestQueryParams(),
                     function (result) {
     
                         var numFound = result.response.numFound;
@@ -1401,7 +1401,7 @@
                                   value = rows[0][1],
                                   finalValues = [value];
                               rows.forEach(function (d) {
-                                  while ((date = d3.time.day.offset(date, 1)) < d[0])
+                                  while ((date = d3v2.time.day.offset(date, 1)) < d[0])
                                       finalValues.push(value);
                                   finalValues.push(value = (d[1] - compare) / compare);
                               });

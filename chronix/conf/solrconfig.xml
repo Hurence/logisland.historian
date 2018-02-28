@@ -574,6 +574,16 @@
             <str name="facet.pivot">group,host</str>
         </lst>
     </requestHandler>
+     <requestHandler name="/experiment" class="de.qaware.chronix.solr.query.ChronixQueryHandler">
+
+        <lst name="defaults">
+            <str name="echoParams">explicit</str>
+            <str name="wt">velocity</str>
+            <str name="v.template">experiment</str>
+
+            <str name="title">LogIsland data historian</str>
+        </lst>
+    </requestHandler>
     <requestHandler name="/login" class="de.qaware.chronix.solr.query.ChronixQueryHandler">
 
         <lst name="defaults">

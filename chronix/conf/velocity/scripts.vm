@@ -7,8 +7,10 @@
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/jquery-1.11.2.min.js&contentType=text/javascript" type="text/javascript"></script>
       ## <script type="text/javascript" src="#{url_root}/js/lib/jquery-1.7.2.min.js"></script>
       ## <script type="text/javascript" src="#{url_for_solr}/admin/file?file=/velocity/jquery.autocomplete.js&contentType=text/javascript"></script>
-      <script src="#{url_for_solr}/admin/file?file=/velocity/d3.v2.min.js&contentType=text/javascript" charset="utf-8"></script>
-      <script src="#{url_for_solr}/admin/file?file=/velocity/cubism.v1.js&contentType=text/javascript"></script>
+      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/d3.v2.min.js&contentType=text/javascript" charset="utf-8"></script>   
+      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/d3-4.5.0.min.js"></script>
+      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/circos.min.js"></script>
+      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/cubism.v1.js&contentType=text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/jquery.easing.min.js&contentType=text/javascript" type="text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/bootstrap/js/bootstrap.min.js&contentType=text/javascript" type="text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/pace/pace.min.js&contentType=text/javascript" type="text/javascript"></script>
@@ -43,7 +45,7 @@
 <script>
   $(document).ready(function() {
 
-    d3
+    d3v2
       .select("body")
       .append("p");
     $("\#q")
@@ -100,7 +102,7 @@ var load_metrics = [];
         load_metrics.push(chronix.metric({"metricName": metric_name}).alias(metric_name.replace("\\", " ")));
     })
 
-        d3
+        d3v2
             .select("#graph")
             .selectAll(".axis")
             .data(["top", "bottom"])
@@ -110,28 +112,28 @@ var load_metrics = [];
                 return d + " axis";
             })
             .each(function (d) {
-                d3
+                d3v2
                     .select(this)
                     .call(context.axis().ticks(12).orient(d));
             });
 
-        d3
+        d3v2
             .select("#graph")
             .append("div")
             .attr("class", "rule")
             .call(context.rule());
 
-        d3
+        d3v2
             .select("#graph")
             .selectAll(".horizon")
             .data(uniq(load_metrics))
             .enter()
             .insert("div", ".bottom")
             .attr("class", "horizon")
-            .call(context.horizon().format(d3.format("+,.2p")));
+            .call(context.horizon().format(d3v2.format("+,.2p")));
 
         context.on("focus", function (i) {
-          d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
+          d3v2.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
 
         });
         $(document).ready(function() {

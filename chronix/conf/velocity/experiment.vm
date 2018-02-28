@@ -1,137 +1,83 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 
-<script src="#{url_for_solr}/admin/file?file=/velocity/d3.v2.min.js" charset="utf-8"></script>
-<script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/jsonQ.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.js'></script>
+<script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/d3-queue.js" charset="utf-8"></script>
+<script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/circos.min.js"></script>
 <body id="demo">
+    <div class="mdl-layout__tab-panel" id="heatmap">
+        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+                <div class="mdl-card__supporting-text">
+                    <h4>Heatmap</h4>
+                    <div id='heatmapChart'></div>
+                </div>
+            </div>
+        </section>
+    </div>
     <script>
+        function drawCircos(error, months, electricalConsumption, daysOff) {
+            var width = document
+                .getElementsByClassName('mdl-card__supporting-text')[0]
+                .offsetWidth
+            var circosHeatmap = new Circos({container: '#heatmapChart', width: width, height: width});
 
-        //return an array of objects according to key, value, or key and value matching
-        function getObjects(obj, key, val) {
-            var objects = [];
-            for (var i in obj) {
-                if (!obj.hasOwnProperty(i)) 
-                    continue;
-                if (typeof obj[i] == 'object') {
-                    objects = objects.concat(getObjects(obj[i], key, val));
-                } else
-                // if key matches and value matches or if key matches and value is not passed (eliminating the case
-                // where key matches but passed value does not)
-                if (i == key && obj[i] == val || i == key && val == '') { //
-                    objects.push(obj);
-                } else if (obj[i] == val && key == '') {
-                    //only add if the object is not already in the array
-                    if (objects.lastIndexOf(obj) == -1) {
-                        objects.push(obj);
+            electricalConsumption = electricalConsumption.map(function (d) {
+                return {
+                    block_id: d.month,
+                    start: parseInt(d.start),
+                    end: parseInt(d.end),
+                    value: parseFloat(d.value)
+                };
+            })
+            daysOff = daysOff.map(function (d) {
+                return {
+                    block_id: d.month,
+                    start: parseInt(d.start),
+                    end: parseInt(d.end),
+                    value: parseFloat(d.value)
+                };
+            })
+            circosHeatmap
+                .layout(months, {
+                    innerRadius: width / 2 - 80,
+                    outerRadius: width / 2 - 30,
+                    ticks: {
+                        display: false
+                    },
+                    labels: {
+                        position: 'center',
+                        display: true,
+                        size: 14,
+                        color: '#000',
+                        radialOffset: 15
                     }
-                }
-            }
-            return objects;
-        }
-
-        //return an array of values that match on a certain key
-        function getValues(obj, key) {
-            var objects = [];
-            for (var i in obj) {
-                if (!obj.hasOwnProperty(i)) 
-                    continue;
-                if (typeof obj[i] == 'object') {
-                    objects = objects.concat(getValues(obj[i], key));
-                } else if (i == key) {
-                    objects.push(obj[i]);
-                }
-            }
-            return objects;
-        }
-
-        //return an array of keys that match on a certain value
-        function getKeys(obj, val) {
-            var objects = [];
-            for (var i in obj) {
-                if (!obj.hasOwnProperty(i)) 
-                    continue;
-                if (typeof obj[i] == 'object') {
-                    objects = objects.concat(getKeys(obj[i], val));
-                } else if (obj[i] == val) {
-                    objects.push(i);
-                }
-            }
-            return objects;
-        }
-
-        // var jsonQ = require("jsonq");
-        var data = [
-            {
-                "text": "Logisland Historian",
-                "state": {
-                    "opened": true
-                },
-                "children": [
-                    {
-                        "text": "alerts",
-                        "state": {
-                            "disabled": true
-                        },
-                        "children": [],
-                        "icon": "glyphicon glyphicon-flash"
-                    }, {
-                        "text": "graphs",
-                        "state": {
-                            "selected": true
-                        },
-                        "children": []
-                    }, {
-                        "text": "metrics",
-                        "state": {
-                            "selected": true
-                        },
-                        "children": []
-                    }
-                ]
-            }
-        ];
-
-        var query = "#{url_for_solr}/select?indent=on&q=*:*&wt =json&facet=on&facet.field=name&fl=name";
-        d3.json(query, function (json) {
-
-            var facets = json.facet_counts.facet_fields.name;
-            for (i = 0; i < facets.length; i += 2) {
-                if (facets[i + 1] > 0) {
-
-                    var tokens = facets[i].split(/[\s,\\\/]+/);
-                    var tokenPos = 0;
-                    var previousToken = "";
-                    tokens.forEach(function (token) {
-
-                        if (token != "") {
-                            if (tokenPos == 0 && getObjects(data, 'text', token).length == 0) {
-                                getObjects(data, 'text', 'metrics')[0]
-                                    .children
-                                    .push({'text': token});
-                            } else if (getObjects(data, 'text', previousToken).length > 0) {
-                                if (getObjects(data, 'text', previousToken)[0].children == undefined) {
-                                    getObjects(data, 'text', previousToken)[0].children = [
-                                        {
-                                            'text': token
-                                        }
-                                    ];
-                                } else {
-                                    getObjects(data, 'text', previousToken)[0]
-                                        .children
-                                        .push({'text': token});
-                                }
-
-                            }
-                            tokenPos++;
-                            previousToken = token;
+                })
+                .heatmap('electricalConsumption', electricalConsumption, {
+                    innerRadius: 0.8,
+                    outerRadius: 0.98,
+                    logScale: false,
+                    color: 'YlOrRd',
+                    events: {
+                        'mouseover.demo': function (d, i, nodes, event) {
+                            console.log(d, i, nodes, event)
                         }
-                    });
+                    }
+                })
+                .heatmap('days-off', daysOff, {
+                    innerRadius: 0.7,
+                    outerRadius: 0.79,
+                    logScale: false,
+                    color: 'Blues'
+                })
+                .render()
+        }
 
-                }
-
-            }
-
-            console.log(getObjects(data, 'text', 'metrics')[0]);
-        
-        });
+        d3
+            .queue()
+            .defer(d3.json, '#{url_for_solr}/admin/file?file=/velocity/data/months.json')
+            .defer(d3.csv, '#{url_for_solr}/admin/file?file=/velocity/data/electrical-consumption.csv')
+            .defer(d3.csv, '#{url_for_solr}/admin/file?file=/velocity/data/days-off.csv')
+            .await(drawCircos)
     </script>
+</body>

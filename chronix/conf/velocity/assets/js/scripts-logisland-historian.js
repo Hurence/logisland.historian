@@ -14,11 +14,11 @@ function getUrlParameter(sParam) {
 
             if (sParameterName[1] == "*:*" || sParameterName[1] == "")
                 return "*";
-            else{
-                
+            else {
+
                 return sParameterName[1] === undefined ? true : sParameterName[1];
             }
-                
+
         }
     }
 
@@ -691,6 +691,148 @@ jQuery(function ($) {
         }
     };
 
+
+
+
+
+    ULTRA_SETTINGS.circularMapInit = function () {
+
+
+        var bucketAvgQuery = "http://localhost:8983/solr/chronix/select?cf=metric{savgbckt:67}&fl=dataAsJson&indent=on&q=name:" + getUrlParameter("q") + "&wt=json"
+        var dataNodes = [];
+        $.ajax({
+            url: bucketAvgQuery,
+            cache: false,
+            success: function (s) {
+
+                var count = s.response.numFound;
+
+                for (var i = 0; i < count; i++) {
+                    var doc = s.response.docs[i];
+                    var dataValues = JSON.parse(doc.dataAsJson);
+                    dataNodes.push({ 'name': doc.name, 'start': doc.start, 'end': doc.end, 'timestamps': dataValues[0], 'values': dataValues[1] });
+                }
+
+
+            }
+
+        }).done(function (data1) {
+            drawCircos("", dataNodes);
+        });
+
+
+
+
+
+        function drawCircos(error, dataNodes) {
+            var width = 800;/*document
+                .getElementById('mdl-card__supporting-text')[0]
+                .offsetWidth*/
+            var circosHeatmap = new Circos({ container: '#heatmapChart', width: width, height: width });
+
+
+            var months = [
+                { "len": 24, "color": "#8dd3c7", "label": "25 aug", "id": "25-7" },
+                { "len": 24, "color": "#8dd3c7", "label": "26 aug", "id": "26-7" },
+                { "len": 24, "color": "#8dd3c7", "label": "27 aug", "id": "27-7" },
+                { "len": 24, "color": "#8dd3c7", "label": "28 aug", "id": "28-7" },
+                { "len": 24, "color": "#8dd3c7", "label": "29 aug", "id": "29-7" },
+                { "len": 24, "color": "#8dd3c7", "label": "30 aug", "id": "30-7" },
+                { "len": 24, "color": "#8dd3c7", "label": "31 aug", "id": "31-7" },
+                { "len": 24, "color": "#fccde5", "label": "01 sep", "id": "1-8" }
+            ]
+
+
+            var charts = []
+            for (var j = 0; j < dataNodes.length; j++) {
+                var i = 0;
+                var chart = dataNodes[j].timestamps.map(function (d) {
+                    var currentDate = new Date(d);
+                    return {
+                        block_id: currentDate.getDate() + "-" + currentDate.getMonth(),
+                        start: currentDate.getHours(),
+                        end: currentDate.getHours() + 1,
+                        value: dataNodes[j].values[i],
+                        name: dataNodes[j].name + " : " + currentDate + " : " + dataNodes[j].values[i++],
+                    };
+                })
+                charts.push(chart);
+            }
+
+            // fill empty charts
+            for (var j = charts.length; j <= 4; j++) {
+                charts.push([]);
+            }
+
+
+            circosHeatmap
+                .layout(months, {
+                    innerRadius: width / 2 - 80,
+                    outerRadius: width / 2 - 30,
+                    ticks: {
+                        display: false
+                    },
+                    labels: {
+                        position: 'center',
+                        display: true,
+                        size: 14,
+                        color: '#000',
+                        radialOffset: 15
+                    }
+                })
+                .histogram('chart0', charts[0], {
+                    innerRadius: 0.8,
+                    outerRadius: 0.98,
+                    logScale: false,
+                    color: 'YlOrRd',
+                    tooltipContent: function (d) {
+                        return d.name
+                    }
+                })
+                .histogram('chart1', charts[1], {
+                    innerRadius: 0.7,
+                    outerRadius: 0.79,
+                    logScale: false,
+                    color: 'YlOrRd',
+                    tooltipContent: function (d) {
+                        return d.name
+                    }
+                })
+                .histogram('chart2', charts[2], {
+                    innerRadius: 0.6,
+                    outerRadius: 0.69,
+                    logScale: false,
+                    color: 'YlOrRd',
+                    events: {
+                        'mouseover.demo': function (d, i, nodes, event) {
+                            console.log(d, i, nodes, event)
+                        }
+                    },
+                    tooltipContent: function (d) {
+                        return d.name
+                    }
+                })
+                .histogram('chart3', charts[3], {
+                    innerRadius: 0.5,
+                    outerRadius: 0.59,
+                    logScale: false,
+                    color: 'YlOrRd',
+                    tooltipContent: function (d) {
+                        return d.name
+                    }
+                })
+                .render()
+        }
+
+        /*  d3
+              .queue()
+              .defer(d3.json, '#{url_for_solr}/admin/file?file=/velocity/data/days.json')
+              .defer(d3.csv, '#{url_for_solr}/admin/file?file=/velocity/data/memory-free.csv')
+              .defer(d3.csv, '#{url_for_solr}/admin/file?file=/velocity/data/days-off.csv')
+              .await(drawCircos)*/
+
+    };
+
     /******************************
      initialize respective scripts
      *****************************/
@@ -703,6 +845,7 @@ jQuery(function ($) {
         ULTRA_SETTINGS.draggablePanels();
         ULTRA_SETTINGS.viewportElement();
         ULTRA_SETTINGS.onLoadTopBar();
+        ULTRA_SETTINGS.circularMapInit();
     });
 
     $(window).resize(function () {

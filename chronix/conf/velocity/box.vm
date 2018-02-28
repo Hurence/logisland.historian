@@ -1,142 +1,191 @@
 <div class="row">
-  <div class="col-md-3 col-sm-4 col-xs-12">
-  <section class="box ">
-      <header class="panel_header">
-          <h2 class="title pull-left">Search</h2>
-      </header>
-      <div class="content-body">    <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-              <div class="hidden-sm hidden-xs searchform focus">
-                  <div class="input-group">
-                      <span class="input-group-addon input-focus">
-                          <i class="fa fa-search"></i>
-                      </span>
-                      <form id="query-form" action="#{url_for_home}" method="GET">
-                      <input class="form-control animated fadeIn" type="text" id="q" name="q" value="$!esc.html($params.get('q'))" placeholder="*:*"/>
-                      <input type="submit" id="querySubmit"/>
-                      </form>
-                  </div>
-              </div>
-              </div>
-          </div>
-      </div>
-  </section>
-  <section class="box ">
-      <header class="panel_header">
-          <h2 class="title pull-left">Date range</h2>
-      </header>
-      <div class="content-body">    <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-
-              <div class="notify-toggle-wrapper datetimepicker showopacity">
-              <div class="input-group">
-                    <span class="input-group-addon">
-                        <span class="arrow"></span>
-                        <i class="fa fa-calendar"></i>
-                    </span>
-                    <input id="reportrange"  type="text" class="form-control pull-left" placeholder="">
-                </div>
-              </div>
-              </div>
-          </div>
-      </div>
-  </section>
-
-    <section class="box ">
-      <header class="panel_header">
-        <h2 class="title pull-left">Filters</h2>
-      </header>
-      <div class="content-body">
-        <div class="row">
-          <div class="input-group ">
-            <span class="input-group-addon">
-<i class="fa fa-filter"></i>
-</span>
-            <input type="text" value="" id="treedata_q" placeholder="Filter" class="form-control" />
-          </div>
-          <div id="jstree_treedata" class="treedata" style="min-height:200px;"></div>
-        </div>
-      </div>
-    </section>
-  </div>
-  <div class="col-md-9 col-sm-8 col-xs-12">
-    <div class="">
-
-      <ul class="nav nav-tabs">
-        <li>
-          <a href="#tab-table" data-toggle="tab">
-<i class="fa fa-table"></i> summary
-</a>
-        </li>
-
-        <li class="active">
-          <a href="#tab-horizon-chart" data-toggle="tab">
-<i class="fa fa-area-chart"></i> horizon
-</a>
-        </li>
-
-        <li>
-          <a href="#tab-scatterplot" data-toggle="tab">
-<i class="fa fa-line-chart"></i> scatterplot
-</a>
-        </li>
-        <li>
-          <a href="#tab-information" data-toggle="tab">
-<i class="fa fa-info-circle"></i> information
-</a>
-        </li>
-      </ul>
-
-
-
-      <div class="tab-content">
-        <div class="tab-pane fade in " id="tab-information">
-          <h4>Dataset: <small class="text-primary">http://localhost:8983/solr/chronix/select?indent=on&q=*:*&wt=json</small></h4>
-          <h4>Last modified: <small class="text-info">12 months ago</small></h4>
-          <h4>Num Docs: <small class="text-info">182</small></h4>
-          <h4>Max Doc: <small class="text-info">182</small></h4>
-          <h4>CWD: <small class="text-info">/opt/solr/server</small></h4>
-          <h4>Instance: <small class="text-info">/opt/solr/server/solr/chronix</small></h4>
-          <h4>Data: <small class="text-info">/opt/solr/server/solr/chronix/data</small></h4>
-          <h4>Index: <small class="text-info">/opt/solr/server/solr/chronix/data/index</small></h4>
-          <h4>Impl: <small class="text-info">org.apache.solr.core.NRTCachingDirectoryFactory</small></h4>
-
-
-
-        </div>
-        <div class="tab-pane fade in active" id="tab-horizon-chart">
-          <div id="graph" /></div>
-      </div>
-      <div class="tab-pane fade" id="tab-table">
-
-        <table id="example-1" class="table table-striped dt-responsive display" cellspacing="0" width="100%">
-        </table>
-
-      </div>
-      <div class="tab-pane fade" id="tab-scatterplot">
-
-        <h4>Radar chart</h4>
+    <div class="col-md-3 col-sm-4 col-xs-12">
         <section class="box ">
-          <div class="content-body">
-            <div class="row">
-              <div class="col-md-10 col-sm-10 col-xs-10 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
-                <canvas id="radar-chartjs" width="300" height="300"></canvas>
-              </div>
+            <header class="panel_header">
+                <h2 class="title pull-left">Search</h2>
+            </header>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="hidden-sm hidden-xs searchform focus">
+                            <div class="input-group">
+                                <span class="input-group-addon input-focus">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                <form id="query-form" action="#{url_for_home}" method="GET">
+                                    <input
+                                        class="form-control animated fadeIn"
+                                        type="text"
+                                        id="q"
+                                        name="q"
+                                        value="$!esc.html($params.get('q'))"
+                                        placeholder="*:*"/>
+                                    <input type="submit" id="querySubmit"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+        </section>
+        <section class="box ">
+            <header class="panel_header">
+                <h2 class="title pull-left">Date range</h2>
+            </header>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                        <div class="notify-toggle-wrapper datetimepicker showopacity">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="arrow"></span>
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                                <input id="reportrange" type="text" class="form-control pull-left" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-      </div>
+        <section class="box ">
+            <header class="panel_header">
+                <h2 class="title pull-left">Filters</h2>
+            </header>
+            <div class="content-body">
+                <div class="row">
+                    <div class="input-group ">
+                        <span class="input-group-addon">
+                            <i class="fa fa-filter"></i>
+                        </span>
+                        <input type="text" value="" id="treedata_q" placeholder="Filter" class="form-control"/>
+                    </div>
+                    <div id="jstree_treedata" class="treedata" style="min-height:200px;"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-md-9 col-sm-8 col-xs-12">
+        <div class="">
+
+            <ul class="nav nav-tabs">
+                <li>
+                    <a href="#tab-table" data-toggle="tab">
+                        <i class="fa fa-table"></i>
+                        summary
+                    </a>
+                </li>
+
+                <li class="active">
+                    <a href="#tab-horizon-chart" data-toggle="tab">
+                        <i class="fa fa-area-chart"></i>
+                        horizon
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#tab-scatterplot" data-toggle="tab">
+                        <i class="fa fa-line-chart"></i>
+                        scatterplot
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#tab-circos" data-toggle="tab">
+                        <i class="fa fa-line-chart"></i>
+                        circular
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#tab-information" data-toggle="tab">
+                        <i class="fa fa-info-circle"></i>
+                        information
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane fade in " id="tab-information">
+                    <h4>Dataset:
+                        <small class="text-primary">http://localhost:8983/solr/chronix/select?indent=on&q=*:*&wt=json</small>
+                    </h4>
+                    <h4>Last modified:
+                        <small class="text-info">12 months ago</small>
+                    </h4>
+                    <h4>Num Docs:
+                        <small class="text-info">182</small>
+                    </h4>
+                    <h4>Max Doc:
+                        <small class="text-info">182</small>
+                    </h4>
+                    <h4>CWD:
+                        <small class="text-info">/opt/solr/server</small>
+                    </h4>
+                    <h4>Instance:
+                        <small class="text-info">/opt/solr/server/solr/chronix</small>
+                    </h4>
+                    <h4>Data:
+                        <small class="text-info">/opt/solr/server/solr/chronix/data</small>
+                    </h4>
+                    <h4>Index:
+                        <small class="text-info">/opt/solr/server/solr/chronix/data/index</small>
+                    </h4>
+                    <h4>Impl:
+                        <small class="text-info">org.apache.solr.core.NRTCachingDirectoryFactory</small>
+                    </h4>
+
+                </div>
+                <div class="tab-pane fade in active" id="tab-horizon-chart">
+                    <div id="graph"/></div>
+            </div>
+            <div class="tab-pane fade" id="tab-table">
+
+                <table
+                    id="example-1"
+                    class="table table-striped dt-responsive display"
+                    cellspacing="0"
+                    width="100%"></table>
+
+            </div>
+            <div class="tab-pane fade" id="tab-scatterplot">
+
+                <h4>Radar chart</h4>
+                <section class="box ">
+                    <div class="content-body">
+                        <div class="row">
+                            <div class="col-md-10 col-sm-10 col-xs-10 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+                                <canvas id="radar-chartjs" width="300" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+            <div class="tab-pane fade" id="tab-circos">
+
+                <div class="mdl-layout__tab-panel" id="heatmap">
+                    <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+                        <div class="mdl-card mdl-cell mdl-cell--12-col">
+                            <div class="mdl-card__supporting-text">
+                                <h4>Heatmap</h4>
+                                <div id='heatmapChart'></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+  
+            </div>
+        </section>
 
     </div>
 
-
-  </div>
-
-
-
+</div>
 
 </div>
 
+</div>
 
 </div>
