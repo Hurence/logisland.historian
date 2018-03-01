@@ -277,6 +277,13 @@ jQuery(function ($) {
                                     "valid_children": []
                                 }
                             },
+                            "plugins": ["search"],
+                            "search": {
+                                "case_sensitive": false,
+                                "show_only_matches": true,
+                                "show_only_matches_children":false,
+                                "close_opened_onclear":true
+                            },
                             // "plugins": ["checkbox", "contextmenu", "dnd", "search", "sort", "state", "types", "unique", "wholerow"]
                             "plugins": ["dnd", "search", "sort", "types", "unique", "wholerow", "json_data", "changed"]
                         });
