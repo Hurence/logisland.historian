@@ -2,14 +2,14 @@
     <div class="col-md-3 col-sm-4 col-xs-12">
         <section class="box ">
             <header class="panel_header">
-                <h2 class="title pull-left">Tags</h2>
+                <h2 class="title pull-left">Sources & Tags</h2>
             </header>
             <div class="content-body">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="hidden-sm hidden-xs searchform focus">
 
-                        <a data-toggle="modal" href="#ultraModal-4" class="btn btn-default btn-block">Browse tags</a><br>
+                        <a data-toggle="modal" href="#ultraModal-4" class="btn btn-default btn-block">Browse sources & tags</a><br>
 
                         </div>
                     </div>
@@ -18,7 +18,7 @@
 
             <!-- modal start -->
             <div class="modal fade" id="ultraModal-4" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="ultraModal-Label" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog" style="width: 96%">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -26,7 +26,64 @@
                         </div>
                         <div class="modal-body">
 
-                            To close this modal, click on Close button...
+                                <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                            <form id="commentForm">
+
+                                                <div id="pills"class='wizardpills' >
+                                                    <ul class="form-wizard">
+                                                        <li><a href="#pills-tab1" data-toggle="tab"><span>Source</span></a></li>
+                                                        <li><a href="#pills-tab2" data-toggle="tab"><span>Tags</span></a></li>
+                                                    </ul>
+                                                    <div id="bar" class="progress active">
+                                                        <div class="progress-bar progress-bar-primary " role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                                    </div>
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane" id="pills-tab1">
+                                                        <ul class="uk-nestable" data-uk-nestable="{maxDepth:1}">
+                                                            <li>
+                                                                <div class="uk-nestable-item">
+                                                                    <div class="uk-nestable-handle"></div>
+                                                                    <div data-nestable-action="toggle"></div>
+                                                                    <div class="list-label">Source 1</div>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="uk-nestable-item">
+                                                                    <div class="uk-nestable-handle"></div>
+                                                                    <div data-nestable-action="toggle"></div>
+                                                                    <div class="list-label">Source 2</div>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="uk-nestable-item">
+                                                                    <div class="uk-nestable-handle"></div>
+                                                                    <div data-nestable-action="toggle"></div>
+                                                                    <div class="list-label">Source 3</div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+
+                                                        </div>
+                                                        <div class="tab-pane" id="pills-tab2">
+
+                                                        </div>
+
+
+                                                        <div class="clearfix"></div>
+
+                                                        <ul class="pager wizard">
+                                                            <li class="previous"><a href="javascript:;">Previous</a></li>
+                                                            <li class="next"><a href="javascript:;">Next</a></li>
+                                                            <li class="finish"><a href="javascript:;">Finish</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
 
                         </div>
                         <div class="modal-footer">

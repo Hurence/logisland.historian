@@ -41,6 +41,9 @@
 <link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
 <link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/datatables/extensions/Responsive/bootstrap/3/dataTables.bootstrap.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
 <link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/daterangepicker/daterangepicker.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/uikit/css/uikit.min.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
+<link href="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/uikit/css/components/nestable.min.css&contentType=text/css" rel="stylesheet" type="text/css" media="screen" />
+       
 <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END -->
 
 
