@@ -2,6 +2,43 @@
     <div class="col-md-3 col-sm-4 col-xs-12">
         <section class="box ">
             <header class="panel_header">
+                <h2 class="title pull-left">Tags</h2>
+            </header>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="hidden-sm hidden-xs searchform focus">
+
+                        <a data-toggle="modal" href="#ultraModal-4" class="btn btn-default btn-block">Browse tags</a><br>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- modal start -->
+            <div class="modal fade" id="ultraModal-4" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="ultraModal-Label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Modal Tittle</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            To close this modal, click on Close button...
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- modal end -->
+        </section>
+        <section class="box ">
+            <header class="panel_header">
                 <h2 class="title pull-left">Search</h2>
             </header>
             <div class="content-body">
@@ -74,35 +111,35 @@
                 <li>
                     <a href="#tab-table" data-toggle="tab">
                         <i class="fa fa-table"></i>
-                        summary
+                        summary <i class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></i>
                     </a>
                 </li>
 
                 <li class="active">
                     <a href="#tab-horizon-chart" data-toggle="tab">
                         <i class="fa fa-area-chart"></i>
-                        horizon
+                        horizon <i class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></i>
                     </a>
                 </li>
 
                 <li>
                     <a href="#tab-scatterplot" data-toggle="tab">
                         <i class="fa fa-line-chart"></i>
-                        scatterplot
+                        scatterplot <i class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></i>
                     </a>
                 </li>
 
                 <li>
                     <a href="#tab-circos" data-toggle="tab">
                         <i class="fa fa-line-chart"></i>
-                        circular
+                        circular <i class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></i>
                     </a>
                 </li>
 
                 <li>
                     <a href="#tab-information" data-toggle="tab">
                         <i class="fa fa-info-circle"></i>
-                        information
+                        information <i class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></i>
                     </a>
                 </li>
             </ul>
@@ -189,3 +226,26 @@
 </div>
 
 </div>
+
+
+        <!-- General section box modal start -->
+        <div class="modal" id="section-settings" tabindex="-1" role="dialog" aria-labelledby="ultraModal-Label" aria-hidden="true">
+            <div class="modal-dialog animated bounceInDown">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Section Settings</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        Body goes here...
+
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+                        <button class="btn btn-success" type="button">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal end -->
