@@ -16,25 +16,3 @@
   <section class="wrapper main-wrapper">
     #parse("box.vm")
   </section>
-
-  ## <div class="navigators">
-  ##   #parse("facets.vm")
-  ## </div>
-
-  ## <div class="pagination">
-  ##   #parse("pagination_top.vm")
-  ## </div>
-
-  ## Show Error Message, if any
-  ## <div class="error">
-  ##   #parse("error.vm")
-  ## </div>
-
-  ## Render Results, actual matching docs
-  ## <div class="results">
-  ##   #parse("results_list.vm")
-  ## </div>
-
-  ## <div class="pagination">
-  ##   #parse("pagination_bottom.vm")
-  ## </div>
