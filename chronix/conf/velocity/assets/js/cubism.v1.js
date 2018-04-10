@@ -1332,7 +1332,7 @@
 
     cubism_contextPrototype.chronix = function (config) {
         var host = '',
-            uriPathPrefix = '/solr/chronix/browse';
+            uriPathPrefix = '/solr/chronix/select';
     
         if (arguments.length) {
             if (config.host) {
@@ -1342,7 +1342,7 @@
             if (config.uriPathPrefix) {
                 uriPathPrefix = config.uriPathPrefix;
     
-                /* Add leading and trailing slashes, as appropriate. */
+                // Add leading and trailing slashes, as appropriate.
                 if (uriPathPrefix[0] != '/') {
                     uriPathPrefix = '/' + uriPathPrefix;
                 }
@@ -1356,78 +1356,132 @@
         var source = {},
             context = this;
     
+
+//test
+            var value = 0,
+            values = [],
+            i = 0,
+            last;
+//test
+
+var finalValues = new Map();
+var compare = new Map();
+
+        function buildQuery(host, uriPathPrefix, metricName, start, stop){
+          var qParam = '?q=name:' + metricName;
+          if(metricName.indexOf("Account123")!= -1){
+          /*  if(start){
+              qParam += ' AND start:' + start;
+            }
+           if(stop){
+              qParam += ' AND end:' + stop;
+            }
+*/
+
+            
+           /* if(stop){
+              qParam += ' AND end:' + stop  ;
+            }*/
+           // console.log('start ' + start + ' - stop ' + stop );
+          }
+         
+          return host + uriPathPrefix + qParam + '&fl=dataAsJson&wt=json' ;
+        }
+
         source.metric = function (metricInfo) {
     
             /* Store the members from metricInfo into local variables. */
             var metricName = metricInfo.metricName,
                 onChangeCallback = metricInfo.onChangeCallback;
     
-    
-            var chronixMetric = context.metric(function (start, stop, step, callback) {
-    
-                function constructChronixWebRequestQueryParams() {
-                    return ('q=name:' + metricName + '&fl=dataAsJson&wt=json');
-                }
-    
-                d3v2.json(host + uriPathPrefix + '?' + constructChronixWebRequestQueryParams(),
-                    function (result) {
-    
-                        var numFound = result.response.numFound;
-              
-                        if (numFound > 0) {
-    
-                            var data = eval(result.response.docs[0].dataAsJson)
-    
-                            var dates = data[0];
-                            var values = data[1];
-    
-                            var rows = [];
-                            for (i = 0; i < dates.length; i++) {
-                                rows.push([
-                                    new Date(dates[i]),
-                                    values[i]
-                                ]);
-                            }
-    
-                            rows = rows
-                                .filter(function (d) {
-                                    return d[1];
-                                })
-                                .reverse();
+            var firstCall = true;
+            var lastValue = 0;
 
-                                if(rows.length !=0){
-                                  var date = rows[0][0],
-                                  compare = rows[0][1],
-                                  value = rows[0][1],
-                                  finalValues = [value];
-                              rows.forEach(function (d) {
-                                  while ((date = d3v2.time.day.offset(date, 1)) < d[0])
-                                      finalValues.push(value);
-                                  finalValues.push(value = (d[1] - compare) / compare);
-                              });
-                              callback(null, finalValues.slice(-context.size()));
-                                }
-                          
-                        }
-    
-                        //response.dataAsJson[0].length
-    
+            var chronixMetric = context.metric(function (start, stop, step, callback) {
+
+                var chronixStart = new Date(start).getTime();
+                var chronixEnd = new Date(stop).getTime();
+                var queryString = buildQuery(host, uriPathPrefix, metricName, chronixStart, chronixEnd);
+                
+                d3v2.json(queryString, function (result) {
+               
+                  if( !result  ) {
+                    return callback(new Error("Unable to fetch Chronix data"));
+                  }  
+
+                  if( result.response.numFound == 0 ) {
+                    console.log("no data");
+                    return;
+                  }  
+
+                  if(finalValues.get(metricName) == undefined){
+                    var tmp = [];
+                    for(var i=0; i<context.size(); i++){
+                      tmp.push(0.0);
+                    }
+                    finalValues.set(metricName, tmp);
+                
+                  }else{
+                    finalValues.set(metricName, []);
+                  }
+
+                  var data = eval(result.response.docs[0].dataAsJson)
+                  var dates = data[0];
+                  var values = data[1];
+                  var rows = [];
+                  for (i = 0; i < dates.length; i++) {
+                      rows.push([ new Date(dates[i]), values[i] ]);
+                  }
+
+                  rows = rows.filter(function (d) {
+                    return d[1];
+                  });
+
+                  if(rows.length !=0){
+
+                    if(compare.get(metricName)== undefined){
+                      compare.set(metricName, d3v2.mean(values));  
+                    }
+
+                    var date = rows[0][0],
+                    
+                    value = rows[0][1],
+                    offset = d3v2.time.day.offset(date, 1);
+                    rows.forEach(function (d) {
+                      var value = (d[1] - compare.get(metricName)) / compare.get(metricName);
+                      finalValues.get(metricName).push(value);
                     });
+                  }else{
+                    console.log("no result");
+                  }
+                  
+                  finalValues.set(metricName, finalValues.get(metricName).slice(-context.size()));
+                
+                  callback(null, finalValues.get(metricName));
+                  
+                });
     
-            }, metricName);
+            }, metricInfo);
     
+
+           
+            
+           /*var chronixMetric = context.metric(function(start, stop, step, callback) {
+                start = +start, stop = +stop;
+                if (isNaN(last)) last = start;
+                while (last < stop) {
+                  last += step;
+                  value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += .2)));
+                  values.push(value);
+                }
+                callback(null, values = values.slice((start - stop) / step));
+              }, metricName);*/
+          
+
             chronixMetric.toString = function () {
                 return titleGenerator(metricInfo);
             };
-    
-            /* Allow users to run their custom code each time a chronixMetric changes.
-             *
-             * TODO Consider abstracting away the naked Cubism call, and instead exposing 
-             * a callback that takes in the values array (maybe alongwith the original
-             * start and stop 'naked' parameters), since it's handy to have the entire
-             * dataset at your disposal (and users will likely implement onChangeCallback
-             * primarily to get at this dataset).
-             */
+
             if (onChangeCallback) {
                 chronixMetric.on('change', onChangeCallback);
             }
@@ -1435,6 +1489,19 @@
             return chronixMetric;
         };
     
+
+        source.find = function(pattern, callback) {
+          console.log("WARNING : calling find() function that is not implemented yet");
+          return callback(new Error("unable to find metrics"));
+
+          /*d3.json(host + "/metrics/find?format=completer"
+              + "&query=" + encodeURIComponent(pattern), function(result) {
+            if (!result) return callback(new Error("unable to find metrics"));
+            callback(null, result.metrics.map(function(d) { return d.path; }));
+          });*/
+        };
+
+
         // Returns the gangliaWeb host + uriPathPrefix.
         source.toString = function () {
             return host + uriPathPrefix;
@@ -1442,4 +1509,7 @@
     
         return source;
     };
+
+
+
     })(this);

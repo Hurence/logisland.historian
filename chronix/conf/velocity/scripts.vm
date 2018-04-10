@@ -8,8 +8,9 @@
       ## <script type="text/javascript" src="#{url_root}/js/lib/jquery-1.7.2.min.js"></script>
       ## <script type="text/javascript" src="#{url_for_solr}/admin/file?file=/velocity/jquery.autocomplete.js&contentType=text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/d3.v2.min.js&contentType=text/javascript" charset="utf-8"></script>   
-      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/d3-4.5.0.min.js"></script>
-      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/circos.min.js"></script>
+      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/d3-4.5.0.min.js&contentType=text/javascript"></script>
+      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/circos.min.js&contentType=text/javascript"></script>
+      <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/metricsgraphics.js&contentType=text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/cubism.v1.js&contentType=text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/js/jquery.easing.min.js&contentType=text/javascript" type="text/javascript"></script>
       <script src="#{url_for_solr}/admin/file?file=/velocity/assets/plugins/bootstrap/js/bootstrap.min.js&contentType=text/javascript" type="text/javascript"></script>
@@ -75,67 +76,9 @@
 
 <script>
 
-    var graphWidth = $(".tab-content").width();
-    ## $("#graph").width(graphWidth);
-    var context = cubism
-        .context()
-        .serverDelay(5 * 1000)
-        .step(5000)
-        .size(graphWidth);
-
-    var chronix = context.chronix(
-        {"host": 'http://localhost:8983', "uriPathPrefix": '/solr/chronix/select'}
-    );
-
-function uniq(a) {
-    var seen = {};
-    return a.filter(function(item) {
-        return seen.hasOwnProperty(item) ? false : (seen[item] = true);
-    });
-}
+   
 
 
-var metrics_names = [ #foreach($doc in $response.results)"$doc.get('name').replace("\", "\\\\")",#end];
-
-var load_metrics = [];
-    metrics_names.forEach(function (metric_name){
-        load_metrics.push(chronix.metric({"metricName": metric_name}).alias(metric_name.replace("\\", " ")));
-    })
-
-        d3v2
-            .select("#graph")
-            .selectAll(".axis")
-            .data(["top", "bottom"])
-            .enter()
-            .append("div")
-            .attr("class", function (d) {
-                return d + " axis";
-            })
-            .each(function (d) {
-                d3v2
-                    .select(this)
-                    .call(context.axis().ticks(12).orient(d));
-            });
-
-        d3v2
-            .select("#graph")
-            .append("div")
-            .attr("class", "rule")
-            .call(context.rule());
-
-        d3v2
-            .select("#graph")
-            .selectAll(".horizon")
-            .data(uniq(load_metrics))
-            .enter()
-            .insert("div", ".bottom")
-            .attr("class", "horizon")
-            .call(context.horizon().format(d3v2.format("+,.2p")));
-
-        context.on("focus", function (i) {
-          d3v2.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
-
-        });
         $(document).ready(function() {
         ## date rage picker init
         $('i.daterange').daterangepicker();

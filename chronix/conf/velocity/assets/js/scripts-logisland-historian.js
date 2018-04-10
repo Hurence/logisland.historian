@@ -9,19 +9,53 @@ function getUrlParameter(sParam) {
 
     for (i = 0; i < sURLVariables.length; i++) {
         sParameterName = sURLVariables[i].split('=');
-
         if (sParameterName[0] === sParam) {
-
-            if (sParameterName[1] == "*:*" || sParameterName[1] == "")
-                return "*";
-            else {
-
-                return sParameterName[1] === undefined ? true : sParameterName[1];
-            }
-
+            return sParameterName[1] === undefined ? true : sParameterName[1];
         }
     }
+};
 
+
+function uniq(a) {
+    var seen = {};
+    return a.filter(function (item) {
+        return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+    });
+}
+
+Array.prototype.sum = Array.prototype.sum || function () {
+    return this.reduce(function (sum, a) { return sum + Number(a) }, 0);
+}
+
+Array.prototype.average = Array.prototype.average || function () {
+    return this.sum() / (this.length || 1);
+}
+
+
+function formatRawQuery(rawQuery) {
+
+    if (rawQuery == undefined || rawQuery == "" || rawQuery == "*:*") {
+        return 'q=*:*';
+    }
+    var tokens = rawQuery.split(/[\s,\+]+/);
+    var formatedQuery = "name:" + tokens[0];
+    for (i = 1; i < tokens.length; i++) {
+        formatedQuery = "name:" + tokens[i] + " OR " + formatedQuery
+    }
+
+    return encodeURI(formatedQuery);
+};
+
+function formatQueryString() {
+
+    var rawQuery = getUrlParameter("q");
+    return 'q=' + formatRawQuery(rawQuery);
+};
+
+
+String.prototype.replaceAll = function (search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
 };
 
 jQuery(function ($) {
@@ -31,6 +65,100 @@ jQuery(function ($) {
     var ULTRA_SETTINGS = window.ULTRA_SETTINGS || {};
 
 
+    ULTRA_SETTINGS.onLoadHorizon = function () {
+
+
+        var chronixQuery = "#{url_for_home}/../select?facet.field=name&facet=on&indent=on&" + formatQueryString() + "&wt=json&rows=0";
+
+
+//DEBUG
+
+        var load_metrics = [];
+        $.ajax({
+            url: chronixQuery,
+            cache: false,
+            success: function (data1) {
+
+                var graphWidth = $(".tab-content").width();
+               var context = cubism
+                    .context()
+                    .serverDelay(0)
+                    .step(1000)
+                    .size(graphWidth);/* */
+
+                 /*   var context = cubism.context()
+                                .serverDelay(0)
+                                .clientDelay(0)
+                                .step(2e3)
+                                .size(960);*/
+
+
+                var fullURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
+
+                var chronix = context.chronix(
+                    { "host": fullURL, "uriPathPrefix": '/solr/chronix/select' }
+                );
+
+                var metrics_names = []
+
+                var facets = data1.facet_counts.facet_fields.name;
+
+                for (var i = 0; i < facets.length; i += 2) {
+                    if (facets[i + 1] > 0) {
+                        metrics_names.push(facets[i].replaceAll("\\", "\\\\"));
+                    }
+                }
+
+                var load_metrics = [];
+                metrics_names.forEach(function (metric_name) {
+                    load_metrics.push(chronix.metric({ "metricName": metric_name }).alias(metric_name.replace("\\", " ")));
+                })
+
+
+                /* d3v2
+                    .select("#graph")
+                    .selectAll(".axis")
+                    .data(["top", "bottom"])
+                    .enter()
+                    .append("div")
+                    .attr("class", function (d) {
+                        return d + " axis";
+                    })
+                    .each(function (d) {
+                        d3v2
+                            .select(this)
+                            .call(context.axis().ticks(12).orient(d));
+                    });*/
+
+                d3v2
+                    .select("#graph")
+                    .append("div")
+                    .attr("class", "rule")
+                    .call(context.rule());
+
+                d3v2
+                    .select("#graph")
+                    .selectAll(".horizon")
+                    .data(uniq(load_metrics))
+                    .enter()
+                    .insert("div", ".bottom")
+                    .attr("class", "horizon")
+                    .call(context.horizon().format(d3v2.format("+,.2p")));
+
+                context.on("focus", function (i) {
+                    d3v2.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
+
+
+                   
+                });/**/
+               // $("#graph").load(location.href + " #graph");
+            }
+
+        }).done(function (data1) {
+            console.log("done with tree loading");
+        });
+
+    }
 
     /*--------------------------------
          Window Based Layout
@@ -180,7 +308,7 @@ jQuery(function ($) {
 
 
 
-        var hardCodedQuery = "#{url_for_home}/../select?indent=on&q=name:" + getUrlParameter("q") + "&wt=json&facet=on&facet.field=name&fl=name";
+        var hardCodedQuery = "#{url_for_home}/../select?indent=on&" + formatQueryString() + "&wt=json&facet=on&facet.field=name&fl=name";
 
         if ($.isFunction($.fn.jstree)) {
             $(function () {
@@ -293,18 +421,18 @@ jQuery(function ($) {
                             },
                             "children": [
                                 {
-                                    "text": "alerts",
+                                    "text": "Alerts",
                                     "state": {
                                         "disabled": true
                                     },
                                     "children": [],
                                     "icon": "fa fa-folder"
                                 }, {
-                                    "text": "graphs",
+                                    "text": "Graphs",
                                     "children": [],
                                     "icon": "fa fa-folder"
                                 }, {
-                                    "text": "metrics",
+                                    "text": "Metrics",
                                     "state": {
                                         "selected": false,
                                         "opened": true
@@ -324,7 +452,7 @@ jQuery(function ($) {
                             state.opened = true;
                         }
                         var tokens = facets[i].split(/[\s,\\\/]+/);
-                        var parentToken = 'metrics';
+                        var parentToken = 'Metrics';
                         tokens.forEach(function (token) {
                             if (token != "") {
                                 if (!objetExists(nodes, 'text', token)) {
@@ -362,7 +490,7 @@ jQuery(function ($) {
 
         if ($.isFunction($.fn.dataTable)) {
 
-            var chronixQuery = "#{url_for_home}/../select?indent=on&q=name:" + getUrlParameter("q") + "&wt=json&cf=metric{count;min;max;avg;dev;trend;outlier}";
+            var chronixQuery = "#{url_for_home}/../select?indent=on&" + formatQueryString() + "&wt=json&cf=metric{count;min;max;avg;dev;trend;outlier}";
 
             var dataNodes = [];
             $.ajax({
@@ -693,17 +821,63 @@ jQuery(function ($) {
 
 
 
+    ULTRA_SETTINGS.simpleMetricsInit = function () {
 
+        var chronixQuery = "#{url_for_home}/../select?indent=on&" + formatQueryString() + "&wt=json&fl=dataAsJson";
+
+
+        d3.json(chronixQuery, function (data) {
+
+           
+            var count = data.response.numFound;
+            var series = [];
+            var legends = [];
+            for (var i = 0; i < count; i++) {
+                var doc = data.response.docs[i];
+                var dataValues = JSON.parse(doc.dataAsJson);
+                if (dataValues.length > 0) {
+                    var values = [];
+                    for (var j = 0; j < dataValues[0].length; j++) {
+                        values.push({ "date": new Date(dataValues[0][j]), "value": dataValues[1][j] });
+                    }
+                  //  series.push({ 'name': doc.name, 'start': doc.start, 'end': doc.end, 'values': values});
+                  series.push(values);
+                  legends.push(doc.name);
+                }
+
+            }
+
+            MG.data_graphic({
+                title: "Metrics values",
+                description: "metrics over time for all selected values",
+                data: series,
+                width: 800,
+                height: 200,
+                right: 40,
+                color: '#8C001A',
+                target: 'div#line-charts',
+                x_accessor: 'date',
+                y_accessor: 'value'
+            });
+        });
+    };
 
     ULTRA_SETTINGS.circularMapInit = function () {
 
 
-        var bucketAvgQuery = "http://localhost:8983/solr/chronix/select?cf=metric{savgbckt:67}&fl=dataAsJson&indent=on&q=name:" + getUrlParameter("q") + "&wt=json"
+        var bucketSize = 67;
+        var queryString = formatQueryString();
+        var bucketAvgQuery = "http://localhost:8983/solr/chronix/select?cf=metric{savgbckt:" + bucketSize + "}&fl=dataAsJson&indent=on&" + queryString + "&wt=json"
         var dataNodes = [];
+
+
+ 
+ 
         $.ajax({
             url: bucketAvgQuery,
             cache: false,
             success: function (s) {
+
 
                 var count = s.response.numFound;
 
@@ -723,7 +897,6 @@ jQuery(function ($) {
 
 
 
-
         function drawCircos(error, dataNodes) {
             var width = 800;/*document
                 .getElementById('mdl-card__supporting-text')[0]
@@ -732,7 +905,6 @@ jQuery(function ($) {
 
 
             var months = [
-                { "len": 24, "color": "#8dd3c7", "label": "25 aug", "id": "25-7" },
                 { "len": 24, "color": "#8dd3c7", "label": "26 aug", "id": "26-7" },
                 { "len": 24, "color": "#8dd3c7", "label": "27 aug", "id": "27-7" },
                 { "len": 24, "color": "#8dd3c7", "label": "28 aug", "id": "28-7" },
@@ -837,6 +1009,11 @@ jQuery(function ($) {
      initialize respective scripts
      *****************************/
     $(document).ready(function () {
+
+      
+
+        
+        ULTRA_SETTINGS.onLoadHorizon();
         ULTRA_SETTINGS.dataTablesInit();
         ULTRA_SETTINGS.pageTopBar();
         ULTRA_SETTINGS.extraFormSettings();
@@ -846,6 +1023,7 @@ jQuery(function ($) {
         ULTRA_SETTINGS.viewportElement();
         ULTRA_SETTINGS.onLoadTopBar();
         ULTRA_SETTINGS.circularMapInit();
+        ULTRA_SETTINGS.simpleMetricsInit();
     });
 
     $(window).resize(function () {
