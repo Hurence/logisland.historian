@@ -1,10 +1,14 @@
 server:
   port: ${appPort:8000}
+  servlet-path: /
 
-# Spring MVC dispatcher servlet path. Needs to be different than Jersey's to enable/disable Actuator endpoints access (/info, /health, ...)
-server.servlet-path: /
+
 # Jersey dispatcher servlet
-spring.jersey.application-path: /api
+spring:
+  application:
+      name: springboot-jersey-swagger-docker
+  jersey:
+    application-path: /api
 
 # http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
 # http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-use-actuator-with-jersey
@@ -23,3 +27,19 @@ info:
     name: @project.artifactId@
   build:
     version: @project.version@
+
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  realm: logisland
+  resource: logisland-historian
+  public-client: true
+  security-constraints:
+    - authRoles:
+        - user
+      securityCollections:
+        - patterns:
+          - /products/*
+
+
+
+
