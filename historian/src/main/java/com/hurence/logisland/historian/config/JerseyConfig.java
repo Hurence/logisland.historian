@@ -17,7 +17,8 @@
 package com.hurence.logisland.historian.config;
 
 
-import com.hurence.logisland.historian.rest.v1.HelloResource;
+import com.hurence.logisland.historian.old.rest.v1.HelloResource;
+import com.hurence.logisland.historian.rest.v1.api.TagsApi;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
@@ -46,7 +47,8 @@ public class JerseyConfig extends ResourceConfig {
     }
 
     private void registerEndpoints() {
-        this.register(HelloResource.class);
+       // this.register(HelloResource.class);
+        this.register(TagsApi.class);
         // Access through /<Jersey's servlet path>/application.wadl
         this.register(WadlResource.class);
     }
@@ -64,7 +66,7 @@ public class JerseyConfig extends ResourceConfig {
         config.setContact("Thomas Bailet");
         config.setSchemes(new String[]{"http", "https"});
         config.setBasePath(this.apiPath);
-        config.setResourcePackage("com.hurence.logisland.historian.rest.v1");
+        config.setResourcePackage("com.hurence.logisland.historian.rest.v1.api");
         config.setPrettyPrint(true);
         config.setScan(true);
     }

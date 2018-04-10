@@ -14,16 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hurence.logisland.historian;
+package com.hurence.logisland.historian.old.model;
 
-import org.springframework.stereotype.Component;
+public class Hello {
 
-import java.util.Arrays;
-import java.util.List;
+    private String msg;
 
-@Component
-class ProductService {
-    public List<String> getProducts() {
-        return Arrays.asList("iPad","iPod","iPhone");
+    public String getMsg() {
+        return this.msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

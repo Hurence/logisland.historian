@@ -9,7 +9,7 @@ spring.jersey.application-path: /api
 # http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
 # http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-use-actuator-with-jersey
 endpoints:
-  enabled: false
+  enabled: true
   info:
     enabled: true
   health:

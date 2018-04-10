@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hurence.logisland.historian.rest.v1;
+package com.hurence.logisland.historian.old.rest.v1;
 
 
 
@@ -32,7 +32,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import com.hurence.logisland.historian.model.Hello;
+import com.hurence.logisland.historian.old.model.Hello;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
