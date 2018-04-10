@@ -9,6 +9,7 @@ cache:
 language: java
 
 script:
+  - cd historian
   - mvn clean install
 
 jdk:
