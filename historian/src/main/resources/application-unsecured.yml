@@ -1,12 +1,29 @@
-keycloak:
-  auth-server-url: http://localhost:8080/auth
-  realm: logisland
-  resource: logisland-historian
-  public-client: true
-  security-constraints:
-    - securityCollections:
-        - patterns:
-          - /*
+server:
+  port: ${appPort:8701}
+
+
+
+# Jersey dispatcher servlet
+spring:
+  application:
+      name: logisland-historian
+  freemarker:
+    template-loader-path: classpath:/templates
+    suffix: .ftl
+
+
+# app name and build version updated during build process from Maven properties.
+info:
+  app:
+    name: @project.artifactId@
+  build:
+    version: @project.version@
+
+redis:
+  host: localhost
+  port: 6379
+
+
 
 
 

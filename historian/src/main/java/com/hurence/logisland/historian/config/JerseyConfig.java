@@ -17,7 +17,8 @@
 package com.hurence.logisland.historian.config;
 
 
-import com.hurence.logisland.historian.rest.v1.HelloResource;
+import com.hurence.logisland.historian.old.rest.v1.HelloResource;
+import com.hurence.logisland.historian.rest.v1.api.TagsApi;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
@@ -46,7 +47,8 @@ public class JerseyConfig extends ResourceConfig {
     }
 
     private void registerEndpoints() {
-        this.register(HelloResource.class);
+       // this.register(HelloResource.class);
+        this.register(TagsApi.class);
         // Access through /<Jersey's servlet path>/application.wadl
         this.register(WadlResource.class);
     }
@@ -58,13 +60,13 @@ public class JerseyConfig extends ResourceConfig {
         this.register(CORSResponseFilter.class);
 
         BeanConfig config = new BeanConfig();
-        config.setConfigId("springboot-jersey-swagger-docker-example");
-        config.setTitle("Spring Boot + Jersey + Swagger + Docker Example");
+        config.setConfigId("logisland-historian");
+        config.setTitle("Logisland Data Historian");
         config.setVersion("v1");
-        config.setContact("Thomas Bailet");
+        config.setContact("support@hurence.com");
         config.setSchemes(new String[]{"http", "https"});
         config.setBasePath(this.apiPath);
-        config.setResourcePackage("com.hurence.logisland.historian.rest.v1");
+        config.setResourcePackage("com.hurence.logisland.historian.rest.v1.api");
         config.setPrettyPrint(true);
         config.setScan(true);
     }

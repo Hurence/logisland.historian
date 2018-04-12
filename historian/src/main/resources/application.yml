@@ -6,14 +6,17 @@ server:
 # Jersey dispatcher servlet
 spring:
   application:
-      name: springboot-jersey-swagger-docker
+      name: logisland-historian
   jersey:
     application-path: /api
+  freemarker:
+    template-loader-path: classpath:/templates
+    suffix: .ftl
 
 # http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
 # http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-use-actuator-with-jersey
 endpoints:
-  enabled: false
+  enabled: true
   info:
     enabled: true
   health:
@@ -38,8 +41,11 @@ keycloak:
         - user
       securityCollections:
         - patterns:
-          - /products/*
+          - /tags/*
 
 
+redis:
+  host: localhost
+  port: 6379
 
 

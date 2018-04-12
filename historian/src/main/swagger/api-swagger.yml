@@ -1,0 +1,765 @@
+swagger: '2.0'
+info:
+  description: REST API for logisland historian
+  version: v1
+  title: Logisland Data Historian
+  contact:
+    name: hurence
+    email: support@hurence.com
+host: localhost:8701
+basePath: /api/v1
+schemes:
+  - http
+  - https
+paths:
+
+  /metrics:
+    get:
+      tags:
+        - metrology
+      operationId: getMetrics
+      summary: retrieve all job metrics in Prometheus format
+      description: get Prometheus metrics.
+        have a look to https://prometheus.io/docs/instrumenting/exposition_formats/
+      produces:
+        - text/plain
+      responses:
+        "200":
+          description: metrics
+          schema:
+            type: string
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /configs:
+    get:
+      tags:
+       - config
+      operationId: getConfig
+      summary:  global config
+      description: get all global configuration properties
+      responses:
+        "200":
+          description: global configuration
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Property'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  # Job API
+  /jobs:
+    get:
+      tags:
+       - job
+      operationId: getAllJobs
+      summary:  get all jobs
+      description: retrieve all jobs (retrieve only summary fields)
+      responses:
+        "200":
+          description: job configuration list
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Job'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+       - job
+      summary:  create new job
+      description:  store a new job configuration if valid
+      operationId: addJob
+      parameters:
+        - name: job
+          in: body
+          description: Job to add to the store
+          required: true
+          schema:
+            $ref: '#/definitions/Job'
+      responses:
+        "404":
+          description: Job not found
+        "400":
+          description: Invalid ID supplied
+        "200":
+          description: Job successfuly created
+          schema:
+            $ref: '#/definitions/Job'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /jobs/{jobId}:
+    get:
+      tags:
+        - job
+      summary: get job
+      description: get the corresponding Job definition
+      operationId: getJob
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - name: jobId
+          in: path
+          description: id of the job to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: job definition
+          schema:
+            $ref: '#/definitions/Job'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - job
+      summary: delete job
+      description: remove the corresponding Job definition and stop if its currently running
+      operationId: deleteJob
+      parameters:
+        - name: jobId
+          in: path
+          description: id of the job to return
+          required: true
+          type: string
+      responses:
+        "404":
+          description: Job not found
+        "400":
+          description: Invalid ID supplied
+        "200":
+          description: job successfully removed
+          schema:
+            $ref: '#/definitions/Job'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+       - job
+      summary:  update job
+      description: update an existing job configuration if valid
+      operationId: updateJob
+      parameters:
+        - name: jobId
+          in: path
+          description: Job to add to the store
+          required: true
+          type: string
+        - name: job
+          in: body
+          description: Job to add to the store
+          required: true
+          schema:
+            $ref: '#/definitions/Job'
+      responses:
+        "200":
+          description: Job successfuly created
+          schema:
+            $ref: '#/definitions/Job'
+    post:
+      tags:
+       - job
+      summary:  create new job
+      description:  store a new job configuration if valid
+      operationId: addJobWithId
+      parameters:
+        - name: body
+          in: body
+          description: Job configuration to add to the store
+          required: true
+          schema:
+            $ref: '#/definitions/Job'
+        - name: jobId
+          in: path
+          description: JobId to add to the store
+          required: true
+          type: string
+      responses:
+        "404":
+          description: Job not found
+        "400":
+          description: Invalid ID supplied
+        "200":
+          description: Job successfuly created
+          schema:
+            $ref: '#/definitions/Job'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /jobs/{jobId}/restart:
+     post:
+      tags:
+        - job
+      summary: start job
+      description: start the corresponding Job definition
+      operationId: reStartJob
+      parameters:
+        - name: jobId
+          in: path
+          description: id of the job to restart
+          required: true
+          type: string
+      responses:
+        "200":
+          description: job successfuly started
+          schema:
+            $ref: '#/definitions/Job'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /jobs/{jobId}/start:
+     post:
+      tags:
+        - job
+      summary: start job
+      description: start the corresponding Job definition
+      operationId: startJob
+      parameters:
+        - name: jobId
+          in: path
+          description: id of the job to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: job successfuly started
+          schema:
+            $ref: '#/definitions/Job'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /jobs/{jobId}/shutdown:
+     post:
+      tags:
+        - job
+      summary: shutdown job
+      description: shutdown the running Job
+      operationId: shutdownJob
+      parameters:
+        - name: jobId
+          in: path
+          description: id of the job to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: job successfuly started
+          schema:
+            $ref: '#/definitions/Job'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /jobs/{jobId}/pause:
+     post:
+      tags:
+        - job
+      summary: pause job
+      description: pause the corresponding Job
+      operationId: pauseJob
+      parameters:
+        - name: jobId
+          in: path
+          description: id of the job to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: job successfuly paused
+          schema:
+            $ref: '#/definitions/Job'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+
+   # Tags API
+  /tags:
+     get:
+       tags:
+        - tag
+        - opc
+       operationId: getAllTags
+       summary:  get all OPC tags
+       description: retrieve all OPC tags
+       produces:
+          - application/json
+       responses:
+         '200':
+           description: tags list
+           schema:
+             type: array
+             items:
+               $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+     post:
+       tags:
+        - tag
+        - opc
+       summary:  create new tag
+       description:  store a new tag
+       operationId: addTag
+       parameters:
+         - name: tag
+           in: body
+           description: Tag to add
+           required: true
+           schema:
+             $ref: '#/definitions/Tag'
+       responses:
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Tag successfuly created
+           schema:
+             $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+  /tags/{itemId}:
+     get:
+       tags:
+         - tag
+       summary: get tag
+       description: get the corresponding Tag
+       operationId: getTag
+       produces:
+         - application/json
+       parameters:
+         - name: itemId
+           in: path
+           description: id of the tag to return
+           required: true
+           type: string
+       responses:
+         '200':
+           description: tag
+           schema:
+             $ref: '#/definitions/Tag'
+         '404':
+            description: Tag resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+     delete:
+       tags:
+         - tag
+       summary: delete tag
+       description: remove the corresponding Tag
+       operationId: deleteTag
+       parameters:
+         - name: itemId
+           in: path
+           description: id of the tag to be deleted
+           required: true
+           type: string
+       responses:
+         '404':
+           description: Tag resource not found
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Tag successfully removed
+           schema:
+             $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+     put:
+       tags:
+        - tag
+        - opc
+       summary:  update tag
+       description: update an existing tag
+       operationId: updateTag
+       parameters:
+         - name: itemId
+           in: path
+           description: itemId to be updated
+           required: true
+           type: string
+         - name: tag
+           in: body
+           description: new Tag definition
+           required: true
+           schema:
+             $ref: '#/definitions/Tag'
+       responses:
+        '404':
+          description: Tag resource not found
+        '400':
+          description: Invalid ID supplied
+        '200':
+         description: Tag successfuly updated
+         schema:
+           $ref: '#/definitions/Tag'
+     post:
+       tags:
+        - tag
+       summary:  create new tag
+       description:  store a new tag
+       operationId: addTagWithId
+       parameters:
+         - name: body
+           in: body
+           description: Tag resource to add
+           required: true
+           schema:
+             $ref: '#/definitions/Tag'
+         - name: itemId
+           in: path
+           description: itemId to
+           required: true
+           type: string
+       responses:
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Tag successfuly created
+           schema:
+             $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+
+
+  # Alerts
+  /alerts:
+     get:
+      tags:
+        - alerts
+      summary: get job alerts
+      description: get the alerts
+      operationId: getAlerts
+      parameters:
+        - name: count
+          in: query
+          description: max number of ites to retrieve
+          required: false
+          type: integer
+          default: 20
+      responses:
+        "200":
+          description: job metrics
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Alert'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+
+  #/events:
+
+  #/datasources:
+
+
+
+
+
+
+
+
+
+definitions:
+
+
+  Alert:
+    type: object
+    properties:
+      time:
+        type: string
+      message:
+        type: string
+      tag:
+        $ref: '#/definitions/Tag'
+
+  Datasource:
+    type: object
+    properties:
+      id:
+        type: string
+
+  OPCServer:
+    allOf:
+      - $ref: '#/definitions/Datasource'
+      - type: object
+    properties:
+      name:
+        type: string
+      clsid:
+        type: string
+      host:
+        type: string
+      domain:
+        type: string
+      user:
+        type: string
+      password:
+        type: string
+
+  Group:
+    type: object
+    properties:
+      group_name:
+        type: string
+      tags:
+        type: array
+        items:
+          $ref: '#/definitions/Tag'
+
+
+  Tag:
+    type: object
+    properties:
+      item_name:
+        type: string
+      datasource:
+        type: string
+      data_type:
+        type: string
+        default: float
+        enum:
+        - int
+        - long
+        - float
+        - double
+        - string
+        - array
+        - null
+        - bytes
+        - boolean
+      description:
+        type: string
+      creation_date:
+        description: timestamp
+        type: integer
+        format: int64
+      last_modification_date:
+        description: timestamp
+        type: integer
+        format: int64
+      last_polling_date:
+        description: timestamp
+        type: integer
+        format: int64
+      last_base64_value:
+        description: base64 encoded value
+        type: string
+        format: byte
+      update_rate:
+        description: polling delay in ms
+        type: integer
+      min_numeric_value:
+        type: number
+        format: dumble
+      max_numeric_value:
+        type: number
+        format: double
+      last_numeric_value:
+        type: number
+        format: double
+      last_quality:
+        type: integer
+
+
+  Job:
+    type: object
+    required:
+      - engine
+      - name
+      - streams
+      - version
+    properties:
+      id:
+        description: a unique identifier for the job
+        type: integer
+        format: int64
+      version:
+        description: the version of the job configuration
+        type: integer
+        format: int32
+      name:
+        description: the job name
+        type: string
+      usedCores:
+        description: the number of used cores
+        type: integer
+        format: int32
+      usedMemory:
+        description: the total memory allocated for this job
+        type: integer
+        format: int32
+      status:
+        description: the job status
+        type: string
+        default: stopped
+        enum:
+        - stopped
+        - running
+        - failed
+        - paused
+      dateModified:
+        description: latest date of modification
+        type: string
+        format: date-time
+      documentation:
+        description: write here what the job is doing
+        type: string
+      engine:
+        $ref: '#/definitions/Engine'
+      streams:
+        type: array
+        items:
+          $ref: '#/definitions/Stream'
+
+  Engine:
+    type: object
+    required:
+      - component
+      - config
+      - name
+    properties:
+      name:
+        type: string
+      component:
+        type: string
+      config:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+
+  Stream:
+    type: object
+    required:
+      - component
+      - name
+    properties:
+      name:
+        type: string
+      component:
+        type: string
+      documentation:
+        type: string
+      config:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+      processors:
+        type: array
+        items:
+          $ref: '#/definitions/Processor'
+
+  Processor:
+    type: object
+    required:
+      - component
+      - config
+      - name
+    properties:
+      name:
+        type: string
+      component:
+        type: string
+      documentation:
+        type: string
+      config:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+
+  Property:
+    type: object
+    required:
+      - key
+      - value
+    properties:
+      key:
+        type: string
+      type:
+        type: string
+        default: "string"
+      value:
+        type: string
+
+  FieldType:
+    type: object
+    required:
+      - name
+      - type
+    properties:
+      name:
+        description: a unique identifier for the topic
+        type: string
+      encrypted:
+        description: is the field need to be encrypted
+        type: boolean
+        default: false
+      indexed:
+        description: is the field need to be indexed to search store
+        type: boolean
+        default: true
+      persistent:
+        description: is the field need to be persisted to data store
+        type: boolean
+        default: true
+      optional:
+        description: is the field mandatory
+        type: boolean
+        default: true
+      type:
+        description: the type of the field
+        type: string
+        default: string
+        enum:
+        - string
+        - int
+        - long
+        - array
+        - float
+        - double
+        - bytes
+        - record
+        - map
+        - enum
+        - boolean
+
+  Error:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

@@ -8,8 +8,12 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
-@SpringBootApplication
-@EnableWebMvc
+@SpringBootApplication/*(
+        scanBasePackages = {
+                "com.hurence.logisland.historian.config", "com.hurence.logisland.historian.rest"
+        }
+)*/
+//@EnableWebMvc
 public class DataHistorianApplication extends SpringBootServletInitializer {
 
     @Override
