@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,15 +37,10 @@ class MainController {
     TagService tagService;
 
     @GetMapping(path = "/tags")
-    public String getTags(Model model){
+    public String getTags(Principal principal, Model model){
         model.addAttribute("tags", tagService.getTags());
 
-       List<Tag> tags
-               = tagService.getTags();
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("tags", tags);
-
+        model.addAttribute("principal",principal);
 
         return "tags";
     }
