@@ -31,3 +31,9 @@ Build and run historian as Docker container
 
 mvn -U -X clean versions:set -DnewVersion=1.0.37
 mvn -U -X package docker:build -Dpush.image=true
+
+
+
+TODO
+
+docker compose

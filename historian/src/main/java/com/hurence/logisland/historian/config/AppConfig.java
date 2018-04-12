@@ -31,7 +31,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 @Configuration
 @EnableCaching
 @ComponentScan("com.hurence.logisland")
-@PropertySource("classpath:/application.properties")
+@PropertySource("classpath:/application.yml")
 public class AppConfig {
 
     private @Value("${redis.host}") String redisHost;

@@ -60,10 +60,10 @@ public class JerseyConfig extends ResourceConfig {
         this.register(CORSResponseFilter.class);
 
         BeanConfig config = new BeanConfig();
-        config.setConfigId("springboot-jersey-swagger-docker-example");
-        config.setTitle("Spring Boot + Jersey + Swagger + Docker Example");
+        config.setConfigId("logisland-historian");
+        config.setTitle("Logisland Data Historian");
         config.setVersion("v1");
-        config.setContact("Thomas Bailet");
+        config.setContact("support@hurence.com");
         config.setSchemes(new String[]{"http", "https"});
         config.setBasePath(this.apiPath);
         config.setResourcePackage("com.hurence.logisland.historian.rest.v1.api");

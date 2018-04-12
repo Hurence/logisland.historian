@@ -14,31 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hurence.logisland.historian.web;
+package com.hurence.logisland.historian.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.hurence.logisland.historian.rest.v1.model.Tag;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
 
-@Controller
-class ProductController {
-
-    @Autowired
-    ProductService productService;
-
-    @GetMapping(path = "/products")
-    public String getProducts(Model model){
-        model.addAttribute("products", productService.getProducts());
-        return "products";
-    }
-
-    @GetMapping(path = "/logout")
-    public String logout(HttpServletRequest request) throws ServletException {
-        request.logout();
-        return "/";
+@Component
+public class TagService {
+    public List<Tag> getTags() {
+        Tag tag1 = new Tag();
+        tag1.setItemName("tag1");
+        Tag tag2 = new Tag();
+        tag2.setItemName("tag2");
+        return Arrays.asList(tag1, tag2);
     }
 }
