@@ -10,7 +10,7 @@ Get swagger.json doc
 
 Run Keycloak as a docker service on port 8080
     
-    docker run jboss/keycloak --name keycloak -p 8080:8080
+    docker run jboss/keycloak --id keycloak -p 8080:8080
 
     # add a admin user
     bin/add-user-keycloak.sh -u admin

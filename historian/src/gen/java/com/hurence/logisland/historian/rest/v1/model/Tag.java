@@ -19,24 +19,49 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.cache.annotation.Cacheable;
-
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.Serializable;
 import javax.validation.constraints.*;
 
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.solr.core.mapping.Indexed;
+import org.springframework.data.solr.core.mapping.SolrDocument;
+
 /**
- * Tag
- */
-@Cacheable(value = "tag", key = "#itemName")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-04-10T20:47:54.004+02:00")
-public class Tag   {
-  @JsonProperty("item_name")
-  private String itemName = null;
+* a Tag is an identifier to an OPC value
+*/
+    @ApiModel(description = "a Tag is an identifier to an OPC value")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-04-16T16:36:23.971+02:00")
+@SolrDocument(solrCoreName = "historian")
+public class Tag  implements Serializable {
+        @JsonProperty("id")
+        @Indexed(name = "id", type = "String")
+        private String id = "mySweetUniqueId";
 
-  @JsonProperty("datasource")
-  private String datasource = null;
+        @JsonProperty("domain")
+        @Indexed(name = "domain", type = "String")
+        private String domain = null;
 
-  /**
+        @JsonProperty("server")
+        @Indexed(name = "server", type = "String")
+        private String server = null;
+
+        @JsonProperty("group")
+        @Indexed(name = "group", type = "String")
+        private String group = null;
+
+        @JsonProperty("tag_name")
+        @Indexed(name = "tag_name", type = "String")
+        private String tagName = null;
+
+        @JsonProperty("labels")
+        @Indexed(name = "labels", type = "List&lt;String&gt;")
+        private List<String> labels = null;
+
+              /**
    * Gets or Sets dataType
    */
   public enum DataTypeEnum {
@@ -79,298 +104,398 @@ public class Tag   {
     }
   }
 
-  @JsonProperty("data_type")
-  private DataTypeEnum dataType = DataTypeEnum.FLOAT;
+        @JsonProperty("data_type")
+        @Indexed(name = "data_type", type = "String")
+        private DataTypeEnum dataType = DataTypeEnum.FLOAT;
 
-  @JsonProperty("description")
-  private String description = null;
+        @JsonProperty("description")
+        @Indexed(name = "description", type = "String")
+        private String description = null;
 
-  @JsonProperty("creation_date")
-  private Long creationDate = null;
+        @JsonProperty("creation_date")
+        @Indexed(name = "creation_date", type = "Long")
+        private Long creationDate = null;
 
-  @JsonProperty("last_modification_date")
-  private Long lastModificationDate = null;
+        @JsonProperty("last_modification_date")
+        @Indexed(name = "last_modification_date", type = "Long")
+        private Long lastModificationDate = null;
 
-  @JsonProperty("last_polling_date")
-  private Long lastPollingDate = null;
+        @JsonProperty("last_polling_date")
+        @Indexed(name = "last_polling_date", type = "Long")
+        private Long lastPollingDate = null;
 
-  @JsonProperty("last_base64_value")
-  private byte[] lastBase64Value = null;
+        @JsonProperty("last_base64_value")
+        @Indexed(name = "last_base64_value", type = "byte[]")
+        private byte[] lastBase64Value = null;
 
-  @JsonProperty("update_rate")
-  private Integer updateRate = null;
+        @JsonProperty("update_rate")
+        @Indexed(name = "update_rate", type = "Integer")
+        private Integer updateRate = null;
 
-  @JsonProperty("min_numeric_value")
-  private BigDecimal minNumericValue = null;
+        @JsonProperty("min_numeric_value")
+        @Indexed(name = "min_numeric_value", type = "BigDecimal")
+        private BigDecimal minNumericValue = null;
 
-  @JsonProperty("max_numeric_value")
-  private Double maxNumericValue = null;
+        @JsonProperty("max_numeric_value")
+        @Indexed(name = "max_numeric_value", type = "Double")
+        private Double maxNumericValue = null;
 
-  @JsonProperty("last_numeric_value")
-  private Double lastNumericValue = null;
+        @JsonProperty("last_numeric_value")
+        @Indexed(name = "last_numeric_value", type = "Double")
+        private Double lastNumericValue = null;
 
-  @JsonProperty("last_quality")
-  private Integer lastQuality = null;
+        @JsonProperty("last_quality")
+        @Indexed(name = "last_quality", type = "Integer")
+        private Integer lastQuality = null;
 
-  public Tag itemName(String itemName) {
-    this.itemName = itemName;
-    return this;
-  }
+        public Tag id(String id) {
+        this.id = id;
+        return this;
+        }
 
-  /**
-   * Get itemName
-   * @return itemName
-   **/
-  @JsonProperty("item_name")
-  @ApiModelProperty(value = "")
-  public String getItemName() {
-    return itemName;
-  }
+    /**
+        * Get id
+    * @return id
+    **/
+        @JsonProperty("id")
+    @ApiModelProperty(value = "")
+      public String getId() {
+    return id;
+    }
 
-  public void setItemName(String itemName) {
-    this.itemName = itemName;
-  }
+        public void setId(String id) {
+        this.id = id;
+        }
 
-  public Tag datasource(String datasource) {
-    this.datasource = datasource;
-    return this;
-  }
+        public Tag domain(String domain) {
+        this.domain = domain;
+        return this;
+        }
 
-  /**
-   * Get datasource
-   * @return datasource
-   **/
-  @JsonProperty("datasource")
-  @ApiModelProperty(value = "")
-  public String getDatasource() {
-    return datasource;
-  }
+    /**
+        * Get domain
+    * @return domain
+    **/
+        @JsonProperty("domain")
+    @ApiModelProperty(value = "")
+      public String getDomain() {
+    return domain;
+    }
 
-  public void setDatasource(String datasource) {
-    this.datasource = datasource;
-  }
+        public void setDomain(String domain) {
+        this.domain = domain;
+        }
 
-  public Tag dataType(DataTypeEnum dataType) {
-    this.dataType = dataType;
-    return this;
-  }
+        public Tag server(String server) {
+        this.server = server;
+        return this;
+        }
 
-  /**
-   * Get dataType
-   * @return dataType
-   **/
-  @JsonProperty("data_type")
-  @ApiModelProperty(value = "")
+    /**
+        * Get server
+    * @return server
+    **/
+        @JsonProperty("server")
+    @ApiModelProperty(value = "")
+      public String getServer() {
+    return server;
+    }
+
+        public void setServer(String server) {
+        this.server = server;
+        }
+
+        public Tag group(String group) {
+        this.group = group;
+        return this;
+        }
+
+    /**
+        * Get group
+    * @return group
+    **/
+        @JsonProperty("group")
+    @ApiModelProperty(value = "")
+      public String getGroup() {
+    return group;
+    }
+
+        public void setGroup(String group) {
+        this.group = group;
+        }
+
+        public Tag tagName(String tagName) {
+        this.tagName = tagName;
+        return this;
+        }
+
+    /**
+        * Get tagName
+    * @return tagName
+    **/
+        @JsonProperty("tag_name")
+    @ApiModelProperty(value = "")
+      public String getTagName() {
+    return tagName;
+    }
+
+        public void setTagName(String tagName) {
+        this.tagName = tagName;
+        }
+
+        public Tag labels(List<String> labels) {
+        this.labels = labels;
+        return this;
+        }
+
+            public Tag addLabelsItem(String labelsItem) {
+                if (this.labels == null) {
+                this.labels = new ArrayList<String>();
+                }
+            this.labels.add(labelsItem);
+            return this;
+            }
+
+    /**
+        * can be used to group tags around a theme
+    * @return labels
+    **/
+        @JsonProperty("labels")
+    @ApiModelProperty(value = "can be used to group tags around a theme")
+      public List<String> getLabels() {
+    return labels;
+    }
+
+        public void setLabels(List<String> labels) {
+        this.labels = labels;
+        }
+
+        public Tag dataType(DataTypeEnum dataType) {
+        this.dataType = dataType;
+        return this;
+        }
+
+    /**
+        * Get dataType
+    * @return dataType
+    **/
+        @JsonProperty("data_type")
+    @ApiModelProperty(required = true, value = "")
+      @NotNull
   public DataTypeEnum getDataType() {
     return dataType;
-  }
+    }
 
-  public void setDataType(DataTypeEnum dataType) {
-    this.dataType = dataType;
-  }
+        public void setDataType(DataTypeEnum dataType) {
+        this.dataType = dataType;
+        }
 
-  public Tag description(String description) {
-    this.description = description;
-    return this;
-  }
+        public Tag description(String description) {
+        this.description = description;
+        return this;
+        }
 
-  /**
-   * Get description
-   * @return description
-   **/
-  @JsonProperty("description")
-  @ApiModelProperty(value = "")
-  public String getDescription() {
+    /**
+        * Get description
+    * @return description
+    **/
+        @JsonProperty("description")
+    @ApiModelProperty(value = "")
+      public String getDescription() {
     return description;
-  }
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+        public void setDescription(String description) {
+        this.description = description;
+        }
 
-  public Tag creationDate(Long creationDate) {
-    this.creationDate = creationDate;
-    return this;
-  }
+        public Tag creationDate(Long creationDate) {
+        this.creationDate = creationDate;
+        return this;
+        }
 
-  /**
-   * timestamp
-   * @return creationDate
-   **/
-  @JsonProperty("creation_date")
-  @ApiModelProperty(value = "timestamp")
-  public Long getCreationDate() {
+    /**
+        * timestamp
+    * @return creationDate
+    **/
+        @JsonProperty("creation_date")
+    @ApiModelProperty(value = "timestamp")
+      public Long getCreationDate() {
     return creationDate;
-  }
+    }
 
-  public void setCreationDate(Long creationDate) {
-    this.creationDate = creationDate;
-  }
+        public void setCreationDate(Long creationDate) {
+        this.creationDate = creationDate;
+        }
 
-  public Tag lastModificationDate(Long lastModificationDate) {
-    this.lastModificationDate = lastModificationDate;
-    return this;
-  }
+        public Tag lastModificationDate(Long lastModificationDate) {
+        this.lastModificationDate = lastModificationDate;
+        return this;
+        }
 
-  /**
-   * timestamp
-   * @return lastModificationDate
-   **/
-  @JsonProperty("last_modification_date")
-  @ApiModelProperty(value = "timestamp")
-  public Long getLastModificationDate() {
+    /**
+        * timestamp
+    * @return lastModificationDate
+    **/
+        @JsonProperty("last_modification_date")
+    @ApiModelProperty(value = "timestamp")
+      public Long getLastModificationDate() {
     return lastModificationDate;
-  }
+    }
 
-  public void setLastModificationDate(Long lastModificationDate) {
-    this.lastModificationDate = lastModificationDate;
-  }
+        public void setLastModificationDate(Long lastModificationDate) {
+        this.lastModificationDate = lastModificationDate;
+        }
 
-  public Tag lastPollingDate(Long lastPollingDate) {
-    this.lastPollingDate = lastPollingDate;
-    return this;
-  }
+        public Tag lastPollingDate(Long lastPollingDate) {
+        this.lastPollingDate = lastPollingDate;
+        return this;
+        }
 
-  /**
-   * timestamp
-   * @return lastPollingDate
-   **/
-  @JsonProperty("last_polling_date")
-  @ApiModelProperty(value = "timestamp")
-  public Long getLastPollingDate() {
+    /**
+        * timestamp
+    * @return lastPollingDate
+    **/
+        @JsonProperty("last_polling_date")
+    @ApiModelProperty(value = "timestamp")
+      public Long getLastPollingDate() {
     return lastPollingDate;
-  }
+    }
 
-  public void setLastPollingDate(Long lastPollingDate) {
-    this.lastPollingDate = lastPollingDate;
-  }
+        public void setLastPollingDate(Long lastPollingDate) {
+        this.lastPollingDate = lastPollingDate;
+        }
 
-  public Tag lastBase64Value(byte[] lastBase64Value) {
-    this.lastBase64Value = lastBase64Value;
-    return this;
-  }
+        public Tag lastBase64Value(byte[] lastBase64Value) {
+        this.lastBase64Value = lastBase64Value;
+        return this;
+        }
 
-  /**
-   * base64 encoded value
-   * @return lastBase64Value
-   **/
-  @JsonProperty("last_base64_value")
-  @ApiModelProperty(value = "base64 encoded value")
- @Pattern(regexp="^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$")  public byte[] getLastBase64Value() {
+    /**
+        * base64 encoded value
+    * @return lastBase64Value
+    **/
+        @JsonProperty("last_base64_value")
+    @ApiModelProperty(value = "base64 encoded value")
+     @Pattern(regexp="^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$")  public byte[] getLastBase64Value() {
     return lastBase64Value;
-  }
+    }
 
-  public void setLastBase64Value(byte[] lastBase64Value) {
-    this.lastBase64Value = lastBase64Value;
-  }
+        public void setLastBase64Value(byte[] lastBase64Value) {
+        this.lastBase64Value = lastBase64Value;
+        }
 
-  public Tag updateRate(Integer updateRate) {
-    this.updateRate = updateRate;
-    return this;
-  }
+        public Tag updateRate(Integer updateRate) {
+        this.updateRate = updateRate;
+        return this;
+        }
 
-  /**
-   * polling delay in ms
-   * @return updateRate
-   **/
-  @JsonProperty("update_rate")
-  @ApiModelProperty(value = "polling delay in ms")
-  public Integer getUpdateRate() {
+    /**
+        * polling delay in ms
+    * @return updateRate
+    **/
+        @JsonProperty("update_rate")
+    @ApiModelProperty(value = "polling delay in ms")
+      public Integer getUpdateRate() {
     return updateRate;
-  }
+    }
 
-  public void setUpdateRate(Integer updateRate) {
-    this.updateRate = updateRate;
-  }
+        public void setUpdateRate(Integer updateRate) {
+        this.updateRate = updateRate;
+        }
 
-  public Tag minNumericValue(BigDecimal minNumericValue) {
-    this.minNumericValue = minNumericValue;
-    return this;
-  }
+        public Tag minNumericValue(BigDecimal minNumericValue) {
+        this.minNumericValue = minNumericValue;
+        return this;
+        }
 
-  /**
-   * Get minNumericValue
-   * @return minNumericValue
-   **/
-  @JsonProperty("min_numeric_value")
-  @ApiModelProperty(value = "")
-  public BigDecimal getMinNumericValue() {
+    /**
+        * Get minNumericValue
+    * @return minNumericValue
+    **/
+        @JsonProperty("min_numeric_value")
+    @ApiModelProperty(value = "")
+      public BigDecimal getMinNumericValue() {
     return minNumericValue;
-  }
+    }
 
-  public void setMinNumericValue(BigDecimal minNumericValue) {
-    this.minNumericValue = minNumericValue;
-  }
+        public void setMinNumericValue(BigDecimal minNumericValue) {
+        this.minNumericValue = minNumericValue;
+        }
 
-  public Tag maxNumericValue(Double maxNumericValue) {
-    this.maxNumericValue = maxNumericValue;
-    return this;
-  }
+        public Tag maxNumericValue(Double maxNumericValue) {
+        this.maxNumericValue = maxNumericValue;
+        return this;
+        }
 
-  /**
-   * Get maxNumericValue
-   * @return maxNumericValue
-   **/
-  @JsonProperty("max_numeric_value")
-  @ApiModelProperty(value = "")
-  public Double getMaxNumericValue() {
+    /**
+        * Get maxNumericValue
+    * @return maxNumericValue
+    **/
+        @JsonProperty("max_numeric_value")
+    @ApiModelProperty(value = "")
+      public Double getMaxNumericValue() {
     return maxNumericValue;
-  }
+    }
 
-  public void setMaxNumericValue(Double maxNumericValue) {
-    this.maxNumericValue = maxNumericValue;
-  }
+        public void setMaxNumericValue(Double maxNumericValue) {
+        this.maxNumericValue = maxNumericValue;
+        }
 
-  public Tag lastNumericValue(Double lastNumericValue) {
-    this.lastNumericValue = lastNumericValue;
-    return this;
-  }
+        public Tag lastNumericValue(Double lastNumericValue) {
+        this.lastNumericValue = lastNumericValue;
+        return this;
+        }
 
-  /**
-   * Get lastNumericValue
-   * @return lastNumericValue
-   **/
-  @JsonProperty("last_numeric_value")
-  @ApiModelProperty(value = "")
-  public Double getLastNumericValue() {
+    /**
+        * Get lastNumericValue
+    * @return lastNumericValue
+    **/
+        @JsonProperty("last_numeric_value")
+    @ApiModelProperty(value = "")
+      public Double getLastNumericValue() {
     return lastNumericValue;
-  }
+    }
 
-  public void setLastNumericValue(Double lastNumericValue) {
-    this.lastNumericValue = lastNumericValue;
-  }
+        public void setLastNumericValue(Double lastNumericValue) {
+        this.lastNumericValue = lastNumericValue;
+        }
 
-  public Tag lastQuality(Integer lastQuality) {
-    this.lastQuality = lastQuality;
-    return this;
-  }
+        public Tag lastQuality(Integer lastQuality) {
+        this.lastQuality = lastQuality;
+        return this;
+        }
 
-  /**
-   * Get lastQuality
-   * @return lastQuality
-   **/
-  @JsonProperty("last_quality")
-  @ApiModelProperty(value = "")
-  public Integer getLastQuality() {
+    /**
+        * Get lastQuality
+    * @return lastQuality
+    **/
+        @JsonProperty("last_quality")
+    @ApiModelProperty(value = "")
+      public Integer getLastQuality() {
     return lastQuality;
-  }
+    }
 
-  public void setLastQuality(Integer lastQuality) {
-    this.lastQuality = lastQuality;
-  }
+        public void setLastQuality(Integer lastQuality) {
+        this.lastQuality = lastQuality;
+        }
 
 
-  @Override
-  public boolean equals(java.lang.Object o) {
+    @Override
+    public boolean equals(java.lang.Object o) {
     if (this == o) {
-      return true;
+    return true;
     }
     if (o == null || getClass() != o.getClass()) {
-      return false;
+    return false;
     }
-    Tag tag = (Tag) o;
-    return Objects.equals(this.itemName, tag.itemName) &&
-        Objects.equals(this.datasource, tag.datasource) &&
+        Tag tag = (Tag) o;
+        return Objects.equals(this.id, tag.id) &&
+        Objects.equals(this.domain, tag.domain) &&
+        Objects.equals(this.server, tag.server) &&
+        Objects.equals(this.group, tag.group) &&
+        Objects.equals(this.tagName, tag.tagName) &&
+        Objects.equals(this.labels, tag.labels) &&
         Objects.equals(this.dataType, tag.dataType) &&
         Objects.equals(this.description, tag.description) &&
         Objects.equals(this.creationDate, tag.creationDate) &&
@@ -382,45 +507,48 @@ public class Tag   {
         Objects.equals(this.maxNumericValue, tag.maxNumericValue) &&
         Objects.equals(this.lastNumericValue, tag.lastNumericValue) &&
         Objects.equals(this.lastQuality, tag.lastQuality);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(itemName, datasource, dataType, description, creationDate, lastModificationDate, lastPollingDate, lastBase64Value, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality);
-  }
-
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Tag {\n");
-    
-    sb.append("    itemName: ").append(toIndentedString(itemName)).append("\n");
-    sb.append("    datasource: ").append(toIndentedString(datasource)).append("\n");
-    sb.append("    dataType: ").append(toIndentedString(dataType)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
-    sb.append("    lastModificationDate: ").append(toIndentedString(lastModificationDate)).append("\n");
-    sb.append("    lastPollingDate: ").append(toIndentedString(lastPollingDate)).append("\n");
-    sb.append("    lastBase64Value: ").append(toIndentedString(lastBase64Value)).append("\n");
-    sb.append("    updateRate: ").append(toIndentedString(updateRate)).append("\n");
-    sb.append("    minNumericValue: ").append(toIndentedString(minNumericValue)).append("\n");
-    sb.append("    maxNumericValue: ").append(toIndentedString(maxNumericValue)).append("\n");
-    sb.append("    lastNumericValue: ").append(toIndentedString(lastNumericValue)).append("\n");
-    sb.append("    lastQuality: ").append(toIndentedString(lastQuality)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    @Override
+    public int hashCode() {
+    return Objects.hash(id, domain, server, group, tagName, labels, dataType, description, creationDate, lastModificationDate, lastPollingDate, lastBase64Value, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality);
+    }
+
+
+@Override
+public String toString() {
+StringBuilder sb = new StringBuilder();
+sb.append("class Tag {\n");
+
+sb.append("    id: ").append(toIndentedString(id)).append("\n");
+sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
+sb.append("    server: ").append(toIndentedString(server)).append("\n");
+sb.append("    group: ").append(toIndentedString(group)).append("\n");
+sb.append("    tagName: ").append(toIndentedString(tagName)).append("\n");
+sb.append("    labels: ").append(toIndentedString(labels)).append("\n");
+sb.append("    dataType: ").append(toIndentedString(dataType)).append("\n");
+sb.append("    description: ").append(toIndentedString(description)).append("\n");
+sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
+sb.append("    lastModificationDate: ").append(toIndentedString(lastModificationDate)).append("\n");
+sb.append("    lastPollingDate: ").append(toIndentedString(lastPollingDate)).append("\n");
+sb.append("    lastBase64Value: ").append(toIndentedString(lastBase64Value)).append("\n");
+sb.append("    updateRate: ").append(toIndentedString(updateRate)).append("\n");
+sb.append("    minNumericValue: ").append(toIndentedString(minNumericValue)).append("\n");
+sb.append("    maxNumericValue: ").append(toIndentedString(maxNumericValue)).append("\n");
+sb.append("    lastNumericValue: ").append(toIndentedString(lastNumericValue)).append("\n");
+sb.append("    lastQuality: ").append(toIndentedString(lastQuality)).append("\n");
+sb.append("}");
+return sb.toString();
 }
 
+/**
+* Convert the given object to string with each line indented by 4 spaces
+* (except the first line).
+*/
+private String toIndentedString(java.lang.Object o) {
+if (o == null) {
+return "null";
+}
+return o.toString().replace("\n", "\n    ");
+}
+}

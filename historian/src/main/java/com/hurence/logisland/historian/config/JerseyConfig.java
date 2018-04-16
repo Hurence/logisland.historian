@@ -19,12 +19,14 @@ package com.hurence.logisland.historian.config;
 
 import com.hurence.logisland.historian.old.rest.v1.HelloResource;
 import com.hurence.logisland.historian.rest.v1.api.TagsApi;
+import com.hurence.logisland.historian.service.TagService;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.wadl.internal.WadlResource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -66,7 +68,7 @@ public class JerseyConfig extends ResourceConfig {
         config.setContact("support@hurence.com");
         config.setSchemes(new String[]{"http", "https"});
         config.setBasePath(this.apiPath);
-        config.setResourcePackage("com.hurence.logisland.historian.rest.v1.api");
+        config.setResourcePackage("com.hurence.logisland.historian.rest.v1.api.impl");
         config.setPrettyPrint(true);
         config.setScan(true);
     }

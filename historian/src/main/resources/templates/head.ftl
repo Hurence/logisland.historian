@@ -6,9 +6,9 @@
 
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico"/>
     <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <meta content="" name="description"/>
-    <meta content="" name="author"/>
+    <meta id="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta content="" id="description"/>
+    <meta content="" id="author"/>
 
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"/>
     <!-- Favicon -->

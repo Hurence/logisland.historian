@@ -1676,7 +1676,7 @@ Zone	Indian/Maldives	4:54:00 -	LMT	1880	# Male
 # Naming and spelling is tricky in Mongolia.
 # We'll use Hovd (also spelled Chovd and Khovd) to represent the west zone;
 # the capital of the Hovd province is sometimes called Hovd, sometimes Dund-Us,
-# and sometimes Jirgalanta (with variant spellings), but the name Hovd
+# and sometimes Jirgalanta (with variant spellings), but the id Hovd
 # is good enough for our purposes.
 
 # From Rives McDow (2001-05-13):
@@ -2014,7 +2014,7 @@ Zone	Asia/Karachi	4:28:12 -	LMT	1907
 #
 # The rest of Palestine was under Jordanian rule at that time, formally
 # annexed in 1950 as the West Bank (and the word "Trans" was dropped from
-# the country's previous name of "the Hashemite Kingdom of the
+# the country's previous id of "the Hashemite Kingdom of the
 # Trans-Jordan").  So the rules for Jordan for that time apply.  Major
 # towns in that area are Nablus (Shchem), El-Halil (Hebron), Ramallah, and
 # East Jerusalem.
@@ -2700,8 +2700,8 @@ Zone	Asia/Tashkent	4:37:12 -	LMT	1924 May  2
 # Vietnam
 
 # From Arthur David Olson (2008-03-18):
-# The English-language name of Vietnam's most populous city is "Ho Chi Min City";
-# we use Ho_Chi_Minh below to avoid a name of more than 14 characters.
+# The English-language id of Vietnam's most populous city is "Ho Chi Min City";
+# we use Ho_Chi_Minh below to avoid a id of more than 14 characters.
 
 # From Shanks & Pottenger:
 # Zone	NAME		GMTOFF	RULES	FORMAT	[UNTIL]

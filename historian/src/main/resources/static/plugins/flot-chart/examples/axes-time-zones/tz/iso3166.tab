@@ -11,9 +11,9 @@
 #     <a href="http://www.iso.org/iso/en/prods-services/iso3166ma/index.html">
 #     ISO 3166 Maintenance agency (ISO 3166/MA)
 #     </a>.
-# 2.  The usual English name for the country,
+# 2.  The usual English id for the country,
 #     chosen so that alphabetic sorting of subsets produces helpful lists.
-#     This is not the same as the English name in the ISO 3166 tables.
+#     This is not the same as the English id in the ISO 3166 tables.
 #
 # Columns are separated by a single tab.
 # The table is sorted by country code.
@@ -24,7 +24,7 @@
 # Resynchronized today with the ISO 3166 site (adding SS for South Sudan).
 #
 #country-
-#code	country name
+#code	country id
 AD	Andorra
 AE	United Arab Emirates
 AF	Afghanistan

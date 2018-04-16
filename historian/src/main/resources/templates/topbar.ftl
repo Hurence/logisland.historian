@@ -35,7 +35,7 @@
                     <i class="fa fa-check"></i>
                   </div>
                   <div>
-                    <span class="name">
+                    <span class="id">
                       <strong>Server needs to reboot</strong>
                       <span class="time small">15 mins ago</span>
                     </span>
@@ -49,7 +49,7 @@
                     <i class="fa fa-envelope"></i>
                   </div>
                   <div>
-                    <span class="name">
+                    <span class="id">
                       <strong>45 new messages</strong>
                       <span class="time small">45 mins ago</span>
                     </span>
@@ -63,7 +63,7 @@
                     <i class="fa fa-times"></i>
                   </div>
                   <div>
-                    <span class="name">
+                    <span class="id">
                       <strong>Server IP Blocked</strong>
                       <span class="time small">1 hour ago</span>
                     </span>
@@ -77,7 +77,7 @@
                     <i class="fa fa-user"></i>
                   </div>
                   <div>
-                    <span class="name">
+                    <span class="id">
                       <strong>10 Orders Shipped</strong>
                       <span class="time small">5 hours ago</span>
                     </span>
@@ -91,7 +91,7 @@
                     <i class="fa fa-user"></i>
                   </div>
                   <div>
-                    <span class="name">
+                    <span class="id">
                       <strong>New Comment on blog</strong>
                       <span class="time small">Yesterday</span>
                     </span>
@@ -105,7 +105,7 @@
                     <i class="fa fa-check"></i>
                   </div>
                   <div>
-                    <span class="name">
+                    <span class="id">
                       <strong>Great Speed Notify</strong>
                       <span class="time small">14th Mar</span>
                     </span>
@@ -119,7 +119,7 @@
                     <i class="fa fa-times"></i>
                   </div>
                   <div>
-                    <span class="name">
+                    <span class="id">
                       <strong>Team Meeting at 6PM</strong>
                       <span class="time small">16th Mar</span>
                     </span>

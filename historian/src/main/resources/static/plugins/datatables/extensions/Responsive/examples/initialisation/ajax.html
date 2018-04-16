@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta id="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 
 	<title>Responsive example - Ajax data</title>
 	<link rel="stylesheet" type="text/css" href="../../../../media/css/jquery.dataTables.css">
@@ -28,7 +28,7 @@ $(document).ready(function() {
 	$('#example').DataTable( {
 		"ajax": "../../../../examples/ajax/data/objects.txt",
 		"columns": [
-			{ "data": "name" },
+			{ "data": "id" },
 			{ "data": "position" },
 			{ "data": "office" },
 			{ "data": "extn" },
@@ -94,7 +94,7 @@ $(document).ready(function() {
 	$('#example').DataTable( {
 		&quot;ajax&quot;: &quot;../../../../examples/ajax/data/objects.txt&quot;,
 		&quot;columns&quot;: [
-			{ &quot;data&quot;: &quot;name&quot; },
+			{ &quot;data&quot;: &quot;id&quot; },
 			{ &quot;data&quot;: &quot;position&quot; },
 			{ &quot;data&quot;: &quot;office&quot; },
 			{ &quot;data&quot;: &quot;extn&quot; },
@@ -163,7 +163,7 @@ $(document).ready(function() {
 					<div class="toc-group">
 						<h3><a href="./index.html">Basic initialisation</a></h3>
 						<ul class="toc active">
-							<li><a href="./className.html">Class name</a></li>
+							<li><a href="./className.html">Class id</a></li>
 							<li><a href="./option.html">Configuration option</a></li>
 							<li><a href="./new.html">`new` constructor</a></li>
 							<li class="active"><a href="./ajax.html">Ajax data</a></li>

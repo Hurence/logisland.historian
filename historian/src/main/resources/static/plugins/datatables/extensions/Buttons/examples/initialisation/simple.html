@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta id="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 	<title>Buttons example - Basic initialisation</title>
 	<link rel="stylesheet" type="text/css" href="../../../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../../css/buttons.dataTables.css">
@@ -61,7 +61,7 @@ $(document).ready(function() {
 				"String">B</code> option in the <a href="//datatables.net/reference/option/dom"><code class="option" title="DataTables initialisation option">dom</code></a>
 				parameter will instruct DataTables where the buttons should be placed in the document - in this case, at the top left (CSS also plays a part).</p>
 				<p>The simplest method of using buttons is to use <a href="https://datatables.net/reference/buttons">predefined button types</a> which can be displayed simply by
-				using their name in the <a href="//datatables.net/reference/option/buttons"><code class="option" title="Buttons initialisation option">buttons</code></a> array.
+				using their id in the <a href="//datatables.net/reference/option/buttons"><code class="option" title="Buttons initialisation option">buttons</code></a> array.
 				Each button can also be <a href="extend.html">extended</a> to provide customisation of that button.</p>
 				<p>This example shows the <a href="//datatables.net/reference/button/copy"><code class="button" title="Buttons button type">copy</code></a>, <a href=
 				"//datatables.net/reference/button/csv"><code class="button" title="Buttons button type">csv</code></a>, <a href=
@@ -682,7 +682,7 @@ $(document).ready(function() {
 								<a href="../html5/tsv.html">Tab separated values</a>
 							</li>
 							<li>
-								<a href="../html5/filename.html">File name</a>
+								<a href="../html5/filename.html">File id</a>
 							</li>
 							<li>
 								<a href="../html5/copyi18n.html">Copy button internationalisation</a>
@@ -720,7 +720,7 @@ $(document).ready(function() {
 								<a href="../flash/tsv.html">Tab separated values</a>
 							</li>
 							<li>
-								<a href="../flash/filename.html">File name</a>
+								<a href="../flash/filename.html">File id</a>
 							</li>
 							<li>
 								<a href="../flash/copyi18n.html">Copy button internationalisation</a>

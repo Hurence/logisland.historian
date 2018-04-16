@@ -38,7 +38,7 @@
 #	"official time" because Brasilia is the capital city.
 #	The other three time zones are called "Brasilia time "minus one" or
 #	"plus one" or "plus two".  As far as I know there is no such
-#	name/designation as "Eastern Time" or "Central Time".
+#	id/designation as "Eastern Time" or "Central Time".
 # So I invented the following (English-language) abbreviations for now.
 # Corrections are welcome!
 #		std	dst
@@ -381,19 +381,19 @@ Rule	Arg	2008	only	-	Oct	Sun>=15	0:00	1:00	S
 # <a/>
 # is the official page for the Province Government).
 #
-# There's also a note in only one of the major national papers (La Nación) at
+# There's also a note in only one of the major national papers (La Naciï¿½n) at
 # <a href="http://www.lanacion.com.ar/nota.asp?nota_id=1107912">
 # http://www.lanacion.com.ar/nota.asp?nota_id=1107912
 # </a>
 #
 # The press release says:
-#  (...) anunció que el próximo domingo a las 00:00 los puntanos deberán
+#  (...) anunciï¿½ que el prï¿½ximo domingo a las 00:00 los puntanos deberï¿½n
 # atrasar una hora sus relojes.
 #
-# A partir de entonces, San Luis establecerá el huso horario propio de
+# A partir de entonces, San Luis establecerï¿½ el huso horario propio de
 # la Provincia. De esta manera, durante el periodo del calendario anual
-# 2009, el cambio horario quedará comprendido entre las 00:00 del tercer
-# domingo de marzo y las 24:00 del segundo sábado de octubre.
+# 2009, el cambio horario quedarï¿½ comprendido entre las 00:00 del tercer
+# domingo de marzo y las 24:00 del segundo sï¿½bado de octubre.
 # Quick&dirty translation
 # (...) announced that next Sunday, at 00:00, Puntanos (the San Luis
 # inhabitants) will have to turn back one hour their clocks
@@ -812,7 +812,7 @@ Zone	America/La_Paz	-4:32:36 -	LMT	1890
 
 # From Guilherme Bernardes Rodrigues (2011-10-07):
 # There is news in the media, however there is still no decree about it.
-# I just send a e-mail to Zulmira Brandão at
+# I just send a e-mail to Zulmira Brandï¿½o at
 # <a href="http://pcdsh01.on.br/">http://pcdsh01.on.br/</a> the
 # oficial agency about time in Brazil, and she confirmed that the old rule is
 # still in force.
@@ -1346,7 +1346,7 @@ Zone	America/Curacao	-4:35:44 -	LMT	1912 Feb 12	# Willemstad
 
 # From Arthur David Olson (2011-06-15):
 # At least for now, use links for places with new iso3166 codes.
-# The name "Lower Prince's Quarter" is both longer than fourteen charaters
+# The id "Lower Prince's Quarter" is both longer than fourteen charaters
 # and contains an apostrophe; use "Lower_Princes" below.
 
 Link	America/Curacao	America/Lower_Princes # Sint Maarten

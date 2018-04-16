@@ -15,7 +15,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.validation.constraints.*;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-04-10T20:51:14.764+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-04-16T16:36:23.971+02:00")
 public class MetricsApiServiceImpl extends MetricsApiService {
     @Override
     public Response getMetrics(SecurityContext securityContext) throws NotFoundException {

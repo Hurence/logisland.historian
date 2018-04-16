@@ -16,7 +16,7 @@ import java.io.InputStream;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.validation.constraints.*;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-04-10T20:51:14.764+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-04-16T16:36:23.971+02:00")
 public abstract class AlertsApiService {
-    public abstract Response getAlerts( Integer count,SecurityContext securityContext) throws NotFoundException;
+    public abstract Response getAlerts( Integer count, Integer severity, String start, String end,SecurityContext securityContext) throws NotFoundException;
 }

@@ -1,4 +1,4 @@
-.jstree-@{theme-name} {
+.jstree-@{theme-id} {
 	.jstree-node,
 	.jstree-icon { background-repeat:no-repeat; background-color:transparent; }
 	.jstree-anchor,
@@ -38,17 +38,17 @@
 }
 
 // theme variants
-.jstree-@{theme-name} {
+.jstree-@{theme-id} {
 	.jstree-theme(24px, "@{image-path}32px.png", 32px);
 	&.jstree-rtl .jstree-node { background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAACAQMAAAB49I5GAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjAAMOBgAAGAAJMwQHdQAAAABJRU5ErkJggg=="); }
 	&.jstree-rtl .jstree-last { background:transparent; }
 }
-.jstree-@{theme-name}-small {
+.jstree-@{theme-id}-small {
 	.jstree-theme(18px, "@{image-path}32px.png", 32px);
 	&.jstree-rtl .jstree-node { background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAACAQMAAABv1h6PAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjAAMHBgAAiABBI4gz9AAAAABJRU5ErkJggg=="); }
 	&.jstree-rtl .jstree-last { background:transparent; }
 }
-.jstree-@{theme-name}-large {
+.jstree-@{theme-id}-large {
 	.jstree-theme(32px, "@{image-path}32px.png", 32px);
 	&.jstree-rtl .jstree-node { background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAACAQMAAAAD0EyKAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjgIIGBgABCgCBvVLXcAAAAABJRU5ErkJggg=="); }
 	&.jstree-rtl .jstree-last { background:transparent; }
@@ -70,6 +70,6 @@
 	}
 }
 
-.jstree-@{theme-name}-responsive when (@responsive = true) {
+.jstree-@{theme-id}-responsive when (@responsive = true) {
 	@import "responsive.less";
 }

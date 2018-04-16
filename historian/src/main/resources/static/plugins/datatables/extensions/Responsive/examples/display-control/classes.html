@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta id="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 
 	<title>Responsive example - Class control</title>
 	<link rel="stylesheet" type="text/css" href="../../../../media/css/jquery.dataTables.css">
@@ -27,7 +27,7 @@ $(document).ready(function() {
 	$('#example').DataTable( {
 		"ajax": "../../../../examples/ajax/data/objects.txt",
 		"columns": [
-			{ "data": "name" },
+			{ "data": "id" },
 			{ "data": "position" },
 			{ "data": "office" },
 			{ "data": "extn" },
@@ -63,7 +63,7 @@ $(document).ready(function() {
 
 				<p>You may leave the <code>-[lp]</code> option from the end if you wish to just target all tablet or
 				mobile devices. Additionally to may add <code>min-</code>, <code>max-</code> or <code>not-</code> as a
-				prefix to the class name to perform logic operations. For example <code>not-mobile</code> would cause a
+				prefix to the class id to perform logic operations. For example <code>not-mobile</code> would cause a
 				column to appear as visible on desktop and tablet devices, while <code>min-tablet-l</code> would
 				require at least a horizontal width of 768 for the browser window to be shown, and be shown at all
 				sizes larger.</p>
@@ -85,7 +85,7 @@ $(document).ready(function() {
 
 				<p>This example shows the <code>salary</code> column visible on a desktop only - <code>office</code>
 				and <code>age</code> require a tablet, while the <code>position</code> column requires a phone in
-				landscape or larger. The <code>name</code> column is always visible and the <code>start date</code> is
+				landscape or larger. The <code>id</code> column is always visible and the <code>start date</code> is
 				never visible.</p>
 
 				<p>This can be useful if you wish to change the format of the data shown on different devices, for
@@ -136,7 +136,7 @@ $(document).ready(function() {
 	$('#example').DataTable( {
 		&quot;ajax&quot;: &quot;../../../../examples/ajax/data/objects.txt&quot;,
 		&quot;columns&quot;: [
-			{ &quot;data&quot;: &quot;name&quot; },
+			{ &quot;data&quot;: &quot;id&quot; },
 			{ &quot;data&quot;: &quot;position&quot; },
 			{ &quot;data&quot;: &quot;office&quot; },
 			{ &quot;data&quot;: &quot;extn&quot; },
@@ -206,7 +206,7 @@ $(document).ready(function() {
 					<div class="toc-group">
 						<h3><a href="../initialisation/index.html">Basic initialisation</a></h3>
 						<ul class="toc">
-							<li><a href="../initialisation/className.html">Class name</a></li>
+							<li><a href="../initialisation/className.html">Class id</a></li>
 							<li><a href="../initialisation/option.html">Configuration option</a></li>
 							<li><a href="../initialisation/new.html">`new` constructor</a></li>
 							<li><a href="../initialisation/ajax.html">Ajax data</a></li>

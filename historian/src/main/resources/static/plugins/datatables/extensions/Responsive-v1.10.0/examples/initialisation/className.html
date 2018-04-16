@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
-	<title>Responsive example - Class name</title>
+	<meta id="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<title>Responsive example - Class id</title>
 	<link rel="stylesheet" type="text/css" href="../../../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../../css/responsive.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../../../../examples/resources/syntax/shCore.css">
@@ -37,18 +37,18 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>Responsive example <span>Class name</span></h1>
+			<h1>Responsive example <span>Class id</span></h1>
 			<div class="info">
 				<p>The easiest way to initialise the Responsive extension for DataTables is simply to add the class <code class="string" title="String">responsive</code> to the
-				table's class name. When the DataTable is initialised the Responsive extension will automatically enable itself on these tables.</p>
+				table's class id. When the DataTable is initialised the Responsive extension will automatically enable itself on these tables.</p>
 				<p>The may also use the class <code>dt-responsive</code> to perform the same action, since <code>responsive</code> may be used in your stylesheet, or may have some
 				other meaning in a CSS framework being used (for example Bootstrap).</p>
 			</div>
 			<table id="example" class="display responsive nowrap" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>First name</th>
-						<th>Last name</th>
+						<th>First id</th>
+						<th>Last id</th>
 						<th>Position</th>
 						<th>Office</th>
 						<th>Age</th>
@@ -753,7 +753,7 @@ $(document).ready(function() {
 						<h3><a href="./index.html">Basic initialisation</a></h3>
 						<ul class="toc active">
 							<li class="active">
-								<a href="./className.html">Class name</a>
+								<a href="./className.html">Class id</a>
 							</li>
 							<li>
 								<a href="./option.html">Configuration option</a>

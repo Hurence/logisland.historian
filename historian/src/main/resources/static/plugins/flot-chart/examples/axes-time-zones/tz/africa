@@ -33,12 +33,12 @@
 # but Mark R V Murray reports that
 # `SAST' is the official abbreviation for +2:00 in the country of South Africa,
 # `CAT' is commonly used for +2:00 in countries north of South Africa, and
-# `WAT' is probably the best name for +1:00, as the common phrase for
+# `WAT' is probably the best id for +1:00, as the common phrase for
 # the area that includes Nigeria is ``West Africa''.
 # He has heard of ``Western Sahara Time'' for +0:00 but can find no reference.
 #
 # To make things confusing, `WAT' seems to have been used for -1:00 long ago;
-# I'd guess that this was because people needed _some_ name for -1:00,
+# I'd guess that this was because people needed _some_ id for -1:00,
 # and at the time, far west Africa was the only major land area in -1:00.
 # This usage is now obsolete, as the last use of -1:00 on the African
 # mainland seems to have been 1976 in Western Sahara.

@@ -18,9 +18,7 @@ package com.hurence.logisland.historian.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -29,13 +27,13 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
-@EnableCaching
-@ComponentScan("com.hurence.logisland")
 @PropertySource("classpath:/application.yml")
 public class AppConfig {
 
-    private @Value("${redis.host}") String redisHost;
-    private @Value("${redis.port}") int redisPort;
+    private @Value("${redis.host}")
+    String redisHost;
+    private @Value("${redis.port}")
+    int redisPort;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -52,8 +50,8 @@ public class AppConfig {
     }
 
     @Bean
-    RedisTemplate<Object, Object> redisTemplate() {
-        RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<Object, Object>();
+    RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
         return redisTemplate;
     }

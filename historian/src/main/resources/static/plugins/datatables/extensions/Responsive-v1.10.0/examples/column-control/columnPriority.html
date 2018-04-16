@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta id="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 	<title>Responsive example - Column priority</title>
 	<link rel="stylesheet" type="text/css" href="../../../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../../css/responsive.dataTables.css">
@@ -54,16 +54,16 @@ $(document).ready(function() {
 				"//datatables.net/reference/option/columns"><code class="option" title="DataTables initialisation option">columns</code></a> or <a href=
 				"//datatables.net/reference/option/columnDefs"><code class="option" title="DataTables initialisation option">columnDefs</code></a>). The priority given is a number
 				with lower values representing a higher priority.</p>
-				<p>This example shows the <em>first name</em> column being given top priority and then the <em>extn.</em> column. Resizing the table will cause the other columns
-				to be removed before these two columns - with the <em>first name</em> column finally taking priority.</p>
+				<p>This example shows the <em>first id</em> column being given top priority and then the <em>extn.</em> column. Resizing the table will cause the other columns
+				to be removed before these two columns - with the <em>first id</em> column finally taking priority.</p>
 				<p>The column priority can also be defined by a <code>data-priority</code> attribute on the column's header cell (for example <code class="tag" title=
-				"HTML tag">&lt;th data-priority="1"&gt;First name&lt;/th&gt;</code>).</p>
+				"HTML tag">&lt;th data-priority="1"&gt;First id&lt;/th&gt;</code>).</p>
 			</div>
 			<table id="example" class="display nowrap" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>First name</th>
-						<th>Last name</th>
+						<th>First id</th>
+						<th>Last id</th>
 						<th>Position</th>
 						<th>Office</th>
 						<th>Age</th>
@@ -774,7 +774,7 @@ $(document).ready(function() {
 						<h3><a href="../initialisation/index.html">Basic initialisation</a></h3>
 						<ul class="toc">
 							<li>
-								<a href="../initialisation/className.html">Class name</a>
+								<a href="../initialisation/className.html">Class id</a>
 							</li>
 							<li>
 								<a href="../initialisation/option.html">Configuration option</a>

@@ -49,4 +49,7 @@ redis:
   host: localhost
   port: 6379
 
-
+solr:
+  core: chronix
+  host: localhost
+  port: 8983

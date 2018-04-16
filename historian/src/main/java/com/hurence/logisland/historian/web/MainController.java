@@ -16,7 +16,6 @@
  */
 package com.hurence.logisland.historian.web;
 
-import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,9 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 class MainController {
@@ -38,9 +34,14 @@ class MainController {
 
     @GetMapping(path = "/tags")
     public String getTags(Principal principal, Model model){
-        model.addAttribute("tags", tagService.getTags());
+
+        long start = System.currentTimeMillis();
+        model.addAttribute("tags", tagService.findAll());
+        long requestTime  = System.currentTimeMillis() - start;
 
         model.addAttribute("principal",principal);
+        model.addAttribute("requestTime",requestTime);
+
 
         return "tags";
     }

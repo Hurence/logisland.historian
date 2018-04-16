@@ -12,7 +12,7 @@
 #     in ISO 6709 sign-degrees-minutes-seconds format,
 #     either +-DDMM+-DDDMM or +-DDMMSS+-DDDMMSS,
 #     first latitude (+ is north), then longitude (+ is east).
-# 3.  Zone name used in value of TZ environment variable.
+# 3.  Zone id used in value of TZ environment variable.
 # 4.  Comments; present if and only if the country has multiple rows.
 #
 # Columns are separated by a single tab.

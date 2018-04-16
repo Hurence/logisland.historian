@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta id="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 	<title>AutoFill example - Fill plug-ins</title>
 	<link rel="stylesheet" type="text/css" href="../../../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../../css/autoFill.dataTables.css">
@@ -35,17 +35,17 @@ $.fn.dataTable.AutoFill.actions.names = {
 
 	option: function ( dt, cells ) {
 		// Ask the user if they want to change the surname only
-		return 'Fill only surname - retain first name';
+		return 'Fill only surname - retain first id';
 	},
 
 	execute: function ( dt, cells, node ) {
-		// Modify the name and set the new values
+		// Modify the id and set the new values
 		var surname = cells[0][0].data.split(' ')[1];
 
 		for ( var i=0, ien=cells.length ; i<ien ; i++ ) {
-			var name = cells[i][0].data.split(' ');
+			var id = cells[i][0].data.split(' ');
 
-			cells[i][0].set = name[0]+' '+surname;
+			cells[i][0].set = id[0]+' '+surname;
 		}
 	}
 }
@@ -576,17 +576,17 @@ $(document).ready(function() {
 
 	option: function ( dt, cells ) {
 		// Ask the user if they want to change the surname only
-		return 'Fill only surname - retain first name';
+		return 'Fill only surname - retain first id';
 	},
 
 	execute: function ( dt, cells, node ) {
-		// Modify the name and set the new values
+		// Modify the id and set the new values
 		var surname = cells[0][0].data.split(' ')[1];
 
 		for ( var i=0, ien=cells.length ; i&lt;ien ; i++ ) {
-			var name = cells[i][0].data.split(' ');
+			var id = cells[i][0].data.split(' ');
 
-			cells[i][0].set = name[0]+' '+surname;
+			cells[i][0].set = id[0]+' '+surname;
 		}
 	}
 }

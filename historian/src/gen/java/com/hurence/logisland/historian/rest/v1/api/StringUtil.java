@@ -1,6 +1,6 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-04-10T20:51:14.764+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-04-16T16:36:23.971+02:00")
 public class StringUtil {
   /**
    * Check if the given array contains the given value (with case-insensitive comparison).

@@ -30,7 +30,7 @@ import javax.validation.constraints.*;
 
 
 @io.swagger.annotations.Api(description = "the alerts API")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-04-10T20:51:14.764+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2018-04-16T16:36:23.971+02:00")
 public class AlertsApi  {
    private final AlertsApiService delegate;
 
@@ -59,14 +59,17 @@ public class AlertsApi  {
     
     
     
-    @io.swagger.annotations.ApiOperation(value = "get job alerts", notes = "get the alerts", response = Alert.class, responseContainer = "List", tags={ "alerts", })
+    @io.swagger.annotations.ApiOperation(value = "get all alerts", notes = "get the alerts", response = Alert.class, responseContainer = "List", tags={ "alerts", })
     @io.swagger.annotations.ApiResponses(value = { 
         @io.swagger.annotations.ApiResponse(code = 200, message = "job metrics", response = Alert.class, responseContainer = "List"),
         
         @io.swagger.annotations.ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
     public Response getAlerts(@ApiParam(value = "max number of ites to retrieve", defaultValue="20") @DefaultValue("20") @QueryParam("count") Integer count
+,@ApiParam(value = "severity level (the higher the most severe)", defaultValue="0") @DefaultValue("0") @QueryParam("severity") Integer severity
+,@ApiParam(value = "lower date range", defaultValue="1DAYS-AGO") @DefaultValue("1DAYS-AGO") @QueryParam("start") String start
+,@ApiParam(value = "upper date range", defaultValue="NOW") @DefaultValue("NOW") @QueryParam("end") String end
 ,@Context SecurityContext securityContext)
     throws NotFoundException {
-        return delegate.getAlerts(count,securityContext);
+        return delegate.getAlerts(count,severity,start,end,securityContext);
     }
 }

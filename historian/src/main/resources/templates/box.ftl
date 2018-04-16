@@ -112,7 +112,7 @@
                                         class="form-control animated fadeIn"
                                         type="text"
                                         id="q"
-                                        name="q"
+                                        id="q"
                                         value="$!esc.html($params.get('q'))"
                                         placeholder="*:*"/>
                                     <input type="submit" id="querySubmit"/>

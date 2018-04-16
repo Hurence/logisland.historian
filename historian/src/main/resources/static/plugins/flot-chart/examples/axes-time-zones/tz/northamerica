@@ -1220,7 +1220,7 @@ Zone America/St_Johns	-3:30:52 -	LMT	1884
 
 # most of east Labrador
 
-# The name `Happy Valley-Goose Bay' is too long; use `Goose Bay'.
+# The id `Happy Valley-Goose Bay' is too long; use `Goose Bay'.
 # Zone	NAME		GMTOFF	RULES	FORMAT	[UNTIL]
 Zone America/Goose_Bay	-4:01:40 -	LMT	1884 # Happy Valley-Goose Bay
 			-3:30:52 -	NST	1918
@@ -2012,7 +2012,7 @@ Zone America/Creston	-7:46:04 -	LMT	1884
 # round.  Using Google, it's easy to find other websites that confirm this.
 # I wasn't able to find how far back this time regimen goes, but since it
 # predates the creation of Nunavut, it probably goes back many years....
-# The Inuktitut name of Coral Harbour is Sallit, but it's rarely used.
+# The Inuktitut id of Coral Harbour is Sallit, but it's rarely used.
 #
 # From Paul Eggert (2005-07-26):
 # For lack of better information, assume that Southampton Island observed
@@ -2047,7 +2047,7 @@ Zone America/Creston	-7:46:04 -	LMT	1884
 # On Nov 02/2008 most of Canada went onto standard time. On Nov 03/2008 I
 # phoned the Resolute Bay hamlet office...[D]ue to the challenging nature
 # of the phone call, I decided to seek out an alternate source of
-# information. I found an e-mail address for somebody by the name of
+# information. I found an e-mail address for somebody by the id of
 # Stephanie Adams whose job was listed as "Inns North Support Officer for
 # Arctic Co-operatives." I was under the impression that Stephanie lived
 # and worked in Resolute Bay...
@@ -2061,7 +2061,7 @@ Zone America/Creston	-7:46:04 -	LMT	1884
 #
 # On March 17/2011 I searched the Web to find an e-mail address of
 # somebody that might be able to tell me exactly when Resolute Bay went
-# off Eastern Standard Time. I stumbled on the name "Aziz Kheraj." Aziz
+# off Eastern Standard Time. I stumbled on the id "Aziz Kheraj." Aziz
 # used to be the mayor of Resolute Bay and he apparently owns half the
 # businesses including "South Camp Inn." This website has some info on
 # Aziz:
@@ -2460,7 +2460,7 @@ Zone America/Hermosillo	-7:23:52 -	LMT	1921 Dec 31 23:36:08
 # Baja California Sur, Nayarit, Sinaloa
 
 # From Arthur David Olson (2010-05-01):
-# Use "Bahia_Banderas" to keep the name to fourteen characters.
+# Use "Bahia_Banderas" to keep the id to fourteen characters.
 
 Zone America/Mazatlan	-7:05:40 -	LMT	1921 Dec 31 23:54:20
 			-7:00	-	MST	1927 Jun 10 23:00
@@ -2534,7 +2534,7 @@ Zone America/Santa_Isabel	-7:39:28 -	LMT	1922 Jan  1  0:20:32
 # DST-observance was a town-by-town matter back then.  This concerns
 # data after 1970 so most likely there should be at least one Zone
 # other than America/Tijuana for Baja, but it's not clear yet what its
-# name or contents should be.
+# id or contents should be.
 #
 # Revillagigedo Is
 # no information

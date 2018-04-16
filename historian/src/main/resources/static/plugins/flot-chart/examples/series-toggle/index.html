@@ -54,7 +54,7 @@
 		// insert checkboxes 
 		var choiceContainer = $("#choices");
 		$.each(togdatasets, function(key, val) {
-			choiceContainer.append("<br/><input type='checkbox' name='" + key +
+			choiceContainer.append("<br/><input type='checkbox' id='" + key +
 				"' checked='checked' id='id" + key + "'></input>" +
 				"<label for='id" + key + "'>"
 				+ val.label + "</label>");
@@ -67,7 +67,7 @@
 			var data = [];
 
 			choiceContainer.find("input:checked").each(function () {
-				var key = $(this).attr("name");
+				var key = $(this).attr("id");
 				if (key && togdatasets[key]) {
 					data.push(togdatasets[key]);
 				}

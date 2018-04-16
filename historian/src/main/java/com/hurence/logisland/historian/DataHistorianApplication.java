@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                 "com.hurence.logisland.historian.config", "com.hurence.logisland.historian.rest"
         }
 )*/
-//@EnableWebMvc
 public class DataHistorianApplication extends SpringBootServletInitializer {
 
     @Override

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta id="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 	<title>Responsive example - Compact styling</title>
 	<link rel="stylesheet" type="text/css" href="../../../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../../css/responsive.dataTables.css">
@@ -44,14 +44,14 @@ $(document).ready(function() {
 			<h1>Responsive example <span>Compact styling</span></h1>
 			<div class="info">
 				<p>DataTables' <a href="http://datatables.net/manual/styling/classes">default stylesheet</a> has a number number of features available that can be enabled by
-				including a class name on the DataTable. One of those options is <code>compact</code> which displays the DataTable with less whitespace padding that might other be
+				including a class id on the DataTable. One of those options is <code>compact</code> which displays the DataTable with less whitespace padding that might other be
 				used to increase the information density of the table. Responsive's own style has support for this <code>compact</code> styling as showing in this example.</p>
 			</div>
 			<table id="example" class="display compact nowrap" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>First name</th>
-						<th>Last name</th>
+						<th>First id</th>
+						<th>Last id</th>
 						<th>Position</th>
 						<th>Office</th>
 						<th>Age</th>
@@ -758,7 +758,7 @@ $(document).ready(function() {
 						<h3><a href="../initialisation/index.html">Basic initialisation</a></h3>
 						<ul class="toc">
 							<li>
-								<a href="../initialisation/className.html">Class name</a>
+								<a href="../initialisation/className.html">Class id</a>
 							</li>
 							<li>
 								<a href="../initialisation/option.html">Configuration option</a>

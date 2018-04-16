@@ -2,9 +2,10 @@
 
     <html>
     <h1>${principal.getName()} tags</h1>
+    <p>Request time : ${requestTime}</p>
     <ul>
         <#list tags as tag>
-            <li>${tag.getItemName()}</li>
+            <li>${tag.getId()}</li>
         </#list>
     </ul>
     <p>
