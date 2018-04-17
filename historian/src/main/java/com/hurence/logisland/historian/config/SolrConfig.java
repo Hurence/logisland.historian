@@ -16,7 +16,6 @@
  */
 package com.hurence.logisland.historian.config;
 
-import com.hurence.logisland.historian.service.TagService;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.solr.client.solrj.SolrClient;
@@ -25,13 +24,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.solr.core.SolrOperations;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import org.springframework.data.solr.server.SolrClientFactory;
 import org.springframework.data.solr.server.support.HttpSolrClientFactory;
-
-import java.net.MalformedURLException;
 
 @Configuration
 @PropertySource("classpath:/application.yml")

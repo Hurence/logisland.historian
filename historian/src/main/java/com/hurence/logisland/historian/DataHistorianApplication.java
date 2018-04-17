@@ -5,14 +5,13 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
-@SpringBootApplication/*(
-        scanBasePackages = {
-                "com.hurence.logisland.historian.config", "com.hurence.logisland.historian.rest"
-        }
-)*/
+@SpringBootApplication
+@EnableSwagger2
 public class DataHistorianApplication extends SpringBootServletInitializer {
 
     @Override

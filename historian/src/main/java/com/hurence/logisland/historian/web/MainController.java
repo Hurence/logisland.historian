@@ -16,7 +16,7 @@
  */
 package com.hurence.logisland.historian.web;
 
-import com.hurence.logisland.historian.service.TagService;
+import com.hurence.logisland.historian.service.TagsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,16 +30,16 @@ import java.security.Principal;
 class MainController {
 
     @Autowired
-    TagService tagService;
+    TagsService tagsService;
 
-    @GetMapping(path = "/tags")
+    @GetMapping(path = "/mytags")
     public String getTags(Principal principal, Model model){
 
         long start = System.currentTimeMillis();
-        model.addAttribute("tags", tagService.findAll());
+        model.addAttribute("tags", tagsService.findAll());
         long requestTime  = System.currentTimeMillis() - start;
 
-        model.addAttribute("principal",principal);
+     //   model.addAttribute("principal",principal);
         model.addAttribute("requestTime",requestTime);
 
 

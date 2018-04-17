@@ -7,8 +7,6 @@ server:
 spring:
   application:
       name: logisland-historian
-  jersey:
-    application-path: /api
   freemarker:
     template-loader-path: classpath:/templates
     suffix: .ftl
@@ -42,7 +40,7 @@ keycloak:
         - user
       securityCollections:
         - patterns:
-          - /tags/*
+          - /mytags/*
 
 
 redis:

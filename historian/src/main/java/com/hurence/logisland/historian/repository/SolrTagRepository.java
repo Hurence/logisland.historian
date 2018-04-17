@@ -30,7 +30,13 @@ public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
 
     List<Tag> findById(String id);
 
-    Tag getById(String id);
+    // catch all query
+    List<Tag> findByText(String text);
+
+   // long count(String searchTerm);
+
+    @Query(fields = { "id", "tag_name", "group", "domain", "server", "creation_date" })
+    Page<Tag> findAll(Pageable page);
 
     //Derived Query will be "q=popularity:<popularity>&start=<page.number>&rows=<page.size>"
     //@Query(fields = { "id", "tag_name", "domain", "server" })

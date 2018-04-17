@@ -624,6 +624,11 @@ definitions:
         - boolean
       description:
         type: string
+      text:
+        description: ctach all field
+        type: array
+        items:
+          type: string
       creation_date:
         description: timestamp
         type: integer

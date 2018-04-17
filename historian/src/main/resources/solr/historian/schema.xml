@@ -25,7 +25,6 @@
         <field name="tag_name" type="string" indexed="true" stored="true" required="false"/>
         <field name="data_type" type="string" indexed="true" stored="true" required="false"/>
         <field name="labels" type="string" indexed="true" stored="true" required="false" multiValued="true"/>
-        <field name="datasource_id" type="string" indexed="true" stored="true" required="false"/>
         <field name="description" type="string" indexed="true" stored="true" required="false"/>
         <field name="creation_date" type="date" indexed="true" stored="true" required="false"/>
         <field name="last_modification_date" type="date" indexed="true" stored="true" required="false"/>
@@ -40,7 +39,7 @@
         <field name="last_numeric_value" type="double" indexed="true" stored="true" required="false"/>
         <field name="last_quality" type="int" indexed="true" stored="true" required="false"/>
 
-        <field name="text" type="string" indexed="true" stored="true" required="false"/>
+        <field name="text" type="string" indexed="true" multiValued="true"/>
 
 
         <!-- Dynamic field -->
@@ -49,7 +48,14 @@
 
     </fields>
 
-    <copyField source="text" dest="id"/>
+    <copyField source="domain" dest="text"/>
+    <copyField source="server" dest="text"/>
+    <copyField source="group" dest="text"/>
+    <copyField source="tag_name" dest="text"/>
+    <copyField source="labels" dest="text"/>
+    <copyField source="data_type" dest="text"/>
+    <copyField source="description" dest="text"/>
+
     <uniqueKey>id</uniqueKey>
     <solrQueryParser defaultOperator="OR"/>
 
