@@ -1,0 +1,17 @@
+{
+  "name": "logisland.historian",
+  "version": "1.0.0",
+  "description": "front-end logisland-historian",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.23.6",
+    "gulp": "^3.9.1",
+    "run-sequence": "^2.2.1",
+    "sass": "^1.2.0"
+  }
+}
