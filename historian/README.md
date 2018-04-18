@@ -5,7 +5,8 @@
 
 Run a chronix docker container on port 8983
 
-    docker run -p 8983:8983 --name chronix -it hurence/docker-chronix:latest
+    docker run -p 8983:8983 --name chronix -d hurence/chronix:latest
+    docker run -p 6379:6379 --name redis -d redis
     
 Run Keycloak as a docker service on port 8080
     
@@ -25,7 +26,7 @@ Run spring boot application on port 8701
 
 Get swagger.json doc
 
-    curl -XGET http://localhost:8701/api/swagger.json
+    curl -XGET http://localhost:8701/v2/api-docs
 
 
 
@@ -39,10 +40,8 @@ Build and run historian as Docker container
     mvn -U -X package docker:build
     docker run -idt -p 8701:8701 -e appPort=8701 hurence/historian:latest
 
-
-
-mvn -U -X clean versions:set -DnewVersion=1.0.37
-mvn -U -X package docker:build -Dpush.image=true
+    mvn -U -X clean versions:set -DnewVersion=1.0.37
+    mvn -U -X package docker:build -Dpush.image=true
 
 
 
