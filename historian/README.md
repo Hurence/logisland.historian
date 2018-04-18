@@ -1,3 +1,23 @@
+    git clone git@github.com:Hurence/logisland.historian.git
+    git hf init
+    git hf feature checkout rest-api.#45
+    
+
+Run a chronix docker container on port 8983
+
+    docker run -p 8983:8983 --name chronix -it hurence/docker-chronix:latest
+    
+Run Keycloak as a docker service on port 8080
+    
+    docker run jboss/keycloak --id keycloak -p 8080:8080
+
+    # add a admin user
+    bin/add-user-keycloak.sh -u admin
+    
+    http://localhost:8080/auth
+
+
+
 Run spring boot application on port 8701
     
     mvn clean spring-boot:run -DappPort=8701
@@ -8,14 +28,6 @@ Get swagger.json doc
     curl -XGET http://localhost:8701/api/swagger.json
 
 
-Run Keycloak as a docker service on port 8080
-    
-    docker run jboss/keycloak --id keycloak -p 8080:8080
-
-    # add a admin user
-    bin/add-user-keycloak.sh -u admin
-    
-    http://localhost:8080/auth
 
 
  keytool -genkey -alias logisland-historian -storetype PKCS12 -keyalg RSA -keysize 2048  -keystore keystore.p12 -validity 3650
