@@ -23,32 +23,32 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-17T16:33:03.739+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T10:27:56.333+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Tag  implements Serializable {
         @JsonProperty("id")
-        @Indexed(name = "id", type = "String")
+        @Indexed(name = "id")
         private String id = "mySweetUniqueId";
 
         @JsonProperty("domain")
-        @Indexed(name = "domain", type = "String")
+        @Indexed(name = "domain")
         private String domain = null;
 
         @JsonProperty("server")
-        @Indexed(name = "server", type = "String")
+        @Indexed(name = "server")
         private String server = null;
 
         @JsonProperty("group")
-        @Indexed(name = "group", type = "String")
+        @Indexed(name = "group")
         private String group = null;
 
         @JsonProperty("tag_name")
-        @Indexed(name = "tag_name", type = "String")
+        @Indexed(name = "tag_name")
         private String tagName = null;
 
         @JsonProperty("labels")
-        @Indexed(name = "labels", type = "List&lt;String&gt;")
+        @Indexed(name = "labels")
         private List<String> labels = null;
 
               /**
@@ -95,51 +95,47 @@ public class Tag  implements Serializable {
   }
 
         @JsonProperty("data_type")
-        @Indexed(name = "data_type", type = "String")
+        @Indexed(name = "data_type")
         private DataTypeEnum dataType = DataTypeEnum.FLOAT;
 
         @JsonProperty("description")
-        @Indexed(name = "description", type = "String")
+        @Indexed(name = "description")
         private String description = null;
 
         @JsonProperty("text")
-        @Indexed(name = "text", type = "List&lt;String&gt;")
+        @Indexed(name = "text")
         private List<String> text = null;
 
         @JsonProperty("creation_date")
-        @Indexed(name = "creation_date", type = "Long")
+        @Indexed(name = "creation_date")
         private Long creationDate = null;
 
         @JsonProperty("last_modification_date")
-        @Indexed(name = "last_modification_date", type = "Long")
+        @Indexed(name = "last_modification_date")
         private Long lastModificationDate = null;
 
         @JsonProperty("last_polling_date")
-        @Indexed(name = "last_polling_date", type = "Long")
+        @Indexed(name = "last_polling_date")
         private Long lastPollingDate = null;
 
-        @JsonProperty("last_base64_value")
-        @Indexed(name = "last_base64_value", type = "byte[]")
-        private byte[] lastBase64Value = null;
-
         @JsonProperty("update_rate")
-        @Indexed(name = "update_rate", type = "Integer")
+        @Indexed(name = "update_rate")
         private Integer updateRate = null;
 
         @JsonProperty("min_numeric_value")
-        @Indexed(name = "min_numeric_value", type = "BigDecimal")
+        @Indexed(name = "min_numeric_value")
         private BigDecimal minNumericValue = null;
 
         @JsonProperty("max_numeric_value")
-        @Indexed(name = "max_numeric_value", type = "Double")
+        @Indexed(name = "max_numeric_value")
         private Double maxNumericValue = null;
 
         @JsonProperty("last_numeric_value")
-        @Indexed(name = "last_numeric_value", type = "Double")
+        @Indexed(name = "last_numeric_value")
         private Double lastNumericValue = null;
 
         @JsonProperty("last_quality")
-        @Indexed(name = "last_quality", type = "Integer")
+        @Indexed(name = "last_quality")
         private Integer lastQuality = null;
 
         public Tag id(String id) {
@@ -411,27 +407,6 @@ public class Tag  implements Serializable {
         this.lastPollingDate = lastPollingDate;
         }
 
-        public Tag lastBase64Value(byte[] lastBase64Value) {
-        this.lastBase64Value = lastBase64Value;
-        return this;
-        }
-
-    /**
-        * base64 encoded value
-    * @return lastBase64Value
-    **/
-        @JsonProperty("last_base64_value")
-    @ApiModelProperty(value = "base64 encoded value")
-    
-@Pattern(regexp="^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$") 
-  public byte[] getLastBase64Value() {
-    return lastBase64Value;
-    }
-
-        public void setLastBase64Value(byte[] lastBase64Value) {
-        this.lastBase64Value = lastBase64Value;
-        }
-
         public Tag updateRate(Integer updateRate) {
         this.updateRate = updateRate;
         return this;
@@ -560,7 +535,6 @@ public class Tag  implements Serializable {
         Objects.equals(this.creationDate, tag.creationDate) &&
         Objects.equals(this.lastModificationDate, tag.lastModificationDate) &&
         Objects.equals(this.lastPollingDate, tag.lastPollingDate) &&
-        Objects.equals(this.lastBase64Value, tag.lastBase64Value) &&
         Objects.equals(this.updateRate, tag.updateRate) &&
         Objects.equals(this.minNumericValue, tag.minNumericValue) &&
         Objects.equals(this.maxNumericValue, tag.maxNumericValue) &&
@@ -570,7 +544,7 @@ public class Tag  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(id, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, lastBase64Value, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality);
+    return Objects.hash(id, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality);
     }
 
 
@@ -591,7 +565,6 @@ sb.append("    text: ").append(toIndentedString(text)).append("\n");
 sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
 sb.append("    lastModificationDate: ").append(toIndentedString(lastModificationDate)).append("\n");
 sb.append("    lastPollingDate: ").append(toIndentedString(lastPollingDate)).append("\n");
-sb.append("    lastBase64Value: ").append(toIndentedString(lastBase64Value)).append("\n");
 sb.append("    updateRate: ").append(toIndentedString(updateRate)).append("\n");
 sb.append("    minNumericValue: ").append(toIndentedString(minNumericValue)).append("\n");
 sb.append("    maxNumericValue: ").append(toIndentedString(maxNumericValue)).append("\n");

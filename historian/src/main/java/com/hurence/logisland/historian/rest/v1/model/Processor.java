@@ -21,24 +21,24 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Processor
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-17T16:33:03.739+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T10:27:56.333+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Processor  implements Serializable {
         @JsonProperty("name")
-        @Indexed(name = "name", type = "String")
+        @Indexed(name = "name")
         private String name = null;
 
         @JsonProperty("component")
-        @Indexed(name = "component", type = "String")
+        @Indexed(name = "component")
         private String component = null;
 
         @JsonProperty("documentation")
-        @Indexed(name = "documentation", type = "String")
+        @Indexed(name = "documentation")
         private String documentation = null;
 
         @JsonProperty("config")
-        @Indexed(name = "config", type = "List&lt;Property&gt;")
+        @Indexed(name = "config")
         private List<Property> config = new ArrayList<Property>();
 
         public Processor name(String name) {

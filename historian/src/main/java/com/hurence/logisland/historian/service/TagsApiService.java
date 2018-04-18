@@ -28,9 +28,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class TagsService {
+public class TagsApiService {
 
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -91,13 +92,30 @@ public class TagsService {
     public List<Tag> getAllTags(String fq) {
 
         String query = fq;
-        if(fq == null || fq.isEmpty())
+        if (fq == null || fq.isEmpty())
             query = "*:*";
 
-        Page<Tag> tags = repository.findAll(new PageRequest(0,20));
+        Page<Tag> tags = repository.findAll(new PageRequest(0, 20));
 
         return tags.getContent();
 
+
+    }
+
+    public Optional<Tag> addTagWithId(Tag body, String itemId) {
+
+        logger.info("Tag already {} exists, delete it first", itemId);
+
+        Tag tagToRemove = solrTemplate.getById(itemId, Tag.class);
+        if (tagToRemove != null) {
+            return Optional.empty();
+        } else {
+
+            body.setId(itemId);
+            // body.id( "/" + body.getDomain() + "/" + body.getServer() + "/" + body.getGroup() + "/" + body.getTagName())
+            repository.save(body);
+            return Optional.of(body);
+        }
 
     }
 /*

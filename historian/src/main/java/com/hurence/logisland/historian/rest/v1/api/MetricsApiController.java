@@ -1,6 +1,7 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.Error;
+import com.hurence.logisland.historian.service.MetricsApiService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-17T16:33:03.739+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T10:27:56.333+02:00")
 
 @Controller
 public class MetricsApiController implements MetricsApi {
@@ -31,24 +32,29 @@ public class MetricsApiController implements MetricsApi {
 
     private final HttpServletRequest request;
 
+    private final MetricsApiService service;
+
+
     @org.springframework.beans.factory.annotation.Autowired
-    public MetricsApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+    public MetricsApiController(ObjectMapper objectMapper, HttpServletRequest request, MetricsApiService service) {
         this.objectMapper = objectMapper;
         this.request = request;
+        this.service = service;
     }
 
     public ResponseEntity<String> getMetrics() {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("")) {
-            try {
-                return new ResponseEntity<String>(objectMapper.readValue("", String.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type ", e);
-                return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+            String accept = request.getHeader("Accept");
+            if (accept != null && accept.contains("")) {
+                try {
+                    return new ResponseEntity<String>(
+                objectMapper.readValue("", String.class), HttpStatus.NOT_IMPLEMENTED);
+                    } catch (IOException e) {
+                    log.error("Couldn't serialize response for content type ", e);
+                    return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             }
-        }
 
-        return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

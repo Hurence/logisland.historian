@@ -18,20 +18,20 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Property
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-17T16:33:03.739+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T10:27:56.333+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Property  implements Serializable {
         @JsonProperty("key")
-        @Indexed(name = "key", type = "String")
+        @Indexed(name = "key")
         private String key = null;
 
         @JsonProperty("type")
-        @Indexed(name = "type", type = "String")
+        @Indexed(name = "type")
         private String type = "string";
 
         @JsonProperty("value")
-        @Indexed(name = "value", type = "String")
+        @Indexed(name = "value")
         private String value = null;
 
         public Property key(String key) {

@@ -18,16 +18,16 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Error
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-17T16:33:03.739+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T10:27:56.333+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Error  implements Serializable {
         @JsonProperty("code")
-        @Indexed(name = "code", type = "Integer")
+        @Indexed(name = "code")
         private Integer code = null;
 
         @JsonProperty("message")
-        @Indexed(name = "message", type = "String")
+        @Indexed(name = "message")
         private String message = null;
 
         public Error code(Integer code) {

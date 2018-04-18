@@ -641,10 +641,10 @@ definitions:
         description: timestamp
         type: integer
         format: int64
-      last_base64_value:
-        description: base64 encoded value
-        type: string
-        format: byte
+     # last_base64_value:
+     #   description: base64 encoded value
+     #   type: string
+      #  format: byte
       update_rate:
         description: polling delay in ms
         default: 1000

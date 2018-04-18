@@ -18,36 +18,36 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Datasource
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-17T16:33:03.739+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T10:27:56.333+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Datasource  implements Serializable {
         @JsonProperty("id")
-        @Indexed(name = "id", type = "String")
+        @Indexed(name = "id")
         private String id = null;
 
         @JsonProperty("description")
-        @Indexed(name = "description", type = "String")
+        @Indexed(name = "description")
         private String description = null;
 
         @JsonProperty("clsid")
-        @Indexed(name = "clsid", type = "String")
+        @Indexed(name = "clsid")
         private String clsid = null;
 
         @JsonProperty("host")
-        @Indexed(name = "host", type = "String")
+        @Indexed(name = "host")
         private String host = null;
 
         @JsonProperty("domain")
-        @Indexed(name = "domain", type = "String")
+        @Indexed(name = "domain")
         private String domain = null;
 
         @JsonProperty("user")
-        @Indexed(name = "user", type = "String")
+        @Indexed(name = "user")
         private String user = null;
 
         @JsonProperty("password")
-        @Indexed(name = "password", type = "String")
+        @Indexed(name = "password")
         private String password = null;
 
         public Datasource id(String id) {

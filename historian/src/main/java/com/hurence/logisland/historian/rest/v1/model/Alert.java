@@ -19,24 +19,24 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Alert
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-17T16:33:03.739+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T10:27:56.333+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Alert  implements Serializable {
         @JsonProperty("time")
-        @Indexed(name = "time", type = "String")
+        @Indexed(name = "time")
         private String time = null;
 
         @JsonProperty("message")
-        @Indexed(name = "message", type = "String")
+        @Indexed(name = "message")
         private String message = null;
 
         @JsonProperty("severity")
-        @Indexed(name = "severity", type = "Integer")
+        @Indexed(name = "severity")
         private Integer severity = null;
 
         @JsonProperty("tag")
-        @Indexed(name = "tag", type = "Tag")
+        @Indexed(name = "tag")
         private Tag tag = null;
 
         public Alert time(String time) {

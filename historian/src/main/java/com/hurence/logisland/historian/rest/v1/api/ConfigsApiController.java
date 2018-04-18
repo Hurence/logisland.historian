@@ -2,6 +2,7 @@ package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.Error;
 import com.hurence.logisland.historian.rest.v1.model.Property;
+import com.hurence.logisland.historian.service.ConfigsApiService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-17T16:33:03.739+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T10:27:56.333+02:00")
 
 @Controller
 public class ConfigsApiController implements ConfigsApi {
@@ -32,24 +33,29 @@ public class ConfigsApiController implements ConfigsApi {
 
     private final HttpServletRequest request;
 
+    private final ConfigsApiService service;
+
+
     @org.springframework.beans.factory.annotation.Autowired
-    public ConfigsApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+    public ConfigsApiController(ObjectMapper objectMapper, HttpServletRequest request, ConfigsApiService service) {
         this.objectMapper = objectMapper;
         this.request = request;
+        this.service = service;
     }
 
     public ResponseEntity<List<Property>> getConfig() {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<Property>>(objectMapper.readValue("[ {  \"type\" : \"string\",  \"value\" : \"value\",  \"key\" : \"key\"}, {  \"type\" : \"string\",  \"value\" : \"value\",  \"key\" : \"key\"} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Property>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            String accept = request.getHeader("Accept");
+            if (accept != null && accept.contains("application/json")) {
+                try {
+                    return new ResponseEntity<List<Property>>(
+                objectMapper.readValue("[ {  \"type\" : \"string\",  \"value\" : \"value\",  \"key\" : \"key\"}, {  \"type\" : \"string\",  \"value\" : \"value\",  \"key\" : \"key\"} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
+                    } catch (IOException e) {
+                    log.error("Couldn't serialize response for content type application/json", e);
+                    return new ResponseEntity<List<Property>>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             }
-        }
 
-        return new ResponseEntity<List<Property>>(HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<List<Property>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

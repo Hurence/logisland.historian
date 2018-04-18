@@ -25,7 +25,7 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#seriali
     {{/items.isEnum}}
     {{#jackson}}
         @JsonProperty("{{baseName}}")
-        @Indexed(name = "{{baseName}}", type = "{{datatype}}")
+        @Indexed(name = "{{baseName}}")
     {{/jackson}}
     {{#gson}}
         @SerializedName("{{baseName}}")

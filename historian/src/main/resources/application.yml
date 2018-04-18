@@ -2,11 +2,9 @@ server:
   port: ${appPort:8000}
   servlet-path: /
 
-
-# Jersey dispatcher servlet
 spring:
   application:
-      name: logisland-historian
+    name: logisland-historian
   freemarker:
     template-loader-path: classpath:/templates
     suffix: .ftl
