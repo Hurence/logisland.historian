@@ -5,9 +5,14 @@
 
 ## Option A : all-in-one docker-compose
 
+Prerequisite : having docker-compose installed (so docker too)
+Prerequisite : you should not already have container with name 'chronix', 'redis' or 'keycloak'.
+
 Run a compose stack
     
-    docker-compose -f src/main/docker/docker-compose.yml up
+    docker-compose -f backend/src/main/docker/docker-compose.yml up
+    
+Troubleshooting: If this does not work your docker/docker-compose version may be not compatible    
 
 ## Option B : start each docker service manually
 
@@ -65,7 +70,8 @@ Checkout the source and build
     git hf feature checkout rest-api.#45
 
 Run spring boot application on port 8701
-    
+
+    cd backend    
     mvn clean spring-boot:run -DappPort=8701
 
 
