@@ -14,6 +14,36 @@ schemes:
 paths:
 
 
+  /admin:
+     post:
+       tags:
+        - tag
+        - datasource
+        - admin
+       summary:  create new dataset with some sample data
+       description:  create new dataset with some sample data
+       operationId: sampleData
+       produces:
+          - application/json
+       parameters:
+         - name: flush
+           in: query
+           description: do we flush previous entries ?
+           required: false
+           type: boolean
+           default: false
+       responses:
+         '200':
+           description: Sample tag list
+           schema:
+             type: array
+             items:
+               $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
   # Datasources
   /datasources:
      get:

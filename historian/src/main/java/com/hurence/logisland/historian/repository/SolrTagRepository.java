@@ -31,6 +31,7 @@ public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
     List<Tag> findById(String id);
 
     // catch all query
+    @Query(value = "*:*", filters = { "text:?0" })
     List<Tag> findByText(String text);
 
    // long count(String searchTerm);

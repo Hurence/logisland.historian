@@ -36,7 +36,7 @@ class MainController {
     public String getTags(Principal principal, Model model){
 
         long start = System.currentTimeMillis();
-        model.addAttribute("tags", tagsApiService.findAll());
+        model.addAttribute("tags", tagsApiService.getAllTags("*"));
         long requestTime  = System.currentTimeMillis() - start;
 
      //   model.addAttribute("principal",principal);
