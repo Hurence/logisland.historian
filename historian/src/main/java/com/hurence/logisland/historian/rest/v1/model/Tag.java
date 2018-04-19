@@ -23,10 +23,14 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T17:50:40.316+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-19T11:39:12.580+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Tag  implements Serializable {
+        @JsonProperty("record_type")
+        @Indexed(name = "record_type")
+        private String recordType = "tag";
+
         @JsonProperty("id")
         @Indexed(name = "id")
         private String id = "mySweetUniqueId";
@@ -137,6 +141,27 @@ public class Tag  implements Serializable {
         @JsonProperty("last_quality")
         @Indexed(name = "last_quality")
         private Integer lastQuality = null;
+
+        public Tag recordType(String recordType) {
+        this.recordType = recordType;
+        return this;
+        }
+
+    /**
+        * Get recordType
+    * @return recordType
+    **/
+        @JsonProperty("record_type")
+    @ApiModelProperty(value = "")
+    
+
+  public String getRecordType() {
+    return recordType;
+    }
+
+        public void setRecordType(String recordType) {
+        this.recordType = recordType;
+        }
 
         public Tag id(String id) {
         this.id = id;
@@ -523,7 +548,8 @@ public class Tag  implements Serializable {
     return false;
     }
         Tag tag = (Tag) o;
-        return Objects.equals(this.id, tag.id) &&
+        return Objects.equals(this.recordType, tag.recordType) &&
+        Objects.equals(this.id, tag.id) &&
         Objects.equals(this.domain, tag.domain) &&
         Objects.equals(this.server, tag.server) &&
         Objects.equals(this.group, tag.group) &&
@@ -544,7 +570,7 @@ public class Tag  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(id, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality);
+    return Objects.hash(recordType, id, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality);
     }
 
 
@@ -553,6 +579,7 @@ public String toString() {
 StringBuilder sb = new StringBuilder();
 sb.append("class Tag {\n");
 
+sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
 sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
 sb.append("    server: ").append(toIndentedString(server)).append("\n");

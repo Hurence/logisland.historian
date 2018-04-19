@@ -16,13 +16,13 @@
  */
 package com.hurence.logisland.historian.service;
 
+import com.hurence.logisland.historian.repository.SolrDatasourceRepository;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
+import com.hurence.logisland.historian.rest.v1.model.Datasource;
 import com.hurence.logisland.historian.rest.v1.model.IdUtils;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,11 @@ public class AdminApiService {
     private static final String TAGS_LIST = "tags";
 
     @Resource
-    private SolrTagRepository repository;
+    private SolrTagRepository solrTagRepository;
+
+    @Resource
+    private SolrDatasourceRepository solrDatasourceRepository;
+
 
     @Resource(name = "solrTemplate")
     private SolrTemplate solrTemplate;
@@ -83,7 +87,7 @@ public class AdminApiService {
                     .tagName(tag));
 
             tags.add(t);
-            repository.save(t);
+            solrTagRepository.save(t);
 
             listOps.leftPush(TAGS_LIST, t);
             tagsCount--;
@@ -93,7 +97,7 @@ public class AdminApiService {
      //   Tag tag = solrTemplate.getById("/hurence/opc-server1/sensors.temperature/TEMP008", Tag.class);
 
 
-     //   List<Tag> tags = repository.findByDomain("hurence");//, new PageRequest(1, 20) );
+     //   List<Tag> tags = solrTagRepository.findByDomain("hurence");//, new PageRequest(1, 20) );
 
      //   logger.info(tag.toString());
 
@@ -108,6 +112,36 @@ public class AdminApiService {
         return tags;//.getContent();
     }
 
+    public List<Datasource> generateSampleDatasources(boolean doFlush) {
 
+        List<Datasource> ds = new ArrayList<>();
+
+        Random random = new Random();
+        int count = random.nextInt(20);
+
+        while (count > 0) {
+
+            String domain = domains.get(random.nextInt(domains.size()));
+            String server = servers.get(random.nextInt(servers.size()));
+            String group = groups.get(random.nextInt(groups.size()));
+            String tag = UUID.randomUUID().toString().substring(0, 5);
+            Datasource t = IdUtils.setId(new Datasource()
+                    .domain(domain)
+                    .clsid(UUID.randomUUID().toString())
+                    .host(server)
+                    .user("tom")
+            .password("xxx"));
+
+            ds.add(t);
+            solrDatasourceRepository.save(t);
+
+
+            count--;
+        }
+
+
+
+        return ds;
+    }
 
 }

@@ -53,6 +53,12 @@ paths:
        operationId: getAllDatasources
        summary:  get all datasources
        description: retrieve all datasources
+       parameters:
+         - name: fq
+           in: query
+           description: filter query (lucene syntax like fq="labels:opc AND datasources:win32")
+           required: false
+           type: string
        produces:
           - application/json
        responses:
@@ -584,13 +590,16 @@ definitions:
   Alert:
     type: object
     properties:
-      time:
+      record_type:
         type: string
+        default: 'alert'
+      timestamp:
+        type: long
       message:
         type: string
       severity:
         type: integer
-      tag:
+      tag_id:
         $ref: '#/definitions/Tag'
 
   Datasource:
@@ -599,6 +608,9 @@ definitions:
       - id
       - host
     properties:
+      record_type:
+        type: string
+        default: 'datasource'
       id:
         type: string
       description:
@@ -623,6 +635,9 @@ definitions:
       - datasource_id
       - data_type
     properties:
+      record_type:
+        type: string
+        default: 'tag'
       id:
         type: string
         default: 'mySweetUniqueId'
@@ -700,6 +715,9 @@ definitions:
       - component
       - name
     properties:
+      record_type:
+        type: string
+        default: 'pipeline'
       name:
         type: string
       component:

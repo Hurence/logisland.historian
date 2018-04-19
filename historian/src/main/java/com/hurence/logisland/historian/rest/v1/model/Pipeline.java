@@ -23,10 +23,14 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Pipeline is a sequence of Processor wich apply specifi business logic on current tag value (matching query for alerting for example)
 */
     @ApiModel(description = "a Pipeline is a sequence of Processor wich apply specifi business logic on current tag value (matching query for alerting for example)")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T17:50:40.316+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-19T11:39:12.580+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Pipeline  implements Serializable {
+        @JsonProperty("record_type")
+        @Indexed(name = "record_type")
+        private String recordType = "pipeline";
+
         @JsonProperty("name")
         @Indexed(name = "name")
         private String name = null;
@@ -46,6 +50,27 @@ public class Pipeline  implements Serializable {
         @JsonProperty("processors")
         @Indexed(name = "processors")
         private List<Processor> processors = null;
+
+        public Pipeline recordType(String recordType) {
+        this.recordType = recordType;
+        return this;
+        }
+
+    /**
+        * Get recordType
+    * @return recordType
+    **/
+        @JsonProperty("record_type")
+    @ApiModelProperty(value = "")
+    
+
+  public String getRecordType() {
+    return recordType;
+    }
+
+        public void setRecordType(String recordType) {
+        this.recordType = recordType;
+        }
 
         public Pipeline name(String name) {
         this.name = name;
@@ -182,7 +207,8 @@ public class Pipeline  implements Serializable {
     return false;
     }
         Pipeline pipeline = (Pipeline) o;
-        return Objects.equals(this.name, pipeline.name) &&
+        return Objects.equals(this.recordType, pipeline.recordType) &&
+        Objects.equals(this.name, pipeline.name) &&
         Objects.equals(this.component, pipeline.component) &&
         Objects.equals(this.documentation, pipeline.documentation) &&
         Objects.equals(this.config, pipeline.config) &&
@@ -191,7 +217,7 @@ public class Pipeline  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(name, component, documentation, config, processors);
+    return Objects.hash(recordType, name, component, documentation, config, processors);
     }
 
 
@@ -200,6 +226,7 @@ public String toString() {
 StringBuilder sb = new StringBuilder();
 sb.append("class Pipeline {\n");
 
+sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("    name: ").append(toIndentedString(name)).append("\n");
 sb.append("    component: ").append(toIndentedString(component)).append("\n");
 sb.append("    documentation: ").append(toIndentedString(documentation)).append("\n");

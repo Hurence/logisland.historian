@@ -19,13 +19,13 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Alert
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T17:50:40.316+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-19T11:39:12.580+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Alert  implements Serializable {
-        @JsonProperty("time")
-        @Indexed(name = "time")
-        private String time = null;
+        @JsonProperty("record_type")
+        @Indexed(name = "record_type")
+        private String recordType = "alert";
 
         @JsonProperty("message")
         @Indexed(name = "message")
@@ -35,29 +35,29 @@ public class Alert  implements Serializable {
         @Indexed(name = "severity")
         private Integer severity = null;
 
-        @JsonProperty("tag")
-        @Indexed(name = "tag")
-        private Tag tag = null;
+        @JsonProperty("tag_id")
+        @Indexed(name = "tag_id")
+        private Tag tagId = null;
 
-        public Alert time(String time) {
-        this.time = time;
+        public Alert recordType(String recordType) {
+        this.recordType = recordType;
         return this;
         }
 
     /**
-        * Get time
-    * @return time
+        * Get recordType
+    * @return recordType
     **/
-        @JsonProperty("time")
+        @JsonProperty("record_type")
     @ApiModelProperty(value = "")
     
 
-  public String getTime() {
-    return time;
+  public String getRecordType() {
+    return recordType;
     }
 
-        public void setTime(String time) {
-        this.time = time;
+        public void setRecordType(String recordType) {
+        this.recordType = recordType;
         }
 
         public Alert message(String message) {
@@ -102,26 +102,26 @@ public class Alert  implements Serializable {
         this.severity = severity;
         }
 
-        public Alert tag(Tag tag) {
-        this.tag = tag;
+        public Alert tagId(Tag tagId) {
+        this.tagId = tagId;
         return this;
         }
 
     /**
-        * Get tag
-    * @return tag
+        * Get tagId
+    * @return tagId
     **/
-        @JsonProperty("tag")
+        @JsonProperty("tag_id")
     @ApiModelProperty(value = "")
     
   @Valid
 
-  public Tag getTag() {
-    return tag;
+  public Tag getTagId() {
+    return tagId;
     }
 
-        public void setTag(Tag tag) {
-        this.tag = tag;
+        public void setTagId(Tag tagId) {
+        this.tagId = tagId;
         }
 
 
@@ -134,15 +134,15 @@ public class Alert  implements Serializable {
     return false;
     }
         Alert alert = (Alert) o;
-        return Objects.equals(this.time, alert.time) &&
+        return Objects.equals(this.recordType, alert.recordType) &&
         Objects.equals(this.message, alert.message) &&
         Objects.equals(this.severity, alert.severity) &&
-        Objects.equals(this.tag, alert.tag);
+        Objects.equals(this.tagId, alert.tagId);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(time, message, severity, tag);
+    return Objects.hash(recordType, message, severity, tagId);
     }
 
 
@@ -151,10 +151,10 @@ public String toString() {
 StringBuilder sb = new StringBuilder();
 sb.append("class Alert {\n");
 
-sb.append("    time: ").append(toIndentedString(time)).append("\n");
+sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("    message: ").append(toIndentedString(message)).append("\n");
 sb.append("    severity: ").append(toIndentedString(severity)).append("\n");
-sb.append("    tag: ").append(toIndentedString(tag)).append("\n");
+sb.append("    tagId: ").append(toIndentedString(tagId)).append("\n");
 sb.append("}");
 return sb.toString();
 }

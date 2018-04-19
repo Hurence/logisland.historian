@@ -22,6 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.core.query.Criteria;
+import org.springframework.data.solr.core.query.Join;
+import org.springframework.data.solr.core.query.SolrDataQuery;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -95,17 +98,18 @@ public class TagsApiService {
         }
     }
 
+
+
     public List<Tag> getAllTags(String fq) {
 
         String query = fq;
         if (fq == null || fq.isEmpty())
             query = "*";
 
-        logger.info(query);
 
-        List<Tag> tags = repository.findByText(query);//, new PageRequest(0, 20));
+        List<Tag> tags = repository.findByText(query);
 
-        return tags;//.getContent();
+        return tags;
 
 
     }

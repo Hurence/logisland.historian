@@ -18,10 +18,14 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Datasource
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T17:50:40.316+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-19T11:39:12.580+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Datasource  implements Serializable {
+        @JsonProperty("record_type")
+        @Indexed(name = "record_type")
+        private String recordType = "datasource";
+
         @JsonProperty("id")
         @Indexed(name = "id")
         private String id = null;
@@ -49,6 +53,27 @@ public class Datasource  implements Serializable {
         @JsonProperty("password")
         @Indexed(name = "password")
         private String password = null;
+
+        public Datasource recordType(String recordType) {
+        this.recordType = recordType;
+        return this;
+        }
+
+    /**
+        * Get recordType
+    * @return recordType
+    **/
+        @JsonProperty("record_type")
+    @ApiModelProperty(value = "")
+    
+
+  public String getRecordType() {
+    return recordType;
+    }
+
+        public void setRecordType(String recordType) {
+        this.recordType = recordType;
+        }
 
         public Datasource id(String id) {
         this.id = id;
@@ -209,7 +234,8 @@ public class Datasource  implements Serializable {
     return false;
     }
         Datasource datasource = (Datasource) o;
-        return Objects.equals(this.id, datasource.id) &&
+        return Objects.equals(this.recordType, datasource.recordType) &&
+        Objects.equals(this.id, datasource.id) &&
         Objects.equals(this.description, datasource.description) &&
         Objects.equals(this.clsid, datasource.clsid) &&
         Objects.equals(this.host, datasource.host) &&
@@ -220,7 +246,7 @@ public class Datasource  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(id, description, clsid, host, domain, user, password);
+    return Objects.hash(recordType, id, description, clsid, host, domain, user, password);
     }
 
 
@@ -229,6 +255,7 @@ public String toString() {
 StringBuilder sb = new StringBuilder();
 sb.append("class Datasource {\n");
 
+sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
 sb.append("    description: ").append(toIndentedString(description)).append("\n");
 sb.append("    clsid: ").append(toIndentedString(clsid)).append("\n");

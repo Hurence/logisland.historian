@@ -14,36 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hurence.logisland.historian.rest.v1.model;
+package com.hurence.logisland.historian.repository;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import com.hurence.logisland.historian.rest.v1.model.Datasource;
+import com.hurence.logisland.historian.rest.v1.model.Tag;
+import org.springframework.data.solr.repository.Query;
+import org.springframework.data.solr.repository.SolrCrudRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
 
-public class IdUtils {
-
-
-    public static final String ID_SEPARATOR = "/";
-
-
-
-    public static Tag setId(Tag tag)  {
-
-        String id = ID_SEPARATOR + tag.getDomain() + ID_SEPARATOR + tag.getServer() + ID_SEPARATOR + tag.getGroup() + ID_SEPARATOR + tag.getTagName();
+@Repository
+public interface SolrDatasourceRepository extends SolrCrudRepository<Datasource, String> {
 
 
-            return tag.id(tag.getTagName() + String.valueOf(id.hashCode()));
+    // catch all query
+    @Query(value = "*:*", filters = { "text:?0", "record_type:datasource" })
+    List<Datasource> findByText(String text);
 
-
-    }
-
-    public static Datasource setId(Datasource ds)  {
-
-        String id = ID_SEPARATOR + ds.getDomain() + ID_SEPARATOR + ds.getHost() + ID_SEPARATOR + ds.getClsid();
-
-
-        return ds.id(ds.getClsid() + String.valueOf(id.hashCode()));
-
-
-    }
 }

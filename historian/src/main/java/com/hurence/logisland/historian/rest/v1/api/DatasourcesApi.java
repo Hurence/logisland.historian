@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T17:50:40.316+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-19T11:39:12.580+02:00")
 
 @Api(value = "datasources", description = "the datasources API")
     public interface DatasourcesApi {
@@ -57,7 +57,7 @@ import java.util.List;
             @RequestMapping(value = "/api/v1/datasources",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        ResponseEntity<List<Datasource>> getAllDatasources();
+        ResponseEntity<List<Datasource>> getAllDatasources(@ApiParam(value = "filter query (lucene syntax like fq=\"labels:opc AND datasources:win32\")") @Valid @RequestParam(value = "fq", required = false) String fq);
 
 
             @ApiOperation(value = "get all tags from datasources", nickname = "getAllDatasourcesTags", notes = "retrieve all tags through this datasources", response = Tag.class, responseContainer = "List", tags={ "tag","datasource", })

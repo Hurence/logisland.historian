@@ -17,8 +17,9 @@
         <!-- Solr -->
         <field name="id" type="string" indexed="true" stored="true" required="true"/>
         <field name="_version_" type="long" indexed="true" stored="true"/>
+        <field name="record_type" type="string" indexed="true" stored="true" required="true"/>
 
-        <!-- API: The required fields -->
+        <!-- Tag API -->
         <field name="domain" type="string" indexed="true" stored="true" required="false"/>
         <field name="server" type="string" indexed="true" stored="true" required="false"/>
         <field name="group" type="string" indexed="true" stored="true" required="false"/>
@@ -29,15 +30,26 @@
         <field name="creation_date" type="date" indexed="true" stored="true" required="false"/>
         <field name="last_modification_date" type="date" indexed="true" stored="true" required="false"/>
         <field name="last_polling_date" type="date" indexed="true" stored="true" required="false"/>
-
-
-        <!-- value fields -->
         <field name="last_base64_value" type="binary" indexed="true" stored="true" required="false"/>
         <field name="update_rate" type="int" indexed="true" stored="true" required="false"/>
         <field name="min_numeric_value" type="double" indexed="true" stored="true" required="false"/>
         <field name="max_numeric_value" type="double" indexed="true" stored="true" required="false"/>
         <field name="last_numeric_value" type="double" indexed="true" stored="true" required="false"/>
         <field name="last_quality" type="int" indexed="true" stored="true" required="false"/>
+
+
+        <!-- Tag API -->
+        <field name="clsid" type="string" indexed="true" stored="true" required="false"/>
+        <field name="host" type="string" indexed="true" stored="true" required="false"/>
+        <field name="user" type="string" indexed="true" stored="true" required="false"/>
+        <field name="password" type="string" indexed="true" stored="true" required="false"/>
+
+
+        <!-- Alert API -->
+        <field name="timestamp" type="long" indexed="true" stored="true" required="false"/>
+        <field name="message" type="string" indexed="true" stored="true" required="false"/>
+        <field name="severity" type="int" indexed="true" stored="true" required="false"/>
+        <field name="tag_id" type="string" indexed="true" stored="true" required="false"/>
 
         <field name="text" type="string" indexed="true" multiValued="true"/>
 
@@ -55,6 +67,10 @@
     <copyField source="labels" dest="text"/>
     <copyField source="data_type" dest="text"/>
     <copyField source="description" dest="text"/>
+    <copyField source="message" dest="text"/>
+    <copyField source="user" dest="text"/>
+    <copyField source="clsid" dest="text"/>
+    <copyField source="host" dest="text"/>
 
     <uniqueKey>id</uniqueKey>
     <solrQueryParser defaultOperator="OR"/>
