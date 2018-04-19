@@ -17,8 +17,11 @@ endpoints:
     enabled: true
   health:
     enabled: true
+    sensitive: false
   metrics:
     enabled: true
+  actuator:
+    sensitive: false
 
 # app name and build version updated during build process from Maven properties.
 info:
@@ -49,3 +52,17 @@ solr:
   core: chronix
   host: localhost
   port: 8983
+connections:
+  opc-da:
+    cls-id: F8582CF2-88FB-11D0-B850-00C0F0104305
+    domain: OPC-9167C0D9342
+    password: opc
+    user: OPC
+    refresh-period-millis: 100
+    timeout-millis: 2000
+    host: 192.168.56.101
+
+
+
+
+
