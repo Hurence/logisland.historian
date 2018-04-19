@@ -16,40 +16,15 @@
  */
 package com.hurence.logisland.historian.service;
 
-import com.hurence.logisland.historian.rest.v1.model.Tag;
-import com.hurence.opc.OpcData;
-import com.hurence.opc.OpcOperations;
-import com.hurence.opc.da.OpcDaConnectionProfile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
-public class TagService {
+public class PipelinesApiService {
 
 
-    private final OpcOperations<OpcDaConnectionProfile, OpcData> opcOperations;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    /**
-     * Constructor.
-     *
-     * @param opcOperations to be autowired by spring.
-     */
-    public TagService(OpcOperations<OpcDaConnectionProfile, OpcData> opcOperations) {
-        this.opcOperations = opcOperations;
-    }
 
-    /**
-     * Returns the list of available tags.
-     * @return
-     */
-    public List<Tag> getTags() {
-        return opcOperations.browseTags().stream()
-                .map(s -> {
-                    Tag ret = new Tag();
-                    ret.setItemName(s);
-                    return ret;
-                }).collect(Collectors.toList());
-    }
 }
