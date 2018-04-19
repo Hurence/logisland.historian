@@ -26,6 +26,15 @@ services:
       - '8080:8080'
     networks:
       - itnet
+
+#  historian:
+#    container_name: historian
+#    image: 'hurence/historian:latest'
+#    ports:
+#      - '8701:8701'
+#    networks:
+#      - itnet
+
 #
 #  logisland:
 #    #command: /bin/bash bin/logisland.sh --conf conf/mqtt-to-historian.yml
