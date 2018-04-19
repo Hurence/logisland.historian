@@ -48,10 +48,6 @@ redis:
   host: localhost
   port: 6379
 
-solr:
-  core: chronix
-  host: localhost
-  port: 8983
 connections:
   opc-da:
     cls-id: F8582CF2-88FB-11D0-B850-00C0F0104305
@@ -61,6 +57,12 @@ connections:
     refresh-period-millis: 100
     timeout-millis: 2000
     host: 192.168.56.101
+
+
+solr:
+  core: chronix
+  host: localhost
+  port: 8983
 
 
 
