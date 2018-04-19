@@ -1,5 +1,5 @@
 server:
-  port: ${appPort:8000}
+  port: ${appPort:8701}
   servlet-path: /
 
 spring:

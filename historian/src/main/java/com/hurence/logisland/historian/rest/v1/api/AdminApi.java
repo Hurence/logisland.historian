@@ -6,7 +6,7 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.Error;
-import com.hurence.logisland.historian.rest.v1.model.Property;
+import com.hurence.logisland.historian.rest.v1.model.Tag;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,15 +25,16 @@ import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-19T12:25:30.271+02:00")
 
-@Api(value = "configs", description = "the configs API")
-    public interface ConfigsApi {
+@Api(value = "admin", description = "the admin API")
+    public interface AdminApi {
 
-            @ApiOperation(value = "global config", nickname = "getConfig", notes = "get all global configuration properties", response = Property.class, responseContainer = "List", tags={ "config", })
+            @ApiOperation(value = "create new dataset with some sample data", nickname = "sampleData", notes = "create new dataset with some sample data", response = Tag.class, responseContainer = "List", tags={ "tag","datasource","admin", })
             @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "global configuration", response = Property.class, responseContainer = "List"),
+                @ApiResponse(code = 200, message = "Sample tag list", response = Tag.class, responseContainer = "List"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/configs",
-            method = RequestMethod.GET)
-        ResponseEntity<List<Property>> getConfig();
+            @RequestMapping(value = "/api/v1/admin",
+                produces = { "application/json" }, 
+            method = RequestMethod.POST)
+        ResponseEntity<List<Tag>> sampleData(@ApiParam(value = "do we flush previous entries ?", defaultValue = "false") @Valid @RequestParam(value = "flush", required = false, defaultValue="false") Boolean flush);
 
         }

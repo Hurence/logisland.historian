@@ -1,7 +1,8 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.Error;
-import com.hurence.logisland.historian.service.MetricsApiService;
+import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.service.AdminApiService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -24,37 +25,28 @@ import java.util.List;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T15:00:18.181+02:00")
 
 @Controller
-public class MetricsApiController implements MetricsApi {
+public class AdminApiController implements AdminApi {
 
-    private static final Logger log = LoggerFactory.getLogger(MetricsApiController.class);
+    private static final Logger log = LoggerFactory.getLogger(AdminApiController.class);
 
     private final ObjectMapper objectMapper;
 
     private final HttpServletRequest request;
 
-    private final MetricsApiService service;
+    private final AdminApiService service;
 
 
     @org.springframework.beans.factory.annotation.Autowired
-    public MetricsApiController(ObjectMapper objectMapper, HttpServletRequest request, MetricsApiService service) {
+    public AdminApiController(ObjectMapper objectMapper, HttpServletRequest request, AdminApiService service) {
         this.objectMapper = objectMapper;
         this.request = request;
         this.service = service;
     }
 
-    public ResponseEntity<String> getMetrics() {
-            String accept = request.getHeader("Accept");
-            if (accept != null && accept.contains("")) {
-                try {
-                    return new ResponseEntity<String>(
-                objectMapper.readValue("", String.class), HttpStatus.NOT_IMPLEMENTED);
-                    } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type ", e);
-                    return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
+    public ResponseEntity<List<Tag>> sampleData(@ApiParam(value = "do we flush previous entries ?", defaultValue = "false") @Valid @RequestParam(value = "flush", required = false, defaultValue="false") Boolean flush){
 
-            return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
+        service.generateSampleDatasources(flush);
+        return new ResponseEntity<List<Tag>>(service.generateSampleTags(flush), HttpStatus.OK);
     }
 
 }

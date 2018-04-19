@@ -14,7 +14,7 @@ tmp/src/main/webapp/WEB-INF
 **/web.xml
 **/Bootstrap.java
 #**/*Impl.java
-#**/*ApiController.java
+**/*ApiController.java
 src/main/java/io/swagger/*
 src/main/java/io/swagger/configuration/*
 
