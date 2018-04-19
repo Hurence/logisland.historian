@@ -6,6 +6,7 @@ import com.hurence.logisland.historian.rest.v1.model.Datasource;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.service.DatasourcesApiService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hurence.logisland.historian.service.OpcService;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,12 +41,17 @@ public class DatasourcesApiController implements DatasourcesApi {
 
     private final DatasourcesApiService service;
 
+    private final OpcService opcService;
+
 
     @org.springframework.beans.factory.annotation.Autowired
-    public DatasourcesApiController(ObjectMapper objectMapper, HttpServletRequest request, DatasourcesApiService service) {
+    public DatasourcesApiController(ObjectMapper objectMapper, HttpServletRequest request,
+                                    DatasourcesApiService service,
+                                    OpcService opcService) {
         this.objectMapper = objectMapper;
         this.request = request;
         this.service = service;
+        this.opcService = opcService;
     }
 
     public ResponseEntity<Datasource> addDatasourceWithId(@ApiParam(value = "Datasource resource to add" ,required=true )  @Valid @RequestBody Datasource body,@ApiParam(value = "datasourceId to",required=true) @PathVariable("datasourceId") String datasourceId) {
@@ -76,7 +83,7 @@ public class DatasourcesApiController implements DatasourcesApi {
     }
 
     public  ResponseEntity<List<Tag>> getAllDatasourcesTags() {
-        return new ResponseEntity<List<Tag>>(HttpStatus.NOT_IMPLEMENTED);
+        return ResponseEntity.ok(opcService.browseAllTags());
     }
 
     public ResponseEntity<Datasource> getDatasource(@ApiParam(value = "id of the Datasource to return",required=true) @PathVariable("datasourceId") String datasourceId) {

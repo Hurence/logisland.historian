@@ -16,7 +16,7 @@ public class DataHistorianApplicationTests {
 
     @Test
     public void test() {
-        
+
     }
 
 }
