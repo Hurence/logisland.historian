@@ -31,7 +31,7 @@ info:
     version: @project.version@
 
 keycloak:
-  auth-server-url: http://localhost:8080/auth
+  auth-server-url: http://keycloak:8080/auth
   realm: logisland
   resource: logisland-historian
   public-client: true
@@ -45,7 +45,7 @@ keycloak:
 
 
 redis:
-  host: localhost
+  host: redis
   port: 6379
 
 connections:
@@ -61,7 +61,7 @@ connections:
 
 solr:
   core: chronix
-  host: localhost
+  host: chronix
   port: 8983
 
 

@@ -57,7 +57,7 @@ public class SolrConfig {
 
     @Bean
     SolrClient solrClient() {
-        return new HttpSolrClient("http://localhost:8983/solr");
+        return new HttpSolrClient("http://" + solrHost + ":" + solrPort +"/solr");
     }
 
 

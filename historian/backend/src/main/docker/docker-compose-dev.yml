@@ -1,0 +1,24 @@
+version: "2"
+services:
+
+  chronix:
+    container_name: chronix
+    hostname: chronix
+    image: 'hurence/chronix:latest'
+    ports:
+      - '8983:8983'
+    network_mode: bridge
+
+  redis:
+    container_name: redis
+    image: 'redis:latest'
+    ports:
+      - '6379:6379'
+    network_mode: bridge
+
+  keycloak:
+    container_name: keycloak
+    image: 'hurence/keycloak:latest'
+    ports:
+      - '8080:8080'
+    network_mode: bridge
