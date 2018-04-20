@@ -1,0 +1,14 @@
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  realm: logisland
+  resource: logisland-historian
+  public-client: true
+  security-constraints:
+    - authRoles:
+      securityCollections:
+        - patterns:
+          - /*
+
+management:
+  security:
+    enabled: false

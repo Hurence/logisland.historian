@@ -1,0 +1,777 @@
+swagger: '2.0'
+info:
+  description: REST API for logisland historian
+  version: v1
+  title: Logisland Data Historian
+  contact:
+    name: hurence
+    email: support@hurence.com
+host: localhost:8701
+basePath: /api/v1
+schemes:
+  - http
+  - https
+paths:
+
+
+  /admin:
+     post:
+       tags:
+        - tag
+        - datasource
+        - admin
+       summary:  create new dataset with some sample data
+       description:  create new dataset with some sample data
+       operationId: sampleData
+       produces:
+          - application/json
+       parameters:
+         - name: flush
+           in: query
+           description: do we flush previous entries ?
+           required: false
+           type: boolean
+           default: false
+       responses:
+         '200':
+           description: Sample tag list
+           schema:
+             type: array
+             items:
+               $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+  # Datasources
+  /datasources:
+     get:
+       tags:
+        - tag
+        - datasource
+       operationId: getAllDatasources
+       summary:  get all datasources
+       description: retrieve all datasources
+       parameters:
+         - name: fq
+           in: query
+           description: filter query (lucene syntax like fq="labels:opc AND datasources:win32")
+           required: false
+           type: string
+       produces:
+          - application/json
+       responses:
+         '200':
+           description: Datasource list
+           schema:
+             type: array
+             items:
+               $ref: '#/definitions/Datasource'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+  /datasources/tags:
+     get:
+       tags:
+        - tag
+        - datasource
+       operationId: getAllDatasourcesTags
+       summary:  get all tags from datasources
+       description: retrieve all tags through this datasources
+       produces:
+          - application/json
+       responses:
+         '200':
+           description: Tag list
+           schema:
+             type: array
+             items:
+               $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+  /datasources/{datasourceId}:
+     get:
+       tags:
+         - tag
+         - datasource
+       summary: get Datasource
+       description: get the corresponding Datasource
+       operationId: getDatasource
+       produces:
+         - application/json
+       parameters:
+         - name: datasourceId
+           in: path
+           description: id of the Datasource to return
+           required: true
+           type: string
+       responses:
+         '200':
+           description: Datasource found
+           schema:
+             $ref: '#/definitions/Datasource'
+         '404':
+            description: Datasource resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+     delete:
+       tags:
+         - tag
+         - datasource
+       summary: delete Datasource
+       description: remove the corresponding Datasource
+       operationId: deleteDatasource
+       parameters:
+         - name: datasourceId
+           in: path
+           description: id of the Datasource to be deleted
+           required: true
+           type: string
+       responses:
+         '404':
+           description: Datasource resource not found
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Datasource successfully removed
+           schema:
+             $ref: '#/definitions/Datasource'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+     put:
+       tags:
+        - tag
+        - datasource
+       summary:  update Datasource
+       description: update an existing Datasource
+       operationId: updateDatasource
+       parameters:
+         - name: datasourceId
+           in: path
+           description: datasourceId to be updated
+           required: true
+           type: string
+         - name: datasource
+           in: body
+           description: new Datasource definition
+           required: true
+           schema:
+             $ref: '#/definitions/Datasource'
+       responses:
+        '404':
+          description: Datasource resource not found
+        '400':
+          description: Invalid ID supplied
+        '200':
+         description: Datasource successfuly updated
+         schema:
+           $ref: '#/definitions/Datasource'
+     post:
+       tags:
+        - tag
+        - datasource
+       summary:  create new Datasource
+       description:  store a new Datasource
+       operationId: addDatasourceWithId
+       parameters:
+         - name: body
+           in: body
+           description: Datasource resource to add
+           required: true
+           schema:
+             $ref: '#/definitions/Datasource'
+         - name: datasourceId
+           in: path
+           description: datasourceId to
+           required: true
+           type: string
+       responses:
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Datasource successfuly created
+           schema:
+             $ref: '#/definitions/Datasource'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+
+
+
+
+   # Tags API
+  /tags:
+    get:
+      tags:
+      - tag
+      - opc
+      operationId: getAllTags
+      parameters:
+        - name: fq
+          in: query
+          description: filter query (lucene syntax like fq="labels:opc AND datasources:win32")
+          required: false
+          type: string
+      summary:  get all saved tags
+      description: retrieve all OPC tags
+      produces:
+        - application/json
+      responses:
+       '200':
+         description: tags list
+         schema:
+           type: array
+           items:
+             $ref: '#/definitions/Tag'
+       default:
+         description: unexpected error
+         schema:
+           $ref: '#/definitions/Error'
+  /tags/{itemId}:
+     get:
+       tags:
+         - tag
+       summary: get tag
+       description: get the corresponding Tag
+       operationId: getTag
+       produces:
+         - application/json
+       parameters:
+         - name: itemId
+           in: path
+           description: id of the tag to return
+           required: true
+           type: string
+       responses:
+         '200':
+           description: tag
+           schema:
+             $ref: '#/definitions/Tag'
+         '404':
+            description: Tag resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+     delete:
+       tags:
+         - tag
+       summary: delete tag
+       description: remove the corresponding Tag
+       operationId: deleteTag
+       parameters:
+         - name: itemId
+           in: path
+           description: id of the tag to be deleted
+           required: true
+           type: string
+       responses:
+         '404':
+           description: Tag resource not found
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Tag successfully removed
+           schema:
+             $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+     put:
+       tags:
+        - tag
+        - opc
+       summary:  update tag
+       description: update an existing tag
+       operationId: updateTag
+       parameters:
+         - name: itemId
+           in: path
+           description: itemId to be updated
+           required: true
+           type: string
+         - name: tag
+           in: body
+           description: new Tag definition
+           required: true
+           schema:
+             $ref: '#/definitions/Tag'
+       responses:
+        '404':
+          description: Tag resource not found
+        '400':
+          description: Invalid ID supplied
+        '200':
+         description: Tag successfuly updated
+         schema:
+           $ref: '#/definitions/Tag'
+     post:
+       tags:
+        - tag
+       summary:  create new tag
+       description:  store a new tag
+       operationId: addTagWithId
+       parameters:
+         - name: body
+           in: body
+           description: Tag resource to add
+           required: true
+           schema:
+             $ref: '#/definitions/Tag'
+         - name: itemId
+           in: path
+           description: itemId to
+           required: true
+           type: string
+       responses:
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Tag successfuly created
+           schema:
+             $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+
+
+
+
+  /metrics:
+    get:
+      tags:
+        - metrology
+      operationId: getMetrics
+      summary: retrieve all job metrics in Prometheus format
+      description: get Prometheus metrics.
+        have a look to https://prometheus.io/docs/instrumenting/exposition_formats/
+      produces:
+        - text/plain
+      responses:
+        "200":
+          description: metrics
+          schema:
+            type: string
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /configs:
+    get:
+      tags:
+       - config
+      operationId: getConfig
+      summary:  global config
+      description: get all global configuration properties
+      responses:
+        "200":
+          description: global configuration
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Property'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  # Alerts
+  /alerts:
+     get:
+      tags:
+        - alerts
+      summary: get all alerts
+      description: get the alerts
+      operationId: getAlerts
+      parameters:
+        - name: count
+          in: query
+          description: max number of ites to retrieve
+          required: false
+          type: integer
+          default: 20
+        - name: severity
+          in: query
+          description: severity level (the higher the most severe)
+          required: false
+          type: integer
+          default: 0
+        - name: start
+          in: query
+          description: lower date range
+          required: false
+          type: string
+          default: '1DAYS-AGO'
+        - name: end
+          in: query
+          description: upper date range
+          required: false
+          type: string
+          default: 'NOW'
+      responses:
+        "200":
+          description: job metrics
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Alert'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+
+  # Pipeline API
+  /pipelines:
+    get:
+      tags:
+       - pipeline
+      operationId: getAllPipelines
+      summary:  get all pipelines
+      description: retrieve all pipelines (retrieve only summary fields)
+      responses:
+        "200":
+          description: pipeline configuration list
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Pipeline'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /pipelines/{pipelineId}:
+    get:
+      tags:
+        - pipeline
+      summary: get pipeline
+      description: get the corresponding Pipeline definition
+      operationId: getPipeline
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - name: pipelineId
+          in: path
+          description: id of the pipeline to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: pipeline definition
+          schema:
+            $ref: '#/definitions/Pipeline'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - pipeline
+      summary: delete pipeline
+      description: remove the corresponding Pipeline definition and stop if its currently running
+      operationId: deletePipeline
+      parameters:
+        - name: pipelineId
+          in: path
+          description: id of the pipeline to return
+          required: true
+          type: string
+      responses:
+        "404":
+          description: Pipeline not found
+        "400":
+          description: Invalid ID supplied
+        "200":
+          description: pipeline successfully removed
+          schema:
+            $ref: '#/definitions/Pipeline'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+       - pipeline
+      summary:  update pipeline
+      description: update an existing pipeline configuration if valid
+      operationId: updatePipeline
+      parameters:
+        - name: pipelineId
+          in: path
+          description: Pipeline to add to the store
+          required: true
+          type: string
+        - name: pipeline
+          in: body
+          description: Pipeline to add to the store
+          required: true
+          schema:
+            $ref: '#/definitions/Pipeline'
+      responses:
+        "200":
+          description: Pipeline successfuly created
+          schema:
+            $ref: '#/definitions/Pipeline'
+  /pipelines/{pipelineId}/start:
+     post:
+      tags:
+        - pipeline
+      summary: start pipeline
+      description: start the corresponding Pipeline definition
+      operationId: startPipeline
+      parameters:
+        - name: pipelineId
+          in: path
+          description: id of the pipeline to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: pipeline successfuly started
+          schema:
+            $ref: '#/definitions/Pipeline'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /pipelines/{pipelineId}/stop:
+    post:
+      tags:
+       - pipeline
+      summary:  create new pipeline
+      description:  store a new pipeline configuration if valid
+      operationId: addPipelineWithId
+      parameters:
+        - name: body
+          in: body
+          description: Pipeline configuration to add to the store
+          required: true
+          schema:
+            $ref: '#/definitions/Pipeline'
+        - name: pipelineId
+          in: path
+          description: PipelineId to add to the store
+          required: true
+          type: string
+      responses:
+        "404":
+          description: Pipeline not found
+        "400":
+          description: Invalid ID supplied
+        "200":
+          description: Pipeline successfuly created
+          schema:
+            $ref: '#/definitions/Pipeline'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+
+
+definitions:
+
+
+  Alert:
+    type: object
+    properties:
+      record_type:
+        type: string
+        default: 'alert'
+      timestamp:
+        type: long
+      message:
+        type: string
+      severity:
+        type: integer
+      tag_id:
+        $ref: '#/definitions/Tag'
+
+  Datasource:
+    type: object
+    required:
+      - id
+      - host
+    properties:
+      record_type:
+        type: string
+        default: 'datasource'
+      id:
+        type: string
+      description:
+        type: string
+      clsid:
+        type: string
+      host:
+        type: string
+      domain:
+        type: string
+      user:
+        type: string
+      password:
+        type: string
+
+
+  Tag:
+    type: object
+    description: a Tag is an identifier to an OPC value
+    required:
+      - item_name
+      - datasource_id
+      - data_type
+    properties:
+      record_type:
+        type: string
+        default: 'tag'
+      id:
+        type: string
+        default: 'mySweetUniqueId'
+      domain:
+        type: string
+      server:
+        type: string
+      group:
+        type: string
+      tag_name:
+        type: string
+      labels:
+        description: can be used to group tags around a theme
+        type: array
+        items:
+          type: string
+      data_type:
+        type: string
+        default: float
+        enum:
+        - int
+        - long
+        - float
+        - double
+        - string
+        - array
+        - null
+        - bytes
+        - boolean
+      description:
+        type: string
+      text:
+        description: ctach all field
+        type: array
+        items:
+          type: string
+      creation_date:
+        description: timestamp
+        type: integer
+        format: int64
+      last_modification_date:
+        description: timestamp
+        type: integer
+        format: int64
+      last_polling_date:
+        description: timestamp
+        type: integer
+        format: int64
+     # last_base64_value:
+     #   description: base64 encoded value
+     #   type: string
+      #  format: byte
+      update_rate:
+        description: polling delay in ms
+        default: 1000
+        type: integer
+      min_numeric_value:
+        type: number
+        format: dumble
+      max_numeric_value:
+        type: number
+        format: double
+      last_numeric_value:
+        type: number
+        format: double
+      last_quality:
+        type: integer
+
+
+
+  Pipeline:
+    type: object
+    description: a Pipeline is a sequence of Processor wich apply specifi business logic on current tag value (matching query for alerting for example)
+    required:
+      - component
+      - name
+    properties:
+      record_type:
+        type: string
+        default: 'pipeline'
+      name:
+        type: string
+      component:
+        type: string
+      documentation:
+        type: string
+      config:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+      processors:
+        type: array
+        items:
+          $ref: '#/definitions/Processor'
+
+  Processor:
+    type: object
+    required:
+      - component
+      - config
+      - name
+    properties:
+      name:
+        type: string
+      component:
+        type: string
+      documentation:
+        type: string
+      config:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+
+  Property:
+    type: object
+    required:
+      - key
+      - value
+    properties:
+      key:
+        type: string
+      type:
+        type: string
+        default: "string"
+      value:
+        type: string
+
+  Error:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

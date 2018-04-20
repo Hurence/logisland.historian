@@ -1,0 +1,54 @@
+version: "2"
+services:
+
+  chronix:
+    container_name: chronix
+    hostname: chronix
+    image: 'hurence/chronix:0.1.0'
+    ports:
+      - '8983:8983'
+    network_mode: bridge
+
+  redis:
+    container_name: redis
+    image: 'redis:latest'
+    ports:
+      - '6379:6379'
+    network_mode: bridge
+
+  keycloak:
+    container_name: keycloak
+    image: 'hurence/keycloak:0.1.0'
+    ports:
+      - '8080:8080'
+    network_mode: bridge
+
+  historian-backend:
+    container_name: historian-backend
+    image: 'hurence/historian-backend:0.1.0'
+    ports:
+      - '8701:8701'
+    links:
+      - chronix
+      - redis
+      - keycloak
+    network_mode: bridge
+
+#
+#  logisland:
+#    #command: /bin/bash bin/logisland.sh --conf conf/mqtt-to-historian.yml
+#    command: tail -f bin/logisland.sh
+#    environment:
+#      - MQTT_BROKER_URL=tcp://51.15.164.141:1883
+#
+#    hostname: kapua-logisland
+#    container_name: kapua-logisland
+#    image: 'hurence/logisland:0.12.0'
+#    ports:
+#      - '4050:4050'
+#      - '8008:8008'
+#    volumes:
+#      - ./conf/logisland:/conf
+#      - ./data/logisland:/data
+#    networks:
+#      - itnet

@@ -20,6 +20,33 @@ Download the `latest release build <https://github.com/Hurence/logisland.histori
 chat with us on `gitter <https://gitter.im/logisland/logisland.historian>`_
 
 
+
+Run & play
+==========
+
+Add the following line to your `/etc/hosts` files
+
+    127.0.0.1       keycloak chronix redis historian
+
+Run a compose stack 
+    
+    docker-compose -f historian/backend/src/main/docker/docker-compose.yml up
+
+Keycloak admin console
+
+    http://keycloak:8080/auth/admin/master/console/#/realms/logisland/sessions/realm
+
+Chronix admin (chronix core for timeseries and historian core for configs)
+
+    http://chronix:8983/solr/#/chronix
+    http://chronix:8983/solr/#/historian   
+
+Get swagger.json doc
+
+    curl -XGET http://historian:8701/v2/api-docs 
+
+Read the doc at `https://github.com/Hurence/logisland.historian/tree/master/historian <https://github.com/Hurence/logisland.historian/tree/master/historian>`_
+
 Logisland CEP
 =============
 
