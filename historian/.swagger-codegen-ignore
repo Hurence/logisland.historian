@@ -9,11 +9,14 @@
 #ApiClient.cs
 pom.xml
 README.md
+src/main/resources/application.properties
 tmp/src/main/webapp/WEB-INF
 **/web.xml
 **/Bootstrap.java
 #**/*Impl.java
-
+**/*ApiController.java
+src/main/java/io/swagger/*
+src/main/java/io/swagger/configuration/*
 
 # You can match any string of characters against a directory, file or extension with a single asterisk (*):
 #foo/*/qux
