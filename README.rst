@@ -80,19 +80,3 @@ Logisland Search
 Logisland Grapher provides a global search box that's always available in the corner of the screen. Unlike most data historian search tools that only search for tag names and their descriptions, our search tool provides a comprehensive search experience. In a single action it searches all tag, plot, graphic, and calculation objects for matches. It even finds the plot, graphic, and calculation objects that contain or use a specific tag name inside of them. It's like having a Google search engine for your historian and its visualizations.
 
 
-
-Easy Installation
-=================
-We've eliminated the laborious installation process that's so common with other data historian systems. Many of our customers have been able to install our software, setup an initial OPC data collection, and see their data appear on a live plot in less than 30 minutes. In most cases you don't even need to reboot your computer to complete the installation.
-
-
-
-
-
-
-## Docker setup
-
-docker run jboss/keycloak --name keycloak -p 8080:8080
-
-bin/add-user-keycloak.sh -u admin
-http://localhost:8080/auth
