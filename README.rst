@@ -45,7 +45,7 @@ Get swagger.json doc
 
     curl -XGET http://historian:8701/v2/api-docs 
 
-Read the doc at `https://github.com/Hurence/logisland.historian/tree/master/historian <https://github.com/Hurence/logisland.historian/tree/master/historian>`
+Read the doc at `https://github.com/Hurence/logisland.historian/tree/master/historian <https://github.com/Hurence/logisland.historian/tree/master/historian>`_
 
 Logisland CEP
 =============
