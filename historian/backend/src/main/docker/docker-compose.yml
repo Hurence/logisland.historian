@@ -4,7 +4,7 @@ services:
   chronix:
     container_name: chronix
     hostname: chronix
-    image: 'hurence/chronix:latest'
+    image: 'hurence/chronix:0.1.0'
     ports:
       - '8983:8983'
     network_mode: bridge
@@ -18,14 +18,14 @@ services:
 
   keycloak:
     container_name: keycloak
-    image: 'hurence/keycloak:latest'
+    image: 'hurence/keycloak:0.1.0'
     ports:
       - '8080:8080'
     network_mode: bridge
 
-  historian:
-    container_name: historian
-    image: 'hurence/historian:latest'
+  historian-backend:
+    container_name: historian-backend
+    image: 'hurence/historian-backend:0.1.0'
     ports:
       - '8701:8701'
     links:

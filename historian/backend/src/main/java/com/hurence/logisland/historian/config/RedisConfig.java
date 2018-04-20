@@ -32,8 +32,8 @@ public class RedisConfig {
 
     private @Value("${redis.host}")
     String redisHost;
-    private @Value("${redis.port}")
-    int redisPort;
+    //private @Value("${redis.port}")
+    int redisPort = 6379;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
