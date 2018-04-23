@@ -1,3 +1,10 @@
+# install node and yarn
+
+typing this command should do the work
+
+    ../mvnw clean install
+
+
 # Webapp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
