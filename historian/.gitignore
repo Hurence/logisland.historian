@@ -1,5 +1,6 @@
 **/target/
 **/node_modules/
+frontend/src/main/resources/webapp/node
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

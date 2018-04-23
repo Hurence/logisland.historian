@@ -6,7 +6,12 @@ cache:
     - $HOME/.sbt
     - $HOME/.ivy2
 
+    
 language: java
+
+before_script:
+  - export DISPLAY=:99.0          #set up virtual screen for front test
+  - sh -e /etc/init.d/xvfb start  #set up virtual screen for front test
 
 script:
   - cd historian
@@ -18,6 +23,7 @@ jdk:
 notifications:
   email:
     - bailet.thomas@gmail.com
+    - s.h.gregoire@gmail.com
 
   webhooks:
     urls:
