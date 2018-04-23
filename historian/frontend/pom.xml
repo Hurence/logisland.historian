@@ -19,7 +19,7 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>src/webapp</directory>
+				<directory>src/main/resources/webapp</directory>
 			</resource>
 		</resources>
 	</build>
