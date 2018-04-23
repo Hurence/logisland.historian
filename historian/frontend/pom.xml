@@ -19,7 +19,7 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>src/main/resources/webapp</directory>
+				<directory>dist</directory>
 			</resource>
 		</resources>
 		<plugins>
