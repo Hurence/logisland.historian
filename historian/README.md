@@ -120,4 +120,29 @@ Build and run historian as Docker container
 
     mvn -U -X clean versions:set -DnewVersion=1.0.37
     mvn -U -X package docker:build -Dpush.image=true
+    
+## Configuring keycloak for webapp
 
+log in
+       
+    http://keycloak:8080/auth
+    
+then go to client, select Logisland-hitorian and add those properties :
+
+    Valid Redirect URIs: http://localhost:4200/*
+    Web Origins: http://localhost:4200 
+
+Do not erase previous values just add those new ones.
+Now when you go on webapp at 
+
+    http://localhost:4200
+    
+Keycloak authentification should be used if not you may not have ran the webapp, in this case tape in 'frontend' directory :
+
+    ng serve -o
+    
+If this does not work you may have to rebuild 
+
+    ./mvnw clean install    
+    
+        
