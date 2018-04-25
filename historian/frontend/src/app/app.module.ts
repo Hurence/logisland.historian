@@ -12,10 +12,15 @@ import { initializer } from './app-init';
 // nebular modules
 import { NbThemeModule } from '@nebular/theme';
 import { NbSidebarModule, NbLayoutModule, NbSidebarService } from '@nebular/theme';
+import { NbUserModule } from '@nebular/theme/components/user/user.module';
+import { DatasourcesListComponent } from './datasources-list/datasources-list.component';
+import { DatasourceService } from './datasource.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DatasourcesListComponent,
   ],
   imports: [
     BrowserModule,
@@ -24,6 +29,8 @@ import { NbSidebarModule, NbLayoutModule, NbSidebarService } from '@nebular/them
     NbLayoutModule,
     NbSidebarModule,
     KeycloakAngularModule,
+    NbUserModule,
+    HttpClientModule,
   ],
   providers: [
     {
@@ -32,7 +39,8 @@ import { NbSidebarModule, NbLayoutModule, NbSidebarService } from '@nebular/them
       multi: true,
       deps: [KeycloakService]
     },
-    NbSidebarService
+    NbSidebarService,
+    DatasourceService,
   ],
   bootstrap: [AppComponent],
 })

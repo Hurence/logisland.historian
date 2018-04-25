@@ -4,9 +4,21 @@
 
 <nb-layout>
 
-  <nb-layout-header fixed>Logisland historian</nb-layout-header>
 
-  <nb-sidebar>Sidebar Content</nb-sidebar>
+
+  <nb-layout-header fixed>
+    Logisland historian
+    <nb-user name="gregoire">gregoire</nb-user>
+  </nb-layout-header>
+
+  <nb-sidebar>Sidebar Content
+
+    <a href="http://localhost:8701/api/v1/datasources">you can verify liste of datasource here !</a>
+    
+    <app-datasources-list></app-datasources-list>
+
+
+  </nb-sidebar>
 
   <nb-layout-column>
     <div style="text-align:center">
