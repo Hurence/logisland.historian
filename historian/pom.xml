@@ -38,6 +38,7 @@
         <springfox-version>2.7.0</springfox-version>
         <!-- Test Dependencies -->
         <rest-assured.version>2.9.0</rest-assured.version>
+
     </properties>
 
 
