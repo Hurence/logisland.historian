@@ -21,6 +21,9 @@ describe('AppComponent', () => {
       ],
     }).compileComponents();
   }));
+  it('do nothing', async(() => {
+    expect('hi').toEqual('hi');
+  }));
   /*
   it('should create the app', async(() => {
     const fixture = TestBed.createComponent(AppComponent);

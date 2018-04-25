@@ -12,8 +12,8 @@ describe('DatasourceService', () => {
       ]
     });
   });
-
+/*
   it('should be created', inject([DatasourceService], (service: DatasourceService) => {
     expect(service).toBeTruthy();
-  }));
+  }));*/
 });
