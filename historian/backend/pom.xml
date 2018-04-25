@@ -9,6 +9,11 @@
 
     <name>data-historian-backend</name>
     <description>Operational data Historian backend from the Logisland Suite</description>
+    <properties>
+
+        <shaded.package>logisland.chronix.solr642</shaded.package>
+
+    </properties>
 
     <parent>
         <groupId>com.hurence.logisland</groupId>
@@ -94,6 +99,58 @@
         </dependency>
 
         <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.17</version>
+        </dependency>
+
+
+        <!-- SolR Chronix stuff	-->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>6.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.chronix</groupId>
+            <artifactId>chronix-api</artifactId>
+            <version>0.2-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.chronix</groupId>
+            <artifactId>chronix-server-client</artifactId>
+            <version>0.5-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.chronix</groupId>
+            <artifactId>chronix-timeseries</artifactId>
+            <version>0.3.2-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.chronix</groupId>
+            <artifactId>chronix-timeseries-converter</artifactId>
+            <version>0.3.2-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.chronix</groupId>
+            <artifactId>chronix-timeseries-common</artifactId>
+            <version>0.3.2-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-core</artifactId>
+            <version>6.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queries</artifactId>
+            <version>6.5.0</version>
+        </dependency>
+
+
+
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -175,6 +232,9 @@
                 </configuration>
             </plugin>
 
+
+
+
         </plugins>
     </build>
 
@@ -183,6 +243,23 @@
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>bintray</id>
+            <name>bintray repo</name>
+            <url>http://dl.bintray.com/chronix/maven</url>
+        </repository>
+        <repository>
+            <id>openscada</id>
+            <url>http://neutronium.openscada.org/maven/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>maven-restlet</id>
+            <name>Public online Restlet repository</name>
+            <url>http://maven.restlet.org</url>
         </repository>
     </repositories>
 
