@@ -27,9 +27,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.solr.core.SolrTemplate;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -44,8 +42,7 @@ public class ChronixImporter {
 
 
 
-    @Resource(name = "solrTemplate")
-    private SolrTemplate solrTemplate;
+    private final HttpSolrClient CHRONIX_SOLR_CLIENT;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChronixImporter.class);
 
@@ -57,22 +54,23 @@ public class ChronixImporter {
             .setV(4711).build()
             .getSerializedSize();
     private static final int SER_SIZE = LIST_SERIALIZED_SIZE + POINT_SERIALIZED_SIZE;
-    private final String URL;
+    //private final String URL;
 
 
     private final String[] SCHEMA_FIELDS;
 
-    private final HttpSolrClient CHRONIX_SOLR_CLIENT;
+   // private final HttpSolrClient CHRONIX_SOLR_CLIENT;
     private ChronixClient<MetricTimeSeries, HttpSolrClient, SolrQuery> CHRONIX;
 
     /**
      * Constructs a Chronix importer
      *
-     * @param url the url to chronix server
+     * @param chronix_solr_client
      */
-    public ChronixImporter(String url, String[] attributeFields) {
-        URL = url;
-        CHRONIX_SOLR_CLIENT = (HttpSolrClient) solrTemplate.getSolrClient();
+    public ChronixImporter(HttpSolrClient chronix_solr_client, String[] attributeFields) {
+        CHRONIX_SOLR_CLIENT = chronix_solr_client;
+       // URL = url;
+       // CHRONIX_SOLR_CLIENT = (HttpSolrClient) solrTemplate.getSolrClient();
         //new HttpSolrClient.Builder().withBaseSolrUrl(url).build();
         SCHEMA_FIELDS = attributeFields;
         CHRONIX = new ChronixClient<>(new MetricTimeSeriesConverter(),

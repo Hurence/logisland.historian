@@ -18,7 +18,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Error
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-26T14:57:04.764+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-26T16:51:10.992+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Error  implements Serializable {

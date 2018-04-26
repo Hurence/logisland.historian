@@ -79,6 +79,145 @@ public class FileImporter {
 
     }
 
+    /**
+     * Reads the given file / folder and calls the bi consumer with the extracted points
+     *
+     * @param points
+     * @param inputStream
+     * @param databases
+     * @return
+     */
+    public Pair<Integer, Integer> importPoints(Map<Attributes, Pair<Instant, Instant>> points, InputStream inputStream, BiConsumer<List<ImportPoint>, Attributes>... databases) {
+
+
+        final AtomicInteger pointCounter = new AtomicInteger(0);
+        final AtomicInteger tsCounter = new AtomicInteger(0);
+        final File metricsFile = new File(METRICS_FILE_PATH);
+
+        LOGGER.info("Writing imported metrics to {}", metricsFile);
+        LOGGER.info("Import supports csv files as well as gz compressed csv files.");
+
+        try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+            NumberFormat nf = DecimalFormat.getInstance(numberLocal);
+
+            AtomicInteger counter = new AtomicInteger(0);
+            BufferedReader reader = null;
+            try {
+
+
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                //Read the first line
+                String headerLine = reader.readLine();
+
+
+                //Extract the attributes from the file name
+                //E.g. first_second_third_attribute.csv
+                //   String[] fileNameMetaData = file.getName().split("_");
+                String[] fileNameMetaData = new String[]{"a"};
+
+                String[] metrics = headerLine.split(csvDelimiter);
+
+                Map<Integer, Attributes> attributesPerTimeSeries = new HashMap<>(metrics.length);
+
+
+                for (int i = 1; i < metrics.length; i++) {
+                    String metric = metrics[i];
+                    String metricOnlyAscii = Normalizer.normalize(metric, Normalizer.Form.NFD);
+                    metricOnlyAscii = metric.replaceAll("[^\\x00-\\x7F]", "");
+                     Attributes attributes = new Attributes(metricOnlyAscii, fileNameMetaData);
+
+                    //Check if meta data is completely set
+                     /*   if (isEmpty(attributes)) {
+                            boolean deleted = deleteFile(file, inputStream, reader);
+                            LOGGER.info("Attributes contains empty values {}. File {} deleted {}", attributes, file.getName(), deleted);
+                            continue;
+                        }
+
+                        if (attributes.getMetric().equals(".*")) {
+                            boolean deleted = deleteFile(file, inputStream, reader);
+                            LOGGER.info("Attributes metric{}. File {} deleted {}", attributes.getMetric(), file.getName(), deleted);
+                            continue;
+                        }*/
+                        attributesPerTimeSeries.put(i, attributes);
+                    tsCounter.incrementAndGet();
+
+                }
+
+                Map<Integer, List<ImportPoint>> dataPoints = new HashMap<>();
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] splits = line.split(csvDelimiter);
+                    String date = splits[0];
+
+
+                    Instant dateObject;
+                    if (instantDate) {
+                        dateObject = Instant.parse(date);
+                    } else if (sdfDate) {
+                        dateObject = sdf.parse(date).toInstant();
+                    } else {
+                        dateObject = Instant.ofEpochMilli(Long.valueOf(date));
+                    }
+
+
+                    for (int column = 1; column < splits.length; column++) {
+
+                        String value = splits[column];
+                        double numericValue = nf.parse(value).doubleValue();
+
+                        ImportPoint point = new ImportPoint(dateObject, numericValue);
+
+
+                        if (!dataPoints.containsKey(column)) {
+                            dataPoints.put(column, new ArrayList<>());
+                        }
+                        dataPoints.get(column).add(point);
+                        pointCounter.incrementAndGet();
+                    }
+
+                }
+
+
+                dataPoints.values().forEach(Collections::sort);
+
+                IOUtils.closeQuietly(reader);
+                IOUtils.closeQuietly(inputStream);
+
+                dataPoints.forEach((key, importPoints) -> {
+                    for (BiConsumer<List<ImportPoint>, Attributes> database : databases) {
+                        database.accept(importPoints, attributesPerTimeSeries.get(key));
+                    }
+                    points.put(attributesPerTimeSeries.get(key), Pair.of(importPoints.get(0).getDate(), importPoints.get(importPoints.size() - 1).getDate()));
+                    //write the stats to the file
+                    Instant start = importPoints.get(0).getDate();
+                    Instant end = importPoints.get(importPoints.size() - 1).getDate();
+
+                       /* try {
+                            writeStatsLine(metricsFileWriter, attributesPerTimeSeries.get(key), start, end);
+                        } catch (IOException e) {
+                            LOGGER.error("Could not write stats line", e);
+                        }*/
+                    LOGGER.info("{} of {} time series imported", counter.incrementAndGet(), tsCounter.get());
+                });
+
+
+            } catch (Exception e) {
+                LOGGER.info("Exception while reading points.", e);
+            } finally {
+                //close all streams
+                IOUtils.closeQuietly(reader);
+                IOUtils.closeQuietly(inputStream);
+            }
+
+        }catch (Exception e){
+            LOGGER.info(e.toString());
+        }
+        return Pair.of(tsCounter.get(), pointCounter.get());
+    }
 
     /**
      * Reads the given file / folder and calls the bi consumer with the extracted points

@@ -16,7 +16,12 @@
  */
 package com.hurence.logisland.historian.service;
 
+import com.hurence.logisland.chronix.importer.csv.Attributes;
+import com.hurence.logisland.chronix.importer.csv.ChronixImporter;
+import com.hurence.logisland.chronix.importer.csv.FileImporter;
+import com.hurence.logisland.chronix.importer.csv.Pair;
 import com.hurence.logisland.historian.rest.v1.model.Mesures;
+import com.hurence.logisland.historian.rest.v1.model.Tag;
 import de.qaware.chronix.ChronixClient;
 import de.qaware.chronix.converter.MetricTimeSeriesConverter;
 import de.qaware.chronix.solr.client.ChronixSolrStorage;
@@ -24,15 +29,17 @@ import de.qaware.chronix.timeseries.MetricTimeSeries;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -47,6 +54,7 @@ public class MesuresApiService {
 
     @Resource(name = "solrClientChronix")
     private SolrClient solrClient;
+
 
 
     static Function<MetricTimeSeries, String> groupBy = MetricTimeSeries::getName;
@@ -77,12 +85,12 @@ public class MesuresApiService {
         attributes.forEach((k, v) -> {
             if (k.contains("function")) {
                 String name = k.substring(k.lastIndexOf("_") + 1);
-                if( v instanceof Boolean){
-                    if((Boolean) v)
+                if (v instanceof Boolean) {
+                    if ((Boolean) v)
                         chunk.addFunctionsItem(new com.hurence.logisland.historian.rest.v1.model.Function().name(name).value(1.0));
                     else
                         chunk.addFunctionsItem(new com.hurence.logisland.historian.rest.v1.model.Function().name(name).value(0.0));
-                }else if( v instanceof Double){
+                } else if (v instanceof Double) {
                     Double value = (Double) v;
                     chunk.addFunctionsItem(new com.hurence.logisland.historian.rest.v1.model.Function().name(name).value(value));
                 }
@@ -96,6 +104,15 @@ public class MesuresApiService {
     }
 
 
+    /**
+     * returns a list of mesures for a given Tag
+     *
+     * @param itemId
+     * @param start
+     * @param end
+     * @param functions
+     * @return
+     */
     public Optional<Mesures> getTagMesures(String itemId, String start, String end, String functions) {
 
         long startTime = System.currentTimeMillis();
@@ -124,11 +141,9 @@ public class MesuresApiService {
         query.setFields("dataAsJson");
         logger.info(query.toString());
 
-        //    Mesures mesures = new Mesures();
-      List<Mesures> chunks = chronix.stream(solrClient, query)
+        List<Mesures> chunks = chronix.stream(solrClient, query)
                 .map(this::convertToMesures)
                 .collect(Collectors.toList());
-
 
 
         if (chunks.isEmpty())
@@ -136,5 +151,42 @@ public class MesuresApiService {
         else
             return Optional.of(chunks.get(0).queryDuration(System.currentTimeMillis() - startTime));
 
+    }
+
+    public List<Tag> uploadTagMesures(MultipartFile content, String csvDelimiter, String dateFormat, String numberFormat, String attributeFields) {
+
+        List<Tag> tags = Collections.emptyList();
+        try {
+            String contentStr = new String(content.getBytes());
+
+
+            boolean cleanImport = true;
+            String[] attributes = new String[]{"host"};
+
+            Map<Attributes, Pair<Instant, Instant>> importStatistics = new HashMap<>();
+            ChronixImporter chronixImporter = new ChronixImporter((HttpSolrClient) solrClient,  attributes);
+            FileImporter importer = new FileImporter(dateFormat, numberFormat, csvDelimiter);
+            Pair<Integer, Integer> result;
+
+            logger.info("Start importing files to the Chronix.");
+            long start = System.currentTimeMillis();
+
+            result = importer.importPoints(importStatistics, content.getInputStream(), chronixImporter.importToChronix(cleanImport, false));
+
+            logger.info("Done importing. Trigger commit.");
+            chronixImporter.commit();
+            long end = System.currentTimeMillis();
+
+
+            logger.info("Import done (Took: {} sec). Imported {} time series with {} points", (end - start) / 1000, result.getFirst(), result.getSecond());
+
+
+            tags.isEmpty();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return tags;
     }
 }

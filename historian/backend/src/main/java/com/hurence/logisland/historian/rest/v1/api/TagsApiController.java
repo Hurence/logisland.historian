@@ -14,10 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,9 +69,8 @@ public class TagsApiController implements TagsApi {
     }
 
     public ResponseEntity<List<Tag>> getAllTags(@ApiParam(value = "filter query (lucene syntax like fq=\"labels:opc AND datasources:win32\")") @Valid @RequestParam(value = "fq", required = false) String fq) {
-        return new ResponseEntity<List<Tag>>(service.getAllTags(fq),HttpStatus.OK);
+        return new ResponseEntity<List<Tag>>(service.getAllTags(fq), HttpStatus.OK);
     }
-
 
 
     public ResponseEntity<Tag> getTag(@ApiParam(value = "id of the tag to return", required = true) @PathVariable("itemId") String itemId) {
@@ -85,8 +85,8 @@ public class TagsApiController implements TagsApi {
     }
 
     @Override
-    public ResponseEntity<Mesures> getTagMesures(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ", defaultValue = "NOW-5MINUTES") @Valid @RequestParam(value = "start", required = false, defaultValue="NOW-5MINUTES") String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ", defaultValue = "NOW") @Valid @RequestParam(value = "end", required = false, defaultValue="NOW") String end,@ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ", defaultValue = "NOW") @Valid @RequestParam(value = "functions", required = false) String functions) {
-        Optional<Mesures> mesures = mesuresApiService.getTagMesures(itemId,start,end,functions);
+    public ResponseEntity<Mesures> getTagMesures(@ApiParam(value = "id of the tag", required = true) @PathVariable("itemId") String itemId, @ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ", defaultValue = "NOW-5MINUTES") @Valid @RequestParam(value = "start", required = false, defaultValue = "NOW-5MINUTES") String start, @ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ", defaultValue = "NOW") @Valid @RequestParam(value = "end", required = false, defaultValue = "NOW") String end, @ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ", defaultValue = "NOW") @Valid @RequestParam(value = "functions", required = false) String functions) {
+        Optional<Mesures> mesures = mesuresApiService.getTagMesures(itemId, start, end, functions);
         if (mesures.isPresent()) {
             return new ResponseEntity<Mesures>(mesures.get(), HttpStatus.OK);
 
@@ -94,6 +94,13 @@ public class TagsApiController implements TagsApi {
             return new ResponseEntity<Mesures>(HttpStatus.NOT_FOUND);
 
         }
+    }
+
+    @Override
+    public ResponseEntity<List<Tag>> postTagMesures(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile content, @ApiParam(value = "the csv file content", defaultValue = ";") @Valid @RequestParam(value = "csv_delimiter", required = false, defaultValue = ";") String csvDelimiter, @ApiParam(value = "valid values LONG (ms since 1970),   INSTANT (default java 8 instant),   'SDF-FORMAT' e.g dd.MM.yyyy HH:mm:ss.SSS ", defaultValue = "dd.MM.yyyy HH:mm:ss.SSS") @Valid @RequestParam(value = "date_format", required = false, defaultValue = "dd.MM.yyyy HH:mm:ss.SSS") String dateFormat, @ApiParam(value = "valid values ENGLISH, GERMAN", defaultValue = "ENGLISH") @Valid @RequestParam(value = "number_format", required = false, defaultValue = "ENGLISH") String numberFormat, @ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields) {
+
+
+        return new ResponseEntity<List<Tag>>(mesuresApiService.uploadTagMesures(content, csvDelimiter, dateFormat, numberFormat, attributeFields), HttpStatus.OK);
     }
 
     public ResponseEntity<Tag> updateTag(@ApiParam(value = "itemId to be updated", required = true) @PathVariable("itemId") String itemId, @ApiParam(value = "new Tag definition", required = true) @Valid @RequestBody Tag tag) {
