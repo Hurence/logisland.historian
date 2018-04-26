@@ -23,7 +23,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Pipeline is a sequence of Processor wich apply specifi business logic on current tag value (matching query for alerting for example)
 */
     @ApiModel(description = "a Pipeline is a sequence of Processor wich apply specifi business logic on current tag value (matching query for alerting for example)")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-19T12:25:30.271+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-26T14:57:04.764+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Pipeline  implements Serializable {

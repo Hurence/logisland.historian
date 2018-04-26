@@ -6,6 +6,7 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.Error;
+import com.hurence.logisland.historian.rest.v1.model.Mesures;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-19T12:25:30.271+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-26T14:57:04.764+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -68,6 +69,17 @@ import java.util.List;
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
         ResponseEntity<Tag> getTag(@ApiParam(value = "id of the tag to return",required=true) @PathVariable("itemId") String itemId);
+
+
+            @ApiOperation(value = "get tag mesures", nickname = "getTagMesures", notes = "get the corresponding Tag mesures between start and end time", response = Mesures.class, tags={ "tag", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "tag", response = Mesures.class),
+                @ApiResponse(code = 404, message = "Tag resource not found"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/tags/{itemId}/mesures",
+                produces = { "application/json" }, 
+            method = RequestMethod.GET)
+        ResponseEntity<Mesures> getTagMesures(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ", defaultValue = "NOW-5MINUTES") @Valid @RequestParam(value = "start", required = false, defaultValue="NOW-5MINUTES") String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ", defaultValue = "NOW") @Valid @RequestParam(value = "end", required = false, defaultValue="NOW") String end,@ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions);
 
 
             @ApiOperation(value = "update tag", nickname = "updateTag", notes = "update an existing tag", response = Tag.class, tags={ "tag","opc", })

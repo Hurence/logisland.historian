@@ -1,7 +1,9 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hurence.logisland.historian.rest.v1.model.Mesures;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.service.MesuresApiService;
 import com.hurence.logisland.historian.service.TagsApiService;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -31,13 +33,15 @@ public class TagsApiController implements TagsApi {
     private final HttpServletRequest request;
 
     private final TagsApiService service;
+    private final MesuresApiService mesuresApiService;
 
 
     @org.springframework.beans.factory.annotation.Autowired
-    public TagsApiController(ObjectMapper objectMapper, HttpServletRequest request, TagsApiService service) {
+    public TagsApiController(ObjectMapper objectMapper, HttpServletRequest request, TagsApiService service, MesuresApiService mesuresApiService) {
         this.objectMapper = objectMapper;
         this.request = request;
         this.service = service;
+        this.mesuresApiService = mesuresApiService;
     }
 
     public ResponseEntity<Tag> addTagWithId(@ApiParam(value = "Tag resource to add", required = true) @Valid @RequestBody Tag body, @ApiParam(value = "itemId to", required = true) @PathVariable("itemId") String itemId) {
@@ -76,6 +80,18 @@ public class TagsApiController implements TagsApi {
 
         } else {
             return new ResponseEntity<Tag>(HttpStatus.NOT_FOUND);
+
+        }
+    }
+
+    @Override
+    public ResponseEntity<Mesures> getTagMesures(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ", defaultValue = "NOW-5MINUTES") @Valid @RequestParam(value = "start", required = false, defaultValue="NOW-5MINUTES") String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ", defaultValue = "NOW") @Valid @RequestParam(value = "end", required = false, defaultValue="NOW") String end,@ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ", defaultValue = "NOW") @Valid @RequestParam(value = "functions", required = false) String functions) {
+        Optional<Mesures> mesures = mesuresApiService.getTagMesures(itemId,start,end,functions);
+        if (mesures.isPresent()) {
+            return new ResponseEntity<Mesures>(mesures.get(), HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<Mesures>(HttpStatus.NOT_FOUND);
 
         }
     }
