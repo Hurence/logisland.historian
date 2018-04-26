@@ -408,8 +408,60 @@ paths:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
-
-
+  /tags/mesures:
+     post:
+       tags:
+         - tag
+         - mesure
+       summary: post tag mesures
+       description: post some new values
+       operationId: postTagMesures
+       produces:
+         - application/json
+       parameters:
+         - name: content
+           in: formData
+           description: the csv file content
+           required: true
+           type: file
+         - name: csv_delimiter
+           in: query
+           description: the csv file content
+           required: false
+           type: string
+           default: ';'
+         - name: date_format
+           in: query
+           description: |
+            valid values LONG (ms since 1970),
+              INSTANT (default java 8 instant),
+              'SDF-FORMAT' e.g dd.MM.yyyy HH:mm:ss.SSS
+           required: false
+           type: string
+           default: 'dd.MM.yyyy HH:mm:ss.SSS'
+         - name: number_format
+           in: query
+           description: valid values ENGLISH, GERMAN
+           required: false
+           type: string
+           default: 'ENGLISH'
+         - name: attribute_fields
+           in: query
+           required: false
+           type: string
+       responses:
+         '200':
+           description: tags list
+           schema:
+             type: array
+             items:
+               $ref: '#/definitions/Tag'
+         '404':
+            description: Tag resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
 
 
   /metrics:

@@ -47,7 +47,7 @@ public class CSVImporter {
      */
     public static void main(String[] args) {
 
-        if (args.length != 2) {
+       /* if (args.length != 2) {
             LOGGER.info("The given arguments does not contain the required argument 'ymlConfig' 'tsPath'");
             return;
         }
@@ -76,7 +76,7 @@ public class CSVImporter {
         boolean cleanImport = (boolean) config.get("cleanImport");
 
         Map<Attributes, Pair<Instant, Instant>> importStatistics = new HashMap<>();
-        ChronixImporter chronixImporter = new ChronixImporter(url, attributeFields);
+        ChronixImporter chronixImporter = new ChronixImporter(chronix_solr_client, url, attributeFields);
         FileImporter importer = new FileImporter(dateFormat, numberFormat, csvDelimiter);
         Pair<Integer, Integer> result;
 
@@ -92,6 +92,6 @@ public class CSVImporter {
         long end = System.currentTimeMillis();
 
 
-        LOGGER.info("Import done (Took: {} sec). Imported {} time series with {} points", (end - start) / 1000, result.getFirst(), result.getSecond());
+        LOGGER.info("Import done (Took: {} sec). Imported {} time series with {} points", (end - start) / 1000, result.getFirst(), result.getSecond());*/
     }
 }
