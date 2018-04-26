@@ -345,7 +345,69 @@ paths:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
+  /tags/{itemId}/mesures:
+     get:
+       tags:
+         - tag
+       summary: get tag mesures
+       description: get the corresponding Tag mesures between start and end time
+       operationId: getTagMesures
+       produces:
+         - application/json
+       parameters:
+         - name: itemId
+           in: path
+           description: id of the tag
+           required: true
+           type: string
+         - name: start
+           in: query
+           description: |
+            date de début (borne inf) peut-être exprimée sous les formats suivants :
+              timestamp : 4578965
+              date-time : 2015-11-25T12:06:57.330Z
+              relatif   : NOW-30DAYS
+           required: false
+           type: string
+           default: NOW-5MINUTES
+         - name: end
+           in: query
+           description: |
+             date de fin (borne sup) peut-être exprimée sous les formats suivants :
+               timestamp : 4578965
+               date-time : 2015-11-25T12:06:57.330Z
+               relatif   : NOW-30DAYS
+           required: false
+           type: string
+           default: NOW
+         - name: functions
+           in: query
+           description: |
+              Multiple analyses, aggregations, and transformations are allowed per query.
+              If so, Chronix will first execute the transformations in the order they occur.
+              Then it executes the analyses and aggregations on the result of the chained transformations.
+              For example the query:
 
+                max;min;trend;movavg:10,minutes;scale:4
+
+              is executed as follows:
+
+                Calculate the moving average
+                Scale the result of the moving average by 4
+                Calculate the max, min, and the trend based on the prior result.
+           required: false
+           type: string
+       responses:
+         '200':
+           description: tag
+           schema:
+             $ref: '#/definitions/Mesures'
+         '404':
+            description: Tag resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
 
 
 
@@ -686,10 +748,6 @@ definitions:
         description: timestamp
         type: integer
         format: int64
-     # last_base64_value:
-     #   description: base64 encoded value
-     #   type: string
-      #  format: byte
       update_rate:
         description: polling delay in ms
         default: 1000
@@ -706,6 +764,50 @@ definitions:
       last_quality:
         type: integer
 
+  Mesures:
+    type: object
+    description: holds a double array of values for a Tag between start & stop
+    properties:
+      name:
+        type: string
+      start:
+        type: integer
+        format: int64
+      end:
+        type: integer
+        format: int64
+      query_duration:
+        type: integer
+        format: int64
+      quality:
+        type: number
+        format : double
+      num_points:
+        type: integer
+        format: int32
+      timestamps:
+        type: array
+        items:
+          type: integer
+          format: int64
+      values:
+        type: array
+        items:
+          type: number
+          format: double
+      functions:
+        type: array
+        items:
+          $ref : "#/definitions/Function"
+
+  Function:
+    type: object
+    properties:
+      name:
+        type: string
+      value:
+        type: number
+        format: double
 
 
   Pipeline:

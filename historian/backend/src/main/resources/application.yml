@@ -41,7 +41,7 @@ keycloak:
         - user
       securityCollections:
         - patterns:
-          - /api/v1/tags/*
+          - /api/v1/tags/secured/*
 
 
 redis:

@@ -60,5 +60,9 @@ public class SolrConfig {
         return new HttpSolrClient("http://" + solrHost + ":" + solrPort +"/solr");
     }
 
+    @Bean
+    SolrClient solrClientChronix() {
+        return new HttpSolrClient("http://" + solrHost + ":" + solrPort +"/solr/chronix");
+    }
 
 }

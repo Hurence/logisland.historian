@@ -2,7 +2,7 @@ package com.hurence.logisland.historian.rest.v1.api;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-19T12:25:30.271+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-26T14:57:04.764+02:00")
 
 @javax.xml.bind.annotation.XmlRootElement
 public class ApiResponseMessage {

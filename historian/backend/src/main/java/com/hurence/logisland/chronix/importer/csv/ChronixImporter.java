@@ -27,7 +27,9 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.solr.core.SolrTemplate;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -40,6 +42,10 @@ import java.util.stream.Collectors;
  */
 public class ChronixImporter {
 
+
+
+    @Resource(name = "solrTemplate")
+    private SolrTemplate solrTemplate;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChronixImporter.class);
 
@@ -66,7 +72,8 @@ public class ChronixImporter {
      */
     public ChronixImporter(String url, String[] attributeFields) {
         URL = url;
-        CHRONIX_SOLR_CLIENT = new HttpSolrClient.Builder().withBaseSolrUrl(url).build();
+        CHRONIX_SOLR_CLIENT = (HttpSolrClient) solrTemplate.getSolrClient();
+        //new HttpSolrClient.Builder().withBaseSolrUrl(url).build();
         SCHEMA_FIELDS = attributeFields;
         CHRONIX = new ChronixClient<>(new MetricTimeSeriesConverter(),
                 new ChronixSolrStorage(200, null, null));
