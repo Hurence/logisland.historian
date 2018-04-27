@@ -42,7 +42,10 @@ keycloak:
       securityCollections:
         - patterns:
           - /api/v1/tags/*
-
+  cors: true
+  cors-allowed-headers: "*"
+  cors-allowed-methods: "*"
+  cors-exposed-headers: "*"
 
 redis:
   host: redis
