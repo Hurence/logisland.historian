@@ -173,6 +173,52 @@ should send you back something like:
             }
         ]
     }
+    
+## Get tag stats
+
+To retrieve min, max, last values :
+
+    curl -X GET \
+      'http://localhost:8701/api/v1/tags/temperature_sensor_1/stats?start=1319783340000&end=1325074700000'
+      
+ the result is as follows:
+ 
+    {
+        "name": "temperature_sensor_1",
+        "start": 1319783340000,
+        "end": 1323965280000,
+        "query_duration": 8,
+        "quality": null,
+        "num_points": null,
+        "timestamps": null,
+        "values": null,
+        "functions": [
+            {
+                "name": "first",
+                "value": 97.2
+            },
+            {
+                "name": "avg",
+                "value": 838.0296482412055
+            },
+            {
+                "name": "min",
+                "value": 26.2
+            },
+            {
+                "name": "max",
+                "value": 888.8
+            },
+            {
+                "name": "count",
+                "value": 199
+            },
+            {
+                "name": "last",
+                "value": 27.2
+            }
+        ]
+    }
 
 ## REST API generation with Swagger
 
