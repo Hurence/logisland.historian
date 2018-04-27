@@ -5,6 +5,7 @@
 */
 package com.hurence.logisland.historian.rest.v1.api;
 
+import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Error;
 import com.hurence.logisland.historian.rest.v1.model.Mesures;
 import org.springframework.core.io.Resource;
@@ -25,7 +26,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-26T16:51:10.992+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-27T11:32:13.178+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -83,15 +84,15 @@ import java.util.List;
         ResponseEntity<Mesures> getTagMesures(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ", defaultValue = "NOW-5MINUTES") @Valid @RequestParam(value = "start", required = false, defaultValue="NOW-5MINUTES") String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ", defaultValue = "NOW") @Valid @RequestParam(value = "end", required = false, defaultValue="NOW") String end,@ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions);
 
 
-            @ApiOperation(value = "post tag mesures", nickname = "postTagMesures", notes = "post some new values", response = Tag.class, responseContainer = "List", tags={ "tag","mesure", })
+            @ApiOperation(value = "post tag mesures", nickname = "postTagMesures", notes = "post some new values", response = BulkLoad.class, tags={ "tag","mesure", })
             @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "tags list", response = Tag.class, responseContainer = "List"),
+                @ApiResponse(code = 200, message = "BulkLoad result", response = BulkLoad.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
             @RequestMapping(value = "/api/v1/tags/mesures",
                 produces = { "application/json" }, 
             method = RequestMethod.POST)
-        ResponseEntity<List<Tag>> postTagMesures(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile content,@ApiParam(value = "the csv file content", defaultValue = ";") @Valid @RequestParam(value = "csv_delimiter", required = false, defaultValue=";") String csvDelimiter,@ApiParam(value = "valid values LONG (ms since 1970),   INSTANT (default java 8 instant),   'SDF-FORMAT' e.g dd.MM.yyyy HH:mm:ss.SSS ", defaultValue = "dd.MM.yyyy HH:mm:ss.SSS") @Valid @RequestParam(value = "date_format", required = false, defaultValue="dd.MM.yyyy HH:mm:ss.SSS") String dateFormat,@ApiParam(value = "valid values ENGLISH, GERMAN", defaultValue = "ENGLISH") @Valid @RequestParam(value = "number_format", required = false, defaultValue="ENGLISH") String numberFormat,@ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields);
+        ResponseEntity<BulkLoad> postTagMesures(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile content,@ApiParam(value = "the csv file content", defaultValue = ";") @Valid @RequestParam(value = "csv_delimiter", required = false, defaultValue=";") String csvDelimiter,@ApiParam(value = "valid values LONG (ms since 1970),   INSTANT (default java 8 instant),   'SDF-FORMAT' e.g dd.MM.yyyy HH:mm:ss.SSS ", defaultValue = "dd.MM.yyyy HH:mm:ss.SSS") @Valid @RequestParam(value = "date_format", required = false, defaultValue="dd.MM.yyyy HH:mm:ss.SSS") String dateFormat,@ApiParam(value = "valid values ENGLISH, GERMAN", defaultValue = "ENGLISH") @Valid @RequestParam(value = "number_format", required = false, defaultValue="ENGLISH") String numberFormat,@ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields,@ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue="false") Boolean cleanImport);
 
 
             @ApiOperation(value = "update tag", nickname = "updateTag", notes = "update an existing tag", response = Tag.class, tags={ "tag","opc", })

@@ -95,6 +95,84 @@ this access token can be used to access to securised API zone
       -H 'Cache-Control: no-cache' \
       -H 'Content-Type: application/json' \
       -H 'Postman-Token: a1f1faef-72e2-4071-95d2-b558275876f2'
+      
+      
+## POST Tag mesures through CSV file
+
+If you want to upload some timeseries in a bulk fashion, you can use `POST /api/v1/tags/mesures` resource.
+
+
+    curl -X POST \
+      http://localhost:8701/api/v1/tags/mesures \
+      -H 'Cache-Control: no-cache' \
+      -H 'Content-Type: multipart/form-data' \
+      -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+      -F file=@data/data_to_import.csv \
+      -F 'csv_delimiter=;' \
+      -F 'date_format=dd.MM.yyyy HH:mm:ss.SSS' \
+      -F number_format=ENGLISH \
+      -F 'attribute_fields=host,source' \
+      -F clean_import=false
+      
+should return something like :
+
+    {
+        "start_time": null,
+        "import_duration": 8127,
+        "num_metrics_imported": 37,
+        "num_points_imported": 9740653,
+        "metrics": [
+            "com.hurence.logisland.chronix.importer.csv.Attributes@f8ef5fe[attributes={DL2,001E6600156C,197001010108,converted.csv},metric=heat_quantity]=Pair{first=2011-12-14T21:28:00Z, second=2015-01-27T21:19:00Z}",
+            "com.hurence.logisland.chronix.importer.csv.Attributes@1879900d[attributes={DL2,001E6600156C,197001010108,converted.csv},metric=speed_relay_2]=Pair{first=2011-10-28T06:29:00Z, second=2015-01-27T21:19:00Z}",
+            
+            ...
+            
+            "com.hurence.logisland.chronix.importer.csv.Attributes@7a7a8bb4[attributes={DL2,001E6600156C,197001010108,converted.csv},metric=irradiance_cs]=Pair{first=2011-10-28T06:29:00Z, second=2015-01-27T21:19:00Z}"
+        ]
+    }
+
+## GET mesures values
+
+To retrieve a value for a tag just use `GET /api/v1/tags/{itemId}/mesures`
+
+    curl -X GET \
+      'http://localhost:8701/api/v1/tags/temperature_sensor_5/mesures?start=1319783340000&end=1323898380000&functions=max;min;avg'
+    
+    
+should send you back something like:
+
+    {
+        "name": "temperature_sensor_5",
+        "start": 1319783340000,
+        "end": 1323898380000,
+        "query_duration": 79,
+        "quality": null,
+        "num_points": 3,
+        "timestamps": [
+            1319783340000,
+            1323898080000,
+            1323898380000
+        ],
+        "values": [
+            96,
+            18.9,
+            18.9
+        ],
+        "functions": [
+            {
+                "name": "avg",
+                "value": 44.6
+            },
+            {
+                "name": "min",
+                "value": 18.9
+            },
+            {
+                "name": "max",
+                "value": 96
+            }
+        ]
+    }
 
 ## REST API generation with Swagger
 

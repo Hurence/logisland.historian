@@ -8,6 +8,11 @@ spring:
   freemarker:
     template-loader-path: classpath:/templates
     suffix: .ftl
+  http:
+    multipart:
+      max-file-size: 50Mb
+      max-request-size: 50Mb
+
 
 # http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
 # http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-use-actuator-with-jersey

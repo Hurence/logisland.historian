@@ -449,13 +449,17 @@ paths:
            in: query
            required: false
            type: string
+         - name: clean_import
+           in: query
+           description: will discard all previously loaded data (use it with great care)
+           required: false
+           type: boolean
+           default: false
        responses:
          '200':
-           description: tags list
+           description: BulkLoad result
            schema:
-             type: array
-             items:
-               $ref: '#/definitions/Tag'
+             $ref: '#/definitions/BulkLoad'
          '404':
             description: Tag resource not found
          default:
@@ -701,6 +705,25 @@ paths:
 definitions:
 
 
+  BulkLoad:
+    type: object
+    properties:
+      start_time:
+        type: string
+      import_duration:
+        type: integer
+        format: int32
+      num_metrics_imported:
+        type: integer
+        format: int32
+      num_points_imported:
+        type: integer
+        format: int64
+      metrics:
+         type: array
+         items:
+          type: string
+
   Alert:
     type: object
     properties:
@@ -708,7 +731,8 @@ definitions:
         type: string
         default: 'alert'
       timestamp:
-        type: long
+        type: integer
+        format: int64
       message:
         type: string
       severity:
