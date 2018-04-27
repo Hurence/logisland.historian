@@ -87,7 +87,7 @@ public class FileImporter {
      * @param databases
      * @return
      */
-    public Pair<Integer, Integer> importPoints(Map<Attributes, Pair<Instant, Instant>> points, InputStream inputStream, BiConsumer<List<ImportPoint>, Attributes>... databases) {
+    public Pair<Integer, Integer> importPoints(Map<Attributes, Pair<Instant, Instant>> points, InputStream inputStream, String[] fileNameMetaData, BiConsumer<List<ImportPoint>, Attributes>... databases) {
 
 
         final AtomicInteger pointCounter = new AtomicInteger(0);
@@ -116,7 +116,7 @@ public class FileImporter {
                 //Extract the attributes from the file name
                 //E.g. first_second_third_attribute.csv
                 //   String[] fileNameMetaData = file.getName().split("_");
-                String[] fileNameMetaData = new String[]{"a"};
+              //  String[] fileNameMetaData = new String[]{"a"};
 
                 String[] metrics = headerLine.split(csvDelimiter);
 
