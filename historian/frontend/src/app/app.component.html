@@ -7,9 +7,9 @@
 
 
   <nb-layout-header fixed>
-    Logisland historian
-    <nb-user name="gregoire">gregoire</nb-user>
-  </nb-layout-header>
+    Logisland historian username: {{profil.username}}, lastName : {{profil.lastName}}.
+    <nb-user name="gregoire"></nb-user>
+  </nb-layout-header>   
 
   <nb-sidebar>Sidebar Content
 
@@ -39,6 +39,11 @@
         <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
       </li>
     </ul>
+
+
+    <a href="http://localhost:8701/api/v1/tags?fq=*">you can verify liste of tag here !</a>
+    
+    <app-tags-list></app-tags-list>
   </nb-layout-column>
 
   <nb-layout-footer>Contact us</nb-layout-footer>

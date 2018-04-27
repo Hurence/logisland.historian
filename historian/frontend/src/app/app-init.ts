@@ -26,6 +26,12 @@ export function initializer(keycloak: KeycloakService): () => Promise<any> {
             '/assets',
             '/clients/public'
           ],
+        }).then(function(result) {
+          if (result) {
+            console.log('autehntification succeeded !');
+          } else {
+            console.log('autehntification failed !');
+          }
         });
         resolve();
       } catch (error) {
