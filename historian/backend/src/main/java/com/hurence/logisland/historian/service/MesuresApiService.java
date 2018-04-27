@@ -63,7 +63,7 @@ public class MesuresApiService {
                     new ChronixSolrStorage<>(100, groupBy, reduce));
 
 
-    private Mesures convertToMesures(MetricTimeSeries mts) {
+    private Mesures convertToMesures(MetricTimeSeries mts, boolean noValues) {
         final Double[] values = ArrayUtils.toObject(mts.getValues().toArray());
         final Long[] timestamps = ArrayUtils.toObject(mts.getTimestamps().toArray());
         final Map<String, Object> attributes = mts.getAttributesReference();
@@ -74,11 +74,12 @@ public class MesuresApiService {
         chunk.setName(mts.getName());
         chunk.setStart(mts.getStart());
         chunk.setEnd(mts.getEnd());
-        chunk.setQuality((Double) attributes.get("quality"));
-        chunk.setValues(Arrays.asList(values));
-        chunk.setTimestamps(Arrays.asList(timestamps));
-        chunk.setNumPoints(values.length);
-
+        if (!noValues) {
+            chunk.setQuality((Double) attributes.get("quality"));
+            chunk.setValues(Arrays.asList(values));
+            chunk.setTimestamps(Arrays.asList(timestamps));
+            chunk.setNumPoints(values.length);
+        }
         attributes.forEach((k, v) -> {
             if (k.contains("function")) {
                 String name = k.substring(k.lastIndexOf("_") + 1);
@@ -110,7 +111,7 @@ public class MesuresApiService {
      * @param functions
      * @return
      */
-    public Optional<Mesures> getTagMesures(String itemId, String start, String end, String functions) {
+    public Optional<Mesures> getTagMesures(String itemId, String start, String end, String functions, Boolean noValues) {
 
         long startTime = System.currentTimeMillis();
         StringBuilder queryBuilder = new StringBuilder();
@@ -118,6 +119,7 @@ public class MesuresApiService {
 
         if (itemId != null && !itemId.isEmpty())
             queryBuilder.append("name:").append(itemId).append(" ");
+
 
         if (start != null && !start.isEmpty())
             queryBuilder.append("AND start:").append(start).append(" ");
@@ -135,11 +137,13 @@ public class MesuresApiService {
             query.setParam("cf", "metric{" + functions + "}");
         }
 
-        query.setFields("dataAsJson");
+        if (!noValues) {
+            query.setFields("dataAsJson");
+        }
         logger.info(query.toString());
 
         List<Mesures> chunks = chronix.stream(solrClient, query)
-                .map(this::convertToMesures)
+                .map((MetricTimeSeries mts) -> convertToMesures(mts, noValues))
                 .collect(Collectors.toList());
 
 
@@ -150,6 +154,18 @@ public class MesuresApiService {
 
     }
 
+
+    /**
+     * upload and parses a CSV file
+     *
+     * @param content
+     * @param csvDelimiter
+     * @param dateFormat
+     * @param numberFormat
+     * @param attributeFields
+     * @param cleanImport
+     * @return
+     */
     public BulkLoad uploadTagMesures(MultipartFile content, String csvDelimiter, String dateFormat, String numberFormat, String attributeFields, Boolean cleanImport) {
 
         BulkLoad bl = new BulkLoad();
@@ -178,7 +194,6 @@ public class MesuresApiService {
             logger.info("Import done (Took: {} sec). Imported {} time series with {} points", (end - start) / 1000, result.getFirst(), result.getSecond());
 
 
-
             bl.importDuration((int) (end - start))
                     .numMetricsImported(result.getFirst())
                     .numPointsImported(Long.valueOf(result.getSecond()));
@@ -186,7 +201,7 @@ public class MesuresApiService {
 
             //((HashMap) importStatistics).entrySet().toArray()[0].key.metric
 
-            ((HashMap) importStatistics).entrySet().forEach( k->{
+            ((HashMap) importStatistics).entrySet().forEach(k -> {
                 bl.addMetricsItem(k.toString());
 
             });

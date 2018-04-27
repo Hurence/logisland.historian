@@ -369,7 +369,6 @@ paths:
               relatif   : NOW-30DAYS
            required: false
            type: string
-           default: NOW-5MINUTES
          - name: end
            in: query
            description: |
@@ -379,7 +378,6 @@ paths:
                relatif   : NOW-30DAYS
            required: false
            type: string
-           default: NOW
          - name: functions
            in: query
            description: |
@@ -395,6 +393,57 @@ paths:
                 Calculate the moving average
                 Scale the result of the moving average by 4
                 Calculate the max, min, and the trend based on the prior result.
+           required: false
+           type: string
+         - name: no_values
+           in: query
+           description: will retrieve only function values, no data points
+           required: false
+           type: boolean
+           default: false
+       responses:
+         '200':
+           description: tag
+           schema:
+             $ref: '#/definitions/Mesures'
+         '404':
+            description: Tag resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+  /tags/{itemId}/stats:
+     get:
+       tags:
+         - tag
+       summary: get tag mesures stats
+       description: get the corresponding Tag mesures between start and end time
+       operationId: getTagStats
+       produces:
+         - application/json
+       parameters:
+         - name: itemId
+           in: path
+           description: id of the tag
+           required: true
+           type: string
+         - name: start
+           in: query
+           description: |
+            date de début (borne inf) peut-être exprimée sous les formats suivants :
+              timestamp : 4578965
+              date-time : 2015-11-25T12:06:57.330Z
+              relatif   : NOW-30DAYS
+           required: false
+           type: string
+         - name: end
+           in: query
+           description: |
+             date de fin (borne sup) peut-être exprimée sous les formats suivants :
+               timestamp : 4578965
+               date-time : 2015-11-25T12:06:57.330Z
+               relatif   : NOW-30DAYS
            required: false
            type: string
        responses:
