@@ -179,7 +179,7 @@ should send you back something like:
 To retrieve min, max, last values :
 
     curl -X GET \
-      'http://localhost:8701/api/v1/tags/temperature_sensor_1/stats?start=1319783340000&end=1325074700000'
+      'http://localhost:8701/api/v1/tags/temperature_sensor_1/stats?start=NOW-5MINUTES&end=NOW'
       
  the result is as follows:
  
