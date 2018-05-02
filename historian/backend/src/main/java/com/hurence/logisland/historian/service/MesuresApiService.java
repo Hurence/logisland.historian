@@ -20,6 +20,7 @@ import com.hurence.logisland.chronix.importer.csv.Attributes;
 import com.hurence.logisland.chronix.importer.csv.ChronixImporter;
 import com.hurence.logisland.chronix.importer.csv.FileImporter;
 import com.hurence.logisland.chronix.importer.csv.Pair;
+import com.hurence.logisland.historian.generator.TSimulusWrapper;
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Mesures;
 import de.qaware.chronix.ChronixClient;
@@ -34,14 +35,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import scala.collection.JavaConverters;
+import scala.collection.Seq;
 
 import javax.annotation.Resource;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 
 @Service
 public class MesuresApiService {
@@ -198,13 +205,88 @@ public class MesuresApiService {
                     .numMetricsImported(result.getFirst())
                     .numPointsImported(Long.valueOf(result.getSecond()));
 
-
-            //((HashMap) importStatistics).entrySet().toArray()[0].key.metric
-
             ((HashMap) importStatistics).entrySet().forEach(k -> {
                 bl.addMetricsItem(k.toString());
 
             });
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bl;
+    }
+
+
+
+    public BulkLoad launchTagMesuresGenerator(MultipartFile config, String attributeFields, Boolean cleanImport) {
+
+        BulkLoad bl = new BulkLoad();
+        try {
+            String contentStr = new String(config.getBytes());
+
+            TSimulusWrapper simulator = new TSimulusWrapper();
+
+
+
+            List<String> generatedFiles = simulator.generate(contentStr);
+            generatedFiles.forEach( file -> {
+                String[] attributes = (attributeFields != null) ? attributeFields.split(",") : new String[]{"source"};
+
+                Map<Attributes, Pair<Instant, Instant>> importStatistics = new HashMap<>();
+                ChronixImporter chronixImporter = new ChronixImporter((HttpSolrClient) solrClient, attributes);
+                FileImporter importer = new FileImporter("dd.MM.yyyy HH:mm:ss.SSS", "ENGLISH", ";");
+                Pair<Integer, Integer> result;
+
+                logger.info("Start importing files to the Chronix.");
+                long start = System.currentTimeMillis();
+
+                String[] fileNameMetaData = config.getOriginalFilename().split("_");
+
+
+
+                InputStream is;
+
+                try {
+                    is = new FileInputStream(file);
+
+                    result = importer.importPoints(importStatistics, is, fileNameMetaData, chronixImporter.importToChronix(cleanImport, false));
+
+                    logger.info("Done importing. Trigger commit.");
+                    chronixImporter.commit();
+                    long end = System.currentTimeMillis();
+
+
+                    logger.info("Import done (Took: {} sec). Imported {} time series with {} points", (end - start) / 1000, result.getFirst(), result.getSecond());
+
+
+                    bl.importDuration((int) (end - start))
+                            .numMetricsImported(result.getFirst())
+                            .numPointsImported(Long.valueOf(result.getSecond()));
+
+
+                    //((HashMap) importStatistics).entrySet().toArray()[0].key.metric
+
+                    ((HashMap) importStatistics).entrySet().forEach(k -> {
+                        bl.addMetricsItem(k.toString());
+
+                    });
+                    is.close();
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+            });
+
+
+
+
 
 
         } catch (IOException e) {

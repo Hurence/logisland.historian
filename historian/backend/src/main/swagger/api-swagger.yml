@@ -516,6 +516,43 @@ paths:
            schema:
              $ref: '#/definitions/Error'
 
+  /tags/mesures/generator:
+     post:
+       tags:
+         - tag
+         - mesure
+       summary: post tag mesures simulation
+       description: post some new values according to a simulation
+       operationId: postTagMesuresGenerator
+       produces:
+         - application/json
+       parameters:
+         - name: config
+           in: formData
+           description: the json config file
+           required: true
+           type: file
+         - name: attribute_fields
+           in: query
+           required: false
+           type: string
+         - name: clean_import
+           in: query
+           description: will discard all previously loaded data (use it with great care)
+           required: false
+           type: boolean
+           default: false
+       responses:
+         '200':
+           description: BulkLoad result
+           schema:
+             $ref: '#/definitions/BulkLoad'
+         '404':
+            description: Tag resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
 
   /metrics:
     get:

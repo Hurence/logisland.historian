@@ -128,4 +128,12 @@ public class TagsApiController implements TagsApi {
         }
     }
 
+    @Override
+    public ResponseEntity<BulkLoad> postTagMesuresGenerator(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile config,@ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields,@ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue="false") Boolean cleanImport){
+
+
+        return new ResponseEntity<BulkLoad>(mesuresApiService.launchTagMesuresGenerator(config,  attributeFields, cleanImport), HttpStatus.OK);
+
+    }
+
 }
