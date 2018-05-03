@@ -1,8 +1,24 @@
+.logo {
+  background-image: url("../img/logo-hurence-black.png");
+  background-repeat: no-repeat;
+  width: 150px;
+  display: block;
+  min-height: 37px;
+  /* float: left; */
+  margin: 0 auto;
+  /* background-color: transparent !important; */
+}
+
 .login-pf body {
   background-image: url("../img/island.png");
   background-size: cover;
 }
-
+/* div#kc-header::after {
+    content: 'DATA HISTORIAN';
+    font-size: 40px;
+    line-height: 20px;
+    margin-bottom: 15px;
+} */
 .alert-error {
     background-color: #ffffff;
     border-color: #cc0000;
@@ -372,7 +388,7 @@ a.zocial  {
 }
 
 .card-pf {
-  background: #fff;
+  background: rgba(255, 255, 255,0.5);
   margin: 0 auto;
   padding: 0 20px;
   max-width: 500px;
