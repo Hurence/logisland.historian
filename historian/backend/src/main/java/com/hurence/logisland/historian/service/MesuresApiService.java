@@ -123,7 +123,7 @@ public class MesuresApiService {
 
 
         if (itemId != null && !itemId.isEmpty())
-            queryBuilder.append("name:").append(itemId).append(" ");
+            queryBuilder.append("name:\"").append(itemId).append("\" ");
 
 
         if (start != null && !start.isEmpty())

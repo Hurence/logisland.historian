@@ -27,7 +27,7 @@ RUN  bash -c 'touch ${APP_HOME}/${APP_JAR}'
 
 RUN ls  ${APP_HOME}/${APP_JAR}
 
-ENV JAVA_TOOL_OPTIONS "-Xms128M -Xmx128M -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom"
+ENV JAVA_TOOL_OPTIONS "-Xms1G -Xmx1G -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom"
 
 #USER $USER_NAME
 WORKDIR $APP_HOME
