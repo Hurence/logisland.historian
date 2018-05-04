@@ -23,7 +23,7 @@
     {
       "name": "temperature",
       "generator": "monthly-basis",
-      "frequency": 60000
+      "frequency": 1000
     }
   ],
   "from": "2017-01-01 00:00:00.000",

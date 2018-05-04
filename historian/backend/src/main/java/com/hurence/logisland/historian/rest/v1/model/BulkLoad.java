@@ -20,13 +20,17 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * BulkLoad
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-02T15:14:50.257+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-04T11:29:18.230+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class BulkLoad  implements Serializable {
         @JsonProperty("start_time")
         @Indexed(name = "start_time")
         private String startTime = null;
+
+        @JsonProperty("generation_duration")
+        @Indexed(name = "generation_duration")
+        private Integer generationDuration = 0;
 
         @JsonProperty("import_duration")
         @Indexed(name = "import_duration")
@@ -63,6 +67,27 @@ public class BulkLoad  implements Serializable {
 
         public void setStartTime(String startTime) {
         this.startTime = startTime;
+        }
+
+        public BulkLoad generationDuration(Integer generationDuration) {
+        this.generationDuration = generationDuration;
+        return this;
+        }
+
+    /**
+        * Get generationDuration
+    * @return generationDuration
+    **/
+        @JsonProperty("generation_duration")
+    @ApiModelProperty(value = "")
+    
+
+  public Integer getGenerationDuration() {
+    return generationDuration;
+    }
+
+        public void setGenerationDuration(Integer generationDuration) {
+        this.generationDuration = generationDuration;
         }
 
         public BulkLoad importDuration(Integer importDuration) {
@@ -168,6 +193,7 @@ public class BulkLoad  implements Serializable {
     }
         BulkLoad bulkLoad = (BulkLoad) o;
         return Objects.equals(this.startTime, bulkLoad.startTime) &&
+        Objects.equals(this.generationDuration, bulkLoad.generationDuration) &&
         Objects.equals(this.importDuration, bulkLoad.importDuration) &&
         Objects.equals(this.numMetricsImported, bulkLoad.numMetricsImported) &&
         Objects.equals(this.numPointsImported, bulkLoad.numPointsImported) &&
@@ -176,7 +202,7 @@ public class BulkLoad  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(startTime, importDuration, numMetricsImported, numPointsImported, metrics);
+    return Objects.hash(startTime, generationDuration, importDuration, numMetricsImported, numPointsImported, metrics);
     }
 
 
@@ -186,6 +212,7 @@ StringBuilder sb = new StringBuilder();
 sb.append("class BulkLoad {\n");
 
 sb.append("    startTime: ").append(toIndentedString(startTime)).append("\n");
+sb.append("    generationDuration: ").append(toIndentedString(generationDuration)).append("\n");
 sb.append("    importDuration: ").append(toIndentedString(importDuration)).append("\n");
 sb.append("    numMetricsImported: ").append(toIndentedString(numMetricsImported)).append("\n");
 sb.append("    numPointsImported: ").append(toIndentedString(numPointsImported)).append("\n");

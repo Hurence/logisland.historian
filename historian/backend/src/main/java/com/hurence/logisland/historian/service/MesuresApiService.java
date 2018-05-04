@@ -35,8 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import scala.collection.JavaConverters;
-import scala.collection.Seq;
 
 import javax.annotation.Resource;
 import java.io.FileInputStream;
@@ -173,7 +171,7 @@ public class MesuresApiService {
      * @param cleanImport
      * @return
      */
-    public BulkLoad uploadTagMesures(MultipartFile content, String csvDelimiter, String dateFormat, String numberFormat, String attributeFields, Boolean cleanImport) {
+    public BulkLoad uploadTagMesures(MultipartFile content, String csvDelimiter, String dateFormat, String numberFormat, String attributeFields, Boolean cleanImport, Integer pointsByChunk) {
 
         BulkLoad bl = new BulkLoad();
         try {
@@ -191,7 +189,10 @@ public class MesuresApiService {
 
             String[] fileNameMetaData = content.getOriginalFilename().split("_");
 
-            result = importer.importPoints(importStatistics, content.getInputStream(), fileNameMetaData, chronixImporter.importToChronix(cleanImport, false));
+            result = importer.importPoints(importStatistics,
+                    content.getInputStream(),
+                    fileNameMetaData,
+                    chronixImporter.importToChronix(cleanImport, false, pointsByChunk));
 
             logger.info("Done importing. Trigger commit.");
             chronixImporter.commit();
@@ -219,7 +220,6 @@ public class MesuresApiService {
     }
 
 
-
     public BulkLoad launchTagMesuresGenerator(MultipartFile config, String attributeFields, Boolean cleanImport) {
 
         BulkLoad bl = new BulkLoad();
@@ -229,9 +229,11 @@ public class MesuresApiService {
             TSimulusWrapper simulator = new TSimulusWrapper();
 
 
+            long startGeneration = System.currentTimeMillis();
 
             List<String> generatedFiles = simulator.generate(contentStr);
-            generatedFiles.forEach( file -> {
+            bl.setGenerationDuration((int) (System.currentTimeMillis()- startGeneration));
+            generatedFiles.forEach(file -> {
                 String[] attributes = (attributeFields != null) ? attributeFields.split(",") : new String[]{"source"};
 
                 Map<Attributes, Pair<Instant, Instant>> importStatistics = new HashMap<>();
@@ -245,13 +247,13 @@ public class MesuresApiService {
                 String[] fileNameMetaData = config.getOriginalFilename().split("_");
 
 
-
                 InputStream is;
 
                 try {
+                    logger.info("Start importing " + file);
                     is = new FileInputStream(file);
 
-                    result = importer.importPoints(importStatistics, is, fileNameMetaData, chronixImporter.importToChronix(cleanImport, false));
+                    result = importer.importPoints(importStatistics, is, fileNameMetaData, chronixImporter.importToChronix(cleanImport, false, 10000));
 
                     logger.info("Done importing. Trigger commit.");
                     chronixImporter.commit();
@@ -283,10 +285,6 @@ public class MesuresApiService {
 
 
             });
-
-
-
-
 
 
         } catch (IOException e) {

@@ -1,6 +1,6 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-02T15:14:50.257+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-04T11:29:18.230+02:00")
 
 public class NotFoundException extends ApiException {
     private int code;

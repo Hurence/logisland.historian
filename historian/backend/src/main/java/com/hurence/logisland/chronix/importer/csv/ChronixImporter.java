@@ -90,7 +90,7 @@ public class ChronixImporter {
      *
      * @return a BiConsumer handling the given list of import points and attributes
      */
-    public BiConsumer<List<ImportPoint>, Attributes> importToChronix(boolean cleanImport, boolean useOpenTSDB) {
+    public BiConsumer<List<ImportPoint>, Attributes> importToChronix(boolean cleanImport, boolean useOpenTSDB, Integer pointsByChunk) {
 
         if (cleanImport) {
             deleteIndex();
@@ -114,12 +114,16 @@ public class ChronixImporter {
             timeSeries.sort();
             List<Point> points = timeSeries.points().collect(Collectors.toList());
 
+
+
             final int chunkSize = 128 * 1024;
 
             //number of points
-            int numberOfPoints = chunkSize / SER_SIZE;
+            int numberOfPoints = pointsByChunk == null ? chunkSize / SER_SIZE : pointsByChunk;
             int start = 0;
             int end;
+
+            LOGGER.info("Chronix ---> numberOfPoints by chunk {}", numberOfPoints);
 
             List<MetricTimeSeries> records = new ArrayList<>();
             //Loop over the time series
