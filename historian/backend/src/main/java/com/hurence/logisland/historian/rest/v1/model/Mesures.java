@@ -22,7 +22,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * holds a double array of values for a Tag between start &amp; stop
 */
     @ApiModel(description = "holds a double array of values for a Tag between start & stop")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-02T15:14:50.257+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-04T11:29:18.230+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Mesures  implements Serializable {

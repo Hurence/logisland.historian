@@ -504,6 +504,12 @@ paths:
            required: false
            type: boolean
            default: false
+         - name: points_by_chunk
+           in: query
+           description: the number of points by chunk
+           required: false
+           type: integer
+           format: int32
        responses:
          '200':
            description: BulkLoad result
@@ -796,6 +802,10 @@ definitions:
     properties:
       start_time:
         type: string
+      generation_duration:
+        type: integer
+        format: int32
+        default: 0
       import_duration:
         type: integer
         format: int32
