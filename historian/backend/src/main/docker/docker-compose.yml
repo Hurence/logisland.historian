@@ -3,6 +3,8 @@ services:
 
   chronix:
     container_name: chronix
+    environment:
+      - JAVA_MEMORY=4g
     hostname: chronix
     image: 'hurence/chronix:0.1.0'
     ports:
