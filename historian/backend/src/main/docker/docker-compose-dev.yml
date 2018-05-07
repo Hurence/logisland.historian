@@ -25,5 +25,5 @@ services:
       - '8080:8080'
     network_mode: bridge
     volumes:
-       - ~/Documents/workspace/hurence/projects/logisland.historian/historian/data:/tmp/data
-
+       - ../../../../../historian/frontend/keycloak/themes/logisland.historian/:/opt/jboss/keycloak/themes/logisland.historian
+       - ../../../../../historian/frontend/keycloak/themes/base.logisland.historian/:/opt/jboss/keycloak/themes/base.logisland.historian

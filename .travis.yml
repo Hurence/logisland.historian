@@ -12,6 +12,7 @@ language: java
 before_script:
   - export DISPLAY=:99.0          #set up virtual screen for front test
   - sh -e /etc/init.d/xvfb start  #set up virtual screen for front test
+  - sleep 3 # give xvfb some time to start
 
 script:
   - cd historian
