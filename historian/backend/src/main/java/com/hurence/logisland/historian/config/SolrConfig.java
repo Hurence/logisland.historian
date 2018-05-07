@@ -16,20 +16,11 @@
  */
 package com.hurence.logisland.historian.config;
 
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
 @Configuration
 @EnableSolrRepositories(basePackages = {"com.hurence.logisland.historian.repository"})
 public class SolrConfig {
-/*
-    @Bean
-    public SolrClient solrClientChronix(@Value("${spring.data.solr.host") String host) {
-        return new HttpSolrClient.Builder().withBaseSolrUrl(host + "/chronix").build();
-    }
-*/
+
 }
