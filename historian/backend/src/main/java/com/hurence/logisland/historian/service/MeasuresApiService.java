@@ -34,9 +34,11 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -55,9 +57,15 @@ public class MeasuresApiService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Value("${spring.data.solr.host}")
+    private String solrHost;
 
-    @Resource(name = "solrClientChronix")
     private SolrClient solrClient;
+
+    @PostConstruct
+    public void init() {
+        solrClient = new HttpSolrClient.Builder().withBaseSolrUrl(solrHost + "/chronix").build();
+    }
 
 
     static Function<MetricTimeSeries, String> groupBy = MetricTimeSeries::getName;

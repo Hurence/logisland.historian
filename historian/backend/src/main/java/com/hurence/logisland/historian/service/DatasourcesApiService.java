@@ -20,10 +20,6 @@ import com.hurence.logisland.historian.repository.SolrDatasourceRepository;
 import com.hurence.logisland.historian.rest.v1.model.Datasource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.solr.core.SolrOperations;
-import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,64 +30,48 @@ import java.util.Optional;
 public class DatasourcesApiService {
 
 
-  
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     @Resource
     private SolrDatasourceRepository repository;
 
-    @Autowired
-    private SolrOperations solrTemplate;
-
-
-
 
     public Optional<Datasource> deleteDatasource(String itemId) {
 
-        logger.info("deleting Datasource " + itemId);
-        Datasource DatasourceToRemove = solrTemplate.getById(itemId, Datasource.class);
-        if (DatasourceToRemove != null) {
-            repository.delete(itemId);
-            return Optional.of(DatasourceToRemove);
-        } else
-            return Optional.empty();
-
+        logger.info("deleting Datasource {}", itemId);
+        Optional<Datasource> datasourceToRemove = repository.findById(itemId);
+        if (datasourceToRemove.isPresent()) {
+            repository.delete(datasourceToRemove.get());
+        }
+        return datasourceToRemove;
     }
 
 
     public Optional<Datasource> getDatasource(String itemId) {
-        logger.debug("getting Datasource " + itemId);
-        Datasource Datasource = solrTemplate.getById(itemId, Datasource.class);
-        if (Datasource != null) {
-            return Optional.of(Datasource);
+        logger.debug("getting Datasource {}", itemId);
+        return repository.findById(itemId);
+    }
+
+
+    public Optional<Datasource> updateDatasource(Datasource datasource) {
+        logger.debug("updating Datasource {}", datasource.getId());
+        Optional<Datasource> datasourceToUpdate = getDatasource(datasource.getId());
+        if (datasourceToUpdate.isPresent()) {
+            return Optional.of(repository.save(datasource));
         } else {
-            logger.debug("Datasource " + itemId + " not found");
+            logger.error("Datasource {} not found, unable to update", datasource.getId());
             return Optional.empty();
         }
     }
 
-
-    public Optional<Datasource> updateDatasource(Datasource Datasource) {
-        logger.debug("updating Datasource " + Datasource.getId());
-        Optional<Datasource> DatasourceToUpdate = getDatasource(Datasource.getId());
-        if (DatasourceToUpdate.isPresent()) {
-            solrTemplate.saveBean(Datasource);
-            return Optional.of(Datasource);
+    public Optional<Datasource> updateDatasource(Datasource datasource, String itemId) {
+        if (!itemId.equals(datasource.getId())) {
+            return updateDatasource(datasource.id(itemId));
         } else {
-            logger.error("Datasource " + Datasource.getId() + " not found, unable to update");
-            return Optional.empty();
+            return updateDatasource(datasource);
         }
     }
-
-    public Optional<Datasource> updateDatasource(Datasource Datasource, String itemId) {
-        if (!Datasource.getId().equals(itemId)) {
-            return updateDatasource(Datasource.id(itemId));
-        } else {
-            return updateDatasource(Datasource);
-        }
-    }
-
 
 
     public List<Datasource> getAllDatasources(String fq) {
@@ -110,17 +90,13 @@ public class DatasourcesApiService {
 
     public Optional<Datasource> addDatasourceWithId(Datasource body, String itemId) {
 
-        logger.info("Datasource already {} exists, delete it first", itemId);
-
-        Datasource DatasourceToRemove = solrTemplate.getById(itemId, Datasource.class);
-        if (DatasourceToRemove != null) {
+        Optional<Datasource> datasourceToRemove = getDatasource(itemId);
+        if (datasourceToRemove.isPresent()) {
+            logger.info("Datasource already {} exists, delete it first", itemId);
             return Optional.empty();
         } else {
-
             body.setId(itemId);
-            // body.id( "/" + body.getDomain() + "/" + body.getServer() + "/" + body.getGroup() + "/" + body.getDatasourceName())
-            repository.save(body);
-            return Optional.of(body);
+            return Optional.of(repository.save(body));
         }
 
     }
