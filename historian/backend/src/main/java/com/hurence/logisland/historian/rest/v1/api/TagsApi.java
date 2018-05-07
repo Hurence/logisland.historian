@@ -7,7 +7,7 @@ package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Error;
-import com.hurence.logisland.historian.rest.v1.model.Mesures;
+import com.hurence.logisland.historian.rest.v1.model.Measures;
 import org.springframework.core.io.Resource;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import io.swagger.annotations.*;
@@ -73,48 +73,48 @@ import java.util.List;
         ResponseEntity<Tag> getTag(@ApiParam(value = "id of the tag to return",required=true) @PathVariable("itemId") String itemId);
 
 
-            @ApiOperation(value = "get tag mesures", nickname = "getTagMesures", notes = "get the corresponding Tag mesures between start and end time", response = Mesures.class, tags={ "tag", })
+            @ApiOperation(value = "get tag measures", nickname = "getTagMeasures", notes = "get the corresponding Tag measures between start and end time", response = Measures.class, tags={ "tag", })
             @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "tag", response = Mesures.class),
+                @ApiResponse(code = 200, message = "tag", response = Measures.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/tags/{itemId}/mesures",
+            @RequestMapping(value = "/api/v1/tags/{itemId}/measures",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        ResponseEntity<Mesures> getTagMesures(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end,@ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions,@ApiParam(value = "will retrieve only function values, no data points", defaultValue = "false") @Valid @RequestParam(value = "no_values", required = false, defaultValue="false") Boolean noValues);
+        ResponseEntity<Measures> getTagMeasures(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end,@ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions,@ApiParam(value = "will retrieve only function values, no data points", defaultValue = "false") @Valid @RequestParam(value = "no_values", required = false, defaultValue="false") Boolean noValues);
 
 
-            @ApiOperation(value = "get tag mesures stats", nickname = "getTagStats", notes = "get the corresponding Tag mesures between start and end time", response = Mesures.class, tags={ "tag", })
+            @ApiOperation(value = "get tag measures stats", nickname = "getTagStats", notes = "get the corresponding Tag measures between start and end time", response = Measures.class, tags={ "tag", })
             @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "tag", response = Mesures.class),
+                @ApiResponse(code = 200, message = "tag", response = Measures.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
             @RequestMapping(value = "/api/v1/tags/{itemId}/stats",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        ResponseEntity<Mesures> getTagStats(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end);
+        ResponseEntity<Measures> getTagStats(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end);
 
 
-            @ApiOperation(value = "post tag mesures", nickname = "postTagMesures", notes = "post some new values", response = BulkLoad.class, tags={ "tag","mesure", })
+            @ApiOperation(value = "post tag measures", nickname = "postTagMeasures", notes = "post some new values", response = BulkLoad.class, tags={ "tag","measure", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "BulkLoad result", response = BulkLoad.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/tags/mesures",
+            @RequestMapping(value = "/api/v1/tags/measures",
                 produces = { "application/json" }, 
             method = RequestMethod.POST)
-        ResponseEntity<BulkLoad> postTagMesures(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile content,@ApiParam(value = "the csv file content", defaultValue = ";") @Valid @RequestParam(value = "csv_delimiter", required = false, defaultValue=";") String csvDelimiter,@ApiParam(value = "valid values LONG (ms since 1970),   INSTANT (default java 8 instant),   'SDF-FORMAT' e.g dd.MM.yyyy HH:mm:ss.SSS ", defaultValue = "dd.MM.yyyy HH:mm:ss.SSS") @Valid @RequestParam(value = "date_format", required = false, defaultValue="dd.MM.yyyy HH:mm:ss.SSS") String dateFormat,@ApiParam(value = "valid values ENGLISH, GERMAN", defaultValue = "ENGLISH") @Valid @RequestParam(value = "number_format", required = false, defaultValue="ENGLISH") String numberFormat,@ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields,@ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue="false") Boolean cleanImport,@ApiParam(value = "the number of points by chunk") @Valid @RequestParam(value = "points_by_chunk", required = false) Integer pointsByChunk);
+        ResponseEntity<BulkLoad> postTagMeasures(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile content,@ApiParam(value = "the csv file content", defaultValue = ";") @Valid @RequestParam(value = "csv_delimiter", required = false, defaultValue=";") String csvDelimiter,@ApiParam(value = "valid values LONG (ms since 1970),   INSTANT (default java 8 instant),   'SDF-FORMAT' e.g dd.MM.yyyy HH:mm:ss.SSS ", defaultValue = "dd.MM.yyyy HH:mm:ss.SSS") @Valid @RequestParam(value = "date_format", required = false, defaultValue="dd.MM.yyyy HH:mm:ss.SSS") String dateFormat,@ApiParam(value = "valid values ENGLISH, GERMAN", defaultValue = "ENGLISH") @Valid @RequestParam(value = "number_format", required = false, defaultValue="ENGLISH") String numberFormat,@ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields,@ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue="false") Boolean cleanImport,@ApiParam(value = "the number of points by chunk") @Valid @RequestParam(value = "points_by_chunk", required = false) Integer pointsByChunk);
 
 
-            @ApiOperation(value = "post tag mesures simulation", nickname = "postTagMesuresGenerator", notes = "post some new values according to a simulation", response = BulkLoad.class, tags={ "tag","mesure", })
+            @ApiOperation(value = "post tag measures simulation", nickname = "postTagMeasuresGenerator", notes = "post some new values according to a simulation", response = BulkLoad.class, tags={ "tag","measure", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "BulkLoad result", response = BulkLoad.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/tags/mesures/generator",
+            @RequestMapping(value = "/api/v1/tags/measures/generator",
                 produces = { "application/json" }, 
             method = RequestMethod.POST)
-        ResponseEntity<BulkLoad> postTagMesuresGenerator(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile config,@ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields,@ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue="false") Boolean cleanImport);
+        ResponseEntity<BulkLoad> postTagMeasuresGenerator(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile config,@ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields,@ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue="false") Boolean cleanImport);
 
 
             @ApiOperation(value = "update tag", nickname = "updateTag", notes = "update an existing tag", response = Tag.class, tags={ "tag","opc", })

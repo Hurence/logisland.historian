@@ -25,7 +25,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-04T11:29:18.230+02:00")
 
 @SolrDocument(solrCoreName = "historian")
-public class Mesures  implements Serializable {
+public class Measures  implements Serializable {
         @JsonProperty("name")
         @Indexed(name = "name")
         private String name = null;
@@ -62,7 +62,7 @@ public class Mesures  implements Serializable {
         @Indexed(name = "functions")
         private List<Function> functions = null;
 
-        public Mesures name(String name) {
+        public Measures name(String name) {
         this.name = name;
         return this;
         }
@@ -83,7 +83,7 @@ public class Mesures  implements Serializable {
         this.name = name;
         }
 
-        public Mesures start(Long start) {
+        public Measures start(Long start) {
         this.start = start;
         return this;
         }
@@ -104,7 +104,7 @@ public class Mesures  implements Serializable {
         this.start = start;
         }
 
-        public Mesures end(Long end) {
+        public Measures end(Long end) {
         this.end = end;
         return this;
         }
@@ -125,7 +125,7 @@ public class Mesures  implements Serializable {
         this.end = end;
         }
 
-        public Mesures queryDuration(Long queryDuration) {
+        public Measures queryDuration(Long queryDuration) {
         this.queryDuration = queryDuration;
         return this;
         }
@@ -146,7 +146,7 @@ public class Mesures  implements Serializable {
         this.queryDuration = queryDuration;
         }
 
-        public Mesures quality(Double quality) {
+        public Measures quality(Double quality) {
         this.quality = quality;
         return this;
         }
@@ -167,7 +167,7 @@ public class Mesures  implements Serializable {
         this.quality = quality;
         }
 
-        public Mesures numPoints(Integer numPoints) {
+        public Measures numPoints(Integer numPoints) {
         this.numPoints = numPoints;
         return this;
         }
@@ -188,12 +188,12 @@ public class Mesures  implements Serializable {
         this.numPoints = numPoints;
         }
 
-        public Mesures timestamps(List<Long> timestamps) {
+        public Measures timestamps(List<Long> timestamps) {
         this.timestamps = timestamps;
         return this;
         }
 
-            public Mesures addTimestampsItem(Long timestampsItem) {
+            public Measures addTimestampsItem(Long timestampsItem) {
                 if (this.timestamps == null) {
                 this.timestamps = new ArrayList<Long>();
                 }
@@ -217,12 +217,12 @@ public class Mesures  implements Serializable {
         this.timestamps = timestamps;
         }
 
-        public Mesures values(List<Double> values) {
+        public Measures values(List<Double> values) {
         this.values = values;
         return this;
         }
 
-            public Mesures addValuesItem(Double valuesItem) {
+            public Measures addValuesItem(Double valuesItem) {
                 if (this.values == null) {
                 this.values = new ArrayList<Double>();
                 }
@@ -246,12 +246,12 @@ public class Mesures  implements Serializable {
         this.values = values;
         }
 
-        public Mesures functions(List<Function> functions) {
+        public Measures functions(List<Function> functions) {
         this.functions = functions;
         return this;
         }
 
-            public Mesures addFunctionsItem(Function functionsItem) {
+            public Measures addFunctionsItem(Function functionsItem) {
                 if (this.functions == null) {
                 this.functions = new ArrayList<Function>();
                 }
@@ -285,16 +285,16 @@ public class Mesures  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
     return false;
     }
-        Mesures mesures = (Mesures) o;
-        return Objects.equals(this.name, mesures.name) &&
-        Objects.equals(this.start, mesures.start) &&
-        Objects.equals(this.end, mesures.end) &&
-        Objects.equals(this.queryDuration, mesures.queryDuration) &&
-        Objects.equals(this.quality, mesures.quality) &&
-        Objects.equals(this.numPoints, mesures.numPoints) &&
-        Objects.equals(this.timestamps, mesures.timestamps) &&
-        Objects.equals(this.values, mesures.values) &&
-        Objects.equals(this.functions, mesures.functions);
+        Measures measures = (Measures) o;
+        return Objects.equals(this.name, measures.name) &&
+        Objects.equals(this.start, measures.start) &&
+        Objects.equals(this.end, measures.end) &&
+        Objects.equals(this.queryDuration, measures.queryDuration) &&
+        Objects.equals(this.quality, measures.quality) &&
+        Objects.equals(this.numPoints, measures.numPoints) &&
+        Objects.equals(this.timestamps, measures.timestamps) &&
+        Objects.equals(this.values, measures.values) &&
+        Objects.equals(this.functions, measures.functions);
     }
 
     @Override
@@ -306,7 +306,7 @@ public class Mesures  implements Serializable {
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Mesures {\n");
+sb.append("class Measures {\n");
 
 sb.append("    name: ").append(toIndentedString(name)).append("\n");
 sb.append("    start: ").append(toIndentedString(start)).append("\n");

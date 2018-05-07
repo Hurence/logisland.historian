@@ -22,7 +22,7 @@ import com.hurence.logisland.chronix.importer.csv.FileImporter;
 import com.hurence.logisland.chronix.importer.csv.Pair;
 import com.hurence.logisland.historian.generator.TSimulusWrapper;
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
-import com.hurence.logisland.historian.rest.v1.model.Mesures;
+import com.hurence.logisland.historian.rest.v1.model.Measures;
 import de.qaware.chronix.ChronixClient;
 import de.qaware.chronix.converter.MetricTimeSeriesConverter;
 import de.qaware.chronix.solr.client.ChronixSolrStorage;
@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class MesuresApiService {
+public class MeasuresApiService {
 
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -68,13 +68,13 @@ public class MesuresApiService {
                     new ChronixSolrStorage<>(100, groupBy, reduce));
 
 
-    private Mesures convertToMesures(MetricTimeSeries mts, boolean noValues) {
+    private Measures convertToMeasures(MetricTimeSeries mts, boolean noValues) {
         final Double[] values = ArrayUtils.toObject(mts.getValues().toArray());
         final Long[] timestamps = ArrayUtils.toObject(mts.getTimestamps().toArray());
         final Map<String, Object> attributes = mts.getAttributesReference();
 
 
-        final Mesures chunk = new Mesures();
+        final Measures chunk = new Measures();
 
         chunk.setName(mts.getName());
         chunk.setStart(mts.getStart());
@@ -108,7 +108,7 @@ public class MesuresApiService {
 
 
     /**
-     * returns a list of mesures for a given Tag
+     * returns a list of measures for a given Tag
      *
      * @param itemId
      * @param start
@@ -116,7 +116,7 @@ public class MesuresApiService {
      * @param functions
      * @return
      */
-    public Optional<Mesures> getTagMesures(String itemId, String start, String end, String functions, Boolean noValues) {
+    public Optional<Measures> getTagMeasures(String itemId, String start, String end, String functions, Boolean noValues) {
 
         long startTime = System.currentTimeMillis();
         StringBuilder queryBuilder = new StringBuilder();
@@ -147,8 +147,8 @@ public class MesuresApiService {
         }
         logger.info(query.toString());
 
-        List<Mesures> chunks = chronix.stream(solrClient, query)
-                .map((MetricTimeSeries mts) -> convertToMesures(mts, noValues))
+        List<Measures> chunks = chronix.stream(solrClient, query)
+                .map((MetricTimeSeries mts) -> convertToMeasures(mts, noValues))
                 .collect(Collectors.toList());
 
 
@@ -171,7 +171,7 @@ public class MesuresApiService {
      * @param cleanImport
      * @return
      */
-    public BulkLoad uploadTagMesures(MultipartFile content, String csvDelimiter, String dateFormat, String numberFormat, String attributeFields, Boolean cleanImport, Integer pointsByChunk) {
+    public BulkLoad uploadTagMeasures(MultipartFile content, String csvDelimiter, String dateFormat, String numberFormat, String attributeFields, Boolean cleanImport, Integer pointsByChunk) {
 
         BulkLoad bl = new BulkLoad();
         try {
@@ -220,7 +220,7 @@ public class MesuresApiService {
     }
 
 
-    public BulkLoad launchTagMesuresGenerator(MultipartFile config, String attributeFields, Boolean cleanImport) {
+    public BulkLoad launchTagMeasuresGenerator(MultipartFile config, String attributeFields, Boolean cleanImport) {
 
         BulkLoad bl = new BulkLoad();
         try {

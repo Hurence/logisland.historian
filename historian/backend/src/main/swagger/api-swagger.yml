@@ -345,13 +345,13 @@ paths:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
-  /tags/{itemId}/mesures:
+  /tags/{itemId}/measures:
      get:
        tags:
          - tag
-       summary: get tag mesures
-       description: get the corresponding Tag mesures between start and end time
-       operationId: getTagMesures
+       summary: get tag measures
+       description: get the corresponding Tag measures between start and end time
+       operationId: getTagMeasures
        produces:
          - application/json
        parameters:
@@ -405,7 +405,7 @@ paths:
          '200':
            description: tag
            schema:
-             $ref: '#/definitions/Mesures'
+             $ref: '#/definitions/Measures'
          '404':
             description: Tag resource not found
          default:
@@ -417,8 +417,8 @@ paths:
      get:
        tags:
          - tag
-       summary: get tag mesures stats
-       description: get the corresponding Tag mesures between start and end time
+       summary: get tag measures stats
+       description: get the corresponding Tag measures between start and end time
        operationId: getTagStats
        produces:
          - application/json
@@ -450,21 +450,21 @@ paths:
          '200':
            description: tag
            schema:
-             $ref: '#/definitions/Mesures'
+             $ref: '#/definitions/Measures'
          '404':
             description: Tag resource not found
          default:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
-  /tags/mesures:
+  /tags/measures:
      post:
        tags:
          - tag
-         - mesure
-       summary: post tag mesures
+         - measure
+       summary: post tag measures
        description: post some new values
-       operationId: postTagMesures
+       operationId: postTagMeasures
        produces:
          - application/json
        parameters:
@@ -522,14 +522,14 @@ paths:
            schema:
              $ref: '#/definitions/Error'
 
-  /tags/mesures/generator:
+  /tags/measures/generator:
      post:
        tags:
          - tag
-         - mesure
-       summary: post tag mesures simulation
+         - measure
+       summary: post tag measures simulation
        description: post some new values according to a simulation
-       operationId: postTagMesuresGenerator
+       operationId: postTagMeasuresGenerator
        produces:
          - application/json
        parameters:
@@ -936,7 +936,7 @@ definitions:
       last_quality:
         type: integer
 
-  Mesures:
+  Measures:
     type: object
     description: holds a double array of values for a Tag between start & stop
     properties:
