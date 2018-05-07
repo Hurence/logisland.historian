@@ -97,13 +97,13 @@ this access token can be used to access to securised API zone
       -H 'Postman-Token: a1f1faef-72e2-4071-95d2-b558275876f2'
       
       
-## POST Tag mesures through CSV file
+## POST Tag measures through CSV file
 
-If you want to upload some timeseries in a bulk fashion, you can use `POST /api/v1/tags/mesures` resource.
+If you want to upload some timeseries in a bulk fashion, you can use `POST /api/v1/tags/measures` resource.
 
 
     curl -X POST \
-      http://localhost:8701/api/v1/tags/mesures \
+      http://localhost:8701/api/v1/tags/measures \
       -H 'Cache-Control: no-cache' \
       -H 'Content-Type: multipart/form-data' \
       -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
@@ -131,12 +131,12 @@ should return something like :
         ]
     }
 
-## GET mesures values
+## GET measures values
 
-To retrieve a value for a tag just use `GET /api/v1/tags/{itemId}/mesures`
+To retrieve a value for a tag just use `GET /api/v1/tags/{itemId}/measures`
 
     curl -X GET \
-      'http://localhost:8701/api/v1/tags/temperature_sensor_5/mesures?start=1319783340000&end=1323898380000&functions=max;min;avg'
+      'http://localhost:8701/api/v1/tags/temperature_sensor_5/measures?start=1319783340000&end=1323898380000&functions=max;min;avg'
     
     
 should send you back something like:
@@ -227,7 +227,7 @@ To retrieve min, max, last values :
 Based on [TSimulus](https://rts-gen.readthedocs.io/en/latest/index.html) we can generate and inject realistic timeseries values 
 
     curl -X POST \
-      http://localhost:8701/api/v1/tags/mesures/generator \
+      http://localhost:8701/api/v1/tags/measures/generator \
       -H 'Cache-Control: no-cache' \
       -H 'Content-Type: multipart/form-data' \
       -H 'Postman-Token: a593bb88-f5ea-4b01-850f-c3ff744db8e0' \
@@ -308,7 +308,7 @@ The file `demo5.json` contains the following generator timeseries
       "to": "2017-12-31 23:59:59.999"
     }
 
-Will generate 525600 mesures points in about 6" and will import thme into chronix in about 2"
+Will generate 525600 measures points in about 6" and will import thme into chronix in about 2"
 
     {
         "start_time": null,
