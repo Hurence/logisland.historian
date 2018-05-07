@@ -24,7 +24,6 @@ import com.hurence.logisland.historian.rest.v1.model.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,13 +44,8 @@ public class AdminApiService {
     private SolrDatasourceRepository solrDatasourceRepository;
 
 
-    @Resource(name = "solrTemplate")
-    private SolrTemplate solrTemplate;
-
-
     // inject the template as ListOperations
-    @Resource(name = "redisTemplate")
-    private ListOperations<String, Object> listOps;
+   // private ListOperations<String, Object> listOps;
 
 
     private List<String> domains = Arrays.asList("hurence", "pear", "gizmo");
@@ -63,13 +57,13 @@ public class AdminApiService {
 
         List<Tag> tags = new ArrayList<>();
 
-        long tagsCount = listOps.size(TAGS_LIST);
+        long tagsCount = 10; /*listOps.size(TAGS_LIST);
         if (doFlush) {
             while (tagsCount > 0) {
                 listOps.leftPop(TAGS_LIST);
                 tagsCount--;
             }
-        }
+        }*/
 
         Random random = new Random();
         tagsCount = random.nextInt(20);
@@ -89,17 +83,17 @@ public class AdminApiService {
             tags.add(t);
             solrTagRepository.save(t);
 
-            listOps.leftPush(TAGS_LIST, t);
+           // listOps.leftPush(TAGS_LIST, t);
             tagsCount--;
         }
 
 
-     //   Tag tag = solrTemplate.getById("/hurence/opc-server1/sensors.temperature/TEMP008", Tag.class);
+        //   Tag tag = solrTemplate.getById("/hurence/opc-server1/sensors.temperature/TEMP008", Tag.class);
 
 
-     //   List<Tag> tags = solrTagRepository.findByDomain("hurence");//, new PageRequest(1, 20) );
+        //   List<Tag> tags = solrTagRepository.findByDomain("hurence");//, new PageRequest(1, 20) );
 
-     //   logger.info(tag.toString());
+        //   logger.info(tag.toString());
 
         /*
 
@@ -130,7 +124,7 @@ public class AdminApiService {
                     .clsid(UUID.randomUUID().toString())
                     .host(server)
                     .user("tom")
-            .password("xxx"));
+                    .password("xxx"));
 
             ds.add(t);
             solrDatasourceRepository.save(t);
@@ -138,7 +132,6 @@ public class AdminApiService {
 
             count--;
         }
-
 
 
         return ds;
