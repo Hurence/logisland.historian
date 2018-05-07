@@ -55,7 +55,7 @@ public class MeasuresApiService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    @Resource(name = "solrClientChronix")
+    //@Resource(name = "solrClientChronix")
     private SolrClient solrClient;
 
 

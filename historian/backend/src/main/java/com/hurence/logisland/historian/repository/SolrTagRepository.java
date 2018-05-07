@@ -28,7 +28,6 @@ import java.util.List;
 @Repository
 public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
 
-    List<Tag> findById(String id);
 
     // catch all query
     @Query(value = "*:*", filters = { "text:?0", "record_type:tag" })
