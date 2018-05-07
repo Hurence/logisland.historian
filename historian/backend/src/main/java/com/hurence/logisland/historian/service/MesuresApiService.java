@@ -161,6 +161,12 @@ public class MesuresApiService {
     }
 
 
+    /**
+     * Retrieve the stats (last,min,max,avg) values for the last chunk of a given tag
+     *
+     * @param name
+     * @return
+     */
     public Optional<Mesures>  getTagStats(String name) {
         try {
             long startTime = System.currentTimeMillis();
