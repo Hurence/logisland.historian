@@ -31,6 +31,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -169,6 +170,52 @@ public class MeasuresApiService {
 
 
     /**
+     * Retrieve the stats (last,min,max,avg) values for the last chunk of a given tag
+     *
+     * @param name
+     * @return
+     */
+    public Optional<Measures>  getTagStats(String name) {
+        try {
+            long startTime = System.currentTimeMillis();
+            SolrQuery q = new SolrQuery("name:" + name);
+            q.setRows(1);
+            q.addSort("end", SolrQuery.ORDER.desc);
+
+
+            SolrDocumentList docs = solrClient.query(q).getResults();
+            long start = (long) docs.get(0).get("start");
+            long end = (long) docs.get(0).get("end");
+            long numChunks = docs.getNumFound();
+
+            SolrQuery query = new SolrQuery("name:" + name + " AND start:" + start + " AND end:" + end);
+            query.setParam("cf", "metric{last;avg;count;min;max;trend}");
+
+
+
+
+
+            List<Measures> chunks = chronix.stream(solrClient, query)
+                    .map((MetricTimeSeries mts) -> convertToMeasures(mts, true))
+                    .collect(Collectors.toList());
+
+
+            if (chunks.isEmpty())
+                return Optional.empty();
+            else
+                return Optional.of(
+                        chunks.get(0)
+                                .queryDuration(System.currentTimeMillis() - startTime)
+                                .numChunks(numChunks)
+                );
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return Optional.empty();
+        }
+    }
+
+
+    /**
      * upload and parses a CSV file
      *
      * @param content
@@ -210,6 +257,8 @@ public class MeasuresApiService {
             logger.info("Import done (Took: {} sec). Imported {} time series with {} points", (end - start) / 1000, result.getFirst(), result.getSecond());
 
 
+            // TODO update tags list in solr/historian collection if needed
+
             bl.importDuration((int) (end - start))
                     .numMetricsImported(result.getFirst())
                     .numPointsImported(Long.valueOf(result.getSecond()));
@@ -240,7 +289,7 @@ public class MeasuresApiService {
             long startGeneration = System.currentTimeMillis();
 
             List<String> generatedFiles = simulator.generate(contentStr);
-            bl.setGenerationDuration((int) (System.currentTimeMillis()- startGeneration));
+            bl.setGenerationDuration((int) (System.currentTimeMillis() - startGeneration));
             generatedFiles.forEach(file -> {
                 String[] attributes = (attributeFields != null) ? attributeFields.split(",") : new String[]{"source"};
 

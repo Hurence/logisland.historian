@@ -45,7 +45,7 @@ public class AdminApiService {
 
 
     // inject the template as ListOperations
-    private ListOperations<String, Object> listOps;
+   // private ListOperations<String, Object> listOps;
 
 
     private List<String> domains = Arrays.asList("hurence", "pear", "gizmo");
@@ -57,13 +57,13 @@ public class AdminApiService {
 
         List<Tag> tags = new ArrayList<>();
 
-        long tagsCount = listOps.size(TAGS_LIST);
+        long tagsCount = 10; /*listOps.size(TAGS_LIST);
         if (doFlush) {
             while (tagsCount > 0) {
                 listOps.leftPop(TAGS_LIST);
                 tagsCount--;
             }
-        }
+        }*/
 
         Random random = new Random();
         tagsCount = random.nextInt(20);
@@ -83,7 +83,7 @@ public class AdminApiService {
             tags.add(t);
             solrTagRepository.save(t);
 
-            listOps.leftPush(TAGS_LIST, t);
+           // listOps.leftPush(TAGS_LIST, t);
             tagsCount--;
         }
 

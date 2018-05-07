@@ -418,7 +418,7 @@ paths:
        tags:
          - tag
        summary: get tag measures stats
-       description: get the corresponding Tag measures between start and end time
+       description: get the corresponding Tag mesures for last chunk
        operationId: getTagStats
        produces:
          - application/json
@@ -427,24 +427,6 @@ paths:
            in: path
            description: id of the tag
            required: true
-           type: string
-         - name: start
-           in: query
-           description: |
-            date de début (borne inf) peut-être exprimée sous les formats suivants :
-              timestamp : 4578965
-              date-time : 2015-11-25T12:06:57.330Z
-              relatif   : NOW-30DAYS
-           required: false
-           type: string
-         - name: end
-           in: query
-           description: |
-             date de fin (borne sup) peut-être exprimée sous les formats suivants :
-               timestamp : 4578965
-               date-time : 2015-11-25T12:06:57.330Z
-               relatif   : NOW-30DAYS
-           required: false
            type: string
        responses:
          '200':
@@ -954,6 +936,9 @@ definitions:
       quality:
         type: number
         format : double
+      num_chunks:
+        type: integer
+        format: int64
       num_points:
         type: integer
         format: int32
