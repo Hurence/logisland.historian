@@ -219,6 +219,149 @@ To retrieve min, max, last values :
             }
         ]
     }
+    
+    
+## POST data generator
+
+
+Based on [TSimulus](https://rts-gen.readthedocs.io/en/latest/index.html) we can generate and inject realistic timeseries values 
+
+    curl -X POST \
+      http://localhost:8701/api/v1/tags/mesures/generator \
+      -H 'Cache-Control: no-cache' \
+      -H 'Content-Type: multipart/form-data' \
+      -H 'Postman-Token: a593bb88-f5ea-4b01-850f-c3ff744db8e0' \
+      -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+      -F file=@demo5.json
+
+The file `demo5.json` contains the following generator timeseries
+
+    {
+      "generators": [
+        {
+          "name": "monthly-basis",
+          "type": "monthly",
+          "points": {
+            "january": 3.3,
+            "february": 3.7,
+            "march": 6.8,
+            "april": 9.8,
+            "may": 13.6,
+            "june": 16.2,
+            "july": 18.4,
+            "august": 18,
+            "september": 14.9,
+            "october": 11.1,
+            "november": 6.8,
+            "december": 3.9
+          }
+        },
+        {
+          "name": "daily-variation",
+          "type": "daily",
+          "points": {
+            "00:00:00": -3,
+            "02:00:00": -3.9,
+            "04:00:00": -5,
+            "06:00:00": -4.6,
+            "08:00:00": -5.7,
+            "10:00:00": -2.2,
+            "12:00:00": 1,
+            "14:00:00": 3,
+            "16:00:00": 2.3,
+            "18:00:00": 0.9,
+            "20:00:00": -2.3,
+            "22:00:00": -2.7
+          }
+        },
+        {
+          "name": "noise",
+          "type": "arma",
+          "origin": "2017-01-01 00:00:00",
+          "model": {
+            "std": 0.2,
+            "c": 0,
+            "seed": 1234
+          },
+          "timestep": 300000,
+          "origin": "2017-01-01 12:34:56.789"
+        },
+        {
+          "name": "result",
+          "type": "aggregate",
+          "aggregator": "sum",
+          "generators": [
+            "monthly-basis",
+            "daily-variation",
+            "noise"
+          ]
+        }
+      ],
+      "exported": [
+        {
+          "name": "temperator",
+          "generator": "result",
+          "frequency": 60000
+        }
+      ],
+      "from": "2017-01-01 00:00:00",
+      "to": "2017-12-31 23:59:59.999"
+    }
+
+Will generate 525600 mesures points in about 6" and will import thme into chronix in about 2"
+
+    {
+        "start_time": null,
+        "generation_duration": 6198,
+        "import_duration": 1530,
+        "num_metrics_imported": 1,
+        "num_points_imported": 525600,
+        "metrics": [
+            "com.hurence.logisland.chronix.importer.csv.Attributes@2488e582[attributes={demo5.json},metric=temperator]=Pair{first=2017-01-01T00:00:00Z, second=2017-12-31T23:59:00Z}"
+        ]
+    }
+    
+To retrieve some stats :
+
+    curl -X GET http://localhost:8701/api/v1/tags/temperator/stats 
+      
+as follows :
+
+
+    {
+        "name": "temperator",
+        "start": 1483228800000,
+        "end": 1514764740000,
+        "query_duration": 430,
+        "values": null,
+        "functions": [
+            {
+                "name": "first",
+                "value": -0.02169185492800746
+            },
+            {
+                "name": "avg",
+                "value": 8.727500971436408
+            },
+            {
+                "name": "min",
+                "value": -3.2231646429747487
+            },
+            {
+                "name": "max",
+                "value": 22.27103032456763
+            },
+            {
+                "name": "count",
+                "value": 1051200
+            },
+            {
+                "name": "last",
+                "value": 0.3245103016176838
+            }
+        ]
+    }
+      
 
 ## REST API generation with Swagger
 
