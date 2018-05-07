@@ -167,7 +167,7 @@ public class MeasuresApiService {
      * @param name
      * @return
      */
-    public Optional<Mesures>  getTagStats(String name) {
+    public Optional<Measures>  getTagStats(String name) {
         try {
             long startTime = System.currentTimeMillis();
             SolrQuery q = new SolrQuery("name:" + name);
@@ -187,8 +187,8 @@ public class MeasuresApiService {
 
 
 
-            List<Mesures> chunks = chronix.stream(solrClient, query)
-                    .map((MetricTimeSeries mts) -> convertToMesures(mts, true))
+            List<Measures> chunks = chronix.stream(solrClient, query)
+                    .map((MetricTimeSeries mts) -> convertToMeasures(mts, true))
                     .collect(Collectors.toList());
 
 
