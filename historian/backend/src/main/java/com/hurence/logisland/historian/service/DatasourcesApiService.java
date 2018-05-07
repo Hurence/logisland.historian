@@ -20,7 +20,9 @@ import com.hurence.logisland.historian.repository.SolrDatasourceRepository;
 import com.hurence.logisland.historian.rest.v1.model.Datasource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.solr.core.SolrOperations;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +41,8 @@ public class DatasourcesApiService {
     @Resource
     private SolrDatasourceRepository repository;
 
-    @Resource(name = "solrTemplate")
-    private SolrTemplate solrTemplate;
+    @Autowired
+    private SolrOperations solrTemplate;
 
 
 
