@@ -20,7 +20,9 @@ import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.solr.core.SolrOperations;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Criteria;
 import org.springframework.data.solr.core.query.Join;
@@ -42,13 +44,10 @@ public class TagsApiService {
     @Resource
     private SolrTagRepository repository;
 
-    @Resource(name = "solrTemplate")
-    private SolrTemplate solrTemplate;
+    @Autowired
+    private SolrOperations solrTemplate;
 
 
-    // inject the template as ListOperations
-    @Resource(name = "redisTemplate")
-    private ListOperations<String, Object> listOps;
 
 
 

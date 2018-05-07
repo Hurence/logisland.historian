@@ -63,11 +63,15 @@ connections:
     timeout-millis: 2000
     host: 192.168.56.101
 
-
 solr:
   core: chronix
   host: chronix
   port: 8983
+
+management:
+  health:
+    solr:
+      enabled: false
 
 
 
