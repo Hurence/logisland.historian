@@ -99,8 +99,10 @@ public class TagsApiController implements TagsApi {
 
 
     @Override
-    public ResponseEntity<Mesures> getTagStats(@ApiParam(value = "id of the tag", required = true) @PathVariable("itemId") String itemId, @ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start, @ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end) {
-        Optional<Mesures> mesures = mesuresApiService.getTagMesures(itemId, start, end, "min;max;avg;count;first;last", true);
+    public ResponseEntity<Mesures> getTagStats(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId) {
+
+
+        Optional<Mesures> mesures = mesuresApiService.getTagStats(itemId);
         if (mesures.isPresent()) {
             return new ResponseEntity<Mesures>(mesures.get(), HttpStatus.OK);
 

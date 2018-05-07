@@ -22,7 +22,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * holds a double array of values for a Tag between start &amp; stop
 */
     @ApiModel(description = "holds a double array of values for a Tag between start & stop")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-04T11:29:18.230+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-07T14:56:12.459+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Mesures  implements Serializable {
@@ -45,6 +45,10 @@ public class Mesures  implements Serializable {
         @JsonProperty("quality")
         @Indexed(name = "quality")
         private Double quality = null;
+
+        @JsonProperty("num_chunks")
+        @Indexed(name = "num_chunks")
+        private Long numChunks = null;
 
         @JsonProperty("num_points")
         @Indexed(name = "num_points")
@@ -165,6 +169,27 @@ public class Mesures  implements Serializable {
 
         public void setQuality(Double quality) {
         this.quality = quality;
+        }
+
+        public Mesures numChunks(Long numChunks) {
+        this.numChunks = numChunks;
+        return this;
+        }
+
+    /**
+        * Get numChunks
+    * @return numChunks
+    **/
+        @JsonProperty("num_chunks")
+    @ApiModelProperty(value = "")
+    
+
+  public Long getNumChunks() {
+    return numChunks;
+    }
+
+        public void setNumChunks(Long numChunks) {
+        this.numChunks = numChunks;
         }
 
         public Mesures numPoints(Integer numPoints) {
@@ -291,6 +316,7 @@ public class Mesures  implements Serializable {
         Objects.equals(this.end, mesures.end) &&
         Objects.equals(this.queryDuration, mesures.queryDuration) &&
         Objects.equals(this.quality, mesures.quality) &&
+        Objects.equals(this.numChunks, mesures.numChunks) &&
         Objects.equals(this.numPoints, mesures.numPoints) &&
         Objects.equals(this.timestamps, mesures.timestamps) &&
         Objects.equals(this.values, mesures.values) &&
@@ -299,7 +325,7 @@ public class Mesures  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(name, start, end, queryDuration, quality, numPoints, timestamps, values, functions);
+    return Objects.hash(name, start, end, queryDuration, quality, numChunks, numPoints, timestamps, values, functions);
     }
 
 
@@ -313,6 +339,7 @@ sb.append("    start: ").append(toIndentedString(start)).append("\n");
 sb.append("    end: ").append(toIndentedString(end)).append("\n");
 sb.append("    queryDuration: ").append(toIndentedString(queryDuration)).append("\n");
 sb.append("    quality: ").append(toIndentedString(quality)).append("\n");
+sb.append("    numChunks: ").append(toIndentedString(numChunks)).append("\n");
 sb.append("    numPoints: ").append(toIndentedString(numPoints)).append("\n");
 sb.append("    timestamps: ").append(toIndentedString(timestamps)).append("\n");
 sb.append("    values: ").append(toIndentedString(values)).append("\n");
