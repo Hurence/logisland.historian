@@ -24,7 +24,6 @@ import com.hurence.logisland.historian.rest.v1.model.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,12 +44,7 @@ public class AdminApiService {
     private SolrDatasourceRepository solrDatasourceRepository;
 
 
-    @Resource(name = "solrTemplate")
-    private SolrTemplate solrTemplate;
-
-
     // inject the template as ListOperations
-    @Resource(name = "redisTemplate")
     private ListOperations<String, Object> listOps;
 
 
@@ -94,12 +88,12 @@ public class AdminApiService {
         }
 
 
-     //   Tag tag = solrTemplate.getById("/hurence/opc-server1/sensors.temperature/TEMP008", Tag.class);
+        //   Tag tag = solrTemplate.getById("/hurence/opc-server1/sensors.temperature/TEMP008", Tag.class);
 
 
-     //   List<Tag> tags = solrTagRepository.findByDomain("hurence");//, new PageRequest(1, 20) );
+        //   List<Tag> tags = solrTagRepository.findByDomain("hurence");//, new PageRequest(1, 20) );
 
-     //   logger.info(tag.toString());
+        //   logger.info(tag.toString());
 
         /*
 
@@ -130,7 +124,7 @@ public class AdminApiService {
                     .clsid(UUID.randomUUID().toString())
                     .host(server)
                     .user("tom")
-            .password("xxx"));
+                    .password("xxx"));
 
             ds.add(t);
             solrDatasourceRepository.save(t);
@@ -138,7 +132,6 @@ public class AdminApiService {
 
             count--;
         }
-
 
 
         return ds;

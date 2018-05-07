@@ -19,13 +19,17 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Alert
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-19T12:25:30.271+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-04T11:29:18.230+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Alert  implements Serializable {
         @JsonProperty("record_type")
         @Indexed(name = "record_type")
         private String recordType = "alert";
+
+        @JsonProperty("timestamp")
+        @Indexed(name = "timestamp")
+        private Long timestamp = null;
 
         @JsonProperty("message")
         @Indexed(name = "message")
@@ -58,6 +62,27 @@ public class Alert  implements Serializable {
 
         public void setRecordType(String recordType) {
         this.recordType = recordType;
+        }
+
+        public Alert timestamp(Long timestamp) {
+        this.timestamp = timestamp;
+        return this;
+        }
+
+    /**
+        * Get timestamp
+    * @return timestamp
+    **/
+        @JsonProperty("timestamp")
+    @ApiModelProperty(value = "")
+    
+
+  public Long getTimestamp() {
+    return timestamp;
+    }
+
+        public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
         }
 
         public Alert message(String message) {
@@ -135,6 +160,7 @@ public class Alert  implements Serializable {
     }
         Alert alert = (Alert) o;
         return Objects.equals(this.recordType, alert.recordType) &&
+        Objects.equals(this.timestamp, alert.timestamp) &&
         Objects.equals(this.message, alert.message) &&
         Objects.equals(this.severity, alert.severity) &&
         Objects.equals(this.tagId, alert.tagId);
@@ -142,7 +168,7 @@ public class Alert  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, message, severity, tagId);
+    return Objects.hash(recordType, timestamp, message, severity, tagId);
     }
 
 
@@ -152,6 +178,7 @@ StringBuilder sb = new StringBuilder();
 sb.append("class Alert {\n");
 
 sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
+sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
 sb.append("    message: ").append(toIndentedString(message)).append("\n");
 sb.append("    severity: ").append(toIndentedString(severity)).append("\n");
 sb.append("    tagId: ").append(toIndentedString(tagId)).append("\n");

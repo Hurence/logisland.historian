@@ -1,6 +1,8 @@
 server:
   port: ${appPort:8701}
-  servlet-path: /
+  servlet:
+    path: /
+
 
 spring:
   application:
@@ -9,19 +11,21 @@ spring:
     template-loader-path: classpath:/templates
     suffix: .ftl
 
-# http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
-# http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-use-actuator-with-jersey
-endpoints:
-  enabled: true
-  info:
-    enabled: true
-  health:
-    enabled: true
-    sensitive: false
-  metrics:
-    enabled: true
-  actuator:
-    sensitive: false
+  data:
+    solr:
+      host: http://chronix:8983/solr
+  redis:
+    host: redis
+    port: 6379
+  cache:
+    type: redis
+  servlet:
+    multipart:
+      max-file-size: 50Mb
+      max-request-size: 50Mb
+
+
+
 
 # app name and build version updated during build process from Maven properties.
 info:
@@ -41,12 +45,9 @@ keycloak:
         - user
       securityCollections:
         - patterns:
-          - /api/v1/tags/*
+          - /api/v1/tags/secured/*
 
 
-redis:
-  host: redis
-  port: 6379
 
 connections:
   opc-da:
@@ -58,11 +59,17 @@ connections:
     timeout-millis: 2000
     host: 192.168.56.101
 
-
 solr:
   core: chronix
   host: chronix
   port: 8983
+management:
+
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics
+
 
 
 
