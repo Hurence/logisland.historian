@@ -151,6 +151,66 @@
 
 
         <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.17</version>
+        </dependency>
+
+
+        <!-- SolR Chronix stuff	-->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>6.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.chronix</groupId>
+            <artifactId>chronix-api</artifactId>
+            <version>0.2-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.chronix</groupId>
+            <artifactId>chronix-server-client</artifactId>
+            <version>0.5-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.chronix</groupId>
+            <artifactId>chronix-timeseries</artifactId>
+            <version>0.3.2-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.chronix</groupId>
+            <artifactId>chronix-timeseries-converter</artifactId>
+            <version>0.3.2-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>de.qaware.chronix</groupId>
+            <artifactId>chronix-timeseries-common</artifactId>
+            <version>0.3.2-beta</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>be.cetic</groupId>
+            <artifactId>rts-gen_2.11</artifactId>
+            <version>0.1.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${scala.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
