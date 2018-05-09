@@ -1,9 +1,12 @@
 export class Datasource {
-    id: string;
-    name: string;
-    description: string;
-    host: string;
-    domain: string;
-    user: string;
-    password: string;
+
+    constructor(
+        public id: string,
+        public name: string,
+        public description: string,
+        public host: string,
+        public domain: string,
+        public user: string,
+        public password: string,
+    ) {  }
 }

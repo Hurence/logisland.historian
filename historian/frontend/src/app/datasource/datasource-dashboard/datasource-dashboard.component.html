@@ -1,13 +1,15 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-      <div class="col-sm" routerLinkActive="active" routerLink="./datasources">
-        DATA SOURCES Forms ou detail
+      <div class="col-sm" routerLinkActive="active" routerLink="./datasources">    
+        <app-datasource-form></app-datasource-form>
       </div>
       <div class="col-sm" routerLinkActive="active" routerLink="./tags">
-        DATA Sources liste (selection/deselection)
+        DATA Sources liste (selection/deselection)<br><br>
+
+        <app-datasources-list></app-datasources-list>
       </div>       
       <div class="col-sm" routerLinkActive="active" routerLink="./configuration">
-        <p>aide, explication, consignes</p>
+        <p>aide, explication, consignes</p><br><br>
       </div>
   </div>
 </div>

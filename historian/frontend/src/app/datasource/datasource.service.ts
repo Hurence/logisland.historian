@@ -14,4 +14,8 @@ export class DatasourceService {
   getDatasources(): Observable<Datasource[]> {
     return this.http.get<Datasource[]>(this.datasourcesUrl);
   }
+
+  getDatasourceTypes(): String[] {
+    return ['OPC-DA', 'FAKE'];
+  }
 }

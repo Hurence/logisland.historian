@@ -1,0 +1,41 @@
+<div class="container">
+    <h1>Datasource Form</h1>
+    <form>
+      <div class="form-group">
+        <label for="type">TYPE</label>
+        <select class="form-control" id="type" required>
+          <option *ngFor="let type of datasourceTypes" [value]="type">{{type}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="name">NAME</label>
+        <input type="text" class="form-control" id="name" required>
+      </div>
+    
+      <div class="form-group">
+        <label for="hostAndPort">HOST &amp; PORT</label>
+        <input type="text" class="form-control" id="hostAndPort">
+      </div>
+ 
+      <div class="form-group">
+        <label for="clsid">CLSID</label>
+        <input type="text" class="form-control" id="clsid">
+      </div>
+
+      <div class="form-group">
+        <label for="progId">ProgID</label>
+        <input type="text" class="form-control" id="progId">
+      </div>
+      
+      
+      AUTHENTIFICATION
+        NONE
+        CREDENTIALS
+      USER
+      PASSWORD
+
+      <button type="submit" class="btn btn-success">Submit</button>
+ 
+    </form>
+</div>
