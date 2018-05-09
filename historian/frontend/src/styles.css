@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-    font-size: 1em;
+    color:#2699FB;
   }
 .logo {
     background-color: #BBDFFC;
@@ -15,4 +15,7 @@ body {
 [class*="col-"] {
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+label {
+font-size: 0.5rem;
 }
