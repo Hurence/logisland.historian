@@ -10,8 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { KeycloakService, KeycloakAngularModule } from 'keycloak-angular';
 import { initializer } from './app-init';
 
-import { DatasourcesListComponent } from './sources-and-tags/datasources-list/datasources-list.component';
-import { DatasourceService } from './sources-and-tags/datasource.service';
+import { DatasourceService } from './datasource/datasource.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TagsListComponent } from './sources-and-tags/tags-list/tags-list.component';
 import { TagService } from './sources-and-tags/tag.service';
