@@ -9,10 +9,18 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes,  { useHash: true }) ],
-  exports: [ RouterModule ]
+  imports: [
+    RouterModule.forRoot(
+      routes,
+      {
+        useHash: true,
+        enableTracing: true // <-- debugging purposes only
+      }
+    )
+  ],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
 
 /*
 Copyright 2017-2018 Google Inc. All Rights Reserved.
