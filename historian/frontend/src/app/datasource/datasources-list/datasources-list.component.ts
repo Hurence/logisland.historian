@@ -9,10 +9,7 @@ import { DatasourceService } from '../datasource.service';
 })
 export class DatasourcesListComponent implements OnInit {
 
-  datasources: Datasource[] = [
-    { id: '11', name: 'fake 1', domain: 'a', description: 'd', user: 'd', password: 'r', host: 'de' },
-    { id: '12', name: 'fake 2', domain: 'a', description: 'd', user: 'd', password: 'r', host: 'de' }
-  ];
+  datasources: Datasource[];
 
   constructor(private datasourceService: DatasourceService) { }
 

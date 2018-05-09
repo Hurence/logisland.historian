@@ -1,21 +1,31 @@
 <div class="container">
-    <h1>Datasource Form</h1>
-    <form>
+    <h1>Data source</h1>
+    
+    <form (ngSubmit)="onSubmit()" #dsForm="ngForm">
+      
       <div class="form-group">
         <label for="type">TYPE</label>
-        <select class="form-control" id="type" required>
+        <select class="form-control" [(ngModel)]="datasource.type" id="type" name="type" #typ="ngModel" required>
           <option *ngFor="let type of datasourceTypes" [value]="type">{{type}}</option>
         </select>
+        <div [hidden]="typ.valid || typ.pristine"
+            class="alert alert-danger">
+            Type is required
+        </div>
       </div>
 
       <div class="form-group">
         <label for="name">NAME</label>
-        <input type="text" class="form-control" id="name" required>
+        <input type="text" class="form-control" [(ngModel)]="datasource.name" id="name" name="name" #name="ngModel" required>
+        <div [hidden]="name.valid || name.pristine"
+            class="alert alert-danger">
+            Name is required
+        </div>
       </div>
     
       <div class="form-group">
         <label for="hostAndPort">HOST &amp; PORT</label>
-        <input type="text" class="form-control" id="hostAndPort">
+        <input type="text" class="form-control" [(ngModel)]="datasource.host" id="hostAndPort" name="hostAndPort">
       </div>
  
       <div class="form-group">
@@ -35,7 +45,7 @@
       USER
       PASSWORD
 
-      <button type="submit" class="btn btn-success">Submit</button>
+      <button type="submit" class="btn btn-success" [disabled]="!dsForm.form.valid">Add Data source</button>
  
     </form>
 </div>
