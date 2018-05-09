@@ -1,6 +1,21 @@
-<h2>My Datasources</h2>
-<ul class="datasources">
-  <li *ngFor="let datasource of datasources">
-    <span class="badge">{{datasource.name}}</span> host: {{datasource.host}} domain: {{datasource.domain}}
-  </li>
-</ul>
+<div class="container-fluid">
+  <div class="row">
+          <div class="col-8">
+
+            <div class="row">
+              <div class="col-6">
+                <ul class="datasources">
+                  <li *ngFor="let datasource of datasources">
+                    <span class="badge">{{datasource.name}}</span> host: {{datasource.host}} domain: {{datasource.domain}}
+                  </li>
+                </ul>
+              </div>
+              <div class="col-6">.col-6 DATA SOURCE LIST</div>
+              <div class="col-12">.col-12 NAVIGATION</div>
+            </div>
+          </div>
+          <div class="col-4">.col-4 HELP</div>
+        </div>
+
+
+</div>
