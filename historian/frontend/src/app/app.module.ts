@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 // components
 import { AppComponent } from './app.component';
 // router
-import { AppRoutingModule } from './app-routing/app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 // keycloak-angular
 import { KeycloakService, KeycloakAngularModule } from 'keycloak-angular';
 import { initializer } from './app-init';
@@ -20,20 +20,20 @@ import { SourcesAndTagsComponent } from './sources-and-tags/sources-and-tags.com
 import { TodoComponent } from './todo/todo.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
+import { SourcesAndTagsModule }     from './sources-and-tags/sources-and-tags.module';
+
 @NgModule({
   declarations: [
     AppComponent,
-    DatasourcesListComponent,
-    TagsListComponent,
-    SourcesAndTagsComponent,
     TodoComponent,
     PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     KeycloakAngularModule,
-    HttpClientModule
+    HttpClientModule,
+    SourcesAndTagsModule,
+    AppRoutingModule,
   ],
   providers: [
     {
