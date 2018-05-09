@@ -5,19 +5,20 @@ import { RouterModule } from '@angular/router';
 // components
 import { AppComponent } from './app.component';
 // router
-import { AppRoutingModule } from './app-routing-module/app-routing-module.module';
+import { AppRoutingModule } from './app-routing/app-routing.module';
 // keycloak-angular
 import { KeycloakService, KeycloakAngularModule } from 'keycloak-angular';
 import { initializer } from './app-init';
 
-import { DatasourcesListComponent } from './datasources-list/datasources-list.component';
-import { DatasourceService } from './datasource.service';
+import { DatasourcesListComponent } from './sources-and-tags/datasources-list/datasources-list.component';
+import { DatasourceService } from './sources-and-tags/datasource.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TagsListComponent } from './tags-list/tags-list.component';
-import { TagService } from './tag.service';
+import { TagsListComponent } from './sources-and-tags/tags-list/tags-list.component';
+import { TagService } from './sources-and-tags/tag.service';
 import { CustomHttpInterceptor } from './security-http-interceptor';
 import { SourcesAndTagsComponent } from './sources-and-tags/sources-and-tags.component';
 import { TodoComponent } from './todo/todo.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { TodoComponent } from './todo/todo.component';
     TagsListComponent,
     SourcesAndTagsComponent,
     TodoComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+#main-nav .active {
+    background-color: #FFFFFF;
+}
+
+#sources-and-tags-nav .active {
+    background-color: #2599FA;
+}
+
+.logo {
+    background-color: #BBDFFC;
+}
+
+/* div {
+    margin: 0px;
+} */
+
+header .container {
+    margin: 0px;
+    background-color: #BBDFFC;
+}
+
+header .container-fluid {
+    margin: 0px;
+    background-color: #BBDFFC;
+}
