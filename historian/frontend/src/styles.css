@@ -20,7 +20,14 @@ label {
 font-size: 0.5rem;
 margin-bottom: 0.1rem;
 }
-
+.navbar {
+    padding: 0rem 1rem;
+    line-height: 2.5;
+}
+.navbar-dark .navbar-nav .show > .nav-link, .navbar-dark .navbar-nav .active > .nav-link, .navbar-dark .navbar-nav .nav-link.show, .navbar-dark .navbar-nav .nav-link.active {
+    background-color: #fff;
+    color: #2699FB;
+}
 .navbar-brand img{
 width: 100px;
 }
