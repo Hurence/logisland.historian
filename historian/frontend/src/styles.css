@@ -18,6 +18,17 @@ body {
 }
 label {
 font-size: 0.5rem;
+margin-bottom: 0.1rem;
+}
+
+.navbar-brand img{
+width: 100px;
+}
+#main-nav .nav-link{
+cursor: pointer;
+}
+.navbar .nav-item.avatar .dropdown-toggle img {
+    height: 35px;
 }
 
 .ng-valid[required], .ng-valid.required  {
