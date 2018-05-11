@@ -3,7 +3,9 @@
 
 <ul class="datasources">
   <li *ngFor="let datasource of datasources">
-    <button type="button" class="btn btn-default" (click)="onSelect(datasource)">{{datasource.name}} ({{datasource.domain}})</button>    
+    <button type="button" class="btn btn-default" (click)="onSelect(datasource)">{{datasource.name}} ({{datasource.domain}}) 
+      {{datasource.type}}
+    </button>    
   </li>
 </ul>
  
