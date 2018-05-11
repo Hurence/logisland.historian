@@ -10,6 +10,27 @@
             <button type="button" class="btn btn-default" (click)="dsForm.resetForm()">Add Data source</button>
 
             <app-datasources-list (onSelectDatasource)="onSelectDatasource($event)"></app-datasources-list>
+            <div class="row">
+            <button type="button" class="btn btn-light text-uppercase">
+              DATA.SOURCE.NAME.1 <span class="badge badge-light">opc-da</span>
+            </button>
+            <button type="button" class="btn btn-outline-primary text-uppercase">ADD TO DATA SET</button>
+            <button type="button" class="btn btn-outline-danger text-uppercase">remove data source</button>
+          </div>
+            <div class="row">
+            <button type="button" class="btn btn-light text-uppercase">
+              DATA.SOURCE.NAME.2 <span class="badge badge-light">opc-da</span>
+            </button>
+            <button type="button" class="btn btn-outline-primary text-uppercase">ADD TO DATA SET</button>
+            <button type="button" class="btn btn-outline-danger text-uppercase">remove data source</button>
+          </div>
+            <div class="row">
+            <button type="button" class="btn btn-primary text-uppercase">
+              DATA.SOURCE.NAME.3 <span class="badge badge-light">opc-da</span>
+            </button>
+            <button type="button" class="btn btn-danger text-uppercase">REMOVE FROM DATA SET</button>
+            <button type="button" class="btn btn-outline-danger text-uppercase">remove data source</button>
+          </div>
         </div>
         <div class="col-12 border-bottom">.col-12 NAVIGATION</div>
       </div>
