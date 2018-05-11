@@ -4,11 +4,12 @@
 
       <div class="row mt-0">
         <div class="col-6 border-right border-bottom border-top">
-            <app-datasource-form #dsForm></app-datasource-form>
+            <app-datasource-form #dsForm [datasource]="selectedDatasource"></app-datasource-form>
         </div>
         <div class="col-6 border-bottom border-top">
             <button type="button" class="btn btn-default" (click)="dsForm.resetForm()">Add Data source</button>
-            <app-datasources-list></app-datasources-list>
+
+            <app-datasources-list (onSelectDatasource)="onSelectDatasource($event)"></app-datasources-list>
         </div>
         <div class="col-12 border-bottom">.col-12 NAVIGATION</div>
       </div>

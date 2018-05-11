@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
 
@@ -10,6 +10,8 @@ import { DatasourceService } from '../datasource.service';
 export class DatasourcesListComponent implements OnInit {
 
   datasources: Datasource[];
+  selectedDatasource: Datasource;
+  @Output() onSelectDatasource = new EventEmitter<Datasource>();
 
   constructor(private datasourceService: DatasourceService) { }
 
@@ -20,6 +22,11 @@ export class DatasourcesListComponent implements OnInit {
   getDatasources(): void {
     this.datasourceService.getDatasources()
       .subscribe(datasources => this.datasources = datasources);
+  }
+
+  onSelect(datasource: Datasource) {
+    this.onSelectDatasource.emit(datasource);
+    this.selectedDatasource = datasource;
   }
 
 }

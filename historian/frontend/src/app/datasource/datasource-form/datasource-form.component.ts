@@ -10,29 +10,50 @@ import { NgForm } from '@angular/forms';
 })
 export class DatasourceFormComponent implements OnInit {
 
-  datasourceTypes : String[];
+  datasourceTypes : string[];
+  isCreation: boolean;
+  credential: string;
   @ViewChild(NgForm) dsForm;
+  @Input() datasource: Datasource;
 
-  @Input()
-  datasource: Datasource;
-
-  constructor(private datasourceService: DatasourceService) { }
+  constructor(private datasourceService: DatasourceService) {}
 
   ngOnInit() {
-    this.datasourceTypes = this.datasourceService.getDatasourceTypes();
-    // TODO: Remove this when we're done
-    this.datasource = { id: '11', type: 'OPC-DA', name: 'fake 1', domain: 'a', description: 'd', user: 'd', password: 'r', host: 'de' }
+    this.datasourceTypes = this.datasourceService.getDatasourceTypes();  
+    this.datasource = new Datasource();
+    this.isCreation = true;
+    this.credential = 'none';
   }
 
-  // ngAfterViewInit() {
-  //   this.dsForm = this.dsForm
-  // }
+  ngOnChanges() {  
+    this.isCreation = false;
+    if (this.datasource && (this.datasource.password || this.datasource.user)) {
+      this.credential = 'normal'
+    } else {
+      this.credential = 'none'
+    }
+  }
 
+ 
   onSubmit() { 
-    console.log('submited datasource: ' + this.datasource);  
+    if (this.isCreation) {
+      this.datasourceService.saveDatasource(this.datasource)
+        .subscribe(datasource => console.log('saved successfully to ' + JSON.stringify(datasource)));
+    } else {
+      this.datasourceService.updateDatasource(this.datasource)
+        .subscribe(datasource => console.log('updated successfully to ' + JSON.stringify(datasource)));
+    }
   }
+
 
   resetForm() {
-    this.dsForm.reset();
+    this.datasource = new Datasource();
+    this.isCreation = true;
+  }
+
+  resetCred() {
+    console.log('reset cred !!!');
+    this.datasource.user = null;
+    this.datasource.password = null;
   }
 }

@@ -1,6 +1,9 @@
+
+<h5 class="text-uppercase">DATA SOURCE LIST</h5>Select a DATA SOURCE to edit
+
 <ul class="datasources">
   <li *ngFor="let datasource of datasources">
-    <span class="badge">{{datasource.name}}</span> host: {{datasource.host}} domain: {{datasource.domain}}
+    <button type="button" class="btn btn-default" (click)="onSelect(datasource)">{{datasource.name}} ({{datasource.domain}})</button>    
   </li>
 </ul>
  

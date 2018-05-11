@@ -1,4 +1,5 @@
 <h5 class="text-uppercase">Data Source</h5>
+
 <form (ngSubmit)="onSubmit()" #dsForm="ngForm">
   <div class="form-group">
     <label for="type">TYPE</label>
@@ -10,6 +11,7 @@
         Type is required
     </div>
   </div>
+
 
   <div class="form-group">
     <label for="name">NAME</label>
@@ -27,20 +29,42 @@
 
   <div class="form-group">
     <label for="clsid">CLSID</label>
-    <input type="text" class="form-control" id="clsid">
+    <input type="text" class="form-control" [(ngModel)]="datasource.clsid" id="clsid" name="clsid">
   </div>
 
   <div class="form-group">
     <label for="progId">ProgID</label>
-    <input type="text" class="form-control" id="progId">
+    <input type="text" class="form-control"  [(ngModel)]="datasource.progId" id="progId" name="progId">
   </div>
 
-
   AUTHENTIFICATION
-    NONE
-    CREDENTIALS
-  USER
-  PASSWORD
+  <div>
+    <input type="radio" id="withoutCred" value="none" name="cred" [(ngModel)]="credential" (change)="resetCred()">
+    <label for="withoutCred">NONE</label>
+  </div>
+  <div>
+    <input type="radio" id="withCred" value="normal" name="cred" [(ngModel)]="credential">
+    <label for="withCred">CREDENTIALS</label>
+  </div>
+
+  <div *ngIf='credential !== "none"'>
+    <div class="form-group">
+      <label for="user">USER</label>
+      <input type="text" class="form-control" [(ngModel)]="datasource.user" id="user" name="user" #user="ngModel" required>
+    </div>
+    <div [hidden]="user.valid || user.pristine" class="alert alert-danger">
+      User is required
+    </div>
+
+    <div class="form-group">
+      <label for="pwd">PASSWORD</label>
+      <input type="text" class="form-control" [(ngModel)]="datasource.password" id="pwd" name="pwd" #pwd="ngModel" required>
+    </div>
+    <div [hidden]="pwd.valid || pwd.pristine" class="alert alert-danger">
+      Password is required
+    </div>
+  </div>
+
 
   <button type="submit" class="btn btn-success" [disabled]="!dsForm.form.valid">Add Data source</button>
 
