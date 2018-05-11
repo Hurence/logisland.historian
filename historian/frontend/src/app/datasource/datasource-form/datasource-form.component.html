@@ -74,4 +74,6 @@
 
   <button type="submit" class="btn btn-success" [disabled]="!dsForm.form.valid">Add Data source</button>
 
+  <div *ngIf="message">{{message}}</div>
+
 </form>

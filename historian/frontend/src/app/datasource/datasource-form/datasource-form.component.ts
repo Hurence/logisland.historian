@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
 import { NgForm } from '@angular/forms';
@@ -13,8 +13,10 @@ export class DatasourceFormComponent implements OnInit {
   datasourceTypes : string[];
   isCreation: boolean;
   credential: string;
+  message: string;
   @ViewChild(NgForm) dsForm;
   @Input() datasource: Datasource;
+  @Output() onSubmitted = new EventEmitter<Datasource>();
 
   constructor(private datasourceService: DatasourceService) {}
 
@@ -35,18 +37,37 @@ export class DatasourceFormComponent implements OnInit {
   }
 
  
-  onSubmit() { 
+  onSubmit() {
     if (this.isCreation) {
       this.datasourceService.saveDatasource(this.datasource)
-        .subscribe(datasource => console.log('saved successfully to ' + JSON.stringify(datasource)));
+        .subscribe(
+          datasource => {
+            console.log('saved successfully to ' + JSON.stringify(datasource));
+            this.onSubmitted.emit(datasource);
+            this.message = 'successfully added datasource';
+          },
+          error => {
+            console.error('could not save datasource' + JSON.stringify(error);
+            this.message = 'error while saving data source.';
+          }
+        );
     } else {
       this.datasourceService.updateDatasource(this.datasource)
-        .subscribe(datasource => console.log('updated successfully to ' + JSON.stringify(datasource)));
+        .subscribe(
+          datasource => {
+            console.log('updated successfully to ' + JSON.stringify(datasource))
+            this.onSubmitted.emit(datasource);
+            this.message = 'successfully updated datasource';
+          },
+          error => {
+            console.error('could not update '  + JSON.stringify(error));
+            this.message = 'error while updating data source.';
+          }
+        );
     }
   }
 
-
-  resetForm() {
+  resetForm() { 
     this.datasource = new Datasource();
     this.isCreation = true;
   }

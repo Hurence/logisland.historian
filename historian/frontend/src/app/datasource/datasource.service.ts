@@ -34,4 +34,8 @@ export class DatasourceService {
   updateDatasource(datasource: Datasource): Observable<Datasource> {
     return this.http.put<Datasource>(this.datasourcesUrl + '/' + datasource.id, datasource);
   }
+
+  deleteDatasource(datasource: Datasource): Observable<Datasource> {
+    return this.http.delete<Datasource>(this.datasourcesUrl + '/' + datasource.id);
+  }
 }
