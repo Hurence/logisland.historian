@@ -14,7 +14,7 @@ export class DatasourcesListComponent implements OnInit {
 
   datasources$: Observable<Datasource[]>;
   @Input() dataSet: Dataset;
-  @Output() onSelectDatasource = new EventEmitter<Datasource>();
+  @Output() selectDatasource = new EventEmitter<Datasource>();
 
   constructor(private datasourceService: DatasourceService) { }
 
@@ -32,11 +32,11 @@ export class DatasourcesListComponent implements OnInit {
         console.log('deleted datasource with id :' + deletedDs.id);
         this.getDatasources();
       });
-    //TODO handle error and just remove from array directly ?
+    // TODO handle error and just remove from array directly ?
   }
 
   onSelect(datasource: Datasource) {
-    this.onSelectDatasource.emit(datasource);
+    this.selectDatasource.emit(datasource);
   }
 
   onAddToDataset(datasource: Datasource) {
@@ -53,6 +53,4 @@ export class DatasourcesListComponent implements OnInit {
     }
     return false;
   }
-
-  
 }

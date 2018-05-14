@@ -1,9 +1,9 @@
 export class Datasource {
 
-    private record_type: string = 'datasource';
-    private type: string = 'OPC-DA';
+    private record_type = 'datasource';
+    private type = 'OPC-DA';
 
-    constructor(       
+    constructor(
         public id?: string,
         // public type?: string,
         public name?: string,
@@ -13,7 +13,7 @@ export class Datasource {
         public user?: string,
         public password?: string,
         public clsid?: string,
-    ) { 
+    ) {
         this.type = 'OPC-DA';
      }
 

@@ -1,13 +1,9 @@
-import { Injectable }       from '@angular/core';
-import {
-  CanActivate, Router,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  CanActivateChild
-}                           from '@angular/router';
-import { DatasetService } from '../dataset/dataset.service.';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+
+import { DatasetService } from '../dataset/dataset.service.';
 
 @Injectable()
 export class TagsGuard implements CanActivate {

@@ -24,8 +24,8 @@ import { TodoComponent } from './todo/todo.component';
   ],
   imports: [
     BrowserModule,
-    KeycloakAngularModule,    
-    HttpClientModule,  
+    KeycloakAngularModule,
+    HttpClientModule,
     SourcesAndTagsModule,
     BrowserAnimationsModule,
     AppRoutingModule,

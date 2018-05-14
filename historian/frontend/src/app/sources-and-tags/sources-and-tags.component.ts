@@ -20,7 +20,7 @@ export class SourcesAndTagsComponent implements OnInit {
   }
 
   datasetIsEmpty(): boolean {
-    return this.dataset.isEmpty()
+    return this.dataset.isEmpty();
   }
 
 }

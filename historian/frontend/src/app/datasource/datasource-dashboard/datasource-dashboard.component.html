@@ -6,14 +6,14 @@
         <div class="col-6 border-right border-bottom border-top">
           <app-datasource-form #dsForm 
                               [datasource]="selectedDatasource" 
-                              (onSubmitted)="list.getDatasources()"></app-datasource-form>
+                              (submitted)="list.getDatasources()"></app-datasource-form>
         </div>
         
         <div class="col-6 border-bottom border-top">
           <button type="button" class="btn btn-outline-primary text-uppercase" (click)="dsForm.resetForm()">Add Data source</button>
 
           <app-datasources-list [dataSet]="dataSet"
-                                (onSelectDatasource)="onSelectDatasource($event)"
+                                (selectDatasource)="onSelectDatasource($event)"
                                 #list></app-datasources-list>    
         </div>
         <div class="col-12 border-bottom">
