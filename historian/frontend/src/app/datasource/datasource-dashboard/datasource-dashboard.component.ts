@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Datasource } from '../Datasource';
-import { Dataset } from '../../dataset';
-import { DatasetService } from '../../dataset.service.';
+import { Dataset } from '../../dataset/dataset';
+import { DatasetService } from '../../dataset/dataset.service.';
 
 @Component({
   selector: 'app-datasource-dashboard',

@@ -12,15 +12,15 @@ import { initializer } from './app-init';
 
 import { DatasourceService } from './datasource/datasource.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TagsListComponent } from './sources-and-tags/tags-list/tags-list.component';
-import { TagService } from './sources-and-tags/tag.service';
+import { TagsListComponent } from './tag/tags-list/tags-list.component';
+import { TagService } from './tag/tag.service';
 import { CustomHttpInterceptor } from './security-http-interceptor';
 import { SourcesAndTagsComponent } from './sources-and-tags/sources-and-tags.component';
 import { TodoComponent } from './todo/todo.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 import { SourcesAndTagsModule }     from './sources-and-tags/sources-and-tags.module';
-import { DatasetService } from './dataset.service.';
+import { DatasetService } from './dataset/dataset.service.';
 
 @NgModule({
   declarations: [
@@ -47,9 +47,6 @@ import { DatasetService } from './dataset.service.';
       useClass: CustomHttpInterceptor,
       multi: true
     },
-    DatasourceService,
-    DatasetService,
-    TagService,
   ],
   bootstrap: [AppComponent],
 })
