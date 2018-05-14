@@ -3,25 +3,21 @@
 
 <h6>editing dataset: {{dataSet?.name}}</h6>
 
-<ul class="datasources">
-  <li *ngFor="let datasource of datasources" (click)="onSelect(datasource)">
-      <div class="row">    
-        <button type="button" class="btn btn-light text-uppercase">
-          {{datasource.name}} <span class="badge badge-light">datasource.type</span>
-        </button>
 
-        <button type="button" class="btn btn-outline-primary text-uppercase" (click)="onAddToDataset(datasource)" *ngIf="!dataSetContain(datasource)">
-          ADD TO DATA SET
-        </button>
-        
-        <button type="button" class="btn btn-danger text-uppercase" (click)="onRemoveFromDataset(datasource)" *ngIf="dataSetContain(datasource)">
-          REMOVE FROM DATA SET
-        </button>
-    
-        <button type="button" class="btn btn-outline-danger text-uppercase" (click)="onDeleteDatasource(datasource)">
-          remove data source
-        </button>    
-      </div>
-  </li>
-</ul>
- 
+<div class="row" *ngFor="let datasource of datasources" (click)="onSelect(datasource)">    
+  <button type="button" class="btn btn-light text-uppercase">
+    {{datasource.name}} <span class="badge badge-light">{{datasource.type}}</span>
+  </button>
+
+  <button type="button" class="btn btn-outline-primary text-uppercase" (click)="onAddToDataset(datasource)" *ngIf="!dataSetContain(datasource)">
+    ADD TO DATA SET
+  </button>
+  
+  <button type="button" class="btn btn-danger text-uppercase" (click)="onRemoveFromDataset(datasource)" *ngIf="dataSetContain(datasource)">
+    REMOVE FROM DATA SET
+  </button>
+
+  <button type="button" class="btn btn-outline-danger text-uppercase" (click)="onDeleteDatasource(datasource)">
+    remove data source
+  </button>    
+</div>
