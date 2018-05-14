@@ -23,7 +23,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.datasourceTypes = this.datasourceService.getDatasourceTypes();
-    this.datasource = new Datasource();
+    this.datasource = new Datasource('', '');
     this.isCreation = true;
     this.credential = 'none';
     this.submitBtnMsg = 'Add Data source';
@@ -70,7 +70,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   }
 
   resetForm() {
-    this.datasource = new Datasource();
+    this.datasource = new Datasource('', '');
     this.isCreation = true;
     this.submitBtnMsg = 'Add Data source';
   }

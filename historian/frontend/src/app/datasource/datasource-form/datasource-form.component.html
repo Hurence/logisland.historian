@@ -3,7 +3,7 @@
 <form (ngSubmit)="onSubmit()" #dsForm="ngForm">
   <div class="form-group">
     <label for="type">TYPE</label>
-    <select class="form-control" [(ngModel)]="datasource.type" id="type" name="type" #typ="ngModel" required>
+    <select class="form-control" [(ngModel)]="datasource.datasource_type" id="type" name="type" #typ="ngModel" required>
       <option *ngFor="let type of datasourceTypes" [value]="type">{{type}}</option>
     </select>
     <div [hidden]="typ.valid || typ.pristine" class="alert alert-danger">
@@ -11,12 +11,12 @@
     </div>
   </div>
 
-  <div [ngSwitch]="datasource.type">
+  <div [ngSwitch]="datasource.datasource_type">
 
     <div *ngSwitchCase="'OPC-DA'" id="opc-da-form">
       <div class="form-group">
         <label for="name">NAME</label>
-        <input type="text" class="form-control" [(ngModel)]="datasource.name" id="name" name="name" #name="ngModel" required>
+        <input type="text" class="form-control" [(ngModel)]="datasource.id" id="name" name="name" #name="ngModel" required>
         <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
           Name is required
         </div>
@@ -24,7 +24,12 @@
 
       <div class="form-group">
         <label for="hostAndPort">HOST &amp; PORT</label>
-        <input type="text" class="form-control" [(ngModel)]="datasource.host" id="hostAndPort" name="hostAndPort">
+        <input type="text" class="form-control" [(ngModel)]="datasource.host" 
+               id="hostAndPort" name="hostAndPort" #domain="ngModel">
+
+        <div [hidden]="domain.valid || domain.pristine" class="alert alert-danger">
+          Domain is required
+        </div>
       </div>
 
       <div class="form-group">
