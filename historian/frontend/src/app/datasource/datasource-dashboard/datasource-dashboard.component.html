@@ -4,23 +4,32 @@
 
       <div class="row mt-0">
         <div class="col-6 border-right border-bottom border-top">
-          <app-datasource-form #dsForm 
-                              [datasource]="selectedDatasource" 
-                              (submitted)="list.getDatasources()"></app-datasource-form>
+          <app-datasource-form #dsForm
+                              [datasource]="selectedDatasource"
+                              (onSubmitted)="list.getDatasources()"></app-datasource-form>
         </div>
-        
+
         <div class="col-6 border-bottom border-top">
           <button type="button" class="btn btn-outline-primary text-uppercase" (click)="dsForm.resetForm()">Add Data source</button>
 
           <app-datasources-list [dataSet]="dataSet"
-                                (selectDatasource)="onSelectDatasource($event)"
-                                #list></app-datasources-list>    
+                                (onSelectDatasource)="onSelectDatasource($event)"
+                                #list></app-datasources-list>
         </div>
         <div class="col-12 border-bottom">
           <div class="row">
-              <button type="button" class="btn btn-outline-primary text-uppercase" 
+            <div class="col-6">
+              <button class="btn btn-primary btn-md btn-block text-uppercase">
+                <i class="fa fa-arrow-left float-left"></i> DATA SOURCES
+              </button>
+
+          </div>
+            <div class="col-6">
+              <button type="button" class="btn btn-primary btn-md btn-block text-uppercase float-right"
                       (click)="goToTags()"
-                      [disabled]="datasetIsEmpty()">Tags</button>
+                      [disabled]="datasetIsEmpty()">Tags<i class="fa fa-arrow-right float-right"></i></button>
+
+          </div>
           </div>
         </div>
       </div>
