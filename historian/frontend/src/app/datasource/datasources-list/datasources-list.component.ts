@@ -1,7 +1,8 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+
+import { Dataset } from '../../dataset/dataset';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
-import { Dataset } from '../../dataset/dataset';
 
 @Component({
   selector: 'app-datasources-list',

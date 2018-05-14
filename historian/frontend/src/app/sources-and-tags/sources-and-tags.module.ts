@@ -1,14 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
 
-import { SourcesAndTagsComponent } from './sources-and-tags.component';
-import { SourcesAndTagsRoutingModule } from './sources-and-tags-routing.module';
-import { TagsListComponent } from '../tag/tags-list/tags-list.component';
-import { ConfigurationComponent } from './configuration/configuration.component';
+import { DatasetService } from '../dataset/dataset.service.';
 import { DatasourceModule } from '../datasource/datasource.module';
 import { TagModule } from '../tag/tag.module';
-import { DatasetService } from '../dataset/dataset.service.';
+import { ConfigurationComponent } from './configuration/configuration.component';
+import { SourcesAndTagsRoutingModule } from './sources-and-tags-routing.module';
+import { SourcesAndTagsComponent } from './sources-and-tags.component';
 
 @NgModule({
   imports: [
@@ -18,11 +16,11 @@ import { DatasetService } from '../dataset/dataset.service.';
     SourcesAndTagsRoutingModule
   ],
   declarations: [
-    SourcesAndTagsComponent,    
+    SourcesAndTagsComponent,
     ConfigurationComponent
-  ],
+  ],st
   providers: [
     DatasetService,
   ]
 })
-export class SourcesAndTagsModule {}
+export class SourcesAndTagsModule { }

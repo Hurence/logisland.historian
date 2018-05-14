@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TagsListComponent } from './tags-list/tags-list.component';
+import { NgModule } from '@angular/core';
+
 import { TagService } from './tag.service';
+import { TagsListComponent } from './tags-list/tags-list.component';
 
 @NgModule({
   imports: [
