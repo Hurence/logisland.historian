@@ -10,7 +10,7 @@
         </div>
         
         <div class="col-6 border-bottom border-top">
-          <button type="button" class="btn btn-default" (click)="dsForm.resetForm()">Add Data source</button>
+          <button type="button" class="btn btn-outline-primary text-uppercase" (click)="dsForm.resetForm()">Add Data source</button>
 
           <app-datasources-list [dataSet]="dataSet"
                                 (onSelectDatasource)="onSelectDatasource($event)"
