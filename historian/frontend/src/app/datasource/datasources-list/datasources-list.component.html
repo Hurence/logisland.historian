@@ -5,21 +5,23 @@
 
 <ul class="datasources">
   <li *ngFor="let datasource of datasources" (click)="onSelect(datasource)">
-    <button type="button" class="btn btn-default">
-      {{datasource.name}} ({{datasource.domain}}) {{datasource.type}}
-    </button>
+      <div class="row">    
+        <button type="button" class="btn btn-light text-uppercase">
+          {{datasource.name}} <span class="badge badge-light">datasource.type</span>
+        </button>
 
-    <button type="button" class="btn btn-default" (click)="onAddToDataset(datasource)" *ngIf="!dataSetContain(datasource)">
-      Add to dataset
-    </button>
+        <button type="button" class="btn btn-outline-primary text-uppercase" (click)="onAddToDataset(datasource)" *ngIf="!dataSetContain(datasource)">
+          ADD TO DATA SET
+        </button>
+        
+        <button type="button" class="btn btn-danger text-uppercase" (click)="onRemoveFromDataset(datasource)" *ngIf="dataSetContain(datasource)">
+          REMOVE FROM DATA SET
+        </button>
     
-    <button type="button" class="btn btn-default" (click)="onRemoveFromDataset(datasource)" *ngIf="dataSetContain(datasource)">
-      Remove from dataset
-    </button>
-
-    <button type="button" class="btn btn-default" (click)="onDeleteDatasource(datasource)">
-      Remove Data Source
-    </button>
+        <button type="button" class="btn btn-outline-danger text-uppercase" (click)="onDeleteDatasource(datasource)">
+          remove data source
+        </button>    
+      </div>
   </li>
 </ul>
  

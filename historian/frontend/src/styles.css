@@ -20,7 +20,14 @@ label {
 font-size: 0.5rem;
 margin-bottom: 0.1rem;
 }
-
+.navbar {
+    padding: 0rem 1rem;
+    line-height: 2.5;
+}
+.navbar-dark .navbar-nav .show > .nav-link, .navbar-dark .navbar-nav .active > .nav-link, .navbar-dark .navbar-nav .nav-link.show, .navbar-dark .navbar-nav .nav-link.active {
+    background-color: #fff;
+    color: #2699FB;
+}
 .navbar-brand img{
 width: 100px;
 }
@@ -37,4 +44,63 @@ cursor: pointer;
 
 .ng-invalid:not(form)  {
   border-left: 5px solid #a94442; /* red */
+}
+/* data source list buttons */
+.btn {
+    display: inline-block;
+    margin: .1rem .1rem;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 0.5px solid #6c757d;
+    /* padding: .375rem .75rem; */
+    padding: .5rem .5rem;
+    font-size: 0.5rem;
+    line-height: 1.5;
+    border-radius: 0rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.btn-light {
+  border: 0px solid transparent;
+    color: #ffffff;
+    background-color: #2699FB;
+    opacity: 0.5;
+}
+.btn-primary {
+  border: 0px solid transparent;
+}
+.btn-light:hover {
+  border: 0px solid transparent;
+    color: #ffffff;
+    background-color: #2699FB;
+}
+.badge-light {
+    color: #ffffff;
+    background-color: transparent;
+}
+.btn .badge {
+  top: -5px;
+  right: -10px;
+}
+
+.btn-outline-danger {
+  color: #dc3545;
+  background-color: transparent;
+  background-image: none;
+  border-color: #dc3545;
+}
+.btn-outline-primary {
+    color: #007bff;
+    background-color: transparent;
+    background-image: none;
+    border-color: #007bff;
+}
+.btn-danger {
+font-size: 0.2rem;
+border-color: #dc3545;
 }
