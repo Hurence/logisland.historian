@@ -104,3 +104,8 @@ cursor: pointer;
 font-size: 0.2rem;
 border-color: #dc3545;
 }
+.servername{
+  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
