@@ -30,7 +30,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
@@ -44,21 +47,45 @@ import java.util.stream.Collectors;
 @Service
 public class OpcService {
 
-
-    private String extractGroupName(String tag) {
-        int idx = tag.lastIndexOf('.');
-        if (idx > 0) {
-            return tag.substring(0, idx);
-        }
-        return "";
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(OpcService.class);
 
 
     private DatasourcesApiService datasourcesApiService;
     private OpcRepository opcRepository;
     private long socketTimeoutMillis;
+
+    /**
+     * Converts Java Data Type to historian tag {@link com.hurence.logisland.historian.rest.v1.model.Tag.DataTypeEnum}
+     *
+     * @param dataType the java data type (coming from OPC {@link com.hurence.opc.OpcTagInfo})
+     * @return the {@link com.hurence.logisland.historian.rest.v1.model.Tag.DataTypeEnum} that applies.
+     */
+    private Tag.DataTypeEnum mapDataType(Type dataType) {
+        if (dataType instanceof Class<?>) {
+            Class<?> cls = (Class<?>) dataType;
+            if (cls.isArray()) {
+                if (cls.isAssignableFrom(Byte[].class)) {
+                    return Tag.DataTypeEnum.BYTES;
+                }
+                return Tag.DataTypeEnum.ARRAY;
+            } else if (Integer.class.equals(cls) || Byte.class.equals(cls) ||
+                    Short.class.equals(cls) || Character.class.equals(cls)) {
+                return Tag.DataTypeEnum.INT;
+            } else if (Long.class.equals(cls) || Instant.class.equals(cls)) {
+                return Tag.DataTypeEnum.LONG;
+            } else if (Float.class.equals(cls)) {
+                return Tag.DataTypeEnum.FLOAT;
+            } else if (Double.class.equals(cls) || BigDecimal.class.equals(cls)) {
+                return Tag.DataTypeEnum.DOUBLE;
+            } else if (Boolean.class.equals(cls)) {
+                return Tag.DataTypeEnum.BOOLEAN;
+            } else if (String.class.equals(cls)) {
+                return Tag.DataTypeEnum.STRING;
+            }
+        }
+        throw new IllegalStateException("Unhandled datatype :" + dataType);
+
+    }
 
 
     /**
@@ -95,9 +122,11 @@ public class OpcService {
                 .map(tag -> new Tag()
                         .server(datasource.getHost())
                         .domain(datasource.getDomain())
-                        .group(extractGroupName(tag))
-                        .tagName(tag)
-                        .id(StringUtils.join(new String[]{datasource.getDomain(), datasource.getHost(), tag}, "|"))
+                        .group(tag.getGroup())
+                        .tagName(tag.getName())
+                        .dataType(mapDataType(tag.getType()))
+                        .id(StringUtils.join(new String[]{datasource.getDomain(),
+                                datasource.getHost(), tag.getName()}, "|"))
                 ).collect(Collectors.toList());
     }
 

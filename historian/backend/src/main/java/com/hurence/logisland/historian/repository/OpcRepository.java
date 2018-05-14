@@ -17,6 +17,7 @@
 
 package com.hurence.logisland.historian.repository;
 
+import com.hurence.opc.OpcTagInfo;
 import com.hurence.opc.da.OpcDaConnectionProfile;
 import com.hurence.opc.da.OpcDaOperations;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class OpcRepository {
      * @param connectionProfile the connection information.
      * @return a never empty {@link Collection}
      */
-    public Collection<String> fetchAllTags(@Valid OpcDaConnectionProfile connectionProfile) {
+    public Collection<OpcTagInfo> fetchAllTags(@Valid OpcDaConnectionProfile connectionProfile) {
         OpcDaOperations opcDaOperations = new OpcDaOperations();
         try {
             opcDaOperations.connect(connectionProfile);

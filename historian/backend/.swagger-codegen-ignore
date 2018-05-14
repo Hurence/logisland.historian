@@ -15,6 +15,7 @@ tmp/src/main/webapp/WEB-INF
 **/Bootstrap.java
 #**/*Impl.java
 **/*ApiController.java
+**/*ApiException.java
 src/main/java/io/swagger/*
 src/main/java/io/swagger/configuration/*
 
