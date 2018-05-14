@@ -8,11 +8,12 @@
                               [datasource]="selectedDatasource" 
                               (onSubmitted)="list.getDatasources()"></app-datasource-form>
         </div>
-
+        
         <div class="col-6 border-bottom border-top">
           <button type="button" class="btn btn-default" (click)="dsForm.resetForm()">Add Data source</button>
 
-          <app-datasources-list (onSelectDatasource)="onSelectDatasource($event)" 
+          <app-datasources-list [dataSet]="dataSet"
+                                (onSelectDatasource)="onSelectDatasource($event)" 
                                 #list></app-datasources-list>
         </div>
         <div class="col-12 border-bottom">.col-12 NAVIGATION</div>

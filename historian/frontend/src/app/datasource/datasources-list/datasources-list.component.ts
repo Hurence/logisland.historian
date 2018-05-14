@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
+import { Dataset } from '../../dataset';
 
 @Component({
   selector: 'app-datasources-list',
@@ -10,15 +11,13 @@ import { DatasourceService } from '../datasource.service';
 export class DatasourcesListComponent implements OnInit {
 
   datasources: Datasource[];
-  selectedDatasource: Datasource;
-  dataSet: Datasource[];
+  @Input() dataSet: Dataset;
   @Output() onSelectDatasource = new EventEmitter<Datasource>();
 
   constructor(private datasourceService: DatasourceService) { }
 
   ngOnInit() {
     this.getDatasources();
-    this.dataSet = [];
   }
 
   getDatasources(): void {
@@ -37,22 +36,21 @@ export class DatasourcesListComponent implements OnInit {
 
   onSelect(datasource: Datasource) {
     this.onSelectDatasource.emit(datasource);
-    this.selectedDatasource = datasource;
   }
 
   onAddToDataset(datasource: Datasource) {
-    this.dataSet.push(datasource);
+    this.dataSet.addDatasource(datasource);
   }
 
   onRemoveFromDataset(datasource: Datasource) {
-    let index = this.dataSet.indexOf(datasource);
-    console.log('index of element to remove is ' + index);
-    if (index === -1) return;
-    this.dataSet.splice(index, 1);
+    this.dataSet.removeDatasource(datasource);
   }
 
   dataSetContain(datasource: Datasource): boolean {
-      return this.dataSet.includes(datasource);
+    if (this.dataSet) {
+      return this.dataSet.containDatasource(datasource);
+    }
+    return false;
   }
 
   

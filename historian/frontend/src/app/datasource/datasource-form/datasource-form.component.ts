@@ -47,7 +47,7 @@ export class DatasourceFormComponent implements OnInit {
             this.message = 'successfully added datasource';
           },
           error => {
-            console.error('could not save datasource' + JSON.stringify(error);
+            console.error('could not save datasource' + JSON.stringify(error));
             this.message = 'error while saving data source.';
           }
         );

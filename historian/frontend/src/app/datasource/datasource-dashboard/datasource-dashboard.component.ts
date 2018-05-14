@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Datasource } from '../Datasource';
+import { Dataset } from '../../dataset';
+import { DatasetService } from '../../dataset.service.';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -9,13 +11,18 @@ import { Datasource } from '../Datasource';
 export class DatasourceDashboardComponent implements OnInit {
 
   selectedDatasource: Datasource;
+  dataSet: Dataset;
 
-  constructor() { }
+  constructor(private datasetService: DatasetService) { }
 
   ngOnInit() {
+    this.datasetService.getMyDataset()
+      .subscribe(dataSet => this.dataSet = dataSet);
   }
 
   onSelectDatasource(datasource: Datasource) {
     this.selectedDatasource = datasource;
   }
+
+  
 }

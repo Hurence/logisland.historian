@@ -20,6 +20,7 @@ import { TodoComponent } from './todo/todo.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 import { SourcesAndTagsModule }     from './sources-and-tags/sources-and-tags.module';
+import { DatasetService } from './dataset.service.';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { SourcesAndTagsModule }     from './sources-and-tags/sources-and-tags.mo
       multi: true
     },
     DatasourceService,
+    DatasetService,
     TagService,
   ],
   bootstrap: [AppComponent],
