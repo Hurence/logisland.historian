@@ -18,7 +18,7 @@ import { SourcesAndTagsComponent } from './sources-and-tags.component';
   declarations: [
     SourcesAndTagsComponent,
     ConfigurationComponent
-  ],st
+  ],
   providers: [
     DatasetService,
   ]
