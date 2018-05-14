@@ -12,6 +12,7 @@
   </div>
 
   <div [ngSwitch]="datasource.type">
+
     <div *ngSwitchCase="'OPC-DA'" id="opc-da-form">
       <div class="form-group">
         <label for="name">NAME</label>
@@ -68,12 +69,11 @@
     <div *ngSwitchCase="'FAKE'">TODO</div>
 
     <div *ngSwitchDefault>Please choose a type</div>
+
   </div>
 
   
 
-  <button type="submit" class="btn btn-success" [disabled]="!dsForm.form.valid">Add Data source</button>
-
-  <div *ngIf="message">{{message}}</div>
+  <button type="submit" class="btn btn-success" [disabled]="!dsForm.form.valid">{{submitBtnMsg}}</button>
 
 </form>

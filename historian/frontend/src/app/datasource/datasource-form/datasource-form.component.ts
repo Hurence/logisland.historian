@@ -14,10 +14,10 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   datasourceTypes: string[];
   isCreation: boolean;
   credential: string;
-  message: string;
   @ViewChild(NgForm) dsForm;
   @Input() datasource: Datasource;
   @Output() submitted = new EventEmitter<Datasource>();
+  private submitBtnMsg: string
 
   constructor(private datasourceService: DatasourceService) {}
 
@@ -26,10 +26,12 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     this.datasource = new Datasource();
     this.isCreation = true;
     this.credential = 'none';
+    this.submitBtnMsg = 'Add Data source';
   }
 
   ngOnChanges() {
     this.isCreation = false;
+    this.submitBtnMsg = 'Update Data source';
     if (this.datasource && (this.datasource.password || this.datasource.user)) {
       this.credential = 'normal';
     } else {
@@ -44,11 +46,11 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
           datasource => {
             console.log('saved successfully to ' + JSON.stringify(datasource));
             this.submitted.emit(datasource);
-            this.message = 'successfully added datasource';
+            alert('successfully added datasource');
           },
           error => {
             console.error('could not save datasource' + JSON.stringify(error));
-            this.message = 'error while saving data source.';
+            alert('error while saving data source.');
           }
         );
     } else {
@@ -57,11 +59,11 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
           datasource => {
             console.log('updated successfully to ' + JSON.stringify(datasource));
             this.submitted.emit(datasource);
-            this.message = 'successfully updated datasource';
+            alert('successfully updated datasource');
           },
           error => {
             console.error('could not update '  + JSON.stringify(error));
-            this.message = 'error while updating data source.';
+            alert('error while updating data source.');  
           }
         );
     }
@@ -70,6 +72,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   resetForm() {
     this.datasource = new Datasource();
     this.isCreation = true;
+    this.submitBtnMsg = 'Add Data source';
   }
 
   resetCred() {
