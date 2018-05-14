@@ -18,7 +18,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Datasource
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-07T14:56:12.459+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-14T17:06:05.558+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Datasource  implements Serializable {
@@ -37,6 +37,14 @@ public class Datasource  implements Serializable {
         @JsonProperty("clsid")
         @Indexed(name = "clsid")
         private String clsid = null;
+
+        @JsonProperty("datasource_type")
+        @Indexed(name = "datasource_type")
+        private String datasourceType = null;
+
+        @JsonProperty("prog_id")
+        @Indexed(name = "prog_id")
+        private String progId = null;
 
         @JsonProperty("host")
         @Indexed(name = "host")
@@ -139,6 +147,48 @@ public class Datasource  implements Serializable {
         this.clsid = clsid;
         }
 
+        public Datasource datasourceType(String datasourceType) {
+        this.datasourceType = datasourceType;
+        return this;
+        }
+
+    /**
+        * Get datasourceType
+    * @return datasourceType
+    **/
+        @JsonProperty("datasource_type")
+    @ApiModelProperty(value = "")
+    
+
+  public String getDatasourceType() {
+    return datasourceType;
+    }
+
+        public void setDatasourceType(String datasourceType) {
+        this.datasourceType = datasourceType;
+        }
+
+        public Datasource progId(String progId) {
+        this.progId = progId;
+        return this;
+        }
+
+    /**
+        * Get progId
+    * @return progId
+    **/
+        @JsonProperty("prog_id")
+    @ApiModelProperty(value = "")
+    
+
+  public String getProgId() {
+    return progId;
+    }
+
+        public void setProgId(String progId) {
+        this.progId = progId;
+        }
+
         public Datasource host(String host) {
         this.host = host;
         return this;
@@ -238,6 +288,8 @@ public class Datasource  implements Serializable {
         Objects.equals(this.id, datasource.id) &&
         Objects.equals(this.description, datasource.description) &&
         Objects.equals(this.clsid, datasource.clsid) &&
+        Objects.equals(this.datasourceType, datasource.datasourceType) &&
+        Objects.equals(this.progId, datasource.progId) &&
         Objects.equals(this.host, datasource.host) &&
         Objects.equals(this.domain, datasource.domain) &&
         Objects.equals(this.user, datasource.user) &&
@@ -246,7 +298,7 @@ public class Datasource  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id, description, clsid, host, domain, user, password);
+    return Objects.hash(recordType, id, description, clsid, datasourceType, progId, host, domain, user, password);
     }
 
 
@@ -259,6 +311,8 @@ sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
 sb.append("    description: ").append(toIndentedString(description)).append("\n");
 sb.append("    clsid: ").append(toIndentedString(clsid)).append("\n");
+sb.append("    datasourceType: ").append(toIndentedString(datasourceType)).append("\n");
+sb.append("    progId: ").append(toIndentedString(progId)).append("\n");
 sb.append("    host: ").append(toIndentedString(host)).append("\n");
 sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
 sb.append("    user: ").append(toIndentedString(user)).append("\n");

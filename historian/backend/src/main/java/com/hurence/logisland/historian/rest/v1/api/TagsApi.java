@@ -26,7 +26,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-04T11:29:18.230+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-14T17:06:05.558+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -52,7 +52,7 @@ import java.util.List;
         ResponseEntity<Tag> deleteTag(@ApiParam(value = "id of the tag to be deleted",required=true) @PathVariable("itemId") String itemId);
 
 
-            @ApiOperation(value = "get all saved tags", nickname = "getAllTags", notes = "retrieve all OPC tags", response = Tag.class, responseContainer = "List", tags={ "tag","opc", })
+            @ApiOperation(value = "get all saved tags", nickname = "getAllTags", notes = "retrieve all OPC tags", response = Tag.class, responseContainer = "List", tags={ "tag", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "tags list", response = Tag.class, responseContainer = "List"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
@@ -73,7 +73,7 @@ import java.util.List;
         ResponseEntity<Tag> getTag(@ApiParam(value = "id of the tag to return",required=true) @PathVariable("itemId") String itemId);
 
 
-            @ApiOperation(value = "get tag measures", nickname = "getTagMeasures", notes = "get the corresponding Tag measures between start and end time", response = Measures.class, tags={ "tag", })
+            @ApiOperation(value = "get tag measures", nickname = "getTagMeasures", notes = "get the corresponding Tag measures between start and end time", response = Measures.class, tags={ "tag","measure", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "tag", response = Measures.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
@@ -84,9 +84,8 @@ import java.util.List;
         ResponseEntity<Measures> getTagMeasures(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end,@ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions,@ApiParam(value = "will retrieve only function values, no data points", defaultValue = "false") @Valid @RequestParam(value = "no_values", required = false, defaultValue="false") Boolean noValues);
 
 
-
-            @ApiOperation(value = "get tag mesures stats", nickname = "getTagStats", notes = "get the corresponding Tag mesures for last chunk", response = Measures.class, tags={ "tag", })
-            @ApiResponses(value = {
+            @ApiOperation(value = "get tag measures stats", nickname = "getTagStats", notes = "get the corresponding Tag mesures for last chunk", response = Measures.class, tags={ "tag","measure", })
+            @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "tag", response = Measures.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
@@ -118,7 +117,7 @@ import java.util.List;
         ResponseEntity<BulkLoad> postTagMeasuresGenerator(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile config,@ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields,@ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue="false") Boolean cleanImport);
 
 
-            @ApiOperation(value = "update tag", nickname = "updateTag", notes = "update an existing tag", response = Tag.class, tags={ "tag","opc", })
+            @ApiOperation(value = "update tag", nickname = "updateTag", notes = "update an existing tag", response = Tag.class, tags={ "tag", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "Tag successfuly updated", response = Tag.class),
                 @ApiResponse(code = 400, message = "Invalid ID supplied"),
