@@ -70,6 +70,11 @@ public class DatasourcesApiController implements DatasourcesApi {
         return ResponseEntity.ok(opcService.browseAllTags());
     }
 
+    public ResponseEntity<List<Tag>> getAllTagsFromDatasource(@ApiParam(value = "id of the Datasource to return",required=true) @PathVariable("datasourceId") String datasourceId){
+
+        return ResponseEntity.ok(opcService.browseDatasourceTag(datasourceId));
+    }
+
     public ResponseEntity<Datasource> getDatasource(@ApiParam(value = "id of the Datasource to return", required = true) @PathVariable("datasourceId") String datasourceId) {
         Optional<Datasource> Datasource = service.getDatasource(datasourceId);
         if (Datasource.isPresent()) {
