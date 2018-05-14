@@ -1,4 +1,4 @@
-import { Datasource } from "../datasource/Datasource";
+import { Datasource } from '../datasource/Datasource';
 
 export class Dataset {
 
@@ -22,5 +22,9 @@ export class Dataset {
         console.log('index of element to remove is ' + index);
         if (index === -1) return;
         this.datasourceIds.splice(index, 1);
+    }
+
+    isEmpty(): boolean {
+        return this.datasourceIds.length === 0;
     }
 }

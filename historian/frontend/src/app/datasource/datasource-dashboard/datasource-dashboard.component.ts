@@ -1,7 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Datasource } from '../Datasource';
+import { Component, OnInit } from '@angular/core';
+
 import { Dataset } from '../../dataset/dataset';
 import { DatasetService } from '../../dataset/dataset.service.';
+import { Datasource } from '../Datasource';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -13,7 +15,9 @@ export class DatasourceDashboardComponent implements OnInit {
   selectedDatasource: Datasource;
   dataSet: Dataset;
 
-  constructor(private datasetService: DatasetService) { }
+  constructor(private datasetService: DatasetService,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.datasetService.getMyDataset()
@@ -24,5 +28,11 @@ export class DatasourceDashboardComponent implements OnInit {
     this.selectedDatasource = datasource;
   }
 
-  
+  goToTags() {
+    this.router.navigate(['../tags'], { relativeTo: this.route });
+  }
+
+  datasetIsEmpty(): boolean {
+    return this.dataSet.isEmpty();
+  }
 }

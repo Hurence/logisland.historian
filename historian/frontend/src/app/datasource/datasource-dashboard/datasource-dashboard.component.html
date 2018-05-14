@@ -16,7 +16,13 @@
                                 (onSelectDatasource)="onSelectDatasource($event)"
                                 #list></app-datasources-list>    
         </div>
-        <div class="col-12 border-bottom">.col-12 NAVIGATION</div>
+        <div class="col-12 border-bottom">
+          <div class="row">
+              <button type="button" class="btn btn-outline-primary text-uppercase" 
+                      (click)="goToTags()"
+                      [disabled]="datasetIsEmpty()">Tags</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-4 border-right border-right border-left border-bottom border-top">

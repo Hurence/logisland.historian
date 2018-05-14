@@ -1,10 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient } from '@angular/common/http';
-import { Tag } from './tag';
-import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
-import { KeycloakService } from 'keycloak-angular';
+import { catchError, tap } from 'rxjs/operators';
+
+import { Tag } from './tag';
 
 @Injectable()
 export class TagService {

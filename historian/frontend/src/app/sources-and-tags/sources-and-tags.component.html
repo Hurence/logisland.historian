@@ -1,11 +1,19 @@
 <nav id="sources-and-tags-nav" class="nav nav-pills nav-fill text-uppercase border-bottom ">
-  <a class="nav-item nav-link rounded-0 col-4 border-right" routerLinkActive="active" routerLink="./datasources">
+  <a class="nav-item nav-link rounded-0 col-4 border-right" 
+    routerLinkActive="active" 
+    routerLink="./datasources">
     DATA SOURCES
   </a>
-  <a class="nav-item nav-link rounded-0 col-4 disabled border-right" routerLinkActive="active" routerLink="./tags">
+  <a class="nav-item nav-link rounded-0 col-4 border-right btn"
+     [class.disabled] = "datasetIsEmpty()"
+     routerLinkActive="active" 
+     routerLink="./tags">
     TAGS
   </a>
-  <a class="nav-item nav-link rounded-0 col-4 disabled" routerLinkActive="active" routerLink="./configuration">
+  <a class="nav-item nav-link rounded-0 col-4 btn" 
+    [class.disabled] = "true"
+    routerLinkActive="active" 
+    routerLink="./configuration">
     CONFIGURATION
   </a>
 </nav>

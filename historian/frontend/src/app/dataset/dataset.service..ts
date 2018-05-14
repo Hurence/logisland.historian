@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
+
 import { Dataset } from './dataset';
 
 @Injectable()

@@ -2,6 +2,7 @@
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 import { initializer } from './app-init';
@@ -23,9 +24,10 @@ import { TodoComponent } from './todo/todo.component';
   ],
   imports: [
     BrowserModule,
-    KeycloakAngularModule,
-    HttpClientModule,
+    KeycloakAngularModule,    
+    HttpClientModule,  
     SourcesAndTagsModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
   ],
   providers: [
