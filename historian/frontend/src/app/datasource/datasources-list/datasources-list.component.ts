@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Dataset } from '../../dataset/dataset';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-datasources-list',
@@ -11,7 +12,7 @@ import { DatasourceService } from '../datasource.service';
 })
 export class DatasourcesListComponent implements OnInit {
 
-  datasources: Datasource[];
+  datasources$: Observable<Datasource[]>;
   @Input() dataSet: Dataset;
   @Output() onSelectDatasource = new EventEmitter<Datasource>();
 
@@ -22,8 +23,7 @@ export class DatasourcesListComponent implements OnInit {
   }
 
   getDatasources(): void {
-    this.datasourceService.getDatasources()
-      .subscribe(datasources => this.datasources = datasources);
+    this.datasources$ = this.datasourceService.getDatasources();
   }
 
   onDeleteDatasource(datasource: Datasource) {

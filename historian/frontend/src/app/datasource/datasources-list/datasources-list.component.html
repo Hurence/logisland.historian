@@ -4,7 +4,7 @@
 <h6>editing dataset: {{dataSet?.name}}</h6>
 
 
-<div class="row" *ngFor="let datasource of datasources" (click)="onSelect(datasource)">    
+<div class="row" *ngFor="let datasource of datasources$ | async" (click)="onSelect(datasource)">    
   <button type="button" class="btn btn-light text-uppercase">
     {{datasource.name}} <span class="badge badge-light">{{datasource.type}}</span>
   </button>
