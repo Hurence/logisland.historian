@@ -14,7 +14,7 @@
   <app-root></app-root>
   <script>
   $(function() {
-    jQuery(".help").click(function() {
+    $(document).on("click", ".help", function() {
       jQuery(".help-content").toggle();
       $(".col-8.pt-0").toggleClass("col-12");
 
