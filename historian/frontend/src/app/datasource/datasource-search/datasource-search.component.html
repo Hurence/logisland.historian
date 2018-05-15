@@ -1,13 +1,16 @@
 <div class="row">
-    <br>
-    <div class="form-group">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-            <i class="fa fa-search fa-2x float-xs-left searchicon"></i>
-            <input type="search" class="form-control"
-                   id="search" placeholder="Filter items..."
-                   (keyup)="update(searchBox.value)"
-                   #searchBox>
-        </div>
+  <div class="col-sm-12 col-md-12 col-lg-12 ">
+
+    <div class="input-group mb-3 filter">
+      <div class="input-group-prepend">
+        <span class="input-group-text text-uppercase bg-primary" id="inputGroup-sizing-default">Filter data sources</span>
+      </div>
+      <input type="search" class="form-control" id="search" 
+             placeholder="Type to filter data sources items..." 
+             (keyup)="update(search.value)" 
+             #search>
+
     </div>
-    Your filter query is : {{filterString}}
+
+  </div>
 </div>

@@ -10,7 +10,7 @@
         </div>
 
         <div class="col-6 border-bottom border-top">
-          <button type="button" class="btn btn-outline-primary text-uppercase" (click)="dsForm.resetForm()">Add Data source</button>
+          <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="dsForm.resetForm()">Add Data source</button>
 
           <app-datasource-search (queryString)="list.getDatasourcesQuery($event)"></app-datasource-search>
 
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="col-4 border-right border-right border-left border-bottom border-top">
+    <div class="col-4 border-right border-right border-left border-bottom border-top help-content">
       <p>aide, explication, consignes</p>
       <br>
       <br>

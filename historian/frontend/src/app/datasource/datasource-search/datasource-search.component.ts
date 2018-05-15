@@ -11,7 +11,6 @@ export class DatasourceSearchComponent implements OnInit {
 
 
   @Output() queryString = new EventEmitter<string>();
-  private filterString: string;
   private searchTerms = new Subject<string>();
 
   constructor() { }
@@ -34,6 +33,5 @@ export class DatasourceSearchComponent implements OnInit {
   
   update(term: string): void {
     this.searchTerms.next(term);
-    this.filterString = term;
   }
 }
