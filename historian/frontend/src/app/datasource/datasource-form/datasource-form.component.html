@@ -16,7 +16,7 @@
     <div *ngSwitchCase="'OPC-DA'" id="opc-da-form">
       <div class="form-group">
         <label for="name">NAME</label>
-        <input type="text" class="form-control" [ngModel]="datasource.id"
+        <input type="text" class="form-control" [(ngModel)]="datasource.id"
                id="name" name="name" #name="ngModel"
                [disabled]="!isCreation" [required]="isCreation">
         <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
