@@ -24,8 +24,8 @@ export class DatasourceSearchComponent implements OnInit {
        // switch to new search observable each time the term changes
        switchMap(
         (term: string) => {
-          this.queryString.emit(term)
-          return term;
+          this.queryString.emit(term);    
+          return 'nonempty';//error if empty string or void
         }
       ),
     ).subscribe(t => console.debug('typed "' + t + '" in search'));
@@ -33,5 +33,9 @@ export class DatasourceSearchComponent implements OnInit {
   
   update(term: string): void {
     this.searchTerms.next(term);
+  }
+
+  onEnter(term: string): void {
+    this.queryString.emit(term);
   }
 }
