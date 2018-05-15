@@ -92,4 +92,6 @@
 
   <button type="submit" class="btn btn-success" [disabled]="!dsForm.form.valid">{{submitBtnMsg}}</button>
 
+  <div *ngIf="datasourceIsReachable$">{{ (datasourceIsReachable$ | async) ? "Datasource is reachable" : "Can not reach datasource"}}</div>
+
 </form>

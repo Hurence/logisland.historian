@@ -5,6 +5,7 @@ import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
 import { Observable } from 'rxjs/Observable';
 import { catchError, map } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
 
 @Component({
   selector: 'app-datasources-list',
@@ -29,7 +30,7 @@ export class DatasourcesListComponent implements OnInit {
 
   getDatasourcesQuery(queryParameter: string) {
     this.datasources$ = this.datasourceService.getDatasourcesQuery(queryParameter)
-      .pipe(catchError(error => []));
+      .pipe(catchError(error => of([])));
   }
 
 
