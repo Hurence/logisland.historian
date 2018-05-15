@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-datasource-form',
@@ -17,7 +18,8 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   @ViewChild(NgForm) dsForm;
   @Input() datasource: Datasource;
   @Output() submitted = new EventEmitter<Datasource>();
-  private submitBtnMsg: string
+  private submitBtnMsg: string;
+  private datasourceIsReachable$: Observable<boolean>;
 
   constructor(private datasourceService: DatasourceService) {}
 
@@ -46,6 +48,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
           datasource => {
             console.log('saved successfully to ' + JSON.stringify(datasource));
             this.submitted.emit(datasource);
+            this.isReachable();
             alert('successfully added datasource');
           },
           error => {
@@ -59,6 +62,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
           datasource => {
             console.log('updated successfully to ' + JSON.stringify(datasource));
             this.submitted.emit(datasource);
+            this.isReachable();
             alert('successfully updated datasource');
           },
           error => {
@@ -69,10 +73,15 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     }
   }
 
+  isReachable(): void {
+    this.datasourceIsReachable$ = this.datasourceService.datasourceIsReachable(this.datasource.id);
+  }
+
   resetForm() {
     this.datasource = new Datasource('', '');
     this.isCreation = true;
     this.submitBtnMsg = 'Add Data source';
+    this.datasourceIsReachable$ = null;
   }
 
   resetCred() {

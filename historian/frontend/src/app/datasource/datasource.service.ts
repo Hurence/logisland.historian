@@ -1,15 +1,26 @@
-import { Injectable } from '@angular/core';
-import { Datasource } from './Datasource';
-import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { query } from '@angular/core/src/animation/dsl';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { catchError, map } from 'rxjs/operators';
+
+import { Tag } from '../tag/tag';
+import { Datasource } from './Datasource';
 
 @Injectable()
 export class DatasourceService {
 
   private datasourcesUrl = 'http://localhost:8701/api/v1/datasources';
   constructor(private http: HttpClient) { }
+
+  datasourceIsReachable(id: string): Observable<boolean> {
+    return this.http.get<Tag[]>(this.datasourcesUrl + '/' + id + '/tags')
+      .pipe(
+        map(tags => true),
+        catchError(error => of(false))
+      );
+  }
 
   getDatasource(id: string): Observable<Datasource> {
     return this.http.get<Datasource>(this.datasourcesUrl + '/' + id);
