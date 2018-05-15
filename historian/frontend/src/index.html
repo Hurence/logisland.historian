@@ -7,8 +7,19 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
 </head>
 <body>
   <app-root></app-root>
+  <script>
+  $(function() {
+    jQuery(".help").click(function() {
+      jQuery(".help-content").toggle();
+      $(".col-8.pt-0").toggleClass("col-12");
+
+    });
+  });
+  </script>
 </body>
 </html>
