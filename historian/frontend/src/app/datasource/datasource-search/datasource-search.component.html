@@ -3,11 +3,11 @@
 
     <div class="input-group mb-3 filter">
       <div class="input-group-prepend">
-        <span class="input-group-text text-uppercase bg-primary" id="inputGroup-sizing-default">Filter data sources</span>
+        <span class="input-group-text text-uppercase bg-primary" id="inputGroup-sizing-default"><i class="fa fa-filter" aria-hidden="true"></i></span>
       </div>
-      <input type="search" class="form-control" id="search" 
-             placeholder="Type to filter data sources items..." 
-             (keyup)="update(search.value)" 
+      <input type="search" class="form-control" id="search"
+             placeholder="Type to filter by type or by name..."
+             (keyup)="update(search.value)"
              #search>
 
     </div>
