@@ -12,6 +12,8 @@
         <div class="col-6 border-bottom border-top">
           <button type="button" class="btn btn-outline-primary text-uppercase" (click)="dsForm.resetForm()">Add Data source</button>
 
+          <app-datasource-search (queryString)="list.getDatasourcesQuery($event)"></app-datasource-search>
+
           <app-datasources-list [dataSet]="dataSet"
                                 (selectDatasource)="onSelectDatasource($event)"
                                 #list></app-datasources-list>

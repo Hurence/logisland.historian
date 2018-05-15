@@ -6,6 +6,7 @@ import { DatasourceDashboardComponent } from './datasource-dashboard/datasource-
 import { DatasourceFormComponent } from './datasource-form/datasource-form.component';
 import { DatasourceService } from './datasource.service';
 import { DatasourcesListComponent } from './datasources-list/datasources-list.component';
+import { DatasourceSearchComponent } from './datasource-search/datasource-search.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { DatasourcesListComponent } from './datasources-list/datasources-list.co
   declarations: [
     DatasourceDashboardComponent,
     DatasourcesListComponent,
-    DatasourceFormComponent
+    DatasourceFormComponent,
+    DatasourceSearchComponent
   ],
   providers: [
     DatasourceService,

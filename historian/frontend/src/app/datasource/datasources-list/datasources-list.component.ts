@@ -4,6 +4,7 @@ import { Dataset } from '../../dataset/dataset';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
 import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-datasources-list',
@@ -25,6 +26,12 @@ export class DatasourcesListComponent implements OnInit {
   getDatasources(): void {
     this.datasources$ = this.datasourceService.getDatasources();
   }
+
+  getDatasourcesQuery(queryParameter: string) {
+    this.datasources$ = this.datasourceService.getDatasourcesQuery(queryParameter)
+      .pipe(catchError(error => []));
+  }
+
 
   onDeleteDatasource(datasource: Datasource) {
     this.datasourceService.deleteDatasource(datasource)
