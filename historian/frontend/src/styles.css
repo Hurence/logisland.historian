@@ -109,3 +109,13 @@ border-color: #dc3545;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.filter{
+margin-bottom: 0;
+}
+.filter .input-group-text{
+font-size: 0.2rem;
+color: #ffffff;
+}
+.filter input{
+font-size: 0.2rem;
+}
