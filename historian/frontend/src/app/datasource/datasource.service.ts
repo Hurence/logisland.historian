@@ -10,14 +10,6 @@ export class DatasourceService {
 
   private datasourcesUrl = 'http://localhost:8701/api/v1/datasources';
   constructor(private http: HttpClient) { }
-  // TODO remove or enable when filter api implemented
-  // buildFilterQuery(queryString: string): string {
-  //   if (queryString && queryString.length !== 0) {
-  //     return 'http://chronix:8983/solr/historian/select?fq=' + queryString + '&indent=on&q=*:*&wt=json';
-  //   } else {
-  //     return this.datasourcesUrl;
-  //   }
-  // }
 
   getDatasource(id: string): Observable<Datasource> {
     return this.http.get<Datasource>(this.datasourcesUrl + '/' + id);
