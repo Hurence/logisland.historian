@@ -3,6 +3,7 @@ import { Datasource } from './Datasource';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
+import { query } from '@angular/core/src/animation/dsl';
 
 @Injectable()
 export class DatasourceService {
@@ -28,12 +29,16 @@ export class DatasourceService {
 
   getDatasourcesQuery(queryParameter: string): Observable<Datasource[]> {
     if (queryParameter && queryParameter.length !== 0) {
-      return this.getDatasource(queryParameter).pipe(
-        map(datasource => [datasource])
-      );
+      return this.http.get<Datasource[]>(
+        this.datasourcesUrl + '?fq=' + this.formatQuery(queryParameter)
+      );    
     } else {
       return this.getDatasources();
     }
+  }
+  private formatQuery(query: string): string {
+      //TODO complexify parsing (add * ?)
+      return query;    
   }
 
   getDatasourceTypes(): string[] {
