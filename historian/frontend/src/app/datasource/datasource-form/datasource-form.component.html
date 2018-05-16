@@ -1,83 +1,82 @@
 <h5 class="text-uppercase">Data Source</h5>
 
-<form (ngSubmit)="onSubmit()" #dsForm="ngForm">
+<form [formGroup]="dsForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
     <label for="type">TYPE</label>
-    <select class="form-control" [(ngModel)]="datasource.datasource_type" id="type" name="type" #typ="ngModel" required>
+    <select class="form-control" formControlName="type" name="type" required>
       <option *ngFor="let type of datasourceTypes" [value]="type">{{type}}</option>
     </select>
-    <div [hidden]="typ.valid || typ.pristine" class="alert alert-danger">
+    <!-- <div [hidden]="typ.valid || typ.pristine" class="alert alert-danger">
       Type is required
-    </div>
+    </div> -->
   </div>
 
-  <div [ngSwitch]="datasource.datasource_type">
+  <div [ngSwitch]="dsForm.get('type').value">
 
     <div *ngSwitchCase="'OPC-DA'" id="opc-da-form">
       <div class="form-group">
         <label for="name">NAME</label>
-        <input type="text" class="form-control" [(ngModel)]="datasource.id"
-               id="name" name="name" #name="ngModel"
-               [disabled]="!isCreation" [required]="isCreation">
-        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-          Name is required
+        <input type="text" class="form-control" formControlName="name" name="name" 
+              [disabled]="!isCreation" [required]="isCreation">
+        <div [hidden]="dsForm.get('name').valid || dsForm.get('name').pristine" class="alert alert-danger">
+              Name is required
         </div>
       </div>
 
       <div class="form-group">
         <label for="name">DESCRIPTION</label>
-        <input type="text" class="form-control" [(ngModel)]="datasource.description"
-                id="description" name="description" #desc="ngModel" required>
-        <div [hidden]="desc.valid || desc.pristine" class="alert alert-danger">
-          Description is required
-        </div>
+        <input type="text" class="form-control" formControlName="description" name="description" required>
+        <!-- <div [hidden]="desc.valid || desc.pristine" class="alert alert-danger">
+              Description is required
+            </div> -->
       </div>
 
       <div class="form-group">
         <label for="hostAndPort">HOST &amp; PORT</label>
-        <input type="text" class="form-control" [(ngModel)]="datasource.host"
-               id="hostAndPort" name="hostAndPort" #domain="ngModel">
+        <input type="text" class="form-control" formControlName="host" name="hostAndPort">
 
-        <div [hidden]="domain.valid || domain.pristine" class="alert alert-danger">
-          Domain is required
-        </div>
+        <!-- <div [hidden]="domain.valid || domain.pristine" class="alert alert-danger">
+              Domain is required
+            </div> -->
       </div>
 
       <div class="form-group">
         <label for="clsid">CLSID</label>
-        <input type="text" class="form-control" [(ngModel)]="datasource.clsid" id="clsid" name="clsid">
+        <input type="text" class="form-control" formControlName="clsid" name="clsid">
       </div>
 
       <div class="form-group">
         <label for="progId">ProgID</label>
-        <input type="text" class="form-control" [(ngModel)]="datasource.progId" id="progId" name="progId">
+        <input type="text" class="form-control" formControlName="progId" name="progId">
       </div>
 
-      AUTHENTIFICATION
-      <div>
-        <input type="radio" id="withoutCred" value="none" name="cred" [(ngModel)]="credential" (change)="resetCred()">
-        <label for="withoutCred">NONE</label>
-      </div>
-      <div>
-        <input type="radio" id="withCred" value="normal" name="cred" [(ngModel)]="credential">
-        <label for="withCred">CREDENTIALS</label>
-      </div>
+      <div formGroupName="auth" class="well well-lg">
+        <h4>AUTHENTIFICATION</h4>
 
-      <div *ngIf='credential !== "none"'>
-        <div class="form-group">
-          <label for="user">USER</label>
-          <input type="text" class="form-control" [(ngModel)]="datasource.user" id="user" name="user" #user="ngModel" required>
-        </div>
-        <div [hidden]="user.valid || user.pristine" class="alert alert-danger">
-          User is required
+        <div class="form-group radio">
+          <input type="radio" value="none" name="cred" formControlName="cred">
+          <label for="withoutCred">NONE</label>
+
+          <input type="radio" value="normal" name="cred" formControlName="cred">
+          <label for="withCred">CREDENTIALS</label>
         </div>
 
-        <div class="form-group">
-          <label for="pwd">PASSWORD</label>
-          <input type="text" class="form-control" [(ngModel)]="datasource.password" id="pwd" name="pwd" #pwd="ngModel" required>
-        </div>
-        <div [hidden]="pwd.valid || pwd.pristine" class="alert alert-danger">
-          Password is required
+        <div *ngIf="dsForm.get('auth.cred').value !== 'none'">
+          <div class="form-group">
+            <label for="user">USER</label>
+            <input type="text" class="form-control" formControlName="user" name="user">
+          </div>
+          <!-- <div [hidden]="user.valid || user.pristine" class="alert alert-danger">
+                User is required
+              </div> -->
+
+          <div class="form-group">
+            <label for="pwd">PASSWORD</label>
+            <input type="text" class="form-control" formControlName="password" name="password">
+          </div>
+          <!-- <div [hidden]="pwd.valid || pwd.pristine" class="alert alert-danger">
+              Password is required
+            </div> -->
         </div>
       </div>
     </div>
@@ -88,9 +87,9 @@
 
   </div>
 
+  <button type="button" (click)="revert()" class="btn btn-danger btn-md btn-block text-uppercase" [disabled]="!dsForm.valid">Cancel</button>
 
-
-  <button type="submit" class="btn btn-success btn-md btn-block text-uppercase" [disabled]="!dsForm.form.valid">{{submitBtnMsg}}</button>
+  <button type="submit" class="btn btn-success btn-md btn-block text-uppercase" [disabled]="!dsForm.valid">{{submitBtnMsg}}</button>
 
   <div *ngIf="datasourceIsReachable$">{{ (datasourceIsReachable$ | async) ? "Datasource is reachable" : "Can not reach datasource"}}</div>
 
