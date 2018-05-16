@@ -16,8 +16,13 @@
           <div class="card h-100 datasources-list">
 
             <div class="card-body">
-              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="dsForm.resetForm()">Add Data source</button>
+                <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="dsForm.resetForm()">Add Data source</button>
 
+              <h6 _ngcontent-c2="" class="text-uppercase">
+                data sources
+                <small _ngcontent-c2="" class="text-muted">data sources list</small>
+              </h6>
+              
               <app-datasource-search (queryString)="list.getDatasourcesQuery($event)"></app-datasource-search>
 
               <app-datasources-list [dataSet]="dataSet" (selectDatasource)="onSelectDatasource($event)" #list></app-datasources-list>
