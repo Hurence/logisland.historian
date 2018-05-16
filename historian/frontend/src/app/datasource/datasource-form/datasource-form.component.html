@@ -26,7 +26,7 @@
 
       <div class="form-group">
         <label for="name">DESCRIPTION</label>
-        <input type="text" class="form-control" [(ngModel)]="datasource.description" 
+        <input type="text" class="form-control" [(ngModel)]="datasource.description"
                 id="description" name="description" #desc="ngModel" required>
         <div [hidden]="desc.valid || desc.pristine" class="alert alert-danger">
           Description is required
@@ -35,7 +35,7 @@
 
       <div class="form-group">
         <label for="hostAndPort">HOST &amp; PORT</label>
-        <input type="text" class="form-control" [(ngModel)]="datasource.host" 
+        <input type="text" class="form-control" [(ngModel)]="datasource.host"
                id="hostAndPort" name="hostAndPort" #domain="ngModel">
 
         <div [hidden]="domain.valid || domain.pristine" class="alert alert-danger">
@@ -88,9 +88,9 @@
 
   </div>
 
-  
 
-  <button type="submit" class="btn btn-success" [disabled]="!dsForm.form.valid">{{submitBtnMsg}}</button>
+
+  <button type="submit" class="btn btn-success btn-md btn-block text-uppercase" [disabled]="!dsForm.form.valid">{{submitBtnMsg}}</button>
 
   <div *ngIf="datasourceIsReachable$">{{ (datasourceIsReachable$ | async) ? "Datasource is reachable" : "Can not reach datasource"}}</div>
 
