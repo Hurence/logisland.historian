@@ -165,3 +165,10 @@ label {
 .filter i.fa.fa-filter {
   font-size: 0.8rem;
 }
+.footer .row {
+  margin-bottom: 0;
+}
+.footer [class*="col-"]  {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
