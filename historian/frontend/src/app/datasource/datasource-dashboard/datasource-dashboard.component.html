@@ -1,4 +1,4 @@
-<div class="container-fluid mt-2 h-100">
+<div class="container-fluid h-100">
   <div class="row h-100">
     <div class="col-lg-12 col-md-12 pt-0 pb-0">
 
@@ -22,7 +22,7 @@
                 data sources
                 <small _ngcontent-c2="" class="text-muted">data sources list</small>
               </h6>
-              
+
               <app-datasource-search (queryString)="list.getDatasourcesQuery($event)"></app-datasource-search>
 
               <app-datasources-list [dataSet]="dataSet" (selectDatasource)="onSelectDatasource($event)" #list></app-datasources-list>
@@ -38,6 +38,7 @@
             data sources
             <small class="text-muted">add a data source</small>
           </h6>
+
               <p>You can use the mark tag to <mark>highlight</mark> text.</p>
               <h6 class="text-uppercase">
             data sources
