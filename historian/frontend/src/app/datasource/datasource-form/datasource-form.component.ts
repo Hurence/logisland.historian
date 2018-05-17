@@ -170,4 +170,6 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     );
   }
 
+  formIsClean(): boolean { return this.dsForm.dirty; }
+
 }

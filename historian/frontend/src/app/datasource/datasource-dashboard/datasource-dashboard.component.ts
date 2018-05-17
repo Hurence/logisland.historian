@@ -31,7 +31,7 @@ export class DatasourceDashboardComponent implements OnInit {
   }
 
   onSelectDatasource(datasource: Datasource) {
-    if (this.formIsClean()) {
+    if (this.dsFormIsClean()) {
       this.selectedDatasource = datasource;
       this.dsFrmComp.isReachable();  
     } else {
@@ -66,12 +66,12 @@ export class DatasourceDashboardComponent implements OnInit {
     return this.dataSet.isEmpty();
   }
 
-  formIsClean(): Boolean {
-    return !this.dsFrmComp.dsForm.dirty;
+  dsFormIsClean(): Boolean {
+    return !this.dsFrmComp.formIsClean();
   }
 
   canDeactivate(): Observable<boolean> | boolean {
-    if (this.formIsClean()) return true;
+    if (this.dsFormIsClean()) return true;
     return this.dialogService.confirm('Discard changes?');
   }
 }
