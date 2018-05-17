@@ -14,7 +14,6 @@ import { ProfilService } from '../profil/profil.service';
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
   ],
   declarations: [

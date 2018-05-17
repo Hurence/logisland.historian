@@ -162,8 +162,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   }
 
   resetCredWhenNone(): void {
-    const credControl = this.dsForm.get('auth.cred');
-    credControl.valueChanges.forEach(
+    this.dsForm.get('auth.cred').valueChanges.forEach(
       (cred: string) => {
         if (cred === 'none') {
           this.dsForm.patchValue({

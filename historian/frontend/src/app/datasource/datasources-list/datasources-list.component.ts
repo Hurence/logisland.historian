@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { catchError } from 'rxjs/operators';
 
 import { Dataset } from '../../dataset/dataset';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
-import { Observable } from 'rxjs/Observable';
-import { catchError, map } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
 
 @Component({
   selector: 'app-datasources-list',
