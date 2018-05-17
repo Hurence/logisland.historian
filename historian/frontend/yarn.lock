@@ -33,6 +33,12 @@
   dependencies:
     tslib "^1.7.1"
 
+"@angular/cdk@^6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-6.0.2.tgz#65089561f91038ba6d744b9a251998bf99c75097"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/cli@~1.7.4":
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-1.7.4.tgz#b6c31b5fc6f8ea07e55b1b01a26422f5358a4ea6"
@@ -140,6 +146,12 @@
 "@angular/language-service@^5.2.0":
   version "5.2.10"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-5.2.10.tgz#5699af9d46033faccefeb21d4d168524d2180a8c"
+
+"@angular/material@^6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-6.0.2.tgz#bd4b84d764c3c488856243e9dc05ab14ce3310d7"
+  dependencies:
+    tslib "^1.7.1"
 
 "@angular/platform-browser-dynamic@^5.2.0":
   version "5.2.10"
@@ -322,10 +334,6 @@ amqplib@^0.5.2:
     buffer-more-ints "0.0.2"
     readable-stream "1.x >=1.1.9"
     safe-buffer "^5.0.1"
-
-angular-font-awesome@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/angular-font-awesome/-/angular-font-awesome-3.1.2.tgz#9378732612d8e8c71e0d7c2faa0faddc7f858ec9"
 
 ansi-html@0.0.7:
   version "0.0.7"
