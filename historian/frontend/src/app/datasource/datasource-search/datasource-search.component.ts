@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
   templateUrl: './datasource-search.component.html',
   styleUrls: ['./datasource-search.component.css']
 })
-export class DatasourceSearchComponent implements OnInit {
+export class DatasourceSearchComponent implements OnInit, OnDestroy {
 
 
   @Output() queryString = new EventEmitter<string>();
@@ -30,9 +30,13 @@ export class DatasourceSearchComponent implements OnInit {
       ),
     ).subscribe(t => console.debug('typed "' + t + '" in search'));
   }
+
+  ngOnDestroy() {
+    this.searchTerms.unsubscribe();
+  }
   
   update(term: string): void {
-    this.searchTerms.next(term);
+    this.searchTerms.next(term);  
   }
 
   onEnter(term: string): void {
