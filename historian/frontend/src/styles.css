@@ -16,6 +16,12 @@ body {
 .form-group {
     margin-bottom: 0.3rem;
 }
+.text-muted {
+    color: #2E99FB!important;
+}
+mark, .mark {
+    background-color: yellow;
+}
 .logo {
   background-color: #BBDFFC;
 }
