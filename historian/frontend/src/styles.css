@@ -107,7 +107,12 @@ label {
   background-color: #2699FB;
   opacity: 0.5;
 }
-
+.btn-light:not(:disabled):not(.disabled):active, .btn-light:not(:disabled):not(.disabled).active, .show > .btn-light.dropdown-toggle {
+    color: #ffffff;
+    background-color: #007bff;
+    border-color: #d3d9df;
+    opacity: 1;
+}
 .datasource-btn {
   max-width: 33%;
   min-width: 33%;
