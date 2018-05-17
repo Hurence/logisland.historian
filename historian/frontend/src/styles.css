@@ -60,7 +60,18 @@ label {
 .navbar-brand img {
   width: 100px;
 }
-
+.navbar {
+    line-height: 3.4;
+}
+.navbar a{
+  font-size: 0.7rem;
+}
+.navbar-nav .fa-question-circle:before{
+  font-size: 1rem;
+}
+.nav.nav-pills a{
+  font-size: 0.7rem;
+}
 #main-nav .nav-link {
   cursor: pointer;
 }
