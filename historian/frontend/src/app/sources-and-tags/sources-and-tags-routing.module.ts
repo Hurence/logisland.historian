@@ -28,6 +28,11 @@ const sourcesAndTagsRoutes: Routes = [
         path: 'configuration',
         component: ConfigurationComponent,
         canActivate: [ConfigurationGuard],
+      },
+      {
+        path: '',
+        redirectTo: 'datasources',
+        pathMatch: 'full',
       }
     ]
   }
