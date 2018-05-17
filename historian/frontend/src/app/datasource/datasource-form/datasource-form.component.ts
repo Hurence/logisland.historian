@@ -27,11 +27,11 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder,
     private datasourceService: DatasourceService) {
-
     this.isCreation = true;
     this.submitBtnMsg = 'Add Data source';
     this.createForm();
     this.resetCredWhenNone();
+    this.hasBeenReset = true;
   }
 
   ngOnInit() {

@@ -20,7 +20,6 @@ export class DatasourceDashboardComponent implements OnInit {
   private dataSet: Dataset;
   @ViewChild(DatasourceFormComponent)
   private dsFrmComp: DatasourceFormComponent;
-  @Input() helpToggled: boolean;
 
   constructor(private datasetService: DatasetService,
               private router: Router,
