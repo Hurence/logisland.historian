@@ -7,7 +7,7 @@
           <div class="card h-100">
 
             <div class="card-body">
-              <app-datasource-form #dsForm [datasource]="selectedDatasource" (submitted)="list.getDatasources()"></app-datasource-form>
+              <app-datasource-form [datasource]="selectedDatasource" (submitted)="list.getDatasources()"></app-datasource-form>
             </div>
           </div>
         </div>
@@ -16,7 +16,7 @@
           <div class="card h-100 datasources-list">
 
             <div class="card-body">
-              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="dsForm.resetForm(); list.onSelect(null)">Add Data source</button>
+              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onSelectDatasource(null);">Add Data source</button>
 
               <h6 _ngcontent-c2="" class="text-uppercase">
                 data sources
