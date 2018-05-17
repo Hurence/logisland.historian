@@ -16,7 +16,8 @@ export class DatasourcesListComponent implements OnInit {
 
   datasources$: Observable<Datasource[]>;
   @Input() dataSet: Dataset;
-  @Output() selectDatasource = new EventEmitter<Datasource>();
+  private selectedDatasource : Datasource;
+  @Output() selectedDatasourceE = new EventEmitter<Datasource>();
 
   constructor(private datasourceService: DatasourceService) { }
 
@@ -44,7 +45,7 @@ export class DatasourcesListComponent implements OnInit {
   }
 
   onSelect(datasource: Datasource) {
-    this.selectDatasource.emit(datasource);
+    this.selectDatasource(datasource); 
   }
 
   onAddToDataset(datasource: Datasource) {
@@ -60,5 +61,10 @@ export class DatasourcesListComponent implements OnInit {
       return this.dataSet.containDatasource(datasource);
     }
     return false;
+  }
+
+  private selectDatasource(datasource: Datasource): void {
+    this.selectedDatasourceE.emit(datasource);
+    this.selectedDatasource = datasource;
   }
 }

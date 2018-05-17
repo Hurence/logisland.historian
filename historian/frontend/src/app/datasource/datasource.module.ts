@@ -8,6 +8,7 @@ import { DatasourceService } from './datasource.service';
 import { DatasourcesListComponent } from './datasources-list/datasources-list.component';
 import { DatasourceSearchComponent } from './datasource-search/datasource-search.component';
 import { DialogService } from '../dialog.service';
+import { DatasourceHelpComponent } from './datasource-help/datasource-help.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { DialogService } from '../dialog.service';
     DatasourceDashboardComponent,
     DatasourcesListComponent,
     DatasourceFormComponent,
-    DatasourceSearchComponent
+    DatasourceSearchComponent,
+    DatasourceHelpComponent
   ],
   providers: [
     DatasourceService,
