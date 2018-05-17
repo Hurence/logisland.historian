@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SourcesAndTagsComponent } from './sources-and-tags/sources-and-tags.component';
 import { TodoComponent } from './todo/todo.component';
+import { CanDeactivateGuard } from './can-deactivate-guard.service';
 
 const routes: Routes = [
   { path: 'sources-and-tags', component: SourcesAndTagsComponent },
@@ -23,6 +24,9 @@ const routes: Routes = [
       }
     )
   ],
-  exports: [ RouterModule ]
+  exports: [ RouterModule ],
+  providers: [
+    CanDeactivateGuard,
+  ]
 })
 export class AppRoutingModule { }

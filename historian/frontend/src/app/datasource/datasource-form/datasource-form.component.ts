@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
 
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-datasource-form',
@@ -12,36 +12,85 @@ import { Observable } from 'rxjs/Observable';
 })
 export class DatasourceFormComponent implements OnInit, OnChanges {
 
-  datasourceTypes: string[];
-  isCreation: boolean;
-  credential: string;
-  @ViewChild(NgForm) dsForm;
+  private dsForm: FormGroup;
+  private name: FormControl;
+  private typr: FormControl;
+  private description: FormControl;
+  private host: FormControl;
+  private datasourceTypes: string[];
+  private isCreation: boolean;
   @Input() datasource: Datasource;
   @Output() submitted = new EventEmitter<Datasource>();
   private submitBtnMsg: string;
   private datasourceIsReachable$: Observable<boolean>;
 
-  constructor(private datasourceService: DatasourceService) {}
+  constructor(private fb: FormBuilder,
+    private datasourceService: DatasourceService) {
+
+    this.isCreation = true;
+    this.submitBtnMsg = 'Add Data source';
+    this.createForm();
+    this.resetCredWhenNone();
+  }
 
   ngOnInit() {
-    this.datasourceTypes = this.datasourceService.getDatasourceTypes();
-    this.datasource = new Datasource('', '');
-    this.isCreation = true;
-    this.credential = 'none';
-    this.submitBtnMsg = 'Add Data source';
+    this.datasourceTypes = this.datasourceService.getDatasourceTypes();  
   }
 
   ngOnChanges() {
+    if (this.datasource) this.rebuildForm();
     this.isCreation = false;
     this.submitBtnMsg = 'Update Data source';
+  }
+  //restore form with clean values
+  revert() { this.rebuildForm(); }
+
+  private createForm(): void {
+    this.dsForm = this.fb.group({
+      type: ['OPC-DA', Validators.required ],
+      name: ['', Validators.required ],
+      description: ['', Validators.required ],
+      host: ['', Validators.required ],
+      clsid: '',
+      progId: '',
+      auth: this.fb.group({
+        cred: 'none',
+        user: '',
+        password: '', 
+      }),            
+    });
+  }
+
+  private rebuildForm(): void {
+    this.dsForm.reset(this.createFormObject(this.datasource))
+  }
+
+  private createFormObject(datasource: Datasource) {
+    return {
+      type: datasource.datasource_type,
+      name: datasource.id,
+      description: datasource.description,
+      host: datasource.host,
+      clsid: datasource.clsid,
+      progId: datasource.progId,
+      auth: {
+        cred: this.findCredentialForDatasource(datasource),
+        user: datasource.user,
+        password: datasource.password, 
+      },            
+    };
+  }
+  
+  private findCredentialForDatasource(datasource: Datasource): string {
     if (this.datasource && (this.datasource.password || this.datasource.user)) {
-      this.credential = 'normal';
+      return 'normal';
     } else {
-      this.credential = 'none';
+      return 'none';
     }
   }
 
-  onSubmit() {
+  private onSubmit() {
+    this.datasource = this.prepareSaveDatasource();
     if (this.isCreation) {
       this.datasourceService.saveDatasource(this.datasource)
         .subscribe(
@@ -71,22 +120,56 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
           }
         );
     }
+    this.rebuildForm();
+  }
+
+  private prepareSaveDatasource(): Datasource {
+    const formModel = this.dsForm.value;
+
+    const saveDatasource: Datasource = {
+      id: formModel.name,
+      description: formModel.description,
+      host: formModel.host,
+      clsid: formModel.clsid,
+      progId: formModel.progId,
+      user: formModel.user,
+      password: formModel.password,
+      record_type: 'datasource',
+      datasource_type: formModel.type
+    };         
+    return saveDatasource;
   }
 
   isReachable(): void {
-    this.datasourceIsReachable$ = this.datasourceService.datasourceIsReachable(this.datasource.id);
+    if (this.datasource) {
+      this.datasourceIsReachable$ = this.datasourceService.datasourceIsReachable(this.datasource.id);
+    }
   }
 
   resetForm() {
-    this.datasource = new Datasource('', '');
+    this.datasource = new Datasource('', 'OPC-DA');
     this.isCreation = true;
     this.submitBtnMsg = 'Add Data source';
     this.datasourceIsReachable$ = null;
+    this.rebuildForm();
   }
 
-  resetCred() {
-    console.log('reset cred !!!');
-    this.datasource.user = null;
-    this.datasource.password = null;
+  resetCredWhenNone(): void {
+    const credControl = this.dsForm.get('auth.cred');
+    credControl.valueChanges.forEach(
+      (cred: string) => {
+        if (cred === 'none') {
+          this.dsForm.patchValue({
+            auth: {
+              user: null,
+              password: null,
+            }
+          });
+        }
+      }
+    );
   }
+
+  formIsClean(): boolean { return this.dsForm.dirty; }
+
 }

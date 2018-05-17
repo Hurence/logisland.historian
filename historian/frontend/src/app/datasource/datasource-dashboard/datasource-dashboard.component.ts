@@ -5,6 +5,8 @@ import { DatasetService } from '../../dataset/dataset.service.';
 import { Datasource } from '../Datasource';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
+import { DialogService } from '../../dialog.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -20,7 +22,8 @@ export class DatasourceDashboardComponent implements OnInit {
 
   constructor(private datasetService: DatasetService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private dialogService: DialogService) { }
 
   ngOnInit() {
     this.datasetService.getMyDataset()
@@ -28,8 +31,31 @@ export class DatasourceDashboardComponent implements OnInit {
   }
 
   onSelectDatasource(datasource: Datasource) {
-    this.selectedDatasource = datasource;
-    this.dsFrmComp.isReachable();
+    if (this.dsFormIsClean()) {
+      this.selectedDatasource = datasource;
+      this.dsFrmComp.isReachable();  
+    } else {
+      let canSwitch = this.canDeactivate()
+      if (typeof canSwitch === "boolean") {
+        if (canSwitch) {      
+          this.selectedDatasource = datasource;
+          this.dsFrmComp.isReachable();  
+        } else {
+          console.log('user cancelled selection change');
+        }
+      }
+      else {
+        canSwitch.subscribe(bool => {
+          if (bool) {
+            this.selectedDatasource = datasource;
+            this.dsFrmComp.isReachable();  
+          } else {
+            console.log('user cancelled selection change');
+          }
+        })
+      }
+      
+    }
   }
 
   goToTags() {
@@ -38,5 +64,14 @@ export class DatasourceDashboardComponent implements OnInit {
 
   datasetIsEmpty(): boolean {
     return this.dataSet.isEmpty();
+  }
+
+  dsFormIsClean(): Boolean {
+    return !this.dsFrmComp.formIsClean();
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if (this.dsFormIsClean()) return true;
+    return this.dialogService.confirm('Discard changes?');
   }
 }

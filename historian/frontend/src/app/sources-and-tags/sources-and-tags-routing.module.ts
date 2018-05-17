@@ -7,6 +7,7 @@ import { ConfigurationComponent } from './configuration/configuration.component'
 import { DatasourceDashboardComponent } from '../datasource/datasource-dashboard/datasource-dashboard.component';
 import { TagsGuard } from './tags-guard';
 import { ConfigurationGuard } from './configuration-guard';
+import { CanDeactivateGuard } from '../can-deactivate-guard.service';
 
 const sourcesAndTagsRoutes: Routes = [
   {
@@ -15,7 +16,9 @@ const sourcesAndTagsRoutes: Routes = [
     children: [
       {
         path: 'datasources',
-        component: DatasourceDashboardComponent },
+        component: DatasourceDashboardComponent,
+        canDeactivate: [CanDeactivateGuard],
+      },    
       {
         path: 'tags',
         component: TagsListComponent ,
@@ -37,6 +40,7 @@ const sourcesAndTagsRoutes: Routes = [
   providers: [
     TagsGuard,
     ConfigurationGuard,
+    CanDeactivateGuard
   ],
   exports: [
     RouterModule

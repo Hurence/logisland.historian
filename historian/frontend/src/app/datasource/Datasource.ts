@@ -1,6 +1,6 @@
 export class Datasource {
 
-    private record_type = 'datasource';
+    public record_type = 'datasource';
 
     constructor(
         public id: string,
@@ -11,6 +11,7 @@ export class Datasource {
         public user?: string,
         public password?: string,
         public clsid?: string,
+        public progId?: string,
     ) {}
 
 }
