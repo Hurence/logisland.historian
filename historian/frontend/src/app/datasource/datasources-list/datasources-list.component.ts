@@ -45,7 +45,11 @@ export class DatasourcesListComponent implements OnInit {
   }
 
   onSelect(datasource: Datasource) {
-    this.selectDatasource(datasource); 
+    if (datasource === this.selectedDatasource) {            
+      this.selectDatasource(null);
+    } else {
+      this.selectDatasource(datasource);
+    }
   }
 
   onAddToDataset(datasource: Datasource) {

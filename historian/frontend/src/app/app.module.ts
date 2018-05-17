@@ -12,6 +12,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { CustomHttpInterceptor } from './security-http-interceptor';
 import { SourcesAndTagsModule } from './sources-and-tags/sources-and-tags.module';
 import { TodoComponent } from './todo/todo.component';
+import { ProfilService } from './profil/profil.service';
 
 // components
 // router
@@ -42,6 +43,7 @@ import { TodoComponent } from './todo/todo.component';
       useClass: CustomHttpInterceptor,
       multi: true
     },
+    ProfilService,
   ],
   bootstrap: [AppComponent],
 })

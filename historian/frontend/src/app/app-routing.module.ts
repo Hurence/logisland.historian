@@ -9,7 +9,7 @@ import { CanDeactivateGuard } from './can-deactivate-guard.service';
 const routes: Routes = [
   { path: 'sources-and-tags', component: SourcesAndTagsComponent },
   { path: 'todo', component: TodoComponent },
-  { path: '', redirectTo: '/todo', pathMatch: 'full' },
+  { path: '', redirectTo: 'sources-and-tags', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 

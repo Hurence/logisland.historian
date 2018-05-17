@@ -19,6 +19,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private host: FormControl;
   private datasourceTypes: string[];
   private isCreation: boolean;
+  private hasBeenReset: boolean;
   @Input() datasource: Datasource;
   @Output() submitted = new EventEmitter<Datasource>();
   private submitBtnMsg: string;
@@ -39,8 +40,13 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.datasource) this.rebuildForm();
-    this.isCreation = false;
-    this.submitBtnMsg = 'Update Data source';
+    if (this.hasBeenReset) { 
+      this.hasBeenReset = false;
+    } else {
+      this.isCreation = false;
+      this.submitBtnMsg = 'Update Data source';
+      this.isReachable();
+    }
   }
   //restore form with clean values
   revert() { this.rebuildForm(); }
@@ -146,12 +152,13 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     }
   }
 
-  resetForm() {
-    this.datasource = new Datasource('', 'OPC-DA');
+  resetForm(datasource: Datasource) {
+    this.hasBeenReset = true;
+    this.datasource = datasource;
     this.isCreation = true;
     this.submitBtnMsg = 'Add Data source';
     this.datasourceIsReachable$ = null;
-    this.rebuildForm();
+    this.rebuildForm();  
   }
 
   resetCredWhenNone(): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 
 import { Dataset } from '../../dataset/dataset';
 import { DatasetService } from '../../dataset/dataset.service.';
@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
 import { DialogService } from '../../dialog.service';
 import { Observable } from 'rxjs/Observable';
+import { ProfilService } from '../../profil/profil.service';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -15,47 +16,21 @@ import { Observable } from 'rxjs/Observable';
 })
 export class DatasourceDashboardComponent implements OnInit {
 
-  selectedDatasource: Datasource;
-  dataSet: Dataset;
+  private selectedDatasource: Datasource;
+  private dataSet: Dataset;
   @ViewChild(DatasourceFormComponent)
-  dsFrmComp: DatasourceFormComponent;
+  private dsFrmComp: DatasourceFormComponent;
+  @Input() helpToggled: boolean;
 
   constructor(private datasetService: DatasetService,
               private router: Router,
               private route: ActivatedRoute,
-              private dialogService: DialogService) { }
+              private dialogService: DialogService,
+              private profilService: ProfilService) { }
 
   ngOnInit() {
     this.datasetService.getMyDataset()
       .subscribe(dataSet => this.dataSet = dataSet);
-  }
-
-  onSelectDatasource(datasource: Datasource) {
-    if (this.dsFormIsClean()) {
-      this.selectedDatasource = datasource;
-      this.dsFrmComp.isReachable();  
-    } else {
-      let canSwitch = this.canDeactivate()
-      if (typeof canSwitch === "boolean") {
-        if (canSwitch) {      
-          this.selectedDatasource = datasource;
-          this.dsFrmComp.isReachable();  
-        } else {
-          console.log('user cancelled selection change');
-        }
-      }
-      else {
-        canSwitch.subscribe(bool => {
-          if (bool) {
-            this.selectedDatasource = datasource;
-            this.dsFrmComp.isReachable();  
-          } else {
-            console.log('user cancelled selection change');
-          }
-        })
-      }
-      
-    }
   }
 
   goToTags() {
@@ -73,5 +48,41 @@ export class DatasourceDashboardComponent implements OnInit {
   canDeactivate(): Observable<boolean> | boolean {
     if (this.dsFormIsClean()) return true;
     return this.dialogService.confirm('Discard changes?');
+  }
+
+  onSelectDatasource(datasource: Datasource) {
+    if (this.dsFormIsClean()) {  
+      this.selectDatasource(datasource);
+    } else {
+      let canSwitch = this.canDeactivate()
+      if (typeof canSwitch === "boolean") {
+        if (canSwitch) {      
+          this.selectDatasource(datasource);
+        } else {
+          console.debug('user cancelled selection change');
+        }
+      }
+      else {
+        canSwitch.subscribe(bool => {
+          if (bool) {
+            this.selectDatasource(datasource); 
+          } else {
+            console.debug('user cancelled selection change');
+          }
+        })
+      }    
+    }
+  }
+  private selectDatasource(datasource: Datasource) {
+    if (datasource === null) {      
+      this.selectedDatasource = new Datasource('', 'OPC-DA');      
+      this.dsFrmComp.resetForm(this.selectedDatasource);  
+    } else {
+      this.selectedDatasource = datasource;    
+    }
+  }
+
+  isHelpHidden(): boolean {
+    return this.profilService.isHelpHidden();
   }
 }
