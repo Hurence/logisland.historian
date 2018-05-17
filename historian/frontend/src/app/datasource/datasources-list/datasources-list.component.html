@@ -1,12 +1,12 @@
 
 
 
-<h6>editing dataset: {{dataSet?.name}}</h6>
+<!-- <h6>editing dataset: {{dataSet?.name}}</h6> -->
 
 
 <div *ngFor="let datasource of datasources$ | async" (click)="onSelect(datasource)">
 
-  <button type="button" class="btn btn-light text-uppercase datasource-btn" 
+  <button type="button" class="btn btn-light text-uppercase datasource-btn"
           title="{{datasource.description}} {{datasource.datasource_type}}"
           [class.active]="datasource === selectedDatasource">
     <span class="servername">{{datasource.description}}</span> <span class="badge badge-light">{{datasource.datasource_type}}</span>
@@ -23,5 +23,5 @@
   <button type="button" class="btn btn-outline-danger text-uppercase" (click)="onDeleteDatasource(datasource)">
     remove data source
   </button>
-  
+
 </div>
