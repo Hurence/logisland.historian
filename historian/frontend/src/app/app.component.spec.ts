@@ -9,8 +9,6 @@ import { AppComponent } from './app.component';
 // router
 import { AppRoutingModule } from './app-routing.module';
 // nebular modules
-import { NbThemeModule } from '@nebular/theme';
-import { NbSidebarModule, NbLayoutModule, NbSidebarService } from '@nebular/theme';
 import { AppModule } from './app.module';
 
 describe('AppComponent', () => {

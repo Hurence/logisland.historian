@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 
 import { Dataset } from '../../dataset/dataset';
 import { DatasetService } from '../../dataset/dataset.service.';
@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
 import { DialogService } from '../../dialog.service';
 import { Observable } from 'rxjs/Observable';
+import { ProfilService } from '../../profil/profil.service';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -19,11 +20,13 @@ export class DatasourceDashboardComponent implements OnInit {
   private dataSet: Dataset;
   @ViewChild(DatasourceFormComponent)
   private dsFrmComp: DatasourceFormComponent;
+  @Input() helpToggled: boolean;
 
   constructor(private datasetService: DatasetService,
               private router: Router,
               private route: ActivatedRoute,
-              private dialogService: DialogService) { }
+              private dialogService: DialogService,
+              private profilService: ProfilService) { }
 
   ngOnInit() {
     this.datasetService.getMyDataset()
@@ -77,5 +80,9 @@ export class DatasourceDashboardComponent implements OnInit {
     } else {
       this.selectedDatasource = datasource;    
     }
+  }
+
+  isHelpHidden(): boolean {
+    return this.profilService.isHelpHidden();
   }
 }

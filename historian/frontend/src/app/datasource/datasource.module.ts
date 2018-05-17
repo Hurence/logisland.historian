@@ -9,6 +9,7 @@ import { DatasourcesListComponent } from './datasources-list/datasources-list.co
 import { DatasourceSearchComponent } from './datasource-search/datasource-search.component';
 import { DialogService } from '../dialog.service';
 import { DatasourceHelpComponent } from './datasource-help/datasource-help.component';
+import { ProfilService } from '../profil/profil.service';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { DatasourceHelpComponent } from './datasource-help/datasource-help.compo
   providers: [
     DatasourceService,
     DialogService,
+    ProfilService,
   ],
 })
 export class DatasourceModule { }
