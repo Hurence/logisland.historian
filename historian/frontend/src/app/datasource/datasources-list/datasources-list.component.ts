@@ -27,6 +27,13 @@ export class DatasourcesListComponent implements OnInit {
   unSelectDatasource(): void {
     this.selectedDatasource = null;
   }
+  /*
+    select given datasource.
+    Should be used only by external components.
+  */
+  forceSelectDatasource(datasource: Datasource): void {
+    this.selectedDatasource = datasource;
+  }
 
   getDatasources(): void {
     this.datasources$ = this.datasourceService.getDatasources();
@@ -49,7 +56,7 @@ export class DatasourcesListComponent implements OnInit {
   }
 
   private onSelect(datasource: Datasource) {
-    if (datasource === this.selectedDatasource) {            
+    if (datasource === this.selectedDatasource) {           
       this.selectDatasource(null);
     } else {
       this.selectDatasource(datasource);

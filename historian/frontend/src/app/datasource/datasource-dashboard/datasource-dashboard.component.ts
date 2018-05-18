@@ -8,6 +8,7 @@ import { DatasourceFormComponent } from '../datasource-form/datasource-form.comp
 import { DialogService } from '../../dialog/dialog.service';
 import { Observable } from 'rxjs';
 import { ProfilService } from '../../profil/profil.service';
+import { DatasourcesListComponent } from '../datasources-list/datasources-list.component';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -20,6 +21,8 @@ export class DatasourceDashboardComponent implements OnInit {
   private dataSet: Dataset;
   @ViewChild(DatasourceFormComponent)
   private dsFrmComp: DatasourceFormComponent;
+  @ViewChild(DatasourcesListComponent)
+  private dslistComp: DatasourcesListComponent;
 
   constructor(private datasetService: DatasetService,
               private router: Router,
@@ -55,10 +58,11 @@ export class DatasourceDashboardComponent implements OnInit {
     } else {
       let canSwitch = this.canDeactivate()
       if (typeof canSwitch === "boolean") {
-        if (canSwitch) {      
+        if (canSwitch) {
           this.selectDatasource(datasource);
         } else {
           console.debug('user cancelled selection change');
+          this.dslistComp.forceSelectDatasource(this.selectedDatasource);
         }
       }
       else {
@@ -67,6 +71,7 @@ export class DatasourceDashboardComponent implements OnInit {
             this.selectDatasource(datasource); 
           } else {
             console.debug('user cancelled selection change');
+            this.dslistComp.forceSelectDatasource(this.selectedDatasource);
           }
         })
       }    
