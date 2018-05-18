@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { Datasource } from '../Datasource';
@@ -13,10 +13,10 @@ import { DatasourceService } from '../datasource.service';
 export class DatasourceFormComponent implements OnInit, OnChanges {
 
   private dsForm: FormGroup;
-  private name: FormControl;
-  private typr: FormControl;
-  private description: FormControl;
-  private host: FormControl;
+  private name: AbstractControl;
+  private typr: AbstractControl;
+  private description: AbstractControl;
+  private host: AbstractControl;
   private datasourceTypes: string[];
   private isCreation: boolean;
   private hasBeenReset: boolean;
@@ -42,8 +42,10 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     if (this.datasource) this.rebuildForm();
     if (this.hasBeenReset) { 
       this.hasBeenReset = false;
+      this.enaableName();
     } else {
       this.isCreation = false;
+      this.disableName();
       this.submitBtnMsg = 'Update Data source';
       this.isReachable();
     }
@@ -54,7 +56,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private createForm(): void {
     this.dsForm = this.fb.group({
       type: ['OPC-DA', Validators.required ],
-      name: ['', Validators.required ],
+      name: [{value: '', disabled: true}, Validators.required ],
       description: ['', Validators.required ],
       host: ['', Validators.required ],
       clsid: '',
@@ -65,6 +67,15 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
         password: '', 
       }),            
     });
+    this.name = this.dsForm.get('name')
+  }
+
+  private disableName(): void {
+    this.name.disable();
+  }
+
+  private enaableName(): void {
+    this.name.enable();
   }
 
   private rebuildForm(): void {

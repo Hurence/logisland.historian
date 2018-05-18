@@ -19,8 +19,7 @@
     <div *ngSwitchCase="'OPC-DA'" id="opc-da-form">
       <div class="form-group">
         <label for="name">NAME</label>
-        <input type="text" class="form-control" formControlName="name" name="name"
-              [disabled]="!isCreation" [required]="isCreation">
+        <input type="text" class="form-control" formControlName="name" name="name" [required]="isCreation">
         <div [hidden]="dsForm.get('name').valid || dsForm.get('name').pristine" class="alert alert-danger">
               Name is required
         </div>
