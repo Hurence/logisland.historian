@@ -36,8 +36,9 @@ export class DatasourcesListComponent implements OnInit {
 
   onDeleteDatasource(datasource: Datasource) {
     this.datasourceService.deleteDatasource(datasource)
-      .subscribe(deletedDs => {
-        console.log('deleted datasource with id :' + deletedDs.id);
+      .subscribe(deletedDs => {      
+        console.log('deleted datasource with id :' + deletedDs.id);        
+        this.dataSet.removeDatasource(deletedDs);
         this.getDatasources();
       });
     // TODO handle error and just remove from array directly ?
