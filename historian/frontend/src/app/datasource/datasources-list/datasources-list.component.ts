@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { Dataset } from '../../dataset/dataset';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
+import { DialogService } from '../../dialog/dialog.service';
 
 @Component({
   selector: 'app-datasources-list',
@@ -18,7 +19,8 @@ export class DatasourcesListComponent implements OnInit {
   private selectedDatasource : Datasource;
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();
 
-  constructor(private datasourceService: DatasourceService) { }
+  constructor(private datasourceService: DatasourceService,
+              private dialogService: DialogService) { }
 
   ngOnInit() {
     this.getDatasources();
@@ -45,14 +47,18 @@ export class DatasourcesListComponent implements OnInit {
   }
 
 
-  private onDeleteDatasource(datasource: Datasource) {
-    this.datasourceService.deleteDatasource(datasource)
-      .subscribe(deletedDs => {      
-        console.log('deleted datasource with id :' + deletedDs.id);        
-        this.dataSet.removeDatasource(deletedDs);
-        this.getDatasources();
+  private onDeleteDatasource(datasource: Datasource): void {
+    this.dialogService.confirm("Are you sure you want to delete this datasource ?")
+      .subscribe(ok => {
+        if (ok) {
+          this.datasourceService.deleteDatasource(datasource)
+            .subscribe(deletedDs => {
+              console.log('deleted datasource with id :' + deletedDs.id);
+              this.dataSet.removeDatasource(deletedDs);
+              this.getDatasources();            
+            });
+        }
       });
-    // TODO handle error and just remove from array directly ?
   }
 
   private onSelect(datasource: Datasource) {
