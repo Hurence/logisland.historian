@@ -24,6 +24,10 @@ export class DatasourcesListComponent implements OnInit {
     this.getDatasources();
   }
 
+  unSelectDatasource(): void {
+    this.selectedDatasource = null;
+  }
+
   getDatasources(): void {
     this.datasources$ = this.datasourceService.getDatasources();
   }
@@ -34,7 +38,7 @@ export class DatasourcesListComponent implements OnInit {
   }
 
 
-  onDeleteDatasource(datasource: Datasource) {
+  private onDeleteDatasource(datasource: Datasource) {
     this.datasourceService.deleteDatasource(datasource)
       .subscribe(deletedDs => {      
         console.log('deleted datasource with id :' + deletedDs.id);        
@@ -44,7 +48,7 @@ export class DatasourcesListComponent implements OnInit {
     // TODO handle error and just remove from array directly ?
   }
 
-  onSelect(datasource: Datasource) {
+  private onSelect(datasource: Datasource) {
     if (datasource === this.selectedDatasource) {            
       this.selectDatasource(null);
     } else {
@@ -52,15 +56,15 @@ export class DatasourcesListComponent implements OnInit {
     }
   }
 
-  onAddToDataset(datasource: Datasource) {
+  private onAddToDataset(datasource: Datasource) {
     this.dataSet.addDatasource(datasource);
   }
 
-  onRemoveFromDataset(datasource: Datasource) {
+  private onRemoveFromDataset(datasource: Datasource) {
     this.dataSet.removeDatasource(datasource);
   }
 
-  dataSetContain(datasource: Datasource): boolean {
+  private dataSetContain(datasource: Datasource): boolean {
     if (this.dataSet) {
       return this.dataSet.containDatasource(datasource);
     }

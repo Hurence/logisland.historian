@@ -73,7 +73,7 @@ export class DatasourceDashboardComponent implements OnInit {
     }
   }
   private selectDatasource(datasource: Datasource) {
-    if (datasource === null) {      
+    if (datasource === null) {    
       this.selectedDatasource = new Datasource('', 'OPC-DA');      
       this.dsFrmComp.resetForm(this.selectedDatasource);  
     } else {
