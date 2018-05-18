@@ -5,7 +5,7 @@ import { DatasetService } from '../../dataset/dataset.service.';
 import { Datasource } from '../Datasource';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
-import { DialogService } from '../../dialog.service';
+import { DialogService } from '../../dialog/dialog.service';
 import { Observable } from 'rxjs';
 import { ProfilService } from '../../profil/profil.service';
 
