@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
+import { DialogService } from '../../dialog/dialog.service';
 
 @Component({
   selector: 'app-datasource-form',
@@ -26,7 +27,9 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private datasourceIsReachable$: Observable<boolean>;
 
   constructor(private fb: FormBuilder,
-    private datasourceService: DatasourceService) {
+    private datasourceService: DatasourceService,
+    private dialogService: DialogService) {
+
     this.isCreation = true;
     this.submitBtnMsg = 'Add Data source';
     this.createForm();
@@ -51,7 +54,12 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     }
   }
   //restore form with clean values
-  revert() { this.rebuildForm(); }
+  revert() { 
+    this.dialogService.confirm("Are you sure you want to discard changes ?")
+      .subscribe(ok => {
+        if (ok) this.rebuildForm();
+      });
+  }
 
   private createForm(): void {
     this.dsForm = this.fb.group({
@@ -115,11 +123,11 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
             console.log('saved successfully to ' + JSON.stringify(datasource));
             this.submitted.emit(datasource);
             this.isReachable();
-            alert('successfully added datasource');
+            this.dialogService.alert('successfully added datasource');
           },
           error => {
             console.error('could not save datasource' + JSON.stringify(error));
-            alert('error while saving data source.');
+            this.dialogService.alert('error while saving data source.');
           }
         );
     } else {
@@ -129,11 +137,11 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
             console.log('updated successfully to ' + JSON.stringify(datasource));
             this.submitted.emit(datasource);
             this.isReachable();
-            alert('successfully updated datasource');
+            this.dialogService.alert('successfully updated datasource');
           },
           error => {
             console.error('could not update '  + JSON.stringify(error));
-            alert('error while updating data source.');  
+            this.dialogService.alert('error while updating data source.');  
           }
         );
     }
