@@ -50,7 +50,3 @@ Logisland.Historian follows the requirements of the OPC specification to provide
 - [Iconix Hyper Historian](http://www.iconics.com/Home/Products/Historians/Hyper-Historian.aspx#.WsOamtNuaV4)
 - [ABB munufacturing Operation Management](http://new.abb.com/cpm/mom-software-process-production-intelligence)
 - [KEPServerEX](https://www.kepware.com/en-us/products/kepserverex/)
-
-
-
-##
