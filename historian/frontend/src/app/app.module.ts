@@ -13,6 +13,10 @@ import { CustomHttpInterceptor } from './security-http-interceptor';
 import { SourcesAndTagsModule } from './sources-and-tags/sources-and-tags.module';
 import { TodoComponent } from './todo/todo.component';
 import { ProfilService } from './profil/profil.service';
+import { DatasetService } from './dataset/dataset.service.';
+import { TagService } from './tag/tag.service';
+import { DialogService } from './dialog/dialog.service';
+import { DatasourceService } from './datasource/datasource.service';
 
 // components
 // router
@@ -43,6 +47,11 @@ import { ProfilService } from './profil/profil.service';
       useClass: CustomHttpInterceptor,
       multi: true
     },
+    ProfilService,
+    DatasetService,
+    TagService,
+    DatasourceService,
+    DialogService,
     ProfilService,
   ],
   bootstrap: [AppComponent],

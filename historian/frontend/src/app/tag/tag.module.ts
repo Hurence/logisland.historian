@@ -11,8 +11,6 @@ import { TagsListComponent } from './tags-list/tags-list.component';
   declarations: [
     TagsListComponent,
   ],
-  providers: [
-    TagService,
-  ],
+  providers: [],
 })
 export class TagModule { }
