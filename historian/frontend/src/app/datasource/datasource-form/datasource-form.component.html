@@ -19,7 +19,7 @@
     <div *ngSwitchCase="'OPC-DA'" id="opc-da-form">
       <div class="form-group">
         <label for="name">NAME</label>
-        <input type="text" class="form-control" formControlName="name" name="name" [required]="isCreation">
+        <input type="text" class="form-control" formControlName="name" name="name">
         <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
               Name is required
         </div>
@@ -27,7 +27,7 @@
 
       <div class="form-group">
         <label for="name">DESCRIPTION</label>
-        <input type="text" class="form-control" formControlName="description" name="description" required>
+        <input type="text" class="form-control" formControlName="description" name="description">
         <div [hidden]="dsForm.get('description').valid || dsForm.get('description').pristine" class="alert alert-danger">
             Description is required
         </div>
@@ -50,7 +50,8 @@
         <label for="progId">ProgID</label>
         <input type="text" class="form-control" formControlName="progId" name="progId">
       </div>
-      <div formGroupName="auth" class="form-group mt-3">
+
+      <div formGroupName="auth" class="mt-3">
           <h6 _ngcontent-c2="" class="text-uppercase">
             AUTHENTIFICATION
             <small _ngcontent-c2="" class="text-muted">credentials</small>
@@ -68,7 +69,7 @@
             <label for="user">USER</label>
             <input type="text" class="form-control" formControlName="user" name="user">
           </div>
-          <div [hidden]="dsForm.get('user').valid || dsForm.get('user').pristine" class="alert alert-danger">
+          <div [hidden]="dsForm.get('auth.user').valid || dsForm.get('auth.user').pristine" class="alert alert-danger">
               User is required
           </div>
 
@@ -76,7 +77,7 @@
             <label for="pwd">PASSWORD</label>
             <input type="text" class="form-control" formControlName="password" name="password">
           </div>
-          <div [hidden]="dsForm.get('password').valid || dsForm.get('password').pristine" class="alert alert-danger">
+          <div [hidden]="dsForm.get('auth.password').valid || dsForm.get('auth.password').pristine" class="alert alert-danger">
               Password is required
           </div>
         </div>

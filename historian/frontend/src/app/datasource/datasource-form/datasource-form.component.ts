@@ -15,6 +15,8 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   private dsForm: FormGroup;
   private name: AbstractControl;
+  private user: AbstractControl;
+  private password: AbstractControl;
   private datasourceTypes: string[];
 
   @Input() isCreation: boolean;
@@ -80,11 +82,13 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       progId: '',
       auth: this.fb.group({
         cred: this.CREADENTIAL_NONE,
-        user: '',
-        password: '',
+        user: [{ value: '', disabled: true }, Validators.required],
+        password: [{ value: '', disabled: true }, Validators.required],
       }),
     });
     this.name = this.dsForm.get('name')
+    this.user = this.dsForm.get('auth.user')
+    this.password = this.dsForm.get('auth.password')
   }
 
   private disableName(): void {
@@ -170,8 +174,8 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       host: formModel.host,
       clsid: formModel.clsid,
       progId: formModel.progId,
-      user: formModel.user,
-      password: formModel.password,
+      user: formModel.auth.user,
+      password: formModel.auth.password,
       record_type: 'datasource',
       datasource_type: formModel.type
     };
@@ -196,6 +200,11 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
               password: null,
             }
           });
+          this.user.disable();
+          this.password.disable();
+        } else {
+          this.user.enable();
+          this.password.enable();
         }
       }
     );
