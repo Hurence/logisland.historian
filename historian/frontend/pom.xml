@@ -13,15 +13,74 @@
 	<parent>
         <groupId>com.hurence.logisland</groupId>
         <artifactId>historian</artifactId>
-        <version>0.1.0</version>
+        <version>0.2.0</version>
 	</parent>
 
 	<build>
 		<resources>
 			<resource>
-				<directory>src/webapp</directory>
+				<directory>dist</directory>
 			</resource>
 		</resources>
+		<plugins>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.6</version>
+				<configuration>
+					<nodeVersion>v8.11.1</nodeVersion>
+					<yarnVersion>v1.6.0</yarnVersion>
+					<workingDirectory>src/main/resources/webapp</workingDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>install node and yarn</id>
+						<goals>
+							<goal>install-node-and-yarn</goal>
+						</goals>
+						<phase>generate-resources</phase>
+					</execution>
+					<execution>
+						<id>yarn install</id>
+						<goals>
+							<goal>yarn</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>yarn lint</id>
+						<goals>
+							<goal>yarn</goal>
+						</goals>
+						<configuration>
+							<arguments>lint</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>yarn build</id>
+						<goals>
+							<goal>yarn</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<arguments>build</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>yarn test</id>
+						<goals>
+							<goal>yarn</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<arguments>test --watch false</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 
 </project>

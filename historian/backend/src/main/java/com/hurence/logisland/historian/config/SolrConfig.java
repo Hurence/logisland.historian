@@ -16,49 +16,11 @@
  */
 package com.hurence.logisland.historian.config;
 
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
-import org.springframework.data.solr.server.SolrClientFactory;
-import org.springframework.data.solr.server.support.HttpSolrClientFactory;
 
 @Configuration
-@PropertySource("classpath:/application.yml")
-@EnableSolrRepositories(basePackages = {"com.hurence.logisland.historian.repository"}, multicoreSupport = true)
+@EnableSolrRepositories(basePackages = {"com.hurence.logisland.historian.repository"})
 public class SolrConfig {
-
-
-    private @Value("${solr.host}")
-    String solrHost;
-    private @Value("${solr.port}")
-    String solrPort;
-    private @Value("${solr.core}")
-    String solrCore;
-
-
-    @Bean
-    SolrTemplate solrTemplate() {
-        return new SolrTemplate(solrServerFactory());
-    }
-
-    @Bean
-    SolrClientFactory solrServerFactory() {
-
-        Credentials credentials = new UsernamePasswordCredentials("solr", "SolrRocks");
-        return new HttpSolrClientFactory(solrClient(), "", credentials , "BASIC");
-    }
-
-    @Bean
-    SolrClient solrClient() {
-        return new HttpSolrClient("http://" + solrHost + ":" + solrPort +"/solr");
-    }
-
 
 }
