@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Observable ,  of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -14,9 +14,9 @@ import { DialogService } from '../../dialog/dialog.service';
 })
 export class DatasourcesListComponent implements OnInit {
 
-  datasources$: Observable<Datasource[]>;
+  private datasources$: Observable<Datasource[]>;
   @Input() dataSet: Dataset;
-  private selectedDatasource : Datasource;
+  @Input() selectedDatasource : Datasource;
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();
 
   constructor(private datasourceService: DatasourceService,
@@ -26,15 +26,8 @@ export class DatasourcesListComponent implements OnInit {
     this.getDatasources();
   }
 
-  unSelectDatasource(): void {
-    this.selectedDatasource = null;
-  }
-  /*
-    select given datasource.
-    Should be used only by external components.
-  */
-  forceSelectDatasource(datasource: Datasource): void {
-    this.selectedDatasource = datasource;
+  ngOnChanges(changes: SimpleChanges) {
+    console.debug('changes in DatasourcesListComponent' ,changes);
   }
 
   getDatasources(): void {
@@ -46,7 +39,6 @@ export class DatasourcesListComponent implements OnInit {
       .pipe(catchError(error => of([])));
   }
 
-
   private onDeleteDatasource(datasource: Datasource): void {
     this.dialogService.confirm("Are you sure you want to delete this datasource ?")
       .subscribe(ok => {
@@ -55,18 +47,15 @@ export class DatasourcesListComponent implements OnInit {
             .subscribe(deletedDs => {
               console.log('deleted datasource with id :' + deletedDs.id);
               this.dataSet.removeDatasource(deletedDs);
-              this.getDatasources();            
+              this.selectedDatasourceE.emit(null);
+              this.getDatasources();
             });
         }
       });
   }
 
   private onSelect(datasource: Datasource) {
-    if (datasource === this.selectedDatasource) {           
-      this.selectDatasource(null);
-    } else {
-      this.selectDatasource(datasource);
-    }
+    this.selectedDatasourceE.emit(datasource);
   }
 
   private onAddToDataset(datasource: Datasource) {
@@ -84,8 +73,4 @@ export class DatasourcesListComponent implements OnInit {
     return false;
   }
 
-  private selectDatasource(datasource: Datasource): void {
-    this.selectedDatasourceE.emit(datasource);
-    this.selectedDatasource = datasource;
-  }
 }
