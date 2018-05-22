@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { ProfilService } from './profil/profil.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +11,12 @@ import { ProfilService } from './profil/profil.service';
 export class AppComponent implements OnInit {
 
   private profil: Keycloak.KeycloakProfile;
-  private title = 'logisland historian';
-  private logoutUrl: string;
+  logoutUrl: string;
 
   constructor(private keycloakService: KeycloakService,
               private profilService: ProfilService) {
-                this.logoutUrl = "http://keycloak:8080/auth/realms/logisland/protocol/openid-connect/logout?redirect_uri=http://localhost:4200/";
+                
+                this.logoutUrl = environment.KEYCLOAK_LOGOUT_URL;
               }
 
   public ngOnInit(): void {

@@ -1,5 +1,5 @@
 import { KeycloakService } from 'keycloak-angular';
-
+import { environment } from '../environments/environment';
 
 /*
   Authentificatuion utility
@@ -11,11 +11,11 @@ export function initializer(keycloak: KeycloakService): () => Promise<any> {
       try {
         await keycloak.init({
           config: {
-            realm: 'logisland',
-            url: 'http://keycloak:8080/auth',
-            clientId: 'logisland-historian',
+            realm: environment.KEYCLOAK_REALM,
+            url: environment.KEYCLOAK_URL,
+            clientId: environment.KEYCLOAK_CLIENTID,
             credentials: {
-              secret: '4509b60c-4489-4fef-a24e-1ce9377b7d77'
+              secret: environment.KEYCLOAK_CLIENTID_SECRET
             }
           },
           initOptions: {

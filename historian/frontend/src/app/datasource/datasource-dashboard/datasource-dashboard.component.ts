@@ -17,9 +17,9 @@ import { DatasourcesListComponent } from '../datasources-list/datasources-list.c
 })
 export class DatasourceDashboardComponent implements OnInit {
 
-  private selectedDatasource: Datasource;
-  private dataSet: Dataset;
-  private isCreation: boolean;
+  selectedDatasource: Datasource;
+  dataSet: Dataset;
+  isCreation: boolean;
 
   @ViewChild(DatasourceFormComponent)
   private dsFrmComp: DatasourceFormComponent;
@@ -47,7 +47,7 @@ export class DatasourceDashboardComponent implements OnInit {
     return !this.dsFrmComp.formIsClean();
   }
 
-  private onSelectDatasource(datasource: Datasource) {
+  onSelectDatasource(datasource: Datasource) {
     if (this.dsFormIsClean()) {  
       this.selectDatasource(datasource);
     } else {
@@ -86,29 +86,25 @@ export class DatasourceDashboardComponent implements OnInit {
     }
   }
 
-  private printSelectedDatasource(): string {
-    return JSON.stringify(this.selectedDatasource);
-  }
-
-  private goToTags() {
+  goToTags() {
     this.router.navigate(['../tags'], { relativeTo: this.route });
   }
 
-  private isHelpHidden(): boolean {
+  isHelpHidden(): boolean {
     return this.profilService.isHelpHidden();
   }
 
-  private onSubmitted(ds: Datasource) {
+  onSubmitted(ds: Datasource) {
     this.dslistComp.getDatasources();
     this.selectedDatasource = ds;
     this.isCreation = false;
   }
 
-  private onClickAddDatasource() {
+  onClickAddDatasource() {
     this.onSelectDatasource(null);
   }
 
-  private onFilterQuery(query: string) {
+  onFilterQuery(query: string) {
     this.dslistComp.getDatasourcesQuery(query)
   }
 }

@@ -14,7 +14,7 @@ import { DialogService } from '../../dialog/dialog.service';
 })
 export class DatasourcesListComponent implements OnInit {
 
-  private datasources$: Observable<Datasource[]>;
+  datasources$: Observable<Datasource[]>;
   @Input() dataSet: Dataset;
   @Input() selectedDatasource : Datasource;
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();

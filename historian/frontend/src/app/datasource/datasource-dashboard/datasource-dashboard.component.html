@@ -8,8 +8,6 @@
           <div class="card h-100">
 
             <div class="card-body">
-
-              {{printSelectedDatasource()}}
               <app-datasource-form [datasource]="selectedDatasource"
                                    [isCreation]="isCreation"
                                    (submitted)="onSubmitted($event)"></app-datasource-form>
@@ -22,7 +20,7 @@
           <div class="card h-100 datasources-list">
 
             <div class="card-body">
-              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onClickAddDatasource($event)">Add Data source</button>
+              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onClickAddDatasource()">Add Data source</button>
 
               <h6 _ngcontent-c2="" class="text-uppercase">
                 data sources

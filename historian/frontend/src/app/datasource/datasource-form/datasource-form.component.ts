@@ -13,18 +13,18 @@ import { DatasourceService } from '../datasource.service';
 })
 export class DatasourceFormComponent implements OnInit, OnChanges {
 
-  private dsForm: FormGroup;
+  dsForm: FormGroup;
   private name: AbstractControl;
   private user: AbstractControl;
   private password: AbstractControl;
-  private datasourceTypes: string[];
+  datasourceTypes: string[];
 
   @Input() isCreation: boolean;
   @Input() datasource: Datasource;
   @Output() submitted = new EventEmitter<Datasource>();
 
-  private submitBtnMsg: string;
-  private datasourceIsReachable$: Observable<boolean>;
+  submitBtnMsg: string;
+  datasourceIsReachable$: Observable<boolean>;
   private BTN_MSG_ADD = 'Add Data source';
   private BTN_MSG_UPDATE = 'Update Data source';
   private CREADENTIAL_NONE = 'none';
@@ -131,7 +131,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   }
 
   /* save datasource when submitting */
-  private onSubmit() {
+  onSubmit() {
     this.datasource = this.prepareSaveDatasource();
     console.debug('trying to save ', this.datasource);
     if (this.isCreation) {
