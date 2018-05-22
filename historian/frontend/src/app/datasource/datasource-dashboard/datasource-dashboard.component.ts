@@ -48,26 +48,21 @@ export class DatasourceDashboardComponent implements OnInit {
   }
 
   onSelectDatasource(datasource: Datasource) {
-    if (this.dsFormIsClean()) {  
+    if (this.dsFormIsClean()) {
       this.selectDatasource(datasource);
     } else {
-      let canSwitch = this.canDeactivate()
-      if (typeof canSwitch === "boolean") {
+      const canSwitch = this.canDeactivate();
+      if (typeof canSwitch === 'boolean') {
         if (canSwitch) {
           this.selectDatasource(datasource);
-        } else {
-          console.debug('user cancelled selection change');
         }
-      }
-      else {
+      } else {
         canSwitch.subscribe(bool => {
           if (bool) {
-            this.selectDatasource(datasource); 
-          } else {
-            console.debug('user cancelled selection change');
+            this.selectDatasource(datasource);
           }
-        })
-      }    
+        });
+      }
     }
   }
 
@@ -105,6 +100,6 @@ export class DatasourceDashboardComponent implements OnInit {
   }
 
   onFilterQuery(query: string) {
-    this.dslistComp.getDatasourcesQuery(query)
+    this.dslistComp.getDatasourcesQuery(query);
   }
 }

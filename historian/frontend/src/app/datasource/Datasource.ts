@@ -4,7 +4,7 @@ export class Datasource {
 
     constructor(
         public id: string,
-        public datasource_type: string, 
+        public datasource_type: string,
         public description?: string,
         public host?: string,
         public domain?: string,

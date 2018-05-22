@@ -44,7 +44,6 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
     if (changes.datasource  && changes.datasource.previousValue !== changes.datasource.currentValue) this.rebuildForm();
     if (changes.isCreation && changes.isCreation.previousValue !== changes.isCreation.currentValue) {
       if (this.isCreation) {
@@ -61,14 +60,14 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     }
   }
 
-  //restore form with clean values
+  // restore form with clean values
   revert() {
-    this.dialogService.confirm("Are you sure you want to discard changes ?")
+    this.dialogService.confirm('Are you sure you want to discard changes ?')
       .subscribe(ok => {
         if (ok) this.rebuildForm();
       });
   }
-  
+
   formIsClean(): boolean { return this.dsForm.dirty; }
 
   /* Buil form for the first time */
@@ -86,9 +85,9 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
         password: [{ value: '', disabled: true }, Validators.required],
       }),
     });
-    this.name = this.dsForm.get('name')
-    this.user = this.dsForm.get('auth.user')
-    this.password = this.dsForm.get('auth.password')
+    this.name = this.dsForm.get('name');
+    this.user = this.dsForm.get('auth.user');
+    this.password = this.dsForm.get('auth.password');
   }
 
   private disableName(): void {
@@ -101,7 +100,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   /* Fill in form with current datasource properties */
   private rebuildForm(): void {
-    this.dsForm.reset(this.createFormObject(this.datasource))
+    this.dsForm.reset(this.createFormObject(this.datasource));
   }
 
   /* Create form object from given datasource */
@@ -133,7 +132,6 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   /* save datasource when submitting */
   onSubmit() {
     this.datasource = this.prepareSaveDatasource();
-    console.debug('trying to save ', this.datasource);
     if (this.isCreation) {
       this.subscribeToUpdate(this.datasourceService.saveDatasource(this.datasource),
         'successfully added datasource',
@@ -152,7 +150,6 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
                             msgError: string): void {
     submitted.subscribe(
       datasource => {
-        console.log(JSON.stringify(datasource));
         this.submitted.emit(datasource);
         this.isReachable();
         this.dialogService.alert(msgSuccess);
@@ -169,7 +166,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     const formModel = this.dsForm.value;
 
     const saveDatasource: Datasource = {
-      id: formModel.name || this.datasource.id,//when disabled
+      id: formModel.name || this.datasource.id, // when disabled
       description: formModel.description,
       host: formModel.host,
       clsid: formModel.clsid,
@@ -188,7 +185,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       this.datasourceIsReachable$ = this.datasourceService.datasourceIsReachable(this.datasource.id);
     }
   }
-  
+
   /* Listen to auth.cred controller so it resets credentials when selecting none */
   private resetCredWhenNone(): void {
     this.dsForm.get('auth.cred').valueChanges.forEach(
@@ -208,6 +205,5 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
         }
       }
     );
-  }  
-
+  }
 }

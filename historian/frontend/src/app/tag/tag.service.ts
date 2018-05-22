@@ -15,10 +15,8 @@ export class TagService {
 
   getTags(): Observable<Tag[]> {
 
-    console.log('start method getTags');
     return this.http.get<Tag[]>(this.tagsUrl)
     .pipe(
-      tap(tags => console.log(`fetched tags`)),
       catchError(this.handleError('getTags', []))
     );
   }

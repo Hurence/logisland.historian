@@ -16,7 +16,7 @@ export class DatasourcesListComponent implements OnInit {
 
   datasources$: Observable<Datasource[]>;
   @Input() dataSet: Dataset;
-  @Input() selectedDatasource : Datasource;
+  @Input() selectedDatasource: Datasource;
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();
 
   constructor(private datasourceService: DatasourceService,
@@ -24,10 +24,6 @@ export class DatasourcesListComponent implements OnInit {
 
   ngOnInit() {
     this.getDatasources();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.debug('changes in DatasourcesListComponent' ,changes);
   }
 
   getDatasources(): void {
@@ -40,7 +36,7 @@ export class DatasourcesListComponent implements OnInit {
   }
 
   private onDeleteDatasource(datasource: Datasource): void {
-    this.dialogService.confirm("Are you sure you want to delete this datasource ?")
+    this.dialogService.confirm('Are you sure you want to delete this datasource ?')
       .subscribe(ok => {
         if (ok) {
           this.datasourceService.deleteDatasource(datasource)

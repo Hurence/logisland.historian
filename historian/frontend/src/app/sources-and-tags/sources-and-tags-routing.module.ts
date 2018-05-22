@@ -18,7 +18,7 @@ const sourcesAndTagsRoutes: Routes = [
         path: 'datasources',
         component: DatasourceDashboardComponent,
         canDeactivate: [CanDeactivateGuard],
-      },    
+      },
       {
         path: 'tags',
         component: TagsListComponent ,
