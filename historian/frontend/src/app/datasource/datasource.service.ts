@@ -43,7 +43,7 @@ export class DatasourceService {
   }
 
   getDatasourceTypes(): string[] {
-    return ['', 'OPC-DA', 'FAKE'];
+    return ['', 'OPC-DA', 'OPC-UA'];
   }
 
   saveDatasource(datasource: Datasource): Observable<Datasource> {

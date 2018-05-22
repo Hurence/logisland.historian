@@ -10,7 +10,7 @@
             <div class="card-body">
 
               {{printSelectedDatasource()}}
-              <app-datasource-form [datasource]="selectedDatasource" 
+              <app-datasource-form [datasource]="selectedDatasource"
                                    [isCreation]="isCreation"
                                    (submitted)="onSubmitted($event)"></app-datasource-form>
             </div>
@@ -31,7 +31,7 @@
 
               <app-datasource-search (queryString)="onFilterQuery($event)"></app-datasource-search>
 
-              <app-datasources-list [dataSet]="dataSet" 
+              <app-datasources-list [dataSet]="dataSet"
                                     [selectedDatasource]="selectedDatasource"
                                     (selectedDatasourceE)="onSelectDatasource($event)"></app-datasources-list>
             </div>

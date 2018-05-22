@@ -9,9 +9,9 @@
     <select class="form-control" formControlName="type" name="type" required>
       <option *ngFor="let type of datasourceTypes" [value]="type">{{type}}</option>
     </select>
-    <!-- <div [hidden]="typ.valid || typ.pristine" class="alert alert-danger">
-      Type is required
-    </div> -->
+    <div [hidden]="dsForm.get('type').valid || dsForm.get('type').pristine" class="alert alert-danger">
+        Type is required
+    </div>
   </div>
 
   <div [ngSwitch]="dsForm.get('type').value">
@@ -20,7 +20,7 @@
       <div class="form-group">
         <label for="name">NAME</label>
         <input type="text" class="form-control" formControlName="name" name="name" [required]="isCreation">
-        <div [hidden]="dsForm.get('name').valid || dsForm.get('name').pristine" class="alert alert-danger">
+        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
               Name is required
         </div>
       </div>
@@ -28,18 +28,17 @@
       <div class="form-group">
         <label for="name">DESCRIPTION</label>
         <input type="text" class="form-control" formControlName="description" name="description" required>
-        <!-- <div [hidden]="desc.valid || desc.pristine" class="alert alert-danger">
-              Description is required
-            </div> -->
+        <div [hidden]="dsForm.get('description').valid || dsForm.get('description').pristine" class="alert alert-danger">
+            Description is required
+        </div>
       </div>
 
       <div class="form-group">
         <label for="hostAndPort">HOST &amp; PORT</label>
         <input type="text" class="form-control" formControlName="host" name="hostAndPort">
-
-        <!-- <div [hidden]="domain.valid || domain.pristine" class="alert alert-danger">
-              Domain is required
-            </div> -->
+        <div [hidden]="dsForm.get('host').valid || dsForm.get('host').pristine" class="alert alert-danger">
+            Host is required
+        </div>
       </div>
 
       <div class="form-group">
@@ -69,17 +68,17 @@
             <label for="user">USER</label>
             <input type="text" class="form-control" formControlName="user" name="user">
           </div>
-          <!-- <div [hidden]="user.valid || user.pristine" class="alert alert-danger">
-                User is required
-              </div> -->
+          <div [hidden]="dsForm.get('user').valid || dsForm.get('user').pristine" class="alert alert-danger">
+              User is required
+          </div>
 
           <div class="form-group">
             <label for="pwd">PASSWORD</label>
             <input type="text" class="form-control" formControlName="password" name="password">
           </div>
-          <!-- <div [hidden]="pwd.valid || pwd.pristine" class="alert alert-danger">
+          <div [hidden]="dsForm.get('password').valid || dsForm.get('password').pristine" class="alert alert-danger">
               Password is required
-            </div> -->
+          </div>
         </div>
       </div>
     </div>
