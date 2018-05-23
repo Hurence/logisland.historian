@@ -22,12 +22,12 @@ export class DialogService {
     const config = this.getDefautConfig({
       title: title,
       message: message
-    })
+    });
 
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, config);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, config);
 
     return dialogRef.afterClosed();
-  };
+  }
 
   /**
    * Ask user to confirm an action. `message` explains the action.
@@ -38,15 +38,15 @@ export class DialogService {
     const config = this.getDefautConfig({
       title: title,
       message: message
-    })
+    });
 
-    let dialogRef = this.dialog.open(AlertDialogComponent, config);
+    const dialogRef = this.dialog.open(AlertDialogComponent, config);
 
     return dialogRef.afterClosed();
-  };
+  }
 
 
-  private getDefautConfig(data?: any): MatDialogConfig{
+  private getDefautConfig(data?: any): MatDialogConfig {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;

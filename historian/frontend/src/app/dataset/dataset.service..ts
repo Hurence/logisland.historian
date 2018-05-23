@@ -6,7 +6,7 @@ import { Dataset } from './dataset';
 @Injectable()
 export class DatasetService {
 
-    myDataset: Dataset;
+    private myDataset: Dataset;
 
     constructor() {
         this.myDataset = new Dataset(1, 'mock data set', []);

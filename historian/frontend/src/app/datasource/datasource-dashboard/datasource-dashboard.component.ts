@@ -17,8 +17,10 @@ import { DatasourcesListComponent } from '../datasources-list/datasources-list.c
 })
 export class DatasourceDashboardComponent implements OnInit {
 
-  private selectedDatasource: Datasource;
-  private dataSet: Dataset;
+  selectedDatasource: Datasource;
+  dataSet: Dataset;
+  isCreation: boolean;
+
   @ViewChild(DatasourceFormComponent)
   private dsFrmComp: DatasourceFormComponent;
   @ViewChild(DatasourcesListComponent)
@@ -33,10 +35,8 @@ export class DatasourceDashboardComponent implements OnInit {
   ngOnInit() {
     this.datasetService.getMyDataset()
       .subscribe(dataSet => this.dataSet = dataSet);
-  }
-
-  goToTags() {
-    this.router.navigate(['../tags'], { relativeTo: this.route });
+    this.isCreation = true;
+    this.selectDatasource(null);
   }
 
   datasetIsEmpty(): boolean {
@@ -47,46 +47,59 @@ export class DatasourceDashboardComponent implements OnInit {
     return !this.dsFrmComp.formIsClean();
   }
 
-  canDeactivate(): Observable<boolean> | boolean {
+  onSelectDatasource(datasource: Datasource) {
+    if (this.dsFormIsClean()) {
+      this.selectDatasource(datasource);
+    } else {
+      const canSwitch = this.canDeactivate();
+      if (typeof canSwitch === 'boolean') {
+        if (canSwitch) {
+          this.selectDatasource(datasource);
+        }
+      } else {
+        canSwitch.subscribe(bool => {
+          if (bool) {
+            this.selectDatasource(datasource);
+          }
+        });
+      }
+    }
+  }
+
+  private canDeactivate(): Observable<boolean> | boolean {
     if (this.dsFormIsClean()) return true;
     return this.dialogService.confirm('Discard changes?');
   }
 
-  onSelectDatasource(datasource: Datasource) {
-    if (this.dsFormIsClean()) {  
-      this.selectDatasource(datasource);
+  private selectDatasource(datasource: Datasource) {
+    if (datasource === null || datasource.id === this.selectedDatasource.id) {
+      this.isCreation = true;
+      this.selectedDatasource = new Datasource('', 'OPC-DA');
     } else {
-      let canSwitch = this.canDeactivate()
-      if (typeof canSwitch === "boolean") {
-        if (canSwitch) {
-          this.selectDatasource(datasource);
-        } else {
-          console.debug('user cancelled selection change');
-          this.dslistComp.forceSelectDatasource(this.selectedDatasource);
-        }
-      }
-      else {
-        canSwitch.subscribe(bool => {
-          if (bool) {
-            this.selectDatasource(datasource); 
-          } else {
-            console.debug('user cancelled selection change');
-            this.dslistComp.forceSelectDatasource(this.selectedDatasource);
-          }
-        })
-      }    
+      this.isCreation = false;
+      this.selectedDatasource = datasource;
     }
   }
-  private selectDatasource(datasource: Datasource) {
-    if (datasource === null) {    
-      this.selectedDatasource = new Datasource('', 'OPC-DA');      
-      this.dsFrmComp.resetForm(this.selectedDatasource);  
-    } else {
-      this.selectedDatasource = datasource;    
-    }
+
+  goToTags() {
+    this.router.navigate(['../tags'], { relativeTo: this.route });
   }
 
   isHelpHidden(): boolean {
     return this.profilService.isHelpHidden();
+  }
+
+  onSubmitted(ds: Datasource) {
+    this.dslistComp.getDatasources();
+    this.selectedDatasource = ds;
+    this.isCreation = false;
+  }
+
+  onClickAddDatasource() {
+    this.onSelectDatasource(null);
+  }
+
+  onFilterQuery(query: string) {
+    this.dslistComp.getDatasourcesQuery(query);
   }
 }

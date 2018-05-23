@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
+import { DialogService } from '../../dialog/dialog.service';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
-import { DialogService } from '../../dialog/dialog.service';
 
 @Component({
   selector: 'app-datasource-form',
@@ -13,83 +13,97 @@ import { DialogService } from '../../dialog/dialog.service';
 })
 export class DatasourceFormComponent implements OnInit, OnChanges {
 
-  private dsForm: FormGroup;
+  dsForm: FormGroup;
   private name: AbstractControl;
-  private typr: AbstractControl;
-  private description: AbstractControl;
-  private host: AbstractControl;
-  private datasourceTypes: string[];
-  private isCreation: boolean;
-  private hasBeenReset: boolean;
+  private user: AbstractControl;
+  private password: AbstractControl;
+  datasourceTypes: string[];
+
+  @Input() isCreation: boolean;
   @Input() datasource: Datasource;
   @Output() submitted = new EventEmitter<Datasource>();
-  private submitBtnMsg: string;
-  private datasourceIsReachable$: Observable<boolean>;
+
+  submitBtnMsg: string;
+  datasourceIsReachable$: Observable<boolean>;
+  private BTN_MSG_ADD = 'Add Data source';
+  private BTN_MSG_UPDATE = 'Update Data source';
+  private CREADENTIAL_NONE = 'none';
+  private CREADENTIAL_NORMAL = 'normal';
 
   constructor(private fb: FormBuilder,
     private datasourceService: DatasourceService,
     private dialogService: DialogService) {
 
-    this.isCreation = true;
-    this.submitBtnMsg = 'Add Data source';
     this.createForm();
     this.resetCredWhenNone();
-    this.hasBeenReset = true;
   }
 
   ngOnInit() {
-    this.datasourceTypes = this.datasourceService.getDatasourceTypes();  
+    this.datasourceTypes = this.datasourceService.getDatasourceTypes();
+    this.submitBtnMsg = this.BTN_MSG_ADD;
   }
 
-  ngOnChanges() {
-    if (this.datasource) this.rebuildForm();
-    if (this.hasBeenReset) { 
-      this.hasBeenReset = false;
-      this.enaableName();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.datasource  && changes.datasource.previousValue !== changes.datasource.currentValue) this.rebuildForm();
+    if (changes.isCreation && changes.isCreation.previousValue !== changes.isCreation.currentValue) {
+      if (this.isCreation) {
+        this.enableName();
+        this.submitBtnMsg = this.BTN_MSG_ADD;
+        this.datasourceIsReachable$ = null;
+      } else {
+        this.disableName();
+        this.submitBtnMsg = this.BTN_MSG_UPDATE;
+        this.isReachable();
+      }
     } else {
-      this.isCreation = false;
-      this.disableName();
-      this.submitBtnMsg = 'Update Data source';
-      this.isReachable();
+      if (!this.isCreation) this.isReachable();
     }
   }
-  //restore form with clean values
-  revert() { 
-    this.dialogService.confirm("Are you sure you want to discard changes ?")
+
+  // restore form with clean values
+  revert() {
+    this.dialogService.confirm('Are you sure you want to discard changes ?')
       .subscribe(ok => {
         if (ok) this.rebuildForm();
       });
   }
 
+  formIsClean(): boolean { return this.dsForm.dirty; }
+
+  /* Buil form for the first time */
   private createForm(): void {
     this.dsForm = this.fb.group({
-      type: ['OPC-DA', Validators.required ],
-      name: [{value: '', disabled: true}, Validators.required ],
-      description: ['', Validators.required ],
-      host: ['', Validators.required ],
+      type: ['OPC-DA', Validators.required],
+      name: [{ value: '', disabled: false }, Validators.required],
+      description: ['', Validators.required],
+      host: ['', Validators.required],
       clsid: '',
       progId: '',
       auth: this.fb.group({
-        cred: 'none',
-        user: '',
-        password: '', 
-      }),            
+        cred: this.CREADENTIAL_NONE,
+        user: [{ value: '', disabled: true }, Validators.required],
+        password: [{ value: '', disabled: true }, Validators.required],
+      }),
     });
-    this.name = this.dsForm.get('name')
+    this.name = this.dsForm.get('name');
+    this.user = this.dsForm.get('auth.user');
+    this.password = this.dsForm.get('auth.password');
   }
 
   private disableName(): void {
     this.name.disable();
   }
 
-  private enaableName(): void {
+  private enableName(): void {
     this.name.enable();
   }
 
+  /* Fill in form with current datasource properties */
   private rebuildForm(): void {
-    this.dsForm.reset(this.createFormObject(this.datasource))
+    this.dsForm.reset(this.createFormObject(this.datasource));
   }
 
+  /* Create form object from given datasource */
   private createFormObject(datasource: Datasource) {
     return {
       type: datasource.datasource_type,
@@ -101,100 +115,95 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       auth: {
         cred: this.findCredentialForDatasource(datasource),
         user: datasource.user,
-        password: datasource.password, 
-      },            
+        password: datasource.password,
+      },
     };
   }
-  
+
+  /*  return type of credential for given datasource */
   private findCredentialForDatasource(datasource: Datasource): string {
     if (this.datasource && (this.datasource.password || this.datasource.user)) {
-      return 'normal';
+      return this.CREADENTIAL_NORMAL;
     } else {
-      return 'none';
+      return this.CREADENTIAL_NONE;
     }
   }
 
-  private onSubmit() {
+  /* save datasource when submitting */
+  onSubmit() {
     this.datasource = this.prepareSaveDatasource();
     if (this.isCreation) {
-      this.datasourceService.saveDatasource(this.datasource)
-        .subscribe(
-          datasource => {
-            console.log('saved successfully to ' + JSON.stringify(datasource));
-            this.submitted.emit(datasource);
-            this.isReachable();
-            this.dialogService.alert('successfully added datasource');
-          },
-          error => {
-            console.error('could not save datasource' + JSON.stringify(error));
-            this.dialogService.alert('error while saving data source.');
-          }
-        );
+      this.subscribeToUpdate(this.datasourceService.saveDatasource(this.datasource),
+        'successfully added datasource',
+        'error while saving data source.');
     } else {
-      this.datasourceService.updateDatasource(this.datasource)
-        .subscribe(
-          datasource => {
-            console.log('updated successfully to ' + JSON.stringify(datasource));
-            this.submitted.emit(datasource);
-            this.isReachable();
-            this.dialogService.alert('successfully updated datasource');
-          },
-          error => {
-            console.error('could not update '  + JSON.stringify(error));
-            this.dialogService.alert('error while updating data source.');  
-          }
-        );
+      this.subscribeToUpdate(this.datasourceService.updateDatasource(this.datasource),
+        'successfully updated datasource',
+        'error while updating data source.');
     }
-    this.rebuildForm();
+  }
+  /* subscribe to update or save request
+     emitting saved datasource, testing if it is reachable then alerting user when it is done.
+  */
+  private subscribeToUpdate(submitted: Observable<Datasource>,
+                            msgSuccess: string,
+                            msgError: string): void {
+    submitted.subscribe(
+      datasource => {
+        this.submitted.emit(datasource);
+        this.isReachable();
+        this.dialogService.alert(msgSuccess);
+      },
+      error => {
+        console.error(JSON.stringify(error));
+        this.dialogService.alert(msgError);
+      }
+    );
   }
 
+  /* Return a datasource based on formulaire inputs */
   private prepareSaveDatasource(): Datasource {
     const formModel = this.dsForm.value;
 
     const saveDatasource: Datasource = {
-      id: formModel.name,
+      id: formModel.name || this.datasource.id, // when disabled
       description: formModel.description,
       host: formModel.host,
       clsid: formModel.clsid,
       progId: formModel.progId,
-      user: formModel.user,
-      password: formModel.password,
+      user: formModel.auth.user,
+      password: formModel.auth.password,
       record_type: 'datasource',
       datasource_type: formModel.type
-    };         
+    };
     return saveDatasource;
   }
 
-  isReachable(): void {
+  /* update the test (datasourceIsReachable) if server can connect to the datasource */
+  private isReachable(): void {
     if (this.datasource) {
       this.datasourceIsReachable$ = this.datasourceService.datasourceIsReachable(this.datasource.id);
     }
   }
 
-  resetForm(datasource: Datasource) {
-    this.hasBeenReset = true;
-    this.datasource = datasource;
-    this.isCreation = true;
-    this.submitBtnMsg = 'Add Data source';
-    this.datasourceIsReachable$ = null;
-    this.rebuildForm();  
-  }
-
-  resetCredWhenNone(): void {
+  /* Listen to auth.cred controller so it resets credentials when selecting none */
+  private resetCredWhenNone(): void {
     this.dsForm.get('auth.cred').valueChanges.forEach(
       (cred: string) => {
-        if (cred === 'none') {
+        if (cred === this.CREADENTIAL_NONE) {
           this.dsForm.patchValue({
             auth: {
               user: null,
               password: null,
             }
           });
+          this.user.disable();
+          this.password.disable();
+        } else {
+          this.user.enable();
+          this.password.enable();
         }
       }
     );
   }
-
-  formIsClean(): boolean { return this.dsForm.dirty; }
-
 }

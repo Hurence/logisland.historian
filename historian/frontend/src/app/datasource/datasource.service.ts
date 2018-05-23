@@ -32,18 +32,18 @@ export class DatasourceService {
     if (queryParameter && queryParameter.length !== 0) {
       return this.http.get<Datasource[]>(
         this.datasourcesUrl + '?fq=' + this.formatQuery(queryParameter)
-      );    
+      );
     } else {
       return this.getDatasources();
     }
   }
   private formatQuery(query: string): string {
-      //TODO complexify parsing (add * ?)
-      return query;    
+      // TODO complexify parsing (add * ?)
+      return query;
   }
 
   getDatasourceTypes(): string[] {
-    return ['', 'OPC-DA', 'FAKE'];
+    return ['', 'OPC-DA', 'OPC-UA'];
   }
 
   saveDatasource(datasource: Datasource): Observable<Datasource> {

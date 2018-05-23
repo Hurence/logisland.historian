@@ -8,7 +8,7 @@
 
   <button type="button" class="btn btn-light text-uppercase datasource-btn"
           title="{{datasource.description}} {{datasource.datasource_type}}"
-          [class.active]="datasource === selectedDatasource">
+          [class.active]="datasource.id === selectedDatasource.id">
     <span class="servername">{{datasource.description}}</span> <span class="badge badge-light">{{datasource.datasource_type}}</span>
   </button>
 

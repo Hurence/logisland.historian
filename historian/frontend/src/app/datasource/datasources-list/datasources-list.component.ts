@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Observable ,  of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ export class DatasourcesListComponent implements OnInit {
 
   datasources$: Observable<Datasource[]>;
   @Input() dataSet: Dataset;
-  private selectedDatasource : Datasource;
+  @Input() selectedDatasource: Datasource;
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();
 
   constructor(private datasourceService: DatasourceService,
@@ -24,17 +24,6 @@ export class DatasourcesListComponent implements OnInit {
 
   ngOnInit() {
     this.getDatasources();
-  }
-
-  unSelectDatasource(): void {
-    this.selectedDatasource = null;
-  }
-  /*
-    select given datasource.
-    Should be used only by external components.
-  */
-  forceSelectDatasource(datasource: Datasource): void {
-    this.selectedDatasource = datasource;
   }
 
   getDatasources(): void {
@@ -45,7 +34,6 @@ export class DatasourcesListComponent implements OnInit {
     this.datasources$ = this.datasourceService.getDatasourcesQuery(queryParameter)
       .pipe(catchError(error => of([])));
   }
-
 
   private onDeleteDatasource(datasource: Datasource): void {
     this.dialogService.confirm("Delete data source")
@@ -62,11 +50,7 @@ export class DatasourcesListComponent implements OnInit {
   }
 
   private onSelect(datasource: Datasource) {
-    if (datasource === this.selectedDatasource) {
-      this.selectDatasource(null);
-    } else {
-      this.selectDatasource(datasource);
-    }
+    this.selectedDatasourceE.emit(datasource);
   }
 
   private onAddToDataset(datasource: Datasource) {
@@ -84,8 +68,4 @@ export class DatasourcesListComponent implements OnInit {
     return false;
   }
 
-  private selectDatasource(datasource: Datasource): void {
-    this.selectedDatasourceE.emit(datasource);
-    this.selectedDatasource = datasource;
-  }
 }

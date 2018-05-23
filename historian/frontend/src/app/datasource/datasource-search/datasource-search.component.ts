@@ -24,19 +24,19 @@ export class DatasourceSearchComponent implements OnInit, OnDestroy {
        // switch to new search observable each time the term changes
        switchMap(
         (term: string) => {
-          this.queryString.emit(term);    
-          return 'nonempty';//error if empty string or void
+          this.queryString.emit(term);
+          return 'nonempty'; // error if empty string or void
         }
       ),
-    ).subscribe(t => console.debug('typed "' + t + '" in search'));
+    ).subscribe();
   }
 
   ngOnDestroy() {
     this.searchTerms.unsubscribe();
   }
-  
+
   update(term: string): void {
-    this.searchTerms.next(term);  
+    this.searchTerms.next(term);
   }
 
   onEnter(term: string): void {

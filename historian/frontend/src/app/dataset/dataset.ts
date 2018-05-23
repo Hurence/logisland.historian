@@ -19,7 +19,6 @@ export class Dataset {
 
     removeDatasource(datasource: Datasource) {
         const index = this.datasourceIds.indexOf(datasource.id);
-        console.log('index of element to remove is ' + index);
         if (index === -1) { return; }
         this.datasourceIds.splice(index, 1);
     }

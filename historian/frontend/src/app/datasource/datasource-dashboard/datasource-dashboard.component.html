@@ -8,7 +8,9 @@
           <div class="card h-100">
 
             <div class="card-body">
-              <app-datasource-form [datasource]="selectedDatasource" (submitted)="list.getDatasources()"></app-datasource-form>
+              <app-datasource-form [datasource]="selectedDatasource"
+                                   [isCreation]="isCreation"
+                                   (submitted)="onSubmitted($event)"></app-datasource-form>
             </div>
           </div>
         </div>
@@ -18,19 +20,22 @@
           <div class="card h-100 datasources-list">
 
             <div class="card-body">
-              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onSelectDatasource(null);list.unSelectDatasource()">Add Data source</button>
+              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onClickAddDatasource()">Add Data source</button>
 
               <h6 _ngcontent-c2="" class="text-uppercase">
                 data sources
                 <small _ngcontent-c2="" class="text-muted">data sources list</small>
               </h6>
 
-              <app-datasource-search (queryString)="list.getDatasourcesQuery($event)"></app-datasource-search>
+              <app-datasource-search (queryString)="onFilterQuery($event)"></app-datasource-search>
 
-              <app-datasources-list [dataSet]="dataSet" (selectedDatasourceE)="onSelectDatasource($event)" #list></app-datasources-list>
+              <app-datasources-list [dataSet]="dataSet"
+                                    [selectedDatasource]="selectedDatasource"
+                                    (selectedDatasourceE)="onSelectDatasource($event)"></app-datasources-list>
             </div>
           </div>
         </div>
+
         <div class="help-content col-lg-4"
              [ngClass]="{'col-md-4' : isHelpHidden(), 'col-md-6 col-lg-6' : !isHelpHidden()}"
              *ngIf="isHelpHidden()">
