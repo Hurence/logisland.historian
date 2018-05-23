@@ -48,21 +48,21 @@ export class DatasourcesListComponent implements OnInit {
 
 
   private onDeleteDatasource(datasource: Datasource): void {
-    this.dialogService.confirm("Are you sure you want to delete this datasource ?")
+    this.dialogService.confirm("Delete data source")
       .subscribe(ok => {
         if (ok) {
           this.datasourceService.deleteDatasource(datasource)
             .subscribe(deletedDs => {
               console.log('deleted datasource with id :' + deletedDs.id);
               this.dataSet.removeDatasource(deletedDs);
-              this.getDatasources();            
+              this.getDatasources();
             });
         }
       });
   }
 
   private onSelect(datasource: Datasource) {
-    if (datasource === this.selectedDatasource) {           
+    if (datasource === this.selectedDatasource) {
       this.selectDatasource(null);
     } else {
       this.selectDatasource(datasource);
