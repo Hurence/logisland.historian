@@ -11,6 +11,8 @@
               <app-datasource-form [datasource]="selectedDatasource"
                                    [isCreation]="isCreation"
                                    (submitted)="onSubmitted($event)"></app-datasource-form>
+
+              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onClickAddDatasource()">Add Data source</button>
             </div>
           </div>
         </div>
@@ -20,7 +22,6 @@
           <div class="card h-100 datasources-list">
 
             <div class="card-body">
-              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onClickAddDatasource()">Add Data source</button>
 
               <h6 _ngcontent-c2="" class="text-uppercase">
                 data sources
