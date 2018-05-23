@@ -80,6 +80,30 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+	      <groupId>com.spotify</groupId>
+	      <artifactId>docker-maven-plugin</artifactId>
+	      <version>${docker-maven-plugin-spotify.version}</version>
+	      <configuration>
+	          <serverId>docker-hub</serverId>
+
+	          <imageName>${docker.image.prefix}/${project.artifactId}:${project.version}</imageName>
+	          <pushImage>${push.image}</pushImage>
+	          <forceTags>true</forceTags>
+	          <imageTags>
+	              <imageTag>${project.version}</imageTag>
+	              <imageTag>latest</imageTag>
+	          </imageTags>
+	          <dockerDirectory>src/main/docker</dockerDirectory>
+						<!-- copy the service's jar file from target into the root directory of the image -->
+        <resources>
+           <resource>
+             <targetPath>/</targetPath>
+             <directory>${project.basedir}</directory>
+           </resource>
+        </resources>
+	      </configuration>
+	  	</plugin>
 		</plugins>
 	</build>
 

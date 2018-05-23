@@ -36,6 +36,17 @@ services:
       - keycloak
     network_mode: bridge
 
+
+  historian-frontend:
+    container_name: historian-frontend
+    image: 'hurence/historian-frontend:0.2.0'
+    ports:
+      - '4200:80'
+    links:
+      - historian-backend
+      - keycloak
+    network_mode: bridge
+
 #
 #  logisland:
 #    #command: /bin/bash bin/logisland.sh --conf conf/mqtt-to-historian.yml
