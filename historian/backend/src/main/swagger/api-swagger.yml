@@ -48,7 +48,6 @@ paths:
   /datasources:
      get:
        tags:
-        - tag
         - datasource
        operationId: getAllDatasources
        summary:  get all datasources
@@ -93,10 +92,37 @@ paths:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
+  /datasources/{datasourceId}/tags:
+     get:
+       tags:
+        - tag
+        - datasource
+       operationId: getAllTagsFromDatasource
+       summary:  get all tags from a given datasource
+       description: retrieve all tags through this datasource
+       produces:
+          - application/json
+       parameters:
+         - name: datasourceId
+           in: path
+           description: id of the Datasource to return
+           required: true
+           type: string
+       responses:
+         '200':
+           description: Tag list
+           schema:
+             type: array
+             items:
+               $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
   /datasources/{datasourceId}:
      get:
        tags:
-         - tag
          - datasource
        summary: get Datasource
        description: get the corresponding Datasource
@@ -122,7 +148,6 @@ paths:
              $ref: '#/definitions/Error'
      delete:
        tags:
-         - tag
          - datasource
        summary: delete Datasource
        description: remove the corresponding Datasource
@@ -148,7 +173,6 @@ paths:
              $ref: '#/definitions/Error'
      put:
        tags:
-        - tag
         - datasource
        summary:  update Datasource
        description: update an existing Datasource
@@ -176,7 +200,6 @@ paths:
            $ref: '#/definitions/Datasource'
      post:
        tags:
-        - tag
         - datasource
        summary:  create new Datasource
        description:  store a new Datasource
@@ -214,7 +237,6 @@ paths:
     get:
       tags:
       - tag
-      - opc
       operationId: getAllTags
       parameters:
         - name: fq
@@ -291,7 +313,6 @@ paths:
      put:
        tags:
         - tag
-        - opc
        summary:  update tag
        description: update an existing tag
        operationId: updateTag
@@ -349,6 +370,7 @@ paths:
      get:
        tags:
          - tag
+         - measure
        summary: get tag measures
        description: get the corresponding Tag measures between start and end time
        operationId: getTagMeasures
@@ -417,6 +439,7 @@ paths:
      get:
        tags:
          - tag
+         - measure
        summary: get tag measures stats
        description: get the corresponding Tag mesures for last chunk
        operationId: getTagStats
@@ -832,6 +855,10 @@ definitions:
       description:
         type: string
       clsid:
+        type: string
+      datasource_type:
+        type: string
+      prog_id:
         type: string
       host:
         type: string

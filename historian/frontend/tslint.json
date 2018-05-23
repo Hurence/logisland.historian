@@ -10,7 +10,7 @@
       true,
       "check-space"
     ],
-    "curly": true,
+    "curly": [true, "ignore-same-line"],
     "deprecation": {
       "severity": "warn"
     },
@@ -18,10 +18,9 @@
     "forin": true,
     "import-blacklist": [
       true,
-      "rxjs",
       "rxjs/Rx"
     ],
-    "import-spacing": true,
+    "import-spacing": false,
     "indent": [
       true,
       "spaces"
@@ -47,7 +46,7 @@
     "no-arg": true,
     "no-bitwise": true,
     "no-console": [
-      true,
+      true,    
       "debug",
       "info",
       "time",
@@ -126,7 +125,7 @@
     "component-selector": [
       true,
       "element",
-      "app",
+      ["app", "dial"],  
       "kebab-case"
     ],
     "no-output-on-prefix": true,

@@ -1,11 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Datasource } from './Datasource';
-import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable ,  of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+
 import { Tag } from './tag';
-import { catchError, map, tap } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
-import { KeycloakService } from 'keycloak-angular';
 
 @Injectable()
 export class TagService {
@@ -17,10 +15,8 @@ export class TagService {
 
   getTags(): Observable<Tag[]> {
 
-    console.log('start method getTags');
     return this.http.get<Tag[]>(this.tagsUrl)
     .pipe(
-      tap(tags => this.log(`fetched tags`)),
       catchError(this.handleError('getTags', []))
     );
   }
@@ -38,15 +34,11 @@ export class TagService {
       console.error(error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
+      console.error(`${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }
 
-  /** Log a HeroService message with the MessageService */
-  private log(message: string) {
-    console.error('tag service : ' + message);
-  }
 }

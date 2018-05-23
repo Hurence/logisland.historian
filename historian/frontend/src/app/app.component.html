@@ -1,51 +1,35 @@
-<!--The content below is only a placeholder and can be replaced.-->
+<header>
+  <nav id="main-nav"  class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand" href="#"><img src="assets/logo.png" class="img-fluid rounded mx-auto d-block"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-3" aria-controls="navbarSupportedContent-3" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent-3">
+                    <ul class="navbar-nav mr-auto text-uppercase">
+                        <li class="nav-item active" routerLinkActive="active" routerLink="/sources-and-tags">
+                            <a class="nav-link">sources &amp; tags</a>
+                        </li>
+                        <li class="nav-item" routerLink="/todo" routerLinkActive="active">
+                            <a class="nav-link">grapher</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto nav-flex-icons">
+                    <li class="nav-item">
+                        <a class="nav-link help" (click)="toggleHelp()"><i class="fa fa-question-circle " aria-hidden="true"></i></a>
+                    </li>
+                      <li class="nav-item avatar dropdown">
+                          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                              <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" class="rounded-circle z-depth-0" alt="avatar image">
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5">
+                              <a class="dropdown-item" href="#">settings</a>
+                              <a class="dropdown-item" [href]="logoutUrl">logout</a>
+                          </div>
+                      </li>
+                    </ul>
+                </div>
+            </nav>
 
+</header>
 
-
-<nb-layout>
-
-
-
-  <nb-layout-header fixed>
-    Logisland historian username: {{profil.username}}, lastName : {{profil.lastName}}.
-    <nb-user name="gregoire"></nb-user>
-  </nb-layout-header>   
-
-  <nb-sidebar>Sidebar Content
-
-    <a href="http://localhost:8701/api/v1/datasources">you can verify liste of datasource here !</a>
-    
-    <app-datasources-list></app-datasources-list>
-
-
-  </nb-sidebar>
-
-  <nb-layout-column>
-    <div style="text-align:center">
-      <h1>
-        Welcome to {{ title }}!
-      </h1>
-      <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-    </div>
-    <h2>Here are some links to help you start: </h2>
-    <ul>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-      </li>
-    </ul>
-
-
-    <a href="http://localhost:8701/api/v1/tags?fq=*">you can verify liste of tag here !</a>
-    
-    <app-tags-list></app-tags-list>
-  </nb-layout-column>
-
-  <nb-layout-footer>Contact us</nb-layout-footer>
-
-</nb-layout>
+<router-outlet></router-outlet>

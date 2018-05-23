@@ -1,40 +1,39 @@
 // angular modules
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule , APP_INITIALIZER} from '@angular/core';
-import { RouterModule } from '@angular/router'; // we also need angular router for Nebular to function properly
-// components
-import { AppComponent } from './app.component';
-// router
-import { AppRoutingModule } from './app-routing.module';
-// keycloak-angular
-import { KeycloakService, KeycloakAngularModule } from 'keycloak-angular';
-import { initializer } from './app-init';
-// nebular modules
-import { NbThemeModule } from '@nebular/theme';
-import { NbSidebarModule, NbLayoutModule, NbSidebarService } from '@nebular/theme';
-import { NbUserModule } from '@nebular/theme/components/user/user.module';
-import { DatasourcesListComponent } from './datasources-list/datasources-list.component';
-import { DatasourceService } from './datasource.service';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TagsListComponent } from './tags-list/tags-list.component';
-import { TagService } from './tag.service';
-import { CustomHttpInterceptor } from './security-http-interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
+import { initializer } from './app-init';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { CustomHttpInterceptor } from './security-http-interceptor';
+import { SourcesAndTagsModule } from './sources-and-tags/sources-and-tags.module';
+import { TodoComponent } from './todo/todo.component';
+import { ProfilService } from './profil/profil.service';
+import { DatasetService } from './dataset/dataset.service.';
+import { TagService } from './tag/tag.service';
+import { DialogService } from './dialog/dialog.service';
+import { DatasourceService } from './datasource/datasource.service';
+
+// components
+// router
+// keycloak-angular
 @NgModule({
   declarations: [
     AppComponent,
-    DatasourcesListComponent,
-    TagsListComponent,
+    TodoComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
-    NbThemeModule.forRoot({ name: 'default' }), // default theme, available[`cosmic`]
-    AppRoutingModule,
-    NbLayoutModule,
-    NbSidebarModule,
     KeycloakAngularModule,
-    NbUserModule,
     HttpClientModule,
+    SourcesAndTagsModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
   ],
   providers: [
     {
@@ -48,9 +47,12 @@ import { CustomHttpInterceptor } from './security-http-interceptor';
       useClass: CustomHttpInterceptor,
       multi: true
     },
-    NbSidebarService,
-    DatasourceService,
+    ProfilService,
+    DatasetService,
     TagService,
+    DatasourceService,
+    DialogService,
+    ProfilService,
   ],
   bootstrap: [AppComponent],
 })
