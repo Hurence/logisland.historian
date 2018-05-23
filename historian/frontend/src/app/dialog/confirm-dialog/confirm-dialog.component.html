@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{title}}</h2>
-<mat-dialog-content>{{message}}{{datasource.description}} {{datasource.datasource_type}}</mat-dialog-content>
+<mat-dialog-content>{{message}}</mat-dialog-content>
 <mat-dialog-actions>
-  <button class="btn btn-outline-primary text-uppercase" mat-button mat-dialog-close>Cancel</button>
-  <button class="btn btn-outline-danger text-uppercase" mat-button [mat-dialog-close]="true">Remove data source</button>
+  <button class="btn btn-outline-primary text-uppercase" mat-button mat-dialog-close>{{cancelBtnMsg}}</button>
+  <button class="btn btn-outline-danger text-uppercase" mat-button [mat-dialog-close]="true">{{okBtnMsg}}</button>
 </mat-dialog-actions>

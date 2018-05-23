@@ -17,11 +17,13 @@ export class DialogService {
    * Ask user to confirm an action. `message` explains the action.
    * Returns observable resolving to `true`=Yes or `false`=No
    */
-  confirm(title?: string, message?: string): Observable<boolean> {
+  confirm(title?: string, cancelBtnMsg?: string, okBtnMsg?: string, message?: string): Observable<boolean> {
 
     const config = this.getDefautConfig({
-      title: title,
-      message: message
+      title: title || 'Confirm ?',
+      cancelBtnMsg: cancelBtnMsg || 'Cancel',
+      okBtnMsg: okBtnMsg || 'Ok',
+      message: message || ''
     });
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, config);
@@ -36,8 +38,8 @@ export class DialogService {
   alert(title?: string, message?: string): Observable<boolean> {
 
     const config = this.getDefautConfig({
-      title: title,
-      message: message
+      title: title || 'Alert something happened!',
+      message: message || ''
     });
 
     const dialogRef = this.dialog.open(AlertDialogComponent, config);

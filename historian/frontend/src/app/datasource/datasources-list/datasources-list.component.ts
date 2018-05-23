@@ -36,7 +36,8 @@ export class DatasourcesListComponent implements OnInit {
   }
 
   private onDeleteDatasource(datasource: Datasource): void {
-    this.dialogService.confirm("Delete data source")
+    const msg = `Delete data source ${datasource.description} ${datasource.datasource_type} ?`;
+    this.dialogService.confirm(msg, 'Cancel', 'Remove data source')
       .subscribe(ok => {
         if (ok) {
           this.datasourceService.deleteDatasource(datasource)
