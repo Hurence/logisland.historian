@@ -6,7 +6,7 @@ services:
     environment:
       - JAVA_MEMORY=4g
     hostname: chronix
-    image: 'hurence/chronix:0.2.0'
+    image: 'hurence/chronix:0.3.0'
     ports:
       - '8983:8983'
     network_mode: bridge
@@ -20,7 +20,7 @@ services:
 
   keycloak:
     container_name: keycloak
-    image: 'hurence/keycloak:0.2.0'
+    image: 'hurence/keycloak:0.3.0'
     ports:
       - '8080:8080'
     network_mode: bridge
