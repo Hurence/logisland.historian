@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>historian-backend</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <packaging>jar</packaging>
 
     <name>data-historian-backend</name>
@@ -17,7 +17,7 @@
     <parent>
         <groupId>com.hurence.logisland</groupId>
         <artifactId>historian</artifactId>
-        <version>0.2.0</version>
+        <version>0.3.0</version>
     </parent>
 
     <dependencies>

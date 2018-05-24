@@ -5,12 +5,13 @@
 
     <groupId>com.hurence.logisland</groupId>
     <artifactId>historian</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>frontend</module>
         <module>backend</module>
+        <module>chronix</module>
     </modules>
 
     <name>data-historian</name>

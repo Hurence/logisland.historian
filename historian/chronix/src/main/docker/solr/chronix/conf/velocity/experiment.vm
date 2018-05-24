@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
+        margin: 30px auto;
+        width: 1280px;
+        position: relative;
+    }
+
+    header {
+        padding: 6px 0;
+    }
+
+    .group {
+        margin-bottom: 1em;
+    }
+
+    .axis {
+        font: 10px sans-serif;
+        position: fixed;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .axis text {
+        -webkit-transition: fill-opacity 250ms linear;
+    }
+
+    .axis path {
+        display: none;
+    }
+
+    .axis line {
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .axis.top {
+        background-image: linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+        background-image: -o-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+        background-image: -moz-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+        background-image: -webkit-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+        background-image: -ms-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+        top: 0;
+        padding: 0 0 24px;
+    }
+
+    .axis.bottom {
+        background-image: linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+        background-image: -o-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+        background-image: -moz-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+        background-image: -webkit-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+        background-image: -ms-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+        bottom: 0;
+        padding: 24px 0 0;
+    }
+
+    .horizon {
+        border-bottom: solid 1px #000;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .horizon {
+        border-top: solid 1px #000;
+        border-bottom: solid 1px #000;
+    }
+
+    .horizon + .horizon {
+        border-top: none;
+    }
+
+    .horizon canvas {
+        display: block;
+    }
+
+    .horizon .title,
+    .horizon .value {
+        bottom: 0;
+        line-height: 30px;
+        margin: 0 6px;
+        position: absolute;
+        text-shadow: 0 1px 0 rgba(255,255,255,.5);
+        white-space: nowrap;
+    }
+
+    .horizon .title {
+        left: 0;
+    }
+
+    .horizon .value {
+        right: 0;
+    }
+
+    .line {
+        background: #000;
+        z-index: 2;
+    }
+</style>
+<script src="#{url_for_solr}/admin/file?file=/velocity/d3.v2.min.js" charset="utf-8"></script>
+<script src="#{url_for_solr}/admin/file?file=/velocity/cubism.v1.min.js"></script>
+<body id="demo">
+    <script>
+
+
+//experiment:218 Mon Aug 26 2013 00:00:17 GMT+0200 (CEST) - Sun Sep 01 2013 23:59:18 GMT+0200 (CEST)
+        var context = cubism
+            .context()
+            //.serverDelay(new Date(2012, 4, 2) - Date.now())
+           // .serverDelay(new Date(2013, 7, 1) - new Date(2013, 10, 1))
+            .step(864e5)
+            .size(1280)
+          
+            .stop();
+
+        d3
+            .select("#demo")
+            .selectAll(".axis")
+            .data(["top", "bottom"])
+            .enter()
+            .append("div")
+            .attr("class", function (d) {
+                return d + " axis";
+            })
+            .each(function (d) {
+                d3
+                    .select(this)
+                    .call(context.axis().ticks(12).orient(d));
+            });
+
+        d3
+            .select("body")
+            .append("div")
+            .attr("class", "rule")
+            .call(context.rule());
+
+        /* d3
+            .select("body")
+            .selectAll(".horizon")
+            .data([
+                "AAPL",
+                "BIDU",
+                "SINA",
+                "GOOG",
+                "MSFT",
+                "YHOO",
+                "ADBE"
+            ].map(stockCSV))
+            .enter()
+            .insert("div", ".bottom")
+            .attr("class", "horizon")
+            .call(context.horizon().format(d3.format("+,.2p")));*/
+
+        d3
+            .select("body")
+            .selectAll(".horizon")
+            .data(["\\\\Load\\\\avg", "\\\\Swap\\\\cached", "\\\\Tasks\\\\running"].map(fromChronix))
+            .enter()
+            .insert("div", ".bottom")
+            .attr("class", "horizon")
+            .call(context.horizon().format(d3.format("+,.2p")));
+
+        context.on("focus", function (i) {
+            d3
+                .selectAll(".value")
+                .style(
+                    "right",
+                    i == null
+                        ? null
+                        : context.size() - i + "px"
+                );
+        });
+
+        // Replace this with context.graphite and graphite.metric!
+        function stockCSV(name) {
+            var format = d3
+                .time
+                .format("%d-%b-%y");
+            return context.metric(function (start, stop, step, callback) {
+
+                d3.csv("#{url_for_solr}/admin/file?file=/velocity/stocks/" + name + ".csv", function (rows) {
+
+                    rows = rows
+                        .map(function (d) {
+                            return [
+                                format.parse(d.Date), + d.Open
+                            ];
+                        })
+                        .filter(function (d) {
+                            return d[1];
+                        })
+                        .reverse();
+                    var date = rows[0][0],
+                        compare = rows[400][1],
+                        value = rows[0][1],
+                        values = [value];
+                    rows.forEach(function (d) {
+                        while ((date = d3.time.day.offset(date, 1)) < d[0]) 
+                            values.push(value);
+                        values.push(value = (d[1] - compare) / compare);
+                    });
+                    callback(null, values.slice(-context.size()));
+                });
+            }, name);
+        }
+
+        // Replace this with context.graphite and graphite.metric!
+        function fromChronix(name) {
+
+            var format = d3
+                .time
+                .format("%d-%b-%y");
+            return context.metric(function (start, stop, step, callback) {
+
+                d3.json(
+                    "#{url_for_solr}/select?indent=on&q=name:\"" + name + "\"&wt=json&fl=dataAsJson",
+                    function (result) {
+
+                        var numFound = result.response.numFound;
+console.log(new Date(result.response.docs[0].start) + " - " +new Date(result.response.docs[0].end));
+                        if (numFound > 0) {
+
+                            var data = eval(result.response.docs[0].dataAsJson)
+
+                            var dates = data[0];
+                            var values = data[1];
+
+                            var rows = [];
+                            for (i = 0; i < dates.length; i++) {
+                                rows.push([
+                                    new Date(dates[i]),
+                                    values[i]
+                                ]);
+                            }
+
+                            rows = rows
+                                .filter(function (d) {
+                                    return d[1];
+                                })
+                                .reverse();
+                            var date = rows[0][0],
+                                compare = rows[400][1],
+                                value = rows[0][1],
+                                finalValues = [value];
+                            rows.forEach(function (d) {
+                                while ((date = d3.time.day.offset(date, 1)) < d[0]) 
+                                    finalValues.push(value);
+                                finalValues.push(value = (d[1] - compare) / compare);
+                            });
+                            callback(null, finalValues.slice(-context.size()));
+                        }
+
+                        //response.dataAsJson[0].length
+
+                    }
+                );
+            }, name);
+        }
+    </script>
