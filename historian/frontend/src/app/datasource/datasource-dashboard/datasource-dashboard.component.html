@@ -8,11 +8,11 @@
           <div class="card h-100">
 
             <div class="card-body">
+              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onClickAddDatasource()">Add Data source</button>
               <app-datasource-form [datasource]="selectedDatasource"
                                    [isCreation]="isCreation"
                                    (submitted)="onSubmitted($event)"></app-datasource-form>
 
-              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onClickAddDatasource()">Add Data source</button>
             </div>
           </div>
         </div>
