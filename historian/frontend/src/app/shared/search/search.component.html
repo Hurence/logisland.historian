@@ -1,0 +1,10 @@
+<div class="input-group mb-3 filter">
+  <div class="input-group-prepend">
+    <span class="input-group-text text-uppercase bg-primary" id="inputGroup-sizing-default"><i class="fa fa-filter" aria-hidden="true"></i></span>
+  </div>
+  <input type="search" class="form-control"
+          placeholder="{{placeHolder}}"
+          (keyup)="update(search.value)"
+          (keyup.enter)="onEnter(search.value)"
+          #search>          
+</div>

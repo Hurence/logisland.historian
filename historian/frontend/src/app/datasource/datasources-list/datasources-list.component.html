@@ -6,11 +6,9 @@
 
 <div *ngFor="let datasource of datasources$ | async" (click)="onSelect(datasource)">
 
-  <button type="button" class="btn btn-light text-uppercase datasource-btn"
-          title="{{datasource.description}} {{datasource.datasource_type}}"
-          [class.active]="datasource.id === selectedDatasource.id">
-    <span class="servername">{{datasource.description}}</span> <span class="badge badge-light">{{datasource.datasource_type}}</span>
-  </button>
+  <app-button-labelled [centerLabel]="datasource.description" [topRightLabel]="datasource.datasource_type"
+                        [isActive]="datasource.id === selectedDatasource.id">
+  </app-button-labelled>
 
   <button type="button" class="btn btn-outline-primary text-uppercase" 
           (click)="onAddToDataset(datasource)" *ngIf="!dataSetContain(datasource)"

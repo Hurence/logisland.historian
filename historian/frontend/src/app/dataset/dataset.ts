@@ -1,29 +1,45 @@
 import { Datasource } from '../datasource/Datasource';
+import { Tag } from '../tag/tag';
 
 export class Dataset {
 
     constructor(
         public id: number,
         public name: string,
-        public datasourceIds: string[],
+        public datasourceIds: Set<string>,
+        public tagIds: Set<string>,
     ) {
     }
 
     containDatasource(datasource: Datasource): boolean {
-        return this.datasourceIds.includes(datasource.id);
+        return this.datasourceIds.has(datasource.id);
     }
 
-    addDatasource(datasource: Datasource) {
-        this.datasourceIds.push(datasource.id);
+    addDatasource(datasource: Datasource): void {
+        this.datasourceIds.add(datasource.id);
     }
 
-    removeDatasource(datasource: Datasource) {
-        const index = this.datasourceIds.indexOf(datasource.id);
-        if (index === -1) { return; }
-        this.datasourceIds.splice(index, 1);
+    removeDatasource(datasource: Datasource): boolean {
+        return this.datasourceIds.delete(datasource.id);
+    }
+
+    containTag(tag: Tag): boolean {
+        return this.tagIds.has(tag.id);
+    }
+
+    addTag(tag: Tag) {
+        this.tagIds.add(tag.id);
+    }
+
+    removeTag(tag: Tag): boolean {
+        return this.tagIds.delete(tag.id);
     }
 
     isEmpty(): boolean {
-        return this.datasourceIds.length === 0;
+        return this.datasourceIds.size === 0;
+    }
+
+    hasNoTag(): boolean {
+        return this.tagIds.size === 0;
     }
 }

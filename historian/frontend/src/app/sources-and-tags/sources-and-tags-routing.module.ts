@@ -8,6 +8,7 @@ import { DatasourceDashboardComponent } from '../datasource/datasource-dashboard
 import { TagsGuard } from './tags-guard';
 import { ConfigurationGuard } from './configuration-guard';
 import { CanDeactivateGuard } from '../can-deactivate-guard.service';
+import { TagDashboardComponent } from '../tag/tag-dashboard/tag-dashboard.component';
 
 const sourcesAndTagsRoutes: Routes = [
   {
@@ -21,7 +22,7 @@ const sourcesAndTagsRoutes: Routes = [
       },
       {
         path: 'tags',
-        component: TagsListComponent ,
+        component: TagDashboardComponent ,
         canActivate: [TagsGuard],
       },
       {

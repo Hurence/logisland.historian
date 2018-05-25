@@ -47,6 +47,15 @@
       </div>
 
       <div class="form-group label-small">
+        <label for="domain" i18n="domain of the datasource|label for domain with port datasource input">DOMAIN</label>
+        <input type="text" class="form-control" formControlName="domain" name="domain">
+        <div [hidden]="dsForm.get('domain').valid || dsForm.get('domain').pristine" class="alert alert-danger"
+              i18n="domain of the datasource is required|appears when user input is not valid">
+            Domain is required
+        </div>
+      </div>
+
+      <div class="form-group label-small">
         <label for="clsid" i18n="clsid of the datasource|label for clsid datasource input">CLSID</label>
         <input type="text" class="form-control" formControlName="clsid" name="clsid">
       </div>

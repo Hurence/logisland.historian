@@ -9,7 +9,7 @@ export class DatasetService {
     private myDataset: Dataset;
 
     constructor() {
-        this.myDataset = new Dataset(1, 'mock data set', []);
+        this.myDataset = new Dataset(1, 'mock data set', new Set<string>(['Vbox OPC datasource']), new Set<string>());
     }
 
     getMyDataset(): Observable<Dataset> {

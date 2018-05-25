@@ -3,17 +3,19 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-datasource-search',
-  templateUrl: './datasource-search.component.html',
-  styleUrls: ['./datasource-search.component.css']
+  selector: 'app-search',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.css']
 })
-export class DatasourceSearchComponent implements OnInit, OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy {
 
-
+  @Input() placeHolder: string;
   @Output() queryString = new EventEmitter<string>();
   private searchTerms = new Subject<string>();
 
-  constructor() { }
+  constructor() {
+
+  }
 
   ngOnInit() {
     this.searchTerms.pipe(
