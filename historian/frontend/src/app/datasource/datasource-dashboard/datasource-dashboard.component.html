@@ -29,7 +29,12 @@
                 <small _ngcontent-c2="" class="text-muted">data sources list</small>
               </h6>
 
-              <app-datasource-search (queryString)="onFilterQuery($event)"></app-datasource-search>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 ">
+                  <app-search [placeHolder]="filterPlaceHolder"
+                              (queryString)="onFilterQuery($event)"></app-search>
+                </div>
+              </div>
 
               <app-datasources-list [dataSet]="dataSet"
                                     [selectedDatasource]="selectedDatasource"
