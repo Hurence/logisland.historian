@@ -1,16 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable ,  of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { Tag } from './tag';
-import { Datasource } from '../../../target/docker/src/app/datasource/Datasource';
 
 @Injectable()
 export class TagService {
 
   private tagsUrl = 'http://localhost:8701/api/v1/';
-  // http://localhost:8701/api/v1/datasources/Vbox OPC datasource/tags
 
   constructor(private http: HttpClient) { }
 
@@ -27,6 +25,22 @@ export class TagService {
     .pipe(
       catchError(this.handleError('getTagsFromDatasource', []))
     );
+  }
+
+  getTagsFromDatasourceQuery(datasourceId: string, query: string): Observable<Tag[]> {
+    if (query && query.length !== 0) {
+      return this.http.get<Tag[]>(`${this.tagsUrl}datasources/${datasourceId}/tags?fq=${this.formatQuery(query)}`)
+      .pipe(
+        catchError(this.handleError('getTagsFromDatasourceQuery', []))
+      );
+    } else {
+      return this.getTagsFromDatasource(datasourceId);
+    }
+  }
+
+  private formatQuery(query: string): string {
+    // TODO complexify parsing (add * ?)
+    return query;
   }
 
    /**
