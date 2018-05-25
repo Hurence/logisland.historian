@@ -1,6 +1,11 @@
-<h2 i18n="list tag title|title for the list of tags">My Tags</h2>
-<ul class="tags">
-  <li *ngFor="let tag of tags">
-    <span class="badge">{{tag.tag_name}}</span> server: {{tag.server}} domain: {{tag.domain}}
-  </li>
-</ul>
+<div *ngFor="let datasourceId of datasourcesId()">
+    tags of datasource '{{datasourceId}}':
+    <div *ngFor="let tag of tagsMap.get(datasourceId) | async">
+        <app-button-labelled [centerLabel]="tag.tag_name"
+          [topRightLabel]="tag.data_type"
+          [bottomRightLabel]="tag.labels"
+          [isActive]="isSelected(tag)"
+          (click)="onSelect(tag)">
+        </app-button-labelled>
+    </div>
+</div>

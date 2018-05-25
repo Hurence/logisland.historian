@@ -4,20 +4,28 @@ import { Observable ,  of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { Tag } from './tag';
+import { Datasource } from '../../../target/docker/src/app/datasource/Datasource';
 
 @Injectable()
 export class TagService {
 
-  private tagsUrl = 'http://localhost:8701/api/v1/tags';
+  private tagsUrl = 'http://localhost:8701/api/v1/';
+  // http://localhost:8701/api/v1/datasources/Vbox OPC datasource/tags
 
   constructor(private http: HttpClient) { }
 
 
   getTags(): Observable<Tag[]> {
-
-    return this.http.get<Tag[]>(this.tagsUrl)
+    return this.http.get<Tag[]>(this.tagsUrl + 'tags')
     .pipe(
       catchError(this.handleError('getTags', []))
+    );
+  }
+
+  getTagsFromDatasource(datasourceId: string): Observable<Tag[]> {
+    return this.http.get<Tag[]>(`${this.tagsUrl}datasources/${datasourceId}/tags`)
+    .pipe(
+      catchError(this.handleError('getTagsFromDatasource', []))
     );
   }
 
