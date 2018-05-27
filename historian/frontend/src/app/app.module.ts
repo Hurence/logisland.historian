@@ -18,6 +18,7 @@ import { SharedModule } from './shared/shared.module';
 import { SourcesAndTagsModule } from './sources-and-tags/sources-and-tags.module';
 import { TagService } from './tag/tag.service';
 import { TodoComponent } from './todo/todo.component';
+import { QuestionService } from './shared/dynamic-form/question.service';
 
 // components
 // router
@@ -55,6 +56,7 @@ import { TodoComponent } from './todo/todo.component';
     DatasourceService,
     DialogService,
     ProfilService,
+    QuestionService
   ],
   bootstrap: [AppComponent],
 })
