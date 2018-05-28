@@ -34,6 +34,12 @@ export class TagsListComponent implements OnInit {
     });
   }
 
+  getTagsQuery(query: string): void {
+    this.dataSet.datasourceIds.forEach((id, idAgain, set) => {
+      this.tagsMap.set(id, this.tagService.getTagsFromDatasourceQuery(id, query));
+    });
+  }
+
   isSelected(tag: Tag): boolean {
     return this.selectedTags.has(tag);
   }

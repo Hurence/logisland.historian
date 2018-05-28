@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { DatasetService } from '../../dataset/dataset.service.';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { Dataset } from '../../dataset/dataset';
-import { Tag } from '../tag';
+import { DatasetService } from '../../dataset/dataset.service.';
 import { ProfilService } from '../../profil/profil.service';
+import { Tag } from '../tag';
+import { TagsListComponent } from '../tags-list/tags-list.component';
+import { QuestionService } from '../../shared/dynamic-form/question.service';
+import { QuestionBase } from '../../shared/dynamic-form/question-base';
 
 @Component({
   selector: 'app-tag-dashboard',
@@ -14,16 +18,26 @@ export class TagDashboardComponent implements OnInit {
 
   dataSet: Dataset;
   selectedTags: Set<Tag> = new Set();
+  lastSelectedTag: Tag;
   filterPlaceHolder = 'Type to filter by type or by description...';
+  questionsMultiSelection: QuestionBase<any>[] = [];
+  questionsSingleSelection: QuestionBase<any>[] = [];
+
+  @ViewChild(TagsListComponent)
+  private tsListComp: TagsListComponent;
   
   constructor(private datasetService: DatasetService,
     private router: Router,
     private route: ActivatedRoute,
-    private profilService: ProfilService) { }
+    private profilService: ProfilService,
+    private qs: QuestionService) { }
 
   ngOnInit() {
     this.datasetService.getMyDataset()
       .subscribe(dataSet => this.dataSet = dataSet);
+ 
+    this.questionsMultiSelection = this.qs.getTagFormMultiSelection();
+    this.questionsSingleSelection = this.qs.getTagFormSingleSelection();
   }
 
   datasetHasNoTags(): boolean {    
@@ -45,11 +59,26 @@ export class TagDashboardComponent implements OnInit {
   onSelectTag(tag: Tag): void {    
     if (tag !== null && !this.selectedTags.delete(tag)) {      
       this.selectedTags.add(tag);
+      this.lastSelectedTag = tag;
+    } else {//unselect tag
+      this.lastSelectedTag = null;
     }
   }
 
   isHelpHidden(): boolean {
     return this.profilService.isHelpHidden();
+  }
+
+  onFilterQuery(query: string) {
+    this.tsListComp.getTagsQuery(query);
+  }
+
+  anyTagSelected(): boolean {
+    return this.selectedTags.size !== 0;
+  }
+
+  multipleTagSelected(): boolean {
+    return this.selectedTags.size > 1;
   }
 
 }

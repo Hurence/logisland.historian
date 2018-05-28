@@ -16,10 +16,11 @@
             
             <div class="row">
               <div class="col-sm-12 col-md-12 col-lg-12 ">
-                <app-search [placeHolder]="filterPlaceHolder"></app-search>
+                <app-search [placeHolder]="filterPlaceHolder"
+                            (queryString)="onFilterQuery($event)"></app-search>
               </div>
             </div>
-
+            {{lastSelectedTag | json}}
             <app-tags-list [dataSet]="dataSet"
                            [selectedTags]="selectedTags"
                            (selectedTagsE)="onSelectTag($event)"></app-tags-list>
@@ -28,18 +29,26 @@
           </div>
         </div>
 
+
+
         <div class="col-lg-4"
              [ngClass]="{'col-md-4' : isHelpHidden(), 'col-md-6 col-lg-6' : !isHelpHidden()}">
           <div class="card h-100 datasources-list">
 
             <div class="card-body">
 
-              <app-tag-form></app-tag-form>
+              <app-tag-form [visible]="anyTagSelected()"
+                            [showEntireForm]="!multipleTagSelected()"
+                            [questionsMultiSelection]="questionsMultiSelection"
+                            [questionsSingleSelection]="questionsSingleSelection"
+                            [tag]="lastSelectedTag"></app-tag-form>
 
               <!-- <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onClickAddDatasource()">Add Data source</button> -->
             </div>
           </div>
         </div>
+
+
 
         <div class="help-content col-lg-4"
              [ngClass]="{'col-md-4' : isHelpHidden(), 'col-md-6 col-lg-6' : !isHelpHidden()}"
