@@ -142,10 +142,21 @@ mark, .mark {
   background-color: transparent;
 }
 
-.btn .badge {
+.badge-center-label {
   top: -8px;
   right: -5px;
   font-size: 8px !important;
+}
+.badge-top-right-label{
+  top: -8px !important;
+  right: 0px;
+  font-size: 7px !important;
+}
+
+.badge-botttom-right-label{
+  top: 8px !important;
+  right: 42px;
+  font-size: 7px !important;
 }
 
 .btn-outline-danger {
