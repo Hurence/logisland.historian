@@ -10,7 +10,6 @@ import { DatasourcesListComponent } from './datasources-list/datasources-list.co
 
 @NgModule({
   imports: [
-    ReactiveFormsModule,
     DialogModule,
     SharedModule,
   ],
