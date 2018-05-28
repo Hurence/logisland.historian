@@ -4,20 +4,41 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { Tag } from './tag';
+import { AbsModelService } from '../shared/base-model-service';
 
 @Injectable()
-export class TagService {
+export class TagService extends AbsModelService<Tag> {
 
   private tagsUrl = 'http://localhost:8701/api/v1/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    super();
+   }
 
-
-  getTags(): Observable<Tag[]> {
-    return this.http.get<Tag[]>(this.tagsUrl + 'tags')
+  getAll(): Observable<Tag[]> {
+    return this.http.get<Tag[]>(`${this.tagsUrl}tags`)
     .pipe(
       catchError(this.handleError('getTags', []))
     );
+  }
+
+  get(id: string): Observable<Tag> {
+    return this.http.get<Tag>(`${this.tagsUrl}tags/${id}`)
+    .pipe(
+      catchError(this.handleError('getTag'))
+    );
+  }
+
+  save(obj: Tag): Observable<Tag> {
+    return this.http.post<Tag>(`${this.tagsUrl}tags/${obj.id}`, obj);
+  }
+
+  update(obj: Tag): Observable<Tag> {
+    return this.http.put<Tag>(`${this.tagsUrl}tags/${obj.id}`, obj);
+  }
+
+  delete(obj: Tag): Observable<Tag> {
+    return this.http.delete<Tag>(`${this.tagsUrl}tags/${obj.id}`);
   }
 
   getTagsFromDatasource(datasourceId: string): Observable<Tag[]> {
@@ -42,25 +63,4 @@ export class TagService {
     // TODO complexify parsing (add * ?)
     return query;
   }
-
-   /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      console.error(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
-
 }

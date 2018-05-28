@@ -135,11 +135,11 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   onSubmit() {
     this.datasource = this.prepareSaveDatasource();
     if (this.isCreation) {
-      this.subscribeToUpdate(this.datasourceService.saveDatasource(this.datasource),
+      this.subscribeToUpdate(this.datasourceService.save(this.datasource),
         'successfully added datasource',
         'error while saving data source.');
     } else {
-      this.subscribeToUpdate(this.datasourceService.updateDatasource(this.datasource),
+      this.subscribeToUpdate(this.datasourceService.update(this.datasource),
         'successfully updated datasource',
         'error while updating data source.');
     }
