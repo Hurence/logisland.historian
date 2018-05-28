@@ -10,7 +10,8 @@
             [id]="question.key" [type]="question.type" [required]="question.required">
 
     <!-- SELECT (DROPDOWN)-->
-    <select [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key" [class]="form-control" [required]="question.required">
+    <select [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key" [class]="form-control"
+            [required]="question.required">
       <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
     </select>
 

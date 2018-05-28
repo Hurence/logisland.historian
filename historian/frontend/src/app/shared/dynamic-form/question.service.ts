@@ -45,8 +45,7 @@ export class QuestionService {
   }
 
 
-  getTagFormMultiPart(): QuestionBase<any>[]  {
-
+  getTagFormSingleSelection(): QuestionBase<any>[]  {
     // id: string;
     // domain: string;
     // server: string;
@@ -68,13 +67,73 @@ export class QuestionService {
     let questions: QuestionBase<any>[] = [
 
       new TextboxQuestion({
-        key: 'label',      
-        placeholder: 'label...',        
+        key: 'tag_name',
+        label: 'TAG NAME',        
+        order: 4,
+        disabled: true,
+      }),
+
+      new TextboxQuestion({
+        key: 'id',    
+        order: 5,
+        disabled: true
+      }),
+
+      new TextboxQuestion({
+        key: 'domain',      
+        order: 6,
+        disabled: true
+      }),
+
+      new TextboxQuestion({
+        key: 'server',      
+        order: 7,
+        disabled: true
+      }),
+
+      new TextboxQuestion({
+        key: 'group',             
+        order: 8,
+        disabled: true
+      }),
+
+      new TextboxQuestion({
+        key: 'creation_date',
+        label: 'CREATION DATE',        
+        order: 9,
+        disabled: true
+      }),
+
+      new TextboxQuestion({
+        key: 'last_modification_date',
+        label: 'LAST MODIFICATION DATE',        
+        order: 10,
+        disabled: true
+      }),
+
+      new TextboxQuestion({
+        key: 'last_polling_date',
+        label: 'LAST POLLING DATE',        
+        order: 11,
+        disabled: true
+      })
+    ];
+
+    return questions.sort((a, b) => a.order - b.order);
+  }
+  
+  getTagFormMultiSelection(): QuestionBase<any>[]  {
+
+    let questions: QuestionBase<any>[] = [
+
+      new TextboxQuestion({
+        key: 'label',
+        placeholder: 'label...',
         order: 1
       }),
 
       new TextboxQuestion({
-        key: 'description',      
+        key: 'description',
         placeholder: 'description...',
         required: true,
         order: 2
@@ -82,57 +141,11 @@ export class QuestionService {
 
       new TextboxQuestion({
         key: 'update_rate',
-        label: 'UPDATE RATE',      
+        label: 'UPDATE RATE',
         order: 3
       }),
-
-      new TextboxQuestion({
-        key: 'tag_name',
-        label: 'TAG NAME',        
-        order: 4
-      }),
-
-      new TextboxQuestion({
-        key: 'id',    
-        order: 5
-      }),
-
-      new TextboxQuestion({
-        key: 'domain',      
-        order: 6
-      }),
-
-      new TextboxQuestion({
-        key: 'server',      
-        order: 7
-      }),
-
-      new TextboxQuestion({
-        key: 'group',             
-        order: 8
-      }),
-
-      new TextboxQuestion({
-        key: 'creation_date',
-        label: 'CREATION DATE',        
-        order: 9
-      }),
-
-      new TextboxQuestion({
-        key: 'last_modification_date',
-        label: 'LAST MODIFICATION DATE',        
-        order: 10
-      }),
-
-      new TextboxQuestion({
-        key: 'last_polling_date',
-        label: 'LAST POLLING DATE',        
-        order: 11
-      })
     ];
 
     return questions.sort((a, b) => a.order - b.order);
   }
-
-  
 }

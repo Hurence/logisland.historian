@@ -11,8 +11,10 @@ export class QuestionControlService {
     let group: any = {};
 
     questions.forEach(question => {
-      group[question.key] = question.required ? new FormControl(question.value || '', Validators.required)
-                                              : new FormControl(question.value || '');
+      const keyControl = new FormControl(question.value || '');
+      if (question.required) keyControl.setValidators(Validators.required);
+      if (question.disabled) keyControl.disable();
+      group[question.key] = keyControl
     });
     return new FormGroup(group);
   }
