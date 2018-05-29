@@ -1,10 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SearchComponent } from './search/search.component';
-import { ButtonLabelledComponent } from './button-labelled/button-labelled.component';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
+
+import { ButtonLabelledComponent } from './button-labelled/button-labelled.component';
 import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-question/dynamic-form-question.component';
+import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
+import { JsTreeComponent } from './js-tree/js-tree.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   imports: [
@@ -18,12 +20,14 @@ import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-questi
     ButtonLabelledComponent,
     DynamicFormComponent,
     DynamicFormQuestionComponent,
+    JsTreeComponent,
   ],
   declarations: [
     SearchComponent,
     ButtonLabelledComponent,
     DynamicFormComponent,
     DynamicFormQuestionComponent,
+    JsTreeComponent,
   ]
 })
 export class SharedModule { }

@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
-import { Tag } from '../tag';
-import { TagService } from '../tag.service';
+import { interval, from } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
+import { combineAll, map, take, concat } from 'rxjs/operators';
+
 import { Dataset } from '../../dataset/dataset';
 import { DialogService } from '../../dialog/dialog.service';
+import { Tag } from '../tag';
+import { TagService } from '../tag.service';
+import { TreeTagService } from './tree-view-tag.service';
 
 @Component({
   selector: 'app-tags-list',
@@ -13,19 +16,34 @@ import { DialogService } from '../../dialog/dialog.service';
 })
 export class TagsListComponent implements OnInit {
 
-  tagsMap: Map<string, Observable<Tag[]>>;
+  treeDataTag$: Observable<any>;
+  tagsMap: Map<string/*datasource Id*/, Observable<Tag[]>>;
+
   // tags$: Observable<Tag[]>;
   @Input() dataSet: Dataset;
   @Input() selectedTags: Set<Tag>;
   @Output() selectedTagsE = new EventEmitter<Tag>();
 
   constructor(private tagService: TagService,
-              private dialogService: DialogService) { 
+              private dialogService: DialogService,
+              private treeTagService: TreeTagService) {
                 this.tagsMap = new Map();
               }
 
   ngOnInit() {
     this.getTags();
+    this.treeDataTag$ = this.treeTagService.buildTree(this.createTreeTag())
+  }
+
+
+  createTreeTag(): Observable<Tag[]> {
+    const emptyObs: Observable<Tag[]> = from([]);
+    return Array.from(this.tagsMap.values()).reduce((r, v, i, a) => {
+      let myObs = r.pipe(concat(v));
+      return myObs
+    },
+      emptyObs
+    );
   }
 
   getTags(): void {
@@ -88,4 +106,5 @@ export class TagsListComponent implements OnInit {
   //   }
   //   return false;
   // }
+  
 }

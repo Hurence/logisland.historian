@@ -1,25 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagFormComponent } from './tag-form.component';
+import { JsTreeComponent } from './js-tree.component';
 
-describe('TagFormComponent', () => {
-  let component: TagFormComponent;
-  let fixture: ComponentFixture<TagFormComponent>;
+describe('JsTreeComponent', () => {
+  let component: JsTreeComponent;
+  let fixture: ComponentFixture<JsTreeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TagFormComponent ]
+      declarations: [ JsTreeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TagFormComponent);
+    fixture = TestBed.createComponent(JsTreeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-/*
+
   it('should create', () => {
     expect(component).toBeTruthy();
-  });*/
+  });
 });

@@ -20,6 +20,7 @@ import { TagService } from './tag/tag.service';
 import { TodoComponent } from './todo/todo.component';
 import { QuestionService } from './shared/dynamic-form/question.service';
 import { QuestionControlService } from './shared/dynamic-form/question-control.service';
+import { TreeTagService } from './tag/tags-list/tree-view-tag.service';
 
 // components
 // router
@@ -58,7 +59,8 @@ import { QuestionControlService } from './shared/dynamic-form/question-control.s
     DialogService,
     ProfilService,
     QuestionService,
-    QuestionControlService
+    QuestionControlService,
+    TreeTagService
   ],
   bootstrap: [AppComponent],
 })
