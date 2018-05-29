@@ -4,7 +4,7 @@
 
       <div class="row mt-0 h-100">
         <div class="col-lg-4"
-             [ngClass]="{'col-md-4' : isHelpHidden(), 'col-md-6 col-lg-6' : !isHelpHidden()}">
+             [ngClass]="{'col-md-4' : !isHelpHidden(), 'col-md-6 col-lg-6' : isHelpHidden()}">
           <div class="card h-100">
 
             <div class="card-body">
@@ -32,7 +32,7 @@
 
 
         <div class="col-lg-4"
-             [ngClass]="{'col-md-4' : isHelpHidden(), 'col-md-6 col-lg-6' : !isHelpHidden()}">
+             [ngClass]="{'col-md-4' : !isHelpHidden(), 'col-md-6 col-lg-6' : isHelpHidden()}">
           <div class="card h-100 datasources-list">
 
             <div class="card-body">
@@ -51,8 +51,8 @@
 
 
         <div class="help-content col-lg-4"
-             [ngClass]="{'col-md-4' : isHelpHidden(), 'col-md-6 col-lg-6' : !isHelpHidden()}"
-             *ngIf="isHelpHidden()">
+             [ngClass]="{'col-md-4' : !isHelpHidden(), 'col-md-6 col-lg-6' : isHelpHidden()}"
+             *ngIf="!isHelpHidden()">
           <div class="card h-100">
             <div class="card-body">
               <app-tag-help></app-tag-help>
