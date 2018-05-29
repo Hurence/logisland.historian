@@ -10,10 +10,10 @@
             <div class="card-body">
                 <h6 _ngcontent-c2="" class="text-uppercase"
                 i18n="data sources|text above data sources list">
-              tags
-              <small _ngcontent-c2="" class="text-muted">tags list</small>
-            </h6>    
-            
+              tags list
+              <small _ngcontent-c2="" class="text-muted">Select a TAG or multiple tags to edit or add to collection</small>
+            </h6>
+
             <div class="row">
               <div class="col-sm-12 col-md-12 col-lg-12 ">
                 <app-search [placeHolder]="filterPlaceHolder"
@@ -24,7 +24,7 @@
             <app-tags-list [dataSet]="dataSet"
                            [selectedTags]="selectedTags"
                            (selectedTagsE)="onSelectTag($event)"></app-tags-list>
-              
+
             </div>
           </div>
         </div>

@@ -1,5 +1,3 @@
-TAGS LIST
-Select a TAG or multiple tags to edit or add to collection
 <div *ngFor="let datasourceId of datasourcesId()">
     tags of datasource '{{datasourceId}}' :
     <div *ngFor="let tag of tagsMap.get(datasourceId) | async as tags; let i = index">
