@@ -1,5 +1,7 @@
-TAGS CONFIGURATION
-Modify the label, description and update rate of a tag or multiple tags
+<h6 _ngcontent-c2="" class="text-uppercase">TAGS CONFIGURATION <small _ngcontent-c2="" class="text-muted">Modify the label, description and update rate of a tag or multiple tags</small></h6>
+
+
+
 <div *ngIf="visible">
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
@@ -8,7 +10,7 @@ Modify the label, description and update rate of a tag or multiple tags
     </div>
 
     <div class="form-row">
-      <button type="submit" [disabled]="!form.valid">Save</button>
+      <button class="btn btn-success" type="submit" [disabled]="!form.valid">Save</button>
     </div>
 
     <ng-container *ngIf="showEntireForm">

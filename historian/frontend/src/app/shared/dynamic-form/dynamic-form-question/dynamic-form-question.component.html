@@ -1,8 +1,9 @@
 <div [formGroup]="form">
-  <label [attr.for]="question.key">{{question.label}}</label>
-
   <!-- CHOOSE CONTROL TYPE -->
-  <div [ngSwitch]="question.controlType" class="form-group label-small">
+  <div [ngSwitch]="question.controlType" class="input-group input-group-sm mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text bg-primary" id="question.key" [attr.for]="question.key">{{question.label}}</span>
+    </div>
 
     <!-- TEXTBOX -->
     <input *ngSwitchCase="'textbox'" [formControlName]="question.key"
@@ -15,8 +16,7 @@
       <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
     </select>
 
-  </div> 
+  </div>
 
   <div class="errorMessage alert alert-danger" *ngIf="!isValid">{{question.label}} is required</div>
 </div>
-

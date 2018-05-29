@@ -4,16 +4,16 @@
 
       <div class="row mt-0 h-100">
         <div class="col-lg-4"
-             [ngClass]="{'col-md-4' : isHelpHidden(), 'col-md-6 col-lg-6' : !isHelpHidden()}">
+             [ngClass]="{'col-md-4' : !isHelpHidden(), 'col-md-6 col-lg-6' : isHelpHidden()}">
           <div class="card h-100">
 
             <div class="card-body">
                 <h6 _ngcontent-c2="" class="text-uppercase"
                 i18n="data sources|text above data sources list">
-              tags
-              <small _ngcontent-c2="" class="text-muted">tags list</small>
-            </h6>    
-            
+              tags list
+              <small _ngcontent-c2="" class="text-muted">Select a TAG or multiple tags to edit or add to collection</small>
+            </h6>
+
             <div class="row">
               <div class="col-sm-12 col-md-12 col-lg-12 ">
                 <app-search [placeHolder]="filterPlaceHolder"
@@ -24,7 +24,7 @@
             <app-tags-list [dataSet]="dataSet"
                            [selectedTags]="selectedTags"
                            (selectedTagsE)="onSelectTag($event)"></app-tags-list>
-              
+
             </div>
           </div>
         </div>
@@ -32,7 +32,7 @@
 
 
         <div class="col-lg-4"
-             [ngClass]="{'col-md-4' : isHelpHidden(), 'col-md-6 col-lg-6' : !isHelpHidden()}">
+             [ngClass]="{'col-md-4' : !isHelpHidden(), 'col-md-6 col-lg-6' : isHelpHidden()}">
           <div class="card h-100 datasources-list">
 
             <div class="card-body">
@@ -51,8 +51,8 @@
 
 
         <div class="help-content col-lg-4"
-             [ngClass]="{'col-md-4' : isHelpHidden(), 'col-md-6 col-lg-6' : !isHelpHidden()}"
-             *ngIf="isHelpHidden()">
+             [ngClass]="{'col-md-4' : !isHelpHidden(), 'col-md-6 col-lg-6' : isHelpHidden()}"
+             *ngIf="!isHelpHidden()">
           <div class="card h-100">
             <div class="card-body">
               <app-tag-help></app-tag-help>

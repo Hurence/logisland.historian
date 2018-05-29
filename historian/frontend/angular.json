@@ -21,7 +21,7 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "src/bootstrap-flatly.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/jstree/dist/themes/default/style.min.css",
               "src/styles.css"
@@ -52,7 +52,7 @@
                 }
               ]
             },
-            "production-fr": {              
+            "production-fr": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
