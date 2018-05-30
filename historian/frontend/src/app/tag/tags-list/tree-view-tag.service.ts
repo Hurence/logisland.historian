@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -23,24 +23,26 @@ export class TreeTagService {
    * Then add them in tree.
    * @param tags 
    */
-  buildTree(tags$: Observable<Tag[]>): Observable<any> {  
+  buildTree(tags$: Observable<Tag[]>, tagE: EventEmitter<Tag>): Observable<any> {  
     return tags$.pipe(      
-      map(tags => this.groupBy(tags))
+      map(tags => this.groupBy(tags, tagE))
     );
   }
 
-  private groupBy(tags: Tag[]): any {    
+  private groupBy(tags: Tag[], tagE: EventEmitter<Tag>): any {    
     const treeTag =  tags.reduce(
       (r, v, i, a) => {      
         const domain = this.getOrCreateChildren(r, v['domain']);
         const server = this.getOrCreateChildren(domain, v['server']);
         const group = this.getOrCreateChildren(server, v['group']);
         const children = new NodeTree({
-          text: v.id,
+          text: v.tag_name,
           icon: "fa fa-file",
           state: this.state,
-          children: []
-        });    
+          children: [],
+          tag: v,
+          tagEmitter: tagE,
+        });  
         group.children.push(children);        
         return r;
       },
@@ -50,7 +52,7 @@ export class TreeTagService {
         state: {
           opened: true
         },
-        children: []
+        children: [],
       })
     );    
     return treeTag;
@@ -77,6 +79,7 @@ export interface NodeTree {
   text: string;
   state: any;
   icon: "fa fa-file", 
+  [key: string]: any
 }
 
 export class NodeTree {
@@ -86,7 +89,8 @@ export class NodeTree {
     cache?: boolean;
     text?: string;
     state?: any;
-    icon?: string, 
+    icon?: string,
+    [key: string]: any
   } = {}) {
     Object.assign(this, options)
   }

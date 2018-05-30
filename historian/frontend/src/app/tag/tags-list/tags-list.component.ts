@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { interval, from } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { combineAll, map, take, concat } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { DialogService } from '../../dialog/dialog.service';
 import { Tag } from '../tag';
 import { TagService } from '../tag.service';
 import { TreeTagService } from './tree-view-tag.service';
+import { JsTreeComponent } from '../../shared/js-tree/js-tree.component';
 
 @Component({
   selector: 'app-tags-list',
@@ -23,6 +24,7 @@ export class TagsListComponent implements OnInit {
   @Input() dataSet: Dataset;
   @Input() selectedTags: Set<Tag>;
   @Output() selectedTagsE = new EventEmitter<Tag>();
+  @ViewChild(JsTreeComponent) public dataTreeComp: JsTreeComponent;
 
   constructor(private tagService: TagService,
               private dialogService: DialogService,
@@ -32,20 +34,11 @@ export class TagsListComponent implements OnInit {
 
   ngOnInit() {
     this.getTags();
-    this.treeDataTag$ = this.treeTagService.buildTree(this.createTreeTag())
+    this.treeDataTag$ = this.treeTagService.buildTree(this.createTreeTag(), this.selectedTagsE)
+    this.initializeOnChangeTreeEvent();
   }
 
-
-  createTreeTag(): Observable<Tag[]> {
-    const emptyObs: Observable<Tag[]> = from([]);
-    return Array.from(this.tagsMap.values()).reduce((r, v, i, a) => {
-      let myObs = r.pipe(concat(v));
-      return myObs
-    },
-      emptyObs
-    );
-  }
-
+  
   getTags(): void {
     this.dataSet.datasourceIds.forEach((id, idAgain, set) => {
       this.tagsMap.set(id, this.tagService.getTagsFromDatasource(id));
@@ -68,43 +61,30 @@ export class TagsListComponent implements OnInit {
     return Array.from(this.tagsMap.keys()); 
   }
 
-  // getDatasourcesQuery(queryParameter: string) {
-  //   this.datasources$ = this.datasourceService.getDatasourcesQuery(queryParameter)
-  //     .pipe(catchError(error => of([])));
-  // }
-
-  // private onDeleteDatasource(datasource: Datasource): void {
-  //   const msg = `Delete data source ${datasource.description} ${datasource.datasource_type} ?`;
-  //   this.dialogService.confirm(msg, 'Cancel', 'Remove data source')
-  //     .subscribe(ok => {
-  //       if (ok) {
-  //         this.datasourceService.deleteDatasource(datasource)
-  //           .subscribe(deletedDs => {
-  //             console.log('deleted datasource with id :' + deletedDs.id);
-  //             this.dataSet.removeDatasource(deletedDs);
-  //             this.getDatasources();
-  //           });
-  //       }
-  //     });
-  // }
-
-  private onSelect(tag: Tag) {
+  onSelect(tag: Tag) {
     this.selectedTagsE.emit(tag);
   }
 
-  // private onAddToDataset(datasource: Datasource) {
-  //   this.dataSet.addDatasource(datasource);
-  // }
+  private createTreeTag(): Observable<Tag[]> {
+    const emptyObs: Observable<Tag[]> = from([]);
+    return Array.from(this.tagsMap.values()).reduce((r, v, i, a) => {
+      let myObs = r.pipe(concat(v));
+      return myObs
+    },
+      emptyObs
+    );
+  }
 
-  // private onRemoveFromDataset(datasource: Datasource) {
-  //   this.dataSet.removeDatasource(datasource);
-  // }
-
-  // private dataSetContain(datasource: Datasource): boolean {
-  //   if (this.dataSet) {
-  //     return this.dataSet.containDatasource(datasource);
-  //   }
-  //   return false;
-  // }
-  
+  private initializeOnChangeTreeEvent() {
+    $(this.dataTreeComp.dataTree.nativeElement)
+      .on('changed.jstree', function (e, data) {
+        if (data.selected.length) {
+          const tag = data.instance.get_node(data.selected[0]).original.tag as Tag;
+          if (tag) {
+            const tagEmitter = data.instance.get_node(data.selected[0]).original.tagEmitter as EventEmitter<Tag>;
+            tagEmitter.emit(tag);
+          }
+        }
+      });
+  }
 }
