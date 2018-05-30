@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Dataset } from '../../dataset/dataset';
 import { DatasetService } from '../../dataset/dataset.service.';
 import { ProfilService } from '../../profil/profil.service';
+import { QuestionBase } from '../../shared/dynamic-form/question-base';
+import { QuestionService } from '../../shared/dynamic-form/question.service';
 import { Tag } from '../tag';
 import { TagsListComponent } from '../tags-list/tags-list.component';
-import { QuestionService } from '../../shared/dynamic-form/question.service';
-import { QuestionBase } from '../../shared/dynamic-form/question-base';
 
 @Component({
   selector: 'app-tag-dashboard',
@@ -81,8 +81,9 @@ export class TagDashboardComponent implements OnInit {
   multipleTagSelected(): boolean {
     return this.selectedTags.size > 1;
   }
-
-  onTagSaved(tag: Tag) {
-    //TODO update tag in tree.
+  //update tag in tree.
+  onTagSaved(tag: Tag): void {
+    const nodeToUpdate = this.tsListComp.dataTreeComp.myTreeJs.get_node(tag.id);
+    Object.assign(nodeToUpdate.original.tag, tag);
   }
 }

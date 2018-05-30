@@ -36,13 +36,14 @@ export class TreeTagService {
         const server = this.getOrCreateChildren(domain, v['server']);
         const group = this.getOrCreateChildren(server, v['group']);
         const children = new NodeTree({
+          id: v.id,
           text: v.tag_name,
           icon: "fa fa-file",
           state: this.state,
           children: [],
           tag: v,
           tagEmitter: tagE,
-        });  
+        });
         group.children.push(children);        
         return r;
       },
@@ -63,6 +64,7 @@ export class TreeTagService {
     const found = obj.children.find(node => node.text === value)
     if (found) return found;
     const node = new NodeTree({
+      id: value,
       text: value, 
       icon: "fa fa-file", 
       state: this.state,
