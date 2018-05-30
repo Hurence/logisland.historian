@@ -20,7 +20,7 @@
                             (queryString)="onFilterQuery($event)"></app-search>
               </div>
             </div>
-            {{lastSelectedTag | json}}
+            <!-- {{lastSelectedTag | json}} -->
             <app-tags-list [dataSet]="dataSet"
                            [selectedTags]="selectedTags"
                            (selectedTagsE)="onSelectTag($event)"></app-tags-list>

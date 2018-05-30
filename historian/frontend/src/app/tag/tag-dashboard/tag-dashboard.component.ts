@@ -56,14 +56,20 @@ export class TagDashboardComponent implements OnInit {
   nothing if tag is null
   remove tag if already selected
   else add tag to selection */
-  onSelectTag(tag: Tag): void {    
-    if (tag !== null && !this.selectedTags.delete(tag)) {      
-      this.selectedTags.clear();//TODO remove when enabling multiselect
+  onSelectTag(tag: Tag): void {
+    if (tag) {
+      this.selectedTags.clear();
       this.selectedTags.add(tag);
       this.lastSelectedTag = tag;
-    } else {//unselect tag
-      this.lastSelectedTag = null;
     }
+
+    // if (tag !== null && !this.selectedTags.delete(tag)) {
+    //   this.selectedTags.clear();//TODO remove when enabling multiselect
+    //   this.selectedTags.add(tag);
+    //   this.lastSelectedTag = tag;
+    // } else {//unselect tag
+    //   this.lastSelectedTag = null;
+    // }
   }
 
   isHelpHidden(): boolean {
@@ -71,7 +77,7 @@ export class TagDashboardComponent implements OnInit {
   }
 
   onFilterQuery(query: string) {
-    this.tsListComp.getTagsQuery(query);
+    this.tsListComp.dataTreeComp.myTreeJs.search(query);
   }
 
   anyTagSelected(): boolean {
