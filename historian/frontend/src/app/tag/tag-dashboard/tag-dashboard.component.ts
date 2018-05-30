@@ -58,6 +58,7 @@ export class TagDashboardComponent implements OnInit {
   else add tag to selection */
   onSelectTag(tag: Tag): void {    
     if (tag !== null && !this.selectedTags.delete(tag)) {      
+      this.selectedTags.clear();//TODO remove when enabling multiselect
       this.selectedTags.add(tag);
       this.lastSelectedTag = tag;
     } else {//unselect tag
@@ -81,4 +82,7 @@ export class TagDashboardComponent implements OnInit {
     return this.selectedTags.size > 1;
   }
 
+  onTagSaved(tag: Tag) {
+    //TODO update tag in tree.
+  }
 }

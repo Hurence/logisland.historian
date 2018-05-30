@@ -41,7 +41,8 @@
                             [showEntireForm]="!multipleTagSelected()"
                             [questionsMultiSelection]="questionsMultiSelection"
                             [questionsSingleSelection]="questionsSingleSelection"
-                            [tag]="lastSelectedTag"></app-tag-form>
+                            [tag]="lastSelectedTag"
+                            (submitted)="onTagSaved($event)"></app-tag-form>
 
               <!-- <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onClickAddDatasource()">Add Data source</button> -->
             </div>
