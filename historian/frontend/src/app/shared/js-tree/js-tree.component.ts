@@ -30,6 +30,7 @@ export class JsTreeComponent implements OnInit {
             // let tree = $(this.dataTree.nativeElement) TODO find a way to have the method available.
                 .jstree({
                     "core": {
+                        "multiple": false,
                         "animation": 0,
                         "check_callback": true,
                         "themes": {
@@ -62,8 +63,5 @@ export class JsTreeComponent implements OnInit {
                     // "plugins": ["dnd", "search", "sort", "types", "unique", "wholerow", "json_data", "changed"]
                 })
         }
-
     }
-
-
 }
