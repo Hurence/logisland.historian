@@ -77,7 +77,7 @@ export class TagDashboardComponent implements OnInit {
   }
 
   onFilterQuery(query: string) {
-    this.tsListComp.dataTreeComp.myTreeJs.search(query);
+    this.tsListComp.dataTreeComp.search(query);
   }
 
   anyTagSelected(): boolean {
@@ -89,7 +89,7 @@ export class TagDashboardComponent implements OnInit {
   }
   //update tag in tree.
   onTagSaved(tag: Tag): void {
-    const nodeToUpdate = this.tsListComp.dataTreeComp.myTreeJs.get_node(tag.id);
+    const nodeToUpdate = this.tsListComp.dataTreeComp.getNode(tag.id);
     Object.assign(nodeToUpdate.original.tag, tag);
   }
 }

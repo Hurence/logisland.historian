@@ -14,18 +14,11 @@ export class JsTreeComponent implements OnInit, OnDestroy {
 
     @ViewChild('dataTree') public dataTree: ElementRef;
     @Input() jsonData: any;
-    treeJQuery: any
-    myTreeJs: any
+    private myTreeJs: any;
 
     constructor() { }
 
-    ngOnInit() {
-        /*
-         this.treeJQuery = $(this.dataTree.nativeElement) TODO find a way to have the method available
-         without casting to any (so we would have autocompletion if possible)
-         */
-        this.treeJQuery = ($(this.dataTree.nativeElement) as any);
-    }
+    ngOnInit() { }
 
     ngOnDestroy(): void {
         if (this.myTreeJs) this.myTreeJs.destroy(false);
@@ -38,10 +31,26 @@ export class JsTreeComponent implements OnInit, OnDestroy {
             this.createDataTree();
         }
     }
+    // : JQuery.EventHandler<TElement> | JQuery.EventHandlerBase<any, JQuery.Event<TElement>> | false
+    addChangeEvent(callback) {
+        this.myTreeJs.on('changed.jstree', callback);
+    }
 
-    createDataTree() {
+    search(query: string): void {
+        this.myTreeJs.search(query);
+    }
+
+    getNode(obj: any): any {
+        return this.myTreeJs.get_node(obj);
+    }
+
+    private createDataTree() {
         if (this.jsonData) {
-            this.treeJQuery.jstree({
+             /*
+            this.treeJQuery = $(this.dataTree.nativeElement) TODO find a way to have the method available
+            without casting to any (so we would have autocompletion if possible)
+            */
+            let treeJQuery = ($(this.dataTree.nativeElement) as any).jstree({
                     core: {
                         multiple: false,
                         animation: 0,
@@ -82,7 +91,7 @@ export class JsTreeComponent implements OnInit, OnDestroy {
                     // 'plugins': ['checkbox', 'contextmenu', 'dnd', 'search', 'sort', 'state', 'types', 'unique', 'wholerow']
                     // 'plugins': ['dnd', 'search', 'sort', 'types', 'unique', 'wholerow', 'json_data', 'changed']
                 });
-            this.myTreeJs = ($ as any).jstree.reference(this.treeJQuery);
+            this.myTreeJs = ($ as any).jstree.reference(treeJQuery);
         }
     }
 }
