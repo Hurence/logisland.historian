@@ -23,9 +23,13 @@ export class TagFormComponent implements OnInit, OnChanges {
   @Input() questionsSingleSelection: QuestionBase<any>[] = [];
   @Input() visible: boolean = true;
   @Input() showEntireForm: boolean = true;
+  @Input() isCreation: boolean;
   @Input() tag: ITag;
   @Output() submitted = new EventEmitter<IHistorianTag>();
   payLoad = '';
+  submitBtnMsg: string;
+  private BTN_MSG_ADD = 'Save';
+  private BTN_MSG_UPDATE = 'Update';
 
   constructor(private qcs: QuestionControlService,
               private dialogService: DialogService,
@@ -37,12 +41,18 @@ export class TagFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.tag  && changes.tag.previousValue !== changes.tag.currentValue) this.rebuildForm();
+    if (changes.isCreation && changes.isCreation.previousValue !== changes.isCreation.currentValue) {
+      if (this.isCreation) {
+        this.submitBtnMsg = this.BTN_MSG_ADD;
+      } else {
+        this.submitBtnMsg = this.BTN_MSG_UPDATE;
+      }
+    }
   }
 
   /* Fill in form with current datasource properties */
   private rebuildForm(): void {//TODO FACTORIZE SAME IN BOTH
     this.form.reset(this.tag);
-    // this.form.reset(this.createFormObject(this.tag));
   }
 
   /* save datasource when submitting */
@@ -51,9 +61,15 @@ export class TagFormComponent implements OnInit, OnChanges {
     Object.assign(tag, this.form.value);
     console.log('tag to be saved :', tag)
     this.payLoad = JSON.stringify(tag);//TODO remove when test over
-    this.subscribeToUpdate(this.tagHistorianService.save(tag as IHistorianTag),
+    if (this.isCreation) {
+      this.subscribeToUpdate(this.tagHistorianService.save(tag as IHistorianTag),
       'successfully saved tag',
       'error while saving data source.');
+    } else {
+      this.subscribeToUpdate(this.tagHistorianService.update(tag as IHistorianTag),
+      'successfully updated tag',
+      'error while updated data source.');
+    }
   }
 
   private subscribeToUpdate(submitted: Observable<IHistorianTag>,

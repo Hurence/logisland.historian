@@ -6,8 +6,9 @@ import { DatasetService } from '../../dataset/dataset.service.';
 import { ProfilService } from '../../profil/profil.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
 import { QuestionService } from '../../shared/dynamic-form/question.service';
-import { Tag } from '../modele/tag';
+import { Tag, ITag } from '../modele/tag';
 import { TagTreeComponent } from '../tag-tree/tag-tree.component';
+import { IHistorianTag } from '../modele/HistorianTag';
 
 @Component({
   selector: 'app-tag-dashboard',
@@ -17,11 +18,12 @@ import { TagTreeComponent } from '../tag-tree/tag-tree.component';
 export class TagDashboardComponent implements OnInit {
 
   dataSet: Dataset;
-  selectedTags: Set<Tag> = new Set();
-  lastSelectedTag: Tag;
+  selectedTags: Set<ITag> = new Set();
+  lastSelectedTag: ITag;
   filterPlaceHolder = 'Type to filter by type or by description...';
   questionsMultiSelection: QuestionBase<any>[] = [];
   questionsSingleSelection: QuestionBase<any>[] = [];
+  isCreation: boolean;
 
   @ViewChild(TagTreeComponent)
   private tsListComp: TagTreeComponent;
@@ -56,20 +58,16 @@ export class TagDashboardComponent implements OnInit {
   nothing if tag is null
   remove tag if already selected
   else add tag to selection */
-  onSelectTag(tag: Tag): void {
+  onSelectTag(tag: ITag): void {
     if (tag) {
       this.selectedTags.clear();
       this.selectedTags.add(tag);
       this.lastSelectedTag = tag;
+      this.updateCreation(tag);
     }
-
-    // if (tag !== null && !this.selectedTags.delete(tag)) {
-    //   this.selectedTags.clear();//TODO remove when enabling multiselect
-    //   this.selectedTags.add(tag);
-    //   this.lastSelectedTag = tag;
-    // } else {//unselect tag
-    //   this.lastSelectedTag = null;
-    // }
+  }
+  isHistorianTag(arg: any): arg is IHistorianTag {//TODO move this as a mathod of ITAG ?
+    return (arg as IHistorianTag).description !== null;
   }
 
   isHelpHidden(): boolean {
@@ -91,5 +89,14 @@ export class TagDashboardComponent implements OnInit {
   onTagSaved(tag: Tag): void {
     const nodeToUpdate = this.tsListComp.dataTreeComp.getNode(tag.id);
     Object.assign(nodeToUpdate.original.tag, tag);
+    this.updateCreation(tag);
+  }
+
+  private updateCreation(tag: ITag): void {
+    if (this.isHistorianTag(tag)) {
+      this.isCreation = false;
+    } else {
+      this.isCreation = true;
+    }
   }
 }

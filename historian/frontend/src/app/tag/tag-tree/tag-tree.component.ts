@@ -48,9 +48,9 @@ export class TagTreeComponent implements OnInit {
   private initializeOnChangeTreeEvent() {
     this.dataTreeComp.addEvent('changed.jstree', function (e, data) {
       if (data.selected.length) {
-        const tag = data.instance.get_node(data.selected[0]).original.tag as Tag;
+        const tag = data.instance.get_node(data.selected[0]).original.tag as ITag;
         if (tag) {
-          const tagEmitter = data.instance.get_node(data.selected[0]).original.tagEmitter as EventEmitter<Tag>;
+          const tagEmitter = data.instance.get_node(data.selected[0]).original.tagEmitter as EventEmitter<ITag>;
           tagEmitter.emit(tag);
         }
       }

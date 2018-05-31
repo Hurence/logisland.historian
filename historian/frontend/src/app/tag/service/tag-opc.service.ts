@@ -33,7 +33,7 @@ export class TagOpcService {
     const requests: Observable<IOpcTag[]>[] = datasourceIds.map(id => this.get(id))
     return this.help.zip(requests).pipe(
       catchError(this.help.handleError(`gets(${datasourceIds})`, []))
-    );;
+    );
   }
 
   // save(obj: IOpcTag): Observable<IOpcTag> {
