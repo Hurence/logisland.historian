@@ -119,15 +119,23 @@ public class OpcService {
                 .withPassword(datasource.getPassword())
                 .withSocketTimeout(Duration.of(socketTimeoutMillis, ChronoUnit.MILLIS));
         return opcRepository.fetchAllTags(connectionProfile).stream()
-                .map(tag -> new Tag()
-                        .server(datasource.getHost())
-                        .domain(datasource.getDomain())
-                        .group(tag.getGroup())
-                        .tagName(tag.getName())
-                        .dataType(mapDataType(tag.getType()))
-                        .id(StringUtils.join(new String[]{datasource.getDomain(),
-                                datasource.getHost(), tag.getName()}, "|"))
-                ).collect(Collectors.toList());
+                .map(tag -> {
+                            try {
+                                return new Tag()
+                                        .server(datasource.getHost())
+                                        .domain(datasource.getDomain())
+                                        .group(tag.getGroup())
+                                        .tagName(tag.getName())
+                                        .dataType(mapDataType(tag.getType()))
+                                        .id(StringUtils.join(new String[]{datasource.getDomain(),
+                                                datasource.getHost(), tag.getName()}, "|"));
+                            } catch (Exception e) {
+                                logger.warn("Unable to parse tag " + tag.getName(), e);
+                                return null;
+                            }
+                        }
+                ).filter(tag -> tag != null)
+                .collect(Collectors.toList());
     }
 
 
