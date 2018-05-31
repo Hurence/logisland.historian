@@ -15,6 +15,14 @@ export class JsTreeComponent implements OnInit, OnDestroy {
     @ViewChild('dataTree') public dataTree: ElementRef;
     @Input() jsonData: any;
     private myTreeJs: any;
+    private _treeJQuery: JQuery<HTMLElement>;
+
+    get treeJQuery(): JQuery<HTMLElement> {
+        if (!this._treeJQuery) {
+            this._treeJQuery = $(this.dataTree.nativeElement);
+        }
+        return this._treeJQuery;
+    }
 
     constructor() { }
 
@@ -32,16 +40,17 @@ export class JsTreeComponent implements OnInit, OnDestroy {
         }
     }
     // : JQuery.EventHandler<TElement> | JQuery.EventHandlerBase<any, JQuery.Event<TElement>> | false
-    addChangeEvent(callback) {
-        this.myTreeJs.on('changed.jstree', callback);
+    addEvent(eventName: string, callback: any) {
+        this.treeJQuery.on(eventName, callback);
     }
 
     search(query: string): void {
-        this.myTreeJs.search(query);
+        if (this.myTreeJs) this.myTreeJs.search(query);
     }
 
     getNode(obj: any): any {
-        return this.myTreeJs.get_node(obj);
+        if (this.myTreeJs) return this.myTreeJs.get_node(obj) 
+        else return undefined;
     }
 
     private createDataTree() {
