@@ -21,9 +21,9 @@
               </div>
             </div>
             <!-- {{lastSelectedTag | json}} -->
-            <app-tags-list [dataSet]="dataSet"
+            <app-tag-tree [dataSet]="dataSet"
                            [selectedTags]="selectedTags"
-                           (selectedTagsE)="onSelectTag($event)"></app-tags-list>
+                           (selectedTagsE)="onSelectTag($event)"></app-tag-tree>
 
             </div>
           </div>

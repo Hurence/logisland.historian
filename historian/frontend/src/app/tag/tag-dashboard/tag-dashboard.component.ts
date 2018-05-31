@@ -7,7 +7,7 @@ import { ProfilService } from '../../profil/profil.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
 import { QuestionService } from '../../shared/dynamic-form/question.service';
 import { Tag } from '../tag';
-import { TagsListComponent } from '../tags-list/tags-list.component';
+import { TagTreeComponent } from '../tag-tree/tag-tree.component';
 
 @Component({
   selector: 'app-tag-dashboard',
@@ -23,8 +23,8 @@ export class TagDashboardComponent implements OnInit {
   questionsMultiSelection: QuestionBase<any>[] = [];
   questionsSingleSelection: QuestionBase<any>[] = [];
 
-  @ViewChild(TagsListComponent)
-  private tsListComp: TagsListComponent;
+  @ViewChild(TagTreeComponent)
+  private tsListComp: TagTreeComponent;
   
   constructor(private datasetService: DatasetService,
     private router: Router,
