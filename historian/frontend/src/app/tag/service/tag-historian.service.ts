@@ -18,27 +18,43 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
   getAll(): Observable<IHistorianTag[]> {
     return this.http.get<IHistorianTag[]>(`${this.tagsUrl}tags`)
     .pipe(
-      catchError(this.help.handleError('getTags', []))
+      catchError(this.help.handleError('getAll()', []))
     );
   }
+
+  // getQuery(query: string): Observable<IHistorianTag[]> {
+  //   return this.http.get<IHistorianTag[]>(`${this.tagsUrl}tags`)
+  //   .pipe(
+  //     catchError(this.help.handleError('getAll()', []))
+  //   );
+  // }
 
   get(id: string): Observable<IHistorianTag> {
     return this.http.get<IHistorianTag>(`${this.tagsUrl}tags/${id}`)
     .pipe(
-      catchError(this.help.handleError('getTag'))
+      catchError(this.help.handleError(`get(${id})`))
     );
   }
 
   save(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.post<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`, obj);
+    return this.http.post<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`, obj)
+    .pipe(
+      catchError(this.help.handleError(`save(${obj})`))
+    );
   }
 
   update(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.put<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`, obj);
+    return this.http.put<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`, obj)
+    .pipe(
+      catchError(this.help.handleError(`update(${obj})`))
+    );
   }
 
   delete(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`);
+    return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`)
+    .pipe(
+      catchError(this.help.handleError(`delete(${obj})`))
+    );
   }
  
 }

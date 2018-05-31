@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { map, zip } from 'rxjs/operators';
 
 import { IModelService } from '../../shared/base-model-service';
 import { Utilities } from '../../shared/utilities.service';
+import { IHistorianTag } from '../modele/HistorianTag';
+import { IOpcTag } from '../modele/OpcTag';
 import { ITag } from '../modele/tag';
 import { TagHistorianService } from './tag-historian.service';
 import { TagOpcService } from './tag-opc.service';
@@ -28,8 +30,12 @@ export class TagService implements IModelService<ITag> {
   }
 
   gets(datasourceIds: string[]): Observable<ITag[]> {
-    //TODO add information about tags that are saved in historian
-    return this.tagOpcService.gets(datasourceIds);
+    const tagFromOpc: Observable<IOpcTag[]> = this.tagOpcService.gets(datasourceIds);
+    const tagFromHist: Observable<IHistorianTag[]> = this.tagHistorianService.getAll();//TODO use gets(datasourceIds)
+    return tagFromOpc.pipe(
+      zip(tagFromHist, (tagsOpc, tagsHist) => tagsOpc.concat(tagsHist)),
+      map(tags => this.mergeTags(tags))
+    )
   }
 
   save(obj: ITag): Observable<ITag> {
@@ -42,5 +48,25 @@ export class TagService implements IModelService<ITag> {
 
   delete(obj: ITag): Observable<ITag> {
     throw new Error("Method not implemented.");
+  }
+  /** Merge tags with same id (combine properties).
+   * The array length returned may be inferior (if at least a match has been found)
+   *
+   * @param tags an array of ITag
+   */
+  private mergeTags(tags: ITag[]): ITag[] {
+    const mergedTag: Map<string, ITag> = tags.reduce(
+      (r, v) => {
+        if (r.has(v.id)) {
+          const oldTag = r.get(v.id);
+          Object.assign(oldTag, v);
+        } else {
+          r.set(v.id, v);
+        }
+        return r;
+      },
+      new Map<string, ITag>()
+    )
+    return Array.from(mergedTag.values());
   }
 }

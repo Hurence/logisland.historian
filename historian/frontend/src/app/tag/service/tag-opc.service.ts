@@ -15,20 +15,25 @@ export class TagOpcService {
   constructor(private http: HttpClient,
               private help: Utilities) { }
 
-  // getAll(): Observable<IOpcTag[]> {
-  //   throw new Error("Method not implemented.");
-  // }
+  getAll(): Observable<IOpcTag[]> {
+    return this.http.get<IOpcTag[]>(`${this.tagsUrl}datasources/tags`)
+    .pipe(
+      catchError(this.help.handleError('getAll()', []))
+    );
+  }
 
   get(datasourceId: string): Observable<IOpcTag[]> {
     return this.http.get<IOpcTag[]>(`${this.tagsUrl}datasources/${datasourceId}/tags`)
     .pipe(
-      catchError(this.help.handleError('get', []))
+      catchError(this.help.handleError(`get(${datasourceId})`, []))
     );
   }
 
   gets(datasourceIds: string[]): Observable<IOpcTag[]> {
     const requests: Observable<IOpcTag[]>[] = datasourceIds.map(id => this.get(id))
-    return this.help.merge(requests);
+    return this.help.zip(requests).pipe(
+      catchError(this.help.handleError(`gets(${datasourceIds})`, []))
+    );;
   }
 
   // save(obj: IOpcTag): Observable<IOpcTag> {
