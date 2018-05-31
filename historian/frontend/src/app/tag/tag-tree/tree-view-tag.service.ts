@@ -2,7 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Tag } from '../tag';
+import { Tag, ITag } from '../tag';
 import { debug } from 'util';
 import { Options } from 'selenium-webdriver/firefox';
 
@@ -23,15 +23,15 @@ export class TreeTagService {
    * Then add them in tree.
    * @param tags 
    */
-  buildTree(tags$: Observable<Tag[]>, tagE: EventEmitter<Tag>): Observable<any> {  
+  buildTree(tags$: Observable<ITag[]>, tagE: EventEmitter<ITag>): Observable<any> {
     return tags$.pipe(      
       map(tags => this.groupBy(tags, tagE))
     );
   }
 
-  private groupBy(tags: Tag[], tagE: EventEmitter<Tag>): any {    
+  private groupBy(tags: ITag[], tagE: EventEmitter<ITag>): any {
     const treeTag =  tags.reduce(
-      (r, v, i, a) => {      
+      (r, v, i, a) => {
         const domain = this.getOrCreateChildren(r, v['domain']);
         const server = this.getOrCreateChildren(domain, v['server']);
         const group = this.getOrCreateChildren(server, v['group']);

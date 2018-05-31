@@ -4,9 +4,11 @@ import { FormGroup } from '@angular/forms';
 import { DialogService } from '../../dialog/dialog.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
 import { QuestionControlService } from '../../shared/dynamic-form/question-control.service';
-import { Tag } from '../tag';
+import { Tag, ITag } from '../tag';
 import { Observable } from 'rxjs';
 import { TagService } from '../tag.service';
+import { IHistorianTag } from '../HistorianTag';
+import { TagHistorianService } from '../tag-historian.service';
 
 @Component({
   selector: 'app-tag-form',
@@ -21,13 +23,13 @@ export class TagFormComponent implements OnInit, OnChanges {
   @Input() questionsSingleSelection: QuestionBase<any>[] = [];
   @Input() visible: boolean = true;
   @Input() showEntireForm: boolean = true;
-  @Input() tag: Tag;
-  @Output() submitted = new EventEmitter<Tag>();
+  @Input() tag: ITag;
+  @Output() submitted = new EventEmitter<IHistorianTag>();
   payLoad = '';
 
   constructor(private qcs: QuestionControlService,
               private dialogService: DialogService,
-              private tagService: TagService) { }
+              private tagHistorianService: TagHistorianService) { }
 
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questionsMultiSelection.concat(this.questionsSingleSelection));
@@ -49,34 +51,12 @@ export class TagFormComponent implements OnInit, OnChanges {
     Object.assign(tag, this.form.value);
     console.log('tag to be saved :', tag)
     this.payLoad = JSON.stringify(tag);//TODO remove when test over
-    this.subscribeToUpdate(this.tagService.save(tag),
+    this.subscribeToUpdate(this.tagHistorianService.save(tag as IHistorianTag),
       'successfully saved tag',
       'error while saving data source.');
   }
 
-  /* Return a datasource based on formulaire inputs */
-  // private prepareSaveDatasource(): Tag {
-  //   const formModel = this.form.getRawValue();
-
-  //   formModel
-  //   const saveDatasource: Tag = {
-  //     id: formModel.name || this.tag.id, // when disabled
-  //     description: formModel.description,
-  //     host: formModel.host,
-  //     domain: formModel.domain,
-  //     clsid: formModel.clsid,
-  //     progId: formModel.progId,
-  //     user: formModel.auth.user,
-  //     password: formModel.auth.password,
-  //     record_type: 'datasource',
-  //     datasource_type: formModel.type
-  //   };
-  //   return saveDatasource;
-  // }
-  /* subscribe to update or save request
-     emitting saved datasource, testing if it is reachable then alerting user when it is done.
-  */
-  private subscribeToUpdate(submitted: Observable<Tag>,
+  private subscribeToUpdate(submitted: Observable<IHistorianTag>,
                             msgSuccess: string,
                             msgError: string): void {
     submitted.subscribe(

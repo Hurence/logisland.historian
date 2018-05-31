@@ -1,66 +1,46 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { Tag } from './tag';
-import { AbsModelService } from '../shared/base-model-service';
+import { IModelService } from '../shared/base-model-service';
+import { Utilities } from '../shared/utilities.service';
+import { ITag } from './tag';
+import { TagHistorianService } from './tag-historian.service';
+import { TagOpcService } from './tag-opc.service';
 
 @Injectable()
-export class TagService extends AbsModelService<Tag> {
+export class TagService implements IModelService<ITag> {
 
   private tagsUrl = 'http://localhost:8701/api/v1/';
 
-  constructor(private http: HttpClient) {
-    super();
-   }
+  constructor(private http: HttpClient,
+    private help: Utilities,
+    private tagOpcService: TagOpcService,
+    private tagHistorianService: TagHistorianService) { }
 
-  getAll(): Observable<Tag[]> {
-    return this.http.get<Tag[]>(`${this.tagsUrl}tags`)
-    .pipe(
-      catchError(this.handleError('getTags', []))
-    );
+  getAll(): Observable<ITag[]> {
+    throw new Error("Method not implemented.");
   }
 
-  get(id: string): Observable<Tag> {
-    return this.http.get<Tag>(`${this.tagsUrl}tags/${id}`)
-    .pipe(
-      catchError(this.handleError('getTag'))
-    );
+  get(id: string): Observable<ITag> {
+    throw new Error("Method not implemented.");
   }
 
-  save(obj: Tag): Observable<Tag> {
-    return this.http.post<Tag>(`${this.tagsUrl}tags/${obj.id}`, obj);
+  gets(datasourceIds: string[]): Observable<ITag[]> {
+    //TODO add information about tags that are saved in historian
+    return this.tagOpcService.gets(datasourceIds);
   }
 
-  update(obj: Tag): Observable<Tag> {
-    return this.http.put<Tag>(`${this.tagsUrl}tags/${obj.id}`, obj);
+  save(obj: ITag): Observable<ITag> {
+    throw new Error("Method not implemented.");
   }
 
-  delete(obj: Tag): Observable<Tag> {
-    return this.http.delete<Tag>(`${this.tagsUrl}tags/${obj.id}`);
+  update(obj: ITag): Observable<ITag> {
+    throw new Error("Method not implemented.");
   }
 
-  getTagsFromDatasource(datasourceId: string): Observable<Tag[]> {
-    return this.http.get<Tag[]>(`${this.tagsUrl}datasources/${datasourceId}/tags`)
-    .pipe(
-      catchError(this.handleError('getTagsFromDatasource', []))
-    );
-  }
-
-  getTagsFromDatasourceQuery(datasourceId: string, query: string): Observable<Tag[]> {
-    if (query && query.length !== 0) {
-      return this.http.get<Tag[]>(`${this.tagsUrl}datasources/${datasourceId}/tags?fq=${this.formatQuery(query)}`)
-      .pipe(
-        catchError(this.handleError('getTagsFromDatasourceQuery', []))
-      );
-    } else {
-      return this.getTagsFromDatasource(datasourceId);
-    }
-  }
-
-  private formatQuery(query: string): string {
-    // TODO complexify parsing (add * ?)
-    return query;
+  delete(obj: ITag): Observable<ITag> {
+    throw new Error("Method not implemented.");
   }
 }

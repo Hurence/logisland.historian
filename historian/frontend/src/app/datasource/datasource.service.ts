@@ -5,15 +5,15 @@ import { catchError, map } from 'rxjs/operators';
 
 import { Tag } from '../tag/tag';
 import { Datasource } from './Datasource';
-import { AbsModelService } from '../shared/base-model-service';
+import { IModelService } from '../shared/base-model-service';
+import { Utilities } from '../shared/utilities.service';
 
 @Injectable()
-export class DatasourceService extends AbsModelService<Datasource> {
+export class DatasourceService implements IModelService<Datasource> {
 
   private datasourcesUrl = 'http://localhost:8701/api/v1/datasources';
-  constructor(private http: HttpClient) {
-    super();
-  }
+  constructor(private http: HttpClient,
+              private help: Utilities) { }
 
   getAll(): Observable<Datasource[]> {
     return this.http.get<Datasource[]>(this.datasourcesUrl);

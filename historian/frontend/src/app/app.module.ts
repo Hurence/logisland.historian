@@ -21,6 +21,9 @@ import { TodoComponent } from './todo/todo.component';
 import { QuestionService } from './shared/dynamic-form/question.service';
 import { QuestionControlService } from './shared/dynamic-form/question-control.service';
 import { TreeTagService } from './tag/tag-tree/tree-view-tag.service';
+import { TagHistorianService } from './tag/tag-historian.service';
+import { TagOpcService } from './tag/tag-opc.service';
+import { Utilities } from './shared/utilities.service';
 
 // components
 // router
@@ -55,12 +58,15 @@ import { TreeTagService } from './tag/tag-tree/tree-view-tag.service';
     ProfilService,
     DatasetService,
     TagService,
+    TagOpcService,
+    TagHistorianService,
     DatasourceService,
     DialogService,
     ProfilService,
     QuestionService,
     QuestionControlService,
-    TreeTagService
+    TreeTagService,
+    Utilities,
   ],
   bootstrap: [AppComponent],
 })

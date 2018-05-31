@@ -5,10 +5,12 @@ import { combineAll, map, take, concat } from 'rxjs/operators';
 
 import { Dataset } from '../../dataset/dataset';
 import { DialogService } from '../../dialog/dialog.service';
-import { Tag } from '../tag';
+import { Tag, ITag } from '../tag';
 import { TagService } from '../tag.service';
 import { TreeTagService } from './tree-view-tag.service';
 import { JsTreeComponent } from '../../shared/js-tree/js-tree.component';
+import { IOpcTag } from '../OpcTag';
+import { IHistorianTag } from '../HistorianTag';
 
 @Component({
   selector: 'app-tag-tree',
@@ -18,42 +20,25 @@ import { JsTreeComponent } from '../../shared/js-tree/js-tree.component';
 export class TagTreeComponent implements OnInit {
 
   treeDataTag$: Observable<any>;//TODO create a specific type
-  private tagsMap: Map<string/*datasource Id*/, Observable<Tag[]>>;
 
   @Input() dataSet: Dataset;
-  @Input() selectedTags: Set<Tag>;
-  @Output() selectedTagsE = new EventEmitter<Tag>();
+  @Input() selectedTags: Set<ITag>;
+  @Output() selectedTagsE = new EventEmitter<ITag>();
   @ViewChild(JsTreeComponent) public dataTreeComp: JsTreeComponent;
 
   constructor(private tagService: TagService,              
-              private treeTagService: TreeTagService) {
-                this.tagsMap = new Map();
-              }
+              private treeTagService: TreeTagService) { }
 
   ngOnInit() {
-    this.getTags();
-    this.treeDataTag$ = this.treeTagService.buildTree(this.getAllTags(), this.selectedTagsE)
+    this.buildTree();
     this.initializeOnChangeTreeEvent();
   }
 
-  
-  getTags(): void {
-    this.dataSet.datasourceIds.forEach((id, idAgain, set) => {
-      this.tagsMap.set(id, this.tagService.getTagsFromDatasource(id));
-    });
+  buildTree(): void {
+    const tags: Observable<ITag[]> = this.tagService.gets(Array.from(this.dataSet.datasourceIds));
+    this.treeDataTag$ = this.treeTagService.buildTree(tags, this.selectedTagsE);
   }
-  /**
-   * get all tags from all selected datasources
-   */
-  private getAllTags(): Observable<Tag[]> {
-    const emptyObs: Observable<Tag[]> = from([]);
-    return Array.from(this.tagsMap.values()).reduce((r, v, i, a) => {
-      let myObs = r.pipe(concat(v));
-      return myObs
-    },
-      emptyObs
-    );
-  }
+
   /** 
    * Emit tag selected when clicking on a node containing a Tag
    * 

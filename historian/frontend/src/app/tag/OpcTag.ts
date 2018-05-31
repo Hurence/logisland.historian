@@ -1,3 +1,5 @@
-import { Tag } from "./tag";
+import { Tag, ITag } from "./tag";
 
-export class OpcTag extends Tag {}
+export interface IOpcTag extends ITag { }
+
+export class OpcTag extends Tag implements IOpcTag {}
