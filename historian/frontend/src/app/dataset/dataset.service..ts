@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable ,  of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { Dataset } from './dataset';
 
