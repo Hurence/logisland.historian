@@ -4,11 +4,11 @@ import { FormGroup } from '@angular/forms';
 import { DialogService } from '../../dialog/dialog.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
 import { QuestionControlService } from '../../shared/dynamic-form/question-control.service';
-import { Tag, ITag } from '../tag';
+import { Tag, ITag } from '../modele/tag';
 import { Observable } from 'rxjs';
-import { TagService } from '../tag.service';
-import { IHistorianTag } from '../HistorianTag';
-import { TagHistorianService } from '../tag-historian.service';
+import { TagService } from '../service/tag.service';
+import { IHistorianTag } from '../modele/HistorianTag';
+import { TagHistorianService } from '../service/tag-historian.service';
 
 @Component({
   selector: 'app-tag-form',

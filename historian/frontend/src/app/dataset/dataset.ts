@@ -1,5 +1,5 @@
 import { Datasource } from '../datasource/Datasource';
-import { Tag } from '../tag/tag';
+import { Tag } from '../tag/modele/tag';
 
 export class Dataset {
 

@@ -6,7 +6,7 @@ import { DatasetService } from '../../dataset/dataset.service.';
 import { ProfilService } from '../../profil/profil.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
 import { QuestionService } from '../../shared/dynamic-form/question.service';
-import { Tag } from '../tag';
+import { Tag } from '../modele/tag';
 import { TagTreeComponent } from '../tag-tree/tag-tree.component';
 
 @Component({

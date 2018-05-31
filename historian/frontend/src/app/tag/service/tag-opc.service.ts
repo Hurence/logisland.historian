@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { Utilities } from '../shared/utilities.service';
-import { IOpcTag } from './OpcTag';
+import { Utilities } from '../../shared/utilities.service';
+import { IOpcTag } from '../modele/OpcTag';
 
 @Injectable()
 export class TagOpcService {

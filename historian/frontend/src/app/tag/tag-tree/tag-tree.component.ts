@@ -5,12 +5,12 @@ import { combineAll, map, take, concat } from 'rxjs/operators';
 
 import { Dataset } from '../../dataset/dataset';
 import { DialogService } from '../../dialog/dialog.service';
-import { Tag, ITag } from '../tag';
-import { TagService } from '../tag.service';
+import { Tag, ITag } from '../modele/tag';
+import { TagService } from '../service/tag.service';
 import { TreeTagService } from './tree-view-tag.service';
 import { JsTreeComponent } from '../../shared/js-tree/js-tree.component';
-import { IOpcTag } from '../OpcTag';
-import { IHistorianTag } from '../HistorianTag';
+import { IOpcTag } from '../modele/OpcTag';
+import { IHistorianTag } from '../modele/HistorianTag';
 
 @Component({
   selector: 'app-tag-tree',

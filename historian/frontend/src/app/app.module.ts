@@ -16,13 +16,13 @@ import { ProfilService } from './profil/profil.service';
 import { CustomHttpInterceptor } from './security-http-interceptor';
 import { SharedModule } from './shared/shared.module';
 import { SourcesAndTagsModule } from './sources-and-tags/sources-and-tags.module';
-import { TagService } from './tag/tag.service';
+import { TagService } from './tag/service/tag.service';
 import { TodoComponent } from './todo/todo.component';
 import { QuestionService } from './shared/dynamic-form/question.service';
 import { QuestionControlService } from './shared/dynamic-form/question-control.service';
 import { TreeTagService } from './tag/tag-tree/tree-view-tag.service';
-import { TagHistorianService } from './tag/tag-historian.service';
-import { TagOpcService } from './tag/tag-opc.service';
+import { TagHistorianService } from './tag/service/tag-historian.service';
+import { TagOpcService } from './tag/service/tag-opc.service';
 import { Utilities } from './shared/utilities.service';
 
 // components

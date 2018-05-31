@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable ,  of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { Tag } from '../tag/tag';
+import { Tag } from '../tag/modele/tag';
 import { Datasource } from './Datasource';
 import { IModelService } from '../shared/base-model-service';
 import { Utilities } from '../shared/utilities.service';

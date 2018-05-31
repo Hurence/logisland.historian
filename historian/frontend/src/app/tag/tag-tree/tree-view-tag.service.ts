@@ -2,7 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Tag, ITag } from '../tag';
+import { Tag, ITag } from '../modele/tag';
 import { debug } from 'util';
 import { Options } from 'selenium-webdriver/firefox';
 

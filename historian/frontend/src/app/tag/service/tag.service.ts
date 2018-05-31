@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { IModelService } from '../shared/base-model-service';
-import { Utilities } from '../shared/utilities.service';
-import { ITag } from './tag';
+import { IModelService } from '../../shared/base-model-service';
+import { Utilities } from '../../shared/utilities.service';
+import { ITag } from '../modele/tag';
 import { TagHistorianService } from './tag-historian.service';
 import { TagOpcService } from './tag-opc.service';
 
