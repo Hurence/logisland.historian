@@ -66,9 +66,6 @@ export class TagDashboardComponent implements OnInit {
       this.updateCreation(tag);
     }
   }
-  isHistorianTag(arg: any): arg is IHistorianTag {//TODO move this as a mathod of ITAG ?
-    return (arg as IHistorianTag).description !== null;
-  }
 
   isHelpHidden(): boolean {
     return this.profilService.isHelpHidden();
@@ -93,7 +90,7 @@ export class TagDashboardComponent implements OnInit {
   }
 
   private updateCreation(tag: ITag): void {
-    if (this.isHistorianTag(tag)) {
+    if (Tag.isHistorianTag(tag)) {
       this.isCreation = false;
     } else {
       this.isCreation = true;

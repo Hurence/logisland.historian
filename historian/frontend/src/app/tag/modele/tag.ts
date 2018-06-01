@@ -1,3 +1,5 @@
+import { IHistorianTag } from "./HistorianTag";
+
 export interface ITag {
     id?: string;
     domain?: string;
@@ -14,6 +16,7 @@ export interface ITag {
     max_numeric_value?: number;
     last_numeric_value?: number;
     last_quality?: number;
+
 }
 
 export abstract class Tag implements ITag {
@@ -47,5 +50,9 @@ export abstract class Tag implements ITag {
             console.error(`data_type "${options.data_type}" is not known`);
         }
         Object.assign(this, options);
+    }
+
+    public static isHistorianTag(tag: ITag): tag is IHistorianTag {
+        return (tag as IHistorianTag).description !== null;
     }
 }
