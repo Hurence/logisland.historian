@@ -22,5 +22,10 @@ export class SourcesAndTagsComponent implements OnInit {
   datasetIsEmpty(): boolean {
     return this.dataset.isEmpty();
   }
+  //TODO remove once stable
+  showDataset(): string {
+    return `datasourceIds: ${JSON.stringify(Array.from(this.dataset.getDatasourceIds()))}
+            tagIds: ${JSON.stringify(Array.from(this.dataset.getTagIds()))}`;
+  }
 
 }

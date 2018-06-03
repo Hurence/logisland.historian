@@ -1,14 +1,20 @@
 import { Datasource } from '../datasource/Datasource';
-import { Tag } from '../tag/modele/tag';
 
 export class Dataset {
 
     constructor(
         public id: number,
         public name: string,
-        public datasourceIds: Set<string>,
-        public tagIds: Set<string>,
-    ) {
+        private datasourceIds: Set<string>,
+        private tagIds: Set<string>,
+    ) {}
+
+    getTagIds(): Set<string> {
+        return this.tagIds;
+    }
+
+    getDatasourceIds(): Set<string> {
+        return this.datasourceIds;
     }
 
     containDatasource(datasource: Datasource): boolean {
@@ -23,20 +29,24 @@ export class Dataset {
         return this.datasourceIds.delete(datasource.id);
     }
 
-    containTag(tag: Tag): boolean {
-        return this.tagIds.has(tag.id);
-    }
-
-    addTag(tag: Tag) {
-        this.tagIds.add(tag.id);
-    }
-
-    removeTag(tag: Tag): boolean {
-        return this.tagIds.delete(tag.id);
-    }
-
     isEmpty(): boolean {
         return this.datasourceIds.size === 0;
+    }
+
+    replaceTags(ids: string[]): void {
+        this.tagIds = new Set(ids);
+    }
+
+    containTag(id: string): boolean {
+        return this.tagIds.has(id);
+    }
+
+    addTag(id: string) {
+        this.tagIds.add(id);
+    }
+
+    removeTag(id: string): boolean {
+        return this.tagIds.delete(id);
     }
 
     hasNoTag(): boolean {

@@ -1,11 +1,13 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Tag, ITag } from '../modele/tag';
 import { debug } from 'util';
 import { Options } from 'selenium-webdriver/firefox';
-
+import { TagTreeComponent } from './tag-tree.component';
+import { INodeTree, NodeTree } from '../../shared/js-tree/js-tree.component';
+declare const $: JQueryStatic;
 
 /**
  * Create a tree for type M. Using nested map to simulate the tree.
@@ -15,86 +17,79 @@ import { Options } from 'selenium-webdriver/firefox';
 @Injectable()
 export class TreeTagService {
 
-  state = { "opened": true, "selected": false }
-
   constructor() {}
   /**
    * Group tags by domain, server and group.
    * Then add them in tree.
    * @param tags 
    */
-  buildTree(tags$: Observable<ITag[]>, tagE: EventEmitter<ITag>): Observable<any> {
+  buildTree(tags$: Observable<ITag[]>, comp: TagTreeComponent): Observable<INodeTree> {
     return tags$.pipe(      
-      map(tags => this.groupBy(tags, tagE))
+      map(tags => this.groupBy(tags, comp))
     );
   }
 
-  private groupBy(tags: ITag[], tagE: EventEmitter<ITag>): any {
+  private groupBy(tags: ITag[], comp: TagTreeComponent): INodeTree {
+    let opened = false;
+    if (comp.dataSet.getDatasourceIds().size === 1) {
+      opened = true;
+    }
     const treeTag =  tags.reduce(
       (r, v, i, a) => {
-        const domain = this.getOrCreateChildren(r, v['domain']);
-        const server = this.getOrCreateChildren(domain, v['server']);
-        const group = this.getOrCreateChildren(server, v['group']);
+        const domain = this.getOrCreateChildren(r, v['domain'], opened);
+        const server = this.getOrCreateChildren(domain, v['server'], opened);
+        const group = this.getOrCreateChildren(server, v['group'], false);
+
+
+        let selected = false;
+        let checked = false;
+        if (comp.dataSet.containTag(v.id)) {
+          checked = true;
+        }
+
         const children = new NodeTree({
+          type: 'tag',
           id: v.id,
           text: v.tag_name,
-          icon: "fa fa-file",
-          state: this.state,
+          // icon: "fa fa-file",
+          state: {
+            opened: opened,
+            selected: selected,
+            checked: checked,
+          },
           children: [],
           tag: v,
-          tagEmitter: tagE,
+          comp: comp,
         });
         group.children.push(children);        
         return r;
       },
       new NodeTree({
+        type: '#',
         cache: true,
         text: 'Tags',       
         state: {
-          opened: true
+          opened: true,
         },
         children: [],
+        comp: comp,
       })
-    );    
+    );
     return treeTag;
   }
  
 
-  private getOrCreateChildren(obj: NodeTree, value: string): NodeTree {
+  private getOrCreateChildren(obj: INodeTree, value: string, opened: boolean): INodeTree {
     const found = obj.children.find(node => node.text === value)
     if (found) return found;
     const node = new NodeTree({
       id: value,
       text: value, 
-      icon: "fa fa-file", 
-      state: this.state,
+      // icon: "fa fa-file",
+      state: { opened: opened },
       children: []
     });
     obj.children.push(node)  
     return node;    
   }
-}
-
-export interface NodeTree {
-  children: NodeTree[];
-  cache: boolean;
-  text: string;
-  state: any;
-  icon: "fa fa-file", 
-  [key: string]: any
-}
-
-export class NodeTree {
-
-  constructor(options : {
-    children?: NodeTree[];
-    cache?: boolean;
-    text?: string;
-    state?: any;
-    icon?: string,
-    [key: string]: any
-  } = {}) {
-    Object.assign(this, options)
-  }
-
 }

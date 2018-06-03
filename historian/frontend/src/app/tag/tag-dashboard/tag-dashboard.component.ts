@@ -7,8 +7,9 @@ import { ProfilService } from '../../profil/profil.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
 import { QuestionService } from '../../shared/dynamic-form/question.service';
 import { Tag, ITag } from '../modele/tag';
-import { TagTreeComponent } from '../tag-tree/tag-tree.component';
+import { TagTreeComponent, TreeTagSelect } from '../tag-tree/tag-tree.component';
 import { IHistorianTag } from '../modele/HistorianTag';
+import { TagService } from '../service/tag.service';
 
 @Component({
   selector: 'app-tag-dashboard',
@@ -18,7 +19,7 @@ import { IHistorianTag } from '../modele/HistorianTag';
 export class TagDashboardComponent implements OnInit {
 
   dataSet: Dataset;
-  selectedTags: Set<ITag> = new Set();
+  selectedTags: Set<ITag>;
   lastSelectedTag: ITag;
   filterPlaceHolder = 'Type to filter by type or by description...';
   questionsMultiSelection: QuestionBase<any>[] = [];
@@ -32,7 +33,9 @@ export class TagDashboardComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private profilService: ProfilService,
-    private qs: QuestionService) { }
+    private qs: QuestionService) {
+      this.selectedTags = new Set();
+    }
 
   ngOnInit() {
     this.datasetService.getMyDataset()
@@ -58,12 +61,15 @@ export class TagDashboardComponent implements OnInit {
   nothing if tag is null
   remove tag if already selected
   else add tag to selection */
-  onSelectTag(tag: ITag): void {
-    if (tag) {
-      this.selectedTags.clear();
-      this.selectedTags.add(tag);
-      this.lastSelectedTag = tag;
-      this.updateCreation(tag);
+  onSelectTag(select: TreeTagSelect): void {
+    if (select) {
+      this.selectedTags = new Set(select.selectedTags);
+      if (this.multipleTagSelected()) {
+        //nothing
+      } else {
+        this.lastSelectedTag = select.clickedTag;
+        this.updateCreation(this.lastSelectedTag);
+      }
     }
   }
 

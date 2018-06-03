@@ -13,7 +13,7 @@ declare const $: JQueryStatic;
 export class JsTreeComponent implements OnInit, OnDestroy {
 
     @ViewChild('dataTree') public dataTree: ElementRef;
-    @Input() jsonData: any;
+    @Input() jsonData: INodeTree;
     private myTreeJs: any;
     private _treeJQuery: JQuery<HTMLElement>;
 
@@ -60,47 +60,93 @@ export class JsTreeComponent implements OnInit, OnDestroy {
             without casting to any (so we would have autocompletion if possible)
             */
             let treeJQuery = ($(this.dataTree.nativeElement) as any).jstree({
-                    core: {
-                        multiple: false,
-                        animation: 0,
-                        check_callback: true,
-                        themes: {
-                            stripes: true
-                        },
-                        expand_selected_onload: true,
-                        // keyboard allow to associate keyboard touch to a function
-                        // keyboard: {
-                        //     'enter': () => alert('presserd enter'),
-                        //     'p': () => alert('presserd p'),
-                        // },
-                        data: this.jsonData
+                core: {
+                    multiple: true,
+                    animation: 0,
+                    check_callback: true,
+                    themes: {
+                        stripes: true
                     },
-                    plugins: ['search'],
-                    // types: {
-                    //     '#': {
-                    //         max_children: 1,
-                    //         max_depth: 4,
-                    //         valid_children: ['root']
-                    //     },
-                    //     default: {
-                    //         valid_children: ['default', 'file']
-                    //     },
-                    //     file: {
-                    //         icon: 'fa fa-file',
-                    //         valid_children: []
-                    //     }
+                    expand_selected_onload: true,
+                    // loaded_state: true,
+                    // keyboard allow to associate keyboard touch to a function
+                    // keyboard: {
+                    //     'enter': () => alert('presserd enter'),
+                    //     'p': () => alert('presserd p'),
                     // },
-                    search: {
-                        case_sensitive: false,
-                        show_only_matches: true,
-                        show_only_matches_children: false,
-                        close_opened_onclear: true,
-                        search_leaves_only: true,
+                    data: this.jsonData
+                },
+                plugins: ['search', 'checkbox', 'types'],
+                // 'plugins': ['checkbox', 'contextmenu', 'dnd', 'search', 'sort', 'state', 'types', 'unique', 'wholerow']
+                // 'plugins': ['dnd', 'search', 'sort', 'types', 'unique', 'wholerow', 'json_data', 'changed']
+                checkbox: {
+                    visible: true,
+                    three_state: true,
+                    whole_node: false,
+                    keep_selected_style: true,
+                    tie_selection: false,//an independant array for checkbox when false
+                    // cascade_to_hidden: false,
+                },
+                search: {
+                    case_sensitive: false,
+                    show_only_matches: true,
+                    show_only_matches_children: false,
+                    close_opened_onclear: true,
+                    search_leaves_only: true,
+                },
+                types: {
+                    '#': {
+                        max_depth: 4,
+                        max_children: -1, 
+                        valid_children: ['domlain']
                     },
-                    // 'plugins': ['checkbox', 'contextmenu', 'dnd', 'search', 'sort', 'state', 'types', 'unique', 'wholerow']
-                    // 'plugins': ['dnd', 'search', 'sort', 'types', 'unique', 'wholerow', 'json_data', 'changed']
-                });
+                    domlain: {
+                        max_depth: 3,
+                        max_children: -1,
+                        valid_children: ['server']
+                    },
+                    server: {
+                        max_depth: 2,
+                        max_children: -1,
+                        valid_children: ['group']
+                    },
+                    group: {
+                        max_depth: 1,
+                        max_children: -1,
+                        valid_children: ['tag']
+                    },
+                    tag: {
+                        icon: 'fa fa-file',
+                        max_depth: 0,
+                        max_children: 0,
+                        valid_children: []
+                    },
+                },
+            });
             this.myTreeJs = ($ as any).jstree.reference(treeJQuery);
         }
     }
+}
+
+export interface INodeTree {
+    children?: INodeTree[];
+    cache?: boolean;
+    text?: string;
+    state?: IState;
+    icon?: string,
+    [key: string]: any
+  }
+
+export interface IState {
+    opened?: boolean;
+    checked?: boolean;
+    selected?: boolean;
+}
+
+export class NodeTree implements INodeTree {
+
+    constructor(options: INodeTree = {}) {
+        Object.assign(this, options)
+    }
+
 }
