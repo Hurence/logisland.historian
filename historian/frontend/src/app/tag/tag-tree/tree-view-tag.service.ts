@@ -7,6 +7,7 @@ import { debug } from 'util';
 import { Options } from 'selenium-webdriver/firefox';
 import { TagTreeComponent } from './tag-tree.component';
 import { INodeTree, NodeTree } from '../../shared/js-tree/js-tree.component';
+import { Dataset } from '../../dataset/dataset';
 declare const $: JQueryStatic;
 
 /**
@@ -23,15 +24,15 @@ export class TreeTagService {
    * Then add them in tree.
    * @param tags 
    */
-  buildTree(tags$: Observable<ITag[]>, comp: TagTreeComponent): Observable<INodeTree> {
+  buildTree(tags$: Observable<ITag[]>, dataSet: Dataset): Observable<INodeTree> {
     return tags$.pipe(      
-      map(tags => this.groupBy(tags, comp))
+      map(tags => this.groupBy(tags, dataSet))
     );
   }
 
-  private groupBy(tags: ITag[], comp: TagTreeComponent): INodeTree {
+  private groupBy(tags: ITag[], dataSet: Dataset): INodeTree {
     let opened = false;
-    if (comp.dataSet.getDatasourceIds().size === 1) {
+    if (dataSet.getDatasourceIds().size === 1) {
       opened = true;
     }
     const treeTag =  tags.reduce(
@@ -43,7 +44,7 @@ export class TreeTagService {
 
         let selected = false;
         let checked = false;
-        if (comp.dataSet.containTag(v.id)) {
+        if (dataSet.containTag(v.id)) {
           checked = true;
         }
 
@@ -59,7 +60,6 @@ export class TreeTagService {
           },
           children: [],
           tag: v,
-          comp: comp,
         });
         group.children.push(children);        
         return r;
@@ -72,7 +72,6 @@ export class TreeTagService {
           opened: true,
         },
         children: [],
-        comp: comp,
       })
     );
     return treeTag;

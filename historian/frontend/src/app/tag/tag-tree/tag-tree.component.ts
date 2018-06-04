@@ -62,7 +62,7 @@ export class TagTreeComponent implements OnInit, OnDestroy {
 
   buildTree(): void {
     const tags: Observable<ITag[]> = this.tagService.gets(Array.from(this.dataSet.getDatasourceIds()));
-    this.treeDataTag$ = this.treeTagService.buildTree(tags, this);
+    this.treeDataTag$ = this.treeTagService.buildTree(tags, this.dataSet);
   }
 
   /** 
