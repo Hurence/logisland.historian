@@ -95,25 +95,20 @@ export class TagFormComponent implements OnInit, OnChanges {
   }
 
   private prepareSaveTag(): ITagFormOutput[] {
-    const formModel = this.form.value;
-    const labelArray: FormArray = this.form.controls.labels as FormArray;
-    // deep copy of form model lairs
-    const labelsDeepCopy: string[] = labelArray.getRawValue().map(
-      (obj: {label: string}) => obj.label
-    );
-    // return new `Tag` object containing a combination of original tag value(s)
-    // and deep copies of changed form model values
-    return this.tags.map(i => new TagFormOutput(i, formModel, labelsDeepCopy));
+    return this.tags.map(i => new TagFormOutput(i, this.form));
   }
 
   /* Fill in form with current datasource properties */
   private rebuildForm(): void { // TODO FACTORIZE SAME IN BOTH
     const objForForm = this.prepareObjForForm();
     this.form.reset(objForForm);
-    const concatenedLabels: string[] = this.tags.reduce((p, c) => {
-      return p.concat((c.tag as IHistorianTag).labels || [])
+    const concatenedLabels: Set<string> = this.tags.reduce((p, c) => {
+      if (Tag.isHistorianTag(c.tag)) {
+        c.tag.labels.forEach(label => p.add(label));
+      }
+      return p;
     },
-      []
+      new Set<string>()
     );
     this.setLabels(concatenedLabels);
   }
@@ -130,7 +125,8 @@ export class TagFormComponent implements OnInit, OnChanges {
     submitted.subscribe(
       tag => {
         this.submitted.emit(tag);
-        this.dialogService.alert(msgSuccess);
+        // this.dialogService.alert(msgSuccess);
+        // TODO use a popup
       },
       error => {
         console.error(JSON.stringify(error));
@@ -139,9 +135,12 @@ export class TagFormComponent implements OnInit, OnChanges {
     );
   }
 
-  private setLabels(labels: string[]): void {
-    if (labels && labels.length !== 0) {
-      const labelsFGs = labels.map((label) => this.fb.group({'label': label}));
+  private setLabels(labels: Set<string>): void {
+    if (labels && labels.size !== 0) {
+      const labelsFGs: FormGroup[] = []
+      labels.forEach(label => {
+        labelsFGs.push(this.fb.group({'label': label}));
+      })
       const labelFormArray = this.fb.array(labelsFGs);
       this.form.setControl('labels', labelFormArray);
     } else {
