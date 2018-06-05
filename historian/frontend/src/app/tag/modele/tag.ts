@@ -2,6 +2,7 @@ import { IHistorianTag } from './HistorianTag';
 
 export interface ITag {
     id?: string;
+    datasource_id?: string;
     domain?: string;
     server?: string;
     group?: string;
@@ -21,6 +22,7 @@ export interface ITag {
 
 export abstract class Tag implements ITag {
     id?: string;
+    datasource_id?: string;
     domain?: string;
     server?: string;
     group?: string;
