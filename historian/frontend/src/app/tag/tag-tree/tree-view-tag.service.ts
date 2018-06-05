@@ -1,13 +1,11 @@
-import { Injectable, EventEmitter, Component } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Tag, ITag } from '../modele/tag';
-import { debug } from 'util';
-import { Options } from 'selenium-webdriver/firefox';
-import { TagTreeComponent } from './tag-tree.component';
-import { INodeTree, NodeTree } from '../../shared/js-tree/js-tree.component';
 import { Dataset } from '../../dataset/dataset';
+import { INodeTree, IState, NodeTree } from '../../shared/js-tree/js-tree.component';
+import { ITag } from '../modele/tag';
+
 declare const $: JQueryStatic;
 
 /**
@@ -35,14 +33,14 @@ export class TreeTagService {
     if (dataSet.getDatasourceIds().size === 1) {
       opened = true;
     }
+    const selected = false;
+
     const treeTag =  tags.reduce(
       (r, v, i, a) => {
-        const domain = this.getOrCreateChildren(r, v['domain'], opened);
-        const server = this.getOrCreateChildren(domain, v['server'], opened);
-        const group = this.getOrCreateChildren(server, v['group'], false);
+        const domain = this.getOrCreateChildren(r, v['domain'],  { opened: opened });
+        const server = this.getOrCreateChildren(domain, v['server'],  { opened: opened });
+        const group = this.getOrCreateChildren(server, v['group'],  { opened: false });
 
-
-        let selected = false;
         let checked = false;
         if (dataSet.containTag(v.id)) {
           checked = true;
@@ -78,14 +76,14 @@ export class TreeTagService {
   }
  
 
-  private getOrCreateChildren(obj: INodeTree, value: string, opened: boolean): INodeTree {
+  private getOrCreateChildren(obj: INodeTree, value: string, state?: IState): INodeTree {
     const found = obj.children.find(node => node.text === value)
     if (found) return found;
     const node = new NodeTree({
       id: value,
       text: value, 
       // icon: "fa fa-file",
-      state: { opened: opened },
+      state: state,
       children: []
     });
     obj.children.push(node)  
