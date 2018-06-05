@@ -77,6 +77,13 @@ export class QuestionService {
       }),
 
       new TextboxQuestion({
+        key: 'datasource_id',
+        label: 'Datasource Name',
+        order: 4,
+        disabled: true,
+      }),
+
+      new TextboxQuestion({
         key: 'id',
         order: 5,
         disabled: true
