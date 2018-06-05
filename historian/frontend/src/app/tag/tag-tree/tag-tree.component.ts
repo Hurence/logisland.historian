@@ -74,7 +74,7 @@ export class TagTreeComponent implements OnInit, OnDestroy {
       if (node.original && node.original.tag) {
         const emitItem = {
           clickedTag: node.original.tag, // undefined if none
-          selectedTags: data.selected,
+          selectedTags: data.selected.map(id => data.instance.get_node(id).original.tag),
         };
         this.selectedTagsE.emit(emitItem);
       }

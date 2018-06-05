@@ -37,24 +37,15 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
   }
 
   save(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.post<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`, obj)
-    .pipe(
-      catchError(this.help.handleError(`save(${obj})`))
-    );
+    return this.http.post<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`, obj);
   }
 
   update(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.put<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`, obj)
-    .pipe(
-      catchError(this.help.handleError(`update(${obj})`))
-    );
+    return this.http.put<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`, obj);
   }
 
   delete(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`)
-    .pipe(
-      catchError(this.help.handleError(`delete(${obj})`))
-    );
+    return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`);
   }
 
 }

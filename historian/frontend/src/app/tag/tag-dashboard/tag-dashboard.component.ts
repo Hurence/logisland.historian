@@ -10,6 +10,7 @@ import { Tag, ITag } from '../modele/tag';
 import { TagTreeComponent, TreeTagSelect } from '../tag-tree/tag-tree.component';
 import { IHistorianTag } from '../modele/HistorianTag';
 import { TagService } from '../service/tag.service';
+import { ITagFormInput, TagFormInput } from '../tag-form/TagFormInput';
 
 @Component({
   selector: 'app-tag-dashboard',
@@ -19,12 +20,10 @@ import { TagService } from '../service/tag.service';
 export class TagDashboardComponent implements OnInit {
 
   dataSet: Dataset;
-  selectedTags: Set<ITag>;
-  lastSelectedTag: ITag;
+  selectedTags: ITagFormInput[];
   filterPlaceHolder = 'Type to filter by type or by description...';
   questionsMultiSelection: QuestionBase<any>[] = [];
   questionsSingleSelection: QuestionBase<any>[] = [];
-  isCreation: boolean;
 
   @ViewChild(TagTreeComponent)
   private tsListComp: TagTreeComponent;
@@ -34,7 +33,7 @@ export class TagDashboardComponent implements OnInit {
     private route: ActivatedRoute,
     private profilService: ProfilService,
     private qs: QuestionService) {
-      this.selectedTags = new Set();
+      this.selectedTags = [];
     }
 
   ngOnInit() {
@@ -63,13 +62,7 @@ export class TagDashboardComponent implements OnInit {
   else add tag to selection */
   onSelectTag(select: TreeTagSelect): void {
     if (select) {
-      this.selectedTags = new Set(select.selectedTags);
-      if (this.multipleTagSelected()) {
-        // nothing
-      } else {
-        this.lastSelectedTag = select.clickedTag;
-        this.updateCreation(this.lastSelectedTag);
-      }
+      this.selectedTags = select.selectedTags.map(tag => new TagFormInput(tag))
     }
   }
 
@@ -82,24 +75,16 @@ export class TagDashboardComponent implements OnInit {
   }
 
   anyTagSelected(): boolean {
-    return this.selectedTags.size !== 0;
+    return this.selectedTags.length !== 0;
   }
 
   multipleTagSelected(): boolean {
-    return this.selectedTags.size > 1;
+    return this.selectedTags.length > 1;
   }
   // update tag in tree.
-  onTagSaved(tag: Tag): void {
+  onTagSaved(tag: IHistorianTag): void {    
     const nodeToUpdate = this.tsListComp.dataTreeComp.getNode(tag.id);
-    Object.assign(nodeToUpdate.original.tag, tag);
-    this.updateCreation(tag);
+    Object.assign(nodeToUpdate.original.tag, tag);  
   }
 
-  private updateCreation(tag: ITag): void {
-    if (Tag.isHistorianTag(tag)) {
-      this.isCreation = false;
-    } else {
-      this.isCreation = true;
-    }
-  }
 }
