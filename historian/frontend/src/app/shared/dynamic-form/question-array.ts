@@ -1,6 +1,6 @@
-import { QuestionBase, IQuestionBase } from "./question-base";
-import { FormGroup, FormArray, AbstractControl } from "@angular/forms";
-import { QuestionControlService } from "./question-control.service";
+import { QuestionBase, IQuestionBase } from './question-base';
+import { FormGroup, FormArray, AbstractControl } from '@angular/forms';
+import { QuestionControlService } from './question-control.service';
 
 export interface IArrayQuestion<T> extends IQuestionBase<T[]> {
   questions: QuestionBase<any>[];
@@ -16,7 +16,7 @@ interface IQuestionCanAddRemoveGetControls {
 export class ArrayQuestion<T> extends QuestionBase<T[]> implements IArrayQuestion<T>, IQuestionCanAddRemoveGetControls {
     controlType = 'array';
     questions: QuestionBase<any>[];
-  
+
     constructor(options: IArrayQuestion<T>,
                 private qcs: QuestionControlService) {
       super(options);

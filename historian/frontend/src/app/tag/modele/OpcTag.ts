@@ -1,4 +1,4 @@
-import { Tag, ITag } from "./tag";
+import { Tag, ITag } from './tag';
 
 export interface IOpcTag extends ITag { }
 

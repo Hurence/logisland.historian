@@ -16,7 +16,7 @@ export class QuestionService {
   // TODO: make asynchronous
   getMockQuestions(): QuestionBase<any>[]  {
 
-    let questions: QuestionBase<any>[] = [
+    const questions: QuestionBase<any>[] = [
 
       new DropdownQuestion({
         key: 'brave',
@@ -68,57 +68,57 @@ export class QuestionService {
     // max_numeric_value: number;
     // last_numeric_value: number;
     // last_quality: number;
-    
-    let questions: QuestionBase<any>[] = [
+
+    const questions: QuestionBase<any>[] = [
 
       new TextboxQuestion({
         key: 'tag_name',
-        label: 'TAG NAME',        
+        label: 'TAG NAME',
         order: 4,
         disabled: true,
       }),
 
       new TextboxQuestion({
-        key: 'id',    
+        key: 'id',
         order: 5,
         disabled: true
       }),
 
       new TextboxQuestion({
-        key: 'domain',      
+        key: 'domain',
         order: 6,
         disabled: true
       }),
 
       new TextboxQuestion({
-        key: 'server',      
+        key: 'server',
         order: 7,
         disabled: true
       }),
 
       new TextboxQuestion({
-        key: 'group',             
+        key: 'group',
         order: 8,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'creation_date',
-        label: 'CREATION DATE',        
+        label: 'CREATION DATE',
         order: 9,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'last_modification_date',
-        label: 'LAST MODIFICATION DATE',        
+        label: 'LAST MODIFICATION DATE',
         order: 10,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'last_polling_date',
-        label: 'LAST POLLING DATE',        
+        label: 'LAST POLLING DATE',
         order: 11,
         disabled: true
       })
@@ -126,10 +126,10 @@ export class QuestionService {
 
     return questions.sort((a, b) => a.order - b.order);
   }
-  
+
   getTagFormMultiSelection(): QuestionBase<any>[]  {
 
-    let questions: QuestionBase<any>[] = [
+    const questions: QuestionBase<any>[] = [
 
       new ArrayQuestion<string>({
         key: 'labels',

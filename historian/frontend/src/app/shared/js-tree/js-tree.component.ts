@@ -1,6 +1,6 @@
 import 'jquery';
 
-import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChild, OnChanges } from '@angular/core';
 
 // import $ from 'jquery';
 declare const $: JQueryStatic;
@@ -10,7 +10,7 @@ declare const $: JQueryStatic;
     templateUrl: './js-tree.component.html',
     styleUrls: ['./js-tree.component.css']
 })
-export class JsTreeComponent implements OnInit, OnDestroy {
+export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
 
     @ViewChild('dataTree') public dataTree: ElementRef;
     @Input() jsonData: INodeTree;
@@ -35,7 +35,7 @@ export class JsTreeComponent implements OnInit, OnDestroy {
     ngOnChanges(changes: SimpleChanges) {
         console.log('tree changes : ', changes);
         if (changes.jsonData && changes.jsonData.previousValue !== changes.jsonData.currentValue) {
-            this.ngOnDestroy();//destroy previous tree
+            this.ngOnDestroy(); // destroy previous tree
             this.createDataTree();
         }
     }
@@ -49,7 +49,7 @@ export class JsTreeComponent implements OnInit, OnDestroy {
     }
 
     getNode(obj: any): any {
-        if (this.myTreeJs) return this.myTreeJs.get_node(obj) 
+        if (this.myTreeJs) return this.myTreeJs.get_node(obj);
         else return undefined;
     }
 
@@ -59,7 +59,7 @@ export class JsTreeComponent implements OnInit, OnDestroy {
             this.treeJQuery = $(this.dataTree.nativeElement) TODO find a way to have the method available
             without casting to any (so we would have autocompletion if possible)
             */
-            let treeJQuery = ($(this.dataTree.nativeElement) as any).jstree({
+            const treeJQuery = ($(this.dataTree.nativeElement) as any).jstree({
                 core: {
                     multiple: true,
                     animation: 0,
@@ -84,7 +84,7 @@ export class JsTreeComponent implements OnInit, OnDestroy {
                     three_state: true,
                     whole_node: false,
                     keep_selected_style: true,
-                    tie_selection: false,//an independant array for checkbox when false
+                    tie_selection: false, // an independant array for checkbox when false
                     // cascade_to_hidden: false,
                 },
                 search: {
@@ -97,7 +97,7 @@ export class JsTreeComponent implements OnInit, OnDestroy {
                 types: {
                     '#': {
                         max_depth: 4,
-                        max_children: -1, 
+                        max_children: -1,
                         valid_children: ['domlain']
                     },
                     domlain: {
@@ -133,8 +133,8 @@ export interface INodeTree {
     cache?: boolean;
     text?: string;
     state?: IState;
-    icon?: string,
-    [key: string]: any
+    icon?: string;
+    [key: string]: any;
   }
 
 export interface IState {
@@ -146,7 +146,7 @@ export interface IState {
 export class NodeTree implements INodeTree {
 
     constructor(options: INodeTree = {}) {
-        Object.assign(this, options)
+        Object.assign(this, options);
     }
 
 }

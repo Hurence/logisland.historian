@@ -1,4 +1,4 @@
-import { Tag, ITag } from "./tag";
+import { Tag, ITag } from './tag';
 
 
 export interface IHistorianTag extends ITag {

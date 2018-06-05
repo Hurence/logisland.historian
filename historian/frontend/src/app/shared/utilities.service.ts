@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, of } from 'rxjs';
-import { concat, zip, merge } from 'rxjs/operators';
+import { concat, zip, merge, map } from 'rxjs/operators';
+import { andObservables } from '@angular/router/src/utils/collection';
+import 'rxjs/add/observable/zip';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/observable/concat';
 
 @Injectable()
 export class Utilities {
@@ -29,21 +33,21 @@ export class Utilities {
    * @param obs array of observables to concat
    */
   concat<T>(obs: Observable<T[]>[]): Observable<T[]> {
-    return this.mergeArrayObs(obs, this.concatObs)
+    return this.mergeArrayObs(obs, this.concatObs);
   }
   /**
    *
    * @param obs array of observables to concat
    */
   merge<T>(obs: Observable<T[]>[]): Observable<T[]> {
-    return this.mergeArrayObs(obs, this.mergeObs)
+    return this.mergeArrayObs(obs, this.mergeObs);
   }
   /**
   *
   * @param obs array of observables to concat
   */
   zip<T>(obs: Observable<T[]>[]): Observable<T[]> {
-    return this.mergeArrayObs(obs, this.zipObs)
+    return this.mergeArrayObs(obs, this.zipObs);
   }
 
   /** group the array by a key
@@ -70,9 +74,22 @@ export class Utilities {
         return r;
       },
       {}
-    )
+    );
   }
 
+  zipObs<T>(ob1: Observable<T[]>, ob2: Observable<T[]>): Observable<T[]> {
+    return Observable.zip(ob1, ob2).pipe(
+      map(([a, b]) => a.concat(b))
+    );
+  }
+
+  mergeObs<T>(ob1: Observable<T[]>, ob2: Observable<T[]>): Observable<T[]> {
+    return Observable.merge(ob1, ob2);
+  }
+
+  concatObs<T>(ob1: Observable<T[]>, ob2: Observable<T[]>): Observable<T[]> {
+    return Observable.concat(ob1, ob2);
+  }
 
     /**
   *
@@ -80,7 +97,7 @@ export class Utilities {
   */
   private mergeArrayObs<T>(
     obs: Observable<T[]>[],
-    callback: (a:Observable<T[]>, b:Observable<T[]>) => Observable<T[]>): Observable<T[]> {
+    callback: (a: Observable<T[]>, b: Observable<T[]>) => Observable<T[]>): Observable<T[]> {
 
     if (obs.length === 1) return obs[0];
     const emptyObs: Observable<T[]> = from([]);
@@ -91,17 +108,5 @@ export class Utilities {
     },
       emptyObs
     );
-  }
-
-  private zipObs<T>(ob1: Observable<T[]>, ob2: Observable<T[]>): Observable<T[]> {
-    return ob1.pipe(zip(ob2, (a, b) => a.concat(b)));
-  }
-
-  private mergeObs<T>(ob1: Observable<T[]>, ob2: Observable<T[]>): Observable<T[]> {
-    return ob1.pipe(merge(ob2));
-  }
-
-  private concatObs<T>(ob1: Observable<T[]>, ob2: Observable<T[]>): Observable<T[]> {
-    return ob1.pipe(concat(ob2));
   }
 }

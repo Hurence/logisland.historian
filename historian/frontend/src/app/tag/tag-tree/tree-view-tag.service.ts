@@ -10,7 +10,7 @@ declare const $: JQueryStatic;
 
 /**
  * Create a tree for type M. Using nested map to simulate the tree.
- * 
+ *
  * TODO: build a generic class. Hard coded type of Map to gain time.
  */
 @Injectable()
@@ -20,10 +20,10 @@ export class TreeTagService {
   /**
    * Group tags by domain, server and group.
    * Then add them in tree.
-   * @param tags 
+   * @param tags
    */
   buildTree(tags$: Observable<ITag[]>, dataSet: Dataset): Observable<INodeTree> {
-    return tags$.pipe(      
+    return tags$.pipe(
       map(tags => this.groupBy(tags, dataSet))
     );
   }
@@ -59,13 +59,13 @@ export class TreeTagService {
           children: [],
           tag: v,
         });
-        group.children.push(children);        
+        group.children.push(children);
         return r;
       },
       new NodeTree({
         type: '#',
         cache: true,
-        text: 'Tags',       
+        text: 'Tags',
         state: {
           opened: true,
         },
@@ -74,19 +74,19 @@ export class TreeTagService {
     );
     return treeTag;
   }
- 
+
 
   private getOrCreateChildren(obj: INodeTree, value: string, state?: IState): INodeTree {
-    const found = obj.children.find(node => node.text === value)
+    const found = obj.children.find(n => n.text === value);
     if (found) return found;
     const node = new NodeTree({
       id: value,
-      text: value, 
+      text: value,
       // icon: "fa fa-file",
       state: state,
       children: []
     });
-    obj.children.push(node)  
-    return node;    
+    obj.children.push(node);
+    return node;
   }
 }

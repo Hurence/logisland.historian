@@ -22,32 +22,32 @@ export class TagService implements IModelService<ITag> {
     private tagHistorianService: TagHistorianService) { }
 
   getAll(): Observable<ITag[]> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   get(id: string): Observable<ITag> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   gets(datasourceIds: string[]): Observable<ITag[]> {
     const tagFromOpc: Observable<IOpcTag[]> = this.tagOpcService.gets(datasourceIds);
-    const tagFromHist: Observable<IHistorianTag[]> = this.tagHistorianService.getAll();//TODO use gets(datasourceIds)
-    return tagFromOpc.pipe(
-      zip(tagFromHist, (tagsOpc, tagsHist) => tagsOpc.concat(tagsHist)),
+    const tagFromHist: Observable<IHistorianTag[]> = this.tagHistorianService.getAll(); // TODO use gets(datasourceIds)
+    const zippedTags = this.help.zipObs(tagFromOpc, tagFromHist);
+    return zippedTags.pipe(
       map(tags => this.mergeTags(tags))
-    )
+    );
   }
 
   save(obj: ITag): Observable<ITag> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   update(obj: ITag): Observable<ITag> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   delete(obj: ITag): Observable<ITag> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   /** Merge tags with same id (combine properties).
    * The array length returned may be inferior (if at least a match has been found)
@@ -66,7 +66,7 @@ export class TagService implements IModelService<ITag> {
         return r;
       },
       new Map<string, ITag>()
-    )
+    );
     return Array.from(mergedTag.values());
   }
 }

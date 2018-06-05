@@ -8,13 +8,13 @@ export class QuestionControlService {
   constructor(private fb: FormBuilder) { }
 
   toFormGroup(questions: QuestionBase<any>[]): FormGroup {
-    let group: any = {};
+    const group: any = {};
 
     questions.forEach(question => {
       const keyControl: AbstractControl = this.getControl(question.controlType, question.value);
       if (question.required) keyControl.setValidators(Validators.required);
       if (question.disabled) keyControl.disable();
-      group[question.key] = keyControl
+      group[question.key] = keyControl;
     });
     return new FormGroup(group);
   }

@@ -28,7 +28,7 @@ export class TagDashboardComponent implements OnInit {
 
   @ViewChild(TagTreeComponent)
   private tsListComp: TagTreeComponent;
-  
+
   constructor(private datasetService: DatasetService,
     private router: Router,
     private route: ActivatedRoute,
@@ -40,12 +40,12 @@ export class TagDashboardComponent implements OnInit {
   ngOnInit() {
     this.datasetService.getMyDataset()
       .subscribe(dataSet => this.dataSet = dataSet);
- 
+
     this.questionsMultiSelection = this.qs.getTagFormMultiSelection();
     this.questionsSingleSelection = this.qs.getTagFormSingleSelection();
   }
 
-  datasetHasNoTags(): boolean {    
+  datasetHasNoTags(): boolean {
     return this.dataSet.hasNoTag();
   }
 
@@ -65,7 +65,7 @@ export class TagDashboardComponent implements OnInit {
     if (select) {
       this.selectedTags = new Set(select.selectedTags);
       if (this.multipleTagSelected()) {
-        //nothing
+        // nothing
       } else {
         this.lastSelectedTag = select.clickedTag;
         this.updateCreation(this.lastSelectedTag);
@@ -88,7 +88,7 @@ export class TagDashboardComponent implements OnInit {
   multipleTagSelected(): boolean {
     return this.selectedTags.size > 1;
   }
-  //update tag in tree.
+  // update tag in tree.
   onTagSaved(tag: Tag): void {
     const nodeToUpdate = this.tsListComp.dataTreeComp.getNode(tag.id);
     Object.assign(nodeToUpdate.original.tag, tag);

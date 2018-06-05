@@ -1,4 +1,4 @@
-import { IHistorianTag } from "./HistorianTag";
+import { IHistorianTag } from './HistorianTag';
 
 export interface ITag {
     id?: string;
@@ -35,7 +35,7 @@ export abstract class Tag implements ITag {
     max_numeric_value?: number;
     last_numeric_value?: number;
     last_quality?: number;
-    
+
     private data_types = new Set(['int', 'long', 'float', 'double', 'string', 'array', 'bytes', 'boolean']);
 
     constructor(options: ITag = {

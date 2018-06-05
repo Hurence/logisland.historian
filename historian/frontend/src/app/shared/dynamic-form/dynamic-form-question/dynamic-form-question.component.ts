@@ -11,7 +11,7 @@ import { ArrayQuestion } from '../question-array';
 })
 export class DynamicFormQuestionComponent {
   @Input() question: QuestionBase<any>;
-  @Input() form: FormGroup;  
+  @Input() form: FormGroup;
 
   constructor(private fb: FormBuilder,
     private qcs: QuestionControlService) { }

@@ -30,7 +30,7 @@ export class TagOpcService {
   }
 
   gets(datasourceIds: string[]): Observable<IOpcTag[]> {
-    const requests: Observable<IOpcTag[]>[] = datasourceIds.map(id => this.get(id))
+    const requests: Observable<IOpcTag[]>[] = datasourceIds.map(id => this.get(id));
     return this.help.zip(requests).pipe(
       catchError(this.help.handleError(`gets(${datasourceIds})`, []))
     );

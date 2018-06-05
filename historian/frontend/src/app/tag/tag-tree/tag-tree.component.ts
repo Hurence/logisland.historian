@@ -13,8 +13,8 @@ import { IOpcTag } from '../modele/OpcTag';
 import { IHistorianTag } from '../modele/HistorianTag';
 
 export interface TreeTagSelect {
-  clickedTag: ITag, //undefined if none
-  selectedTags: ITag[],
+  clickedTag: ITag; // undefined if none
+  selectedTags: ITag[];
 }
 
 @Component({
@@ -25,14 +25,14 @@ export interface TreeTagSelect {
 export class TagTreeComponent implements OnInit, OnDestroy {
 
 
-  treeDataTag$: Observable<any>;//TODO create a specific type
+  treeDataTag$: Observable<any>; // TODO create a specific type
 
   @Input() dataSet: Dataset;
   @Output() selectedTagsE = new EventEmitter<TreeTagSelect>();
   @ViewChild(JsTreeComponent) public dataTreeComp: JsTreeComponent;
   private modifiedCheckedNodes = new Subject<any>();
 
-  constructor(private tagService: TagService,              
+  constructor(private tagService: TagService,
               private treeTagService: TreeTagService) {}
 
   ngOnInit() {
@@ -49,7 +49,7 @@ export class TagTreeComponent implements OnInit, OnDestroy {
      * TODO: find a better solution. One would be to not use internal array of checkbox plugin and use ours.
      */
     this.modifiedCheckedNodes.pipe(
-      debounceTime(400),//wait for all tags to be checked
+      debounceTime(400), // wait for all tags to be checked
       tap(instance => this.addCheckedNodeToDataset(instance))
     ).subscribe();
   }
@@ -65,10 +65,10 @@ export class TagTreeComponent implements OnInit, OnDestroy {
     this.treeDataTag$ = this.treeTagService.buildTree(tags, this.dataSet);
   }
 
-  /** 
+  /**
    * Emit tag selected when clicking on a node containing a Tag
-   * 
-   * Idea: We could put reference of this component in every node instead of just tag emitter 
+   *
+   * Idea: We could put reference of this component in every node instead of just tag emitter
    * so we have access to all methods
    */
   private onChange(e, data): void {
@@ -76,9 +76,9 @@ export class TagTreeComponent implements OnInit, OnDestroy {
       const node = data.node;
       if (node.original && node.original.tag) {
         const emitItem = {
-          clickedTag: node.original.tag, //undefined if none
+          clickedTag: node.original.tag, // undefined if none
           selectedTags: data.selected,
-        }
+        };
         this.selectedTagsE.emit(emitItem);
       }
   }

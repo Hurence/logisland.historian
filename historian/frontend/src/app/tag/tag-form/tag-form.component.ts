@@ -22,8 +22,8 @@ export class TagFormComponent implements OnInit, OnChanges {
   // submitBtnMsg = 'Save';
   @Input() questionsMultiSelection: QuestionBase<any>[] = [];
   @Input() questionsSingleSelection: QuestionBase<any>[] = [];
-  @Input() visible: boolean = true;
-  @Input() showEntireForm: boolean = true;
+  @Input() visible = true;
+  @Input() showEntireForm = true;
   @Input() isCreation: boolean;
   @Input() tag: ITag;
 
@@ -53,7 +53,7 @@ export class TagFormComponent implements OnInit, OnChanges {
     }
   }
 
-  revert() {//TODO could be factorized
+  revert() { // TODO could be factorized
     this.dialogService.confirm('Are you sure you want to discard changes ?')
       .subscribe(ok => {
         if (ok) this.rebuildForm();
@@ -92,7 +92,7 @@ export class TagFormComponent implements OnInit, OnChanges {
   }
 
   /* Fill in form with current datasource properties */
-  private rebuildForm(): void {//TODO FACTORIZE SAME IN BOTH
+  private rebuildForm(): void { // TODO FACTORIZE SAME IN BOTH
     const objForForm = this.prepareObjForForm();
     this.form.reset(objForForm);
     const labels = (this.tag as IHistorianTag).labels || [];

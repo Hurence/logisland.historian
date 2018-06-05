@@ -56,5 +56,5 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
       catchError(this.help.handleError(`delete(${obj})`))
     );
   }
- 
+
 }

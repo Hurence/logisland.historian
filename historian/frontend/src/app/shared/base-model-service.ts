@@ -1,5 +1,5 @@
-import { Observable } from "rxjs/Observable";
-import { of } from "rxjs";
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 
 
 export interface IModelService<M> {
