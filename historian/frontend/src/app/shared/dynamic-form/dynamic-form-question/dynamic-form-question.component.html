@@ -18,7 +18,7 @@
 
     <!-- ARRAY -->
     <div *ngSwitchCase="'array'" [formArrayName]="question.key" class="form-control" [id]="question.key">
-      <div *ngFor="let item of question.getArrayControls(form); let i=index" [formGroupName]="i">
+      <div *ngFor="let item of question.getFormArray(form).controls; let i=index" [formGroupName]="i">
         <!-- The repeated address template -->
         <div style="margin-left: 1em;">
           <div class="form-group">

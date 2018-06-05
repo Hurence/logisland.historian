@@ -9,7 +9,6 @@ export interface IArrayQuestion<T> extends IQuestionBase<T[]> {
 interface IQuestionCanAddRemoveGetControls {
   addItem(form: FormGroup): void;
   removeItem(form: FormGroup, index: number): void;
-  getArrayControls(form: FormGroup): AbstractControl[];
   getFormControlName(index: number): string;
 }
 
@@ -23,19 +22,12 @@ export class ArrayQuestion<T> extends QuestionBase<T[]> implements IArrayQuestio
       this.questions = options.questions || [];
     }
 
-    addItem(form: FormGroup) {
-      this.getArrayControls(form).push(this.createAnArrayFormGroup());
+    addItem(form: FormGroup) {      
+      this.getFormArray(form).push(this.createAnArrayFormGroup());
     }
 
     removeItem(form: FormGroup, index: number) {
-      if (index > -1) {
-        this.getArrayControls(form).splice(index, 1);
-      }
-    }
-
-    getArrayControls(form: FormGroup): AbstractControl[] {
-      // console.log('exectuting getArrayControls');//TODO find why it is executed when hoverring over tree tag
-      return this.getFormArray(form).controls;
+        this.getFormArray(form).removeAt(index);
     }
 
     getFormControlName(index: number): string {
@@ -46,7 +38,7 @@ export class ArrayQuestion<T> extends QuestionBase<T[]> implements IArrayQuestio
       return this.qcs.toFormGroup(this.questions);
     }
 
-    private getFormArray(form: FormGroup): FormArray {
+    getFormArray(form: FormGroup): FormArray {
       return form.get(this.key) as FormArray;
     }
   }
