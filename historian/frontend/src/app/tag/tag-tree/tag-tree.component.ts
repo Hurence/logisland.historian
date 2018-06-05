@@ -1,16 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { interval, from, Subject } from 'rxjs';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
-import { combineAll, map, take, concat, tap, debounceTime } from 'rxjs/operators';
+import { debounceTime, tap } from 'rxjs/operators';
 
 import { Dataset } from '../../dataset/dataset';
-import { DialogService } from '../../dialog/dialog.service';
-import { Tag, ITag } from '../modele/tag';
+import { JsTreeComponent } from '../../shared/js-tree/js-tree.component';
+import { ITag } from '../modele/tag';
 import { TagService } from '../service/tag.service';
 import { TreeTagService } from './tree-view-tag.service';
-import { JsTreeComponent } from '../../shared/js-tree/js-tree.component';
-import { IOpcTag } from '../modele/OpcTag';
-import { IHistorianTag } from '../modele/HistorianTag';
 
 export interface TreeTagSelect {
   clickedTag: ITag; // undefined if none
