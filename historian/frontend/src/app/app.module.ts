@@ -8,7 +8,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { initializer } from './app-init';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DatasetService } from './dataset/dataset.service.';
+import { DatasetService } from './dataset/dataset.service';
 import { DatasourceService } from './datasource/datasource.service';
 import { DialogService } from './dialog/dialog.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';

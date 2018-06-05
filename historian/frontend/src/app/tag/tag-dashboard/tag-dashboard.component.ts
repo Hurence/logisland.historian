@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Dataset } from '../../dataset/dataset';
-import { DatasetService } from '../../dataset/dataset.service.';
+import { DatasetService } from '../../dataset/dataset.service';
 import { ProfilService } from '../../profil/profil.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
 import { QuestionService } from '../../shared/dynamic-form/question.service';

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 
 import { Dataset } from '../../dataset/dataset';
-import { DatasetService } from '../../dataset/dataset.service.';
+import { DatasetService } from '../../dataset/dataset.service';
 import { Datasource } from '../Datasource';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
