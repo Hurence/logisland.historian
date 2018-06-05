@@ -11,12 +11,29 @@
             [id]="question.key" [type]="question.type" [required]="question.required">
 
     <!-- SELECT (DROPDOWN)-->
-    <select [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key" [class]="form-control"
-            [required]="question.required">
+    <select *ngSwitchCase="'dropdown'" [id]="question.key" [formControlName]="question.key"
+            class]="form-control" [required]="question.required">
       <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
     </select>
 
-  </div>
+    <!-- ARRAY -->
+    <div *ngSwitchCase="'array'" [formArrayName]="question.key" class="form-control" [id]="question.key">
+      <div *ngFor="let item of arrayControls; let i=index" [formGroupName]="i">
+        <!-- The repeated address template -->
+        <h4>Label #{{i + 1}}</h4>
+        <div style="margin-left: 1em;">
+          <div class="form-group">
+            <label class="center-block">Label:
+              <input class="form-control" [formControlName]="'label'">
+            </label>
+            <button (click)="removeItem(i)" type="button">Remove this item</button>
+          </div>
+        </div>
+        <br>
+      </div>
 
+      <button (click)="addItem()" type="button">Add an item</button>
+    </div>
+  </div>
   <div class="errorMessage alert alert-danger" *ngIf="!isValid">{{question.label}} is required</div>
 </div>

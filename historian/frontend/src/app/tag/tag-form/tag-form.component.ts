@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, Input, OnChanges, OnInit, Output, SimpleChanges, EventEmitter, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
 
 import { DialogService } from '../../dialog/dialog.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { TagService } from '../service/tag.service';
 import { IHistorianTag } from '../modele/HistorianTag';
 import { TagHistorianService } from '../service/tag-historian.service';
+import { DynamicFormQuestionComponent } from '../../shared/dynamic-form/dynamic-form-question/dynamic-form-question.component';
 
 @Component({
   selector: 'app-tag-form',
@@ -25,6 +26,7 @@ export class TagFormComponent implements OnInit, OnChanges {
   @Input() showEntireForm: boolean = true;
   @Input() isCreation: boolean;
   @Input() tag: ITag;
+
   @Output() submitted = new EventEmitter<IHistorianTag>();
   payLoad = '';
   submitBtnMsg: string;
@@ -32,6 +34,7 @@ export class TagFormComponent implements OnInit, OnChanges {
   private BTN_MSG_UPDATE = 'Update';
 
   constructor(private qcs: QuestionControlService,
+              private fb: FormBuilder,
               private dialogService: DialogService,
               private tagHistorianService: TagHistorianService) { }
 
@@ -50,26 +53,56 @@ export class TagFormComponent implements OnInit, OnChanges {
     }
   }
 
-  /* Fill in form with current datasource properties */
-  private rebuildForm(): void {//TODO FACTORIZE SAME IN BOTH
-    this.form.reset(this.tag);
+  revert() {//TODO could be factorized
+    this.dialogService.confirm('Are you sure you want to discard changes ?')
+      .subscribe(ok => {
+        if (ok) this.rebuildForm();
+      });
   }
+
 
   /* save datasource when submitting */
   onSubmit() {
-    const tag = Object.assign({} ,this.tag);
-    Object.assign(tag, this.form.value);
-    console.log('tag to be saved :', tag)
-    this.payLoad = JSON.stringify(tag);//TODO remove when test over
+    const tag = this.prepareSaveTag();
     if (this.isCreation) {
-      this.subscribeToUpdate(this.tagHistorianService.save(tag as IHistorianTag),
+      this.subscribeToUpdate(this.tagHistorianService.save(tag),
       'successfully saved tag',
       'error while saving data source.');
     } else {
-      this.subscribeToUpdate(this.tagHistorianService.update(tag as IHistorianTag),
+      this.subscribeToUpdate(this.tagHistorianService.update(tag),
       'successfully updated tag',
       'error while updated data source.');
     }
+  }
+
+  private prepareSaveTag(): IHistorianTag {
+    const formModel = this.form.value;
+    const labelArray: FormArray = this.form.controls.labels as FormArray;
+    // deep copy of form model lairs
+    const labelsDeepCopy: string[] = labelArray.getRawValue().map(
+      (obj: {label: string}) => obj.label
+    );
+    // return new `Tag` object containing a combination of original tag value(s)
+    // and deep copies of changed form model values
+    const tag: ITag = Object.assign({} , this.tag);
+    Object.assign(tag, formModel);
+    Object.assign(tag, {labels: labelsDeepCopy});
+
+    return tag as IHistorianTag;
+  }
+
+  /* Fill in form with current datasource properties */
+  private rebuildForm(): void {//TODO FACTORIZE SAME IN BOTH
+    const objForForm = this.prepareObjForForm();
+    this.form.reset(objForForm);
+    const labels = (this.tag as IHistorianTag).labels || [];
+    this.setLabels(labels);
+  }
+
+  private prepareObjForForm(): any {
+    const obj = Object.assign({}, this.tag as any);
+    delete obj.labels;
+    return obj;
   }
 
   private subscribeToUpdate(submitted: Observable<IHistorianTag>,
@@ -87,11 +120,14 @@ export class TagFormComponent implements OnInit, OnChanges {
     );
   }
 
-
-  revert() {//TODO could be factorized
-    this.dialogService.confirm('Are you sure you want to discard changes ?')
-      .subscribe(ok => {
-        if (ok) this.rebuildForm();
-      });
+  private setLabels(labels: string[]): void {
+    if (labels && labels.length !== 0) {
+      const labelsFGs = labels.map((label) => this.fb.group({'label': label}));
+      const labelFormArray = this.fb.array(labelsFGs);
+      this.form.setControl('labels', labelFormArray);
+    } else {
+      this.form.setControl('labels', this.fb.array([]));
+    }
   }
+
 }

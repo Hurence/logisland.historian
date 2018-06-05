@@ -3,6 +3,7 @@ import { Injectable }       from '@angular/core';
 import { DropdownQuestion } from './question-dropdown';
 import { QuestionBase }     from './question-base';
 import { TextboxQuestion }  from './question-textbox';
+import { ArrayQuestion } from './question-array';
 
 @Injectable()
 export class QuestionService {
@@ -126,10 +127,15 @@ export class QuestionService {
 
     let questions: QuestionBase<any>[] = [
 
-      new TextboxQuestion({
-        key: 'label',
-        placeholder: 'label...',
-        order: 1
+      new ArrayQuestion<string>({
+        key: 'labels',
+        order: 1,
+        questions: [
+          new TextboxQuestion({
+            key: 'label',
+            placeholder: 'label...',
+          })
+        ]
       }),
 
       new TextboxQuestion({
