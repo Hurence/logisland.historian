@@ -7,6 +7,7 @@ import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-questi
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { JsTreeComponent } from './js-tree/js-tree.component';
 import { SearchComponent } from './search/search.component';
+import { DynamicFormQuestionArrayComponent } from './dynamic-form/dynamic-form-question-array/dynamic-form-question-array.component';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { SearchComponent } from './search/search.component';
     DynamicFormComponent,
     DynamicFormQuestionComponent,
     JsTreeComponent,
+    DynamicFormQuestionArrayComponent,
   ]
 })
 export class SharedModule { }

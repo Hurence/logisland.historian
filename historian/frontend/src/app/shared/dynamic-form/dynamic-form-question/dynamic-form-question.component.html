@@ -1,38 +1,28 @@
-<div [formGroup]="form">
+
   <!-- CHOOSE CONTROL TYPE -->
   <div [ngSwitch]="question.controlType" class="input-group input-group-sm mb-3">
+    
     <div class="input-group-prepend">
       <span class="input-group-text bg-primary" id="question.key" [attr.for]="question.key">{{question.label}}</span>
     </div>
 
     <!-- TEXTBOX -->
-    <input *ngSwitchCase="'textbox'" [formControlName]="question.key"
-            class="form-control" [placeholder]="question.placeholder"
-            [id]="question.key" [type]="question.type" [required]="question.required">
-
+    <div *ngSwitchCase="'textbox'" [formGroup]="form">
+      <input [formControlName]="question.key"
+              class="form-control" [placeholder]="question.placeholder"
+              [id]="question.key" [type]="question.type" [required]="question.required">
+    </div>
     <!-- SELECT (DROPDOWN)-->
-    <select *ngSwitchCase="'dropdown'" [id]="question.key" [formControlName]="question.key"
-            class]="form-control" [required]="question.required">
-      <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
-    </select>
+    <div *ngSwitchCase="'dropdown'" [formGroup]="form">
+      <select [id]="question.key" [formControlName]="question.key"
+              class]="form-control" [required]="question.required">
+        <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
+      </select>
+    </div>
 
     <!-- ARRAY -->
-    <div *ngSwitchCase="'array'" [formArrayName]="question.key" class="form-control" [id]="question.key">
-      <div *ngFor="let item of question.getFormArray(form).controls; let i=index" [formGroupName]="i">
-        <!-- The repeated address template -->
-        <div style="margin-left: 1em;">
-          <div class="form-group">
-            <label class="center-block">{{question.getFormControlName(i)}}:
-              <input class="form-control" [formControlName]="question.getFormControlName(i)">
-            </label>
-            <button (click)="question.removeItem(form, i)" type="button">Remove this label</button>
-          </div>
-        </div>
-        <br>
-      </div>
-
-      <button (click)="question.addItem(form)" type="button">Add a label</button>
-    </div>
+    <app-dynamic-form-question-array *ngSwitchCase="'array'" [question]="question"
+        [form]="form"></app-dynamic-form-question-array>
   </div>
   <div class="errorMessage alert alert-danger" *ngIf="!isValid">{{question.label}} is required</div>
-</div>
+
