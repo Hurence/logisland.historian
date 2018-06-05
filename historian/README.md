@@ -13,14 +13,14 @@ Pre-requisites : Add the following line to your `/etc/hosts` files
 
 Run a compose stack 
     
-    docker-compose -f backend/src/main/docker/docker-compose.yml up
+    docker-compose  up
 
 ## Option B : start dependencies only with docker 
 
 
-Run dependencies services ()redis/chronix & keycloak) in  Docker compose
+Run dependencies services (redis/chronix & keycloak) in  Docker compose
 
-    docker-compose -f backend/src/main/docker/docker-compose-dev.yml up 
+    docker-compose -f docker-compose-dev.yml up 
     
     
 ## service list

@@ -23,7 +23,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-14T17:06:05.558+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-05T15:01:13.761+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Tag  implements Serializable {
@@ -34,6 +34,10 @@ public class Tag  implements Serializable {
         @JsonProperty("id")
         @Indexed(name = "id")
         private String id = "mySweetUniqueId";
+
+        @JsonProperty("datasource_id")
+        @Indexed(name = "datasource_id")
+        private String datasourceId = null;
 
         @JsonProperty("domain")
         @Indexed(name = "domain")
@@ -182,6 +186,28 @@ public class Tag  implements Serializable {
 
         public void setId(String id) {
         this.id = id;
+        }
+
+        public Tag datasourceId(String datasourceId) {
+        this.datasourceId = datasourceId;
+        return this;
+        }
+
+    /**
+        * Get datasourceId
+    * @return datasourceId
+    **/
+        @JsonProperty("datasource_id")
+    @ApiModelProperty(required = true, value = "")
+      @NotNull
+
+
+  public String getDatasourceId() {
+    return datasourceId;
+    }
+
+        public void setDatasourceId(String datasourceId) {
+        this.datasourceId = datasourceId;
         }
 
         public Tag domain(String domain) {
@@ -550,6 +576,7 @@ public class Tag  implements Serializable {
         Tag tag = (Tag) o;
         return Objects.equals(this.recordType, tag.recordType) &&
         Objects.equals(this.id, tag.id) &&
+        Objects.equals(this.datasourceId, tag.datasourceId) &&
         Objects.equals(this.domain, tag.domain) &&
         Objects.equals(this.server, tag.server) &&
         Objects.equals(this.group, tag.group) &&
@@ -570,7 +597,7 @@ public class Tag  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality);
+    return Objects.hash(recordType, id, datasourceId, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality);
     }
 
 
@@ -581,6 +608,7 @@ sb.append("class Tag {\n");
 
 sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
+sb.append("    datasourceId: ").append(toIndentedString(datasourceId)).append("\n");
 sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
 sb.append("    server: ").append(toIndentedString(server)).append("\n");
 sb.append("    group: ").append(toIndentedString(group)).append("\n");

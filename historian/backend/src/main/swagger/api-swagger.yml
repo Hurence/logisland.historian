@@ -74,7 +74,6 @@ paths:
   /datasources/tags:
      get:
        tags:
-        - tag
         - datasource
        operationId: getAllDatasourcesTags
        summary:  get all tags from datasources
@@ -95,7 +94,6 @@ paths:
   /datasources/{datasourceId}/tags:
      get:
        tags:
-        - tag
         - datasource
        operationId: getAllTagsFromDatasource
        summary:  get all tags from a given datasource
@@ -884,6 +882,8 @@ definitions:
       id:
         type: string
         default: 'mySweetUniqueId'
+      datasource_id:
+        type: string
       domain:
         type: string
       server:
