@@ -12,8 +12,6 @@ export class QuestionService {
 
   constructor(private qcs: QuestionControlService) {}
 
-  // TODO: get from a remote source of question metadata
-  // TODO: make asynchronous
   getMockQuestions(): QuestionBase<any>[]  {
 
     const questions: QuestionBase<any>[] = [
