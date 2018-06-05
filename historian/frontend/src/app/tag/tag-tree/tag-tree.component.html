@@ -2,16 +2,3 @@ TAGS LIST
 Select a TAG or multiple tags to edit or add to collection
 
 <app-js-tree [jsonData]="treeDataTag$ | async"></app-js-tree>
-<!-- <div *ngFor="let datasourceId of datasourcesId()">
-    tags of datasource '{{datasourceId}}' :
-    <div *ngFor="let tag of tagsMap.get(datasourceId) | async as tags; let i = index">
-        found {{tags.length}}
-        <app-button-labelled [centerLabel]="tag.tag_name"
-          [topRightLabel]="tag.data_type"
-          [bottomRightLabel]="tag.labels"
-          [isActive]="isSelected(tag)"
-          (click)="onSelect(tag)">
-        </app-button-labelled>
-        number {{i}}
-    </div>
-</div> -->

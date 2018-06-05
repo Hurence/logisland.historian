@@ -1,10 +1,14 @@
-import { QuestionBase } from './question-base';
+import { QuestionBase, IQuestionBase } from './question-base';
 
-export class TextboxQuestion extends QuestionBase<string> {
+export interface ITextboxQuestion extends IQuestionBase<string> {
+  type?: string;
+}
+
+export class TextboxQuestion extends QuestionBase<string> implements ITextboxQuestion {
   controlType = 'textbox';
   type: string;
 
-  constructor(options: {} = {}) {
+  constructor(options: ITextboxQuestion) {
     super(options);
     this.type = options['type'] || '';
   }

@@ -4,9 +4,13 @@ import { DropdownQuestion } from './question-dropdown';
 import { QuestionBase }     from './question-base';
 import { TextboxQuestion }  from './question-textbox';
 import { ArrayQuestion } from './question-array';
+import { QuestionControlService } from './question-control.service';
 
 @Injectable()
 export class QuestionService {
+
+
+  constructor(private qcs: QuestionControlService) {}
 
   // TODO: get from a remote source of question metadata
   // TODO: make asynchronous
@@ -136,7 +140,8 @@ export class QuestionService {
             placeholder: 'label...',
           })
         ]
-      }),
+      },
+      this.qcs),
 
       new TextboxQuestion({
         key: 'description',

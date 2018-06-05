@@ -18,21 +18,20 @@
 
     <!-- ARRAY -->
     <div *ngSwitchCase="'array'" [formArrayName]="question.key" class="form-control" [id]="question.key">
-      <div *ngFor="let item of arrayControls; let i=index" [formGroupName]="i">
+      <div *ngFor="let item of question.getArrayControls(form); let i=index" [formGroupName]="i">
         <!-- The repeated address template -->
-        <h4>Label #{{i + 1}}</h4>
         <div style="margin-left: 1em;">
           <div class="form-group">
-            <label class="center-block">Label:
-              <input class="form-control" [formControlName]="'label'">
+            <label class="center-block">{{question.getFormControlName(i)}}:
+              <input class="form-control" [formControlName]="question.getFormControlName(i)">
             </label>
-            <button (click)="removeItem(i)" type="button">Remove this item</button>
+            <button (click)="question.removeItem(form, i)" type="button">Remove this item</button>
           </div>
         </div>
         <br>
       </div>
 
-      <button (click)="addItem()" type="button">Add an item</button>
+      <button (click)="question.addItem(form)" type="button">Add an item</button>
     </div>
   </div>
   <div class="errorMessage alert alert-danger" *ngIf="!isValid">{{question.label}} is required</div>
