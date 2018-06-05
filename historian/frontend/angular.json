@@ -21,14 +21,16 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "src/bootstrap-flatly.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
+              "node_modules/jstree/dist/themes/default/style.min.css",
               "src/styles.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/jstree/dist/jstree.min.js",
               "src/scripts.js"
             ]
           },
@@ -49,6 +51,36 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "production-fr": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "outputPath": "dist/my-project-fr/",
+              "i18nFile": "src/locale/messages.fr.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "fr",
+              "i18nMissingTranslation": "error"
+            },
+            "fr": {
+              "aot": true,
+              "outputPath": "dist/my-project-fr/",
+              "i18nFile": "src/locale/messages.fr.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "fr",
+              "i18nMissingTranslation": "error"
             }
           }
         },
@@ -60,6 +92,9 @@
           "configurations": {
             "production": {
               "browserTarget": "webapp:build:production"
+            },
+            "fr": {
+              "browserTarget": "webapp:build:fr"
             }
           }
         },
@@ -80,11 +115,13 @@
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/jstree/dist/jstree.min.js",
               "src/scripts.js"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/font-awesome/css/font-awesome.css",
+              "node_modules/jstree/dist/themes/default/style.min.css",
               "src/styles.css"
             ],
             "assets": [

@@ -79,14 +79,14 @@ public class TagsApiService {
 
     public Optional<Tag> addTagWithId(Tag body, String itemId) {
 
-        logger.info("Tag already {} exists, delete it first", itemId);
-
-        if (repository.existsById(itemId)) {
+        Optional<Tag> datasourceToRemove = getTag(itemId);
+        if (datasourceToRemove.isPresent()) {
+            logger.info("Tag already {} exists, delete it first", itemId);
+            return Optional.empty();
+        } else {
             body.setId(itemId);
             return Optional.of(repository.save(body));
         }
-        return Optional.empty();
-
     }
 
 }

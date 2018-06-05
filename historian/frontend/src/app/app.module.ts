@@ -8,15 +8,22 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { initializer } from './app-init';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { CustomHttpInterceptor } from './security-http-interceptor';
-import { SourcesAndTagsModule } from './sources-and-tags/sources-and-tags.module';
-import { TodoComponent } from './todo/todo.component';
-import { ProfilService } from './profil/profil.service';
-import { DatasetService } from './dataset/dataset.service.';
-import { TagService } from './tag/tag.service';
-import { DialogService } from './dialog/dialog.service';
+import { DatasetService } from './dataset/dataset.service';
 import { DatasourceService } from './datasource/datasource.service';
+import { DialogService } from './dialog/dialog.service';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ProfilService } from './profil/profil.service';
+import { CustomHttpInterceptor } from './security-http-interceptor';
+import { SharedModule } from './shared/shared.module';
+import { SourcesAndTagsModule } from './sources-and-tags/sources-and-tags.module';
+import { TagService } from './tag/service/tag.service';
+import { TodoComponent } from './todo/todo.component';
+import { QuestionService } from './shared/dynamic-form/question.service';
+import { QuestionControlService } from './shared/dynamic-form/question-control.service';
+import { TreeTagService } from './tag/tag-tree/tree-view-tag.service';
+import { TagHistorianService } from './tag/service/tag-historian.service';
+import { TagOpcService } from './tag/service/tag-opc.service';
+import { Utilities } from './shared/utilities.service';
 
 // components
 // router
@@ -34,6 +41,7 @@ import { DatasourceService } from './datasource/datasource.service';
     SourcesAndTagsModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    SharedModule,
   ],
   providers: [
     {
@@ -50,9 +58,15 @@ import { DatasourceService } from './datasource/datasource.service';
     ProfilService,
     DatasetService,
     TagService,
+    TagOpcService,
+    TagHistorianService,
     DatasourceService,
     DialogService,
     ProfilService,
+    QuestionService,
+    QuestionControlService,
+    TreeTagService,
+    Utilities,
   ],
   bootstrap: [AppComponent],
 })

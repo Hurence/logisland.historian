@@ -112,40 +112,58 @@ mark, .mark {
 
 .btn-light {
   border: 0px solid transparent;
-  color: #ffffff;
-  background-color: #2699FB;
-  opacity: 0.5;
+  /* color: #ffffff;
+  background-color: #2699FB; */
+  opacity: 1;
+}
+.input-group .bg-primary {
+    color: white;
+    font-weight: inherit;
+    font-size: 0.5rem !important;
 }
 .btn-light:not(:disabled):not(.disabled):active, .btn-light:not(:disabled):not(.disabled).active, .show > .btn-light.dropdown-toggle {
     color: #ffffff;
-    background-color: #007bff;
-    border-color: #d3d9df;
+    background-color: #2c3e50;
+    border-color: #2c3e50;
     opacity: 1;
 }
 .datasource-btn {
   max-width: 33%;
   min-width: 33%;
 }
-
+.btn .badge {
+    border-radius: 0;
+}
 .btn-primary {
   border: 0px solid transparent;
 }
 
-.btn-light:hover {
+/* .btn-light:hover {
   border: 0px solid transparent;
   color: #ffffff;
   background-color: #2699FB;
-}
+} */
 
-.badge-light {
+/* .badge-light {
   color: #ffffff;
   background-color: transparent;
-}
+} */
 
-.btn .badge {
+.badge-center-label {
   top: -8px;
   right: -5px;
   font-size: 8px !important;
+}
+.badge-top-right-label{
+  top: -8px !important;
+  right: 0px;
+  font-size: 7px !important;
+}
+
+.badge-botttom-right-label{
+  top: 8px !important;
+  right: 42px;
+  font-size: 7px !important;
 }
 
 .btn-outline-danger {

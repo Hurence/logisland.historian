@@ -27,7 +27,7 @@ export class DatasourcesListComponent implements OnInit {
   }
 
   getDatasources(): void {
-    this.datasources$ = this.datasourceService.getDatasources();
+    this.datasources$ = this.datasourceService.getAll();
   }
 
   getDatasourcesQuery(queryParameter: string) {
@@ -40,7 +40,7 @@ export class DatasourcesListComponent implements OnInit {
     this.dialogService.confirm(msg, 'Cancel', 'Remove data source')
       .subscribe(ok => {
         if (ok) {
-          this.datasourceService.deleteDatasource(datasource)
+          this.datasourceService.delete(datasource)
             .subscribe(deletedDs => {
               console.log('deleted datasource with id :' + deletedDs.id);
               this.dataSet.removeDatasource(deletedDs);

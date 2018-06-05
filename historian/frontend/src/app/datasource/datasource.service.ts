@@ -3,14 +3,33 @@ import { Injectable } from '@angular/core';
 import { Observable ,  of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { Tag } from '../tag/tag';
+import { Tag } from '../tag/modele/tag';
 import { Datasource } from './Datasource';
+import { IModelService } from '../shared/base-model-service';
+import { Utilities } from '../shared/utilities.service';
 
 @Injectable()
-export class DatasourceService {
+export class DatasourceService implements IModelService<Datasource> {
 
   private datasourcesUrl = 'http://localhost:8701/api/v1/datasources';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private help: Utilities) { }
+
+  getAll(): Observable<Datasource[]> {
+    return this.http.get<Datasource[]>(this.datasourcesUrl);
+  }
+  get(id: string): Observable<Datasource> {
+    return this.http.get<Datasource>(this.datasourcesUrl + '/' + id);
+  }
+  save(obj: Datasource): Observable<Datasource> {
+    return this.http.post<Datasource>(this.datasourcesUrl + '/' + obj.id, obj);
+  }
+  update(obj: Datasource): Observable<Datasource> {
+    return this.http.put<Datasource>(this.datasourcesUrl + '/' + obj.id, obj);
+  }
+  delete(obj: Datasource): Observable<Datasource> {
+    return this.http.delete<Datasource>(this.datasourcesUrl + '/' + obj.id);
+  }
 
   datasourceIsReachable(id: string): Observable<boolean> {
     return this.http.get<Tag[]>(this.datasourcesUrl + '/' + id + '/tags')
@@ -20,21 +39,13 @@ export class DatasourceService {
       );
   }
 
-  getDatasource(id: string): Observable<Datasource> {
-    return this.http.get<Datasource>(this.datasourcesUrl + '/' + id);
-  }
-
-  getDatasources(): Observable<Datasource[]> {
-    return this.http.get<Datasource[]>(this.datasourcesUrl);
-  }
-
   getDatasourcesQuery(queryParameter: string): Observable<Datasource[]> {
     if (queryParameter && queryParameter.length !== 0) {
       return this.http.get<Datasource[]>(
         this.datasourcesUrl + '?fq=' + this.formatQuery(queryParameter)
       );
     } else {
-      return this.getDatasources();
+      return this.getAll();
     }
   }
   private formatQuery(query: string): string {
@@ -46,15 +57,5 @@ export class DatasourceService {
     return ['', 'OPC-DA', 'OPC-UA'];
   }
 
-  saveDatasource(datasource: Datasource): Observable<Datasource> {
-    return this.http.post<Datasource>(this.datasourcesUrl + '/' + datasource.id, datasource);
-  }
 
-  updateDatasource(datasource: Datasource): Observable<Datasource> {
-    return this.http.put<Datasource>(this.datasourcesUrl + '/' + datasource.id, datasource);
-  }
-
-  deleteDatasource(datasource: Datasource): Observable<Datasource> {
-    return this.http.delete<Datasource>(this.datasourcesUrl + '/' + datasource.id);
-  }
 }

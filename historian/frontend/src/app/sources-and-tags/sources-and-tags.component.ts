@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { slideInDownAnimation } from '../animation';
-import { DatasetService } from '../dataset/dataset.service.';
+import { DatasetService } from '../dataset/dataset.service';
 import { Dataset } from '../dataset/dataset';
 
 @Component({
@@ -22,5 +22,4 @@ export class SourcesAndTagsComponent implements OnInit {
   datasetIsEmpty(): boolean {
     return this.dataset.isEmpty();
   }
-
 }

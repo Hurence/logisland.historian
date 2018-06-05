@@ -33,7 +33,8 @@ public class TagsApiController implements TagsApi {
 
 
     @org.springframework.beans.factory.annotation.Autowired
-    public TagsApiController(TagsApiService service, MeasuresApiService measuresApiService) {
+    public TagsApiController(TagsApiService service,
+                             MeasuresApiService measuresApiService) {
         this.service = service;
         this.measuresApiService = measuresApiService;
     }

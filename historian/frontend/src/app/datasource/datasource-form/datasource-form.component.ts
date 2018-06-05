@@ -39,12 +39,14 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.datasourceTypes = this.datasourceService.getDatasourceTypes();
+    this.datasourceTypes = this.datasourceService.getDatasourceTypes(); // TODO should disappear when using dynamic form
     this.submitBtnMsg = this.BTN_MSG_ADD;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.datasource  && changes.datasource.previousValue !== changes.datasource.currentValue) this.rebuildForm();
+    if (changes.datasource  && changes.datasource.previousValue !== changes.datasource.currentValue) {
+      this.rebuildForm(); // TODO could be factorized
+    }
     if (changes.isCreation && changes.isCreation.previousValue !== changes.isCreation.currentValue) {
       if (this.isCreation) {
         this.enableName();
@@ -61,22 +63,23 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   }
 
   // restore form with clean values
-  revert() {
+  revert() { // TODO could be factorized
     this.dialogService.confirm('Are you sure you want to discard changes ?')
       .subscribe(ok => {
         if (ok) this.rebuildForm();
       });
   }
 
-  formIsClean(): boolean { return this.dsForm.dirty; }
+  formIsClean(): boolean { return this.dsForm.dirty; } // TODO could be factorized
 
   /* Buil form for the first time */
-  private createForm(): void {
+  private createForm(): void { // TODO should disappear when using dynamic form
     this.dsForm = this.fb.group({
       type: ['OPC-DA', Validators.required],
       name: [{ value: '', disabled: false }, Validators.required],
       description: ['', Validators.required],
       host: ['', Validators.required],
+      domain: ['', Validators.required],
       clsid: '',
       progId: '',
       auth: this.fb.group({
@@ -100,6 +103,8 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   /* Fill in form with current datasource properties */
   private rebuildForm(): void {
+    /*TODO could be factorized but form structure is different from model object...
+    Have to find an intelligent way to deal with that*/
     this.dsForm.reset(this.createFormObject(this.datasource));
   }
 
@@ -110,6 +115,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       name: datasource.id,
       description: datasource.description,
       host: datasource.host,
+      domain: datasource.domain,
       clsid: datasource.clsid,
       progId: datasource.progId,
       auth: {
@@ -133,11 +139,11 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   onSubmit() {
     this.datasource = this.prepareSaveDatasource();
     if (this.isCreation) {
-      this.subscribeToUpdate(this.datasourceService.saveDatasource(this.datasource),
+      this.subscribeToUpdate(this.datasourceService.save(this.datasource),
         'successfully added datasource',
         'error while saving data source.');
     } else {
-      this.subscribeToUpdate(this.datasourceService.updateDatasource(this.datasource),
+      this.subscribeToUpdate(this.datasourceService.update(this.datasource),
         'successfully updated datasource',
         'error while updating data source.');
     }
@@ -169,6 +175,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       id: formModel.name || this.datasource.id, // when disabled
       description: formModel.description,
       host: formModel.host,
+      domain: formModel.domain,
       clsid: formModel.clsid,
       progId: formModel.progId,
       user: formModel.auth.user,

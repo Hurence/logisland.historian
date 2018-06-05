@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DatasourceSearchComponent } from './datasource-search.component';
+import { JsTreeComponent } from './js-tree.component';
 
-describe('DatasourceSearchComponent', () => {
-  let component: DatasourceSearchComponent;
-  let fixture: ComponentFixture<DatasourceSearchComponent>;
+describe('JsTreeComponent', () => {
+  let component: JsTreeComponent;
+  let fixture: ComponentFixture<JsTreeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DatasourceSearchComponent ]
+      declarations: [ JsTreeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DatasourceSearchComponent);
+    fixture = TestBed.createComponent(JsTreeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

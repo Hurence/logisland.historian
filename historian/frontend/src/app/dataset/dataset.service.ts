@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable ,  of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { Dataset } from './dataset';
 
@@ -9,7 +9,7 @@ export class DatasetService {
     private myDataset: Dataset;
 
     constructor() {
-        this.myDataset = new Dataset(1, 'mock data set', []);
+        this.myDataset = new Dataset(1, 'mock data set', new Set<string>(), new Set<string>());
     }
 
     getMyDataset(): Observable<Dataset> {

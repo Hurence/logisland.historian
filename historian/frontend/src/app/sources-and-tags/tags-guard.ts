@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { DatasetService } from '../dataset/dataset.service.';
+import { DatasetService } from '../dataset/dataset.service';
 
 @Injectable()
 export class TagsGuard implements CanActivate {

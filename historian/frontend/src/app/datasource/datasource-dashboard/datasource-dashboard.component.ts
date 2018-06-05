@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 
 import { Dataset } from '../../dataset/dataset';
-import { DatasetService } from '../../dataset/dataset.service.';
+import { DatasetService } from '../../dataset/dataset.service';
 import { Datasource } from '../Datasource';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
@@ -20,6 +20,7 @@ export class DatasourceDashboardComponent implements OnInit {
   selectedDatasource: Datasource;
   dataSet: Dataset;
   isCreation: boolean;
+  filterPlaceHolder = 'Type to filter by type or by description...';
 
   @ViewChild(DatasourceFormComponent)
   private dsFrmComp: DatasourceFormComponent;
@@ -66,21 +67,6 @@ export class DatasourceDashboardComponent implements OnInit {
     }
   }
 
-  private canDeactivate(): Observable<boolean> | boolean {
-    if (this.dsFormIsClean()) return true;
-    return this.dialogService.confirm('Discard changes?');
-  }
-
-  private selectDatasource(datasource: Datasource) {
-    if (datasource === null || datasource.id === this.selectedDatasource.id) {
-      this.isCreation = true;
-      this.selectedDatasource = new Datasource('', 'OPC-DA');
-    } else {
-      this.isCreation = false;
-      this.selectedDatasource = datasource;
-    }
-  }
-
   goToTags() {
     this.router.navigate(['../tags'], { relativeTo: this.route });
   }
@@ -101,5 +87,20 @@ export class DatasourceDashboardComponent implements OnInit {
 
   onFilterQuery(query: string) {
     this.dslistComp.getDatasourcesQuery(query);
+  }
+
+  private canDeactivate(): Observable<boolean> | boolean {
+    if (this.dsFormIsClean()) return true;
+    return this.dialogService.confirm('Discard changes?');
+  }
+
+  private selectDatasource(datasource: Datasource) {
+    if (datasource === null || datasource.id === this.selectedDatasource.id) {
+      this.isCreation = true;
+      this.selectedDatasource = new Datasource('', 'OPC-DA');
+    } else {
+      this.isCreation = false;
+      this.selectedDatasource = datasource;
+    }
   }
 }
