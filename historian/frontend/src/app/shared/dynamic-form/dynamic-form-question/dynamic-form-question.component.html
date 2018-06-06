@@ -1,4 +1,4 @@
-
+<!-- {{question | json}} -->
   <!-- CHOOSE CONTROL TYPE -->
   <div [ngSwitch]="question.controlType" class="input-group input-group-sm mb-3">
     
@@ -7,18 +7,21 @@
     </div>
 
     <!-- TEXTBOX -->
-    <div *ngSwitchCase="'textbox'" [formGroup]="form">
-      <input [formControlName]="question.key"
-              class="form-control" [placeholder]="question.placeholder"
-              [id]="question.key" [type]="question.type" [required]="question.required">
-    </div>
+    <ng-container *ngSwitchCase="'textbox'">
+      <div [formGroup]="form">
+        <input [formControlName]="question.key" class="form-control"
+          [placeholder]="question.placeholder" [id]="question.key" [type]="question.type"
+          [required]="question.required">
+      </div>
+    </ng-container>
     <!-- SELECT (DROPDOWN)-->
-    <div *ngSwitchCase="'dropdown'" [formGroup]="form">
-      <select [id]="question.key" [formControlName]="question.key"
-              class]="form-control" [required]="question.required">
-        <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
-      </select>
-    </div>
+    <ng-container *ngSwitchCase="'dropdown'">
+      <div [formGroup]="form">
+        <select [id]="question.key" [formControlName]="question.key" class]="form-control" [required]="question.required">
+          <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
+        </select>
+      </div>
+    </ng-container>
 
     <!-- ARRAY -->
     <app-dynamic-form-question-array *ngSwitchCase="'array'" [question]="question"
