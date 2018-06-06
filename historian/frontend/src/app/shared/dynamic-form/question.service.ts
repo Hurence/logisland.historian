@@ -1,16 +1,15 @@
-import { Injectable }       from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { DropdownQuestion } from './question-dropdown';
-import { QuestionBase }     from './question-base';
-import { TextboxQuestion }  from './question-textbox';
 import { ArrayQuestion } from './question-array';
-import { QuestionControlService } from './question-control.service';
+import { QuestionBase } from './question-base';
+import { DropdownQuestion } from './question-dropdown';
+import { TextboxQuestion } from './question-textbox';
 
 @Injectable()
 export class QuestionService {
 
 
-  constructor(private qcs: QuestionControlService) {}
+  constructor() {}
 
   getMockQuestions(): QuestionBase<any>[]  {
 
@@ -145,8 +144,7 @@ export class QuestionService {
             placeholder: 'label...',
           })
         ]
-      },
-      this.qcs),
+      }),
 
       new TextboxQuestion({
         key: 'description',

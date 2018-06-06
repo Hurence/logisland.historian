@@ -11,8 +11,8 @@ import { QuestionControlService } from '../question-control.service';
 export class DynamicFormQuestionArrayComponent implements OnInit {
 
   @Input() question: ArrayQuestion<any>;
-  @Input() form: FormGroup;  
-  
+  @Input() form: FormGroup;
+
   constructor(private qcs: QuestionControlService) { }
 
   ngOnInit() {}
@@ -30,9 +30,9 @@ export class DynamicFormQuestionArrayComponent implements OnInit {
   at(index: number): FormGroup {
     return this.formArray.at(index) as FormGroup;
   }
-  
+
   get formArray(): FormArray {
-    return this.form.get(this.question.key) as FormArray;    
+    return this.form.get(this.question.key) as FormArray;
   }
 
   private createAnArrayFormGroup(): FormGroup {

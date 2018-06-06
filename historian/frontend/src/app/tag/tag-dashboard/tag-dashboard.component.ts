@@ -62,7 +62,7 @@ export class TagDashboardComponent implements OnInit {
   else add tag to selection */
   onSelectTag(select: TreeTagSelect): void {
     if (select) {
-      this.selectedTags = select.selectedTags.map(tag => new TagFormInput(tag))
+      this.selectedTags = select.selectedTags.map(tag => new TagFormInput(tag));
     }
   }
 
@@ -82,9 +82,9 @@ export class TagDashboardComponent implements OnInit {
     return this.selectedTags.length > 1;
   }
   // update tag in tree.
-  onTagSaved(tag: IHistorianTag): void {    
+  onTagSaved(tag: IHistorianTag): void {
     const nodeToUpdate = this.tsListComp.dataTreeComp.getNode(tag.id);
-    Object.assign(nodeToUpdate.original.tag, tag);  
+    Object.assign(nodeToUpdate.original.tag, tag);
   }
 
 }

@@ -8,8 +8,8 @@ import { QuestionControlService } from '../../shared/dynamic-form/question-contr
 import { IHistorianTag } from '../modele/HistorianTag';
 import { ITag, Tag } from '../modele/tag';
 import { TagHistorianService } from '../service/tag-historian.service';
-import { ITagFormInput } from './TagFormInput'
-import { ITagFormOutput, TagFormOutput } from './TagFormOutput'
+import { ITagFormInput } from './TagFormInput';
+import { ITagFormOutput, TagFormOutput } from './TagFormOutput';
 
 @Component({
   selector: 'app-tag-form',
@@ -57,7 +57,7 @@ export class TagFormComponent implements OnInit, OnChanges {
       } else {
         update = true;
       }
-    })
+    });
     if (creation) {
       if (update) {
         this.submitBtnMsg = `${this.BTN_MSG_ADD} & ${this.BTN_MSG_UPDATE}`;
@@ -137,10 +137,10 @@ export class TagFormComponent implements OnInit, OnChanges {
 
   private setLabels(labels: Set<string>): void {
     if (labels && labels.size !== 0) {
-      const labelsFGs: FormGroup[] = []
+      const labelsFGs: FormGroup[] = [];
       labels.forEach(label => {
         labelsFGs.push(this.fb.group({'label': label}));
-      })
+      });
       const labelFormArray = this.fb.array(labelsFGs);
       this.form.setControl('labels', labelFormArray);
     } else {
