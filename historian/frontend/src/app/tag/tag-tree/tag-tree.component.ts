@@ -35,20 +35,7 @@ export class TagTreeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.buildTree();
     this.dataTreeComp.addEvent('changed.jstree', this.onChange.bind(this));
-    this.dataTreeComp.addEvent('uncheck_node.jstree', this.onUnCheckNode.bind(this));
-    this.dataTreeComp.addEvent('check_node.jstree', this.onCheckNode.bind(this));
     this.dataTreeComp.addEvent('ready.jstree', this.onReady.bind(this));
-
-    /**
-     * We use this observable to update selected tags in dataset.
-     * Indeed the onCheckNodeEvent and onUnCheckNodeEvent are triggered before child nodes are actually checked...
-     * This solution may not be the best but works.
-     * TODO: find a better solution. One would be to not use internal array of checkbox plugin and use ours.
-     */
-    this.modifiedCheckedNodes.pipe(
-      debounceTime(400), // wait for all tags to be checked
-      tap(instance => this.addCheckedNodeToDataset(instance))
-    ).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -57,11 +44,26 @@ export class TagTreeComponent implements OnInit, OnDestroy {
     }
   }
 
-  buildTree(): void {
+  onAddToDataset(): void {
+    this.getSelectedTagsId().forEach(id => {
+      this.dataSet.addTag(id);
+    });
+  }
+
+  onRemoveFromDataset(): void {
+    this.getSelectedTagsId().forEach(id => {
+      this.dataSet.removeTag(id);
+    });
+  }
+
+  private getSelectedTagsId(): string[] {
+    return this.dataTreeComp.getBottomSelectedNodesId();
+  }
+
+  private buildTree(): void {
     const tags: Observable<ITag[]> = this.tagService.gets(Array.from(this.dataSet.getDatasourceIds()));
     this.treeDataTag$ = this.treeTagService.buildTree(tags, this.dataSet);
   }
-
   /**
    * Emit tag selected when clicking on a node containing a Tag
    *
@@ -71,7 +73,7 @@ export class TagTreeComponent implements OnInit, OnDestroy {
   private onChange(e, data): void {
       console.log('onChange called');
       const node = data.node;
-      if (node.original && node.original.tag) {
+      if (node && node.original && node.original.tag) {
         const emitItem = {
           clickedTag: node.original.tag, // undefined if none
           selectedTags: data.selected.map(id => data.instance.get_node(id).original.tag),
@@ -80,27 +82,8 @@ export class TagTreeComponent implements OnInit, OnDestroy {
       }
   }
 
-  private onCheckNode(e, data, event): void {
-    const node = data.node;
-    if (node.original && node.original.tag) {
-      this.dataSet.addTag(node.original.tag.id);
-    } else {
-      this.modifiedCheckedNodes.next(data.instance);
-    }
-  }
-
-  private onUnCheckNode(e, data): void {
-    const node = data.node;
-    if (node.original && node.original.tag) {
-      this.dataSet.removeTag(node.original.tag.id);
-    } else {
-      this.modifiedCheckedNodes.next(data.instance);
-    }
-  }
-
   private onReady(e, data): void {
-    const checkeds: string[] = data.instance.get_checked();
-    checkeds.forEach(idNode => {
+    this.dataSet.getTagIds().forEach(idNode => {
       data.instance._open_to(idNode);
     });
   }

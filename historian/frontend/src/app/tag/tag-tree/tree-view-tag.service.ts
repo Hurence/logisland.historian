@@ -33,7 +33,6 @@ export class TreeTagService {
     if (dataSet.getDatasourceIds().size === 1) {
       opened = true;
     }
-    const selected = false;
 
     const treeTag =  tags.reduce(
       (r, v, i, a) => {
@@ -41,10 +40,11 @@ export class TreeTagService {
         const server = this.getOrCreateChildren(domain, v['server'],  { opened: opened });
         const group = this.getOrCreateChildren(server, v['group'],  { opened: false });
 
-        let checked = false;
+        let selected = false;
         if (dataSet.containTag(v.id)) {
-          checked = true;
+          selected = true;
         }
+
         const nodeType = Tag.getType(v);
         const children = new NodeTree({
           type: nodeType,
@@ -54,7 +54,6 @@ export class TreeTagService {
           state: {
             opened: opened,
             selected: selected,
-            checked: checked,
           },
           children: [],
           tag: v,

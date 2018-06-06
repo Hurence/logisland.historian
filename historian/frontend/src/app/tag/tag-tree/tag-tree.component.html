@@ -1,4 +1,15 @@
 TAGS LIST
 Select a TAG or multiple tags to edit or add to collection
 
+
+<button type="button" class="btn btn-outline-primary text-uppercase"
+    (click)="onAddToDataset()">
+    ADD SELECTION TO DATA SET
+</button>
+
+<button type="button" class="btn btn-danger text-uppercase"
+          (click)="onRemoveFromDataset()">
+    REMOVE SELECTION FROM DATA SET
+</button>
+
 <app-js-tree [jsonData]="treeDataTag$ | async"></app-js-tree>

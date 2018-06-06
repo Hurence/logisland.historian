@@ -55,6 +55,11 @@ export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
         else return undefined;
     }
 
+    getBottomSelectedNodesId(): string[] {
+        if (this.myTreeJs) return this.myTreeJs.get_bottom_selected();
+        else return [];
+    }
+
     setType(node: any, type: string): void {
         if (this.myTreeJs) this.myTreeJs.set_type(node, type);
     }
@@ -90,7 +95,7 @@ export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
                     three_state: true,
                     whole_node: false,
                     keep_selected_style: true,
-                    tie_selection: false, // an independant array for checkbox when false
+                    tie_selection: true, // an independant array for checkbox when false
                     // cascade_to_hidden: false,
                 },
                 search: {
