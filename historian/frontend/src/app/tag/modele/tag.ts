@@ -7,7 +7,7 @@ export interface ITag {
     server?: string;
     group?: string;
     tag_name?: string;
-    data_type?: string;
+    data_type?: TagDataType;
     // text: string[];//catch all field
     creation_date?: number;
     last_modification_date?: number;
@@ -25,6 +25,17 @@ export const enum TagType {
     tagOpc = 'tagOpc'
 }
 
+export const enum TagDataType {
+    INT = 'int',
+    LONG = 'long',
+    FLOAT = 'float',
+    DOUBLE = 'double',
+    STRING = 'string',
+    ARRAY = 'array',
+    BYTES = 'bytes',
+    BOOLEAN = 'boolean'
+}
+
 export abstract class Tag implements ITag {
     id?: string;
     datasource_id?: string;
@@ -32,7 +43,7 @@ export abstract class Tag implements ITag {
     server?: string;
     group?: string;
     tag_name?: string;
-    data_type?: string;
+    data_type?: TagDataType;
     // text: string[];//catch all field
     creation_date?: number;
     last_modification_date?: number;
@@ -43,19 +54,14 @@ export abstract class Tag implements ITag {
     last_numeric_value?: number;
     last_quality?: number;
 
-    private data_types = new Set(['int', 'long', 'float', 'double', 'string', 'array', 'bytes', 'boolean']);
-
     constructor(options: ITag = {
         id: '',
         domain: '',
         server: '',
         group: '',
         tag_name: '',
-        data_type: 'boolean',
+        data_type: TagDataType.BOOLEAN,
       }) {
-        if (!this.data_types.has(options.data_type)) {
-            console.error(`data_type "${options.data_type}" is not known`);
-        }
         Object.assign(this, options);
     }
 
