@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Dataset } from '../../dataset/dataset';
 import { INodeTree, IState, NodeTree } from '../../shared/js-tree/NodeTree';
 import { ITag, Tag } from '../modele/tag';
+import { TypesName } from './TypesName';
 
 declare const $: JQueryStatic;
 
@@ -41,11 +42,11 @@ export class TreeTagService {
         const group = this.getOrCreateChildren(server, v['group'],  { opened: false });
 
         let selected = false;
+        let nodeType: string = TypesName.getType(v);
         if (dataSet.containTag(v.id)) {
           selected = true;
+          nodeType = TypesName.TAG_IN_DATASET;
         }
-
-        const nodeType = Tag.getType(v);
         const children = new NodeTree({
           type: nodeType,
           id: v.id,

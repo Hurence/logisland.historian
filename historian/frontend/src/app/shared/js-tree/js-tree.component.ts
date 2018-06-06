@@ -2,7 +2,7 @@ import 'jquery';
 
 import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 
-import { TagType } from '../../tag/modele/tag';
+import { TypesName } from '../../tag/tag-tree/TypesName';
 import { INodeTree } from './NodeTree';
 
 declare const $: JQueryStatic;
@@ -55,12 +55,12 @@ export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
         else return undefined;
     }
 
-    getBottomSelectedNodesId(): string[] {
-        if (this.myTreeJs) return this.myTreeJs.get_bottom_selected();
+    getBottomSelectedNodes(): any[] {
+        if (this.myTreeJs) return this.myTreeJs.get_bottom_selected(true);
         else return [];
     }
 
-    setType(node: any, type: string): void {
+    setType(node: string | any, type: string): void {
         if (this.myTreeJs) this.myTreeJs.set_type(node, type);
     }
 
@@ -112,36 +112,42 @@ export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     private getTypes(): any {
-        const types =  {
-            '#': {
-                max_depth: 4,
-                max_children: -1,
-                valid_children: ['domain']
-            },
-            domain: {
-                max_depth: 3,
-                max_children: -1,
-                valid_children: ['server']
-            },
-            server: {
-                max_depth: 2,
-                max_children: -1,
-                valid_children: ['group']
-            },
-            group: {
-                max_depth: 1,
-                max_children: -1,
-                valid_children: ['tag']
-            }
+        const types =  {};
+
+        types[TypesName.ROOT] = {
+            max_depth: 4,
+            max_children: -1,
+            valid_children: [TypesName.DOMAIN]
         };
-        types[TagType.tagHist] = {
+        types[TypesName.DOMAIN] = {
+            max_depth: 3,
+            max_children: -1,
+            valid_children: [TypesName.SERVER]
+        };
+        types[TypesName.SERVER] = {
+            max_depth: 2,
+            max_children: -1,
+            valid_children: [TypesName.GROUP]
+        };
+        types[TypesName.GROUP] = {
+            max_depth: 1,
+            max_children: -1,
+            valid_children: [TypesName.TAG_HISTORIAN, TypesName.TAG_OPC, TypesName.TAG_IN_DATASET]
+        };
+        types[TypesName.TAG_HISTORIAN] = {
             icon: 'historian-tag',
             max_depth: 0,
             max_children: 0,
             valid_children: []
         };
-        types[TagType.tagOpc] = {
+        types[TypesName.TAG_OPC] = {
             icon: 'fa fa-file',
+            max_depth: 0,
+            max_children: 0,
+            valid_children: []
+        };
+        types[TypesName.TAG_IN_DATASET] = {
+            icon: 'in-dataset',
             max_depth: 0,
             max_children: 0,
             valid_children: []

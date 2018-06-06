@@ -68,9 +68,4 @@ export abstract class Tag implements ITag {
     public static isHistorianTag(tag: ITag): tag is IHistorianTag {
         return (tag as IHistorianTag).description !== null;
     }
-
-    public static getType(tag: ITag): string {
-        if (this.isHistorianTag(tag)) return TagType.tagHist;
-        return TagType.tagOpc;
-    }
 }

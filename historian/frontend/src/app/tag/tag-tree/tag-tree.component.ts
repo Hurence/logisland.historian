@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
-import { debounceTime, tap } from 'rxjs/operators';
 
 import { Dataset } from '../../dataset/dataset';
 import { JsTreeComponent } from '../../shared/js-tree/js-tree.component';
-import { ITag } from '../modele/tag';
+import { IHistorianTag } from '../modele/HistorianTag';
+import { ITag, Tag } from '../modele/tag';
 import { TagService } from '../service/tag.service';
 import { TreeTagService } from './tree-view-tag.service';
+import { TypesName } from './TypesName';
 
 export interface TreeTagSelect {
   clickedTag: ITag; // undefined if none
@@ -45,19 +46,27 @@ export class TagTreeComponent implements OnInit, OnDestroy {
   }
 
   onAddToDataset(): void {
-    this.getSelectedTagsId().forEach(id => {
-      this.dataSet.addTag(id);
+    this.getSelectedHistorianTags().forEach(tag => {
+      this.dataSet.addTag(tag.id);
+      this.dataTreeComp.setType(tag.id, TypesName.TAG_IN_DATASET);
     });
   }
 
   onRemoveFromDataset(): void {
-    this.getSelectedTagsId().forEach(id => {
-      this.dataSet.removeTag(id);
+    this.getSelectedHistorianTags().forEach(tag => {
+      this.dataSet.removeTag(tag.id);
+      this.dataTreeComp.setType(tag.id, TypesName.TAG_HISTORIAN);
     });
   }
 
-  private getSelectedTagsId(): string[] {
-    return this.dataTreeComp.getBottomSelectedNodesId();
+  private getSelectedHistorianTags(): IHistorianTag[] {
+    const tags: IHistorianTag[] = [];
+    this.dataTreeComp.getBottomSelectedNodes().map(node => {
+      if (Tag.isHistorianTag(node.original.tag)) {
+        tags.push(node.original.tag);
+      }
+    });
+    return tags;
   }
 
   private buildTree(): void {

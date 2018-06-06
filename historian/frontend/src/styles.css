@@ -226,3 +226,8 @@ mark, .mark {
   color: green;
   font-family: FontAwesome;
 }
+.in-dataset:before {
+  content: "\f15b";
+  color: blue;
+  font-family: FontAwesome;
+}
