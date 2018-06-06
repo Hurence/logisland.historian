@@ -9,9 +9,10 @@ import { ITag, Tag } from '../modele/tag';
 import { TagService } from '../service/tag.service';
 import { TreeTagService } from './tree-view-tag.service';
 import { TypesName } from './TypesName';
+import { INodeTree } from '../../shared/js-tree/NodeTree';
 
 export interface TreeTagSelect {
-  clickedTag: ITag; // undefined if none
+  clickedTag: ITag;
   selectedTags: ITag[];
 }
 
@@ -23,7 +24,7 @@ export interface TreeTagSelect {
 export class TagTreeComponent implements OnInit, OnDestroy {
 
 
-  treeDataTag$: Observable<any>; // TODO create a specific type
+  treeDataTag: INodeTree;
 
   @Input() dataSet: Dataset;
   @Output() selectedTagsE = new EventEmitter<TreeTagSelect>();
@@ -34,9 +35,7 @@ export class TagTreeComponent implements OnInit, OnDestroy {
               private treeTagService: TreeTagService) {}
 
   ngOnInit() {
-    this.buildTree();
-    this.dataTreeComp.addEvent('changed.jstree', this.onChange.bind(this));
-    this.dataTreeComp.addEvent('ready.jstree', this.onReady.bind(this));
+    this.initTree();
   }
 
   ngOnDestroy(): void {
@@ -59,6 +58,10 @@ export class TagTreeComponent implements OnInit, OnDestroy {
     });
   }
 
+  refresh(): void {
+    this.rebuildTree();
+  }
+
   private getSelectedHistorianTags(): IHistorianTag[] {
     const tags: IHistorianTag[] = [];
     this.dataTreeComp.getBottomSelectedNodes().map(node => {
@@ -69,9 +72,18 @@ export class TagTreeComponent implements OnInit, OnDestroy {
     return tags;
   }
 
-  private buildTree(): void {
-    const tags: Observable<ITag[]> = this.tagService.gets(Array.from(this.dataSet.getDatasourceIds()));
-    this.treeDataTag$ = this.treeTagService.buildTree(tags, this.dataSet);
+  private initTree(): void {
+    this.rebuildTree();
+    this.dataTreeComp.addEvent('changed.jstree', this.onChange.bind(this));
+    this.dataTreeComp.addEvent('ready.jstree', this.onReady.bind(this));
+    this.dataTreeComp.addEvent('create_node.jstree', this.onReady.bind(this));
+  }
+
+  private rebuildTree(): void {
+    const tags$: Observable<ITag[]> = this.tagService.gets(Array.from(this.dataSet.getDatasourceIds()));
+    this.treeTagService.buildTree(tags$, this.dataSet).subscribe(tree => {
+      this.treeDataTag = tree;
+    });
   }
   /**
    * Emit tag selected when clicking on a node containing a Tag

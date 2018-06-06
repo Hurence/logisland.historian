@@ -35,10 +35,14 @@ export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log('tree changes : ', changes);
-        if (changes.jsonData && changes.jsonData.previousValue !== changes.jsonData.currentValue) {
-            this.ngOnDestroy(); // destroy previous tree
-            this.createDataTree();
+        console.log('jstree change');
+        if (changes.jsonData) {
+            if (changes.jsonData.previousValue === undefined) {
+                this.createDataTree();
+            } else {
+                this.deleteNode('Tags');
+                this.createNode('#', changes.jsonData.currentValue);
+            }
         }
     }
     // : JQuery.EventHandler<TElement> | JQuery.EventHandlerBase<any, JQuery.Event<TElement>> | false
@@ -62,6 +66,14 @@ export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
 
     setType(node: string | any, type: string): void {
         if (this.myTreeJs) this.myTreeJs.set_type(node, type);
+    }
+
+    deleteNode(node: any): void {
+        if (this.myTreeJs) this.myTreeJs.delete_node(node);
+    }
+
+    createNode(parent: any, node: any): void {
+        if (this.myTreeJs) this.myTreeJs.create_node(parent, node);
     }
 
     private createDataTree() {
@@ -114,7 +126,7 @@ export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
     private getTypes(): any {
         const types =  {};
 
-        types[TypesName.ROOT] = {
+        types[TypesName.TAGS] = {
             max_depth: 4,
             max_children: -1,
             valid_children: [TypesName.DOMAIN]

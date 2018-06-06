@@ -1,7 +1,7 @@
 import { ITag, Tag } from '../modele/tag';
 
 export enum TypesName {
-    ROOT = '#',
+    TAGS = 'tags',
     DOMAIN = 'domain',
     SERVER = 'server',
     GROUP = 'group',

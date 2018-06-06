@@ -63,6 +63,7 @@ export class TreeTagService {
         return r;
       },
       new NodeTree({
+        id: 'Tags',
         type: '#',
         cache: true,
         text: 'Tags',

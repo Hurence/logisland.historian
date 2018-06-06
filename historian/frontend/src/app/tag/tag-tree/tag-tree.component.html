@@ -12,4 +12,10 @@ Select a TAG or multiple tags to edit or add to collection
     REMOVE SELECTION FROM DATA SET
 </button>
 
-<app-js-tree [jsonData]="treeDataTag$ | async"></app-js-tree>
+<button type="button" class="btn btn-outline-primary text-uppercase"
+          (click)="refresh()">
+    REFRESH TREE
+</button>
+
+
+<app-js-tree [jsonData]="treeDataTag"></app-js-tree>
