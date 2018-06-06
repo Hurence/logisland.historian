@@ -6,11 +6,10 @@ import { DatasetService } from '../../dataset/dataset.service';
 import { ProfilService } from '../../profil/profil.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
 import { QuestionService } from '../../shared/dynamic-form/question.service';
-import { Tag, ITag } from '../modele/tag';
-import { TagTreeComponent, TreeTagSelect } from '../tag-tree/tag-tree.component';
 import { IHistorianTag } from '../modele/HistorianTag';
-import { TagService } from '../service/tag.service';
+import { TagType } from '../modele/tag';
 import { ITagFormInput, TagFormInput } from '../tag-form/TagFormInput';
+import { TagTreeComponent, TreeTagSelect } from '../tag-tree/tag-tree.component';
 
 @Component({
   selector: 'app-tag-dashboard',
@@ -26,7 +25,7 @@ export class TagDashboardComponent implements OnInit {
   questionsSingleSelection: QuestionBase<any>[] = [];
 
   @ViewChild(TagTreeComponent)
-  private tsListComp: TagTreeComponent;
+  private tagTreeComp: TagTreeComponent;
 
   constructor(private datasetService: DatasetService,
     private router: Router,
@@ -71,7 +70,7 @@ export class TagDashboardComponent implements OnInit {
   }
 
   onFilterQuery(query: string) {
-    this.tsListComp.dataTreeComp.search(query);
+    this.tagTreeComp.dataTreeComp.search(query);
   }
 
   anyTagSelected(): boolean {
@@ -83,8 +82,9 @@ export class TagDashboardComponent implements OnInit {
   }
   // update tag in tree.
   onTagSaved(tag: IHistorianTag): void {
-    const nodeToUpdate = this.tsListComp.dataTreeComp.getNode(tag.id);
+    const nodeToUpdate = this.tagTreeComp.dataTreeComp.getNode(tag.id);
     Object.assign(nodeToUpdate.original.tag, tag);
+    this.tagTreeComp.dataTreeComp.setType(nodeToUpdate, TagType.tagHist);
   }
 
 }

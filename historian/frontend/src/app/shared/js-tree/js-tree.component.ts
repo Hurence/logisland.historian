@@ -1,8 +1,10 @@
 import 'jquery';
 
-import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChild, OnChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 
-// import $ from 'jquery';
+import { TagType } from '../../tag/modele/tag';
+import { INodeTree } from './NodeTree';
+
 declare const $: JQueryStatic;
 
 @Component({
@@ -53,8 +55,14 @@ export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
         else return undefined;
     }
 
+    setType(node: any, type: string): void {
+        if (this.myTreeJs) this.myTreeJs.set_type(node, type);
+    }
+
     private createDataTree() {
         if (this.jsonData) {
+
+            const types = this.getTypes();
              /*
             this.treeJQuery = $(this.dataTree.nativeElement) TODO find a way to have the method available
             without casting to any (so we would have autocompletion if possible)
@@ -77,8 +85,6 @@ export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
                     data: this.jsonData
                 },
                 plugins: ['search', 'checkbox', 'types'],
-                // 'plugins': ['checkbox', 'contextmenu', 'dnd', 'search', 'sort', 'state', 'types', 'unique', 'wholerow']
-                // 'plugins': ['dnd', 'search', 'sort', 'types', 'unique', 'wholerow', 'json_data', 'changed']
                 checkbox: {
                     visible: true,
                     three_state: true,
@@ -94,59 +100,47 @@ export class JsTreeComponent implements OnInit, OnDestroy, OnChanges {
                     close_opened_onclear: true,
                     search_leaves_only: true,
                 },
-                types: {
-                    '#': {
-                        max_depth: 4,
-                        max_children: -1,
-                        valid_children: ['domlain']
-                    },
-                    domlain: {
-                        max_depth: 3,
-                        max_children: -1,
-                        valid_children: ['server']
-                    },
-                    server: {
-                        max_depth: 2,
-                        max_children: -1,
-                        valid_children: ['group']
-                    },
-                    group: {
-                        max_depth: 1,
-                        max_children: -1,
-                        valid_children: ['tag']
-                    },
-                    tag: {
-                        icon: 'fa fa-file',
-                        max_depth: 0,
-                        max_children: 0,
-                        valid_children: []
-                    },
-                },
+                types: types
             });
             this.myTreeJs = ($ as any).jstree.reference(treeJQuery);
         }
     }
-}
 
-export interface INodeTree {
-    children?: INodeTree[];
-    cache?: boolean;
-    text?: string;
-    state?: IState;
-    icon?: string;
-    [key: string]: any;
-  }
-
-export interface IState {
-    opened?: boolean;
-    checked?: boolean;
-    selected?: boolean;
-}
-
-export class NodeTree implements INodeTree {
-
-    constructor(options: INodeTree = {}) {
-        Object.assign(this, options);
+    private getTypes(): any {
+        const types =  {
+            '#': {
+                max_depth: 4,
+                max_children: -1,
+                valid_children: ['domain']
+            },
+            domain: {
+                max_depth: 3,
+                max_children: -1,
+                valid_children: ['server']
+            },
+            server: {
+                max_depth: 2,
+                max_children: -1,
+                valid_children: ['group']
+            },
+            group: {
+                max_depth: 1,
+                max_children: -1,
+                valid_children: ['tag']
+            }
+        };
+        types[TagType.tagHist] = {
+            icon: 'historian-tag',
+            max_depth: 0,
+            max_children: 0,
+            valid_children: []
+        };
+        types[TagType.tagOpc] = {
+            icon: 'fa fa-file',
+            max_depth: 0,
+            max_children: 0,
+            valid_children: []
+        };
+        return types;
     }
-
 }

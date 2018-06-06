@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Dataset } from '../../dataset/dataset';
-import { INodeTree, IState, NodeTree } from '../../shared/js-tree/js-tree.component';
-import { ITag } from '../modele/tag';
+import { INodeTree, IState, NodeTree } from '../../shared/js-tree/NodeTree';
+import { ITag, Tag } from '../modele/tag';
 
 declare const $: JQueryStatic;
 
@@ -45,9 +45,9 @@ export class TreeTagService {
         if (dataSet.containTag(v.id)) {
           checked = true;
         }
-
+        const nodeType = Tag.getType(v);
         const children = new NodeTree({
-          type: 'tag',
+          type: nodeType,
           id: v.id,
           text: v.tag_name,
           // icon: "fa fa-file",
@@ -74,7 +74,6 @@ export class TreeTagService {
     );
     return treeTag;
   }
-
 
   private getOrCreateChildren(obj: INodeTree, value: string, state?: IState): INodeTree {
     const found = obj.children.find(n => n.text === value);

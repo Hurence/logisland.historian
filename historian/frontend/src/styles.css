@@ -221,3 +221,8 @@ mark, .mark {
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
 }
+.historian-tag:before {
+  content: "\f15b";
+  color: green;
+  font-family: FontAwesome;
+}
