@@ -7,11 +7,11 @@
           <app-question [question]="subQuestion" [form]="control"></app-question>
         </div>
 
-        <button (click)="removeItem(i)" type="button">Remove this {{question.itemLabel}}</button>
+        <button (click)="removeItem(i)" type="button">Remove this from {{question.label}}</button>
       </div>
       <br>
     </div>
 
-    <button (click)="addItem()" type="button">Add one {{question.itemLabel}}</button>
+    <button (click)="addItem()" type="button">Add one more in {{question.label}}</button>
   </div>
 </div>

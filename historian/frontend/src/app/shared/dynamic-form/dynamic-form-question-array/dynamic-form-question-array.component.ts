@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
+
 import { ArrayQuestion } from '../question-array';
 import { QuestionControlService } from '../question-control.service';
 
