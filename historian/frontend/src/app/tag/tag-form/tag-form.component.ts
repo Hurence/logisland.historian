@@ -103,7 +103,7 @@ export class TagFormComponent implements OnInit, OnChanges {
     const objForForm = this.prepareObjForForm();
     this.form.reset(objForForm);
     const concatenedLabels: Set<string> = this.tags.reduce((p, c) => {
-      if (Tag.isHistorianTag(c.tag)) {
+      if (Tag.isHistorianTag(c.tag) && c.tag.labels) {
         c.tag.labels.forEach(label => p.add(label));
       }
       return p;

@@ -18,11 +18,13 @@ export class DynamicFormQuestionArrayComponent implements OnInit {
   ngOnInit() {}
 
   addItem(): void {
-    this.formArray.push(this.createAnArrayFormGroup());    
+    this.formArray.push(this.createAnArrayFormGroup());
+    this.formArray.markAsDirty();
   }
 
   removeItem(index: number): void {
-    this.formArray.removeAt(index);       
+    this.formArray.removeAt(index);
+    this.formArray.markAsDirty();
   }
 
   at(index: number): FormGroup {
