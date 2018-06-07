@@ -21,8 +21,8 @@ export class TagFormComponent implements OnInit, OnChanges {
   form: FormGroup;
   @Input() questionsMultiSelection: QuestionBase<any>[] = [];
   @Input() questionsSingleSelection: QuestionBase<any>[] = [];
-  @Input() visible = true;
-  @Input() showEntireForm = true;
+  visible = true;
+  showEntireForm = true;
   @Input() tags: ITagFormInput[];
 
   @Output() submitted = new EventEmitter<IHistorianTag>();
@@ -40,14 +40,26 @@ export class TagFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tags  &&
-      changes.tags.currentValue.length !== 0 &&
-      changes.tags.previousValue !== changes.tags.currentValue) {
-        this.rebuildForm();
-        this.updateBtn();
+    if (changes.tags) {
+      if (changes.tags.currentValue.length !== 0) {
+        this.visible = true;
+        if (changes.tags.currentValue.length > 1) {
+          this.showEntireForm = false;
+        } else {
+          this.showEntireForm = true;
+        }
+        if (changes.tags.previousValue !== changes.tags.currentValue) {
+          debugger
+          this.rebuildForm();
+          this.updateBtn();
+          debugger
+        }
+      } else {
+        this.visible = false;
       }
-
+    }
   }
+
   private updateBtn(): void {
     let creation = false;
     let update = false;

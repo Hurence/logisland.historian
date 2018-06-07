@@ -35,9 +35,7 @@
 
             <div class="card-body">
 
-              <app-tag-form [visible]="anyTagSelected()"
-                            [showEntireForm]="!multipleTagSelected()"
-                            [questionsMultiSelection]="questionsMultiSelection"
+              <app-tag-form [questionsMultiSelection]="questionsMultiSelection"
                             [questionsSingleSelection]="questionsSingleSelection"
                             [tags]="selectedTags"
                             (submitted)="onTagSaved($event)"></app-tag-form>
