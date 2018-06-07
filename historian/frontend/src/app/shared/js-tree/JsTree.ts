@@ -27,7 +27,7 @@ export class JsTree {
     destroy(): void {
         this.myTreeJs.destroy(false);
     }
-    
+
     // : JQuery.EventHandler<TElement> | JQuery.EventHandlerBase<any, JQuery.Event<TElement>> | false
     addEvent(eventName: string, callback: any) {
         this.treeJQuery.on(eventName, callback);
@@ -38,11 +38,11 @@ export class JsTree {
     }
 
     getNode(obj: any): any {
-        return this.myTreeJs.get_node(obj);    
+        return this.myTreeJs.get_node(obj);
     }
 
     getBottomSelectedNodes(): any[] {
-        return this.myTreeJs.get_bottom_selected(true);        
+        return this.myTreeJs.get_bottom_selected(true);
     }
 
     setType(node: string | any, type: string): void {
@@ -57,7 +57,7 @@ export class JsTree {
         this.myTreeJs.create_node(parent, node);
     }
 
-    private createDataTree(configObject: any) {    
+    private createDataTree(configObject: any) {
         /*
        this.treeJQuery = $(this.dataTree.nativeElement) TODO find a way to have the method available
        without casting to any (so we would have autocompletion if possible)

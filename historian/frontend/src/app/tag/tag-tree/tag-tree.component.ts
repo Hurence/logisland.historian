@@ -120,7 +120,7 @@ export class TagTreeComponent implements OnInit, OnDestroy {
                 search_leaves_only: true,
             },
             types: this.getTypes()
-        }
+        };
       this.jsTree = new JsTree(this.treeElem, configObject);
   }
 
@@ -201,9 +201,9 @@ export class TagTreeComponent implements OnInit, OnDestroy {
       }
     });
     // find clicked tag if any
-    let clickedTag = undefined;
+    let clickedTag;
     if (node && node.original && node.original.tag) {
-      clickedTag = node.original.tag
+      clickedTag = node.original.tag;
     }
     // build and send info
     const emitItem = {
@@ -220,10 +220,10 @@ export class TagTreeComponent implements OnInit, OnDestroy {
   }
 
   private onCreateNode(e, data): void {
-    const tagIds: Set<string> = this.dataSet.getTagIds()
+    const tagIds: Set<string> = this.dataSet.getTagIds();
     tagIds.forEach(idNode => {
       data.instance._open_to(idNode);
     });
-    this.sendSelectedTags(e, data.instance, Array.from(tagIds))
+    this.sendSelectedTags(e, data.instance, Array.from(tagIds));
   }
 }

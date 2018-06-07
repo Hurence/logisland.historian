@@ -49,10 +49,8 @@ export class TagFormComponent implements OnInit, OnChanges {
           this.showEntireForm = true;
         }
         if (changes.tags.previousValue !== changes.tags.currentValue) {
-          debugger
           this.rebuildForm();
           this.updateBtn();
-          debugger
         }
       } else {
         this.visible = false;
