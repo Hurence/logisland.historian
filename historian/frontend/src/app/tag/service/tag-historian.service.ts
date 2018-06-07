@@ -33,7 +33,7 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
       return this.http.get<IHistorianTag[]>(
         `${this.tagsUrl}tags?fq=${query}`
       ).pipe(
-        catchError(this.help.handleError('getAll()', []))
+        catchError(this.help.handleError(`getQuery(${query})`, []))
       );
     } else {
       return this.getAll();

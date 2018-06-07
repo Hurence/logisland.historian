@@ -10,6 +10,7 @@ import { IHistorianTag } from '../modele/HistorianTag';
 import { TagType } from '../modele/tag';
 import { ITagFormInput, TagFormInput } from '../tag-form/TagFormInput';
 import { TagTreeComponent, TreeTagSelect } from '../tag-tree/tag-tree.component';
+import { TypesName } from '../tag-tree/TypesName';
 
 @Component({
   selector: 'app-tag-dashboard',
@@ -84,7 +85,7 @@ export class TagDashboardComponent implements OnInit {
   onTagSaved(tag: IHistorianTag): void {
     const nodeToUpdate = this.tagTreeComp.jsTree.getNode(tag.id);
     Object.assign(nodeToUpdate.original.tag, tag);
-    this.tagTreeComp.jsTree.setType(nodeToUpdate, TagType.tagHist);
+    this.tagTreeComp.jsTree.setType(nodeToUpdate, TypesName.TAG_HISTORIAN);
   }
 
 }
