@@ -52,8 +52,11 @@ export class TagDashboardComponent implements OnInit {
     this.router.navigate(['../datasources'], { relativeTo: this.route });
   }
 
+
   goToConfig(): void {
-    this.router.navigate(['../configuration'], { relativeTo: this.route });
+    // TODO replace this by goToConfig when the corresponding page will be implemented
+    // this.router.navigate(['../configuration'], { relativeTo: this.route });
+    this.router.navigate(['/grapher'], { relativeTo: this.route });
   }
 
   /* DO
