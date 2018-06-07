@@ -22,12 +22,23 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     );
   }
 
-  // getQuery(query: string): Observable<IHistorianTag[]> {
-  //   return this.http.get<IHistorianTag[]>(`${this.tagsUrl}tags`)
-  //   .pipe(
-  //     catchError(this.help.handleError('getAll()', []))
-  //   );
-  // }
+  getAllFromDatasources(datasourceIds: string[]): Observable<IHistorianTag[]> {
+    const query = datasourceIds.map(id => `datasource_id:"${id}"`).join(' OR ');
+    console.log('query is "' + query + '"');
+    return this.getQuery(query);
+  }
+
+  getQuery(query: string): Observable<IHistorianTag[]> {
+    if (query && query.length !== 0) {
+      return this.http.get<IHistorianTag[]>(
+        `${this.tagsUrl}tags?fq=${query}`
+      ).pipe(
+        catchError(this.help.handleError('getAll()', []))
+      );
+    } else {
+      return this.getAll();
+    }
+  }
 
   get(id: string): Observable<IHistorianTag> {
     return this.http.get<IHistorianTag>(`${this.tagsUrl}tags/${id}`)
