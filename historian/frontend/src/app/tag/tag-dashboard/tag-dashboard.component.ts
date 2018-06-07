@@ -70,7 +70,7 @@ export class TagDashboardComponent implements OnInit {
   }
 
   onFilterQuery(query: string) {
-    this.tagTreeComp.dataTreeComp.search(query);
+    this.tagTreeComp.jsTree.search(query);
   }
 
   anyTagSelected(): boolean {
@@ -82,9 +82,9 @@ export class TagDashboardComponent implements OnInit {
   }
   // update tag in tree.
   onTagSaved(tag: IHistorianTag): void {
-    const nodeToUpdate = this.tagTreeComp.dataTreeComp.getNode(tag.id);
+    const nodeToUpdate = this.tagTreeComp.jsTree.getNode(tag.id);
     Object.assign(nodeToUpdate.original.tag, tag);
-    this.tagTreeComp.dataTreeComp.setType(nodeToUpdate, TagType.tagHist);
+    this.tagTreeComp.jsTree.setType(nodeToUpdate, TagType.tagHist);
   }
 
 }

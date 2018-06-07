@@ -1,16 +1,14 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Dataset } from '../../dataset/dataset';
-import { JsTreeComponent } from '../../shared/js-tree/js-tree.component';
+import { JsTree } from '../../shared/js-tree/JsTree';
 import { IHistorianTag } from '../modele/HistorianTag';
 import { ITag, Tag } from '../modele/tag';
 import { TagService } from '../service/tag.service';
 import { TreeTagService } from './tree-view-tag.service';
 import { TypesName } from './TypesName';
 import { INodeTree } from '../../shared/js-tree/NodeTree';
-import { tap } from 'rxjs/operators';
 
 export interface TreeTagSelect {
   clickedTag: ITag;
@@ -24,13 +22,11 @@ export interface TreeTagSelect {
 })
 export class TagTreeComponent implements OnInit, OnDestroy {
 
-
-  treeDataTag: INodeTree;
-
   @Input() dataSet: Dataset;
   @Output() selectedTagsE = new EventEmitter<TreeTagSelect>();
-  @ViewChild(JsTreeComponent) public dataTreeComp: JsTreeComponent;
-  private modifiedCheckedNodes = new Subject<any>();
+
+  @ViewChild('dataTree') public treeElem: ElementRef;
+  public jsTree: JsTree;
 
   constructor(private tagService: TagService,
               private treeTagService: TreeTagService) {}
@@ -40,32 +36,33 @@ export class TagTreeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.modifiedCheckedNodes) {
-      this.modifiedCheckedNodes.unsubscribe();
-    }
+    if (this.jsTree) this.jsTree.destroy();
   }
 
   onAddToDataset(): void {
     this.getSelectedHistorianTags().forEach(tag => {
       this.dataSet.addTag(tag.id);
-      this.dataTreeComp.setType(tag.id, TypesName.TAG_IN_DATASET);
+      this.jsTree.setType(tag.id, TypesName.TAG_IN_DATASET);
     });
   }
 
   onRemoveFromDataset(): void {
     this.getSelectedHistorianTags().forEach(tag => {
       this.dataSet.removeTag(tag.id);
-      this.dataTreeComp.setType(tag.id, TypesName.TAG_HISTORIAN);
+      this.jsTree.setType(tag.id, TypesName.TAG_HISTORIAN);
     });
   }
 
   refresh(): void {
-    this.rebuildTree();
+    this.loadTreeNode().subscribe(tree => {
+      this.jsTree.deleteNode('Tags');
+      this.jsTree.createNode('#', tree);
+    });
   }
 
   private getSelectedHistorianTags(): IHistorianTag[] {
     const tags: IHistorianTag[] = [];
-    this.dataTreeComp.getBottomSelectedNodes().map(node => {
+    this.jsTree.getBottomSelectedNodes().map(node => {
       if (Tag.isHistorianTag(node.original.tag)) {
         tags.push(node.original.tag);
       }
@@ -74,18 +71,102 @@ export class TagTreeComponent implements OnInit, OnDestroy {
   }
 
   private initTree(): void {
-    this.rebuildTree();
-    this.dataTreeComp.addEvent('changed.jstree', this.onChange.bind(this));
-    this.dataTreeComp.addEvent('ready.jstree', this.onReady.bind(this));
-    this.dataTreeComp.addEvent('create_node.jstree', this.onCreateNode.bind(this));
+    this.createTree();
+    this.loadTreeNode().subscribe(tree => {
+      this.jsTree.createNode('#', tree);
+    });
+    this.jsTree.addEvent('changed.jstree', this.onChange.bind(this));
+    this.jsTree.addEvent('ready.jstree', this.onReady.bind(this));
+    this.jsTree.addEvent('create_node.jstree', this.onCreateNode.bind(this));
   }
 
-  private rebuildTree(): void {
+  private loadTreeNode(): Observable<INodeTree> {
     const tags$: Observable<ITag[]> = this.tagService.gets(Array.from(this.dataSet.getDatasourceIds()));
-    this.treeTagService.buildTree(tags$, this.dataSet).subscribe(tree => {
-      this.treeDataTag = tree;
-    });
+    return this.treeTagService.buildTree(tags$, this.dataSet);
   }
+
+  createTree(): void {
+    const configObject = {
+            core: {
+                multiple: true,
+                animation: 0,
+                check_callback: true,
+                themes: {
+                    stripes: true
+                },
+                expand_selected_onload: true,
+                // loaded_state: true,
+                // keyboard allow to associate keyboard touch to a function
+                // keyboard: {
+                //     'enter': () => alert('presserd enter'),
+                //     'p': () => alert('presserd p'),
+                // },
+                // data: jsonData
+            },
+            plugins: ['search', 'checkbox', 'types'],
+            checkbox: {
+                visible: true,
+                three_state: true,
+                whole_node: false,
+                keep_selected_style: true,
+                tie_selection: true, // an independant array for checkbox when false
+                // cascade_to_hidden: false,
+            },
+            search: {
+                case_sensitive: false,
+                show_only_matches: true,
+                show_only_matches_children: false,
+                close_opened_onclear: true,
+                search_leaves_only: true,
+            },
+            types: this.getTypes()
+        }
+      this.jsTree = new JsTree(this.treeElem, configObject);
+  }
+
+  private getTypes(): any {
+    const types =  {};
+
+    types[TypesName.TAGS] = {
+        max_depth: 4,
+        max_children: -1,
+        valid_children: [TypesName.DOMAIN]
+    };
+    types[TypesName.DOMAIN] = {
+        max_depth: 3,
+        max_children: -1,
+        valid_children: [TypesName.SERVER]
+    };
+    types[TypesName.SERVER] = {
+        max_depth: 2,
+        max_children: -1,
+        valid_children: [TypesName.GROUP]
+    };
+    types[TypesName.GROUP] = {
+        max_depth: 1,
+        max_children: -1,
+        valid_children: [TypesName.TAG_HISTORIAN, TypesName.TAG_OPC, TypesName.TAG_IN_DATASET]
+    };
+    types[TypesName.TAG_HISTORIAN] = {
+        icon: 'historian-tag',
+        max_depth: 0,
+        max_children: 0,
+        valid_children: []
+    };
+    types[TypesName.TAG_OPC] = {
+        icon: 'fa fa-file',
+        max_depth: 0,
+        max_children: 0,
+        valid_children: []
+    };
+    types[TypesName.TAG_IN_DATASET] = {
+        icon: 'in-dataset',
+        max_depth: 0,
+        max_children: 0,
+        valid_children: []
+    };
+    return types;
+}
   /**
    * Emit tag selected when clicking on a node containing a Tag
    *
