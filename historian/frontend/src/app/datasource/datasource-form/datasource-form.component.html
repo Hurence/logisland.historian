@@ -21,7 +21,7 @@
     <div *ngSwitchCase="'OPC-DA'" id="opc-da-form">
       <div class="form-group label-small">
         <label for="name" i18n="name of the datasource|label for name datasource input">NAME</label>
-        <input type="text" class="form-control" formControlName="name" name="name">
+        <input type="text" class="form-control" formControlName="name" name="name" required>
         <div [hidden]="name.valid || name.pristine" class="alert alert-danger"
               i18n="name of the datasource is required|appears when user input is not valid">
               Name is required
@@ -30,7 +30,7 @@
 
       <div class="form-group label-small">
         <label for="name" i18n="decription of the datasource|label for decription datasource input">DESCRIPTION</label>
-        <input type="text" class="form-control" formControlName="description" name="description">
+        <input type="text" class="form-control" formControlName="description" name="description" required>
         <div [hidden]="dsForm.get('description').valid || dsForm.get('description').pristine" class="alert alert-danger"
               i18n="decription of the datasource is required|appears when user input is not valid">
             Description is required
@@ -39,7 +39,7 @@
 
       <div class="form-group label-small">
         <label for="hostAndPort" i18n="host with port of the datasource|label for host with port datasource input">HOST &amp; PORT</label>
-        <input type="text" class="form-control" formControlName="host" name="hostAndPort">
+        <input type="text" class="form-control" formControlName="host" name="hostAndPort" required>
         <div [hidden]="dsForm.get('host').valid || dsForm.get('host').pristine" class="alert alert-danger"
               i18n="host with port of the datasource is required|appears when user input is not valid">
             Host is required
@@ -48,7 +48,7 @@
 
       <div class="form-group label-small">
         <label for="domain" i18n="domain of the datasource|label for domain with port datasource input">DOMAIN</label>
-        <input type="text" class="form-control" formControlName="domain" name="domain">
+        <input type="text" class="form-control" formControlName="domain" name="domain" required>
         <div [hidden]="dsForm.get('domain').valid || dsForm.get('domain').pristine" class="alert alert-danger"
               i18n="domain of the datasource is required|appears when user input is not valid">
             Domain is required
@@ -86,7 +86,7 @@
         <div *ngIf="dsForm.get('auth.cred').value !== 'none'">
           <div class="form-group label-small">
             <label for="user" i18n="user of the datasource for connection|label for user datasource input">USER</label>
-            <input type="text" class="form-control" formControlName="user" name="user">
+            <input type="text" class="form-control" formControlName="user" name="user" required>
           </div>
           <div [hidden]="dsForm.get('auth.user').valid || dsForm.get('auth.user').pristine" class="alert alert-danger"
                 i18n="user of the datasource is required|appears when user input is not valid">
@@ -95,7 +95,7 @@
 
           <div class="form-group label-small">
             <label for="pwd" i18n="password of the datasource for connection|label for password datasource input">PASSWORD</label>
-            <input type="text" class="form-control" formControlName="password" name="password">
+            <input type="text" class="form-control" formControlName="password" name="password" required>
           </div>
           <div [hidden]="dsForm.get('auth.password').valid || dsForm.get('auth.password').pristine" class="alert alert-danger"
                 i18n="password of the datasource is required|appears when user input is not valid">

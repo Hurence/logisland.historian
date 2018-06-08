@@ -78,14 +78,17 @@ mark, .mark {
   height: 35px;
 }
 
-.ng-valid[required], .ng-valid.required {
+/*.ng-valid.required  */
+.ng-valid[required] {
   border-left: 5px solid #42A948;
-  /* green */
 }
 
-.form-group .ng-invalid:not(form) {
+/* .form-group.ng-invalid:not(form) {
   border-left: 5px solid #a94442;
-  /* red */
+} */
+
+.form-control.ng-invalid:not(form) {
+  border-left: 5px solid #a94442;
 }
 
 /* data source list buttons */
