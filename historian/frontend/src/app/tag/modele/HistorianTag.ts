@@ -5,6 +5,7 @@ export interface IHistorianTag extends ITag {
     labels: string[];
     description: string;
     update_rate: number;
+    isHistorianTag?: boolean;
 }
 
 export class HistorianTag extends Tag implements IHistorianTag  {
@@ -12,6 +13,7 @@ export class HistorianTag extends Tag implements IHistorianTag  {
     labels: string[];
     description: string;
     update_rate: number;
+    isHistorianTag = true;
 
     constructor(options: IHistorianTag = {
         description: '',

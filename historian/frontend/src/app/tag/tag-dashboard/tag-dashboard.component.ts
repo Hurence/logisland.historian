@@ -109,7 +109,7 @@ export class TagDashboardComponent implements OnInit, CanComponentDeactivate {
 
   canDeactivate(): Observable<boolean> | boolean {
     if (this.tagFormIsClean()) return true;
-    return this.dialogService.confirm('Discard changes?');
+    return this.dialogService.confirm('Discard changes ?');
   }
 
   private tagFormIsClean(): boolean {
