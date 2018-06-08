@@ -23,6 +23,7 @@ export interface TreeTagSelect {
 export class TagTreeComponent implements OnInit, OnDestroy {
 
   @Input() dataSet: Dataset;
+  @Input() canChangeSelection?: () => Observable<boolean> | boolean;
   @Output() selectedTagsE = new EventEmitter<TreeTagSelect>();
 
   @ViewChild('dataTree') public treeElem: ElementRef;
@@ -32,6 +33,9 @@ export class TagTreeComponent implements OnInit, OnDestroy {
               private treeTagService: TreeTagService) {}
 
   ngOnInit() {
+    if (!this.canChangeSelection) {
+      this.canChangeSelection = () => false;
+    }
     this.initTree();
   }
 
@@ -103,7 +107,8 @@ export class TagTreeComponent implements OnInit, OnDestroy {
                 // },
                 // data: jsonData
             },
-            plugins: ['search', 'checkbox', 'types'],
+            plugins: ['search', 'checkbox', 'types', 'conditionalselectasync'],
+            conditionalselectasync: this.canChangeSelection,
             checkbox: {
                 visible: true,
                 three_state: true,

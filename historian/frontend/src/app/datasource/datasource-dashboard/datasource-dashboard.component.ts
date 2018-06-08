@@ -9,13 +9,14 @@ import { DialogService } from '../../dialog/dialog.service';
 import { Observable } from 'rxjs';
 import { ProfilService } from '../../profil/profil.service';
 import { DatasourcesListComponent } from '../datasources-list/datasources-list.component';
+import { CanComponentDeactivate } from '../../can-deactivate-guard.service';
 
 @Component({
   selector: 'app-datasource-dashboard',
   templateUrl: './datasource-dashboard.component.html',
   styleUrls: ['./datasource-dashboard.component.css']
 })
-export class DatasourceDashboardComponent implements OnInit {
+export class DatasourceDashboardComponent implements OnInit, CanComponentDeactivate {
 
   selectedDatasource: Datasource;
   dataSet: Dataset;
@@ -89,7 +90,7 @@ export class DatasourceDashboardComponent implements OnInit {
     this.dslistComp.getDatasourcesQuery(query);
   }
 
-  private canDeactivate(): Observable<boolean> | boolean {
+  canDeactivate(): Observable<boolean> | boolean {
     if (this.dsFormIsClean()) return true;
     return this.dialogService.confirm('Discard changes?');
   }

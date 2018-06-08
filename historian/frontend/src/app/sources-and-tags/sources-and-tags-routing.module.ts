@@ -23,6 +23,7 @@ const sourcesAndTagsRoutes: Routes = [
         path: 'tags',
         component: TagDashboardComponent ,
         canActivate: [TagsGuard],
+        canDeactivate: [CanDeactivateGuard],
       },
       {
         path: 'configuration',

@@ -4,6 +4,7 @@ import { ElementRef } from '@angular/core';
 
 import { TypesName } from '../../tag/tag-tree/TypesName';
 import { INodeTree } from './NodeTree';
+import { Observable } from 'rxjs/Observable';
 
 declare const $: JQueryStatic;
 
@@ -66,6 +67,8 @@ export class JsTree {
        this.treeJQuery = $(this.dataTree.nativeElement) TODO find a way to have the method available
        without casting to any (so we would have autocompletion if possible)
        */
+        this.createCustomPlugins();
+
         let treeJQuery: any;
         if (configObject) {
             treeJQuery = ($(this.dataTree.nativeElement) as any).jstree(configObject);
@@ -73,5 +76,31 @@ export class JsTree {
             treeJQuery = ($(this.dataTree.nativeElement) as any).jstree();
         }
         this.myTreeJs = ($ as any).jstree.reference(treeJQuery);
+    }
+
+    private createCustomPlugins() {
+        const JQueryRoot = ($ as any);
+        if (!JQueryRoot.jstree.plugins.conditionalselectasync) {
+            JQueryRoot.jstree.defaults.conditionalselectasync = function () {
+                return false;
+            };
+             // initializing the custom conditionalselectasync plugin
+             JQueryRoot.jstree.plugins.conditionalselectasync = function (options, parent) {
+                this.activate_node = function (obj, e) {
+                    const canSwitch: Observable<boolean> | boolean = this.settings.conditionalselectasync();
+                    if (typeof canSwitch === 'boolean') {
+                      if (canSwitch) {
+                        parent.activate_node.call(this, obj, e);
+                      }
+                    } else {
+                      canSwitch.subscribe(can => {
+                          if (can) {
+                            parent.activate_node.call(this, obj, e);
+                          }
+                      });
+                    }
+                };
+            };
+        }
     }
 }

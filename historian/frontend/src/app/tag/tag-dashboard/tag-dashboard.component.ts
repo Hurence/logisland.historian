@@ -11,13 +11,17 @@ import { TagType } from '../modele/tag';
 import { ITagFormInput, TagFormInput } from '../tag-form/TagFormInput';
 import { TagTreeComponent, TreeTagSelect } from '../tag-tree/tag-tree.component';
 import { TypesName } from '../tag-tree/TypesName';
+import { Observable } from 'rxjs/Observable';
+import { DialogService } from '../../dialog/dialog.service';
+import { TagFormComponent } from '../tag-form/tag-form.component';
+import { CanComponentDeactivate } from '../../can-deactivate-guard.service';
 
 @Component({
   selector: 'app-tag-dashboard',
   templateUrl: './tag-dashboard.component.html',
   styleUrls: ['./tag-dashboard.component.css']
 })
-export class TagDashboardComponent implements OnInit {
+export class TagDashboardComponent implements OnInit, CanComponentDeactivate {
 
   dataSet: Dataset;
   selectedTags: ITagFormInput[];
@@ -25,14 +29,15 @@ export class TagDashboardComponent implements OnInit {
   questionsMultiSelection: QuestionBase<any>[] = [];
   questionsSingleSelection: QuestionBase<any>[] = [];
 
-  @ViewChild(TagTreeComponent)
-  private tagTreeComp: TagTreeComponent;
+  @ViewChild(TagTreeComponent) private tagTreeComp: TagTreeComponent;
+  @ViewChild(TagFormComponent) private tagFormComp: TagFormComponent;
 
   constructor(private datasetService: DatasetService,
     private router: Router,
     private route: ActivatedRoute,
     private profilService: ProfilService,
-    private qs: QuestionService) {
+    private qs: QuestionService,
+    private dialogService: DialogService) {
       this.selectedTags = [];
     }
 
@@ -99,6 +104,15 @@ export class TagDashboardComponent implements OnInit {
       } else {
         return tagInput;
       }
-    })
+    });
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if (this.tagFormIsClean()) return true;
+    return this.dialogService.confirm('Discard changes?');
+  }
+
+  private tagFormIsClean(): boolean {
+    return !this.tagFormComp.form.dirty;
   }
 }
