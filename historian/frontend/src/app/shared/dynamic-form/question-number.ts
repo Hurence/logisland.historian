@@ -12,7 +12,7 @@ export class NumberQuestion extends QuestionBase<number> implements INumberQuest
 
   constructor(options: INumberQuestion) {
     super(options);
-    this.min = options.min || (options.min === 0 ? 0 :null);
-    this.max = options.max || (options.max === 0 ? 0 :null);
+    this.min = options.min || (options.min === 0 ? 0 : null);
+    this.max = options.max || (options.max === 0 ? 0 : null);
   }
 }

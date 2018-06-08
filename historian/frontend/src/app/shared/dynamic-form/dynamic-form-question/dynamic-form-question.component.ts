@@ -23,6 +23,6 @@ export class DynamicFormQuestionComponent implements OnInit {
   }
 
   get control(): AbstractControl {
-    return this.form.controls[this.question.key]
+    return this.form.controls[this.question.key];
   }
 }

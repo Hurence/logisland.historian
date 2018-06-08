@@ -1,4 +1,4 @@
-import { INumberQuestion, NumberQuestion } from "./question-number";
+import { INumberQuestion, NumberQuestion } from './question-number';
 
 /*Copied from angular doc*/
 
