@@ -88,7 +88,17 @@ export class TagDashboardComponent implements OnInit {
   onTagSaved(tag: IHistorianTag): void {
     const nodeToUpdate = this.tagTreeComp.jsTree.getNode(tag.id);
     Object.assign(nodeToUpdate.original.tag, tag);
-    this.tagTreeComp.jsTree.setType(nodeToUpdate, TypesName.TAG_HISTORIAN);
+    const currentType = this.tagTreeComp.jsTree.getType(nodeToUpdate);
+    if (currentType === TypesName.TAG_OPC) {
+      this.tagTreeComp.jsTree.setType(nodeToUpdate, TypesName.TAG_HISTORIAN);
+    }
+    this.selectedTags = this.selectedTags.map(tagInput => {
+      if (tagInput.tag.id === tag.id) {
+        tagInput.isCreation = false;
+        return tagInput;
+      } else {
+        return tagInput;
+      }
+    })
   }
-
 }

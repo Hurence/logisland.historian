@@ -49,6 +49,10 @@ export class JsTree {
         this.myTreeJs.set_type(node, type);
     }
 
+    getType(node: string | any): string {
+        return this.myTreeJs.get_type(node);
+    }
+
     deleteNode(node: any): void {
         this.myTreeJs.delete_node(node);
     }
