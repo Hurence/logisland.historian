@@ -4,6 +4,7 @@ import { ArrayQuestion } from './question-array';
 import { QuestionBase } from './question-base';
 import { DropdownQuestion } from './question-dropdown';
 import { TextboxQuestion } from './question-textbox';
+import { NumberQuestion } from './question-number';
 
 @Injectable()
 export class QuestionService {
@@ -153,10 +154,11 @@ export class QuestionService {
         order: 2
       }),
 
-      new TextboxQuestion({
+      new NumberQuestion({
         key: 'update_rate',
-        label: 'UPDATE RATE',
-        order: 3
+        label: 'UPDATE RATE',        
+        order: 3,
+        min: 0,
       }),
     ];
 
