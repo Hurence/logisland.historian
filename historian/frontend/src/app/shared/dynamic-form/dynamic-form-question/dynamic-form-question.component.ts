@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 
 import { QuestionBase } from '../question-base';
 import { QuestionControlService } from '../question-control.service';
@@ -18,7 +18,11 @@ export class DynamicFormQuestionComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  get isValid() {
-    return this.form.controls[this.question.key].disabled || this.form.controls[this.question.key].valid;
+  get isValid(): boolean {
+    return this.control.disabled || this.control.valid;
+  }
+
+  get control(): AbstractControl {
+    return this.form.controls[this.question.key]
   }
 }

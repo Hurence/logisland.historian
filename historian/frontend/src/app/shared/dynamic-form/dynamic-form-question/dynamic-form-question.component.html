@@ -37,5 +37,15 @@
     <app-dynamic-form-question-array *ngSwitchCase="'array'" [question]="question"
         [form]="form"></app-dynamic-form-question-array>
   </div>
-  <div class="errorMessage alert alert-danger" *ngIf="!isValid">{{question.label}} is required</div>
 
+  <div class="errorMessage alert alert-danger" *ngIf="!isValid">
+    <div *ngIf="control.hasError('required')" class="error">
+      {{question.label}} is required
+    </div>
+    <div *ngIf="control.hasError('min')" class="error">
+      {{question.label}} is to low
+    </div>
+    <div *ngIf="control.hasError('max')" class="error">
+        {{question.label}} is to high
+    </div>
+  </div>

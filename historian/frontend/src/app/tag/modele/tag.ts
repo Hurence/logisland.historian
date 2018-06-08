@@ -66,6 +66,6 @@ export abstract class Tag implements ITag {
     }
 
     public static isHistorianTag(tag: ITag): tag is IHistorianTag {
-        return (tag as IHistorianTag).description !== null;
+        return (tag as IHistorianTag).update_rate !== null;
     }
 }

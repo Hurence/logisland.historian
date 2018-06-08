@@ -158,6 +158,7 @@ export class QuestionService {
         key: 'update_rate',
         label: 'UPDATE RATE',        
         order: 3,
+        required: true,
         min: 0,
       }),
     ];

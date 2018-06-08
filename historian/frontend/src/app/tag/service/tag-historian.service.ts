@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 import { IModelService } from '../../shared/base-model-service';
 import { Utilities } from '../../shared/utilities.service';
@@ -33,6 +33,7 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
       return this.http.get<IHistorianTag[]>(
         `${this.tagsUrl}tags?fq=${query}`
       ).pipe(
+        tap(tags => console.log(`found ${tags.length} historian tags from getQuery(${query})`)),
         catchError(this.help.handleError(`getQuery(${query})`, []))
       );
     } else {
