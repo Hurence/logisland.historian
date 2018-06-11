@@ -1,9 +1,9 @@
-<div [formGroup]="form">    
-  <div [formArrayName]="question.key" class="form-control" [id]="question.key">
-    <div *ngFor="let control of formArray.controls; let i=index" [formGroupName]="i">      
-      
+<div [formGroup]="form">
+  <div [formArrayName]="question.key" class="" [id]="question.key">
+    <div *ngFor="let control of formArray.controls; let i=index" [formGroupName]="i">
+
       <div style="margin-left: 1em;">
-        <div *ngFor="let subQuestion of question.questions" class="form-row">
+        <div *ngFor="let subQuestion of question.questions" class="">
           <app-question [question]="subQuestion" [form]="control"></app-question>
         </div>
 

@@ -1,6 +1,6 @@
 <!-- {{question | json}} -->
   <!-- CHOOSE CONTROL TYPE -->
-  <div [ngSwitch]="question.controlType" class="input-group input-group-sm mb-3  text-capitalize">
+  <div [ngSwitch]="question.controlType" class="input-group mb-3  text-capitalize">
 
     <div class="input-group-prepend">
       <span class="input-group-text bg-primary" id="question.key" [attr.for]="question.key">{{question.label}}</span>
@@ -8,7 +8,7 @@
 
     <!-- TEXTBOX -->
     <ng-container *ngSwitchCase="'textbox'">
-      <div [formGroup]="form">
+      <div [formGroup]="form" class="input-group-container">
         <input [formControlName]="question.key" class="form-control"
           [placeholder]="question.placeholder" [id]="question.key" [type]="question.type"
           [required]="question.required">
@@ -17,7 +17,7 @@
 
     <!-- NUMBER -->
     <ng-container *ngSwitchCase="'number'">
-    <div [formGroup]="form">
+    <div [formGroup]="form" class="input-group-container">
       <input [formControlName]="question.key" class="form-control"
         [placeholder]="question.placeholder" [id]="question.key" [type]="'number'"
         [required]="question.required">
@@ -26,7 +26,7 @@
 
     <!-- SELECT (DROPDOWN)-->
     <ng-container *ngSwitchCase="'dropdown'">
-      <div [formGroup]="form">
+      <div [formGroup]="form" class="input-group-container">
         <select [id]="question.key" [formControlName]="question.key" class]="form-control" [required]="question.required">
           <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
         </select>
