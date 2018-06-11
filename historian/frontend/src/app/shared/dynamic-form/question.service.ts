@@ -71,7 +71,7 @@ export class QuestionService {
 
       new TextboxQuestion({
         key: 'tag_name',
-        label: 'TAG NAME',
+        label: 'tag name',
         order: 4,
         disabled: true,
       }),
@@ -85,45 +85,49 @@ export class QuestionService {
 
       new TextboxQuestion({
         key: 'id',
+        label: 'Id',
         order: 5,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'domain',
+        label: 'Domain',
         order: 6,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'server',
+        label: 'Server',
         order: 7,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'group',
+        label: 'Group',
         order: 8,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'creation_date',
-        label: 'CREATION DATE',
+        label: 'creation date',
         order: 9,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'last_modification_date',
-        label: 'LAST MODIFICATION DATE',
+        label: 'last modification date',
         order: 10,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'last_polling_date',
-        label: 'LAST POLLING DATE',
+        label: 'last polling date',
         order: 11,
         disabled: true
       })
@@ -156,7 +160,7 @@ export class QuestionService {
 
       new NumberQuestion({
         key: 'update_rate',
-        label: 'UPDATE RATE',
+        label: 'update rate',
         order: 3,
         required: true,
         min: 0,
