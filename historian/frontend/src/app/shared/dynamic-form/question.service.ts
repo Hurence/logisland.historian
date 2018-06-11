@@ -142,10 +142,12 @@ export class QuestionService {
 
       new ArrayQuestion<string>({
         key: 'labels',
+        label: 'Labels',
         order: 1,
         questions: [
           new TextboxQuestion({
             key: 'label',
+            label: 'Label',
             placeholder: 'label...',
           })
         ]
@@ -153,6 +155,7 @@ export class QuestionService {
 
       new TextboxQuestion({
         key: 'description',
+        label: 'Description',
         placeholder: 'description...',
         required: true,
         order: 2
