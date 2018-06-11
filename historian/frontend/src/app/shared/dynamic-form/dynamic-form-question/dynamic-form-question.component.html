@@ -32,6 +32,7 @@
       </div>
 
       <button (click)="question.addItem(form)" type="button">Add a label</button>
+
     </div>
   </div>
   <div class="errorMessage alert alert-danger" *ngIf="!isValid">{{question.label}} is required</div>

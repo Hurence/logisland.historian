@@ -24,6 +24,7 @@ import { TreeTagService } from './tag/tag-tree/tree-view-tag.service';
 import { TagHistorianService } from './tag/service/tag-historian.service';
 import { TagOpcService } from './tag/service/tag-opc.service';
 import { Utilities } from './shared/utilities.service';
+import { LineChartComponent } from './graph/line-chart/line-chart.component';
 
 // components
 // router
@@ -33,6 +34,7 @@ import { Utilities } from './shared/utilities.service';
     AppComponent,
     TodoComponent,
     PageNotFoundComponent,
+    LineChartComponent,
   ],
   imports: [
     BrowserModule,

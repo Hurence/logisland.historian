@@ -5,10 +5,11 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { SourcesAndTagsComponent } from './sources-and-tags/sources-and-tags.component';
 import { TodoComponent } from './todo/todo.component';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
+import { LineChartComponent } from './graph/line-chart/line-chart.component';
 
 const routes: Routes = [
   { path: 'sources-and-tags', component: SourcesAndTagsComponent },
-  { path: 'todo', component: TodoComponent },
+  { path: 'grapher', component: LineChartComponent },
   { path: '', redirectTo: 'sources-and-tags', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
