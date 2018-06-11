@@ -1,16 +1,25 @@
-<button type="button" class="btn btn-outline-primary text-uppercase"
-    (click)="onAddToDataset()">
-    ADD SELECTION TO DATA SET
-</button>
+<div class="row">
+  <div class="mx-auto">
 
-<button type="button" class="btn btn-danger text-uppercase"
-          (click)="onRemoveFromDataset()">
-    REMOVE SELECTION FROM DATA SET
-</button>
+    <button type="button" class="btn btn-outline-primary text-uppercase"
+        (click)="onAddToDataset()">
+        ADD SELECTION TO DATA SET
+    </button>
 
-<button type="button" class="btn btn-outline-primary text-uppercase"
-          (click)="refresh()">
-    REFRESH TREE
-</button>
+    <button type="button" class="btn btn-danger text-uppercase"
+              (click)="onRemoveFromDataset()">
+        REMOVE SELECTION FROM DATA SET
+    </button>
 
-<div #dataTree></div>
+    <button type="button" class="btn btn-outline-primary text-uppercase"
+              (click)="refresh()">
+        REFRESH TREE
+    </button>
+
+  </div>
+</div>
+<div class="row">
+  <div class="container-fluid">
+    <div #dataTree></div>
+  </div>
+</div>
