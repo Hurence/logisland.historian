@@ -8,10 +8,13 @@ import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { SearchComponent } from './search/search.component';
 import { DynamicFormQuestionArrayComponent } from './dynamic-form/dynamic-form-question-array/dynamic-form-question-array.component';
 
+import {ChartModule} from 'primeng/chart';
+
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    ChartModule,
   ],
   exports: [
     CommonModule,
@@ -20,6 +23,8 @@ import { DynamicFormQuestionArrayComponent } from './dynamic-form/dynamic-form-q
     ButtonLabelledComponent,
     DynamicFormComponent,
     DynamicFormQuestionComponent,
+    JsTreeComponent,
+    ChartModule,
   ],
   declarations: [
     SearchComponent,
