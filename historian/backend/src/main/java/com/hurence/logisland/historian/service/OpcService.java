@@ -127,6 +127,7 @@ public class OpcService {
                                         .group(tag.getGroup())
                                         .tagName(tag.getName())
                                         .dataType(mapDataType(tag.getType()))
+                                        .datasourceId(datasourceId)
                                         .id(StringUtils.join(new String[]{datasource.getDomain(),
                                                 datasource.getHost(), tag.getName()}, "|"));
                             } catch (Exception e) {

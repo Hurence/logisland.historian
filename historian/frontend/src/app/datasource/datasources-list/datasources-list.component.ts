@@ -19,6 +19,9 @@ export class DatasourcesListComponent implements OnInit {
   @Input() selectedDatasource: Datasource;
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();
 
+  private CANCEL_MSG = 'Cancel';
+  private REMOVE_DATASOURCE_MSG = 'Remove data source';
+
   constructor(private datasourceService: DatasourceService,
               private dialogService: DialogService) { }
 
@@ -37,12 +40,11 @@ export class DatasourcesListComponent implements OnInit {
 
   private onDeleteDatasource(datasource: Datasource): void {
     const msg = `Delete data source ${datasource.description} ${datasource.datasource_type} ?`;
-    this.dialogService.confirm(msg, 'Cancel', 'Remove data source')
+    this.dialogService.confirm(msg, this.CANCEL_MSG, this.REMOVE_DATASOURCE_MSG)
       .subscribe(ok => {
         if (ok) {
           this.datasourceService.delete(datasource)
             .subscribe(deletedDs => {
-              console.log('deleted datasource with id :' + deletedDs.id);
               this.dataSet.removeDatasource(deletedDs);
               this.getDatasources();
             });

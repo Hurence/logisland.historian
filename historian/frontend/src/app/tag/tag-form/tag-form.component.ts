@@ -1,15 +1,15 @@
-import { Component, Input, OnChanges, OnInit, Output, SimpleChanges, EventEmitter, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 import { DialogService } from '../../dialog/dialog.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
 import { QuestionControlService } from '../../shared/dynamic-form/question-control.service';
-import { Tag, ITag } from '../modele/tag';
-import { Observable } from 'rxjs';
-import { TagService } from '../service/tag.service';
 import { IHistorianTag } from '../modele/HistorianTag';
+import { ITag, Tag } from '../modele/tag';
 import { TagHistorianService } from '../service/tag-historian.service';
-import { DynamicFormQuestionComponent } from '../../shared/dynamic-form/dynamic-form-question/dynamic-form-question.component';
+import { ITagFormInput } from './TagFormInput';
+import { ITagFormOutput, TagFormOutput } from './TagFormOutput';
 
 @Component({
   selector: 'app-tag-form',
@@ -19,19 +19,21 @@ import { DynamicFormQuestionComponent } from '../../shared/dynamic-form/dynamic-
 export class TagFormComponent implements OnInit, OnChanges {
 
   form: FormGroup;
-  // submitBtnMsg = 'Save';
   @Input() questionsMultiSelection: QuestionBase<any>[] = [];
   @Input() questionsSingleSelection: QuestionBase<any>[] = [];
-  @Input() visible = true;
-  @Input() showEntireForm = true;
-  @Input() isCreation: boolean;
-  @Input() tag: ITag;
+  visible = true;
+  showEntireForm = true;
+  @Input() tags: ITagFormInput[];
 
   @Output() submitted = new EventEmitter<IHistorianTag>();
-  payLoad = '';
   submitBtnMsg: string;
   private BTN_MSG_ADD = 'Save';
   private BTN_MSG_UPDATE = 'Update';
+  private DISCARD_CHANGE_MSG = 'Are you sure you want to discard changes ?';
+  private SUCCESSFULLY_SAVED_MSG = 'successfully added tag';
+  private FAILED_SAVED_MSG = 'error while saving tag.';
+  private SUCCESSFULLY_UPDATED_MSG = 'successfully updated tag';
+  private FAILED_UPDATED_MSG = 'error while updating tag.';
 
   constructor(private qcs: QuestionControlService,
               private fb: FormBuilder,
@@ -43,18 +45,49 @@ export class TagFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tag  && changes.tag.previousValue !== changes.tag.currentValue) this.rebuildForm();
-    if (changes.isCreation && changes.isCreation.previousValue !== changes.isCreation.currentValue) {
-      if (this.isCreation) {
-        this.submitBtnMsg = this.BTN_MSG_ADD;
+    if (changes.tags) {
+      if (changes.tags.currentValue.length !== 0) {
+        this.visible = true;
+        if (changes.tags.currentValue.length > 1) {
+          this.showEntireForm = false;
+        } else {
+          this.showEntireForm = true;
+        }
+        if (changes.tags.previousValue !== changes.tags.currentValue) {
+          this.rebuildForm();
+          this.updateBtn();
+        }
       } else {
-        this.submitBtnMsg = this.BTN_MSG_UPDATE;
+        this.visible = false;
       }
     }
   }
 
+  private updateBtn(): void {
+    let creation = false;
+    let update = false;
+    this.tags.forEach(i => {
+      if (i.isCreation) {
+        creation = true;
+      } else {
+        update = true;
+      }
+    });
+    if (creation) {
+      if (update) {
+        this.submitBtnMsg = `${this.BTN_MSG_ADD} & ${this.BTN_MSG_UPDATE}`;
+      } else {
+        this.submitBtnMsg = this.BTN_MSG_ADD;
+      }
+    } else if (update) {
+      this.submitBtnMsg = this.BTN_MSG_UPDATE;
+    }
+  }
+
+
+
   revert() { // TODO could be factorized
-    this.dialogService.confirm('Are you sure you want to discard changes ?')
+    this.dialogService.confirm(this.DISCARD_CHANGE_MSG)
       .subscribe(ok => {
         if (ok) this.rebuildForm();
       });
@@ -63,44 +96,40 @@ export class TagFormComponent implements OnInit, OnChanges {
 
   /* save datasource when submitting */
   onSubmit() {
-    const tag = this.prepareSaveTag();
-    if (this.isCreation) {
-      this.subscribeToUpdate(this.tagHistorianService.save(tag),
-      'successfully saved tag',
-      'error while saving data source.');
-    } else {
-      this.subscribeToUpdate(this.tagHistorianService.update(tag),
-      'successfully updated tag',
-      'error while updated data source.');
-    }
+    this.prepareSaveTag().map(o => {
+      if (o.isCreation) {
+        this.subscribeToUpdate(this.tagHistorianService.save(o.tag),
+        this.SUCCESSFULLY_SAVED_MSG,
+        this.FAILED_SAVED_MSG);
+      } else {
+        this.subscribeToUpdate(this.tagHistorianService.update(o.tag),
+        this.SUCCESSFULLY_UPDATED_MSG,
+        this.FAILED_UPDATED_MSG);
+      }
+    });
   }
 
-  private prepareSaveTag(): IHistorianTag {
-    const formModel = this.form.value;
-    const labelArray: FormArray = this.form.controls.labels as FormArray;
-    // deep copy of form model lairs
-    const labelsDeepCopy: string[] = labelArray.getRawValue().map(
-      (obj: {label: string}) => obj.label
-    );
-    // return new `Tag` object containing a combination of original tag value(s)
-    // and deep copies of changed form model values
-    const tag: ITag = Object.assign({} , this.tag);
-    Object.assign(tag, formModel);
-    Object.assign(tag, {labels: labelsDeepCopy});
-
-    return tag as IHistorianTag;
+  private prepareSaveTag(): ITagFormOutput[] {
+    return this.tags.map(i => new TagFormOutput(i, this.form));
   }
 
   /* Fill in form with current datasource properties */
   private rebuildForm(): void { // TODO FACTORIZE SAME IN BOTH
     const objForForm = this.prepareObjForForm();
     this.form.reset(objForForm);
-    const labels = (this.tag as IHistorianTag).labels || [];
-    this.setLabels(labels);
+    const concatenedLabels: Set<string> = this.tags.reduce((p, c) => {
+      if (Tag.isHistorianTag(c.tag) && c.tag.labels) {
+        c.tag.labels.forEach(label => p.add(label));
+      }
+      return p;
+    },
+      new Set<string>()
+    );
+    this.setLabels(concatenedLabels);
   }
 
   private prepareObjForForm(): any {
-    const obj = Object.assign({}, this.tag as any);
+    const obj = Object.assign({}, this.tags[this.tags.length - 1].tag as any);
     delete obj.labels;
     return obj;
   }
@@ -111,18 +140,22 @@ export class TagFormComponent implements OnInit, OnChanges {
     submitted.subscribe(
       tag => {
         this.submitted.emit(tag);
-        this.dialogService.alert(msgSuccess);
+        // this.dialogService.alert(msgSuccess);
+        // TODO use a popup see issue #90
       },
       error => {
         console.error(JSON.stringify(error));
-        this.dialogService.alert(msgError);
+        this.dialogService.alert(`${msgError} : code ${error.status}`);
       }
     );
   }
 
-  private setLabels(labels: string[]): void {
-    if (labels && labels.length !== 0) {
-      const labelsFGs = labels.map((label) => this.fb.group({'label': label}));
+  private setLabels(labels: Set<string>): void {
+    if (labels && labels.size !== 0) {
+      const labelsFGs: FormGroup[] = [];
+      labels.forEach(label => {
+        labelsFGs.push(this.fb.group({'label': label}));
+      });
       const labelFormArray = this.fb.array(labelsFGs);
       this.form.setControl('labels', labelFormArray);
     } else {

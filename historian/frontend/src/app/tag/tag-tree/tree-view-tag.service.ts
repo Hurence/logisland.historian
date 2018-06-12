@@ -3,8 +3,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Dataset } from '../../dataset/dataset';
-import { INodeTree, IState, NodeTree } from '../../shared/js-tree/js-tree.component';
-import { ITag } from '../modele/tag';
+import { INodeTree, IState, NodeTree } from '../../shared/js-tree/NodeTree';
+import { ITag, Tag } from '../modele/tag';
+import { TypesName } from './TypesName';
 
 declare const $: JQueryStatic;
 
@@ -33,7 +34,6 @@ export class TreeTagService {
     if (dataSet.getDatasourceIds().size === 1) {
       opened = true;
     }
-    const selected = false;
 
     const treeTag =  tags.reduce(
       (r, v, i, a) => {
@@ -41,20 +41,20 @@ export class TreeTagService {
         const server = this.getOrCreateChildren(domain, v['server'],  { opened: opened });
         const group = this.getOrCreateChildren(server, v['group'],  { opened: false });
 
-        let checked = false;
+        let selected = false;
+        let nodeType: string = TypesName.getType(v);
         if (dataSet.containTag(v.id)) {
-          checked = true;
+          selected = true;
+          nodeType = TypesName.TAG_IN_DATASET;
         }
-
         const children = new NodeTree({
-          type: 'tag',
+          type: nodeType,
           id: v.id,
           text: v.tag_name,
           // icon: "fa fa-file",
           state: {
             opened: opened,
             selected: selected,
-            checked: checked,
           },
           children: [],
           tag: v,
@@ -63,6 +63,7 @@ export class TreeTagService {
         return r;
       },
       new NodeTree({
+        id: 'Tags',
         type: '#',
         cache: true,
         text: 'Tags',
@@ -74,7 +75,6 @@ export class TreeTagService {
     );
     return treeTag;
   }
-
 
   private getOrCreateChildren(obj: INodeTree, value: string, state?: IState): INodeTree {
     const found = obj.children.find(n => n.text === value);

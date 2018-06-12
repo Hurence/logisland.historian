@@ -6,35 +6,40 @@ import { DatasetService } from '../../dataset/dataset.service';
 import { ProfilService } from '../../profil/profil.service';
 import { QuestionBase } from '../../shared/dynamic-form/question-base';
 import { QuestionService } from '../../shared/dynamic-form/question.service';
-import { Tag, ITag } from '../modele/tag';
-import { TagTreeComponent, TreeTagSelect } from '../tag-tree/tag-tree.component';
 import { IHistorianTag } from '../modele/HistorianTag';
-import { TagService } from '../service/tag.service';
+import { TagType } from '../modele/tag';
+import { ITagFormInput, TagFormInput } from '../tag-form/TagFormInput';
+import { TagTreeComponent, TreeTagSelect } from '../tag-tree/tag-tree.component';
+import { TypesName } from '../tag-tree/TypesName';
+import { Observable } from 'rxjs/Observable';
+import { DialogService } from '../../dialog/dialog.service';
+import { TagFormComponent } from '../tag-form/tag-form.component';
+import { CanComponentDeactivate } from '../../can-deactivate-guard.service';
 
 @Component({
   selector: 'app-tag-dashboard',
   templateUrl: './tag-dashboard.component.html',
   styleUrls: ['./tag-dashboard.component.css']
 })
-export class TagDashboardComponent implements OnInit {
+export class TagDashboardComponent implements OnInit, CanComponentDeactivate {
 
   dataSet: Dataset;
-  selectedTags: Set<ITag>;
-  lastSelectedTag: ITag;
+  selectedTags: ITagFormInput[];
   filterPlaceHolder = 'Type to filter by type or by description...';
   questionsMultiSelection: QuestionBase<any>[] = [];
   questionsSingleSelection: QuestionBase<any>[] = [];
-  isCreation: boolean;
 
-  @ViewChild(TagTreeComponent)
-  private tsListComp: TagTreeComponent;
+  @ViewChild(TagTreeComponent) private tagTreeComp: TagTreeComponent;
+  @ViewChild(TagFormComponent) private tagFormComp: TagFormComponent;
+  private DISCARD_CHANGE_MSG = 'Discard changes ?';
 
   constructor(private datasetService: DatasetService,
     private router: Router,
     private route: ActivatedRoute,
     private profilService: ProfilService,
-    private qs: QuestionService) {
-      this.selectedTags = new Set();
+    private qs: QuestionService,
+    private dialogService: DialogService) {
+      this.selectedTags = [];
     }
 
   ngOnInit() {
@@ -53,8 +58,11 @@ export class TagDashboardComponent implements OnInit {
     this.router.navigate(['../datasources'], { relativeTo: this.route });
   }
 
+
   goToConfig(): void {
-    this.router.navigate(['../configuration'], { relativeTo: this.route });
+    // TODO replace this by goToConfig when the corresponding page will be implemented
+    // this.router.navigate(['../configuration'], { relativeTo: this.route });
+    this.router.navigate(['/grapher'], { relativeTo: this.route });
   }
 
   /* DO
@@ -63,13 +71,7 @@ export class TagDashboardComponent implements OnInit {
   else add tag to selection */
   onSelectTag(select: TreeTagSelect): void {
     if (select) {
-      this.selectedTags = new Set(select.selectedTags);
-      if (this.multipleTagSelected()) {
-        // nothing
-      } else {
-        this.lastSelectedTag = select.clickedTag;
-        this.updateCreation(this.lastSelectedTag);
-      }
+      this.selectedTags = select.selectedTags.map(tag => new TagFormInput(tag));
     }
   }
 
@@ -78,28 +80,40 @@ export class TagDashboardComponent implements OnInit {
   }
 
   onFilterQuery(query: string) {
-    this.tsListComp.dataTreeComp.search(query);
+    this.tagTreeComp.jsTree.search(query);
   }
 
   anyTagSelected(): boolean {
-    return this.selectedTags.size !== 0;
+    return this.selectedTags.length !== 0;
   }
 
   multipleTagSelected(): boolean {
-    return this.selectedTags.size > 1;
+    return this.selectedTags.length > 1;
   }
   // update tag in tree.
-  onTagSaved(tag: Tag): void {
-    const nodeToUpdate = this.tsListComp.dataTreeComp.getNode(tag.id);
+  onTagSaved(tag: IHistorianTag): void {
+    const nodeToUpdate = this.tagTreeComp.jsTree.getNode(tag.id);
     Object.assign(nodeToUpdate.original.tag, tag);
-    this.updateCreation(tag);
+    const currentType = this.tagTreeComp.jsTree.getType(nodeToUpdate);
+    if (currentType === TypesName.TAG_OPC) {
+      this.tagTreeComp.jsTree.setType(nodeToUpdate, TypesName.TAG_HISTORIAN);
+    }
+    this.selectedTags = this.selectedTags.map(tagInput => {
+      if (tagInput.tag.id === tag.id) {
+        tagInput.isCreation = false;
+        return tagInput;
+      } else {
+        return tagInput;
+      }
+    });
   }
 
-  private updateCreation(tag: ITag): void {
-    if (Tag.isHistorianTag(tag)) {
-      this.isCreation = false;
-    } else {
-      this.isCreation = true;
-    }
+  canDeactivate(): Observable<boolean> | boolean {
+    if (this.tagFormIsClean()) return true;
+    return this.dialogService.confirm(this.DISCARD_CHANGE_MSG);
+  }
+
+  private tagFormIsClean(): boolean {
+    return !this.tagFormComp.form.dirty;
   }
 }

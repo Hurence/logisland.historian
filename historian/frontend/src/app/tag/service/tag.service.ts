@@ -31,7 +31,7 @@ export class TagService implements IModelService<ITag> {
 
   gets(datasourceIds: string[]): Observable<ITag[]> {
     const tagFromOpc: Observable<IOpcTag[]> = this.tagOpcService.gets(datasourceIds);
-    const tagFromHist: Observable<IHistorianTag[]> = this.tagHistorianService.getAll(); // TODO use gets(datasourceIds)
+    const tagFromHist: Observable<IHistorianTag[]> = this.tagHistorianService.getAllFromDatasources(datasourceIds);
     const zippedTags = this.help.zipObs(tagFromOpc, tagFromHist);
     return zippedTags.pipe(
       map(tags => this.mergeTags(tags))

@@ -78,14 +78,17 @@ mark, .mark {
   height: 35px;
 }
 
-.ng-valid[required], .ng-valid.required {
+/*.ng-valid.required  */
+.ng-valid[required] {
   border-left: 5px solid #42A948;
-  /* green */
 }
 
-.form-group .ng-invalid:not(form) {
+/* .form-group.ng-invalid:not(form) {
   border-left: 5px solid #a94442;
-  /* red */
+} */
+
+.form-control.ng-invalid:not(form) {
+  border-left: 5px solid #a94442;
 }
 
 /* data source list buttons */
@@ -220,4 +223,30 @@ mark, .mark {
 .footer [class*="col-"]  {
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
+}
+.historian-tag:before {
+  content: "\f15b";
+  color: green;
+  font-family: FontAwesome;
+}
+.in-dataset:before {
+  content: "\f15b";
+  color: blue;
+  font-family: FontAwesome;
+}
+.input-group-container{
+display: block;
+width: 100%;
+}
+.input-group-prepend .input-group-text{
+  font-size: 0.8rem !important;
+}
+.form-control, .input-group-text {
+
+    border-radius: 0rem;
+}
+
+.alert {
+position: relative;
+padding: .25rem .25rem;
 }

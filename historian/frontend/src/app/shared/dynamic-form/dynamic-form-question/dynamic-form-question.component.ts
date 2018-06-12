@@ -1,20 +1,28 @@
-import { Component, Input } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, AbstractControl }        from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 
-import { QuestionBase }     from '../question-base';
+import { QuestionBase } from '../question-base';
 import { QuestionControlService } from '../question-control.service';
-import { ArrayQuestion } from '../question-array';
 
 @Component({
   selector: 'app-question',
   templateUrl: './dynamic-form-question.component.html'
 })
-export class DynamicFormQuestionComponent {
+export class DynamicFormQuestionComponent implements OnInit {
+
   @Input() question: QuestionBase<any>;
   @Input() form: FormGroup;
 
   constructor(private fb: FormBuilder,
     private qcs: QuestionControlService) { }
 
-  get isValid() { return this.form.controls[this.question.key].disabled || this.form.controls[this.question.key].valid; }
+  ngOnInit(): void { }
+
+  get isValid(): boolean {
+    return this.control.disabled || this.control.valid;
+  }
+
+  get control(): AbstractControl {
+    return this.form.controls[this.question.key];
+  }
 }

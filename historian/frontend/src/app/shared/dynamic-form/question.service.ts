@@ -1,16 +1,16 @@
-import { Injectable }       from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { DropdownQuestion } from './question-dropdown';
-import { QuestionBase }     from './question-base';
-import { TextboxQuestion }  from './question-textbox';
 import { ArrayQuestion } from './question-array';
-import { QuestionControlService } from './question-control.service';
+import { QuestionBase } from './question-base';
+import { DropdownQuestion } from './question-dropdown';
+import { TextboxQuestion } from './question-textbox';
+import { NumberQuestion } from './question-number';
 
 @Injectable()
 export class QuestionService {
 
 
-  constructor(private qcs: QuestionControlService) {}
+  constructor() {}
 
   getMockQuestions(): QuestionBase<any>[]  {
 
@@ -71,52 +71,63 @@ export class QuestionService {
 
       new TextboxQuestion({
         key: 'tag_name',
-        label: 'TAG NAME',
+        label: 'tag name',
+        order: 4,
+        disabled: true,
+      }),
+
+      new TextboxQuestion({
+        key: 'datasource_id',
+        label: 'Datasource Name',
         order: 4,
         disabled: true,
       }),
 
       new TextboxQuestion({
         key: 'id',
+        label: 'Id',
         order: 5,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'domain',
+        label: 'Domain',
         order: 6,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'server',
+        label: 'Server',
         order: 7,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'group',
+        label: 'Group',
         order: 8,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'creation_date',
-        label: 'CREATION DATE',
+        label: 'creation date',
         order: 9,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'last_modification_date',
-        label: 'LAST MODIFICATION DATE',
+        label: 'last modification date',
         order: 10,
         disabled: true
       }),
 
       new TextboxQuestion({
         key: 'last_polling_date',
-        label: 'LAST POLLING DATE',
+        label: 'last polling date',
         order: 11,
         disabled: true
       })
@@ -131,27 +142,31 @@ export class QuestionService {
 
       new ArrayQuestion<string>({
         key: 'labels',
+        label: 'Labels',
         order: 1,
         questions: [
           new TextboxQuestion({
             key: 'label',
+            label: 'Label',
             placeholder: 'label...',
           })
         ]
-      },
-      this.qcs),
+      }),
 
       new TextboxQuestion({
         key: 'description',
+        label: 'Description',
         placeholder: 'description...',
         required: true,
         order: 2
       }),
 
-      new TextboxQuestion({
+      new NumberQuestion({
         key: 'update_rate',
-        label: 'UPDATE RATE',
-        order: 3
+        label: 'update rate',
+        order: 3,
+        required: true,
+        min: 0,
       }),
     ];
 

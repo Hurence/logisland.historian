@@ -30,7 +30,7 @@ public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
 
 
     // catch all query
-    @Query(value = "*:*", filters = { "text:?0", "record_type:tag" })
+    @Query(value = "*:*", filters = { "?0", "record_type:tag" })
     List<Tag> findByText(String text);
 
     // catch all query
