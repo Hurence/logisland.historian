@@ -141,7 +141,7 @@ export class TagFormComponent implements OnInit, OnChanges {
       tag => {
         this.submitted.emit(tag);
         // this.dialogService.alert(msgSuccess);
-        // TODO use a popup
+        // TODO use a popup see issue #90
       },
       error => {
         console.error(JSON.stringify(error));
