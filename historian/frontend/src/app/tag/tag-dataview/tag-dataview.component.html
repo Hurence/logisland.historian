@@ -1,0 +1,42 @@
+<p-dataView #dv [value]="tags" [paginator]="true" [rows]="25" [pageLinks]="10"
+[sortField]="sortField" [sortOrder]="sortOrder"
+filterBy="data_type,description"
+[loading]="loading"
+[rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+[paginatorPosition]="'both'"
+[layout]="layout">
+<!-- [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords" -->
+  <!-- HEADER -->
+  <p-header>List of Tags , {{sortField}}, {{sortOrder}}
+    <!-- SORT INPUT -->
+    <p-dropdown [options]="sortOptions"  placeholder="Sort By"
+    (onChange)="onSortChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
+    <!-- FILTER INPUT -->
+    <input type="search" pInputText placeholder="Search by type" (keyup)="dv.filter($event.target.value)">    
+    <!-- display option -->
+    <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+  </p-header>
+  <!-- TEMPLATES -->
+  <ng-template let-tag pTemplate="listItem">
+    <div>
+        <!-- {{tag.id}} -->
+        <div>{{tag.description}}</div>
+        <div>{{tag.domain}}</div>
+        <div>{{tag.server}}</div>
+        <div>{{tag.data_type}}</div>
+    </div>
+  </ng-template>
+  <ng-template let-tag pTemplate="gridItem">
+    <div class="ui-g-12 ui-md-3">
+        <!-- {{tag.id}} -->
+        <div>{{tag.description}}</div>
+        <div>{{tag.domain}}</div>
+        <div>{{tag.server}}</div>
+        <div>{{tag.data_type}}</div>
+    </div>
+  </ng-template>
+  <!-- FOOTER -->
+  <p-footer>Choose from the list.
+      <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+  </p-footer>
+</p-dataView>
