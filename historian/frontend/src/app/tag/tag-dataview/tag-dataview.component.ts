@@ -25,7 +25,7 @@ export class TagDataviewComponent implements OnInit {
 
   layout: string; // for dataview comp
 
-  constructor(private tagService: TagHistorianService) { 
+  constructor(private tagService: TagHistorianService) {
     this.loading = true;
     this.layout = 'grid';
   }
@@ -57,13 +57,12 @@ export class TagDataviewComponent implements OnInit {
   }
 
   onSortChange(event) {
-    let value = event.value;
+    const value = event.value;
 
     if (value.indexOf('!') === 0) {
         this.sortOrder = -1;
         this.sortField = value.substring(1, value.length);
-    }
-    else {
+    } else {
         this.sortOrder = 1;
         this.sortField = value;
     }
