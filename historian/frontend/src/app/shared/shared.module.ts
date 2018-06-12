@@ -23,7 +23,6 @@ import {ChartModule} from 'primeng/chart';
     ButtonLabelledComponent,
     DynamicFormComponent,
     DynamicFormQuestionComponent,
-    JsTreeComponent,
     ChartModule,
   ],
   declarations: [

@@ -38,7 +38,14 @@
         [form]="form"></app-dynamic-form-question-array>
   </div>
 
-      <button (click)="question.addItem(form)" type="button">Add a label</button>
-
+  <div class="errorMessage alert alert-danger" *ngIf="!isValid">
+    <div *ngIf="control.hasError('required')" class="error">
+      {{question.label}} is required
+    </div>
+    <div *ngIf="control.hasError('min')" class="error">
+      {{question.label}} is to low
+    </div>
+    <div *ngIf="control.hasError('max')" class="error">
+      {{question.label}} is to high
     </div>
   </div>
