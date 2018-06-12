@@ -70,7 +70,7 @@ export class TagTreeComponent implements OnInit, OnDestroy {
       this.loadTreeNode().subscribe(tree => {
         this.jsTree.deleteNode('Tags');
         this.jsTree.createNode('#', tree);
-      })
+      });
     });
   }
 
