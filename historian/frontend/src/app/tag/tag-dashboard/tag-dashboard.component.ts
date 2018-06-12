@@ -31,6 +31,7 @@ export class TagDashboardComponent implements OnInit, CanComponentDeactivate {
 
   @ViewChild(TagTreeComponent) private tagTreeComp: TagTreeComponent;
   @ViewChild(TagFormComponent) private tagFormComp: TagFormComponent;
+  private DISCARD_CHANGE_MSG = 'Discard changes ?';
 
   constructor(private datasetService: DatasetService,
     private router: Router,
@@ -109,7 +110,7 @@ export class TagDashboardComponent implements OnInit, CanComponentDeactivate {
 
   canDeactivate(): Observable<boolean> | boolean {
     if (this.tagFormIsClean()) return true;
-    return this.dialogService.confirm('Discard changes ?');
+    return this.dialogService.confirm(this.DISCARD_CHANGE_MSG);
   }
 
   private tagFormIsClean(): boolean {

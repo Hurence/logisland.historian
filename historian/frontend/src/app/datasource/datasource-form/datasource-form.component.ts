@@ -29,6 +29,11 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private BTN_MSG_UPDATE = 'Update Data source';
   private CREADENTIAL_NONE = 'none';
   private CREADENTIAL_NORMAL = 'normal';
+  private DISCARD_CHANGE_QUESTION_MSG = 'Are you sure you want to discard changes ?';
+  private SUCCESSFULLY_SAVED_MSG = 'successfully added datasource';
+  private FAILED_SAVED_MSG = 'error while saving data source.';
+  private SUCCESSFULLY_UPDATED_MSG = 'successfully updated datasource';
+  private FAILED_UPDATED_MSG = 'error while updating data source.';
 
   constructor(private fb: FormBuilder,
     private datasourceService: DatasourceService,
@@ -64,7 +69,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   // restore form with clean values
   revert() { // TODO could be factorized
-    this.dialogService.confirm('Are you sure you want to discard changes ?')
+    this.dialogService.confirm(this.DISCARD_CHANGE_QUESTION_MSG)
       .subscribe(ok => {
         if (ok) this.rebuildForm();
       });
@@ -140,12 +145,12 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     this.datasource = this.prepareSaveDatasource();
     if (this.isCreation) {
       this.subscribeToUpdate(this.datasourceService.save(this.datasource),
-        'successfully added datasource',
-        'error while saving data source.');
+        this.SUCCESSFULLY_SAVED_MSG,
+        this.FAILED_SAVED_MSG);
     } else {
       this.subscribeToUpdate(this.datasourceService.update(this.datasource),
-        'successfully updated datasource',
-        'error while updating data source.');
+      this.SUCCESSFULLY_UPDATED_MSG,
+      this.FAILED_UPDATED_MSG);
     }
   }
   /* subscribe to update or save request

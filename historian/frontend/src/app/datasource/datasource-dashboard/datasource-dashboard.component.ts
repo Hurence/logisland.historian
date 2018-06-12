@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
+import { CanComponentDeactivate } from '../../can-deactivate-guard.service';
 import { Dataset } from '../../dataset/dataset';
 import { DatasetService } from '../../dataset/dataset.service';
-import { Datasource } from '../Datasource';
-import { Router, ActivatedRoute } from '@angular/router';
-import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
 import { DialogService } from '../../dialog/dialog.service';
-import { Observable } from 'rxjs';
 import { ProfilService } from '../../profil/profil.service';
+import { Datasource } from '../Datasource';
+import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
 import { DatasourcesListComponent } from '../datasources-list/datasources-list.component';
-import { CanComponentDeactivate } from '../../can-deactivate-guard.service';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -27,6 +27,7 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
   private dsFrmComp: DatasourceFormComponent;
   @ViewChild(DatasourcesListComponent)
   private dslistComp: DatasourcesListComponent;
+  private DISCARD_CHANGE_QUESTION_MSG = 'Discard changes ?';
 
   constructor(private datasetService: DatasetService,
               private router: Router,
@@ -92,7 +93,7 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
 
   canDeactivate(): Observable<boolean> | boolean {
     if (this.dsFormIsClean()) return true;
-    return this.dialogService.confirm('Discard changes?');
+    return this.dialogService.confirm(this.DISCARD_CHANGE_QUESTION_MSG);
   }
 
   private selectDatasource(datasource: Datasource) {

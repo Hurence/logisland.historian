@@ -29,6 +29,11 @@ export class TagFormComponent implements OnInit, OnChanges {
   submitBtnMsg: string;
   private BTN_MSG_ADD = 'Save';
   private BTN_MSG_UPDATE = 'Update';
+  private DISCARD_CHANGE_MSG = 'Are you sure you want to discard changes ?';
+  private SUCCESSFULLY_SAVED_MSG = 'successfully added tag';
+  private FAILED_SAVED_MSG = 'error while saving tag.';
+  private SUCCESSFULLY_UPDATED_MSG = 'successfully updated tag';
+  private FAILED_UPDATED_MSG = 'error while updating tag.';
 
   constructor(private qcs: QuestionControlService,
               private fb: FormBuilder,
@@ -82,7 +87,7 @@ export class TagFormComponent implements OnInit, OnChanges {
 
 
   revert() { // TODO could be factorized
-    this.dialogService.confirm('Are you sure you want to discard changes ?')
+    this.dialogService.confirm(this.DISCARD_CHANGE_MSG)
       .subscribe(ok => {
         if (ok) this.rebuildForm();
       });
@@ -94,12 +99,12 @@ export class TagFormComponent implements OnInit, OnChanges {
     this.prepareSaveTag().map(o => {
       if (o.isCreation) {
         this.subscribeToUpdate(this.tagHistorianService.save(o.tag),
-        'successfully saved tag',
-        'error while saving data source');
+        this.SUCCESSFULLY_SAVED_MSG,
+        this.FAILED_SAVED_MSG);
       } else {
         this.subscribeToUpdate(this.tagHistorianService.update(o.tag),
-        'successfully updated tag',
-        'error while updated data source');
+        this.SUCCESSFULLY_UPDATED_MSG,
+        this.FAILED_UPDATED_MSG);
       }
     });
   }
@@ -136,7 +141,7 @@ export class TagFormComponent implements OnInit, OnChanges {
       tag => {
         this.submitted.emit(tag);
         // this.dialogService.alert(msgSuccess);
-        // TODO use a popup
+        // TODO use a popup see issue #90
       },
       error => {
         console.error(JSON.stringify(error));

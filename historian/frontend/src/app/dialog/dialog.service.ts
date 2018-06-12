@@ -10,7 +10,11 @@ import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
 @Injectable()
 export class DialogService {
 
-
+  private DEFAUT_ALERT_MSG = 'Alert something happened!';
+  private DEFAUT_CONFIRM_TITLE = 'Confirm ?';
+  private DEFAUT_CONFIRM_MSG = '';
+  private DEFAUT_CONFIRM_OK_BTN_MSG = 'Ok';
+  private DEFAUT_CONFIRM_CANCEL_BTN_MSG = 'Cancel';
 
   constructor(private dialog: MatDialog) {}
   /**
@@ -20,10 +24,10 @@ export class DialogService {
   confirm(title?: string, cancelBtnMsg?: string, okBtnMsg?: string, message?: string): Observable<boolean> {
 
     const config = this.getDefautConfig({
-      title: title || 'Confirm ?',
-      cancelBtnMsg: cancelBtnMsg || 'Cancel',
-      okBtnMsg: okBtnMsg || 'Ok',
-      message: message || ''
+      title: title || this.DEFAUT_CONFIRM_TITLE,
+      cancelBtnMsg: cancelBtnMsg || this.DEFAUT_CONFIRM_CANCEL_BTN_MSG,
+      okBtnMsg: okBtnMsg || this.DEFAUT_CONFIRM_OK_BTN_MSG,
+      message: message || this.DEFAUT_CONFIRM_MSG
     });
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, config);
@@ -38,7 +42,7 @@ export class DialogService {
   alert(title?: string, message?: string): Observable<boolean> {
 
     const config = this.getDefautConfig({
-      title: title || 'Alert something happened!',
+      title: title || this.DEFAUT_ALERT_MSG,
       message: message || ''
     });
 

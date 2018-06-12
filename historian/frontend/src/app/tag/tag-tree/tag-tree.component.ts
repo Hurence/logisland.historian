@@ -9,6 +9,10 @@ import { TagService } from '../service/tag.service';
 import { TreeTagService } from './tree-view-tag.service';
 import { TypesName } from './TypesName';
 import { INodeTree } from '../../shared/js-tree/NodeTree';
+import { Subscription, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/delay';
 
 export interface TreeTagSelect {
   clickedTag: ITag;
@@ -28,6 +32,8 @@ export class TagTreeComponent implements OnInit, OnDestroy {
 
   @ViewChild('dataTree') public treeElem: ElementRef;
   public jsTree: JsTree;
+  private loadJsonTree: Subscription;
+  private DELAY = 400; // delay to wait before requesting tags when refreshing.
 
   constructor(private tagService: TagService,
               private treeTagService: TreeTagService) {}
@@ -40,6 +46,7 @@ export class TagTreeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.loadJsonTree) this.loadJsonTree.unsubscribe();
     if (this.jsTree) this.jsTree.destroy();
   }
 
@@ -58,9 +65,12 @@ export class TagTreeComponent implements OnInit, OnDestroy {
   }
 
   refresh(): void {
-    this.loadTreeNode().subscribe(tree => {
-      this.jsTree.deleteNode('Tags');
-      this.jsTree.createNode('#', tree);
+    if (this.loadJsonTree) this.loadJsonTree.unsubscribe();
+    this.loadJsonTree = Observable.of(1).delay(this.DELAY).subscribe(x => {
+      this.loadTreeNode().subscribe(tree => {
+        this.jsTree.deleteNode('Tags');
+        this.jsTree.createNode('#', tree);
+      });
     });
   }
 
@@ -76,8 +86,8 @@ export class TagTreeComponent implements OnInit, OnDestroy {
 
   private initTree(): void {
     this.createTree();
-    this.loadTreeNode().subscribe(tree => {
-      this.jsTree.createNode('#', tree);
+    this.loadJsonTree = this.loadTreeNode().subscribe(tree => {
+        this.jsTree.createNode('#', tree);
     });
     this.jsTree.addEvent('changed.jstree', this.onChange.bind(this));
     this.jsTree.addEvent('ready.jstree', this.onReady.bind(this));
