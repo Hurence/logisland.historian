@@ -21,7 +21,7 @@ const visualizationRoutes: Routes = [
       },
       {
         path: 'todo',
-        component: TodoComponent,        
+        component: TodoComponent,
       },
       {
         path: '',

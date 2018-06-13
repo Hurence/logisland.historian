@@ -18,9 +18,9 @@ export class VisualizationMenuComponent implements OnInit {
         label: 'View',
         icon: 'fa fa-fw fa-file-o',
         items: [
-          { 
-            label: 'Tabular', 
-            icon: 'fa fa-fw fa-plus', 
+          {
+            label: 'Tabular',
+            icon: 'fa fa-fw fa-plus',
             routerLink: ['./tabular'],
           },
           { label: 'Gauge' },
@@ -31,8 +31,8 @@ export class VisualizationMenuComponent implements OnInit {
         label: 'Graph',
         icon: 'fa fa-fw fa-edit',
         items: [
-          { 
-            label: 'Line Chart', 
+          {
+            label: 'Line Chart',
             icon: 'fa fa-fw fa-mail-forward',
             routerLink: ['./lineChart'],
           },
