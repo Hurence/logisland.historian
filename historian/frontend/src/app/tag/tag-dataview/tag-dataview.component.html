@@ -19,20 +19,12 @@ filterBy="data_type,description"
   <!-- TEMPLATES -->
   <ng-template let-tag pTemplate="listItem">
     <div>
-        <!-- {{tag.id}} -->
-        <div>{{tag.description}}</div>
-        <div>{{tag.domain}}</div>
-        <div>{{tag.server}}</div>
-        <div>{{tag.data_type}}</div>
+        <app-tag-cell-component [tag]="tag"></app-tag-cell-component>
     </div>
   </ng-template>
   <ng-template let-tag pTemplate="gridItem">
     <div class="ui-g-12 ui-md-3">
-        <!-- {{tag.id}} -->
-        <div>{{tag.description}}</div>
-        <div>{{tag.domain}}</div>
-        <div>{{tag.server}}</div>
-        <div>{{tag.data_type}}</div>
+        <app-tag-cell-component [tag]="tag"></app-tag-cell-component>
     </div>
   </ng-template>
   <!-- FOOTER -->

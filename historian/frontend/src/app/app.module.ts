@@ -26,6 +26,7 @@ import { TagOpcService } from './tag/service/tag-opc.service';
 import { Utilities } from './shared/utilities.service';
 import { LineChartComponent } from './graph/line-chart/line-chart.component';
 import { VisualizationModule } from './visualization/visualization.module';
+import { MeasuresService } from './measure/measures.service';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { VisualizationModule } from './visualization/visualization.module';
     QuestionControlService,
     TreeTagService,
     Utilities,
+    MeasuresService,
   ],
   bootstrap: [AppComponent],
 })
