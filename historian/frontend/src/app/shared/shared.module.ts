@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { ButtonLabelledComponent } from './button-labelled/button-labelled.component';
 import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-question/dynamic-form-question.component';
@@ -23,6 +23,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
     DropdownModule,
     MenuModule,
     PanelMenuModule,
+    FormsModule
   ],
   exports: [
     CommonModule,
@@ -36,6 +37,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
     DropdownModule,
     MenuModule,
     PanelMenuModule,
+    FormsModule
   ],
   declarations: [
     SearchComponent,

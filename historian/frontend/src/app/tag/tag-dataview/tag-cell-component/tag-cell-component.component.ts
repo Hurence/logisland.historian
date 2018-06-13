@@ -15,7 +15,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 export class TagCellComponentComponent implements OnInit, OnDestroy {
 
   @Input() tag: IHistorianTag;
-  refreshRate = 3000; // milliseconds
+  @Input() refreshRate: number; // milliseconds
   stats: Measures;
   statsUpdater: Subscription;
   lastRefreshed: Date;
@@ -38,8 +38,13 @@ export class TagCellComponentComponent implements OnInit, OnDestroy {
       ),
     ).subscribe();
 
-    this.statsUpdater = interval(this.refreshRate).subscribe(t => {
+    this.measuresService.getStat('series-A').subscribe(stats => {
       this.lastRefreshed = new Date();
+      this.resfreshStats.next(stats);
+    });
+
+    this.statsUpdater = interval(this.refreshRate).subscribe(t => {
+      this.lastRefreshed = new Date(); // TODO add a marker for loading
       this.measuresService.getStat('series-A').subscribe(stats => {
         this.resfreshStats.next(stats);
       });

@@ -14,12 +14,12 @@ export class TagDataviewComponent implements OnInit {
   totalRecords: number; // for dataview comp
 
   sortOptions: SelectItem[]; // for dropdown comp
-
   sortKey: string; // for dropdown comp
-
-  sortField: string; // for dataview comp
-
+  sortField = 'tag_name'; // for dataview comp
   sortOrder: number; // for dataview comp
+
+  refreshOptions: SelectItem[];
+  refreshRate = 10000; // in milli
 
   loading: boolean; // for dataview comp
 
@@ -38,11 +38,19 @@ export class TagDataviewComponent implements OnInit {
     });
 
     this.sortOptions = [
+      {label: 'Name', value: 'tag_name'},
       {label: 'Alphabetical Description', value: '!description'},
       {label: 'Reverse Alphabetical Description', value: 'description'},
       {label: 'Domain', value: 'domain'},
       {label: 'Type', value: 'data_type'},
       {label: 'Reverse Type', value: '!data_type'},
+    ];
+
+    this.refreshOptions = [
+      {label: '1 secondes', value: '1000'},
+      {label: '5 secondes', value: '5000'},
+      {label: '10 secondes', value: '10000'},
+      {label: '60 secondes', value: '60000'},
     ];
   }
 
@@ -60,11 +68,16 @@ export class TagDataviewComponent implements OnInit {
     const value = event.value;
 
     if (value.indexOf('!') === 0) {
-        this.sortOrder = -1;
-        this.sortField = value.substring(1, value.length);
+      this.sortOrder = -1;
+      this.sortField = value.substring(1, value.length);
     } else {
-        this.sortOrder = 1;
-        this.sortField = value;
+      this.sortOrder = 1;
+      this.sortField = value;
     }
-}
+  }
+
+  onRefreshChange(event) {
+    const refreshRate = event.value; // convert into milli
+    this.refreshRate = refreshRate;
+  }
 }
