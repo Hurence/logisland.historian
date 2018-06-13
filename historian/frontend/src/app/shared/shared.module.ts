@@ -11,6 +11,8 @@ import { DynamicFormQuestionArrayComponent } from './dynamic-form/dynamic-form-q
 import { ChartModule } from 'primeng/chart';
 import { DataViewModule } from 'primeng/dataview';
 import { DropdownModule } from 'primeng/dropdown';
+import { MenuModule } from 'primeng/menu';
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 @NgModule({
   imports: [
@@ -18,7 +20,9 @@ import { DropdownModule } from 'primeng/dropdown';
     ReactiveFormsModule,
     ChartModule,
     DataViewModule,
-    DropdownModule
+    DropdownModule,
+    MenuModule,
+    PanelMenuModule,
   ],
   exports: [
     CommonModule,
@@ -29,7 +33,9 @@ import { DropdownModule } from 'primeng/dropdown';
     DynamicFormQuestionComponent,
     ChartModule,
     DataViewModule,
-    DropdownModule
+    DropdownModule,
+    MenuModule,
+    PanelMenuModule,
   ],
   declarations: [
     SearchComponent,

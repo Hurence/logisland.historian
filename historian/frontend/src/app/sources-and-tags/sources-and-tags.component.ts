@@ -1,7 +1,7 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { slideInDownAnimation } from '../animation';
-import { DatasetService } from '../dataset/dataset.service';
+import { Component, OnInit } from '@angular/core';
+
 import { Dataset } from '../dataset/dataset';
+import { DatasetService } from '../dataset/dataset.service';
 
 @Component({
   templateUrl: './sources-and-tags.component.html',

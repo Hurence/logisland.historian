@@ -25,10 +25,8 @@ import { TagHistorianService } from './tag/service/tag-historian.service';
 import { TagOpcService } from './tag/service/tag-opc.service';
 import { Utilities } from './shared/utilities.service';
 import { LineChartComponent } from './graph/line-chart/line-chart.component';
+import { VisualizationModule } from './visualization/visualization.module';
 
-// components
-// router
-// keycloak-angular
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +39,7 @@ import { LineChartComponent } from './graph/line-chart/line-chart.component';
     KeycloakAngularModule,
     HttpClientModule,
     SourcesAndTagsModule,
+    VisualizationModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     SharedModule,
