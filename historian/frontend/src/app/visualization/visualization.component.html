@@ -1,27 +1,15 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2 col-xs-1 p-l-0 p-r-0 collapse show in" id="sidebar">
-            <div class="list-group panel">
-                <div id="menu1">
-                    <a routerLinkActive="active"
-                       routerLink="./tabular"
-                       class="list-group-item" >Tabular</a>
-                    <a  class="list-group-item"
-                        data-parent="#menu1">Gauge</a>
-                </div>
-                <div id="menu2">
-                    <a  routerLinkActive="active"
-                        routerLink="./lineChart"
-                        class="list-group-item">Line Chart</a>
-                    <a class="list-group-item" data-parent="#menu2">Horizon Chart</a>
-                </div>
-            </div>
-        </div>
-        <main class="col-md-10 col-xs-11 p-l-2 p-t-2">
-            <a href="#sidebar" data-toggle="collapse">
-                <i class="fa fa-navicon fa-lg"></i>
-            </a>
-            <router-outlet></router-outlet>
-        </main>
+  <div class="row">
+    <div class="col-md-2 col-xs-1 p-l-0 p-r-0 in collapse show" id="sidebar">
+      <div class="list-group panel">
+        <a routerLinkActive="active" class="list-group-item collapsed" data-parent="#sidebar" routerLink="./tabular" class="list-group-item collapsed">Tabular</a>
+        <a class="list-group-item collapsed" data-parent="#sidebar" class="list-group-item" data-parent="#sidebar">Gauge</a>
+        <a routerLinkActive="active" class="list-group-item" routerLink="./lineChart" data-parent="#sidebar" class="list-group-item">Line Chart</a>
+      </div>
     </div>
+    <main class="col-md-10 col-xs-11 p-l-2 p-t-2">
+      <a class="nav-toggle" href="#sidebar" data-toggle="collapse"><i class="fa fa-navicon fa-lg"></i></a>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

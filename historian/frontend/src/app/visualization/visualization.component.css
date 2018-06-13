@@ -1,24 +1,37 @@
 #sidebar .list-group-item {
-    border-radius: 0;
+    /* border-radius: 0;
     background-color: #333;
     color: #ccc;
     border-left: 0;
     border-right: 0;
     border-color: #2c2c2c;
-    white-space: nowrap;
+    white-space: nowrap; */
+    color: #ccc;
 }
+.list-group-item {
+    background-color: transparent;
+    border: 0px solid rgba(0,0,0,.125);
+}
+.list-group-item.active {
+text-decoration: underline;
+  }
 #sidebar {
-    background-color: #222;
-    height: 100vh;
-    min-height: 100%;
-    vertical-align: top;
-    transition: width 0.3s ease;
+  background: #272c33;
+  height: 100vh;
+  min-height: 100%;
 }
+/* .nav-toggle{
+  left: -10px;
+  position: absolute;
+}
+.nav-toggle.collapsed{
+  left: 0px;
+  position: inherit;
+} */
 /* highlight active menu */
 #sidebar .list-group-item:not(.collapsed) {
-    background-color: #222;
+    background-color: #272c33;
 }
-
 
 /* closed state */
 #sidebar .list-group .list-group-item[aria-expanded="false"]::after {
@@ -31,7 +44,7 @@
 
 /* open state */
 #sidebar .list-group .list-group-item[aria-expanded="true"] {
-  background-color: #222;
+  background-color: #272c33;
 }
 #sidebar .list-group .list-group-item[aria-expanded="true"]::after {
   content: " \f0da";
