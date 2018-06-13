@@ -18,7 +18,7 @@ export class TagCellComponentComponent implements OnInit {
 
   ngOnInit() {
     this.measuresService.getStat('series-A').subscribe(stats => {
-      this.stats = stats
+      this.stats = stats;
     });
   }
 }

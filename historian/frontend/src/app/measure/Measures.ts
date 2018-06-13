@@ -1,7 +1,7 @@
 // holds a double array of values for a Tag between start & stop
 export interface IMeasures {
     end: number; // integer($int64)
-    functions: IAgregation[];	//[...]
+    functions: IAgregation[]; // [...]
     name: string; // correspond to tag id which this measure correpond to
     num_chunks: number;	// integer($int64)
     num_points: number;	// integer($int32)
@@ -9,7 +9,7 @@ export interface IMeasures {
     query_duration: number;	// integer($int64)
     start: number;	// integer($int64)
     timestamps: number[]; // [integer($int64)]
-    values: number[];	// [number($double)]    
+    values: number[];	// [number($double)]
 }
 
 export interface IAgregation {
@@ -46,7 +46,7 @@ export class Measures implements IMeasures {
 
     public static getAgregations(m: Measures): Map<string, number> {
         const map: Map<string, number> = new Map();
-        m.functions.forEach(f => map.set(f.name, f.value));     
+        m.functions.forEach(f => map.set(f.name, f.value));
         return map;
     }
 }
