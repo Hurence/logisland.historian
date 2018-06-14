@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { IHistorianTag } from '../modele/HistorianTag';
 import { TagHistorianService } from '../service/tag-historian.service';
 import { SelectItem } from 'primeng/components/common/selectitem';
+import { Dataset } from '../../dataset/dataset';
+import { DatasetService } from '../../dataset/dataset.service';
 
 @Component({
   selector: 'app-tag-dataview',
@@ -10,6 +12,7 @@ import { SelectItem } from 'primeng/components/common/selectitem';
 })
 export class TagDataviewComponent implements OnInit {
 
+  dataSet: Dataset;
   tags: IHistorianTag[]; // for dataview comp
   totalRecords: number; // for dataview comp
 
@@ -25,17 +28,22 @@ export class TagDataviewComponent implements OnInit {
 
   layout: string; // for dataview comp
 
-  constructor(private tagService: TagHistorianService) {
+  constructor(private tagService: TagHistorianService,
+              private datasetService: DatasetService) {
     this.loading = true;
     this.layout = 'grid';
   }
 
   ngOnInit() {
-    this.tagService.getAll().subscribe(tags => {
-      this.tags = tags;
-      // this.totalRecords = tags.length;
-      this.loading = false;
-    });
+    this.datasetService.getMyDataset()
+      .subscribe(dataSet => {
+        this.dataSet = dataSet;
+        this.tagService.getAllWithIds(Array.from(this.dataSet.getTagIds())).subscribe(tags => {
+          this.tags = tags;
+          // this.totalRecords = tags.length;
+          this.loading = false;
+        });
+      });
 
     this.sortOptions = [
       {label: 'Name', value: 'tag_name'},
