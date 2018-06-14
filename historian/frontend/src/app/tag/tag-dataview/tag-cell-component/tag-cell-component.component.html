@@ -1,8 +1,0 @@
-<h1>{{tag.tag_name}}</h1> <span *ngIf="lastRefreshed">(tag last refreshed at {{lastRefreshed | date:'mediumTime'}})</span>
-<div>{{tag?.description}} ({{tag.data_type}})</div>
-
-<ng-container *ngIf="stats">
-        <div *ngFor="let agg of stats.functions">
-                {{agg.name}} : {{agg.value}}
-        </div>
-</ng-container>

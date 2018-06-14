@@ -8,11 +8,11 @@ import { interval } from 'rxjs/observable/interval';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-tag-cell-component',
-  templateUrl: './tag-cell-component.component.html',
-  styleUrls: ['./tag-cell-component.component.css']
+  selector: 'app-tag-cell',
+  templateUrl: './tag-cell.component.html',
+  styleUrls: ['./tag-cell.component.css']
 })
-export class TagCellComponentComponent implements OnInit, OnDestroy {
+export class TagCellComponent implements OnInit, OnDestroy {
 
   @Input() tag: IHistorianTag;
   @Input() refreshRate: number; // milliseconds

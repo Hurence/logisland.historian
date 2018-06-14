@@ -25,13 +25,11 @@ filterBy="data_type,description"
   </p-header>
   <!-- TEMPLATES -->
   <ng-template let-tag pTemplate="listItem">
-    <div>
-        <app-tag-cell-component [tag]="tag" [refreshRate]="refreshRate"></app-tag-cell-component>
-    </div>
+      <app-tag-list [tag]="tag" [refreshRate]="refreshRate"></app-tag-list>
   </ng-template>
   <ng-template let-tag pTemplate="gridItem">
-    <div class="ui-g-12 ui-md-3">
-        <app-tag-cell-component [tag]="tag" [refreshRate]="refreshRate"></app-tag-cell-component>
+    <div style="padding:.5em" class="ui-g-12 ui-md-3">
+      <app-tag-cell [tag]="tag" [refreshRate]="refreshRate"></app-tag-cell>
     </div>
   </ng-template>
   <!-- FOOTER -->

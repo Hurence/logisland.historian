@@ -6,7 +6,8 @@ import { TagTreeComponent } from './tag-tree/tag-tree.component';
 import { TagFormComponent } from './tag-form/tag-form.component';
 import { TagHelpComponent } from './tag-help/tag-help.component';
 import { TagDataviewComponent } from './tag-dataview/tag-dataview.component';
-import { TagCellComponentComponent } from './tag-dataview/tag-cell-component/tag-cell-component.component';
+import { TagCellComponent } from './tag-dataview/tag-cell/tag-cell.component';
+import { TagListComponent } from './tag-dataview/tag-list/tag-list.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { TagCellComponentComponent } from './tag-dataview/tag-cell-component/tag
     TagFormComponent,
     TagHelpComponent,
     TagDataviewComponent,
-    TagCellComponentComponent,
+    TagCellComponent,
+    TagListComponent,
   ],
   providers: [],
 })
