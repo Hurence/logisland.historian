@@ -1,50 +1,53 @@
-import { OnInit, OnDestroy, Input } from '@angular/core';
+import { OnInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { IHistorianTag } from '../modele/HistorianTag';
 import { Measures } from '../../measure/Measures';
 import { Subscription, Subject, interval } from 'rxjs';
 import { MeasuresService } from '../../measure/measures.service';
 import { debounceTime, switchMap, distinctUntilChanged } from 'rxjs/operators';
 
-export abstract class BaseElementTagComponent implements OnInit, OnDestroy {
+export abstract class BaseElementTagComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input() tag: IHistorianTag;
     @Input() refreshRate: number; // milliseconds
     stats: Measures;
-    statsUpdater: Subscription;
     lastRefreshed: Date;
-    private resfreshStats = new Subject<Measures>();
+    private resfreshStats = new Subject<number>();
+    private initSubscription: Subscription;
     protected measuresService: MeasuresService;
 
     ngOnInit() {
-        this.resfreshStats.pipe(
-            // wait 300ms after each keystroke before considering the term
-            debounceTime(400),
-            // ignore new term if same as previous term
-            distinctUntilChanged(),
-            // switch to new search observable each time the term changes
-            switchMap(
-                (stats: Measures) => {
-                    this.stats = stats;
-                    return 'stats';
-                }
-            ),
-        ).subscribe();
-
-        this.measuresService.getStat('series-A').subscribe(stats => {
+        // initialize stat
+        this.initSubscription = this.measuresService.getStat('series-A').subscribe(stats => {
             this.lastRefreshed = new Date();
-            this.resfreshStats.next(stats);
+            this.stats = stats;
         });
+        // initialize watch of stats with initial refreshrate
+        this.resfreshStats.pipe(
+            debounceTime(400),
+            distinctUntilChanged(),
+            // switch to new intervall observable each time it changes
+            switchMap(period => interval(period)),
+        ).subscribe(
+            (t) => {
+                this.lastRefreshed = new Date(); // TODO add a marker for loading
+                this.measuresService.getStat('series-A').subscribe(stats => {
+                    this.stats = stats;
+                });
+            }
+        );
+        this.resfreshStats.next(this.refreshRate);
+    }
 
-        this.statsUpdater = interval(this.refreshRate).subscribe(t => {
-            this.lastRefreshed = new Date(); // TODO add a marker for loading
-            this.measuresService.getStat('series-A').subscribe(stats => {
-                this.resfreshStats.next(stats);
-            });
-        });
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.refreshRate) {
+            if (changes.refreshRate.currentValue !== changes.refreshRate.previousValue) {
+                this.resfreshStats.next(changes.refreshRate.currentValue);
+            }
+        }
     }
 
     ngOnDestroy(): void {
-        if (this.statsUpdater) this.statsUpdater.unsubscribe();
+        if (this.initSubscription) this.initSubscription.unsubscribe();
         if (this.resfreshStats) this.resfreshStats.unsubscribe();
     }
 }
