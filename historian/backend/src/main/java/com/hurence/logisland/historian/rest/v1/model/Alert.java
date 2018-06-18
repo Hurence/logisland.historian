@@ -19,7 +19,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Alert
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-15T10:59:39.197+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-18T14:48:27.731+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Alert  implements Serializable {

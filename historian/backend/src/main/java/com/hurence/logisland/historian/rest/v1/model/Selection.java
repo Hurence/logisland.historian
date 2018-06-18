@@ -18,10 +18,10 @@ import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
 /**
-* a Selection is a selection of user.
+* a Selection is a selection of tags.
 */
-    @ApiModel(description = "a Selection is a selection of user.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-15T10:59:39.197+02:00")
+    @ApiModel(description = "a Selection is a selection of tags.")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-18T14:48:27.731+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Selection  implements Serializable {
@@ -33,9 +33,9 @@ public class Selection  implements Serializable {
         @Indexed(name = "name")
         private String name = null;
 
-        @JsonProperty("user")
-        @Indexed(name = "user")
-        private String user = null;
+        @JsonProperty("owner")
+        @Indexed(name = "owner")
+        private String owner = null;
 
         @JsonProperty("tags")
         @Indexed(name = "tags")
@@ -51,11 +51,11 @@ public class Selection  implements Serializable {
         }
 
     /**
-        * concatenation of user with name for example
+        * concatenation of owner with name for example
     * @return id
     **/
         @JsonProperty("id")
-    @ApiModelProperty(required = true, value = "concatenation of user with name for example")
+    @ApiModelProperty(required = true, value = "concatenation of owner with name for example")
       @NotNull
 
 
@@ -89,26 +89,26 @@ public class Selection  implements Serializable {
         this.name = name;
         }
 
-        public Selection user(String user) {
-        this.user = user;
+        public Selection owner(String owner) {
+        this.owner = owner;
         return this;
         }
 
     /**
-        * Get user
-    * @return user
+        * Get owner
+    * @return owner
     **/
-        @JsonProperty("user")
+        @JsonProperty("owner")
     @ApiModelProperty(required = true, value = "")
       @NotNull
 
 
-  public String getUser() {
-    return user;
+  public String getOwner() {
+    return owner;
     }
 
-        public void setUser(String user) {
-        this.user = user;
+        public void setOwner(String owner) {
+        this.owner = owner;
         }
 
         public Selection tags(List<String> tags) {
@@ -172,14 +172,14 @@ public class Selection  implements Serializable {
         Selection selection = (Selection) o;
         return Objects.equals(this.id, selection.id) &&
         Objects.equals(this.name, selection.name) &&
-        Objects.equals(this.user, selection.user) &&
+        Objects.equals(this.owner, selection.owner) &&
         Objects.equals(this.tags, selection.tags) &&
         Objects.equals(this.recordType, selection.recordType);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(id, name, user, tags, recordType);
+    return Objects.hash(id, name, owner, tags, recordType);
     }
 
 
@@ -190,7 +190,7 @@ sb.append("class Selection {\n");
 
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
 sb.append("    name: ").append(toIndentedString(name)).append("\n");
-sb.append("    user: ").append(toIndentedString(user)).append("\n");
+sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
 sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
 sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("}");

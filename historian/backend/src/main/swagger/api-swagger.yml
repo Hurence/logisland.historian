@@ -1084,20 +1084,20 @@ definitions:
 
   Selection:
     type: object
-    description: a Selection is a selection of user.
+    description: a Selection is a selection of tags.
     required:
       - id
       - name
-      - user
+      - owner
       - tags
       - record_type
     properties:
       id:
-        description: concatenation of user with name for example
+        description: concatenation of owner with name for example
         type: string
       name:
         type: string
-      user:
+      owner:
         type: string
       tags:
         description: list of tags id in selection
@@ -1107,7 +1107,6 @@ definitions:
       record_type:
         type: string
         default: 'selection'
-
 
   Measures:
     type: object

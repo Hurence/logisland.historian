@@ -25,4 +25,5 @@ public class SecurityService {
         }
         return authentication.getName();
     }
+
 }

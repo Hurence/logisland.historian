@@ -6,9 +6,11 @@ import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticatio
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter;
 import org.keycloak.adapters.springsecurity.filter.KeycloakPreAuthActionsFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,6 +22,7 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+
 
     @Bean
     public GrantedAuthoritiesMapper grantedAuthoritiesMapper() {
@@ -45,12 +48,15 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         return new NullAuthenticatedSessionStrategy();
     }
 
+
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         super.configure(http);
+
         http
+                .csrf().disable()
                 .authorizeRequests()
-                .anyRequest().permitAll();
+                .anyRequest().authenticated();
     }
 
     @Bean
