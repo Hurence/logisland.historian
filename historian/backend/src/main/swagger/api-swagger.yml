@@ -1088,6 +1088,7 @@ definitions:
     required:
       - id
       - name
+      - user
       - tags
       - record_type
     properties:
@@ -1095,6 +1096,8 @@ definitions:
         description: concatenation of user with name for example
         type: string
       name:
+        type: string
+      user:
         type: string
       tags:
         description: list of tags id in selection

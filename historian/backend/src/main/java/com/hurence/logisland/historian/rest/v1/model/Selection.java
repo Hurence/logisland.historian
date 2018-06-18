@@ -21,7 +21,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Selection is a selection of user.
 */
     @ApiModel(description = "a Selection is a selection of user.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-15T10:44:14.995+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-15T10:59:39.197+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Selection  implements Serializable {
@@ -32,6 +32,10 @@ public class Selection  implements Serializable {
         @JsonProperty("name")
         @Indexed(name = "name")
         private String name = null;
+
+        @JsonProperty("user")
+        @Indexed(name = "user")
+        private String user = null;
 
         @JsonProperty("tags")
         @Indexed(name = "tags")
@@ -83,6 +87,28 @@ public class Selection  implements Serializable {
 
         public void setName(String name) {
         this.name = name;
+        }
+
+        public Selection user(String user) {
+        this.user = user;
+        return this;
+        }
+
+    /**
+        * Get user
+    * @return user
+    **/
+        @JsonProperty("user")
+    @ApiModelProperty(required = true, value = "")
+      @NotNull
+
+
+  public String getUser() {
+    return user;
+    }
+
+        public void setUser(String user) {
+        this.user = user;
         }
 
         public Selection tags(List<String> tags) {
@@ -146,13 +172,14 @@ public class Selection  implements Serializable {
         Selection selection = (Selection) o;
         return Objects.equals(this.id, selection.id) &&
         Objects.equals(this.name, selection.name) &&
+        Objects.equals(this.user, selection.user) &&
         Objects.equals(this.tags, selection.tags) &&
         Objects.equals(this.recordType, selection.recordType);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(id, name, tags, recordType);
+    return Objects.hash(id, name, user, tags, recordType);
     }
 
 
@@ -163,6 +190,7 @@ sb.append("class Selection {\n");
 
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
 sb.append("    name: ").append(toIndentedString(name)).append("\n");
+sb.append("    user: ").append(toIndentedString(user)).append("\n");
 sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
 sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("}");
