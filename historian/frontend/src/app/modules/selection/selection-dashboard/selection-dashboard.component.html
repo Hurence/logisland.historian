@@ -8,10 +8,10 @@
 
 <h1>Current selection of tag name : {{currentSelection.name}} </h1>
 
-<div *ngIf="currentSelection?.tagIds?.length === 0">
+<div *ngIf="currentSelection?.tagsId?.length === 0">
     No tag found in this selection
 </div>
 
-<div *ngFor="let tagId of currentSelection.tagIds; index as i">
+<div *ngFor="let tagId of currentSelection.tagsId; index as i">
     tag {{i}} is '{{tagId}}'
 </div>
