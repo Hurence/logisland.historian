@@ -13,6 +13,7 @@ export abstract class BaseElementTagComponent implements OnInit, OnDestroy, OnCh
     lastRefreshed: Date;
     private resfreshStats = new Subject<number>();
     private initSubscription: Subscription;
+    private refreshSubscription: Subscription;
     protected measuresService: MeasuresService;
 
     ngOnInit() {
@@ -22,7 +23,7 @@ export abstract class BaseElementTagComponent implements OnInit, OnDestroy, OnCh
             this.stats = stats;
         });
         // initialize watch of stats with initial refreshrate
-        this.resfreshStats.pipe(
+        this.refreshSubscription = this.resfreshStats.pipe(
             debounceTime(400),
             distinctUntilChanged(),
             // switch to new intervall observable each time it changes
@@ -48,6 +49,6 @@ export abstract class BaseElementTagComponent implements OnInit, OnDestroy, OnCh
 
     ngOnDestroy(): void {
         if (this.initSubscription) this.initSubscription.unsubscribe();
-        if (this.resfreshStats) this.resfreshStats.unsubscribe();
+        if (this.refreshSubscription) this.refreshSubscription.unsubscribe();
     }
 }
