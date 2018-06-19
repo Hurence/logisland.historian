@@ -1,0 +1,17 @@
+<p>
+  selection-dashboard works!
+</p>
+<!-- Select selection -->
+<span>Choose your selection of tags : </span>
+<p-dropdown [options]="selectionOptions"  placeholder="choose a selection of tag" [(ngModel)]="currentSelection"
+(onChange)="onSelectionChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
+
+<h1>Current selection of tag name : {{currentSelection.name}} </h1>
+
+<div *ngIf="currentSelection?.tagIds?.length === 0">
+    No tag found in this selection
+</div>
+
+<div *ngFor="let tagId of currentSelection.tagIds; index as i">
+    tag {{i}} is '{{tagId}}'
+</div>

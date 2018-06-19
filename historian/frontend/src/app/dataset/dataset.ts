@@ -1,4 +1,4 @@
-import { Datasource } from '../datasource/Datasource';
+import { Datasource } from '../modules/datasource/Datasource';
 
 export class Dataset {
 
