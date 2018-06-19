@@ -49,7 +49,7 @@ keycloak:
         - user
       securityCollections:
         - patterns:
-          - /api/v1/tags/*
+          - /api/v1/**
   cors: true
   cors-allowed-headers: "*"
   cors-allowed-methods: "*"
