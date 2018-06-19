@@ -31,6 +31,7 @@ public class SelectionsApiService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private TagsApiService tagsApiService;
+    private SecurityService securityService;
     @Resource
     private SolrSelectionRepository repository;
 
@@ -39,6 +40,11 @@ public class SelectionsApiService {
     @Autowired
     public void setTagsApiService(TagsApiService tagsApiService) {
         this.tagsApiService = tagsApiService;
+    }
+
+    @Autowired
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
     @Autowired
@@ -96,5 +102,14 @@ public class SelectionsApiService {
             body.setId(itemId);
             return Optional.of(repository.save(body));
         }
+    }
+
+    public List<Selection> getAllUserSelection() {
+        String owner = this.securityService.getUserName();
+        String query = "owner:" + owner;
+
+        List<Selection> selections = repository.findByText(query);
+
+        return selections;
     }
 }

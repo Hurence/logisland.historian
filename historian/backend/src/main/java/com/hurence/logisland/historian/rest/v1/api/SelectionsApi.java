@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-18T14:48:27.731+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-19T17:59:13.992+02:00")
 
 @Api(value = "selections", description = "the selections API")
     public interface SelectionsApi {
@@ -58,6 +58,16 @@ import java.util.List;
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
         ResponseEntity<List<Tag>> getAllTagsFromSelection(@ApiParam(value = "id of the selection",required=true) @PathVariable("selectionId") String selectionId);
+
+
+            @ApiOperation(value = "get all slections that this user has access to", nickname = "getAllUserSelection", notes = "retrieve all slections that user has access to", response = Selection.class, responseContainer = "List", tags={ "selection", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "Selection list", response = Selection.class, responseContainer = "List"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/selections",
+                produces = { "application/json" }, 
+            method = RequestMethod.GET)
+        ResponseEntity<List<Selection>> getAllUserSelection();
 
 
             @ApiOperation(value = "get Selection", nickname = "getSelection", notes = "get the corresponding Selection", response = Selection.class, tags={ "selection", })

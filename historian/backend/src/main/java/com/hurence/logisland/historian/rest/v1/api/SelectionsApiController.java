@@ -1,23 +1,16 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
-import com.hurence.logisland.historian.component.IAuthenticationFacade;
 import com.hurence.logisland.historian.rest.v1.model.Selection;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.service.SecurityService;
 import com.hurence.logisland.historian.service.SelectionsApiService;
 import com.hurence.logisland.historian.service.TagsApiService;
-import io.swagger.annotations.ApiParam;
-import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +36,7 @@ public class SelectionsApiController implements SelectionsApi {
 
     @Override
     public ResponseEntity<Selection> addSelectionWithId(@Valid Selection body, String selectionId) {
-        log.info("user is " + securityService.currentUserNameSimple());
+        log.info("user is " + securityService.getUserName());
         Optional<Selection> selection = service.addSelectionWithId(body, selectionId);
         if (selection.isPresent()) {
             return new ResponseEntity<Selection>(selection.get(), HttpStatus.OK);
@@ -54,7 +47,7 @@ public class SelectionsApiController implements SelectionsApi {
 
     @Override
     public ResponseEntity<Selection> deleteSelection(String selectionId) {
-        log.info("user is " + securityService.currentUserNameSimple());
+        log.info("user is " + securityService.getUserName());
         Optional<Selection> selection = service.deleteSelection(selectionId);
         if (selection.isPresent()) {
             return new ResponseEntity<Selection>(selection.get(), HttpStatus.OK);
@@ -71,8 +64,13 @@ public class SelectionsApiController implements SelectionsApi {
     }
 
     @Override
+    public ResponseEntity<List<Selection>> getAllUserSelection() {
+        return new ResponseEntity<List<Selection>>(service.getAllUserSelection(), HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<Selection> getSelection(String selectionId) {
-        log.info("user is " + securityService.currentUserNameSimple());
+        log.info("user is " + securityService.getUserName());
         Optional<Selection> selection = service.getSelection(selectionId);
         if (selection.isPresent()) {
             return new ResponseEntity<Selection>(selection.get(), HttpStatus.OK);
@@ -85,7 +83,7 @@ public class SelectionsApiController implements SelectionsApi {
 
     @Override
     public ResponseEntity<Selection> updateSelection(String selectionId, @Valid Selection selection) {
-        log.info("user is " + securityService.currentUserNameSimple());
+        log.info("user is " + securityService.getUserName());
         Optional<Selection> updatedSelection = service.updateSelection(selection, selectionId);
         if (updatedSelection.isPresent()) {
             return new ResponseEntity<Selection>(updatedSelection.get(), HttpStatus.OK);

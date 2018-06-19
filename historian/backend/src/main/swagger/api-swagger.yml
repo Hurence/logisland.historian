@@ -565,6 +565,26 @@ paths:
              $ref: '#/definitions/Error'
 
   # Selection API
+  /selections:
+    get:
+     tags:
+      - selection
+     operationId: getAllUserSelection
+     summary:  get all slections that this user has access to
+     description: retrieve all slections that user has access to
+     produces:
+        - application/json
+     responses:
+       '200':
+         description: Selection list
+         schema:
+           type: array
+           items:
+             $ref: '#/definitions/Selection'
+       default:
+         description: unexpected error
+         schema:
+           $ref: '#/definitions/Error'
   /selections/{selectionId}:
     get:
      tags:
