@@ -1,9 +1,9 @@
 export interface IMeasuresRequest {
     itemId: string;
-    /* date de début (borne inf) peut-être exprimée sous les formats suivants :
+    /* Start date (inferior bound) can be expressed the following ways:
     timestamp : 4578965 date-time : 2015-11-25T12:06:57.330Z relatif : NOW-30DAYS */
     start?: string;
-    /* date de fin (borne sup) peut-être exprimée sous les formats suivants :
+    /* End date (superior bound) can be expressed the following ways:
     timestamp : 4578965 date-time : 2015-11-25T12:06:57.330Z relatif : NOW-30DAYS */
     end?: string;
     /* Multiple analyses, aggregations, and transformations are allowed per query.
