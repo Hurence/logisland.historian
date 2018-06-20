@@ -35,17 +35,21 @@ info:
     version: @project.version@
 
 keycloak:
-  auth-server-url: http://keycloak:8080/auth
   realm: logisland
+  auth-server-url: http://keycloak:8080/auth
+  ssl-required: external
   resource: logisland-historian
   public-client: true
+  bearer-only: true
+  use-resource-role-mappings: true
+  confidential-port: 0
   principal-attribute: preferred_username
   security-constraints:
     - authRoles:
         - user
       securityCollections:
         - patterns:
-          - /api/v1/tags/*
+          - /api/v1/**
   cors: true
   cors-allowed-headers: "*"
   cors-allowed-methods: "*"

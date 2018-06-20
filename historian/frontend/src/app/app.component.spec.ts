@@ -1,16 +1,11 @@
-import { TestBed, async } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
-// angular modules
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router'; // we also need angular router for Nebular to function properly
-// components
-import { AppComponent } from './app.component';
-// router
-import { AppRoutingModule } from './app-routing.module';
-// nebular modules
 import { AppModule } from './app.module';
 
+// angular modules
+// components
+// router
+// nebular modules
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({

@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-14T17:06:05.558+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-18T14:48:27.731+02:00")
 
 @Api(value = "datasources", description = "the datasources API")
     public interface DatasourcesApi {
@@ -60,7 +60,7 @@ import java.util.List;
         ResponseEntity<List<Datasource>> getAllDatasources(@ApiParam(value = "filter query (lucene syntax like fq=\"labels:opc AND datasources:win32\")") @Valid @RequestParam(value = "fq", required = false) String fq);
 
 
-            @ApiOperation(value = "get all tags from datasources", nickname = "getAllDatasourcesTags", notes = "retrieve all tags through this datasources", response = Tag.class, responseContainer = "List", tags={ "tag","datasource", })
+            @ApiOperation(value = "get all tags from datasources", nickname = "getAllDatasourcesTags", notes = "retrieve all tags through this datasources", response = Tag.class, responseContainer = "List", tags={ "datasource", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "Tag list", response = Tag.class, responseContainer = "List"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })

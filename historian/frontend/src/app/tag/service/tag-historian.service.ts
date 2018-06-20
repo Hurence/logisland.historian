@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
@@ -15,25 +15,38 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
   constructor(private http: HttpClient,
               private help: Utilities) { }
 
-
   getAll(): Observable<IHistorianTag[]> {
     return this.http.get<IHistorianTag[]>(`${this.tagsUrl}tags`)
-    .pipe(
-      map(tags => tags.map(this.markAsHistTag)),
-      catchError(this.help.handleError('getAll()', []))
-    );
+      .pipe(
+        map(tags => tags.map(this.markAsHistTag)),
+        catchError(this.help.handleError('getAll()', []))
+      );
   }
 
   getAllFromDatasources(datasourceIds: string[]): Observable<IHistorianTag[]> {
     const query = datasourceIds.map(id => `datasource_id:"${id}"`).join(' OR ');
-    console.log('query is "' + query + '"');
     return this.getQuery(query);
   }
 
-  getQuery(query: string): Observable<IHistorianTag[]> {
+  getAllWithIds(tagIds: string[]): Observable<IHistorianTag[]> {
+    if (tagIds.length === 0) {
+      return Observable.of([]);
+    } else {
+      const query = tagIds.map(id => `id:"${id}"`).join(' OR ');
+      return this.getQuery(query);
+    }
+  }
+
+  private getQuery(query: string): Observable<IHistorianTag[]> {
     if (query && query.length !== 0) {
+      console.log('query is "' + query + '"');
       return this.http.get<IHistorianTag[]>(
-        `${this.tagsUrl}tags?fq=${query}`
+        `${this.tagsUrl}tags`,
+        {
+          params: {
+            fq : query
+          }
+        }
       ).pipe(
         map(tags => tags.map(this.markAsHistTag)),
         tap(tags => console.log(`found ${tags.length} historian tags from getQuery(${query})`)),

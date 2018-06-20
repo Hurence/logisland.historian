@@ -24,21 +24,23 @@ import { TreeTagService } from './tag/tag-tree/tree-view-tag.service';
 import { TagHistorianService } from './tag/service/tag-historian.service';
 import { TagOpcService } from './tag/service/tag-opc.service';
 import { Utilities } from './shared/utilities.service';
+import { LineChartComponent } from './graph/line-chart/line-chart.component';
+import { VisualizationModule } from './visualization/visualization.module';
+import { MeasuresService } from './measure/measures.service';
 
-// components
-// router
-// keycloak-angular
 @NgModule({
   declarations: [
     AppComponent,
     TodoComponent,
     PageNotFoundComponent,
+    LineChartComponent,
   ],
   imports: [
     BrowserModule,
     KeycloakAngularModule,
     HttpClientModule,
     SourcesAndTagsModule,
+    VisualizationModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     SharedModule,
@@ -67,6 +69,7 @@ import { Utilities } from './shared/utilities.service';
     QuestionControlService,
     TreeTagService,
     Utilities,
+    MeasuresService,
   ],
   bootstrap: [AppComponent],
 })
