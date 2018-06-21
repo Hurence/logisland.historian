@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Utilities } from '../shared/utilities.service';
-import { SelectionService } from '../modules/selection/selection.service';
+
 import { TagsSelection } from '../modules/selection/Selection';
 
 
@@ -23,8 +21,7 @@ export class ProfilService {
 
   private getDefautSelection(): TagsSelection {
     return new TagsSelection({
-      id: 'default',
-      name: 'default selection',
+      id: 'default selection',
       tagsId: [],
     });
   }

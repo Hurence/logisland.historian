@@ -14,6 +14,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { PanelModule } from 'primeng/panel';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { PanelModule } from 'primeng/panel';
     PanelMenuModule,
     FormsModule,
     PanelModule,
+    DialogModule,
   ],
   exports: [
     CommonModule,
@@ -41,6 +43,7 @@ import { PanelModule } from 'primeng/panel';
     PanelMenuModule,
     FormsModule,
     PanelModule,
+    DialogModule,
   ],
   declarations: [
     SearchComponent,

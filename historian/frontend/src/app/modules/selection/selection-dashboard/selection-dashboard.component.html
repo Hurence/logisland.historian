@@ -6,6 +6,8 @@
 <p-dropdown [options]="selectionOptions"  placeholder="choose a selection of tag" [(ngModel)]="currentSelection"
 (onChange)="onSelectionChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
 
+<button type="text" (click)="showDialog()" pButton icon="pi pi-info-circle" label="Show">Add</button>
+
 <h1>Current selection of tag name : {{currentSelection.name}} </h1>
 
 <div *ngIf="currentSelection?.tagsId?.length === 0">
@@ -15,3 +17,18 @@
 <div *ngFor="let tagId of currentSelection.tagsId; index as i">
     tag {{i}} is '{{tagId}}'
 </div>
+
+
+<p-dialog [(visible)]="display">
+    <!-- <app-selection-form></app-selection-form> -->
+
+    <app-selection-form [questions]="selectionQuestions" [item]="selectionOfTagsInForm" (submitted)="onCreated($event)"></app-selection-form>
+
+    <!-- <p-header>
+        Create a new selection of tags
+    </p-header>
+    Content
+    <p-footer>
+        //buttons
+    </p-footer> -->
+</p-dialog>
