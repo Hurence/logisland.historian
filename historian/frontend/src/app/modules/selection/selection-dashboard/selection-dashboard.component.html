@@ -8,7 +8,7 @@
 
 <button type="text" (click)="showDialog()" pButton icon="pi pi-info-circle" label="Show">Add</button>
 
-<h1>Current selection of tag name : {{currentSelection.name}} </h1>
+<h1>Current selection of tag name : {{currentSelection.name}} </h1> {{currentSelection | json}}
 
 <div *ngIf="currentSelection?.tagsId?.length === 0">
     No tag found in this selection

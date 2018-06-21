@@ -21,8 +21,8 @@ export class ProfilService {
 
   private getDefautSelection(): TagsSelection {
     return new TagsSelection({
-      id: 'default selection',
-      tagsId: [],
+      name: 'default selection',
+      tagIds: [],
     });
   }
 }

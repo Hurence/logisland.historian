@@ -1,8 +1,8 @@
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Utilities } from './utilities.service';
+import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
+
+import { Utilities } from './utilities.service';
 
 
 export interface IModelService<M> {
@@ -11,18 +11,14 @@ export interface IModelService<M> {
 
   get(id: string): Observable<M>;
 
-  save(obj: M): Observable<M>;
+  save(obj: M, id: string): Observable<M>;
 
-  update(obj: M): Observable<M>;
+  update(obj: M, id: string): Observable<M>;
 
-  delete(obj: M): Observable<M>;
+  delete(obj: M, id: string): Observable<M>;
 }
 
-export interface IRestModelObject {
-  id: string | number;
-}
-
-export abstract class AbstractModelService<M extends IRestModelObject> implements IModelService<M> {
+export abstract class AbstractModelService<M> implements IModelService<M> {
 
   protected baseUrl: string;
 
@@ -47,15 +43,15 @@ export abstract class AbstractModelService<M extends IRestModelObject> implement
       );
   }
 
-  save(obj: M): Observable<M> {
-    return this.http.post<M>(`${this.baseUrl}/${obj.id}`, obj);
+  save(obj: M, id: string): Observable<M> {
+    return this.http.post<M>(`${this.baseUrl}/${id}`, obj);
   }
 
-  update(obj: M): Observable<M> {
-    return this.http.put<M>(`${this.baseUrl}/${obj.id}`, obj);
+  update(obj: M, id: string): Observable<M> {
+    return this.http.put<M>(`${this.baseUrl}/${id}`, obj);
   }
 
-  delete(obj: M): Observable<M> {
-    return this.http.delete<M>(`${this.baseUrl}/${obj.id}`);
+  delete(obj: M, id: string): Observable<M> {
+    return this.http.delete<M>(`${this.baseUrl}/${id}`);
   }
 }

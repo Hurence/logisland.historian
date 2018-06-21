@@ -32,7 +32,7 @@ export class SelectionDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.selectionQuestions = this.getMyQuestions();
-    this.selectionOfTagsInForm = new TagsSelection({id: 'new selection', tagsId: []});
+    this.selectionOfTagsInForm = new TagsSelection({name: 'new selection', tagIds: []});
     this.currentSelection = this.profilService.currentTagsSelection;
     this.actualizeListOfTagsSelection();
   }
@@ -46,7 +46,7 @@ export class SelectionDashboardComponent implements OnInit {
   }
 
   onCreated(selection: TagsSelection) {
-    this.selectionOfTagsInForm = new TagsSelection({id: 'new selection', tagsId: []});
+    this.selectionOfTagsInForm = new TagsSelection({name: 'new selection', tagIds: []});
     this.currentSelection = selection;
     this.actualizeListOfTagsSelection();
   }
@@ -54,7 +54,7 @@ export class SelectionDashboardComponent implements OnInit {
   actualizeListOfTagsSelection() {
     this.selectionService.getAll().subscribe(selections => {
       this.selectionOptions = selections.map(selection => {
-        return {label: selection.id, value: selection};
+        return {label: selection.name, value: selection};
       });
     });
   }
@@ -64,7 +64,7 @@ export class SelectionDashboardComponent implements OnInit {
     const questions: QuestionBase<any>[] = [
 
       new TextboxQuestion({
-        key: 'id',
+        key: 'name',
         label: 'Name',
         placeholder: 'name for the selection',
         order: 1,

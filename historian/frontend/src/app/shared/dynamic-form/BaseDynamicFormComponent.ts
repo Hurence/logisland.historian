@@ -2,11 +2,16 @@ import { EventEmitter, Input, Output, OnInit, SimpleChanges, OnChanges } from '@
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
-import { IModelService, IRestModelObject } from '../base-model-service';
+import { IModelService } from '../base-model-service';
 import { QuestionBase } from './question-base';
 import { QuestionControlService } from './question-control.service';
 
-export class BaseDynamicFormComponent<T extends IRestModelObject> implements OnInit, OnChanges {
+
+export interface CanGetId {
+  getId(): string;
+}
+
+export abstract class BaseDynamicFormComponent<T extends CanGetId> implements OnInit, OnChanges {
 
   @Input() questions: QuestionBase<any>[] = [];
   @Input() item: T;
@@ -32,7 +37,7 @@ export class BaseDynamicFormComponent<T extends IRestModelObject> implements OnI
 
   onSubmit() {
     this.item = this.prepareSaveItem();
-    this.subscribeToUpdate(this.service.save(this.item),
+    this.subscribeToUpdate(this.service.save(this.item, this.item.getId()),
       this.SUCCESSFULLY_SAVED_MSG,
       this.FAILED_SAVED_MSG);
   }
@@ -44,9 +49,9 @@ export class BaseDynamicFormComponent<T extends IRestModelObject> implements OnI
   }
 
   /* Return a datasource based on formulaire inputs */
-  private prepareSaveItem(): T {
+  protected prepareSaveItem(): T {
     const formModel = this.form.value;
-    const item = Object.assign({}, this.item);
+    const item = Object.assign(this.create(), this.item);
     Object.assign(item, formModel);
     return item;
   }
@@ -64,4 +69,5 @@ export class BaseDynamicFormComponent<T extends IRestModelObject> implements OnI
     );
   }
 
+  protected abstract create(): T;
 }

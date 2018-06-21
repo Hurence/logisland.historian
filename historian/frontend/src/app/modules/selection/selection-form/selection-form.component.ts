@@ -16,4 +16,8 @@ export class SelectionFormComponent extends BaseDynamicFormComponent<TagsSelecti
               protected service: SelectionService) {
     super(qcs, service);
   }
+
+  protected create(): TagsSelection {
+    return new TagsSelection();
+  }
 }
