@@ -1,5 +1,6 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
+import com.hurence.logisland.historian.rest.v1.model.PrivateSelection;
 import com.hurence.logisland.historian.rest.v1.model.Selection;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.service.SecurityService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class SelectionsApiController implements SelectionsApi {
@@ -36,24 +38,60 @@ public class SelectionsApiController implements SelectionsApi {
         this.securityService = securityService;
     }
 
+    public Selection convertToSelection(PrivateSelection pSelection) {
+        Selection selection = new Selection();
+        selection.setName(pSelection.getName());
+        selection.setDescription(pSelection.getDescription());
+        selection.setPermissions(pSelection.getPermissions());
+        selection.setTagIds(pSelection.getTagIds());
+        selection.setOwner(pSelection.getOwner());
+        return selection;
+    }
+
+    public PrivateSelection buildPrivateSelection(Selection selection, String id) {
+        PrivateSelection pSelection = new PrivateSelection();
+        pSelection.setName(selection.getName());
+        pSelection.setDescription(selection.getDescription());
+        pSelection.setPermissions(selection.getPermissions());
+        pSelection.setTagIds(selection.getTagIds());
+        pSelection.setId(id);
+        pSelection.setOwner(selection.getOwner());
+        return pSelection;
+    }
+
+    public static final String ID_SEPARATOR = "|";
+
+    public String buildId(String name, String owner) {
+        return name + ID_SEPARATOR + owner;
+    }
+
     @Override
     public ResponseEntity<Selection> addSelectionWithId(@Valid @RequestBody Selection body,
-                                                        @PathVariable("selectionId") String selectionId) {
-        log.info("user is " + securityService.getUserName());
-        Optional<Selection> selection = service.addSelectionWithId(body, selectionId);
+                                                        @PathVariable("selectionName") String selectionName) {
+        String owner = securityService.getUserName();
+        if (body.getOwner() != null) {
+            if (!owner.equals(body.getOwner())) {
+                return new ResponseEntity<Selection>(HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            body.setOwner(owner);
+        }
+        String id = buildId(selectionName, body.getOwner());
+        PrivateSelection mySelection = buildPrivateSelection(body, id);
+        Optional<PrivateSelection> selection = service.addSelectionWithId(mySelection, mySelection.getId());
         if (selection.isPresent()) {
-            return new ResponseEntity<Selection>(selection.get(), HttpStatus.OK);
+            return new ResponseEntity<Selection>(convertToSelection(selection.get()), HttpStatus.OK);
         } else {
             return new ResponseEntity<Selection>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
-    public ResponseEntity<Selection> deleteSelection(@PathVariable("selectionId") String selectionId) {
-        log.info("user is " + securityService.getUserName());
-        Optional<Selection> selection = service.deleteSelection(selectionId);
+    public ResponseEntity<Selection> deleteSelection(@PathVariable("selectionName") String selectionName) {
+        String id = buildId(selectionName, securityService.getUserName());
+        Optional<PrivateSelection> selection = service.deleteSelection(id);
         if (selection.isPresent()) {
-            return new ResponseEntity<Selection>(selection.get(), HttpStatus.OK);
+            return new ResponseEntity<Selection>(convertToSelection(selection.get()), HttpStatus.OK);
 
         } else {
             return new ResponseEntity<Selection>(HttpStatus.NOT_FOUND);
@@ -62,21 +100,23 @@ public class SelectionsApiController implements SelectionsApi {
     }
 
     @Override
-    public ResponseEntity<List<Tag>> getAllTagsFromSelection(@PathVariable("selectionId") String selectionId) {
+    public ResponseEntity<List<Tag>> getAllTagsFromSelection(@PathVariable("selectionName") String selectionName) {
         return null;
     }
 
     @Override
     public ResponseEntity<List<Selection>> getAllUserSelection() {
-        return new ResponseEntity<List<Selection>>(service.getAllUserSelection(), HttpStatus.OK);
+        return new ResponseEntity<List<Selection>>(service.getAllUserSelection().stream()
+                .map(this::convertToSelection)
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Selection> getSelection(@PathVariable("selectionId") String selectionId) {
-        log.info("user is " + securityService.getUserName());
-        Optional<Selection> selection = service.getSelection(selectionId);
+    public ResponseEntity<Selection> getSelection(@PathVariable("selectionName") String selectionName) {
+        String id = buildId(selectionName, securityService.getUserName());
+        Optional<PrivateSelection> selection = service.getSelection(id);
         if (selection.isPresent()) {
-            return new ResponseEntity<Selection>(selection.get(), HttpStatus.OK);
+            return new ResponseEntity<Selection>(convertToSelection(selection.get()), HttpStatus.OK);
 
         } else {
             return new ResponseEntity<Selection>(HttpStatus.NOT_FOUND);
@@ -85,12 +125,21 @@ public class SelectionsApiController implements SelectionsApi {
     }
 
     @Override
-    public ResponseEntity<Selection> updateSelection(@PathVariable("selectionId") String selectionId,
+    public ResponseEntity<Selection> updateSelection(@PathVariable("selectionName") String selectionName,
                                                      @Valid @RequestBody Selection selection) {
-        log.info("user is " + securityService.getUserName());
-        Optional<Selection> updatedSelection = service.updateSelection(selection, selectionId);
+        String owner = securityService.getUserName();
+        if (selection.getOwner() != null) {
+            if (!owner.equals(selection.getOwner())) {
+                return new ResponseEntity<Selection>(HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            selection.setOwner(owner);
+        }
+        String id = buildId(selectionName, selection.getOwner());
+        PrivateSelection mySelection = buildPrivateSelection(selection, id);
+        Optional<PrivateSelection> updatedSelection = service.updateSelection(mySelection);
         if (updatedSelection.isPresent()) {
-            return new ResponseEntity<Selection>(updatedSelection.get(), HttpStatus.OK);
+            return new ResponseEntity<Selection>(convertToSelection(updatedSelection.get()), HttpStatus.OK);
 
         } else {
             return new ResponseEntity<Selection>(HttpStatus.NOT_FOUND);

@@ -585,7 +585,7 @@ paths:
              description: unexpected error
              schema:
                $ref: '#/definitions/Error'
-  /selections/{selectionId}:
+  /selections/{selectionName}:
       get:
        tags:
          - selection
@@ -595,7 +595,7 @@ paths:
        produces:
          - application/json
        parameters:
-         - name: selectionId
+         - name: selectionName
            in: path
            description: id of the Selection to return
            required: true
@@ -618,7 +618,7 @@ paths:
        description: remove the corresponding Selection
        operationId: deleteSelection
        parameters:
-         - name: selectionId
+         - name: selectionName
            in: path
            description: id of the Selection to be deleted
            required: true
@@ -643,9 +643,9 @@ paths:
        description: update an existing Selection
        operationId: updateSelection
        parameters:
-         - name: selectionId
+         - name: selectionName
            in: path
-           description: selectionId to be updated
+           description: selectionName to be updated
            required: true
            type: string
          - name: body
@@ -676,9 +676,9 @@ paths:
            required: true
            schema:
              $ref: '#/definitions/Selection'
-         - name: selectionId
+         - name: selectionName
            in: path
-           description: selectionId to create
+           description: selectionName to create
            required: true
            type: string
        responses:
@@ -694,7 +694,7 @@ paths:
              $ref: '#/definitions/Error'
 
 
-  /selections/{selectionId}/tags:
+  /selections/{selectionName}/tags:
        get:
          tags:
           - selection
@@ -705,7 +705,7 @@ paths:
          produces:
             - application/json
          parameters:
-           - name: selectionId
+           - name: selectionName
              in: path
              description: id of the selection
              required: true
@@ -1030,24 +1030,55 @@ definitions:
     type: object
     description: a Selection is a selection of tags.
     required:
-      - id
-      - tags
+      - name
+      - tagIds
     properties:
-      id:
-        description: concatenation of owner with name for example
-        type: string
       name:
+        type: string
+      description:
+        description: description for this selection of tags
         type: string
       owner:
         type: string
-      tags:
+      permissions:
+        $ref: '#/definitions/Permissions'
+      tagIds:
         description: list of tags id in selection
         type: array
         items:
           type: string
-      record_type:
-        type: string
-        default: 'selection'
+
+  PrivateSelection:
+    allOf: # Combines the Selection and the inline model
+      - $ref: '#/definitions/Selection'
+      - type: object
+        description: a Selection is a selection of tags.
+        required:
+          - id
+          - owner
+          - record_type
+        properties:
+          id:
+            description: concatenation of owner with name for example
+            type: string
+          record_type:
+            type: string
+            default: 'selection'
+
+  Permissions:
+    type: object
+    description: a Permissions can allow to share something with others. It describes permission for one item.
+    properties:
+      ownerSharing:
+        description: list of users name whose allowed.
+        type: array
+        items:
+          type: string
+      roleSharing:
+        description: list of roles whose allowed.
+        type: array
+        items:
+          type: string
 
   Tag:
     type: object

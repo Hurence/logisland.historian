@@ -4,9 +4,7 @@ import com.hurence.logisland.historian.repository.OpcRepository;
 import com.hurence.logisland.historian.repository.SolrSelectionRepository;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.api.NotFoundException;
-import com.hurence.logisland.historian.rest.v1.model.Datasource;
-import com.hurence.logisland.historian.rest.v1.model.Selection;
-import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.rest.v1.model.*;
 import com.hurence.opc.da.OpcDaConnectionProfile;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -57,10 +55,9 @@ public class SelectionsApiService {
         this.socketTimeoutMillis = socketTimeoutMillis;
     }
 
-
-    public Optional<Selection> deleteSelection(String itemId) {
+    public Optional<PrivateSelection> deleteSelection(String itemId) {
         logger.info("deleting Selection {}", itemId);
-        Optional<Selection> selectionToRemove = repository.findById(itemId);
+        Optional<PrivateSelection> selectionToRemove = repository.findById(itemId);
         if (selectionToRemove.isPresent()) {
             repository.delete(selectionToRemove.get());
         }
@@ -68,13 +65,13 @@ public class SelectionsApiService {
     }
 
 
-    public Optional<Selection> getSelection(String itemId) {
+    public Optional<PrivateSelection> getSelection(String itemId) {
         logger.debug("getting Selection {}", itemId);
         return repository.findById(itemId);
     }
 
 
-    public Optional<Selection> updateSelection(Selection selection) {
+    public Optional<PrivateSelection> updateSelection(PrivateSelection selection) {
         logger.debug("updating Selection {}", selection.getId());
         if (repository.existsById(selection.getId())) {
             return Optional.of(repository.save(selection));
@@ -84,7 +81,7 @@ public class SelectionsApiService {
         }
     }
 
-    public Optional<Selection> updateSelection(Selection selection, String itemId) {
+    public Optional<PrivateSelection> updateSelection(PrivateSelection selection, String itemId) {
         if (!selection.getId().equals(itemId)) {
             return updateSelection(selection.id(itemId));
         } else {
@@ -92,24 +89,22 @@ public class SelectionsApiService {
         }
     }
 
-    public Optional<Selection> addSelectionWithId(Selection body, String itemId) {
-
-        Optional<Selection> datasourceToRemove = getSelection(itemId);
+    public Optional<PrivateSelection> addSelectionWithId(PrivateSelection selection, String itemId) {
+        Optional<PrivateSelection> datasourceToRemove = getSelection(itemId);
         if (datasourceToRemove.isPresent()) {
             logger.info("Selection already {} exists, delete it first", itemId);
             return Optional.empty();
         } else {
-            body.setId(itemId);
-            body.setOwner(this.securityService.getUserName());
-            return Optional.of(repository.save(body));
+            selection.setId(itemId);
+            return Optional.of(repository.save(selection));
         }
     }
 
-    public List<Selection> getAllUserSelection() {
+    public List<PrivateSelection> getAllUserSelection() {
         String owner = this.securityService.getUserName();
         String query = "owner:" + owner;
 
-        List<Selection> selections = repository.findByText(query);
+        List<PrivateSelection> selections = repository.findByText(query);
 
         return selections;
     }
