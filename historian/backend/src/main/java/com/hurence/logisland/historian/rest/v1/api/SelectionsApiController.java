@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -35,7 +37,8 @@ public class SelectionsApiController implements SelectionsApi {
     }
 
     @Override
-    public ResponseEntity<Selection> addSelectionWithId(@Valid Selection body, String selectionId) {
+    public ResponseEntity<Selection> addSelectionWithId(@Valid @RequestBody Selection body,
+                                                        @PathVariable("selectionId") String selectionId) {
         log.info("user is " + securityService.getUserName());
         Optional<Selection> selection = service.addSelectionWithId(body, selectionId);
         if (selection.isPresent()) {
@@ -46,7 +49,7 @@ public class SelectionsApiController implements SelectionsApi {
     }
 
     @Override
-    public ResponseEntity<Selection> deleteSelection(String selectionId) {
+    public ResponseEntity<Selection> deleteSelection(@PathVariable("selectionId") String selectionId) {
         log.info("user is " + securityService.getUserName());
         Optional<Selection> selection = service.deleteSelection(selectionId);
         if (selection.isPresent()) {
@@ -59,7 +62,7 @@ public class SelectionsApiController implements SelectionsApi {
     }
 
     @Override
-    public ResponseEntity<List<Tag>> getAllTagsFromSelection(String selectionId) {
+    public ResponseEntity<List<Tag>> getAllTagsFromSelection(@PathVariable("selectionId") String selectionId) {
         return null;
     }
 
@@ -69,7 +72,7 @@ public class SelectionsApiController implements SelectionsApi {
     }
 
     @Override
-    public ResponseEntity<Selection> getSelection(String selectionId) {
+    public ResponseEntity<Selection> getSelection(@PathVariable("selectionId") String selectionId) {
         log.info("user is " + securityService.getUserName());
         Optional<Selection> selection = service.getSelection(selectionId);
         if (selection.isPresent()) {
@@ -82,7 +85,8 @@ public class SelectionsApiController implements SelectionsApi {
     }
 
     @Override
-    public ResponseEntity<Selection> updateSelection(String selectionId, @Valid Selection selection) {
+    public ResponseEntity<Selection> updateSelection(@PathVariable("selectionId") String selectionId,
+                                                     @Valid @RequestBody Selection selection) {
         log.info("user is " + securityService.getUserName());
         Optional<Selection> updatedSelection = service.updateSelection(selection, selectionId);
         if (updatedSelection.isPresent()) {

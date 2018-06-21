@@ -100,6 +100,7 @@ public class SelectionsApiService {
             return Optional.empty();
         } else {
             body.setId(itemId);
+            body.setOwner(this.securityService.getUserName());
             return Optional.of(repository.save(body));
         }
     }

@@ -566,132 +566,134 @@ paths:
 
   # Selection API
   /selections:
-    get:
-     tags:
-      - selection
-     operationId: getAllUserSelection
-     summary:  get all slections that this user has access to
-     description: retrieve all slections that user has access to
-     produces:
-        - application/json
-     responses:
-       '200':
-         description: Selection list
-         schema:
-           type: array
-           items:
-             $ref: '#/definitions/Selection'
-       default:
-         description: unexpected error
-         schema:
-           $ref: '#/definitions/Error'
+      get:
+        tags:
+          - selection
+        operationId: getAllUserSelection
+        summary:  get all slections that this user has access to
+        description: retrieve all slections that user has access to
+        produces:
+          - application/json
+        responses:
+          '200':
+             description: Selection list
+             schema:
+               type: array
+               items:
+                 $ref: '#/definitions/Selection'
+          default:
+             description: unexpected error
+             schema:
+               $ref: '#/definitions/Error'
   /selections/{selectionId}:
-    get:
-     tags:
-       - selection
-     summary: get Selection
-     description: get the corresponding Selection
-     operationId: getSelection
-     produces:
-       - application/json
-     parameters:
-       - name: selectionId
-         in: path
-         description: id of the Selection to return
-         required: true
-         type: string
-     responses:
-       '200':
-         description: Selection found
-         schema:
-           $ref: '#/definitions/Selection'
-       '404':
+      get:
+       tags:
+         - selection
+       summary: get Selection
+       description: get the corresponding Selection
+       operationId: getSelection
+       produces:
+         - application/json
+       parameters:
+         - name: selectionId
+           in: path
+           description: id of the Selection to return
+           required: true
+           type: string
+       responses:
+         '200':
+           description: Selection found
+           schema:
+             $ref: '#/definitions/Selection'
+         '404':
+            description: Selection resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+      delete:
+       tags:
+         - selection
+       summary: delete Selection
+       description: remove the corresponding Selection
+       operationId: deleteSelection
+       parameters:
+         - name: selectionId
+           in: path
+           description: id of the Selection to be deleted
+           required: true
+           type: string
+       responses:
+         '404':
+           description: Selection resource not found
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Selection successfully removed
+           schema:
+             $ref: '#/definitions/Selection'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+      put:
+       tags:
+        - selection
+       summary:  update Selection
+       description: update an existing Selection
+       operationId: updateSelection
+       parameters:
+         - name: selectionId
+           in: path
+           description: selectionId to be updated
+           required: true
+           type: string
+         - name: body
+           in: body
+           description: new Selection definition
+           required: true
+           schema:
+             $ref: '#/definitions/Selection'
+       responses:
+        '404':
           description: Selection resource not found
-       default:
-         description: unexpected error
-         schema:
-           $ref: '#/definitions/Error'
-    delete:
-     tags:
-       - selection
-     summary: delete Selection
-     description: remove the corresponding Selection
-     operationId: deleteSelection
-     parameters:
-       - name: selectionId
-         in: path
-         description: id of the Selection to be deleted
-         required: true
-         type: string
-     responses:
-       '404':
-         description: Selection resource not found
-       '400':
-         description: Invalid ID supplied
-       '200':
-         description: Selection successfully removed
+        '400':
+          description: Invalid ID supplied
+        '200':
+         description: Selection successfuly updated
          schema:
            $ref: '#/definitions/Selection'
-       default:
-         description: unexpected error
-         schema:
-           $ref: '#/definitions/Error'
-    put:
-     tags:
-      - selection
-     summary:  update Selection
-     description: update an existing Selection
-     operationId: updateSelection
-     parameters:
-       - name: selectionId
-         in: path
-         description: selectionId to be updated
-         required: true
-         type: string
-       - name: selection
-         in: body
-         description: new Selection definition
-         required: true
-         schema:
-           $ref: '#/definitions/Selection'
-     responses:
-      '404':
-        description: Selection resource not found
-      '400':
-        description: Invalid ID supplied
-      '200':
-       description: Selection successfuly updated
-       schema:
-         $ref: '#/definitions/Selection'
-    post:
-     tags:
-      - selection
-     summary:  create new Selection
-     description:  store a new Selection
-     operationId: addSelectionWithId
-     parameters:
-       - name: body
-         in: body
-         description: Selection resource to add
-         required: true
-         schema:
-           $ref: '#/definitions/Selection'
-       - name: selectionId
-         in: path
-         description: selectionId to create
-         required: true
-         type: string
-     responses:
-       '400':
-         description: Invalid ID supplied
-       '200':
-         description: Selection successfuly created
-         schema:
-           $ref: '#/definitions/Selection'
-       default:
-         description: unexpected error
-         schema:
-           $ref: '#/definitions/Error'
+      post:
+       tags:
+        - selection
+       summary:  create new Selection
+       description:  store a new Selection
+       operationId: addSelectionWithId
+       parameters:
+         - name: body
+           in: body
+           description: Selection resource to add
+           required: true
+           schema:
+             $ref: '#/definitions/Selection'
+         - name: selectionId
+           in: path
+           description: selectionId to create
+           required: true
+           type: string
+       responses:
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Selection successfuly created
+           schema:
+             $ref: '#/definitions/Selection'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+
   /selections/{selectionId}/tags:
        get:
          tags:
@@ -1024,6 +1026,28 @@ definitions:
       password:
         type: string
 
+  Selection:
+    type: object
+    description: a Selection is a selection of tags.
+    required:
+      - id
+      - tags
+    properties:
+      id:
+        description: concatenation of owner with name for example
+        type: string
+      name:
+        type: string
+      owner:
+        type: string
+      tags:
+        description: list of tags id in selection
+        type: array
+        items:
+          type: string
+      record_type:
+        type: string
+        default: 'selection'
 
   Tag:
     type: object
@@ -1101,32 +1125,6 @@ definitions:
         format: double
       last_quality:
         type: integer
-
-  Selection:
-    type: object
-    description: a Selection is a selection of tags.
-    required:
-      - id
-      - name
-      - owner
-      - tags
-      - record_type
-    properties:
-      id:
-        description: concatenation of owner with name for example
-        type: string
-      name:
-        type: string
-      owner:
-        type: string
-      tags:
-        description: list of tags id in selection
-        type: array
-        items:
-          type: string
-      record_type:
-        type: string
-        default: 'selection'
 
   Measures:
     type: object

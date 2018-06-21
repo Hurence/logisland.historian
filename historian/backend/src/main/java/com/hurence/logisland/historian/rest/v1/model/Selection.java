@@ -21,7 +21,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Selection is a selection of tags.
 */
     @ApiModel(description = "a Selection is a selection of tags.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-19T17:59:13.992+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-20T15:19:01.168+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Selection  implements Serializable {
@@ -77,9 +77,8 @@ public class Selection  implements Serializable {
     * @return name
     **/
         @JsonProperty("name")
-    @ApiModelProperty(required = true, value = "")
-      @NotNull
-
+    @ApiModelProperty(value = "")
+    
 
   public String getName() {
     return name;
@@ -99,9 +98,8 @@ public class Selection  implements Serializable {
     * @return owner
     **/
         @JsonProperty("owner")
-    @ApiModelProperty(required = true, value = "")
-      @NotNull
-
+    @ApiModelProperty(value = "")
+    
 
   public String getOwner() {
     return owner;
@@ -148,9 +146,8 @@ public class Selection  implements Serializable {
     * @return recordType
     **/
         @JsonProperty("record_type")
-    @ApiModelProperty(required = true, value = "")
-      @NotNull
-
+    @ApiModelProperty(value = "")
+    
 
   public String getRecordType() {
     return recordType;
