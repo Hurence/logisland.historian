@@ -47,7 +47,7 @@ export class TagService implements IModelService<ITag> {
     throw new Error('Method not implemented.');
   }
 
-  delete(obj: ITag): Observable<ITag> {
+  delete(id: string): Observable<ITag> {
     throw new Error('Method not implemented.');
   }
   /** Merge tags with same id (combine properties).

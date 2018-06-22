@@ -14,4 +14,7 @@ export class SelectionService extends AbstractModelService<TagsSelection> {
         super(http, help, `${environment.HISTORIAN_API_URL}selections`);
     }
 
+    protected create(): TagsSelection {
+        return new TagsSelection();
+    }
 }

@@ -78,8 +78,8 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     );
   }
 
-  delete(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`).pipe(
+  delete(id: string): Observable<IHistorianTag> {
+    return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${id}`).pipe(
       map(this.markAsHistTag)
     );
   }

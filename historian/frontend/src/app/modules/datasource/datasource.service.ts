@@ -30,8 +30,8 @@ export class DatasourceService implements IModelService<Datasource> {
   update(obj: Datasource): Observable<Datasource> {
     return this.http.put<Datasource>(this.datasourcesUrl + '/' + obj.id, obj);
   }
-  delete(obj: Datasource): Observable<Datasource> {
-    return this.http.delete<Datasource>(this.datasourcesUrl + '/' + obj.id);
+  delete(id: string): Observable<Datasource> {
+    return this.http.delete<Datasource>(this.datasourcesUrl + '/' + id);
   }
 
   datasourceIsReachable(id: string): Observable<boolean> {

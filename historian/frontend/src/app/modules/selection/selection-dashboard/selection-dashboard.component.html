@@ -7,6 +7,7 @@
 (onChange)="onSelectionChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
 
 <button type="text" (click)="showDialog()" pButton icon="pi pi-info-circle" label="Show">Add</button>
+<button type="text" (click)="delete(currentSelection)" pButton icon="pi pi-info-circle" label="Show">Delete</button>
 
 <h1>Current selection of tag name : {{currentSelection.name}} </h1> {{currentSelection | json}}
 

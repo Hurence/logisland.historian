@@ -30,7 +30,7 @@ export abstract class BaseDynamicFormComponent<T extends CanGetId> implements On
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.item && !changes.item.isFirstChange && changes.item.currentValue !== changes.item.previousValue) {
+    if (changes.item && !changes.item.isFirstChange() && changes.item.currentValue !== changes.item.previousValue) {
       this.rebuildForm();
     }
   }

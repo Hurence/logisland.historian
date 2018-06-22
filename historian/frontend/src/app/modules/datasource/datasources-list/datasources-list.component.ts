@@ -43,7 +43,7 @@ export class DatasourcesListComponent implements OnInit {
     this.dialogService.confirm(msg, this.CANCEL_MSG, this.REMOVE_DATASOURCE_MSG)
       .subscribe(ok => {
         if (ok) {
-          this.datasourceService.delete(datasource)
+          this.datasourceService.delete(datasource.id)
             .subscribe(deletedDs => {
               this.dataSet.removeDatasource(deletedDs);
               this.getDatasources();
