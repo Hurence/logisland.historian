@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VisualizationComponent implements OnInit {
 
+  displayTagManagement = false;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  showDialogTagManagement(): void {
+    this.displayTagManagement = true;
+  }
 }

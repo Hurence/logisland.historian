@@ -17,6 +17,7 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
 
   @Input() tagsSelection: TagsSelection;
 
+  loading = false;
   treeNodes: TreeNode[];
   selectedNodes: TreeNode[];
 
@@ -156,8 +157,10 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
   }
 
   private loadChildren(node: TreeNode): void {
+    this.loading = true;
     this.getChildren(node).subscribe(nodes => {
       node.children = nodes;
+      this.loading = false;
     });
   }
 

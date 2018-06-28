@@ -1,1 +1,5 @@
+<button type="text" (click)="showDialogTagManagement()" pButton icon="pi pi-info-circle" label="Show">Modify Selection</button>
+<p-dialog [(visible)]="displayTagManagement">
+    <app-selection-dashboard></app-selection-dashboard>
+</p-dialog>
 <router-outlet></router-outlet>
