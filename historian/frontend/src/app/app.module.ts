@@ -30,6 +30,7 @@ import { SharedModule } from './shared/shared.module';
 import { Utilities } from './shared/utilities.service';
 import { TodoComponent } from './todo/todo.component';
 import { NgTreenodeService } from './modules/tag/historian-tag-tree/ng-treenode.service';
+import { ArrayUtil } from './shared/array-util';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { NgTreenodeService } from './modules/tag/historian-tag-tree/ng-treenode.
     MeasuresService,
     SelectionService,
     NgTreenodeService,
+    ArrayUtil,
   ],
   bootstrap: [AppComponent],
 })

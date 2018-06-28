@@ -7,6 +7,7 @@ import { TagsSelection } from '../../selection/Selection';
 import { IHistorianTag } from '../modele/HistorianTag';
 import { TagHistorianService } from '../service/tag-historian.service';
 import { NgTreenodeService } from './ng-treenode.service';
+import { ProfilService } from '../../../profil/profil.service';
 
 @Component({
   selector: 'app-historian-tag-tree',
@@ -22,7 +23,8 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
   selectedNodes: TreeNode[];
 
   constructor(private ngTreenodeService: NgTreenodeService,
-              private tagService: TagHistorianService) { }
+              private tagService: TagHistorianService,
+              private profilService: ProfilService) { }
 
   ngOnInit() {
     this.selectedNodes = [];
@@ -113,8 +115,10 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
       node.icon = this.findIcon(isSelected);
       if (isSelected) {
         this.tagsSelection.addTag(node.data.id);
+        this.profilService.addTag(node.data);
       } else {
         this.tagsSelection.removeTag(node.data.id);
+        this.profilService.removeTag(node.data);
       }
     }
     if (node.children) {

@@ -1,15 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/components/common/selectitem';
 
-import { ProfilService } from '../../../profil/profil.service';
-
-import { TagsSelection, TagsSelectionArray } from '../Selection';
-import { SelectionService } from '../selection.service';
-import { QuestionBase } from '../../../shared/dynamic-form/question-base';
-import { QuestionControlService } from '../../../shared/dynamic-form/question-control.service';
-import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
-import { SelectionFormComponent } from '../selection-form/selection-form.component';
 import { DialogService } from '../../../dialog/dialog.service';
+import { ProfilService } from '../../../profil/profil.service';
+import { QuestionBase } from '../../../shared/dynamic-form/question-base';
+import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
+import { TagsSelection } from '../Selection';
+import { SelectionFormComponent } from '../selection-form/selection-form.component';
+import { SelectionService } from '../selection.service';
 
 @Component({
   selector: 'app-selection-dashboard',
@@ -42,7 +40,7 @@ export class SelectionDashboardComponent implements OnInit {
   }
   set currentSelection(selection: TagsSelection) {
       this._currentSelection = selection;
-      this.profilService.currentTagsSelection = selection;
+      this.profilService.changeSelection(selection);
   }
 
   ngOnInit() {
