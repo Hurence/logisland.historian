@@ -32,7 +32,7 @@ export abstract class AbstractModelService<M> implements IModelService<M> {
   getAll(): Observable<M[]> {
     return this.http.get<M[]>(`${this.baseUrl}`)
       .pipe(
-        map(items => items.map(item => Object.assign(this.create(), item))),
+        map(items => items.map(item => this.create(item))),
         catchError(this.help.handleError('getAll()', []))
       );
   }
@@ -40,7 +40,7 @@ export abstract class AbstractModelService<M> implements IModelService<M> {
   get(id: string): Observable<M> {
     return this.http.get<M>(`${this.baseUrl}/${id}`)
       .pipe(
-        map(item => Object.assign(this.create(), item)),
+        map(item => this.create(item)),
         catchError(this.help.handleError(`get(${id})`))
       );
   }
@@ -48,23 +48,23 @@ export abstract class AbstractModelService<M> implements IModelService<M> {
   save(obj: M, id: string): Observable<M> {
     return this.http.post<M>(`${this.baseUrl}/${id}`, obj)
       .pipe(
-        map(item => Object.assign(this.create(), item))
+        map(item => this.create(item))
       );
   }
 
   update(obj: M, id: string): Observable<M> {
     return this.http.put<M>(`${this.baseUrl}/${id}`, obj)
       .pipe(
-        map(item => Object.assign(this.create(), item))
+        map(item => this.create(item))
       );
   }
 
   delete(id: string): Observable<M> {
     return this.http.delete<M>(`${this.baseUrl}/${id}`)
       .pipe(
-        map(item => Object.assign(this.create(), item))
+        map(item => this.create(item))
       );
   }
 
-  protected abstract create(): M;
+  protected abstract create(item: M): M;
 }
