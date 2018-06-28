@@ -34,38 +34,22 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.tagsSelection && !changes.tagsSelection.isFirstChange()) {
       this.selectedNodes.forEach(node => {
-        this.selectRecursive(node, false)
+        this.selectRecursive(node, false);
       });
       this.selectedNodes = [];
       this.treeNodes.forEach(node => {
         this.selectTagNodes(node);
       });
-    }  
-  }
-  
-  private getNodeTree(): Observable<TreeNode[]> {
-    return this.ngTreenodeService.getHistTagTree();
+    }
   }
 
-  nodeSelect(event) {    
+  nodeSelect(event) {
     this.loadANode(event.node);
     this.selectNode(event.node);
   }
 
   nodeUnSelect(event) {
     this.selectRecursive(event.node, false);
-  }
-
-  private selectTagNodes(node: TreeNode): void {
-    if (node && node.type === 'tag' && this.tagsSelection.containTag(node.data.id)) {      
-        node.icon = this.findIcon(true);
-        this.selectedNodes.push(node);         
-    }
-    if (node.children) {
-        node.children.forEach( childNode => {
-            this.selectTagNodes(childNode);
-        } );
-    }
   }
 
   saveSelection() {
@@ -75,24 +59,40 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
   revertSelection() {
 
   }
-  private selectNode(node: TreeNode): void {
-    console.log('select node', node);
-    this.selectRecursive(node, true);
-  }
 
-  expandAll(){
+  expandAll() {
     this.treeNodes.forEach( node => {
         this.expandRecursive(node, true);
     } );
   }
 
-  collapseAll(){
+  collapseAll() {
     this.treeNodes.forEach( node => {
         this.expandRecursive(node, false);
     } );
   }
 
-  private expandRecursive(node:TreeNode, isExpand:boolean){
+  loadNode(event) {
+    this.loadANode(event.node);
+  }
+
+  private getNodeTree(): Observable<TreeNode[]> {
+    return this.ngTreenodeService.getHistTagTree();
+  }
+
+  private selectTagNodes(node: TreeNode): void {
+    if (node && node.type === 'tag' && this.tagsSelection.containTag(node.data.id)) {
+        node.icon = this.findIcon(true);
+        this.selectedNodes.push(node);
+    }
+    if (node.children) {
+        node.children.forEach( childNode => {
+            this.selectTagNodes(childNode);
+        } );
+    }
+  }
+
+  private expandRecursive(node: TreeNode, isExpand: boolean) {
     node.expanded = isExpand;
     this.loadANode(node);
     if (node.children) {
@@ -102,14 +102,19 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
     }
   }
 
-  private selectRecursive(node:TreeNode, isSelected:boolean) {    
+  private selectNode(node: TreeNode): void {
+    console.log('select node', node);
+    this.selectRecursive(node, true);
+  }
+
+  private selectRecursive(node: TreeNode, isSelected: boolean) {
     if (node.type === 'tag') {
       node.icon = this.findIcon(isSelected);
       if (isSelected) {
         this.tagsSelection.addTag(node.data.id);
       } else {
         this.tagsSelection.removeTag(node.data.id);
-      }      
+      }
     }
     if (node.children) {
         node.children.forEach( childNode => {
@@ -118,20 +123,13 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
     }
   }
 
-  
   private findIcon(isSelected: boolean): string {
     if (isSelected) return 'in-dataset';
     return 'historian-tag';
   }
 
-  
-
-  loadNode(event) {
-    this.loadANode(event.node);
-  }
-
-  private loadANode(node: TreeNode): boolean {    
-    if (node && node.type === 'group' && (!node.children  || node.children.length === 0)) {      
+  private loadANode(node: TreeNode): boolean {
+    if (node && node.type === 'group' && (!node.children  || node.children.length === 0)) {
       this.loadChildren(node);
       return true;
     }
@@ -141,20 +139,23 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
   private getChildren(node: TreeNode): Observable<TreeNode[]> {
     const query: string = this.buildQuery(node);
     return this.tagService.getQuery(query).pipe(
-      map(tags => {
-        const nodes = this.createNodes(tags);        
-        nodes.forEach(node => {
-          const tagId = (node.data as IHistorianTag).id;
-          if (this.tagsSelection.containTag(tagId)) {
-            this.selectedNodes.push(node);
-            this.selectNode(node);            
-          }
-        });      
-        return nodes;
-      }));
+      map(tags => this.createNodesFromTags(tags))
+    );
   }
 
-  private loadChildren(node: TreeNode): void {    
+  private createNodesFromTags(tags: IHistorianTag[]): TreeNode[] {
+    const nodes = this.createNodes(tags);
+    nodes.forEach(node => {
+      const tagId = (node.data as IHistorianTag).id;
+      if (this.tagsSelection.containTag(tagId)) {
+        this.selectedNodes.push(node);
+        this.selectNode(node);
+      }
+    });
+    return nodes;
+  }
+
+  private loadChildren(node: TreeNode): void {
     this.getChildren(node).subscribe(nodes => {
       node.children = nodes;
     });
@@ -165,7 +166,7 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
       return {
           label: tag.tag_name,
           data: tag,
-          icon: 'historian-tag',        
+          icon: 'historian-tag',
           leaf: true,
           type: 'tag',
       };
@@ -174,8 +175,8 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
   }
 
   private buildQuery(node: TreeNode): string {
-    let query: string = `${node.type}:"${node.label}"`;
+    const query = `${node.type}:"${node.label}"`;
     if (node.parent) return `${query} AND ${this.buildQuery(node.parent)}`;
-    return query;    
+    return query;
   }
 }

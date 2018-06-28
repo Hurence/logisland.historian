@@ -37,7 +37,7 @@ export class SelectionDashboardComponent implements OnInit {
               private selectionService: SelectionService) {}
 
 
-  get currentSelection():TagsSelection {
+  get currentSelection(): TagsSelection {
       return this._currentSelection;
   }
   set currentSelection(selection: TagsSelection) {
