@@ -250,3 +250,7 @@ width: 100%;
 position: relative;
 padding: .25rem .25rem;
 }
+/* tree */
+.ui-tree {
+  width: 500px;
+}

@@ -8,6 +8,10 @@ export class ProfilService {
 
   helpHidden = true;
   currentTagsSelection: TagsSelection;
+  private defautSelection = new TagsSelection({
+    name: 'default selection',
+    tagIds: new Set(),
+  });
 
   constructor() { this.currentTagsSelection = this.getDefautSelection(); }
 
@@ -19,10 +23,7 @@ export class ProfilService {
       this.helpHidden = !this.helpHidden;
   }
 
-  private getDefautSelection(): TagsSelection {
-    return new TagsSelection({
-      name: 'default selection',
-      tagIds: [],
-    });
+ getDefautSelection(): TagsSelection {
+    return this.defautSelection;
   }
 }

@@ -3,7 +3,7 @@ import { SelectItem } from 'primeng/components/common/selectitem';
 
 import { ProfilService } from '../../../profil/profil.service';
 
-import { TagsSelection } from '../Selection';
+import { TagsSelection, TagsSelectionArray } from '../Selection';
 import { SelectionService } from '../selection.service';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { QuestionControlService } from '../../../shared/dynamic-form/question-control.service';
@@ -20,7 +20,7 @@ export class SelectionDashboardComponent implements OnInit {
 
   // dropdown select current selection of tags
   selectionOptions: SelectItem[];
-  currentSelection: TagsSelection;
+  private _currentSelection: TagsSelection;
 
   // Form to add new selection of tags
   display = false;
@@ -34,12 +34,20 @@ export class SelectionDashboardComponent implements OnInit {
 
   constructor(private profilService: ProfilService,
               private dialogService: DialogService,
-              // private tagService: TagHistorianService,
               private selectionService: SelectionService) {}
+
+
+  get currentSelection():TagsSelection {
+      return this._currentSelection;
+  }
+  set currentSelection(selection: TagsSelection) {
+      this._currentSelection = selection;
+      this.profilService.currentTagsSelection = selection;
+  }
 
   ngOnInit() {
     this.selectionQuestions = this.getMyQuestions();
-    this.selectionOfTagsInForm = new TagsSelection({name: 'new selection', tagIds: []});
+    this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
     this.currentSelection = this.profilService.currentTagsSelection;
     this.actualizeListOfTagsSelection();
   }
@@ -57,7 +65,7 @@ export class SelectionDashboardComponent implements OnInit {
   }
 
   onCreated(selection: TagsSelection) {
-    this.selectionOfTagsInForm = new TagsSelection({name: 'new selection', tagIds: []});
+    this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
     this.currentSelection = selection;
     this.actualizeListOfTagsSelection();
     this.closeDialog();
@@ -65,8 +73,9 @@ export class SelectionDashboardComponent implements OnInit {
 
   actualizeListOfTagsSelection() {
     this.selectionService.getAll().subscribe(selections => {
-      selections.push(this.profilService.currentTagsSelection);
-      this.selectionOptions = selections.map(selection => {
+      const selectionsWithSet = selections.map(s => new TagsSelection(s));
+      selectionsWithSet.push(this.profilService.getDefautSelection());
+      this.selectionOptions = selectionsWithSet.map(selection => {
         return {label: selection.name, value: selection};
       });
     });

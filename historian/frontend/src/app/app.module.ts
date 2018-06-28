@@ -29,6 +29,7 @@ import { QuestionService } from './shared/dynamic-form/question.service';
 import { SharedModule } from './shared/shared.module';
 import { Utilities } from './shared/utilities.service';
 import { TodoComponent } from './todo/todo.component';
+import { NgTreenodeService } from './modules/tag/historian-tag-tree/ng-treenode.service';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { TodoComponent } from './todo/todo.component';
     Utilities,
     MeasuresService,
     SelectionService,
+    NgTreenodeService,
   ],
   bootstrap: [AppComponent],
 })

@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { Dataset } from '../../../dataset/dataset';
 import { INodeTree, IState, NodeTree } from '../../../shared/js-tree/NodeTree';
-import { ITag, Tag } from '../modele/tag';
+import { ITag } from '../modele/tag';
 import { TypesName } from './TypesName';
 
 declare const $: JQueryStatic;

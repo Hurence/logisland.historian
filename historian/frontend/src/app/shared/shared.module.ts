@@ -15,6 +15,8 @@ import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { PanelModule } from 'primeng/panel';
 import { DialogModule } from 'primeng/dialog';
+import { TreeModule } from 'primeng/tree';
+import { TreeDragDropService } from 'primeng/api';
 
 @NgModule({
   imports: [
@@ -28,6 +30,7 @@ import { DialogModule } from 'primeng/dialog';
     FormsModule,
     PanelModule,
     DialogModule,
+    TreeModule,
   ],
   exports: [
     CommonModule,
@@ -44,6 +47,10 @@ import { DialogModule } from 'primeng/dialog';
     FormsModule,
     PanelModule,
     DialogModule,
+    TreeModule,
+  ],
+  providers: [
+    TreeDragDropService,
   ],
   declarations: [
     SearchComponent,
@@ -51,6 +58,6 @@ import { DialogModule } from 'primeng/dialog';
     DynamicFormComponent,
     DynamicFormQuestionComponent,
     DynamicFormQuestionArrayComponent,
-  ]
+  ],
 })
 export class SharedModule { }

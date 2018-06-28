@@ -5,13 +5,18 @@ import { Observable } from 'rxjs/Observable';
 import { IModelService } from '../base-model-service';
 import { QuestionBase } from './question-base';
 import { QuestionControlService } from './question-control.service';
+import { isObject } from 'util';
 
 
 export interface CanGetId {
   getId(): string;
 }
 
-export abstract class BaseDynamicFormComponent<T extends CanGetId> implements OnInit, OnChanges {
+export interface CanGetId {
+  getId(): string;
+}
+
+export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements OnInit, OnChanges {
 
   @Input() questions: QuestionBase<any>[] = [];
   @Input() item: T;
@@ -22,7 +27,7 @@ export abstract class BaseDynamicFormComponent<T extends CanGetId> implements On
 
 
   constructor(protected qcs: QuestionControlService,
-              protected service: IModelService<T>) { }
+              protected service: IModelService<B>) { }
 
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
@@ -36,8 +41,8 @@ export abstract class BaseDynamicFormComponent<T extends CanGetId> implements On
   }
 
   onSubmit() {
-    this.item = this.prepareSaveItem();
-    this.subscribeToUpdate(this.service.save(this.item, this.item.getId()),
+    const objToSave = this.prepareSaveItem();
+    this.subscribeToUpdate(this.service.save(objToSave, objToSave.getId()),
       this.SUCCESSFULLY_SAVED_MSG,
       this.FAILED_SAVED_MSG);
   }
@@ -49,19 +54,21 @@ export abstract class BaseDynamicFormComponent<T extends CanGetId> implements On
   }
 
   /* Return a datasource based on formulaire inputs */
-  protected prepareSaveItem(): T {
+  protected prepareSaveItem(): B {
     const formModel = this.form.value;
-    const item = Object.assign(this.create(), this.item);
+    const item = this.create(this.item);
     Object.assign(item, formModel);
     return item;
   }
 
-  private subscribeToUpdate(submitted: Observable<T>,
+  private subscribeToUpdate(submitted: Observable<B>,
                             msgSuccess: string,
                             msgError: string): void {
     submitted.subscribe(
       obj => {
-        this.submitted.emit(obj);
+        const converted = this.convert(obj);
+        this.item = converted;
+        this.submitted.emit(converted);
       },
       error => {
         console.error(JSON.stringify(error));
@@ -69,5 +76,7 @@ export abstract class BaseDynamicFormComponent<T extends CanGetId> implements On
     );
   }
 
-  protected abstract create(): T;
+  protected abstract create(item: T): B;
+
+  protected abstract convert(backObj: B): T;
 }

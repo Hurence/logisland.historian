@@ -7,6 +7,7 @@ import { IModelService } from '../../../shared/base-model-service';
 import { Utilities } from '../../../shared/utilities.service';
 import { IHistorianTag } from '../modele/HistorianTag';
 import { environment } from '../../../../environments/environment';
+import { RestTreeNode } from '../../../core/modele/RestTreeNode';
 
 @Injectable()
 export class TagHistorianService implements IModelService<IHistorianTag> {
@@ -38,7 +39,7 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     }
   }
 
-  private getQuery(query: string): Observable<IHistorianTag[]> {
+  getQuery(query: string): Observable<IHistorianTag[]> {
     if (query && query.length !== 0) {
       console.log('query is "' + query + '"');
       return this.http.get<IHistorianTag[]>(
@@ -81,6 +82,13 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
   delete(id: string): Observable<IHistorianTag> {
     return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${id}`).pipe(
       map(this.markAsHistTag)
+    );
+  }
+
+  getTreeTag(): Observable<RestTreeNode[]> {
+    return this.http.get<RestTreeNode[]>(`${this.tagsUrl}tags/tree?limit=1`) // limit = 0 => solr facet only, return no tags
+    .pipe(
+      catchError(this.help.handleError('getTreeTag', []))
     );
   }
 
