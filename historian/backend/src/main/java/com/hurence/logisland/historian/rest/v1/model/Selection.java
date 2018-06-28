@@ -22,7 +22,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Selection is a selection of tags.
 */
     @ApiModel(description = "a Selection is a selection of tags.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-21T15:03:41.851+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-26T15:57:01.504+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Selection  implements Serializable {

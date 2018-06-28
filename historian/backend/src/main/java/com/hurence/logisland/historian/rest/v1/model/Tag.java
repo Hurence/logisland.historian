@@ -23,7 +23,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-21T15:03:41.851+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-26T15:57:01.504+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Tag  implements Serializable {

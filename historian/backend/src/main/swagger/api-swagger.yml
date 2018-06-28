@@ -461,6 +461,43 @@ paths:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
+  /tags/tree:
+       get:
+         tags:
+           - tag
+         summary: get tag tree by fields
+         description: get tag tree by fields for each value of chosen fields
+         operationId: getTreeTag
+         produces:
+           - application/json
+         parameters:
+#           - name: fields
+#             in: query
+#             description: the chosen fields of Tag to built the tre with
+#             required: false
+#             type: array
+#             items:
+#              type: string
+           - name: limit
+             in: query
+             description: maximum number of element to retrieve in a treenode.
+             required: false
+             type: integer
+             format: int32
+             default: 100
+         responses:
+           '200':
+             description: Tree of tag fields
+             schema:
+              type: array
+              items:
+                $ref: '#/definitions/TreeNode'
+           '404':
+              description: Tree of tag could not be build
+           default:
+             description: unexpected error
+             schema:
+               $ref: '#/definitions/Error'
   /tags/measures:
      post:
        tags:
@@ -1273,3 +1310,21 @@ definitions:
         format: int32
       message:
         type: string
+
+  TreeNode:
+      type: object
+      required:
+        - value
+        - totalChildNumber
+        - children
+      properties:
+        value:
+          type: string
+        totalChildNumber:
+          type: integer
+          format: int64
+        children:
+          type: array
+          items:
+            $ref: '#/definitions/TreeNode'
+

@@ -1,28 +1,16 @@
 package com.hurence.logisland.historian.service;
 
-import com.hurence.logisland.historian.repository.OpcRepository;
 import com.hurence.logisland.historian.repository.SolrSelectionRepository;
-import com.hurence.logisland.historian.repository.SolrTagRepository;
-import com.hurence.logisland.historian.rest.v1.api.NotFoundException;
-import com.hurence.logisland.historian.rest.v1.model.*;
-import com.hurence.opc.da.OpcDaConnectionProfile;
-import org.apache.commons.lang3.StringUtils;
+import com.hurence.logisland.historian.rest.v1.model.PrivateSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class SelectionsApiService {
@@ -101,11 +89,6 @@ public class SelectionsApiService {
     }
 
     public List<PrivateSelection> getAllUserSelection() {
-        String owner = this.securityService.getUserName();
-        String query = "owner:" + owner;
-
-        List<PrivateSelection> selections = repository.findByText(query);
-
-        return selections;
+        return repository.findByOwner(this.securityService.getUserName());
     }
 }
