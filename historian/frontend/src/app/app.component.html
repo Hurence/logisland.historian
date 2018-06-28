@@ -1,35 +1,65 @@
 <header>
   <nav id="main-nav"  class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="#"><img src="assets/logo.png" class="img-fluid rounded mx-auto d-block"></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-3" aria-controls="navbarSupportedContent-3" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent-3">
-                    <ul class="navbar-nav mr-auto text-uppercase">
-                        <li class="nav-item" routerLinkActive="active" routerLink="/sources-and-tags">
-                            <a class="nav-link" i18n="sources and tags|sources and tags tab link">sources &amp; tags</a>
-                        </li>
-                        <li class="nav-item" routerLink="/visualization" routerLinkActive="active">
-                            <a class="nav-link" i18n="grapher|grapher tab link">visualization</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ml-auto nav-flex-icons">
-                    <li class="nav-item">
-                        <a class="nav-link help" (click)="toggleHelp()"><i class="fa fa-question-circle " aria-hidden="true"></i></a>
-                    </li>
-                      <li class="nav-item avatar dropdown">
-                          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                              <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" class="rounded-circle z-depth-0" alt="avatar image">
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5">
-                              <a class="dropdown-item" href="#" i18n="settings|access to the settings for profil">settings</a>
-                              <a class="dropdown-item" [href]="logoutUrl" i18n="logout|to logout from the session">logout</a>
-                          </div>
-                      </li>
-                    </ul>
-                </div>
-            </nav>
-
+        <a class="nav-toggle" href="#sidebar" data-toggle="collapse">
+            <i class="fa fa-navicon fa-lg"></i>
+        </a>
+        <a class="navbar-brand" href="#">
+            <img src="assets/logo.png" class="img-fluid rounded mx-auto d-block">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-3" aria-controls="navbarSupportedContent-3"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent-3">
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+                <li class="nav-item">
+                    <a class="nav-link help" (click)="toggleHelp()">
+                        <i class="fa fa-question-circle " aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="nav-item avatar dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" class="rounded-circle z-depth-0" alt="avatar image">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5">
+                        <a class="dropdown-item" href="#" i18n="settings|access to the settings for profil">settings</a>
+                        <a class="dropdown-item" [href]="logoutUrl" i18n="logout|to logout from the session">logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        </nav>
 </header>
 
-<router-outlet></router-outlet>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 col-xs-1 p-l-0 p-r-0 collapse in show" id="sidebar">
+        <div class="list-group panel">
+            <!-- START menu-settings -->
+            <a href="#menu-settings" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <i class="fa fa-dashboard"></i>
+            <span class="hidden-sm-down">Settings</span>
+            </a>
+            <div class="collapse" id="menu-settings">
+            <a routerLinkActive="active" routerLink="/sources-and-tags/datasources" class="list-group-item" data-parent="#menu-settings">Datasources</a>
+            <a routerLinkActive="active" routerLink="/sources-and-tags/tags" class="list-group-item" data-parent="#menu-settings">Tags</a>
+            </div>
+            <!-- START menu selection -->
+            <a routerLinkActive="active" routerLink="." class="list-group-item">Selection</a>
+            <!-- START menu-visualization -->
+            <a href="#menu-visualization" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <i class="fa fa-film"></i>
+            <span class="hidden-sm-down">Visualization</span>
+            </a>
+            <div class="collapse" id="menu-visualization">
+            <a class="list-group-item" routerLinkActive="active" routerLink="/visualization/tabular" data-parent="#menu-visualization">Tabular</a>
+            <a class="list-group-item" routerLinkActive="active" routerLink="/visualization/lineChart" data-parent="#menu-visualization">Line Chart</a>
+            </div>
+            <!-- END menu-visualization -->
+        </div>
+        </div>
+        <main class="col-md-10 col-xs-11 p-l-2 p-t-2">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>
