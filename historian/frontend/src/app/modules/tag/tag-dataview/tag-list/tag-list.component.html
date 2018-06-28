@@ -23,6 +23,9 @@
                     <div class="ui-g-10 ui-sm-6"><b>{{agg.value}}</b></div>
                 </ng-container>
             </ng-container>
+            <ng-container *ngIf="notFound">
+                    No stat found for this tag !
+            </ng-container>
         </div>
     </div>
     <!-- <div class="ui-g-12 ui-md-1 search-icon">

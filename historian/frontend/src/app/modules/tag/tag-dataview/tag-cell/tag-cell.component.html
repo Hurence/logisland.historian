@@ -6,6 +6,9 @@
                         {{agg.name}} : {{agg.value}}
                 </div>
         </ng-container>
+        <ng-container *ngIf="notFound">
+                No stat found for this tag !
+        </ng-container>
         <hr class="ui-widget-content" style="border-top:0">
         <!-- <button pButton type="button" icon="pi pi-search" (click)="selectCar($event, car)" style="margin-top:0"></button> -->
 </p-panel>
