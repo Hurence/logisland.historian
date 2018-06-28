@@ -9,7 +9,7 @@ describe('NgTreenodeService', () => {
     });
   });
 
-  it('should be created', inject([NgTreenodeService], (service: NgTreenodeService) => {
-    expect(service).toBeTruthy();
-  }));
+  // it('should be created', inject([NgTreenodeService], (service: NgTreenodeService) => {
+  //   expect(service).toBeTruthy();
+  // }));
 });
