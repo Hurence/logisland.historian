@@ -1,32 +1,21 @@
 <h1>Choose your selection of tag</h1>
-<!-- Select selection -->
-<p-dropdown [options]="selectionOptions"  placeholder="choose a selection of tag" [(ngModel)]="currentSelection"
-(onChange)="onSelectionChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
+<div class="ui-g-12">
+    <!-- Select selection -->
+    <p-dropdown [options]="selectionOptions"  placeholder="choose a selection of tag" [(ngModel)]="currentSelection"
+    (onChange)="onSelectionChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
 
-<button type="text" (click)="showDialog()" pButton icon="pi pi-info-circle" label="Show">Add</button>
-<button type="text" (click)="delete(currentSelection)" pButton icon="pi pi-info-circle" label="Show">Delete</button>
-
-<!-- <div *ngIf="currentSelection">
-    <div *ngIf="currentSelection?.tagsId?.length === 0">
-    No tag found in this selection
-    </div>
-
-    <div *ngFor="let tagId of currentSelection.tagIdsArray; index as i">
-    tag {{i}} is '{{tagId}}'
-    </div>
-</div> -->
-<app-historian-tag-tree [tagsSelection]="currentSelection"></app-historian-tag-tree>
+    <button type="text" (click)="showDialog()" pButton icon="pi pi-info-circle" label="Show">Add</button>
+    <button type="text" (click)="delete(currentSelection)" pButton icon="pi pi-info-circle" label="Show">Delete</button>
+</div>
+<div class="ui-g-12">
+    <app-historian-tag-tree [tagsSelection]="currentSelection"></app-historian-tag-tree>
+</div>
 
 <p-dialog [(visible)]="display">
-    <!-- <app-selection-form></app-selection-form> -->
-
-    <app-selection-form [questions]="selectionQuestions" [item]="selectionOfTagsInForm" (submitted)="onCreated($event)"></app-selection-form>
-
-    <!-- <p-header>
+    <p-header>
         Create a new selection of tags
     </p-header>
-    Content
+    <app-selection-form [questions]="selectionQuestions" [item]="selectionOfTagsInForm" (submitted)="onCreated($event)"></app-selection-form>
     <p-footer>
-        //buttons
-    </p-footer> -->
+    </p-footer>
 </p-dialog>

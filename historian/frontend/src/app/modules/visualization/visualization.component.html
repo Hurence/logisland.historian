@@ -1,5 +1,10 @@
 <button type="text" (click)="showDialogTagManagement()" pButton icon="pi pi-info-circle" label="Show">Modify Selection</button>
-<p-dialog [(visible)]="displayTagManagement">
+<p-dialog [(visible)]="displayTagManagement" [resizable]="true">
+    <p-header>
+        Manage your selection
+    </p-header>
     <app-selection-dashboard></app-selection-dashboard>
+    <p-footer>
+    </p-footer>
 </p-dialog>
 <router-outlet></router-outlet>
