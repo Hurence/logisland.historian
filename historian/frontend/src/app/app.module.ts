@@ -10,7 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DatasetService } from './dataset/dataset.service';
 import { DialogService } from './dialog/dialog.service';
-import { LineChartComponent } from './graph/line-chart/line-chart.component';
+import { LineChartComponent } from './modules/graph/line-chart/line-chart.component';
 import { MeasuresService } from './measure/measures.service';
 import { DatasourceService } from './modules/datasource/datasource.service';
 import { SelectionModule } from './modules/selection/selection.module';
@@ -36,7 +36,6 @@ import { NgTreenodeService } from './modules/tag/historian-tag-tree/ng-treenode.
     AppComponent,
     TodoComponent,
     PageNotFoundComponent,
-    LineChartComponent,
   ],
   imports: [
     BrowserModule,

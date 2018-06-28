@@ -1,10 +1,9 @@
-All tags
 <div class="ui-g-12 ui-md-6">
     <div style="margin-top: 8px">
         <button pButton type="button" label="Expand all" (click)="expandAll()" style="margin-right: .25em">Expand all</button>
         <button pButton type="button" label="Collapse all" (click)="collapseAll()">Collapse all</button>
-        <button pButton type="button" label="Collapse all" (click)="saveSelection()">Save selection</button>
-        <button pButton type="button" label="Collapse all" (click)="revertSelection()">Revert selection</button>
+        <!-- <button pButton type="button" label="Collapse all" (click)="saveSelection()">Save selection</button>
+        <button pButton type="button" label="Collapse all" (click)="revertSelection()">Revert selection</button> -->
     </div>
     <p-tree [value]="treeNodes" selectionMode="checkbox" [(selection)]="selectedNodes"
         (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnSelect($event)" (onNodeExpand)="loadNode($event)" [loading]="loading">

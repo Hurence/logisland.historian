@@ -10,6 +10,9 @@ import { TagModule } from '../tag/tag.module';
     SharedModule,
     TagModule,
   ],
+  exports: [
+    SelectionDashboardComponent,
+  ],
   declarations: [
     SelectionDashboardComponent,
     SelectionFormComponent,

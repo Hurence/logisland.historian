@@ -1,15 +1,12 @@
-<h1>Choose your selection of tag and configure it</h1>
+<h1>Choose your selection of tag</h1>
 <!-- Select selection -->
-<span>Choose your selection of tags : </span>
 <p-dropdown [options]="selectionOptions"  placeholder="choose a selection of tag" [(ngModel)]="currentSelection"
 (onChange)="onSelectionChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
 
 <button type="text" (click)="showDialog()" pButton icon="pi pi-info-circle" label="Show">Add</button>
 <button type="text" (click)="delete(currentSelection)" pButton icon="pi pi-info-circle" label="Show">Delete</button>
 
-<h2>Current selection of tag is : {{currentSelection.name}} </h2>
-
-<div *ngIf="currentSelection">
+<!-- <div *ngIf="currentSelection">
     <div *ngIf="currentSelection?.tagsId?.length === 0">
     No tag found in this selection
     </div>
@@ -17,7 +14,7 @@
     <div *ngFor="let tagId of currentSelection.tagIdsArray; index as i">
     tag {{i}} is '{{tagId}}'
     </div>
-</div>
+</div> -->
 <app-historian-tag-tree [tagsSelection]="currentSelection"></app-historian-tag-tree>
 
 <p-dialog [(visible)]="display">
