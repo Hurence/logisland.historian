@@ -253,4 +253,5 @@ mark, .mark {
 /* tree */
 .ui-tree {
   width: 100%;
+  min-width: 400px;
 }
