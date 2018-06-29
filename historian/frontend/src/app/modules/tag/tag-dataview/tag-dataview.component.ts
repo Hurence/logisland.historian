@@ -43,11 +43,6 @@ export class TagDataviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.tagService.getAllWithIds(this.profilService.currentTagsSelection.tagIdsArray).subscribe(tags => {
-      this.tags = tags;
-      this.totalRecords = this.tags.length;
-      this.loading = false;
-    });
     this.changeSelectionSubscription = this.profilService.getSelectionPublisher().subscribe(newSelection => {
       this.loading = true;
       this.tagService.getAllWithIds(newSelection.tagIdsArray).subscribe(tags => {
