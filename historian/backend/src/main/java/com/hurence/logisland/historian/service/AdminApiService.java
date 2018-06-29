@@ -49,31 +49,25 @@ public class AdminApiService {
 
 
     private List<String> domains = Arrays.asList("hurence", "pear", "gizmo");
-    private List<String> servers = Arrays.asList("opc-server1", "opc-server2", "opc-server3");
-    private List<String> groups = Arrays.asList("temp.group1", "temp.group2", "freq.group1", "freq.group2");
+    private List<String> servers = Arrays.asList("usine 1", "usine 2", "usine 3");
+    private List<String> groups = Arrays.asList(
+            "Température", "Pression", "Force", "Rayonnement optique",
+            "Accélération", "Vitesse", "Position", "Courant");
 
 
     public List<Tag> generateSampleTags(boolean doFlush) {
 
         List<Tag> tags = new ArrayList<>();
 
-        long tagsCount = 10; /*listOps.size(TAGS_LIST);
-        if (doFlush) {
-            while (tagsCount > 0) {
-                listOps.leftPop(TAGS_LIST);
-                tagsCount--;
-            }
-        }*/
-
         Random random = new Random();
-        tagsCount = random.nextInt(20);
+        int tagsCount = random.nextInt(30);
 
         while (tagsCount > 0) {
 
             String domain = domains.get(random.nextInt(domains.size()));
             String server = servers.get(random.nextInt(servers.size()));
             String group = groups.get(random.nextInt(groups.size()));
-            String tag = UUID.randomUUID().toString().substring(0, 5);
+            String tag = group.toLowerCase() + '-' + UUID.randomUUID().toString().substring(0, 5);
             Tag t = IdUtils.setId(new Tag()
                     .domain(domain)
                     .server(server)
