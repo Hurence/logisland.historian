@@ -1,20 +1,19 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { SelectItem } from 'primeng/components/common/selectitem';
+import { Subscription } from 'rxjs';
+
+import { ProfilService } from '../../../profil/profil.service';
+import { ArrayUtil } from '../../../shared/array-util';
 import { IHistorianTag } from '../modele/HistorianTag';
 import { TagHistorianService } from '../service/tag-historian.service';
-import { SelectItem } from 'primeng/components/common/selectitem';
-import { Dataset } from '../../../dataset/dataset';
-import { DatasetService } from '../../../dataset/dataset.service';
-import { TagsSelection } from '../../selection/Selection';
-import { ProfilService } from '../../../profil/profil.service';
-import { Subscription } from 'rxjs';
-import { ArrayUtil } from '../../../shared/array-util';
+import { AbsSubscriberToSelectionOfTag } from '../../../core/AbsSubscriberToSelectionOfTag';
 
 @Component({
   selector: 'app-tag-dataview',
   templateUrl: './tag-dataview.component.html',
   styleUrls: ['./tag-dataview.component.css']
 })
-export class TagDataviewComponent implements OnInit, OnDestroy {
+export class TagDataviewComponent extends AbsSubscriberToSelectionOfTag implements OnInit, OnDestroy {
 
   tags: IHistorianTag[]; // for dataview comp
   totalRecords: number; // for dataview comp
@@ -31,25 +30,23 @@ export class TagDataviewComponent implements OnInit, OnDestroy {
 
   layout: string; // for dataview comp
 
-  private changeSelectionSubscription: Subscription;
-  private addTagSubscription: Subscription;
-  private removeTagSubscription: Subscription;
+  protected changeSelectionSubscription: Subscription;
+  protected addTagSubscription: Subscription;
+  protected removeTagSubscription: Subscription;
 
   constructor(private tagService: TagHistorianService,
-              private profilService: ProfilService,
+              protected profilService: ProfilService,
               private arrayUtil: ArrayUtil) {
+    super(profilService);
     this.loading = true;
     this.layout = 'grid';
   }
 
   ngOnInit() {
     this.changeSelectionSubscription = this.profilService.getSelectionPublisher().subscribe(newSelection => {
-      this.loading = true;
-      this.tagService.getAllWithIds(newSelection.tagIdsArray).subscribe(tags => {
-        this.tags = tags;
-        this.totalRecords = this.tags.length;
-        this.loading = false;
-      });
+      this.tags = newSelection.tags;
+      this.totalRecords = this.tags.length;
+      this.loading = false;
     });
     this.addTagSubscription = this.profilService.getAddTagPublisher().subscribe(tag => {
       this.tags.push(tag);
@@ -74,12 +71,6 @@ export class TagDataviewComponent implements OnInit, OnDestroy {
       {label: '10 secondes', value: '10000'},
       {label: '60 secondes', value: '60000'},
     ];
-  }
-
-  ngOnDestroy() {
-    this.changeSelectionSubscription.unsubscribe();
-    this.addTagSubscription.unsubscribe();
-    this.removeTagSubscription.unsubscribe();
   }
 
   // loadData(event) {

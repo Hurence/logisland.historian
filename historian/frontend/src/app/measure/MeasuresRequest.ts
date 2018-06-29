@@ -45,7 +45,7 @@ export class MeasuresRequest implements IMeasuresRequest, CanBuildQuery {
                     parameters.push(`${key}=${this[key]}`);
                 }
             }
-        })
+        });
         return query + parameters.join('&');
     }
 }
