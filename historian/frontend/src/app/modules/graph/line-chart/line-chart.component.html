@@ -1,2 +1,7 @@
-<p-chart type="line" [data]="data" [options]="options" (onDataSelect)="selectData($event)"></p-chart>
-<button type="button" pButton (click)="update()">Add data</button>
+<div class="ui-g-12">
+        <button *ngFor="let start of starts" class="ui-g-4" type="button" pButton (click)="changeTimeRange(start)">{{start.label}}</button>
+</div>
+timeRangeFilter is :{{timeRangeFilter | json}}
+<div class="ui-g-12">
+        <p-chart type="line" [data]="data" [options]="options" (onDataSelect)="selectData($event)"></p-chart>
+</div>
