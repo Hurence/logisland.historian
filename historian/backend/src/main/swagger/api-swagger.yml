@@ -14,7 +14,7 @@ schemes:
 paths:
 
 
-  /admin:
+  /admin/generate/tags:
      post:
        tags:
         - tag
@@ -32,6 +32,12 @@ paths:
            required: false
            type: boolean
            default: false
+         - name: clean
+           in: query
+           description: do we delete previous entries ?
+           required: false
+           type: boolean
+           default: false
        responses:
          '200':
            description: Sample tag list
@@ -39,6 +45,38 @@ paths:
              type: array
              items:
                $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+  /admin/generate/measures:
+     post:
+       tags:
+        - tag
+        - measures
+        - admin
+       summary: create new measures for all tags
+       description: create new measures for all tags
+       operationId: generateMeasuresForTags
+       produces:
+          - application/json
+       parameters:
+         - name: clean
+           in: query
+           description: do we delete previous entries ?
+           required: false
+           type: boolean
+           default: false
+         - name: generator
+           in: formData
+           description: json config file for genereting data (export will not be used instead it will generate data for all tags)
+           required: true
+           type: file
+       responses:
+         '200':
+           description: BulkLoad result
+           schema:
+             $ref: '#/definitions/BulkLoad'
          default:
            description: unexpected error
            schema:

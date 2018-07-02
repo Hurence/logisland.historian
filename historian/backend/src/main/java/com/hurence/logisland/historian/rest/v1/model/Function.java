@@ -18,7 +18,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Function
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-26T15:57:01.504+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class Function  implements Serializable {

@@ -2,21 +2,27 @@ package com.hurence.logisland.historian.rest.v1.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.hurence.logisland.historian.rest.v1.model.Permissions;
+import com.hurence.logisland.historian.rest.v1.model.Selection;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
 /**
 * PrivateSelection
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-26T15:57:01.504+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class PrivateSelection  implements Serializable {

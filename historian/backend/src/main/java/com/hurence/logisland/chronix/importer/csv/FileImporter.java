@@ -92,9 +92,9 @@ public class FileImporter {
 
         final AtomicInteger pointCounter = new AtomicInteger(0);
         final AtomicInteger tsCounter = new AtomicInteger(0);
-        final File metricsFile = new File(METRICS_FILE_PATH);
-
-        LOGGER.info("Writing imported metrics to {}", metricsFile);
+//        final File metricsFile = new File(METRICS_FILE_PATH);
+//
+//        LOGGER.info("Writing imported metrics to {}", metricsFile);
         LOGGER.info("Import supports csv files as well as gz compressed csv files.");
 
         try {
@@ -121,7 +121,6 @@ public class FileImporter {
                 String[] metrics = headerLine.split(csvDelimiter);
 
                 Map<Integer, Attributes> attributesPerTimeSeries = new HashMap<>(metrics.length);
-
 
                 for (int i = 1; i < metrics.length; i++) {
                     String metric = metrics[i];

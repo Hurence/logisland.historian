@@ -5,7 +5,9 @@
 */
 package com.hurence.logisland.historian.rest.v1.api;
 
+import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Error;
+import org.springframework.core.io.Resource;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
@@ -23,18 +25,28 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-26T15:57:01.504+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
 
 @Api(value = "admin", description = "the admin API")
     public interface AdminApi {
+
+            @ApiOperation(value = "create new measures for all tags", nickname = "generateMeasuresForTags", notes = "create new measures for all tags", response = BulkLoad.class, tags={ "tag","measures","admin", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "BulkLoad result", response = BulkLoad.class),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/admin/generate/measures",
+                produces = { "application/json" }, 
+            method = RequestMethod.POST)
+        ResponseEntity<BulkLoad> generateMeasuresForTags(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile generator,@ApiParam(value = "do we delete previous entries ?", defaultValue = "false") @Valid @RequestParam(value = "clean", required = false, defaultValue="false") Boolean clean);
+
 
             @ApiOperation(value = "create new dataset with some sample data", nickname = "sampleData", notes = "create new dataset with some sample data", response = Tag.class, responseContainer = "List", tags={ "tag","datasource","admin", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "Sample tag list", response = Tag.class, responseContainer = "List"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/admin",
+            @RequestMapping(value = "/api/v1/admin/generate/tags",
                 produces = { "application/json" }, 
             method = RequestMethod.POST)
-        ResponseEntity<List<Tag>> sampleData(@ApiParam(value = "do we flush previous entries ?", defaultValue = "false") @Valid @RequestParam(value = "flush", required = false, defaultValue="false") Boolean flush);
+        ResponseEntity<List<Tag>> sampleData(@ApiParam(value = "do we flush previous entries ?", defaultValue = "false") @Valid @RequestParam(value = "flush", required = false, defaultValue="false") Boolean flush,@ApiParam(value = "do we delete previous entries ?", defaultValue = "false") @Valid @RequestParam(value = "clean", required = false, defaultValue="false") Boolean clean);
 
         }
