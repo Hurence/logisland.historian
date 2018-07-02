@@ -27,18 +27,18 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTag implements
   timeRangeFilter: TimeRangeFilter =  {label: 'Defaut', start: '1474399200000', end: '1474499500000'};
 
   starts: TimeRangeFilter[] = [
-    {label: 'Today', start: 'NOW/DAY', end: 'NOW+1DAY/DAY'},
-    {label: 'This week', start: 'NOW/WEEK', end: 'NOW+1WEEK/WEEK'},
-    {label: 'This month', start: 'NOW/MONTH', end: 'NOW+1MONTH/MONTH'},
-    {label: 'This year', start: 'NOW/YEAR', end: 'NOW+1YEAR/YEAR'},
+    {label: 'Today', start: 'NOW/DAY', end: 'NOW+1DAY/DAY'.replace("+", "%2B")},//replacing + because of an angular httpClient bug
+    // {label: 'This week', start: 'NOW/WEEK', end: 'NOW+1WEEK/WEEK'},
+    {label: 'This month', start: 'NOW/MONTH', end: 'NOW+1MONTH/MONTH'.replace("+", "%2B")},
+    {label: 'This year', start: 'NOW/YEAR', end: 'NOW+1YEAR/YEAR'.replace("+", "%2B")},
     {label: 'The day so far', start: 'NOW/DAY', end: 'NOW'},
-    {label: 'Week to date', start: 'NOW/WEEK', end: 'NOW'},
+    // {label: 'Week to date', start: 'NOW/WEEK', end: 'NOW'},
     {label: 'Month to date', start: 'NOW/MONTH', end: 'NOW'},
     {label: 'Year to date', start: 'NOW/YEAR', end: 'NOW'}, // yyyy-mm-ddThh:mm:ss.mmmZ
     {label: 'Yesterday', start: 'NOW-1DAY/DAY', end: 'NOW/DAY'},
     {label: 'Day before yesterday', start: 'NOW-2DAYS/DAY', end: 'NOW-1DAY/DAY'},
     {label: 'This day last week', start: 'NOW-7DAYS/DAY', end: 'NOW-6DAYS/DAY'},
-    {label: 'Previous week', start: 'NOW-1WEEK/WEEK', end: 'NOW/WEEK'},
+    // {label: 'Previous week', start: 'NOW-1WEEK/WEEK', end: 'NOW/WEEK'},
     {label: 'Previous month', start: 'NOW-1MONTH/MONTH', end: 'NOW/MONTH'},
     {label: 'Previous year', start: 'NOW-1YEAR/YEAR', end: 'NOW/YEAR'},
     {label: 'Last 15 minutes', start: 'NOW-15MINUTES', end: 'NOW'},
@@ -79,19 +79,19 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTag implements
       spanGaps: false,
       scales: {
         xAxes: [{
-          type: CartesianAxeType.LINEAR,
-          distribution: TimeDistribution.SERIES,
-          ticks: {
+          type: CartesianAxeType.TIME,
+          distribution: TimeDistribution.LINEAR,
+          // ticks: {
             // suggestedMin: 0,
             // suggestedMax: 30
-          }
+          // }
       }],
         yAxes: [{
             // stacked: false
             type: CartesianAxeType.LINEAR,
             ticks: {
-              suggestedMin: 30,
-              suggestedMax: 80
+              // suggestedMin: 30,
+              // suggestedMax: 80
             }
         }]
       }
