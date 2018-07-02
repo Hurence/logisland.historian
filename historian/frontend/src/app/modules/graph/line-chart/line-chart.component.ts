@@ -9,9 +9,9 @@ import { IHistorianTag } from '../../tag/modele/HistorianTag';
 import { ArrayUtil } from '../../../shared/array-util';
 
 export interface TimeRangeFilter {
-  label: string,
-  start: string,
-  end: string,
+  label: string;
+  start: string;
+  end: string;
 }
 
 @Component({
@@ -27,10 +27,10 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTag implements
   timeRangeFilter: TimeRangeFilter =  {label: 'Defaut', start: '1474399200000', end: '1474499500000'};
 
   starts: TimeRangeFilter[] = [
-    {label: 'Today', start: 'NOW/DAY', end: 'NOW+1DAY/DAY'.replace("+", "%2B")},//replacing + because of an angular httpClient bug
+    {label: 'Today', start: 'NOW/DAY', end: 'NOW+1DAY/DAY'.replace('+', '%2B')}, // replacing + because of an angular httpClient bug
     // {label: 'This week', start: 'NOW/WEEK', end: 'NOW+1WEEK/WEEK'},
-    {label: 'This month', start: 'NOW/MONTH', end: 'NOW+1MONTH/MONTH'.replace("+", "%2B")},
-    {label: 'This year', start: 'NOW/YEAR', end: 'NOW+1YEAR/YEAR'.replace("+", "%2B")},
+    {label: 'This month', start: 'NOW/MONTH', end: 'NOW+1MONTH/MONTH'.replace('+', '%2B')},
+    {label: 'This year', start: 'NOW/YEAR', end: 'NOW+1YEAR/YEAR'.replace('+', '%2B')},
     {label: 'The day so far', start: 'NOW/DAY', end: 'NOW'},
     // {label: 'Week to date', start: 'NOW/WEEK', end: 'NOW'},
     {label: 'Month to date', start: 'NOW/MONTH', end: 'NOW'},
@@ -55,7 +55,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTag implements
     {label: 'Last 1 year', start: 'NOW-1YEAR', end: 'NOW'},
     {label: 'Last 2 years', start: 'NOW-2YEARS', end: 'NOW'},
     {label: 'Last 5 year', start: 'NOW-5YEARS', end: 'NOW'}
-  ]
+  ];
 
   constructor(private measuresService: MeasuresService,
               private arrayUtil: ArrayUtil,
@@ -137,7 +137,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTag implements
         this.data.datasets.push(this.convertMeasureToDataset(m));
         this.redrawGraph();
       });
-    })
+    });
   }
 
   redrawGraph() {
