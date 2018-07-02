@@ -57,6 +57,7 @@ public class AdminApiService {
 
     private static final String TAGS_LIST = "tags";
 
+
     @Resource
     private SolrTagRepository solrTagRepository;
 
@@ -88,6 +89,10 @@ public class AdminApiService {
 
     public void deleteAllTag() {
         solrTagRepository.deleteAll();
+    }
+
+    public void deleteAllMeasures() {
+        new ChronixImporter((HttpSolrClient) solrClient, new String[]{"source"}).deleteIndex();
     }
 
     public List<String> getAllTagIds() {
@@ -175,7 +180,7 @@ public class AdminApiService {
     }
 
 
-    public BulkLoad launchTagMeasuresGenerator(MultipartFile config, List<String> metricNames, Boolean clean) {
+    public BulkLoad launchTagMeasuresGenerator(MultipartFile config, List<String> metricNames) {
 
         BulkLoad bl = new BulkLoad();
         try {
@@ -188,6 +193,7 @@ public class AdminApiService {
                     JavaConverters.asScalaBufferConverter(metricNames).asScala().toList());
 
             bl.setGenerationDuration((int) (System.currentTimeMillis() - startGeneration));
+
             generatedFiles.forEach(file -> {
                 String[] attributes = new String[]{"source"};
 
@@ -208,7 +214,8 @@ public class AdminApiService {
                     logger.info("Start importing " + file);
                     is = new FileInputStream(file);
 
-                    result = importer.importPoints(importStatistics, is, fileNameMetaData, chronixImporter.importToChronix(clean, false, 10000));
+                    result = importer.importPoints(importStatistics, is, fileNameMetaData, chronixImporter.importToChronix(false, false, 10000));
+
 
                     logger.info("Done importing. Trigger commit.");
                     chronixImporter.commit();

@@ -39,8 +39,9 @@ public class AdminApiController implements AdminApi {
     @Override
     public ResponseEntity<BulkLoad> generateMeasuresForTags(@Valid @RequestPart("file") MultipartFile generator,
                                            @Valid @RequestParam(value = "clean", required = false, defaultValue="false") Boolean clean) {
+        if (clean) service.deleteAllMeasures();
         List<String> tagIds = service.getAllTagIds();
-        return new ResponseEntity<BulkLoad>(service.launchTagMeasuresGenerator(generator, tagIds, clean), HttpStatus.OK);
+        return new ResponseEntity<BulkLoad>(service.launchTagMeasuresGenerator(generator, tagIds), HttpStatus.OK);
     }
 
 }
