@@ -17,7 +17,6 @@ filterBy="data_type,description"
     <span>Filter by :</span>
     <input type="search" pInputText placeholder="Search by type" (keyup)="dv.filter($event.target.value)">    
     <!-- REFRESH RATE -->
-    <span>Refresh every :</span>
     <app-refresh-rate-selection [(refreshRate)]="refreshRate"></app-refresh-rate-selection>
     <!-- display option -->
     <span>Choose display :</span>

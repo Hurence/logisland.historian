@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { ILineChartData, ILineChartOption, CartesianAxeType, TimeDistribution, ILineChartDataset } from './LineChartModele';
+import { Component, Input, OnInit } from '@angular/core';
+
+import { mixin } from '../../../../../node_modules/mixin';
+import { AbsSubscriberToSelectionOfTag, AbsSubscriberToSelectionOfTagWithRefresh } from '../../../core/AbsSubscriberToSelectionOfTag';
 import { Measures } from '../../../measure/Measures';
 import { MeasuresService } from '../../../measure/measures.service';
 import { MeasuresRequest } from '../../../measure/MeasuresRequest';
-import { AbsSubscriberToSelectionOfTag } from '../../../core/AbsSubscriberToSelectionOfTag';
 import { ProfilService } from '../../../profil/profil.service';
-import { IHistorianTag } from '../../tag/modele/HistorianTag';
 import { ArrayUtil } from '../../../shared/array-util';
+import { RefreshRateComponent } from '../../../shared/refresh-rate-selection/RefreshRateComponent';
+import { IHistorianTag } from '../../tag/modele/HistorianTag';
+import { CartesianAxeType, ILineChartData, ILineChartDataset, ILineChartOption, TimeDistribution } from './LineChartModele';
 
 export interface TimeRangeFilter {
   label: string;
@@ -19,12 +22,13 @@ export interface TimeRangeFilter {
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css']
 })
-export class LineChartComponent extends AbsSubscriberToSelectionOfTag implements OnInit {
+export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh implements OnInit {
 
   data: ILineChartData;
   options: ILineChartOption;
   tags: IHistorianTag[];
   timeRangeFilter: TimeRangeFilter =  {label: 'Defaut', start: '1474399200000', end: '1474499500000'};
+  @Input() refreshRate: number;
 
   starts: TimeRangeFilter[] = [
     {label: 'Today', start: 'NOW/DAY', end: 'NOW+1DAY/DAY'.replace('+', '%2B')}, // replacing + because of an angular httpClient bug
@@ -99,6 +103,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTag implements
   }
 
   ngOnInit() {
+    super.ngOnInit();
     this.changeSelectionSubscription = this.profilService.getSelectionPublisher().subscribe(newSelection => {
       this.tags = newSelection.tags;
       this.tags.forEach(tag => {
@@ -148,6 +153,9 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTag implements
     console.log(`Data Selected' : ${this.data.datasets[event.element._datasetIndex].data[event.element._index]}`);
   }
 
+  subscribeToRefreshChanges(t: number): void {
+    this.updateGraphData();
+  }
 
   private convertMeasureToDataset(m: Measures): ILineChartDataset {
     const timeSerie = m.timestamps.map((time, index) => {

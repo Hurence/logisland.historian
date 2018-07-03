@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LineChartViewComponent implements OnInit {
 
+  refreshRate = 10000;
+
   constructor() { }
 
   ngOnInit() {
