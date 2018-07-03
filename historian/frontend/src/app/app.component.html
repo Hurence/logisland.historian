@@ -36,22 +36,22 @@
         <div class="col-md-2 col-xs-1 p-l-0 p-r-0 collapse in show" id="sidebar">
         <div class="list-group panel">
             <!-- START menu-settings -->
-            <a href="#menu-settings" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <a href="#menu-settings" class="list-group-item" data-toggle="collapse" data-parent="#sidebar" aria-expanded="true">
             <i class="fa fa-dashboard"></i>
             <span class="hidden-sm-down">Settings</span>
             </a>
-            <div class="collapse" id="menu-settings">
+            <div class="collapse show" id="menu-settings">
             <a routerLinkActive="active" routerLink="/sources-and-tags/datasources" class="list-group-item" data-parent="#menu-settings">Datasources</a>
             <a routerLinkActive="active" routerLink="/sources-and-tags/tags" class="list-group-item" data-parent="#menu-settings">Tags</a>
             </div>
             <!-- START menu selection -->
             <a routerLinkActive="active" routerLink="/selections" class="list-group-item">Selection</a>
             <!-- START menu-visualization -->
-            <a href="#menu-visualization" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <a href="#menu-visualization" class="list-group-item" data-toggle="collapse" data-parent="#sidebar" aria-expanded="true">
             <i class="fa fa-film"></i>
             <span class="hidden-sm-down">Visualization</span>
             </a>
-            <div class="collapse" id="menu-visualization">
+            <div class="collapse show" id="menu-visualization">
             <a class="list-group-item" routerLinkActive="active" routerLink="/visualization/tabular" data-parent="#menu-visualization">Tabular</a>
             <a class="list-group-item" routerLinkActive="active" routerLink="/visualization/lineChart" data-parent="#menu-visualization">Line Chart</a>
             </div>
