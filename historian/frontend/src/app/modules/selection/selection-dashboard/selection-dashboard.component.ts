@@ -5,7 +5,7 @@ import { DialogService } from '../../../dialog/dialog.service';
 import { ProfilService } from '../../../profil/profil.service';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
-import { TagsSelection } from '../Selection';
+import { TagsSelection, TagsSelectionArray } from '../Selection';
 import { SelectionFormComponent } from '../selection-form/selection-form.component';
 import { SelectionService } from '../selection.service';
 
@@ -34,25 +34,13 @@ export class SelectionDashboardComponent implements OnInit {
               private dialogService: DialogService,
               private selectionService: SelectionService) {}
 
-
-  get currentSelection(): TagsSelection {
-      return this._currentSelection;
-  }
-  set currentSelection(selection: TagsSelection) {
-      this._currentSelection = selection;
-      this.profilService.changeSelection(selection);
-  }
-
   ngOnInit() {
     this.selectionQuestions = this.getMyQuestions();
     this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
-    this.currentSelection = this.profilService.currentTagsSelection;
     this.actualizeListOfTagsSelection();
   }
 
-  onSelectionChange(event) {
-    this.currentSelection = event.value;
-  }
+  onSelectionChange(event) {}
 
   showDialog() {
       this.display = true;
@@ -64,7 +52,7 @@ export class SelectionDashboardComponent implements OnInit {
 
   onCreated(selection: TagsSelection) {
     this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
-    this.currentSelection = selection;
+    this.profilService.currentTagsSelection = selection;
     this.actualizeListOfTagsSelection();
     this.closeDialog();
   }
