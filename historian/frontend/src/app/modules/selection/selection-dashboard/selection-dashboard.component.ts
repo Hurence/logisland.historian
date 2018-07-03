@@ -30,7 +30,7 @@ export class SelectionDashboardComponent implements OnInit {
 
   @ViewChild(SelectionFormComponent) private tagSelectionFormComp: SelectionFormComponent;
 
-  constructor(private profilService: ProfilService,
+  constructor(public profilService: ProfilService,
               private dialogService: DialogService,
               private selectionService: SelectionService) {}
 

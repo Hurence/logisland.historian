@@ -1,13 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { mixin } from '../../../../../node_modules/mixin';
-import { AbsSubscriberToSelectionOfTag, AbsSubscriberToSelectionOfTagWithRefresh } from '../../../core/AbsSubscriberToSelectionOfTag';
+import { AbsSubscriberToSelectionOfTagWithRefresh } from '../../../core/AbsSubscriberToSelectionOfTag';
 import { Measures } from '../../../measure/Measures';
 import { MeasuresService } from '../../../measure/measures.service';
 import { MeasuresRequest } from '../../../measure/MeasuresRequest';
 import { ProfilService } from '../../../profil/profil.service';
 import { ArrayUtil } from '../../../shared/array-util';
-import { RefreshRateComponent } from '../../../shared/refresh-rate-selection/RefreshRateComponent';
 import { IHistorianTag } from '../../tag/modele/HistorianTag';
 import { CartesianAxeType, ILineChartData, ILineChartDataset, ILineChartOption, TimeDistribution } from './LineChartModele';
 
