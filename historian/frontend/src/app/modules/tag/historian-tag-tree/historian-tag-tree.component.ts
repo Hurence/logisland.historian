@@ -37,22 +37,25 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.tagsSelection && !changes.tagsSelection.isFirstChange()) {
       this.selectedNodes.forEach(node => {
-        this.selectRecursive(node, false);
+        this.restoreNodeTree(node);
       });
       this.selectedNodes = [];
       this.treeNodes.forEach(node => {
-        this.selectTagNodes(node);
+        this.initializeTreeWithTagsSelection(node, this.tagsSelection);
       });
     }
   }
 
-  nodeSelect(event) {
-    this.loadANode(event.node);
-    this.selectNode(event.node);
+  selectNode(event) {
+    this.selectRecursive(event.node, true);
   }
 
-  nodeUnSelect(event) {
+  unSelectNode(event) {
     this.selectRecursive(event.node, false);
+  }
+
+  loadNode(event) {
+    this.loadANodeIfNeeded(event.node);
   }
 
   saveSelection() {
@@ -64,52 +67,47 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
   }
 
   expandAll() {
-    this.treeNodes.forEach( node => {
-        this.expandRecursive(node, true);
+    this.treeNodes.forEach(node => {
+        this.expandRecursive(node, true, true);
     } );
   }
 
   collapseAll() {
     this.treeNodes.forEach( node => {
-        this.expandRecursive(node, false);
+        this.expandRecursive(node, false, false);
     } );
-  }
-
-  loadNode(event) {
-    this.loadANode(event.node);
   }
 
   private getNodeTree(): Observable<TreeNode[]> {
     return this.ngTreenodeService.getHistTagTree();
   }
 
-  private selectTagNodes(node: TreeNode): void {
-    if (node && node.type === 'tag' && this.tagsSelection.containTag(node.data.id)) {
+  private initializeTreeWithTagsSelection(node: TreeNode, tagsSelection: TagsSelection): void {
+    if (node && node.type === 'tag' && tagsSelection.containTag(node.data.id)) {
         node.icon = this.findIcon(true);
         this.selectedNodes.push(node);
     }
     if (node.children) {
         node.children.forEach( childNode => {
-            this.selectTagNodes(childNode);
+            this.initializeTreeWithTagsSelection(childNode, tagsSelection);
         } );
     }
   }
 
-  private expandRecursive(node: TreeNode, isExpand: boolean) {
+  private expandRecursive(node: TreeNode, isExpand: boolean, loadChildren: boolean) {
     node.expanded = isExpand;
-    this.loadANode(node);
+    if (loadChildren) this.loadANodeIfNeeded(node);
     if (node.children) {
         node.children.forEach( childNode => {
-            this.expandRecursive(childNode, isExpand);
+            this.expandRecursive(childNode, isExpand, loadChildren);
         } );
     }
   }
-
-  private selectNode(node: TreeNode): void {
-    console.log('select node', node);
-    this.selectRecursive(node, true);
-  }
-
+  /** Change icon of selected or unselected tags
+   * add or remove them from current tagsSelection
+   *
+   * We do not need to add them in selectedNodes as it is done by defaut using checkbox selection
+  */
   private selectRecursive(node: TreeNode, isSelected: boolean) {
     if (node.type === 'tag') {
       node.icon = this.findIcon(isSelected);
@@ -122,8 +120,19 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
       }
     }
     if (node.children) {
-        node.children.forEach( childNode => {
+        node.children.forEach(childNode => {
             this.selectRecursive(childNode, isSelected);
+        } );
+    }
+  }
+
+  private restoreNodeTree(node: TreeNode) {
+    if (node.type === 'tag') {
+      node.icon = this.findIcon(false);
+    }
+    if (node.children) {
+        node.children.forEach(childNode => {
+            this.restoreNodeTree(childNode);
         } );
     }
   }
@@ -133,7 +142,7 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
     return 'historian-tag';
   }
 
-  private loadANode(node: TreeNode): boolean {
+  private loadANodeIfNeeded(node: TreeNode): boolean {
     if (node && node.type === 'group' && (!node.children  || node.children.length === 0)) {
       this.loadChildren(node);
       return true;
