@@ -27,7 +27,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
   data: ILineChartData;
   options: ILineChartOption;
   tags: IHistorianTag[];
-  timeRangeFilter: TimeRangeFilter =  {label: 'Defaut', start: '1474399200000', end: '1474499500000'};
+  timeRangeFilter: TimeRangeFilter =  {label: 'Last 15 minutes', start: 'NOW-15MINUTES', end: 'NOW'};
   @Input() refreshRate: number;
 
   starts: TimeRangeFilter[] = [
