@@ -6,6 +6,7 @@ import { SelectionModule } from '../selection/selection.module';
 import { LineChartViewComponent } from './line-chart-view/line-chart-view.component';
 import { VisualizationRoutingModule } from './visualization-routing.module';
 import { VisualizationComponent } from './visualization.component';
+import { RefreshRateSelectionComponent } from '../../shared/refresh-rate-selection/refresh-rate-selection.component';
 
 
 @NgModule({

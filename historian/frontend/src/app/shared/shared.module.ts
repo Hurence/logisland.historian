@@ -17,6 +17,7 @@ import { PanelModule } from 'primeng/panel';
 import { DialogModule } from 'primeng/dialog';
 import { TreeModule } from 'primeng/tree';
 import { TreeDragDropService } from 'primeng/api';
+import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-rate-selection.component';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { TreeDragDropService } from 'primeng/api';
     PanelModule,
     DialogModule,
     TreeModule,
+    RefreshRateSelectionComponent,
   ],
   providers: [
     TreeDragDropService,
@@ -58,6 +60,7 @@ import { TreeDragDropService } from 'primeng/api';
     DynamicFormComponent,
     DynamicFormQuestionComponent,
     DynamicFormQuestionArrayComponent,
+    RefreshRateSelectionComponent,
   ],
 })
 export class SharedModule { }

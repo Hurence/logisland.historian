@@ -18,8 +18,7 @@ filterBy="data_type,description"
     <input type="search" pInputText placeholder="Search by type" (keyup)="dv.filter($event.target.value)">    
     <!-- REFRESH RATE -->
     <span>Refresh every :</span>
-    <p-dropdown [options]="refreshOptions"  placeholder="Refresh every" [(ngModel)]="refreshRate"
-    (onChange)="onRefreshChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
+    <app-refresh-rate-selection [(refreshRate)]="refreshRate"></app-refresh-rate-selection>
     <!-- display option -->
     <span>Choose display :</span>
     <p-dataViewLayoutOptions></p-dataViewLayoutOptions>

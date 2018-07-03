@@ -23,7 +23,6 @@ export class TagDataviewComponent extends AbsSubscriberToSelectionOfTag implemen
   sortField = 'tag_name'; // for dataview comp
   sortOrder: number; // for dataview comp
 
-  refreshOptions: SelectItem[];
   refreshRate = 10000; // in milli
 
   loading: boolean; // for dataview comp
@@ -64,13 +63,6 @@ export class TagDataviewComponent extends AbsSubscriberToSelectionOfTag implemen
       {label: 'Type', value: 'data_type'},
       {label: 'Reverse Type', value: '!data_type'},
     ];
-
-    this.refreshOptions = [
-      {label: '1 secondes', value: '1000'},
-      {label: '5 secondes', value: '5000'},
-      {label: '10 secondes', value: '10000'},
-      {label: '60 secondes', value: '60000'},
-    ];
   }
 
   // loadData(event) {
@@ -94,8 +86,4 @@ export class TagDataviewComponent extends AbsSubscriberToSelectionOfTag implemen
     }
   }
 
-  onRefreshChange(event) {
-    const refreshRate = event.value; // convert into milli
-    this.refreshRate = refreshRate;
-  }
 }
