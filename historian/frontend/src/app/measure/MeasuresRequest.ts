@@ -14,11 +14,13 @@ export interface IMeasuresRequest {
     Calculate the max, min, and the trend based on the prior result.*/
     functions?: string;
     no_values?: boolean; // will retrieve only function values, no data points
+}
 
+export interface CanBuildQuery {
     buildQuery(rootUrl: string): string;
 }
 
-export class MeasuresRequest implements IMeasuresRequest {
+export class MeasuresRequest implements IMeasuresRequest, CanBuildQuery {
     itemId: string;
     start?: string;
     end?: string;
@@ -34,14 +36,16 @@ export class MeasuresRequest implements IMeasuresRequest {
      * @param rootUrl root url with / at end
      */
     buildQuery(rootUrl: string): string {
-        const query = `${rootUrl}tags/${this.itemId}/measures`;
+        const query = `${rootUrl}tags/${this.itemId}/measures?`;
         const parameters: string[] = [];
-        for (const key in Object.keys(this)) {
+        Object.keys(this).forEach(key => {
             if (key !== 'itemId') {
                 console.log('key is', key);
-                parameters.push(`${key}=${this[key]}`);
+                if (this[key] !== undefined) {
+                    parameters.push(`${key}=${encodeURIComponent(this[key])}`);
+                }
             }
-        }
+        });
         return query + parameters.join('&');
     }
 }

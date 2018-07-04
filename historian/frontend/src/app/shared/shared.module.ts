@@ -14,6 +14,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { PanelModule } from 'primeng/panel';
+import { DialogModule } from 'primeng/dialog';
+import { TreeModule } from 'primeng/tree';
+import { TreeDragDropService } from 'primeng/api';
+import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-rate-selection.component';
 
 @NgModule({
   imports: [
@@ -26,6 +30,8 @@ import { PanelModule } from 'primeng/panel';
     PanelMenuModule,
     FormsModule,
     PanelModule,
+    DialogModule,
+    TreeModule,
   ],
   exports: [
     CommonModule,
@@ -41,6 +47,12 @@ import { PanelModule } from 'primeng/panel';
     PanelMenuModule,
     FormsModule,
     PanelModule,
+    DialogModule,
+    TreeModule,
+    RefreshRateSelectionComponent,
+  ],
+  providers: [
+    TreeDragDropService,
   ],
   declarations: [
     SearchComponent,
@@ -48,6 +60,7 @@ import { PanelModule } from 'primeng/panel';
     DynamicFormComponent,
     DynamicFormQuestionComponent,
     DynamicFormQuestionArrayComponent,
-  ]
+    RefreshRateSelectionComponent,
+  ],
 })
 export class SharedModule { }

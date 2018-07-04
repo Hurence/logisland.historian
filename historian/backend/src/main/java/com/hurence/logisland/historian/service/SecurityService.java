@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.util.Set;
+
 @Service
 public class SecurityService {
 
@@ -17,13 +20,20 @@ public class SecurityService {
     @Autowired
     private IAuthenticationFacade authenticationFacade;
 
-    public String currentUserNameSimple() {
-        Authentication authentication = authenticationFacade.getAuthentication();
-        log.info("user is " + authentication.getName());
-        if (authentication.getDetails() instanceof SimpleKeycloakAccount) {
-            log.info("roles are " + ((SimpleKeycloakAccount) authentication.getDetails()).getRoles());
-        }
-        return authentication.getName();
+    public String getUserName() {
+        return authenticationFacade.getAuthentication().getName();
     }
 
+    public Principal getPrincipal() {
+        return (Principal) authenticationFacade.getAuthentication().getPrincipal();
+    }
+
+    public Set<String> getRoles() {
+        Object details = authenticationFacade.getAuthentication().getDetails();
+        if (details instanceof SimpleKeycloakAccount) {
+            return ((SimpleKeycloakAccount) details).getRoles();
+        } else {
+            throw new IllegalStateException("Authentication is not of class SimpleKeycloakAccount");
+        }
+    }
 }

@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-18T14:48:27.731+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
 
 @Api(value = "selections", description = "the selections API")
     public interface SelectionsApi {
@@ -34,9 +34,9 @@ import java.util.List;
                 @ApiResponse(code = 200, message = "Selection successfuly created", response = Selection.class),
                 @ApiResponse(code = 400, message = "Invalid ID supplied"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/selections/{selectionId}",
+            @RequestMapping(value = "/api/v1/selections/{selectionName}",
             method = RequestMethod.POST)
-        ResponseEntity<Selection> addSelectionWithId(@ApiParam(value = "Selection resource to add" ,required=true )  @Valid @RequestBody Selection body,@ApiParam(value = "selectionId to create",required=true) @PathVariable("selectionId") String selectionId);
+        ResponseEntity<Selection> addSelectionWithId(@ApiParam(value = "Selection resource to add" ,required=true )  @Valid @RequestBody Selection body,@ApiParam(value = "selectionName to create",required=true) @PathVariable("selectionName") String selectionName);
 
 
             @ApiOperation(value = "delete Selection", nickname = "deleteSelection", notes = "remove the corresponding Selection", response = Selection.class, tags={ "selection", })
@@ -45,19 +45,29 @@ import java.util.List;
                 @ApiResponse(code = 400, message = "Invalid ID supplied"),
                 @ApiResponse(code = 404, message = "Selection resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/selections/{selectionId}",
+            @RequestMapping(value = "/api/v1/selections/{selectionName}",
             method = RequestMethod.DELETE)
-        ResponseEntity<Selection> deleteSelection(@ApiParam(value = "id of the Selection to be deleted",required=true) @PathVariable("selectionId") String selectionId);
+        ResponseEntity<Selection> deleteSelection(@ApiParam(value = "id of the Selection to be deleted",required=true) @PathVariable("selectionName") String selectionName);
 
 
             @ApiOperation(value = "get all tags from a selection", nickname = "getAllTagsFromSelection", notes = "retrieve all tags through this selection", response = Tag.class, responseContainer = "List", tags={ "selection","tag", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "Tag list", response = Tag.class, responseContainer = "List"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/selections/{selectionId}/tags",
+            @RequestMapping(value = "/api/v1/selections/{selectionName}/tags",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        ResponseEntity<List<Tag>> getAllTagsFromSelection(@ApiParam(value = "id of the selection",required=true) @PathVariable("selectionId") String selectionId);
+        ResponseEntity<List<Tag>> getAllTagsFromSelection(@ApiParam(value = "id of the selection",required=true) @PathVariable("selectionName") String selectionName);
+
+
+            @ApiOperation(value = "get all slections that this user has access to", nickname = "getAllUserSelection", notes = "retrieve all slections that user has access to", response = Selection.class, responseContainer = "List", tags={ "selection", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "Selection list", response = Selection.class, responseContainer = "List"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/selections",
+                produces = { "application/json" }, 
+            method = RequestMethod.GET)
+        ResponseEntity<List<Selection>> getAllUserSelection();
 
 
             @ApiOperation(value = "get Selection", nickname = "getSelection", notes = "get the corresponding Selection", response = Selection.class, tags={ "selection", })
@@ -65,10 +75,10 @@ import java.util.List;
                 @ApiResponse(code = 200, message = "Selection found", response = Selection.class),
                 @ApiResponse(code = 404, message = "Selection resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/selections/{selectionId}",
+            @RequestMapping(value = "/api/v1/selections/{selectionName}",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        ResponseEntity<Selection> getSelection(@ApiParam(value = "id of the Selection to return",required=true) @PathVariable("selectionId") String selectionId);
+        ResponseEntity<Selection> getSelection(@ApiParam(value = "id of the Selection to return",required=true) @PathVariable("selectionName") String selectionName);
 
 
             @ApiOperation(value = "update Selection", nickname = "updateSelection", notes = "update an existing Selection", response = Selection.class, tags={ "selection", })
@@ -76,8 +86,8 @@ import java.util.List;
                 @ApiResponse(code = 200, message = "Selection successfuly updated", response = Selection.class),
                 @ApiResponse(code = 400, message = "Invalid ID supplied"),
                 @ApiResponse(code = 404, message = "Selection resource not found") })
-            @RequestMapping(value = "/api/v1/selections/{selectionId}",
+            @RequestMapping(value = "/api/v1/selections/{selectionName}",
             method = RequestMethod.PUT)
-        ResponseEntity<Selection> updateSelection(@ApiParam(value = "selectionId to be updated",required=true) @PathVariable("selectionId") String selectionId,@ApiParam(value = "new Selection definition" ,required=true )  @Valid @RequestBody Selection selection);
+        ResponseEntity<Selection> updateSelection(@ApiParam(value = "selectionName to be updated",required=true) @PathVariable("selectionName") String selectionName,@ApiParam(value = "new Selection definition" ,required=true )  @Valid @RequestBody Selection body);
 
         }

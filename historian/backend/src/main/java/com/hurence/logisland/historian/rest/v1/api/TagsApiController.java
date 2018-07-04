@@ -3,6 +3,7 @@ package com.hurence.logisland.historian.rest.v1.api;
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Measures;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.rest.v1.model.TreeNode;
 import com.hurence.logisland.historian.service.MeasuresApiService;
 import com.hurence.logisland.historian.service.TagsApiService;
 import io.swagger.annotations.ApiParam;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,6 +106,13 @@ public class TagsApiController implements TagsApi {
 
         }
     }
+
+    @Override
+    public ResponseEntity<List<TreeNode>> getTreeTag(@Valid @RequestParam(value = "limit", required = false, defaultValue="100") Integer limit) {
+        List<TreeNode> treeTag = service.getTreeTag(0, limit);
+        return new ResponseEntity<List<TreeNode>>(treeTag, HttpStatus.OK);
+    }
+
 
     @Override
     public ResponseEntity<BulkLoad> postTagMeasures(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile content, @ApiParam(value = "the csv file content", defaultValue = ";") @Valid @RequestParam(value = "csv_delimiter", required = false, defaultValue = ";") String csvDelimiter, @ApiParam(value = "valid values LONG (ms since 1970),   INSTANT (default java 8 instant),   'SDF-FORMAT' e.g dd.MM.yyyy HH:mm:ss.SSS ", defaultValue = "dd.MM.yyyy HH:mm:ss.SSS") @Valid @RequestParam(value = "date_format", required = false, defaultValue = "dd.MM.yyyy HH:mm:ss.SSS") String dateFormat, @ApiParam(value = "valid values ENGLISH, GERMAN", defaultValue = "ENGLISH") @Valid @RequestParam(value = "number_format", required = false, defaultValue = "ENGLISH") String numberFormat, @ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields, @ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue = "false") Boolean cleanImport, @ApiParam(value = "the number of points by chunk") @Valid @RequestParam(value = "points_by_chunk", required = false) Integer pointsByChunk) {
