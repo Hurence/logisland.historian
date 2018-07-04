@@ -22,20 +22,20 @@ export class DatasourceService implements IModelService<Datasource> {
     return this.http.get<Datasource[]>(this.datasourcesUrl);
   }
   get(id: string): Observable<Datasource> {
-    return this.http.get<Datasource>(this.datasourcesUrl + '/' + id);
+    return this.http.get<Datasource>(this.datasourcesUrl + '/' + encodeURIComponent(id));
   }
   save(obj: Datasource): Observable<Datasource> {
-    return this.http.post<Datasource>(this.datasourcesUrl + '/' + obj.id, obj);
+    return this.http.post<Datasource>(this.datasourcesUrl + '/' + encodeURIComponent(obj.id), obj);
   }
   update(obj: Datasource): Observable<Datasource> {
-    return this.http.put<Datasource>(this.datasourcesUrl + '/' + obj.id, obj);
+    return this.http.put<Datasource>(this.datasourcesUrl + '/' + encodeURIComponent(obj.id), obj);
   }
   delete(id: string): Observable<Datasource> {
-    return this.http.delete<Datasource>(this.datasourcesUrl + '/' + id);
+    return this.http.delete<Datasource>(this.datasourcesUrl + '/' + encodeURIComponent(id));
   }
 
   datasourceIsReachable(id: string): Observable<boolean> {
-    return this.http.get<Tag[]>(this.datasourcesUrl + '/' + id + '/tags')
+    return this.http.get<Tag[]>(this.datasourcesUrl + '/' + encodeURIComponent(id) + '/tags')
       .pipe(
         map(tags => true),
         catchError(error => of(false))

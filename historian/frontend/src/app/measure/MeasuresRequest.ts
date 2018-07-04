@@ -42,7 +42,7 @@ export class MeasuresRequest implements IMeasuresRequest, CanBuildQuery {
             if (key !== 'itemId') {
                 console.log('key is', key);
                 if (this[key] !== undefined) {
-                    parameters.push(`${key}=${this[key]}`);
+                    parameters.push(`${key}=${encodeURIComponent(this[key])}`);
                 }
             }
         });

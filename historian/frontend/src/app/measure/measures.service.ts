@@ -21,7 +21,7 @@ export class MeasuresService {
   }
 
   getStat(itemId: string): Observable<Measures> {
-    return this.http.get<Measures>(`${this.measuresUrl}tags/${itemId}/stats`).pipe(
+    return this.http.get<Measures>(`${this.measuresUrl}tags/${encodeURIComponent(itemId)}/stats`).pipe(
       tap(stat => console.log(`stat for item ${itemId}`, stat))
     );
   }

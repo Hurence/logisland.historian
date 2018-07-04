@@ -29,10 +29,10 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
   @Input() refreshRate: number;
 
   starts: TimeRangeFilter[] = [
-    {label: 'Today', start: 'NOW/DAY', end: 'NOW+1DAY/DAY'.replace('+', '%2B')}, // replacing + because of an angular httpClient bug
+    {label: 'Today', start: 'NOW/DAY', end: 'NOW+1DAY/DAY'},
     // {label: 'This week', start: 'NOW/WEEK', end: 'NOW+1WEEK/WEEK'},
-    {label: 'This month', start: 'NOW/MONTH', end: 'NOW+1MONTH/MONTH'.replace('+', '%2B')},
-    {label: 'This year', start: 'NOW/YEAR', end: 'NOW+1YEAR/YEAR'.replace('+', '%2B')},
+    {label: 'This month', start: 'NOW/MONTH', end: 'NOW+1MONTH/MONTH'},
+    {label: 'This year', start: 'NOW/YEAR', end: 'NOW+1YEAR/YEAR'},
     {label: 'The day so far', start: 'NOW/DAY', end: 'NOW'},
     // {label: 'Week to date', start: 'NOW/WEEK', end: 'NOW'},
     {label: 'Month to date', start: 'NOW/MONTH', end: 'NOW'},

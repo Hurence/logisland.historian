@@ -26,7 +26,7 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
   }
 
   getAllFromDatasources(datasourceIds: string[]): Observable<IHistorianTag[]> {
-    const query = datasourceIds.map(id => `datasource_id:"${id}"`).join(' OR ');
+    const query = datasourceIds.map(id => `datasource_id:"${encodeURIComponent(id)}"`).join(' OR ');
     return this.getQuery(query);
   }
 
@@ -34,7 +34,7 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     if (tagIds.length === 0) {
       return Observable.of([]);
     } else {
-      const query = tagIds.map(id => `id:"${id}"`).join(' OR ');
+      const query = tagIds.map(id => `id:"${encodeURIComponent(id)}"`).join(' OR ');
       return this.getQuery(query);
     }
   }
@@ -60,7 +60,7 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
   }
 
   get(id: string): Observable<IHistorianTag> {
-    return this.http.get<IHistorianTag>(`${this.tagsUrl}tags/${id}`)
+    return this.http.get<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(id)}`)
     .pipe(
       map(this.markAsHistTag),
       catchError(this.help.handleError(`get(${id})`))
@@ -68,19 +68,19 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
   }
 
   save(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.post<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`, obj).pipe(
+    return this.http.post<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj).pipe(
       map(this.markAsHistTag)
     );
   }
 
   update(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.put<IHistorianTag>(`${this.tagsUrl}tags/${obj.id}`, obj).pipe(
+    return this.http.put<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj).pipe(
       map(this.markAsHistTag)
     );
   }
 
   delete(id: string): Observable<IHistorianTag> {
-    return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${id}`).pipe(
+    return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(id)}`).pipe(
       map(this.markAsHistTag)
     );
   }

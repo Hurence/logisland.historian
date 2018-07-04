@@ -23,7 +23,7 @@ export class TagOpcService {
   }
 
   get(datasourceId: string): Observable<IOpcTag[]> {
-    return this.http.get<IOpcTag[]>(`${this.tagsUrl}datasources/${datasourceId}/tags`)
+    return this.http.get<IOpcTag[]>(`${this.tagsUrl}datasources/${encodeURIComponent(datasourceId)}/tags`)
     .pipe(
       catchError(this.help.handleError(`get(${datasourceId})`, []))
     );
@@ -35,33 +35,4 @@ export class TagOpcService {
       catchError(this.help.handleError(`gets(${datasourceIds})`, []))
     );
   }
-
-  // save(obj: IOpcTag): Observable<IOpcTag> {
-  //   throw new Error("Method not implemented.");
-  // }
-
-  // update(obj: IOpcTag): Observable<IOpcTag> {
-  //   throw new Error("Method not implemented.");
-  // }
-
-  // delete(obj: IOpcTag): Observable<IOpcTag> {
-  //   throw new Error("Method not implemented.");
-  // }
-
-
-  // getTagsFromDatasourceQuery(datasourceId: string, query: string): Observable<Tag[]> {
-  //   if (query && query.length !== 0) {
-  //     return this.http.get<Tag[]>(`${this.tagsUrl}datasources/${datasourceId}/tags?fq=${this.formatQuery(query)}`)
-  //     .pipe(
-  //       catchError(this.handleError('getTagsFromDatasourceQuery', []))
-  //     );
-  //   } else {
-  //     return this.getTagsFromDatasource(datasourceId);
-  //   }
-  // }
-
-  // private formatQuery(query: string): string {
-  //   // TODO complexify parsing (add * ?)
-  //   return query;
-  // }
 }
