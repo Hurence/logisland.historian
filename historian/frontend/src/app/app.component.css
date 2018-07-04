@@ -1,3 +1,11 @@
+header {
+  height: 10%;
+  min-height: 10px;
+  max-height: 60px;
+}
+.row.content {
+  height: 88%;
+}
 #sidebar .list-group-item {
     /* border-radius: 0;
     background-color: #333;
@@ -17,8 +25,6 @@ text-decoration: underline;
   }
 #sidebar {
   background: #272c33;
-  height: 100vh;
-  min-height: 100%;
 }
 /* .nav-toggle{
   left: -10px;
