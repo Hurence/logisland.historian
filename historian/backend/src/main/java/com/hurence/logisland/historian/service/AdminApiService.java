@@ -237,12 +237,8 @@ public class AdminApiService {
 
                     });
                     is.close();
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    logger.error(e.getMessage(), e);
                 }
 
 
