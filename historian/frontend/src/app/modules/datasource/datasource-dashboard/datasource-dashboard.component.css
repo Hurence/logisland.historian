@@ -1,6 +1,21 @@
+.row {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
 .row.title {
-    height: 2%;
+    min-height: 5rem;
+    height: 5%;
+}
+
+.row.title div {
+    text-align: left;
+    padding-left: 10rem;
+}
+
+h1 {
+    font-size: 2rem;
 }
 .row.content {
-    height: 98%;
+    height: 90%;
 }

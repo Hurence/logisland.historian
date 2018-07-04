@@ -26,11 +26,6 @@ mark, .mark {
   background-color: #BBDFFC;
 }
 
-.row .row {
-  margin-top: 1rem;
-  margin-bottom: 0;
-}
-
 [class*="col-"] {
   padding-top: 1rem;
   padding-bottom: 1rem;
