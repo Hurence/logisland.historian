@@ -18,13 +18,18 @@ package com.hurence.logisland.historian.service;
 
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.rest.v1.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.solr.core.query.result.FacetPage;
+import org.springframework.data.solr.core.query.result.FacetPivotFieldEntry;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TagsApiService {
@@ -89,4 +94,24 @@ public class TagsApiService {
         }
     }
 
+    public List<TreeNode> getTreeTag(int page, int limit) {
+        FacetPage<Tag> facet = repository.findTreeFacetOnDomainThenServerThenGroup(PageRequest.of(page, limit));
+        List<FacetPivotFieldEntry> domainPiv = facet.getPivot("domain,server,group");
+        return buildTreeNodes(domainPiv);
+    }
+
+    public List<TreeNode> buildTreeNodes(List<FacetPivotFieldEntry> facetPivotFields) {
+        return facetPivotFields.stream()
+                .map(this::buildTreeNode)
+                .collect(Collectors.toList());
+    }
+
+    public TreeNode buildTreeNode(FacetPivotFieldEntry facetPivot) {
+        TreeNode node = new TreeNode();
+        node.setValue(facetPivot.getValue());
+        node.setTotalChildNumber(facetPivot.getValueCount());
+        List<TreeNode> children = buildTreeNodes(facetPivot.getPivot());
+        node.setChildren(children);
+        return node;
+    }
 }

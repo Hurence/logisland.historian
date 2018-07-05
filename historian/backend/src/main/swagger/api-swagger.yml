@@ -14,7 +14,7 @@ schemes:
 paths:
 
 
-  /admin:
+  /admin/generate/tags:
      post:
        tags:
         - tag
@@ -32,6 +32,12 @@ paths:
            required: false
            type: boolean
            default: false
+         - name: clean
+           in: query
+           description: do we delete previous entries ?
+           required: false
+           type: boolean
+           default: false
        responses:
          '200':
            description: Sample tag list
@@ -39,6 +45,38 @@ paths:
              type: array
              items:
                $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+  /admin/generate/measures:
+     post:
+       tags:
+        - tag
+        - measures
+        - admin
+       summary: create new measures for all tags
+       description: create new measures for all tags
+       operationId: generateMeasuresForTags
+       produces:
+          - application/json
+       parameters:
+         - name: clean
+           in: query
+           description: do we delete previous entries ?
+           required: false
+           type: boolean
+           default: false
+         - name: generator
+           in: formData
+           description: json config file for genereting data (export will not be used instead it will generate data for all tags)
+           required: true
+           type: file
+       responses:
+         '200':
+           description: BulkLoad result
+           schema:
+             $ref: '#/definitions/BulkLoad'
          default:
            description: unexpected error
            schema:
@@ -461,6 +499,43 @@ paths:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
+  /tags/tree:
+       get:
+         tags:
+           - tag
+         summary: get tag tree by fields
+         description: get tag tree by fields for each value of chosen fields
+         operationId: getTreeTag
+         produces:
+           - application/json
+         parameters:
+#           - name: fields
+#             in: query
+#             description: the chosen fields of Tag to built the tre with
+#             required: false
+#             type: array
+#             items:
+#              type: string
+           - name: limit
+             in: query
+             description: maximum number of element to retrieve in a treenode.
+             required: false
+             type: integer
+             format: int32
+             default: 100
+         responses:
+           '200':
+             description: Tree of tag fields
+             schema:
+              type: array
+              items:
+                $ref: '#/definitions/TreeNode'
+           '404':
+              description: Tree of tag could not be build
+           default:
+             description: unexpected error
+             schema:
+               $ref: '#/definitions/Error'
   /tags/measures:
      post:
        tags:
@@ -565,114 +640,136 @@ paths:
              $ref: '#/definitions/Error'
 
   # Selection API
-  /selections/{selectionId}:
-    get:
-     tags:
-       - selection
-     summary: get Selection
-     description: get the corresponding Selection
-     operationId: getSelection
-     produces:
-       - application/json
-     parameters:
-       - name: selectionId
-         in: path
-         description: id of the Selection to return
-         required: true
-         type: string
-     responses:
-       '200':
-         description: Selection found
-         schema:
-           $ref: '#/definitions/Selection'
-       '404':
+  /selections:
+      get:
+        tags:
+          - selection
+        operationId: getAllUserSelection
+        summary:  get all slections that this user has access to
+        description: retrieve all slections that user has access to
+        produces:
+          - application/json
+        responses:
+          '200':
+             description: Selection list
+             schema:
+               type: array
+               items:
+                 $ref: '#/definitions/Selection'
+          default:
+             description: unexpected error
+             schema:
+               $ref: '#/definitions/Error'
+  /selections/{selectionName}:
+      get:
+       tags:
+         - selection
+       summary: get Selection
+       description: get the corresponding Selection
+       operationId: getSelection
+       produces:
+         - application/json
+       parameters:
+         - name: selectionName
+           in: path
+           description: id of the Selection to return
+           required: true
+           type: string
+       responses:
+         '200':
+           description: Selection found
+           schema:
+             $ref: '#/definitions/Selection'
+         '404':
+            description: Selection resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+      delete:
+       tags:
+         - selection
+       summary: delete Selection
+       description: remove the corresponding Selection
+       operationId: deleteSelection
+       parameters:
+         - name: selectionName
+           in: path
+           description: id of the Selection to be deleted
+           required: true
+           type: string
+       responses:
+         '404':
+           description: Selection resource not found
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Selection successfully removed
+           schema:
+             $ref: '#/definitions/Selection'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+      put:
+       tags:
+        - selection
+       summary:  update Selection
+       description: update an existing Selection
+       operationId: updateSelection
+       parameters:
+         - name: selectionName
+           in: path
+           description: selectionName to be updated
+           required: true
+           type: string
+         - name: body
+           in: body
+           description: new Selection definition
+           required: true
+           schema:
+             $ref: '#/definitions/Selection'
+       responses:
+        '404':
           description: Selection resource not found
-       default:
-         description: unexpected error
-         schema:
-           $ref: '#/definitions/Error'
-    delete:
-     tags:
-       - selection
-     summary: delete Selection
-     description: remove the corresponding Selection
-     operationId: deleteSelection
-     parameters:
-       - name: selectionId
-         in: path
-         description: id of the Selection to be deleted
-         required: true
-         type: string
-     responses:
-       '404':
-         description: Selection resource not found
-       '400':
-         description: Invalid ID supplied
-       '200':
-         description: Selection successfully removed
+        '400':
+          description: Invalid ID supplied
+        '200':
+         description: Selection successfuly updated
          schema:
            $ref: '#/definitions/Selection'
-       default:
-         description: unexpected error
-         schema:
-           $ref: '#/definitions/Error'
-    put:
-     tags:
-      - selection
-     summary:  update Selection
-     description: update an existing Selection
-     operationId: updateSelection
-     parameters:
-       - name: selectionId
-         in: path
-         description: selectionId to be updated
-         required: true
-         type: string
-       - name: selection
-         in: body
-         description: new Selection definition
-         required: true
-         schema:
-           $ref: '#/definitions/Selection'
-     responses:
-      '404':
-        description: Selection resource not found
-      '400':
-        description: Invalid ID supplied
-      '200':
-       description: Selection successfuly updated
-       schema:
-         $ref: '#/definitions/Selection'
-    post:
-     tags:
-      - selection
-     summary:  create new Selection
-     description:  store a new Selection
-     operationId: addSelectionWithId
-     parameters:
-       - name: body
-         in: body
-         description: Selection resource to add
-         required: true
-         schema:
-           $ref: '#/definitions/Selection'
-       - name: selectionId
-         in: path
-         description: selectionId to create
-         required: true
-         type: string
-     responses:
-       '400':
-         description: Invalid ID supplied
-       '200':
-         description: Selection successfuly created
-         schema:
-           $ref: '#/definitions/Selection'
-       default:
-         description: unexpected error
-         schema:
-           $ref: '#/definitions/Error'
-  /selections/{selectionId}/tags:
+      post:
+       tags:
+        - selection
+       summary:  create new Selection
+       description:  store a new Selection
+       operationId: addSelectionWithId
+       parameters:
+         - name: body
+           in: body
+           description: Selection resource to add
+           required: true
+           schema:
+             $ref: '#/definitions/Selection'
+         - name: selectionName
+           in: path
+           description: selectionName to create
+           required: true
+           type: string
+       responses:
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Selection successfuly created
+           schema:
+             $ref: '#/definitions/Selection'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+
+  /selections/{selectionName}/tags:
        get:
          tags:
           - selection
@@ -683,7 +780,7 @@ paths:
          produces:
             - application/json
          parameters:
-           - name: selectionId
+           - name: selectionName
              in: path
              description: id of the selection
              required: true
@@ -1004,6 +1101,59 @@ definitions:
       password:
         type: string
 
+  Selection:
+    type: object
+    description: a Selection is a selection of tags.
+    required:
+      - name
+      - tagIds
+    properties:
+      name:
+        type: string
+      description:
+        description: description for this selection of tags
+        type: string
+      owner:
+        type: string
+      permissions:
+        $ref: '#/definitions/Permissions'
+      tagIds:
+        description: list of tags id in selection
+        type: array
+        items:
+          type: string
+
+  PrivateSelection:
+    allOf: # Combines the Selection and the inline model
+      - $ref: '#/definitions/Selection'
+      - type: object
+        description: a Selection is a selection of tags.
+        required:
+          - id
+          - owner
+          - record_type
+        properties:
+          id:
+            description: concatenation of owner with name for example
+            type: string
+          record_type:
+            type: string
+            default: 'selection'
+
+  Permissions:
+    type: object
+    description: a Permissions can allow to share something with others. It describes permission for one item.
+    properties:
+      ownerSharing:
+        description: list of users name whose allowed.
+        type: array
+        items:
+          type: string
+      roleSharing:
+        description: list of roles whose allowed.
+        type: array
+        items:
+          type: string
 
   Tag:
     type: object
@@ -1081,32 +1231,6 @@ definitions:
         format: double
       last_quality:
         type: integer
-
-  Selection:
-    type: object
-    description: a Selection is a selection of tags.
-    required:
-      - id
-      - name
-      - owner
-      - tags
-      - record_type
-    properties:
-      id:
-        description: concatenation of owner with name for example
-        type: string
-      name:
-        type: string
-      owner:
-        type: string
-      tags:
-        description: list of tags id in selection
-        type: array
-        items:
-          type: string
-      record_type:
-        type: string
-        default: 'selection'
 
   Measures:
     type: object
@@ -1224,3 +1348,21 @@ definitions:
         format: int32
       message:
         type: string
+
+  TreeNode:
+      type: object
+      required:
+        - value
+        - totalChildNumber
+        - children
+      properties:
+        value:
+          type: string
+        totalChildNumber:
+          type: integer
+          format: int64
+        children:
+          type: array
+          items:
+            $ref: '#/definitions/TreeNode'
+

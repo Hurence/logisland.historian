@@ -1,0 +1,14 @@
+<p-panel [header]="tag.tag_name" [style]="{'text-align':'center'}">
+        <span *ngIf="lastRefreshed">(tag last refreshed at {{lastRefreshed | date:'mediumTime'}})</span>
+        <div class="tag-detail">{{tag?.description}} - {{tag.data_type}}</div>
+        <ng-container *ngIf="stats">
+                <div *ngFor="let agg of stats.functions">
+                        {{agg.name}} : {{agg.value}}
+                </div>
+        </ng-container>
+        <ng-container *ngIf="notFound">
+                No stat found for this tag !
+        </ng-container>
+        <hr class="ui-widget-content" style="border-top:0">
+        <!-- <button pButton type="button" icon="pi pi-search" (click)="selectCar($event, car)" style="margin-top:0"></button> -->
+</p-panel>

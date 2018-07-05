@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { Utilities } from '../shared/utilities.service';
-import { IMeasures, Measures } from './Measures';
-import { IMeasuresRequest } from './MeasuresRequest';
-import { tap } from 'rxjs/operators';
+import { Measures } from './Measures';
+import { MeasuresRequest } from './MeasuresRequest';
 
 @Injectable()
 export class MeasuresService {
@@ -16,12 +16,12 @@ export class MeasuresService {
   constructor(private http: HttpClient,
     private help: Utilities) { }
 
-  get(request: IMeasuresRequest): Observable<Measures> {
+  get(request: MeasuresRequest): Observable<Measures> {
     return this.http.get<Measures>(request.buildQuery(this.measuresUrl));
   }
 
   getStat(itemId: string): Observable<Measures> {
-    return this.http.get<Measures>(`${this.measuresUrl}tags/${itemId}/stats`).pipe(
+    return this.http.get<Measures>(`${this.measuresUrl}tags/${encodeURIComponent(itemId)}/stats`).pipe(
       tap(stat => console.log(`stat for item ${itemId}`, stat))
     );
   }

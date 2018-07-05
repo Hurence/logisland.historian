@@ -2,7 +2,7 @@ import 'jquery';
 
 import { ElementRef } from '@angular/core';
 
-import { TypesName } from '../../tag/tag-tree/TypesName';
+import { TypesName } from '../../modules/tag/tag-tree/TypesName';
 import { INodeTree } from './NodeTree';
 import { Observable } from 'rxjs/Observable';
 

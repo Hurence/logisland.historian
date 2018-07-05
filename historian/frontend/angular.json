@@ -34,6 +34,7 @@
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/jstree/dist/jstree.min.js",
+              "node_modules/moment/min/moment.min.js",
               "node_modules/chart.js/dist/Chart.js",
               "src/scripts.js"
             ]

@@ -153,7 +153,7 @@ public class ChronixImporter {
 
     }
 
-    private void deleteIndex() {
+    public void deleteIndex() {
         try {
             CHRONIX_SOLR_CLIENT.deleteByQuery("*:*");
         } catch (SolrServerException | IOException e) {

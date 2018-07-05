@@ -10,6 +10,7 @@ import com.hurence.logisland.historian.rest.v1.model.Error;
 import com.hurence.logisland.historian.rest.v1.model.Measures;
 import org.springframework.core.io.Resource;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.rest.v1.model.TreeNode;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +27,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-06-18T14:48:27.731+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -93,6 +94,17 @@ import java.util.List;
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
         ResponseEntity<Measures> getTagStats(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId);
+
+
+            @ApiOperation(value = "get tag tree by fields", nickname = "getTreeTag", notes = "get tag tree by fields for each value of chosen fields", response = TreeNode.class, responseContainer = "List", tags={ "tag", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "Tree of tag fields", response = TreeNode.class, responseContainer = "List"),
+                @ApiResponse(code = 404, message = "Tree of tag could not be build"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/tags/tree",
+                produces = { "application/json" }, 
+            method = RequestMethod.GET)
+        ResponseEntity<List<TreeNode>> getTreeTag(@ApiParam(value = "maximum number of element to retrieve in a treenode.", defaultValue = "100") @Valid @RequestParam(value = "limit", required = false, defaultValue="100") Integer limit);
 
 
             @ApiOperation(value = "post tag measures", nickname = "postTagMeasures", notes = "post some new values", response = BulkLoad.class, tags={ "tag","measure", })
