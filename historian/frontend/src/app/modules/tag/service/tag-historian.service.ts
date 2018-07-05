@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
+import 'rxjs/add/observable/of';
 
 import { IModelService } from '../../../shared/base-model-service';
 import { Utilities } from '../../../shared/utilities.service';

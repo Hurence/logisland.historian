@@ -8,9 +8,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { initializer } from './app-init';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DatasetService } from './dataset/dataset.service';
 import { DialogService } from './dialog/dialog.service';
-import { LineChartComponent } from './modules/graph/line-chart/line-chart.component';
 import { MeasuresService } from './measure/measures.service';
 import { DatasourceService } from './modules/datasource/datasource.service';
 import { SelectionModule } from './modules/selection/selection.module';
@@ -19,7 +17,6 @@ import { SourcesAndTagsModule } from './modules/sources-and-tags/sources-and-tag
 import { TagHistorianService } from './modules/tag/service/tag-historian.service';
 import { TagOpcService } from './modules/tag/service/tag-opc.service';
 import { TagService } from './modules/tag/service/tag.service';
-import { TreeTagService } from './modules/tag/tag-tree/tree-view-tag.service';
 import { VisualizationModule } from './modules/visualization/visualization.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfilService } from './profil/profil.service';
@@ -29,7 +26,7 @@ import { QuestionService } from './shared/dynamic-form/question.service';
 import { SharedModule } from './shared/shared.module';
 import { Utilities } from './shared/utilities.service';
 import { TodoComponent } from './todo/todo.component';
-import { NgTreenodeService } from './modules/tag/historian-tag-tree/ng-treenode.service';
+import { NgTreenodeService } from './modules/tag/service/ng-treenode.service';
 import { ArrayUtil } from './shared/array-util';
 
 @NgModule({
@@ -62,16 +59,13 @@ import { ArrayUtil } from './shared/array-util';
       multi: true
     },
     ProfilService,
-    DatasetService,
     TagService,
     TagOpcService,
     TagHistorianService,
     DatasourceService,
     DialogService,
-    ProfilService,
     QuestionService,
     QuestionControlService,
-    TreeTagService,
     Utilities,
     MeasuresService,
     SelectionService,

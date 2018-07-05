@@ -5,8 +5,8 @@ export enum TypesName {
     DOMAIN = 'domain',
     SERVER = 'server',
     GROUP = 'group',
-    TAG_OPC = 'tag-opc',
-    TAG_HISTORIAN = 'tag-historian',
+    TAG_OPC = 'opc-tag',
+    TAG_HISTORIAN = 'historian-tag',
     TAG_IN_DATASET = 'tag-in-dataset',
   }
 

@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { Observable ,  of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { Dataset } from '../../../dataset/dataset';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
 import { DialogService } from '../../../dialog/dialog.service';
@@ -15,7 +14,6 @@ import { DialogService } from '../../../dialog/dialog.service';
 export class DatasourcesListComponent implements OnInit {
 
   datasources$: Observable<Datasource[]>;
-  @Input() dataSet: Dataset;
   @Input() selectedDatasource: Datasource;
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();
 
@@ -45,7 +43,6 @@ export class DatasourcesListComponent implements OnInit {
         if (ok) {
           this.datasourceService.delete(datasource.id)
             .subscribe(deletedDs => {
-              this.dataSet.removeDatasource(deletedDs);
               this.getDatasources();
             });
         }
@@ -54,21 +51,6 @@ export class DatasourcesListComponent implements OnInit {
 
   private onSelect(datasource: Datasource) {
     this.selectedDatasourceE.emit(datasource);
-  }
-
-  private onAddToDataset(datasource: Datasource) {
-    this.dataSet.addDatasource(datasource);
-  }
-
-  private onRemoveFromDataset(datasource: Datasource) {
-    this.dataSet.removeDatasource(datasource);
-  }
-
-  private dataSetContain(datasource: Datasource): boolean {
-    if (this.dataSet) {
-      return this.dataSet.containDatasource(datasource);
-    }
-    return false;
   }
 
 }

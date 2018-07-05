@@ -7,11 +7,13 @@ import { DatasourceDashboardComponent } from './datasource-dashboard/datasource-
 import { DatasourceFormComponent } from './datasource-form/datasource-form.component';
 import { DatasourceHelpComponent } from './datasource-help/datasource-help.component';
 import { DatasourcesListComponent } from './datasources-list/datasources-list.component';
+import { TagModule } from '../tag/tag.module';
 
 @NgModule({
   imports: [
     DialogModule,
     SharedModule,
+    TagModule,
   ],
   declarations: [
     DatasourceDashboardComponent,

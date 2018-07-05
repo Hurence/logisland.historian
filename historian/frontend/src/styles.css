@@ -183,6 +183,11 @@ mark, .mark {
   color: green;
   font-family: FontAwesome;
 }
+.opc-tag:before {
+  content: "\f15b";
+  color: black;
+  font-family: FontAwesome;
+}
 .icon-trash:before {
   content: "\f15b";
   color: green;

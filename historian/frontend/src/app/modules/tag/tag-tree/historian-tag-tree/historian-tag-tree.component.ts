@@ -3,11 +3,11 @@ import { TreeNode } from 'primeng/api';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
-import { TagsSelection } from '../../selection/Selection';
-import { IHistorianTag } from '../modele/HistorianTag';
-import { TagHistorianService } from '../service/tag-historian.service';
-import { NgTreenodeService } from './ng-treenode.service';
-import { ProfilService } from '../../../profil/profil.service';
+import { TagsSelection } from '../../../selection/Selection';
+import { IHistorianTag } from '../../modele/HistorianTag';
+import { TagHistorianService } from '../../service/tag-historian.service';
+import { NgTreenodeService } from '../../service/ng-treenode.service';
+import { ProfilService } from '../../../../profil/profil.service';
 
 @Component({
   selector: 'app-historian-tag-tree',
@@ -73,7 +73,7 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
   }
 
   collapseAll() {
-    this.treeNodes.forEach( node => {
+    this.treeNodes.forEach(node => {
         this.expandRecursive(node, false, false);
     } );
   }

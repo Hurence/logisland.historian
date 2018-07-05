@@ -1,25 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagDashboardComponent } from './tag-dashboard.component';
+import { OpcTagTreeComponent } from './opc-tag-tree.component';
 
-describe('TagDashboardComponent', () => {
-  let component: TagDashboardComponent;
-  let fixture: ComponentFixture<TagDashboardComponent>;
+describe('OpcTagTreeComponent', () => {
+  let component: OpcTagTreeComponent;
+  let fixture: ComponentFixture<OpcTagTreeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TagDashboardComponent ]
+      declarations: [ OpcTagTreeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TagDashboardComponent);
+    fixture = TestBed.createComponent(OpcTagTreeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-/*
+
   it('should create', () => {
     expect(component).toBeTruthy();
-  });*/
+  });
 });
