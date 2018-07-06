@@ -1,3 +1,8 @@
+.col-lg-4.col-md-4.bg-secondary.content, .col-lg-8.col-md-8.content{
+    background-color: #ffffff !important;
+    background-color: #ffffff !important;
+}
+
 .datasource-dashboard-title {
     min-height: 4.5rem;
     height: 40px;
@@ -19,7 +24,7 @@ h2 {
 }
 .row.content {
     height: 90%;
-    padding-top: 1rem;
+    /* padding-top: 1rem; */
 }
 .row.left-panel div {
     padding-left: 10%;
