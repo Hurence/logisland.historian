@@ -2,7 +2,7 @@
     border: 0px solid transparent;
     opacity: 1;
 }
-.list-datasource-container {
-    padding-top: 15px;
-    padding-bottom: 15px;
+.list-container {
+    margin: 15px 0px 15px 0px;
+    padding: 0;
 }

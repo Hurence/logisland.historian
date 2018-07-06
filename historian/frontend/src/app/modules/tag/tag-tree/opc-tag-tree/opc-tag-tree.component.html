@@ -2,23 +2,28 @@
     <div style="margin-top: 8px">
         <button pButton type="button" label="Expand all" (click)="expandAll()" style="margin-right: .25em">Expand all</button>
         <button pButton type="button" label="Collapse all" (click)="collapseAll()">Collapse all</button>
+        <button pButton type="button" label="Register/Modify selected tags" (click)="showRegisterDialog()">Register selected tags</button>
     </div>
     <p-tree [value]="treeNodes" selectionMode="checkbox" [(selection)]="selectedNodes" [loading]="loading">
         <ng-template let-node pTemplate="none">
             No tag found
         </ng-template>
-        <ng-template let-node pTemplate="defaut">
-            {{node.label}} (defaut)
-            <button pButton type="button" (click)="collapseAll()">Register</button>            
-        </ng-template>
         <ng-template let-node pTemplate="historian-tag">
             {{node.label}}
-            <button pButton type="button" (click)="collapseAll()">Edit</button>
-            <button pButton type="button" (click)="collapseAll()">Delete</button>
+            <button pButton type="button" (click)="showDetailDialog(node.data)">Show Detail</button>
         </ng-template>
         <ng-template let-node pTemplate="opc-tag">
-            {{node.label}} 
-            <button pButton type="button" (click)="collapseAll()">Register</button>            
+            {{node.label}}
+            <button pButton type="button" (click)="showDetailDialog(node.data)">Show Detail</button>
         </ng-template>
     </p-tree>
+    <p-dialog [(visible)]="displayRegister">
+        <p-header>
+            Save this/those tag(s) with following values
+        </p-header>
+        <app-tag-form [tags]="tagsInputForForm"
+                      (submitted)="onTagSaved($event)"></app-tag-form>
+        <p-footer>
+        </p-footer>
+    </p-dialog>
 <!-- </div> -->

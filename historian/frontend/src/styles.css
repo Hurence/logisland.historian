@@ -159,7 +159,11 @@ mark, .mark {
   color: #ffffff;
 }
 .btn {
-  width: 100%;
+  background-color: #ffffff;
+  border-color: #186ba0;
+}
+.no-padding-child-div div {
+  padding: 0;
 }
 .filter input {
   font-size: 0.8rem;

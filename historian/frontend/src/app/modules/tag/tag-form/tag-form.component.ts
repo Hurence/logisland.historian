@@ -10,6 +10,7 @@ import { ITag, Tag } from '../modele/tag';
 import { TagHistorianService } from '../service/tag-historian.service';
 import { ITagFormInput } from './TagFormInput';
 import { ITagFormOutput, TagFormOutput } from './TagFormOutput';
+import { QuestionService } from '../../../shared/dynamic-form/question.service';
 
 @Component({
   selector: 'app-tag-form',
@@ -19,8 +20,8 @@ import { ITagFormOutput, TagFormOutput } from './TagFormOutput';
 export class TagFormComponent implements OnInit, OnChanges {
 
   form: FormGroup;
-  @Input() questionsMultiSelection: QuestionBase<any>[] = [];
-  @Input() questionsSingleSelection: QuestionBase<any>[] = [];
+  questionsMultiSelection: QuestionBase<any>[] = [];
+  questionsSingleSelection: QuestionBase<any>[] = [];
   visible = true;
   showEntireForm = true;
   @Input() tags: ITagFormInput[];
@@ -38,14 +39,17 @@ export class TagFormComponent implements OnInit, OnChanges {
   constructor(private qcs: QuestionControlService,
               private fb: FormBuilder,
               private dialogService: DialogService,
+              private qs: QuestionService,
               private tagHistorianService: TagHistorianService) { }
 
   ngOnInit() {
+    this.questionsMultiSelection = this.qs.getTagFormMultiSelection();
+    this.questionsSingleSelection = this.qs.getTagFormSingleSelection();
     this.form = this.qcs.toFormGroup(this.questionsMultiSelection.concat(this.questionsSingleSelection));
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tags) {
+    if (changes.tags && changes.tags.currentValue) {
       if (changes.tags.currentValue.length !== 0) {
         this.visible = true;
         if (changes.tags.currentValue.length > 1) {
