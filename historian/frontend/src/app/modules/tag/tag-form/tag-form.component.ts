@@ -137,7 +137,7 @@ export class TagFormComponent implements OnInit, OnChanges {
           severity: 'success',
           summary: msgSuccess,
           detail: tag.id,
-        })
+        });
       },
       error => {
         console.error(JSON.stringify(error));
@@ -145,7 +145,7 @@ export class TagFormComponent implements OnInit, OnChanges {
           severity: 'error',
           summary: error.status,
           detail: msgError,
-        })
+        });
       }
     );
   }

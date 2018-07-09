@@ -65,7 +65,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     if (node.type === TypesName.TAG_HISTORIAN || node.type === TypesName.TAG_OPC) {
       return [node.data];
     } else {
-      return node.children.map(node => this.getTagsFromNode(node))
+      return node.children.map(n => this.getTagsFromNode(n))
         .reduce((acc, x) => acc.concat(x), []);
     }
   }
@@ -83,7 +83,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
         severity: 'error',
         summary: 'Could not find node to update in tree, please refresh the page to have accurate data',
         detail: `Tag id was '${tag.id}'`,
-      })
+      });
     } else {
       Object.assign(nodeToUpdate.data, tag);
       if (nodeToUpdate.type === TypesName.TAG_OPC) {
@@ -96,21 +96,20 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
  * return node of tag or undefined if not found
  */
   private findNodeOfTag(node: TreeNode, tag: IHistorianTag): TreeNode {
-    switch(node.type) {
+    switch (node.type) {
       case TypesName.TAG_HISTORIAN || node.type === TypesName.TAG_OPC:
        if (node.data.id === tag.id) return node;
        return undefined;
-      break;
-      case 'group': return this.nodeForRegister.children.find(n => n.data.id === tag.id)
+      case 'group': return this.nodeForRegister.children.find(n => n.data.id === tag.id);
       case 'server': this.nodeForRegister.children.forEach(n => {
         const found = this.findNodeOfTag(n, tag);
         if (found) return found;
-      })
+      });
       return undefined;
       case 'domain': this.nodeForRegister.children.forEach(n => {
         const found = this.findNodeOfTag(n, tag);
         if (found) return found;
-      })
+      });
       return undefined;
     }
   }

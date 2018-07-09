@@ -35,7 +35,6 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
   @ViewChild(OpcTagTreeComponent)
   private tagTree: OpcTagTreeComponent;
   private DISCARD_CHANGE_QUESTION_MSG = 'Discard changes ?';
- 
 
   constructor(private router: Router,
               private route: ActivatedRoute,
