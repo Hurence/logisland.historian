@@ -3,7 +3,7 @@
     <div *ngFor="let datasource of datasources$ | async" (click)="onSelect(datasource)"
           class="col-lg-12 col-md-12 datasource-element">
       <div class="row no-gutters">
-        <div class="col-lg col-md ">
+        <div class="col-lg-10 col-md-10 ">
           <app-button-labelled class="h-100 "
             [centerLabel]="datasource.id" [topRightLabel]="datasource.datasource_type"
             [isActive]="datasource.id === selectedDatasource.id">

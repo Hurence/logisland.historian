@@ -104,13 +104,13 @@
     <div *ngSwitchDefault i18n="ask user to select a type for datasource|">Please choose a type</div>
 
   </div>
+  <div class="mx-auto" style="width: 20rem;">
+    <button type="button" (click)="revert()" class="btn btn-danger" [disabled]="!dsForm.valid"
+            i18n="cancel button|revert all changes not saved for datasource">Cancel</button>
 
-  <button type="button" (click)="revert()" class="btn btn-danger" [disabled]="!dsForm.valid"
-          i18n="cancel button|revert all changes not saved for datasource">Cancel</button>
-
-  <button type="submit" class="btn btn-success ml-2" [disabled]="!dsForm.valid"
-          i18n="submit button|save all change to datasource or save new datasource">{{submitBtnMsg}}</button>
-
+    <button type="submit" class="btn btn-success ml-2" [disabled]="!dsForm.valid"
+            i18n="submit button|save all change to datasource or save new datasource">{{submitBtnMsg}}</button>
+  </div>
   <div *ngIf="datasourceIsReachable$"
         i18n="test connnectivity|tells if server can connect to datasource or not">{{ (datasourceIsReachable$ | async) ? "Datasource is reachable" : "Can not reach datasource"}}</div>
 

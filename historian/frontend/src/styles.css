@@ -6,7 +6,7 @@ html, body {
 }
 
 body {
-  background: #f1f2f7;
+  background: #ecf0f5;
 }
 
 .form-group {
@@ -261,7 +261,7 @@ mark, .mark {
 /* tabview = tabview-panels + tabview-nav */
 .ui-tabview-panels {
   height: 90%;
-  max-height: 650px;
+  /* max-height: 650px; */
   overflow-y: auto;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
