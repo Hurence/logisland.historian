@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 import { Utilities } from '../../../shared/utilities.service';
 import { IOpcTag } from '../modele/OpcTag';
@@ -25,6 +25,7 @@ export class TagOpcService {
   get(datasourceId: string): Observable<IOpcTag[]> {
     return this.http.get<IOpcTag[]>(`${this.tagsUrl}datasources/${encodeURIComponent(datasourceId)}/tags`)
     .pipe(
+      tap(tags => console.log(`found ${tags.length} opc tags from datasource '${datasourceId}'`)),
       catchError(this.help.handleError(`get(${datasourceId})`, []))
     );
   }
