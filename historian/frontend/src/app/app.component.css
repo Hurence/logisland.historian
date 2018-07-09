@@ -94,7 +94,9 @@ text-decoration: underline;
         display:none;
     }
 }
-
+#sidebar i.fa {
+  width: 20px;
+}
 /* change transition animation to width when entire sidebar is toggled */
 #sidebar.collapse {
   -webkit-transition-timing-function: ease;
