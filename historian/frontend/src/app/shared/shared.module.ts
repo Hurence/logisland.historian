@@ -22,6 +22,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
+import { GrowlModule } from 'primeng/growl';
 import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-rate-selection.component';
 
 @NgModule({
@@ -42,6 +43,7 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
     InputSwitchModule,
     TooltipModule,
     ButtonModule,
+    GrowlModule,
   ],
   exports: [
     CommonModule,
@@ -65,6 +67,7 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
     InputSwitchModule,
     TooltipModule,
     ButtonModule,
+    GrowlModule,
   ],
   providers: [
     TreeDragDropService,

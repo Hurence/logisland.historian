@@ -27,6 +27,7 @@ import { SharedModule } from './shared/shared.module';
 import { Utilities } from './shared/utilities.service';
 import { TodoComponent } from './todo/todo.component';
 import { NgTreenodeService } from './modules/tag/service/ng-treenode.service';
+import { MessageService } from 'primeng/components/common/messageservice';
 import { ArrayUtil } from './shared/array-util';
 
 @NgModule({
@@ -71,6 +72,7 @@ import { ArrayUtil } from './shared/array-util';
     SelectionService,
     NgTreenodeService,
     ArrayUtil,
+    MessageService,
   ],
   bootstrap: [AppComponent],
 })

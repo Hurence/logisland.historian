@@ -11,6 +11,7 @@ import { TagHistorianService } from '../service/tag-historian.service';
 import { ITagFormInput } from './TagFormInput';
 import { ITagFormOutput, TagFormOutput } from './TagFormOutput';
 import { QuestionService } from '../../../shared/dynamic-form/question.service';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'app-tag-form',
@@ -37,7 +38,8 @@ export class TagFormComponent implements OnInit, OnChanges {
               private fb: FormBuilder,
               private dialogService: DialogService,
               private qs: QuestionService,
-              private tagHistorianService: TagHistorianService) { }
+              private tagHistorianService: TagHistorianService,
+              private messageService: MessageService) { }
 
   ngOnInit() {
     this.questions = this.qs.getTagForm();
@@ -45,7 +47,7 @@ export class TagFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tags && changes.tags.currentValue) {
+    if (changes.tags && changes.tags.currentValue && changes.tags.currentValue.length !== 0) {
       if (changes.tags.previousValue !== changes.tags.currentValue) {
         this.rebuildForm();
         this.updateBtn();
@@ -130,12 +132,20 @@ export class TagFormComponent implements OnInit, OnChanges {
     submitted.subscribe(
       tag => {
         this.submitted.emit(tag);
-        // this.dialogService.alert(msgSuccess);
-        // TODO use a popup see issue #90
+        this.messageService.add({
+          id: tag.id,
+          severity: 'success',
+          summary: msgSuccess,
+          detail: tag.id,
+        })
       },
       error => {
         console.error(JSON.stringify(error));
-        this.dialogService.alert(`${msgError} : code ${error.status}`);
+        this.messageService.add({
+          severity: 'error',
+          summary: error.status,
+          detail: msgError,
+        })
       }
     );
   }

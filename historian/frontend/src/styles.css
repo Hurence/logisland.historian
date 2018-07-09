@@ -338,3 +338,7 @@ mark, .mark {
   height: 1.5em;
   vertical-align: middle;
 }
+.ui-growl {
+  width: auto;
+  max-width: 100%;
+}
