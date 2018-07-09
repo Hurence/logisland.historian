@@ -19,6 +19,10 @@ import { OpcTagTreeComponent } from '../../tag/tag-tree/opc-tag-tree/opc-tag-tre
 })
 export class DatasourceDashboardComponent implements OnInit, CanComponentDeactivate {
 
+  private DATASOURCE_FORM_TAB_INDEX = 1;
+  private DATASOURCE_TAGS_TAB_INDEX = 0;
+
+  selectedTab = this.DATASOURCE_TAGS_TAB_INDEX;
   selectedDatasource: Datasource;
   tags: ITag[];
   isCreation: boolean;
@@ -31,6 +35,7 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
   @ViewChild(OpcTagTreeComponent)
   private tagTree: OpcTagTreeComponent;
   private DISCARD_CHANGE_QUESTION_MSG = 'Discard changes ?';
+ 
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -98,6 +103,7 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
       this.isCreation = true;
       this.selectedDatasource = new Datasource('', 'OPC-DA');
       this.tags = [];
+      this.selectedTab = this.DATASOURCE_FORM_TAB_INDEX;
     } else {
       this.isCreation = false;
       this.selectedDatasource = datasource;
@@ -105,6 +111,7 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
       this.tagService.gets([this.selectedDatasource.id]).subscribe(tags => {
         this.tags = tags;
       });
+      this.selectedTab = this.DATASOURCE_TAGS_TAB_INDEX;
     }
   }
 }

@@ -4,9 +4,6 @@
 }
 
 .datasource-detail-title {
-    /* min-height: 3rem;
-    height: 2%;
-    padding-left: 10rem; */
     height: 10%;
     max-height: 10%;
     background-color: #186ba0;
@@ -14,9 +11,6 @@
 .datasource-detail-content {
     position: relative;
     height: 100%;
-    /* max-height: 600px;
-    overflow-y: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar; */
 }
 h1 {
     font-size: 2rem;
@@ -31,11 +25,6 @@ h2 {
     max-height: 90%;
     /* padding-top: 1rem; */
 }
-/* .row.left-panel div {
-    padding-left: 10%;
-    padding-right: 10%;
-} */
-
 .datasource-tag-detail-container {
     height: 50%;
 }
@@ -47,7 +36,6 @@ h2 {
     height: inherit;
     max-height: inherit;
 }
-
 .col-lg-12, .col-md-12 {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
@@ -58,21 +46,12 @@ h2 {
     margin: 0;
 }
 .rigth-panel {
-    /* padding-right: 2%;
-    padding-left: 2%;     */
     padding: 2%;
 }
 .left-panel {
-    /* margin-right: 5%; */
-    /* padding-right: 2%; */
     padding: 2%;
-  min-height: 600px;
+    min-height: 600px;
 }
 .small-column {
     max-height: 70px;
 }
-/* .large-column {
-    max-height: 80%;
-    overflow-y: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-} */
