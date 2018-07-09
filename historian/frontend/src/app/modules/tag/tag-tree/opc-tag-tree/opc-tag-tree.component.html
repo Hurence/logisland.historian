@@ -61,7 +61,7 @@
     </ng-template>
 </p-tree>
 <!-- tag form -->
-<p-dialog [(visible)]="displayRegister">
+<p-dialog [(visible)]="displayRegister" [modal]="true">
     <p-header>
         Save this/those tag(s) with following values
     </p-header>
@@ -71,11 +71,11 @@
     </p-footer>
 </p-dialog>
 <!-- tag detail -->
-<p-dialog [(visible)]="displayTagDetail">
+<p-dialog [(visible)]="displayTagDetail" [modal]="true">
     <p-header>
         Tag details
     </p-header>
-    <!-- <app-tag-detail [tag]="tagSelected"></app-tag-detail> -->
+    <!-- <app-tag-detail [tag]="tagClicked"></app-tag-detail> -->
     <p-footer>
     </p-footer>
 </p-dialog>

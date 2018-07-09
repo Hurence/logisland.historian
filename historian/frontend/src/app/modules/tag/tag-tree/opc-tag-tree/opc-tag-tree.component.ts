@@ -1,14 +1,13 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 
+import { IHistorianTag } from '../../modele/HistorianTag';
 import { ITag } from '../../modele/tag';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
-import { TagService } from '../../service/tag.service';
-import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
-import { OpcTag } from '../../modele/OpcTag';
 import { ITagFormInput, TagFormInput } from '../../tag-form/TagFormInput';
+import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
-import { IHistorianTag } from '../../modele/HistorianTag';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'app-opc-tag-tree',
@@ -19,13 +18,15 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
 
 
   @Input() tags: ITag[];
-  tagSelected: ITag;
-  displayRegister = false;
+  // tag detail props
+  tagClicked: ITag;
   displayTagDetail = false;
+  // tag form dialog props
+  displayRegister = false;
   tagsInputForForm: ITagFormInput[] = [];
 
   constructor(private ngTreenodeService: NgTreenodeService,
-              private tagService: TagService) {
+              private messageService: MessageService) {
                 super();
                 this.selectedNodes = [];
                 this.tagsInputForForm = [];
@@ -58,26 +59,27 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   }
 
   showDetailDialog(tag: ITag): void {
-    this.tagSelected = tag;
+    this.tagClicked = tag;
     this.displayTagDetail = true;
   }
 
   // update tag in tree.
   onTagSaved(tag: IHistorianTag): void {
-    // const nodeToUpdate = this.tagTreeComp.jsTree.getNode(tag.id);
-    // Object.assign(nodeToUpdate.original.tag, tag);
-    // const currentType = this.tagTreeComp.jsTree.getType(nodeToUpdate);
-    // if (currentType === TypesName.TAG_OPC) {
-    //   this.tagTreeComp.jsTree.setType(nodeToUpdate, TypesName.TAG_HISTORIAN);
-    // }
-    // this.selectedTags = this.selectedTags.map(tagInput => {
-    //   if (tagInput.tag.id === tag.id) {
-    //     tagInput.isCreation = false;
-    //     return tagInput;
-    //   } else {
-    //     return tagInput;
-    //   }
-    // });
+    this.displayRegister = false;
+    const nodeToUpdate: TreeNode = this.selectedNodes.find(n => n.data.id === tag.id);
+    if (nodeToUpdate === undefined) {
+        this.messageService.add({
+        severity: 'error',
+        summary: 'Could not find node to update in tree, please refresh the page to have accurate data',
+        detail: `Tag id was '${tag.id}'`,
+      })
+    } else {
+      Object.assign(nodeToUpdate.data, tag);
+      if (nodeToUpdate.type === TypesName.TAG_OPC) {
+        nodeToUpdate.type = TypesName.TAG_HISTORIAN;
+        nodeToUpdate.icon = nodeToUpdate.type;
+      }
+    }
   }
 
   protected loadANodeIfNeeded(node: TreeNode): boolean {
