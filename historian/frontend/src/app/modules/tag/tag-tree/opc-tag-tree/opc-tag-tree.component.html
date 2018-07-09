@@ -2,27 +2,90 @@
 <div style="margin-top: 8px">
     <button pButton type="button" label="Expand all" (click)="expandAll()" style="margin-right: .25em"></button>
     <button pButton type="button" label="Collapse all" (click)="collapseAll()" style="margin-right: .25em"></button>
-    <button pButton type="button" label="Register selected tags" (click)="showRegisterDialog()"></button>
+    <!-- <button pButton type="button" label="Register selected tags" (click)="showRegisterDialog()"></button> -->
 </div>
-<p-tree [value]="treeNodes" selectionMode="checkbox" [(selection)]="selectedNodes" [loading]="loading">
+<p-tree [value]="treeNodes" [loading]="loading">
     <ng-template let-node pTemplate="domain">
-        {{node.label}} ({{node.children.length}} servers)
+        <div class='row h-100 w-100 no-gutters bg-primary'>
+            <div class='col-lg col-md col-sm col- label-container text-truncate'
+            pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}} ({{node.children.length}} servers)</div>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+            </div>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-primary"
+                    icon="fa fa-edit"></button>
+            </div>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-danger"
+                    icon="fa fa-trash"></button>
+            </div>
+            <div class='col-lg-2 col-md-2 col-sm-2 col-2'>
+                <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
+            </div>
+        </div>
     </ng-template>
     <ng-template let-node pTemplate="server">
-        {{node.label}} ({{node.children.length}} groups)
+        <div class='row h-100 w-100 no-gutters bg-secondary'>
+            <div class='col-lg col-md col-sm col- label-container text-truncate'
+            pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}} ({{node.children.length}} groups)</div>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+            </div>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-primary"
+                    icon="fa fa-edit"></button>
+            </div>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-danger"
+                    icon="fa fa-trash"></button>
+            </div>
+            <div class='col-lg-2 col-md-2 col-sm-2 col-2'>
+                <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
+            </div>
+        </div>
     </ng-template>
     <ng-template let-node pTemplate="group">
-        {{node.label}} ({{node.children.length}} tags)
+        <div class='row h-100 w-100 no-gutters bg-info'>
+            <div class='col-lg col-md col-sm col- label-container text-truncate'
+            pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}} ({{node.children.length}} tags)</div>
+            <div class='col-lg-2 col-md-2 col-sm-2 col-2'>
+                <b>Update rate</b>
+            </div>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-primary"
+                    icon="fa fa-edit"></button>
+            </div>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-danger"
+                    icon="fa fa-trash"></button>
+            </div>
+            <div class='col-lg-2 col-md-2 col-sm-2 col-2'>
+                <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
+            </div>
+        </div>
     </ng-template>
     <ng-template let-node pTemplate="historian-tag" class="h-100">
         <div class='row h-100 w-100 no-gutters'>
             <div class='col-lg col-md col-sm col- label-container text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    {{node.data.update_rate}}
+            </div>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    <button pButton type="button" (click)="showRegisterDialog([node.data]); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-primary"
+                    icon="fa fa-edit"></button>
+            </div>
+            <!-- <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
                     <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
                     class="align-middle h-100 ui-button-info"
                     icon="fa fa-info-circle"></button>
-            </div>
+            </div> -->
             <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
                     <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
                     class="align-middle h-100 ui-button-danger"
@@ -37,11 +100,19 @@
         <div class='row h-100 w-100 no-gutters'>
             <div class='col-lg col-md col-sm label-container text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
-            <div class='col-lg-1 col-md-1 col-sm-1'>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    {{node.data.update_rate}}
+            </div>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    <button pButton type="button" (click)="showRegisterDialog([node.data]); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-primary"
+                    icon="fa fa-edit"></button>
+            </div>
+            <!-- <div class='col-lg-1 col-md-1 col-sm-1'>
                     <button pButton type="button" (click)="showDetailDialog(node.data)"
                     class="align-middle h-100 ui-button-info"
                     icon="fa fa-info-circle"></button>
-            </div>
+            </div> -->
             <div class='col-lg-1 col-md-1 col-sm-1'>
                 <p-button (click)="showDetailDialog(node.data)"
                 styleClass="align-middle h-100 ui-button-danger"

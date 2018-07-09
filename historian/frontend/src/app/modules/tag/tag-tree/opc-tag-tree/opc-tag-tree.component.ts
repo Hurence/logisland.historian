@@ -24,11 +24,12 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   // tag form dialog props
   displayRegister = false;
   tagsInputForForm: ITagFormInput[] = [];
+  // memory to update tree
+  nodeForRegister: TreeNode;
 
   constructor(private ngTreenodeService: NgTreenodeService,
               private messageService: MessageService) {
                 super();
-                this.selectedNodes = [];
                 this.tagsInputForForm = [];
                }
 
@@ -40,7 +41,6 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.tags && !changes.tags.isFirstChange()) {
-      this.selectedNodes = [];
       this.treeNodes = this.ngTreenodeService.buildOpcTagTree(this.tags);
       this.loading = false;
       this.expandAll();
@@ -51,11 +51,23 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     this.loading = true;
   }
 
-  showRegisterDialog(): void {
-    this.tagsInputForForm = this.selectedNodes
-      .filter(node => node.type === TypesName.TAG_HISTORIAN || node.type === TypesName.TAG_OPC)
-      .map(node => new TagFormInput(node.data));
+  showRegisterDialog(tags: ITag[]): void {
+    this.tagsInputForForm = tags.map(tag => new TagFormInput(tag));
     this.displayRegister = true;
+  }
+
+  showRegisterDialogRecursive(node: TreeNode): void {
+    this.nodeForRegister = node;
+    this.showRegisterDialog(this.getTagsFromNode(node));
+  }
+
+  private getTagsFromNode(node: TreeNode): ITag[] {
+    if (node.type === TypesName.TAG_HISTORIAN || node.type === TypesName.TAG_OPC) {
+      return [node.data];
+    } else {
+      return node.children.map(node => this.getTagsFromNode(node))
+        .reduce((acc, x) => acc.concat(x), []);
+    }
   }
 
   showDetailDialog(tag: ITag): void {
@@ -63,10 +75,9 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     this.displayTagDetail = true;
   }
 
-  // update tag in tree.
   onTagSaved(tag: IHistorianTag): void {
     this.displayRegister = false;
-    const nodeToUpdate: TreeNode = this.selectedNodes.find(n => n.data.id === tag.id);
+    const nodeToUpdate: TreeNode = this.findNodeOfTag(this.nodeForRegister, tag);
     if (nodeToUpdate === undefined) {
         this.messageService.add({
         severity: 'error',
@@ -79,6 +90,28 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
         nodeToUpdate.type = TypesName.TAG_HISTORIAN;
         nodeToUpdate.icon = nodeToUpdate.type;
       }
+    }
+  }
+/**
+ * return node of tag or undefined if not found
+ */
+  private findNodeOfTag(node: TreeNode, tag: IHistorianTag): TreeNode {
+    switch(node.type) {
+      case TypesName.TAG_HISTORIAN || node.type === TypesName.TAG_OPC:
+       if (node.data.id === tag.id) return node;
+       return undefined;
+      break;
+      case 'group': return this.nodeForRegister.children.find(n => n.data.id === tag.id)
+      case 'server': this.nodeForRegister.children.forEach(n => {
+        const found = this.findNodeOfTag(n, tag);
+        if (found) return found;
+      })
+      return undefined;
+      case 'domain': this.nodeForRegister.children.forEach(n => {
+        const found = this.findNodeOfTag(n, tag);
+        if (found) return found;
+      })
+      return undefined;
     }
   }
 
