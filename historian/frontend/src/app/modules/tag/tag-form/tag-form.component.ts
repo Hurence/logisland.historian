@@ -20,10 +20,7 @@ import { QuestionService } from '../../../shared/dynamic-form/question.service';
 export class TagFormComponent implements OnInit, OnChanges {
 
   form: FormGroup;
-  questionsMultiSelection: QuestionBase<any>[] = [];
-  questionsSingleSelection: QuestionBase<any>[] = [];
-  visible = true;
-  showEntireForm = true;
+  questions: QuestionBase<any>[] = [];
   @Input() tags: ITagFormInput[];
 
   @Output() submitted = new EventEmitter<IHistorianTag>();
@@ -43,26 +40,15 @@ export class TagFormComponent implements OnInit, OnChanges {
               private tagHistorianService: TagHistorianService) { }
 
   ngOnInit() {
-    this.questionsMultiSelection = this.qs.getTagFormMultiSelection();
-    this.questionsSingleSelection = this.qs.getTagFormSingleSelection();
-    this.form = this.qcs.toFormGroup(this.questionsMultiSelection.concat(this.questionsSingleSelection));
+    this.questions = this.qs.getTagForm();
+    this.form = this.qcs.toFormGroup(this.questions);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.tags && changes.tags.currentValue) {
-      if (changes.tags.currentValue.length !== 0) {
-        this.visible = true;
-        if (changes.tags.currentValue.length > 1) {
-          this.showEntireForm = false;
-        } else {
-          this.showEntireForm = true;
-        }
-        if (changes.tags.previousValue !== changes.tags.currentValue) {
-          this.rebuildForm();
-          this.updateBtn();
-        }
-      } else {
-        this.visible = false;
+      if (changes.tags.previousValue !== changes.tags.currentValue) {
+        this.rebuildForm();
+        this.updateBtn();
       }
     }
   }
