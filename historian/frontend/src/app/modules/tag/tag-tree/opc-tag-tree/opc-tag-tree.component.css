@@ -1,3 +1,23 @@
 .label-container {
-    max-width: 600px;
+    max-width: 80px;
+}
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .label-container {
+        max-width: 100px;
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .label-container {
+        max-width: 200px;
+    }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .label-container {
+        max-width: 380px;
+    }
 }

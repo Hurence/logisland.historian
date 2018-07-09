@@ -1,4 +1,4 @@
-<div class="container-fluid text-white bg-secondary no-padding">
+<div class="container-fluid text-white bg-secondary no-padding datasource-dashboard-container">
   <div class="row no-gutters h-100">
     <div class="col-lg-12 col-md-12 bg-dark h-10 small-column">
       <div class="row no-gutters h-100">
@@ -30,9 +30,9 @@
           <!-- <div class="datasource-detail-title text-center h-10 align-bottom small-column">
             <h2>Datasource Detail</h2>
           </div> -->
-          <div class="datasource-detail-content h-90">
+          <div class="datasource-detail-content h-100">
             <p-tabView [activeIndex]="selectedTab">
-              <p-tabPanel header="Tags Collected">
+              <p-tabPanel header="Collected Tags">
                 <app-opc-tag-tree [tags]="tags"></app-opc-tag-tree>
               </p-tabPanel>
               <p-tabPanel header="Datasource Configuration" [disabled]="false">

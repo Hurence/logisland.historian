@@ -16,22 +16,20 @@
     </ng-template>
     <ng-template let-node pTemplate="historian-tag" class="h-100">
         <div class='row h-100 w-100 no-gutters'>
-            <div class='col-lg col-md col-sm label-container text-truncate'
+            <div class='col-lg col-md col-sm col- label-container text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
-            <div class='col-lg-1 col-md-1 col-sm-1'>
-                    <button pButton type="button" (click)="showDetailDialog(node.data)" class="align-middle h-100"
-                    icon="fa fa-info-circle">
-                        <!-- <i class="fa fa-info-circle" aria-hidden="true"></i> -->
-                    </button>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-info"
+                    icon="fa fa-info-circle"></button>
             </div>
-            <div class='col-lg-1 col-md-1 col-sm-1'>
-                    <button pButton type="button" (click)="showDetailDialog(node.data)" class="align-middle h-100"
-                    icon="fa fa-trash">
-                        <!-- <i class="fa fa-trash" aria-hidden="true"></i> -->
-                    </button>
+            <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
+                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-danger"
+                    icon="fa fa-trash"></button>
             </div>
-            <div class='col-lg-2 col-md-2 col-sm-2'>
-                <p-inputSwitch [(ngModel)]="node.data.enabled"></p-inputSwitch>
+            <div class='col-lg-2 col-md-2 col-sm-2 col-2'>
+                <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
             </div>
         </div>
     </ng-template>
@@ -40,11 +38,13 @@
             <div class='col-lg col-md col-sm label-container text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-lg-1 col-md-1 col-sm-1'>
-                    <button pButton type="button" (click)="showDetailDialog(node.data)" class="align-middle h-100"
+                    <button pButton type="button" (click)="showDetailDialog(node.data)"
+                    class="align-middle h-100 ui-button-info"
                     icon="fa fa-info-circle"></button>
             </div>
             <div class='col-lg-1 col-md-1 col-sm-1'>
-                <p-button (click)="showDetailDialog(node.data)" class="align-middle h-100"
+                <p-button (click)="showDetailDialog(node.data)"
+                styleClass="align-middle h-100 ui-button-danger"
                 icon="fa fa-trash"
                 disabled="true"></p-button>
             </div>

@@ -105,10 +105,10 @@
 
   </div>
 
-  <button type="button" (click)="revert()" class="btn btn-danger btn-md text-uppercase" [disabled]="!dsForm.valid"
+  <button type="button" (click)="revert()" class="btn btn-danger" [disabled]="!dsForm.valid"
           i18n="cancel button|revert all changes not saved for datasource">Cancel</button>
 
-  <button type="submit" class="btn btn-success btn-md text-uppercase ml-2" [disabled]="!dsForm.valid"
+  <button type="submit" class="btn btn-success ml-2" [disabled]="!dsForm.valid"
           i18n="submit button|save all change to datasource or save new datasource">{{submitBtnMsg}}</button>
 
   <div *ngIf="datasourceIsReachable$"
