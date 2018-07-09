@@ -19,6 +19,9 @@ import { TreeModule } from 'primeng/tree';
 import { TreeDragDropService } from 'primeng/api';
 import { AccordionModule } from 'primeng/accordion';
 import { TabViewModule } from 'primeng/tabview';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { TooltipModule } from 'primeng/tooltip';
+import { ButtonModule } from 'primeng/button';
 import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-rate-selection.component';
 
 @NgModule({
@@ -36,6 +39,9 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
     TreeModule,
     AccordionModule,
     TabViewModule,
+    InputSwitchModule,
+    TooltipModule,
+    ButtonModule,
   ],
   exports: [
     CommonModule,
@@ -56,6 +62,9 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
     AccordionModule,
     RefreshRateSelectionComponent,
     TabViewModule,
+    InputSwitchModule,
+    TooltipModule,
+    ButtonModule,
   ],
   providers: [
     TreeDragDropService,

@@ -26,16 +26,16 @@ export class NgTreenodeService {
     private buildTagTreeNodes2(tags: ITag[]): TreeNode[] {
         const treeTag = tags.reduce(
             (prev, cur, i, a) => {
-                const domain = this.getOrCreateChildForNodes(prev, cur['domain']);
-                const server = this.getOrCreateChildForNode(domain, cur['server']);
-                const group = this.getOrCreateChildForNode(server, cur['group']);
+                const domain = this.getOrCreateChildForNodes(prev, cur['domain'], 'domain');
+                const server = this.getOrCreateChildForNode(domain, cur['server'], 'server');
+                const group = this.getOrCreateChildForNode(server, cur['group'], 'group');
 
                 const nodeType: string = TypesName.getType(cur);
                 const children: TreeNode = {
                     label: cur.tag_name,
                     data: cur,
                     icon: nodeType,
-                    leaf: false,
+                    leaf: true,
                     type: nodeType,
                     children: [],
                 };
@@ -52,7 +52,7 @@ export class NgTreenodeService {
         return treeTag;
     }
 
-  private getOrCreateChildForNode(obj: TreeNode, value: string): TreeNode {
+  private getOrCreateChildForNode(obj: TreeNode, value: string, typeNode: string): TreeNode {
     const found = obj.children.find(n => n.data === value);
     if (found) return found;
     const node: TreeNode = {
@@ -61,14 +61,14 @@ export class NgTreenodeService {
         expandedIcon: 'fa fa-folder-open',
         collapsedIcon: 'fa fa-folder',
         leaf: false,
-        type: value,
+        type: typeNode,
         children: [],
     };
     obj.children.push(node);
     return node;
   }
 
-  private getOrCreateChildForNodes(children: TreeNode[], value: string): TreeNode {
+  private getOrCreateChildForNodes(children: TreeNode[], value: string, typeNode: string): TreeNode {
     const found = children.find(n => n.data === value);
     if (found) return found;
     const node: TreeNode = {
@@ -77,7 +77,7 @@ export class NgTreenodeService {
         expandedIcon: 'fa fa-folder-open',
         collapsedIcon: 'fa fa-folder',
         leaf: false,
-        type: value,
+        type: typeNode,
         children: [],
     };
     children.push(node);

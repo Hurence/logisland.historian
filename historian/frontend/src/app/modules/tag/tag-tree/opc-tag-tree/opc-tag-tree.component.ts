@@ -19,7 +19,9 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
 
 
   @Input() tags: ITag[];
+  tagSelected: ITag;
   displayRegister = false;
+  displayTagDetail = false;
   tagsInputForForm: ITagFormInput[] = [];
 
   constructor(private ngTreenodeService: NgTreenodeService,
@@ -53,6 +55,11 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
       .filter(node => node.type === TypesName.TAG_HISTORIAN || node.type === TypesName.TAG_OPC)
       .map(node => new TagFormInput(node.data));
     this.displayRegister = true;
+  }
+
+  showDetailDialog(tag: ITag): void {
+    this.tagSelected = tag;
+    this.displayTagDetail = true;
   }
 
   // update tag in tree.
