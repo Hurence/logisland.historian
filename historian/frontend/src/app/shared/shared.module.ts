@@ -18,6 +18,7 @@ import { DialogModule } from 'primeng/dialog';
 import { TreeModule } from 'primeng/tree';
 import { TreeDragDropService } from 'primeng/api';
 import { AccordionModule } from 'primeng/accordion';
+import { TabViewModule } from 'primeng/tabview';
 import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-rate-selection.component';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
     DialogModule,
     TreeModule,
     AccordionModule,
+    TabViewModule,
   ],
   exports: [
     CommonModule,
@@ -53,6 +55,7 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
     TreeModule,
     AccordionModule,
     RefreshRateSelectionComponent,
+    TabViewModule,
   ],
   providers: [
     TreeDragDropService,

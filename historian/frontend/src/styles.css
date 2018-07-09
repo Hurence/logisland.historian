@@ -223,6 +223,65 @@ mark, .mark {
   width: 100%;
   min-width: 400px;
 }
+/* .ui-accordion {
+  max-height: 600px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}*/
+/* .ui-accordion-header {
+  max-height: 300px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}  */
+/* .ui-accordion-content {
+  max-height: 60px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+} */
 .no-padding {
   padding: 0;
+}
+
+.ui-tabview {
+  height: 100%;
+}
+/* tabview = tabview-panels + tabview-panels */
+.ui-tabview-panels {
+  height: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+.ui-tabview-nav {
+  max-height: 10%;
+}
+.h-5 {
+  height: 5%!important;
+}
+.h-10 {
+  height: 10%!important;
+}
+.h-20 {
+  height: 20%!important;
+}
+.h-30 {
+  height: 30%!important;
+}
+.h-40 {
+  height: 40%!important;
+}
+.h-50 {
+  height: 50%!important;
+}
+.h-60 {
+  height: 60%!important;
+}
+.h-70 {
+  height: 70%!important;
+}
+.h-80 {
+  height: 80%!important;
+}
+.h-90 {
+  height: 90%!important;
 }
