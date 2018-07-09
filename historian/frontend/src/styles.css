@@ -254,7 +254,7 @@ mark, .mark {
 /* tabview = tabview-panels + tabview-nav */
 .ui-tabview-panels {
   height: 90%;
-  max-height: 800px;
+  max-height: 650px;
   overflow-y: auto;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
