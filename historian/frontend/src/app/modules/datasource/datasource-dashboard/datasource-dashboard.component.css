@@ -31,10 +31,10 @@ h2 {
     max-height: 90%;
     /* padding-top: 1rem; */
 }
-.row.left-panel div {
+/* .row.left-panel div {
     padding-left: 10%;
     padding-right: 10%;
-}
+} */
 
 .datasource-tag-detail-container {
     height: 50%;
@@ -58,12 +58,14 @@ h2 {
     margin: 0;
 }
 .rigth-panel {
-    /* margin-right: 5%; */
-    padding-right: 2%;
+    /* padding-right: 2%;
+    padding-left: 2%;     */
+    padding: 2%;
 }
 .left-panel {
     /* margin-right: 5%; */
     /* padding-right: 2%; */
+    padding: 2%;
   min-height: 600px;
 }
 .small-column {

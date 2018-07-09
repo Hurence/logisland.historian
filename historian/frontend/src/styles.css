@@ -239,9 +239,11 @@ mark, .mark {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 } */
 .no-padding {
-  padding: 0;
+  padding: 0!important;
 }
-
+.no-margin {
+  margin: 0!important;
+}
 .ui-tabview {
   height: 100%;
 }
