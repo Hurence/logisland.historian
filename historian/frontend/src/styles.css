@@ -144,8 +144,9 @@ mark, .mark {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  float: left;
-  width: 70%;
+  text-align: right;
+  width: 80%;
+  top: 2px !important;
 }
 .datasources-list{
   overflow-y: scroll;
