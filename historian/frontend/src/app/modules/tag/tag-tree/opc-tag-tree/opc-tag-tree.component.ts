@@ -1,13 +1,14 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 
-import { IHistorianTag } from '../../modele/HistorianTag';
-import { ITag } from '../../modele/tag';
+import { IHistorianTag, HistorianTag } from '../../modele/HistorianTag';
+import { ITag, Tag } from '../../modele/tag';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
 import { ITagFormInput, TagFormInput } from '../../tag-form/TagFormInput';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { TagHistorianService } from '../../service/tag-historian.service';
 
 @Component({
   selector: 'app-opc-tag-tree',
@@ -28,7 +29,8 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   nodeForRegister: TreeNode;
 
   constructor(private ngTreenodeService: NgTreenodeService,
-              private messageService: MessageService) {
+              private messageService: MessageService,
+              private tagHistorianService: TagHistorianService) {
                 super();
                 this.tagsInputForForm = [];
                }
@@ -75,6 +77,37 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     this.displayTagDetail = true;
   }
 
+  deleteTags(node: TreeNode): void {
+    // this.tagHistorianService.delete(node.data.id).subscribe(deletedTag => {
+    //   this.messageService.add({
+    //     severity: 'success',
+    //     summary: 'Deleted Tag',
+    //     detail: `Tag id was '${deletedTag.id}'`,
+    //   });
+    //   Object.assign(node.data, deletedTag);
+    //   if (node.type === TypesName.TAG_HISTORIAN) {
+    //     node.type = TypesName.TAG_OPC;
+    //     node.icon = node.type;
+    //   }
+    // })
+  }
+
+  deleteTag(node: TreeNode): void {
+    this.tagHistorianService.delete(node.data.id).subscribe(deletedTag => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Deleted Tag',
+        detail: `Tag id was '${deletedTag.id}'`,
+      });
+      Object.assign(node.data, deletedTag);
+      if (node.type === TypesName.TAG_HISTORIAN) {
+        Tag.markAsOpcTag(node.data);
+        node.type = TypesName.TAG_OPC;
+        node.icon = node.type;
+      }
+    })
+  }
+
   onTagSaved(tag: IHistorianTag): void {
     this.displayRegister = false;
     const nodeToUpdate: TreeNode = this.findNodeOfTag(this.nodeForRegister, tag);
@@ -87,6 +120,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     } else {
       Object.assign(nodeToUpdate.data, tag);
       if (nodeToUpdate.type === TypesName.TAG_OPC) {
+        Tag.markAsHistorianTag(nodeToUpdate.data);
         nodeToUpdate.type = TypesName.TAG_HISTORIAN;
         nodeToUpdate.icon = nodeToUpdate.type;
       }

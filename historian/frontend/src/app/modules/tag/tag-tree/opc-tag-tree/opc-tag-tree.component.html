@@ -17,7 +17,7 @@
                     icon="fa fa-edit"></button>
             </div>
             <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
-                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                    <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
                     class="align-middle h-100 ui-button-danger"
                     icon="fa fa-trash"></button>
             </div>
@@ -38,7 +38,7 @@
                     icon="fa fa-edit"></button>
             </div>
             <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
-                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                    <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
                     class="align-middle h-100 ui-button-danger"
                     icon="fa fa-trash"></button>
             </div>
@@ -60,7 +60,7 @@
                     icon="fa fa-edit"></button>
             </div>
             <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
-                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                    <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
                     class="align-middle h-100 ui-button-danger"
                     icon="fa fa-trash"></button>
             </div>
@@ -87,7 +87,7 @@
                     icon="fa fa-info-circle"></button>
             </div> -->
             <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
-                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                    <button pButton type="button" (click)="deleteTag(node); $event.stopPropagation();"
                     class="align-middle h-100 ui-button-danger"
                     icon="fa fa-trash"></button>
             </div>
@@ -114,7 +114,7 @@
                     icon="fa fa-info-circle"></button>
             </div> -->
             <div class='col-lg-1 col-md-1 col-sm-1'>
-                <p-button (click)="showDetailDialog(node.data)"
+                <p-button (click)="deleteTag(node)"
                 styleClass="align-middle h-100 ui-button-danger"
                 icon="fa fa-trash"
                 disabled="true"></p-button>

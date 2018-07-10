@@ -68,4 +68,10 @@ export abstract class Tag implements ITag {
     public static isHistorianTag(tag: ITag): tag is IHistorianTag {
         return (tag as IHistorianTag).isHistorianTag === true;
     }
+    public static markAsHistorianTag(obj: any): void {
+        obj.isHistorianTag = true;
+    }
+    public static markAsOpcTag(obj: any): void {
+        obj.isHistorianTag = false;
+    }
 }
