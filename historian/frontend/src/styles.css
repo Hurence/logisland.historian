@@ -342,6 +342,9 @@ mark, .mark {
   width: auto;
   max-width: 100%;
 }
-.datasource-status-switch {
-  opacity: 1!important;
+.color-red {
+  color: red;
+}
+.color-green {
+  color: green;
 }

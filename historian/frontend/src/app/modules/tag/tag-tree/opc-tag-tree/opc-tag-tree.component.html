@@ -15,8 +15,8 @@
                     <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                     class="mx-1 my-1 align-middle h-100 ui-button-primary"
                     icon="fa fa-edit"></button>
-                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
-                    class="mx-1 my-1 align-middle h-100 ui-button-danger"
+                    <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-danger"
                     icon="fa fa-trash"></button>
                     <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
             </div>
@@ -33,8 +33,8 @@
                     <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                     class="mx-1 my-1 ui-button-primary"
                     icon="fa fa-edit"></button>
-                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
-                    class="mx-1 my-1 ui-button-danger"
+                    <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
+                    class="align-middle h-100 ui-button-danger"
                     icon="fa fa-trash"></button>
                     <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
             </div>
@@ -52,7 +52,7 @@
                 <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                 class="mx-1 my-1 ui-button-primary"
                 icon="fa fa-edit"></button>
-                <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
                 class="mx-1 my-1 ui-button-danger"
                 icon="fa fa-trash"></button>
                 <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
@@ -68,10 +68,10 @@
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
                     <!-- {{node.data.update_rate}} -->
-                    <button pButton type="button" (click)="showRegisterDialog([node.data]); $event.stopPropagation();"
+                    <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                     class="mx-1 my-1 ui-button-primary"
                     icon="fa fa-edit"></button>
-                    <button pButton type="button" (click)="showDetailDialog(node.data); $event.stopPropagation();"
+                    <button pButton type="button" (click)="deleteTag(node); $event.stopPropagation();"
                     class="mx-1 my-1 ui-button-danger"
                     icon="fa fa-trash"></button>
                     <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
@@ -87,7 +87,7 @@
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
                     {{node.data.update_rate}}
-                    <button pButton type="button" (click)="showRegisterDialog([node.data]); $event.stopPropagation();"
+                    <button pButton type="button" ((click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                     class="mx-1 my-1 ui-button-primary"
                     icon="fa fa-edit"></button>
                     <p-button (click)="showDetailDialog(node.data)"
