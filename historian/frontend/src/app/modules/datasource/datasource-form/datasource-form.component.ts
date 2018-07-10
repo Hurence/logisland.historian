@@ -19,12 +19,15 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private password: AbstractControl;
   datasourceTypes: string[];
 
+  private red = 'color-red';
+  private green = 'color-green';
+  statusClass: string = this.red;
+
   @Input() isCreation: boolean;
   @Input() datasource: Datasource;
   @Output() submitted = new EventEmitter<Datasource>();
 
   submitBtnMsg: string;
-  datasourceIsReachable = false;
   private BTN_MSG_ADD = 'Add Data source';
   private BTN_MSG_UPDATE = 'Update Data source';
   private CREADENTIAL_NONE = 'none';
@@ -56,7 +59,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       if (this.isCreation) {
         this.enableName();
         this.submitBtnMsg = this.BTN_MSG_ADD;
-        this.datasourceIsReachable = null;
+        this.statusClass = this.red;
       } else {
         this.disableName();
         this.submitBtnMsg = this.BTN_MSG_UPDATE;
@@ -195,7 +198,10 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private isReachable(): void {
     if (this.datasource) {
       this.datasourceService.datasourceIsReachable(this.datasource.id)
-      .subscribe(reachable => this.datasourceIsReachable = reachable);
+      .subscribe(reachable => {
+        const newClass = reachable ? this.green : this.red;
+        this.statusClass = newClass;
+      });
     }
   }
 
