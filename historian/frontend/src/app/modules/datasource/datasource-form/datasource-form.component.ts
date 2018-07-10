@@ -24,7 +24,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   @Output() submitted = new EventEmitter<Datasource>();
 
   submitBtnMsg: string;
-  datasourceIsReachable$: Observable<boolean>;
+  datasourceIsReachable = false;
   private BTN_MSG_ADD = 'Add Data source';
   private BTN_MSG_UPDATE = 'Update Data source';
   private CREADENTIAL_NONE = 'none';
@@ -56,7 +56,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       if (this.isCreation) {
         this.enableName();
         this.submitBtnMsg = this.BTN_MSG_ADD;
-        this.datasourceIsReachable$ = null;
+        this.datasourceIsReachable = null;
       } else {
         this.disableName();
         this.submitBtnMsg = this.BTN_MSG_UPDATE;
@@ -194,7 +194,8 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   /* update the test (datasourceIsReachable) if server can connect to the datasource */
   private isReachable(): void {
     if (this.datasource) {
-      this.datasourceIsReachable$ = this.datasourceService.datasourceIsReachable(this.datasource.id);
+      this.datasourceService.datasourceIsReachable(this.datasource.id)
+      .subscribe(reachable => this.datasourceIsReachable = reachable);
     }
   }
 

@@ -262,8 +262,8 @@ mark, .mark {
 .ui-tabview-panels {
   height: 90%;
   /* max-height: 650px; */
-  overflow-y: auto;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
+  /* overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar; */
 }
 .ui-inputswitch {
   margin: auto!important;
@@ -341,4 +341,7 @@ mark, .mark {
 .ui-growl {
   width: auto;
   max-width: 100%;
+}
+.datasource-status-switch {
+  opacity: 1!important;
 }

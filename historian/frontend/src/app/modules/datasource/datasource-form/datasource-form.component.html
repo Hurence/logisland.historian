@@ -1,3 +1,8 @@
+<div i18n="test connnectivity|tells if server can connect to datasource or not">
+        Status:
+    <p-inputSwitch [ngModel]="datasourceIsReachable" disabled  styleClass="datasource-status-switch"></p-inputSwitch>        
+</div>
+
 <form [formGroup]="dsForm" (ngSubmit)="onSubmit()">
   <div class="form-group label-small text-capitalize">
     <label for="type" i18n="type of the datasource|label for type datasource input">type</label>
