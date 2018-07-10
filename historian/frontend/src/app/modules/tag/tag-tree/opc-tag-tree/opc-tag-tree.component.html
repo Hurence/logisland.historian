@@ -77,7 +77,7 @@
                     {{node.data.update_rate}}
             </div>
             <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
-                    <button pButton type="button" (click)="showRegisterDialog([node.data]); $event.stopPropagation();"
+                    <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                     class="align-middle h-100 ui-button-primary"
                     icon="fa fa-edit"></button>
             </div>
@@ -104,7 +104,7 @@
                     {{node.data.update_rate}}
             </div>
             <div class='col-lg-1 col-md-1 col-sm-1 col-1'>
-                    <button pButton type="button" (click)="showRegisterDialog([node.data]); $event.stopPropagation();"
+                    <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                     class="align-middle h-100 ui-button-primary"
                     icon="fa fa-edit"></button>
             </div>
