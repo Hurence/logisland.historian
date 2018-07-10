@@ -58,8 +58,6 @@ export class NgTreenodeService {
     const node: TreeNode = {
         label: value,
         data: value,
-        expandedIcon: 'fa fa-folder-open',
-        collapsedIcon: 'fa fa-folder',
         leaf: false,
         type: typeNode,
         children: [],
@@ -74,8 +72,6 @@ export class NgTreenodeService {
     const node: TreeNode = {
         label: value,
         data: value,
-        expandedIcon: 'fa fa-folder-open',
-        collapsedIcon: 'fa fa-folder',
         leaf: false,
         type: typeNode,
         children: [],
