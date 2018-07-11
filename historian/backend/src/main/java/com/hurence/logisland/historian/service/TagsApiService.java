@@ -114,4 +114,13 @@ public class TagsApiService {
         node.setChildren(children);
         return node;
     }
+
+    /**
+     *
+     * @param tags
+     * @return true if all items were created. If at least one tag was updated (existed before), it returns false.
+     */
+    public List<Tag> bulkSaveOrUpdate(List<Tag> tags) {
+        return tags.stream().map(tag -> repository.save(tag)).collect(Collectors.toList());
+    }
 }

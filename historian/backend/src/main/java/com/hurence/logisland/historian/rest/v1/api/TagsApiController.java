@@ -1,9 +1,6 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
-import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
-import com.hurence.logisland.historian.rest.v1.model.Measures;
-import com.hurence.logisland.historian.rest.v1.model.Tag;
-import com.hurence.logisland.historian.rest.v1.model.TreeNode;
+import com.hurence.logisland.historian.rest.v1.model.*;
 import com.hurence.logisland.historian.service.MeasuresApiService;
 import com.hurence.logisland.historian.service.TagsApiService;
 import io.swagger.annotations.ApiParam;
@@ -22,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T14:55:12.030+02:00")
 
@@ -39,6 +37,11 @@ public class TagsApiController implements TagsApi {
                              MeasuresApiService measuresApiService) {
         this.service = service;
         this.measuresApiService = measuresApiService;
+    }
+
+    @Override
+    public ResponseEntity<List<Tag>> addManyTags(@ApiParam(value = "tags to create or update." ,required=true )  @Valid @RequestBody List<Tag> tags) {
+        return new ResponseEntity<List<Tag>>(service.bulkSaveOrUpdate(tags), HttpStatus.OK);
     }
 
     public ResponseEntity<Tag> addTagWithId(@ApiParam(value = "Tag resource to add", required = true) @Valid @RequestBody Tag body, @ApiParam(value = "itemId to", required = true) @PathVariable("itemId") String itemId) {

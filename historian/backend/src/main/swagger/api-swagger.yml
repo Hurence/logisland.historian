@@ -499,6 +499,35 @@ paths:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
+  /tags/batch:
+    post:
+      tags:
+       - tag
+      summary: create or update many tags
+      description: create or update the given tags
+      operationId: addManyTags
+      produces:
+        - application/json
+      parameters:
+        - name: tags
+          in: body
+          schema:
+            type: array
+            items:
+             $ref: '#/definitions/Tag'
+          description: tags to create or update.
+          required: true
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
   /tags/tree:
        get:
          tags:

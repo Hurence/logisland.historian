@@ -7,6 +7,7 @@ package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Error;
+import java.util.List;
 import com.hurence.logisland.historian.rest.v1.model.Measures;
 import org.springframework.core.io.Resource;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
@@ -27,10 +28,20 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T10:58:05.350+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
+
+            @ApiOperation(value = "create or update many tags", nickname = "addManyTags", notes = "create or update the given tags", response = Tag.class, responseContainer = "List", tags={ "tag", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "Ok.", response = Tag.class, responseContainer = "List"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/tags/batch",
+                produces = { "application/json" }, 
+            method = RequestMethod.POST)
+        ResponseEntity<List<Tag>> addManyTags(@ApiParam(value = "tags to create or update." ,required=true )  @Valid @RequestBody List<Tag> tags);
+
 
             @ApiOperation(value = "create new tag", nickname = "addTagWithId", notes = "store a new tag", response = Tag.class, tags={ "tag", })
             @ApiResponses(value = { 
