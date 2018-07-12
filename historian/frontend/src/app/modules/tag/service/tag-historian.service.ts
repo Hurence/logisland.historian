@@ -1,16 +1,16 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
 import 'rxjs/add/observable/of';
 
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { MessageService } from 'primeng/components/common/messageservice';
+import { Observable } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+
+import { environment } from '../../../../environments/environment';
+import { RestTreeNode } from '../../../core/modele/RestTreeNode';
 import { IModelService } from '../../../shared/base-model-service';
 import { Utilities } from '../../../shared/utilities.service';
 import { IHistorianTag } from '../modele/HistorianTag';
-import { environment } from '../../../../environments/environment';
-import { RestTreeNode } from '../../../core/modele/RestTreeNode';
-import { ReponseId } from '../modele/ResponseId';
-import { MessageService } from 'primeng/components/common/messageservice';
 
 @Injectable()
 export class TagHistorianService implements IModelService<IHistorianTag> {
