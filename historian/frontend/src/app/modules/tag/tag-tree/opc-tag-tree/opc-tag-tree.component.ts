@@ -87,19 +87,21 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   }
 
   deleteTags(node: TreeNode): void {
-    this.getNodesFromNode(node, [TypesName.TAG_HISTORIAN]).forEach(currentNode => {
-      this.deleteTag(currentNode);
+    const tagNodes = this.getNodesFromNode(node, [TypesName.TAG_HISTORIAN]);
+    const tagsToDelete: string[] = tagNodes.map(tagNode => (<IHistorianTag>tagNode.data).id);
+    this.tagHistorianService.deleteMany(tagsToDelete).subscribe(deletedTags => {
+      tagNodes.forEach(n => {
+        if (n.type === TypesName.TAG_HISTORIAN) {
+          Tag.markAsOpcTag(n.data);
+          n.type = TypesName.TAG_OPC;
+          n.icon = n.type;
+        }
+      });
     });
   }
 
   deleteTag(node: TreeNode): void {
     this.tagHistorianService.delete(node.data.id).subscribe(deletedTag => {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Deleted Tag',
-        detail: `Tag id was '${deletedTag.id}'`,
-      });
-      Object.assign(node.data, deletedTag);
       if (node.type === TypesName.TAG_HISTORIAN) {
         Tag.markAsOpcTag(node.data);
         node.type = TypesName.TAG_OPC;

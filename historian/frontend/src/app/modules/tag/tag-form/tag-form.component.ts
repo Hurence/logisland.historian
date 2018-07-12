@@ -29,10 +29,7 @@ export class TagFormComponent implements OnInit, OnChanges {
   private BTN_MSG_ADD = 'Save';
   private BTN_MSG_UPDATE = 'Update';
   private DISCARD_CHANGE_MSG = 'Are you sure you want to discard changes ?';
-  private SUCCESSFULLY_SAVED_MSG = 'successfully added tag';
   private FAILED_SAVED_MSG = 'error while saving tag.';
-  private SUCCESSFULLY_UPDATED_MSG = 'successfully updated tag';
-  private FAILED_UPDATED_MSG = 'error while updating tag.';
 
   constructor(private qcs: QuestionControlService,
               private fb: FormBuilder,
@@ -92,17 +89,6 @@ export class TagFormComponent implements OnInit, OnChanges {
     this.tagHistorianService.saveMany(tagsToSave).subscribe(
       tags => {
         tags.forEach(tag => this.submitted.emit(tag));
-        let detail;
-        if (tags.length > 1) {
-          detail = `Saved ${tags.length} tags`;
-        } else {
-          detail = `Saved ${tags.length} tag`;
-        }
-        this.messageService.add({
-          severity: 'success',
-          summary: this.SUCCESSFULLY_SAVED_MSG,
-          detail: detail,
-        });
       },
       error => {
         console.error(JSON.stringify(error));

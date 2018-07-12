@@ -10,14 +10,18 @@ import { IHistorianTag } from '../modele/HistorianTag';
 import { environment } from '../../../../environments/environment';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
 import { ReponseId } from '../modele/ResponseId';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Injectable()
 export class TagHistorianService implements IModelService<IHistorianTag> {
 
   private tagsUrl = `${environment.HISTORIAN_API_URL}`;
+  private SUCCESSFULLY_SAVED_MSG = 'successfully added tag';
+  private SUCCESSFULLY_DELETED_MSG = 'successfully deleted tag';
 
   constructor(private http: HttpClient,
-              private help: Utilities) { }
+              private help: Utilities,
+              private messageService: MessageService) { }
 
   getAll(): Observable<IHistorianTag[]> {
     return this.http.get<IHistorianTag[]>(`${this.tagsUrl}tags`)
@@ -71,12 +75,35 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
 
   save(obj: IHistorianTag): Observable<IHistorianTag> {
     return this.http.post<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj).pipe(
-      map(this.markAsHistTag)
+      map(this.markAsHistTag),
+      tap(tag => {
+        const detail = `Saved tag with id ${tag.id}`;
+        this.messageService.add({
+          severity: 'success',
+          summary: this.SUCCESSFULLY_SAVED_MSG,
+          detail: detail,
+        });
+      }),
     );
   }
 
   saveMany(objs: IHistorianTag[]): Observable<IHistorianTag[]> {
-    return this.http.post<IHistorianTag[]>(`${this.tagsUrl}tags/batch`, objs);
+    return this.http.post<IHistorianTag[]>(`${this.tagsUrl}tags/batch`, objs).pipe(
+      map(tags => tags.map(this.markAsHistTag)),
+      tap(tags => {
+        let detail;
+        if (tags.length > 1) {
+          detail = `Saved ${tags.length} tags`;
+        } else {
+          detail = `Saved ${tags.length} tag`;
+        }
+        this.messageService.add({
+          severity: 'success',
+          summary: this.SUCCESSFULLY_SAVED_MSG,
+          detail: detail,
+        });
+      })
+    );
   }
 
   update(obj: IHistorianTag): Observable<IHistorianTag> {
@@ -87,7 +114,34 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
 
   delete(id: string): Observable<IHistorianTag> {
     return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(id)}`).pipe(
-      map(this.markAsHistTag)
+      map(this.markAsHistTag),
+      tap(tag => {
+        const detail = `Deleted tag with id ${tag.id}`;
+        this.messageService.add({
+          severity: 'success',
+          summary: this.SUCCESSFULLY_DELETED_MSG,
+          detail: detail,
+        });
+      })
+    );
+  }
+
+  deleteMany(ids: string[]): Observable<IHistorianTag[]> {
+    return this.http.request<IHistorianTag[]>('delete', `${this.tagsUrl}tags/batch`, { body: ids }).pipe(
+      map(tags => tags.map(this.markAsHistTag)),
+      tap(tags => {
+        let detail;
+        if (tags.length > 1) {
+          detail = `Deleted ${tags.length} tags`;
+        } else {
+          detail = `Deleted ${tags.length} tag`;
+        }
+        this.messageService.add({
+          severity: 'success',
+          summary: this.SUCCESSFULLY_DELETED_MSG,
+          detail: detail,
+        });
+      })
     );
   }
 
