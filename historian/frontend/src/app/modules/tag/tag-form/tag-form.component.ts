@@ -88,17 +88,31 @@ export class TagFormComponent implements OnInit, OnChanges {
 
   /* save datasource when submitting */
   onSubmit() {
-    this.prepareSaveTag().map(o => {
-      if (o.isCreation) {
-        this.subscribeToUpdate(this.tagHistorianService.save(o.tag),
-        this.SUCCESSFULLY_SAVED_MSG,
-        this.FAILED_SAVED_MSG);
-      } else {
-        this.subscribeToUpdate(this.tagHistorianService.update(o.tag),
-        this.SUCCESSFULLY_UPDATED_MSG,
-        this.FAILED_UPDATED_MSG);
+    const tagsToSave = this.prepareSaveTag().map(o => o.tag);
+    this.tagHistorianService.saveMany(tagsToSave).subscribe(
+      tags => {
+        tags.forEach(tag => this.submitted.emit(tag));
+        let detail;
+        if (tags.length > 1) {
+          detail = `Saved ${tags.length} tags`;
+        } else {
+          detail = `Saved ${tags.length} tag`;
+        }
+        this.messageService.add({
+          severity: 'success',
+          summary: this.SUCCESSFULLY_SAVED_MSG,
+          detail: detail,
+        });
+      },
+      error => {
+        console.error(JSON.stringify(error));
+        this.messageService.add({
+          severity: 'error',
+          summary: error.status,
+          detail: this.FAILED_SAVED_MSG,
+        });
       }
-    });
+    );
   }
 
   private prepareSaveTag(): ITagFormOutput[] {
@@ -124,30 +138,6 @@ export class TagFormComponent implements OnInit, OnChanges {
     const obj = Object.assign({}, this.tags[this.tags.length - 1].tag as any);
     delete obj.labels;
     return obj;
-  }
-
-  private subscribeToUpdate(submitted: Observable<IHistorianTag>,
-                            msgSuccess: string,
-                            msgError: string): void {
-    submitted.subscribe(
-      tag => {
-        this.submitted.emit(tag);
-        this.messageService.add({
-          id: tag.id,
-          severity: 'success',
-          summary: msgSuccess,
-          detail: tag.id,
-        });
-      },
-      error => {
-        console.error(JSON.stringify(error));
-        this.messageService.add({
-          severity: 'error',
-          summary: error.status,
-          detail: msgError,
-        });
-      }
-    );
   }
 
   private setLabels(labels: Set<string>): void {

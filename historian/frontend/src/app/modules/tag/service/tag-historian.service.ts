@@ -9,6 +9,7 @@ import { Utilities } from '../../../shared/utilities.service';
 import { IHistorianTag } from '../modele/HistorianTag';
 import { environment } from '../../../../environments/environment';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
+import { ReponseId } from '../modele/ResponseId';
 
 @Injectable()
 export class TagHistorianService implements IModelService<IHistorianTag> {
@@ -72,6 +73,10 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     return this.http.post<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj).pipe(
       map(this.markAsHistTag)
     );
+  }
+
+  saveMany(objs: IHistorianTag[]): Observable<IHistorianTag[]> {
+    return this.http.post<IHistorianTag[]>(`${this.tagsUrl}tags/batch`, objs);
   }
 
   update(obj: IHistorianTag): Observable<IHistorianTag> {
