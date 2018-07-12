@@ -1121,8 +1121,11 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   color: #ffffff; }
 
   /* historian added */
-
-  #historian-tree .ui-tree .ui-treenode-label{
+  #historian-tree .col-auto{
+    margin-left: 0px;
+    margin-right: 35px;
+  }
+#historian-tree .ui-tree .ui-treenode-label{
   vertical-align:initial !important;
 }
 #historian-tree .ui-widget-content .ui-button,#historian-tree .ui-widget.ui-button, #historian-tree .ui-button {
@@ -1198,6 +1201,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 .ui-tree .ui-tree-container{
   max-width: 100%;
+  overflow-x: hidden;
 }
 .ui-button .fa-plus{
   width: 20px;
