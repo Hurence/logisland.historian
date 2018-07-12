@@ -30,6 +30,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class TagsApiService {
@@ -120,7 +121,14 @@ public class TagsApiService {
      * @param tags
      * @return true if all items were created. If at least one tag was updated (existed before), it returns false.
      */
-    public List<Tag> bulkSaveOrUpdate(List<Tag> tags) {
+    public List<Tag> SaveOrUpdateMany(List<Tag> tags) {
         return tags.stream().map(tag -> repository.save(tag)).collect(Collectors.toList());
     }
+
+    public List<Tag> deleteManyTag(List<String> tagIds) {
+        return tagIds.stream().map(id -> this.deleteTag(id))
+                .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty())
+                .collect(Collectors.toList());
+    }
+
 }

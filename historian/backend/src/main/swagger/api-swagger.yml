@@ -528,6 +528,34 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
+    delete:
+      tags:
+       - tag
+      summary: delete tags
+      description: delete the corresponding tags
+      operationId: deleteManyTags
+      produces:
+        - application/json
+      parameters:
+        - name: tagIds
+          in: body
+          schema:
+            type: array
+            items:
+             type: string
+          description: id of the tags to be deleted.
+          required: true
+      responses:
+        '200':
+          description: Tags successfully removed or not found.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
   /tags/tree:
        get:
          tags:

@@ -21,7 +21,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * TreeNode
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T10:58:05.350+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T11:41:16.398+02:00")
 
 @SolrDocument(solrCoreName = "historian")
 public class TreeNode  implements Serializable {

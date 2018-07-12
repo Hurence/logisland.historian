@@ -28,7 +28,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T10:58:05.350+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T11:41:16.398+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -51,6 +51,16 @@ import java.util.List;
             @RequestMapping(value = "/api/v1/tags/{itemId}",
             method = RequestMethod.POST)
         ResponseEntity<Tag> addTagWithId(@ApiParam(value = "Tag resource to add" ,required=true )  @Valid @RequestBody Tag body,@ApiParam(value = "itemId to",required=true) @PathVariable("itemId") String itemId);
+
+
+            @ApiOperation(value = "delete tags", nickname = "deleteManyTags", notes = "delete the corresponding tags", response = Tag.class, responseContainer = "List", tags={ "tag", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "Tags successfully removed or not found.", response = Tag.class, responseContainer = "List"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/tags/batch",
+                produces = { "application/json" }, 
+            method = RequestMethod.DELETE)
+        ResponseEntity<List<Tag>> deleteManyTags(@ApiParam(value = "id of the tags to be deleted." ,required=true )  @Valid @RequestBody List<String> tagIds);
 
 
             @ApiOperation(value = "delete tag", nickname = "deleteTag", notes = "remove the corresponding Tag", response = Tag.class, tags={ "tag", })

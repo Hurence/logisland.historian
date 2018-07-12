@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,7 +40,7 @@ public class TagsApiController implements TagsApi {
 
     @Override
     public ResponseEntity<List<Tag>> addManyTags(@ApiParam(value = "tags to create or update." ,required=true )  @Valid @RequestBody List<Tag> tags) {
-        return new ResponseEntity<List<Tag>>(service.bulkSaveOrUpdate(tags), HttpStatus.OK);
+        return new ResponseEntity<List<Tag>>(service.SaveOrUpdateMany(tags), HttpStatus.OK);
     }
 
     public ResponseEntity<Tag> addTagWithId(@ApiParam(value = "Tag resource to add", required = true) @Valid @RequestBody Tag body, @ApiParam(value = "itemId to", required = true) @PathVariable("itemId") String itemId) {
@@ -53,6 +52,11 @@ public class TagsApiController implements TagsApi {
             return new ResponseEntity<Tag>(HttpStatus.BAD_REQUEST);
 
         }
+    }
+
+    @Override
+    public ResponseEntity<List<Tag>> deleteManyTags(@ApiParam(value = "id of the tags to be deleted." ,required=true )  @Valid @RequestBody List<String> tagIds) {
+        return new ResponseEntity<List<Tag>>(service.deleteManyTag(tagIds), HttpStatus.OK);
     }
 
     public ResponseEntity<Tag> deleteTag(@ApiParam(value = "id of the tag to be deleted", required = true) @PathVariable("itemId") String itemId) {
