@@ -20,7 +20,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a versioned component
 */
     @ApiModel(description = "a versioned component")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T16:34:43.562+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Versioned  implements Serializable {
@@ -51,8 +52,9 @@ public class Versioned  implements Serializable {
     return lastModified;
     }
 
-        public void setLastModified(OffsetDateTime lastModified) {
+        public Versioned setLastModified(OffsetDateTime lastModified) {
         this.lastModified = lastModified;
+        return this;
         }
 
         public Versioned modificationReason(String modificationReason) {
@@ -72,8 +74,9 @@ public class Versioned  implements Serializable {
     return modificationReason;
     }
 
-        public void setModificationReason(String modificationReason) {
+        public Versioned setModificationReason(String modificationReason) {
         this.modificationReason = modificationReason;
+        return this;
         }
 
 

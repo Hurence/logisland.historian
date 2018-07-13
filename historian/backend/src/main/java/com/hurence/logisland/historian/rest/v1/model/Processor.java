@@ -23,7 +23,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * A logisland &#39;processor&#39;.
 */
     @ApiModel(description = "A logisland 'processor'.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T16:34:43.562+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Processor  implements Serializable {
@@ -61,8 +62,9 @@ public class Processor  implements Serializable {
     return name;
     }
 
-        public void setName(String name) {
+        public Processor setName(String name) {
         this.name = name;
+        return this;
         }
 
         public Processor component(String component) {
@@ -83,8 +85,9 @@ public class Processor  implements Serializable {
     return component;
     }
 
-        public void setComponent(String component) {
+        public Processor setComponent(String component) {
         this.component = component;
+        return this;
         }
 
         public Processor documentation(String documentation) {
@@ -104,8 +107,9 @@ public class Processor  implements Serializable {
     return documentation;
     }
 
-        public void setDocumentation(String documentation) {
+        public Processor setDocumentation(String documentation) {
         this.documentation = documentation;
+        return this;
         }
 
         public Processor config(List<Property> config) {
@@ -134,8 +138,9 @@ public class Processor  implements Serializable {
     return config;
     }
 
-        public void setConfig(List<Property> config) {
+        public Processor setConfig(List<Property> config) {
         this.config = config;
+        return this;
         }
 
 

@@ -22,7 +22,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Selection is a selection of tags.
 */
     @ApiModel(description = "a Selection is a selection of tags.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T16:34:43.562+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Selection  implements Serializable {
@@ -64,8 +65,9 @@ public class Selection  implements Serializable {
     return name;
     }
 
-        public void setName(String name) {
+        public Selection setName(String name) {
         this.name = name;
+        return this;
         }
 
         public Selection description(String description) {
@@ -85,8 +87,9 @@ public class Selection  implements Serializable {
     return description;
     }
 
-        public void setDescription(String description) {
+        public Selection setDescription(String description) {
         this.description = description;
+        return this;
         }
 
         public Selection owner(String owner) {
@@ -106,8 +109,9 @@ public class Selection  implements Serializable {
     return owner;
     }
 
-        public void setOwner(String owner) {
+        public Selection setOwner(String owner) {
         this.owner = owner;
+        return this;
         }
 
         public Selection permissions(Permissions permissions) {
@@ -128,8 +132,9 @@ public class Selection  implements Serializable {
     return permissions;
     }
 
-        public void setPermissions(Permissions permissions) {
+        public Selection setPermissions(Permissions permissions) {
         this.permissions = permissions;
+        return this;
         }
 
         public Selection tagIds(List<String> tagIds) {
@@ -155,8 +160,9 @@ public class Selection  implements Serializable {
     return tagIds;
     }
 
-        public void setTagIds(List<String> tagIds) {
+        public Selection setTagIds(List<String> tagIds) {
         this.tagIds = tagIds;
+        return this;
         }
 
 

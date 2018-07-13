@@ -18,7 +18,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Function
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T16:34:43.562+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Function  implements Serializable {
@@ -47,8 +48,9 @@ public class Function  implements Serializable {
     return name;
     }
 
-        public void setName(String name) {
+        public Function setName(String name) {
         this.name = name;
+        return this;
         }
 
         public Function value(Double value) {
@@ -68,8 +70,9 @@ public class Function  implements Serializable {
     return value;
     }
 
-        public void setValue(Double value) {
+        public Function setValue(Double value) {
         this.value = value;
+        return this;
         }
 
 

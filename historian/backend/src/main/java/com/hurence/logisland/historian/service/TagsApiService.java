@@ -83,6 +83,11 @@ public class TagsApiService {
         return tags;
     }
 
+
+    public List<Tag> getAllTagsFromDatasource(String datasourceId) {
+        return repository.findByDatasource(datasourceId);
+    }
+
     public Optional<Tag> addTagWithId(Tag body, String itemId) {
 
         Optional<Tag> datasourceToRemove = getTag(itemId);

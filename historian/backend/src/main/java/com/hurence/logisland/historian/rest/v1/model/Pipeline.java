@@ -24,7 +24,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * Tracks stream processing pipeline configuration
 */
     @ApiModel(description = "Tracks stream processing pipeline configuration")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T16:34:43.562+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Pipeline  implements Serializable {
@@ -59,8 +60,9 @@ public class Pipeline  implements Serializable {
     return lastModified;
     }
 
-        public void setLastModified(OffsetDateTime lastModified) {
+        public Pipeline setLastModified(OffsetDateTime lastModified) {
         this.lastModified = lastModified;
+        return this;
         }
 
         public Pipeline modificationReason(String modificationReason) {
@@ -80,8 +82,9 @@ public class Pipeline  implements Serializable {
     return modificationReason;
     }
 
-        public void setModificationReason(String modificationReason) {
+        public Pipeline setModificationReason(String modificationReason) {
         this.modificationReason = modificationReason;
+        return this;
         }
 
         public Pipeline processors(List<Processor> processors) {
@@ -110,8 +113,9 @@ public class Pipeline  implements Serializable {
     return processors;
     }
 
-        public void setProcessors(List<Processor> processors) {
+        public Pipeline setProcessors(List<Processor> processors) {
         this.processors = processors;
+        return this;
         }
 
 

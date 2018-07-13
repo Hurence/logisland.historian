@@ -19,7 +19,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Alert
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T16:34:43.562+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Alert  implements Serializable {
@@ -60,8 +61,9 @@ public class Alert  implements Serializable {
     return recordType;
     }
 
-        public void setRecordType(String recordType) {
+        public Alert setRecordType(String recordType) {
         this.recordType = recordType;
+        return this;
         }
 
         public Alert timestamp(Long timestamp) {
@@ -81,8 +83,9 @@ public class Alert  implements Serializable {
     return timestamp;
     }
 
-        public void setTimestamp(Long timestamp) {
+        public Alert setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+        return this;
         }
 
         public Alert message(String message) {
@@ -102,8 +105,9 @@ public class Alert  implements Serializable {
     return message;
     }
 
-        public void setMessage(String message) {
+        public Alert setMessage(String message) {
         this.message = message;
+        return this;
         }
 
         public Alert severity(Integer severity) {
@@ -123,8 +127,9 @@ public class Alert  implements Serializable {
     return severity;
     }
 
-        public void setSeverity(Integer severity) {
+        public Alert setSeverity(Integer severity) {
         this.severity = severity;
+        return this;
         }
 
         public Alert tagId(Tag tagId) {
@@ -145,8 +150,9 @@ public class Alert  implements Serializable {
     return tagId;
     }
 
-        public void setTagId(Tag tagId) {
+        public Alert setTagId(Tag tagId) {
         this.tagId = tagId;
+        return this;
         }
 
 

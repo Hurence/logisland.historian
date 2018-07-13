@@ -21,7 +21,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Component
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T16:34:43.562+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Component  implements Serializable {
@@ -59,8 +60,9 @@ public class Component  implements Serializable {
     return name;
     }
 
-        public void setName(String name) {
+        public Component setName(String name) {
         this.name = name;
+        return this;
         }
 
         public Component component(String component) {
@@ -81,8 +83,9 @@ public class Component  implements Serializable {
     return component;
     }
 
-        public void setComponent(String component) {
+        public Component setComponent(String component) {
         this.component = component;
+        return this;
         }
 
         public Component documentation(String documentation) {
@@ -102,8 +105,9 @@ public class Component  implements Serializable {
     return documentation;
     }
 
-        public void setDocumentation(String documentation) {
+        public Component setDocumentation(String documentation) {
         this.documentation = documentation;
+        return this;
         }
 
         public Component config(List<Property> config) {
@@ -132,8 +136,9 @@ public class Component  implements Serializable {
     return config;
     }
 
-        public void setConfig(List<Property> config) {
+        public Component setConfig(List<Property> config) {
         this.config = config;
+        return this;
         }
 
 

@@ -21,7 +21,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * TreeNode
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T16:34:43.562+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class TreeNode  implements Serializable {
@@ -55,8 +56,9 @@ public class TreeNode  implements Serializable {
     return value;
     }
 
-        public void setValue(String value) {
+        public TreeNode setValue(String value) {
         this.value = value;
+        return this;
         }
 
         public TreeNode totalChildNumber(Long totalChildNumber) {
@@ -77,8 +79,9 @@ public class TreeNode  implements Serializable {
     return totalChildNumber;
     }
 
-        public void setTotalChildNumber(Long totalChildNumber) {
+        public TreeNode setTotalChildNumber(Long totalChildNumber) {
         this.totalChildNumber = totalChildNumber;
+        return this;
         }
 
         public TreeNode children(List<TreeNode> children) {
@@ -105,8 +108,9 @@ public class TreeNode  implements Serializable {
     return children;
     }
 
-        public void setChildren(List<TreeNode> children) {
+        public TreeNode setChildren(List<TreeNode> children) {
         this.children = children;
+        return this;
         }
 
 

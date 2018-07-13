@@ -20,7 +20,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * BulkLoad
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T16:34:43.562+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class BulkLoad  implements Serializable {
@@ -65,8 +66,9 @@ public class BulkLoad  implements Serializable {
     return startTime;
     }
 
-        public void setStartTime(String startTime) {
+        public BulkLoad setStartTime(String startTime) {
         this.startTime = startTime;
+        return this;
         }
 
         public BulkLoad generationDuration(Integer generationDuration) {
@@ -86,8 +88,9 @@ public class BulkLoad  implements Serializable {
     return generationDuration;
     }
 
-        public void setGenerationDuration(Integer generationDuration) {
+        public BulkLoad setGenerationDuration(Integer generationDuration) {
         this.generationDuration = generationDuration;
+        return this;
         }
 
         public BulkLoad importDuration(Integer importDuration) {
@@ -107,8 +110,9 @@ public class BulkLoad  implements Serializable {
     return importDuration;
     }
 
-        public void setImportDuration(Integer importDuration) {
+        public BulkLoad setImportDuration(Integer importDuration) {
         this.importDuration = importDuration;
+        return this;
         }
 
         public BulkLoad numMetricsImported(Integer numMetricsImported) {
@@ -128,8 +132,9 @@ public class BulkLoad  implements Serializable {
     return numMetricsImported;
     }
 
-        public void setNumMetricsImported(Integer numMetricsImported) {
+        public BulkLoad setNumMetricsImported(Integer numMetricsImported) {
         this.numMetricsImported = numMetricsImported;
+        return this;
         }
 
         public BulkLoad numPointsImported(Long numPointsImported) {
@@ -149,8 +154,9 @@ public class BulkLoad  implements Serializable {
     return numPointsImported;
     }
 
-        public void setNumPointsImported(Long numPointsImported) {
+        public BulkLoad setNumPointsImported(Long numPointsImported) {
         this.numPointsImported = numPointsImported;
+        return this;
         }
 
         public BulkLoad metrics(List<String> metrics) {
@@ -178,8 +184,9 @@ public class BulkLoad  implements Serializable {
     return metrics;
     }
 
-        public void setMetrics(List<String> metrics) {
+        public BulkLoad setMetrics(List<String> metrics) {
         this.metrics = metrics;
+        return this;
         }
 
 

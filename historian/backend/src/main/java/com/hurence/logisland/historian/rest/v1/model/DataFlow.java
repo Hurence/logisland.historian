@@ -25,7 +25,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * A streaming pipeline.
 */
     @ApiModel(description = "A streaming pipeline.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T16:34:43.562+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class DataFlow  implements Serializable {
@@ -64,8 +65,9 @@ public class DataFlow  implements Serializable {
     return lastModified;
     }
 
-        public void setLastModified(OffsetDateTime lastModified) {
+        public DataFlow setLastModified(OffsetDateTime lastModified) {
         this.lastModified = lastModified;
+        return this;
         }
 
         public DataFlow modificationReason(String modificationReason) {
@@ -85,8 +87,9 @@ public class DataFlow  implements Serializable {
     return modificationReason;
     }
 
-        public void setModificationReason(String modificationReason) {
+        public DataFlow setModificationReason(String modificationReason) {
         this.modificationReason = modificationReason;
+        return this;
         }
 
         public DataFlow services(List<Service> services) {
@@ -115,8 +118,9 @@ public class DataFlow  implements Serializable {
     return services;
     }
 
-        public void setServices(List<Service> services) {
+        public DataFlow setServices(List<Service> services) {
         this.services = services;
+        return this;
         }
 
         public DataFlow streams(List<Stream> streams) {
@@ -145,8 +149,9 @@ public class DataFlow  implements Serializable {
     return streams;
     }
 
-        public void setStreams(List<Stream> streams) {
+        public DataFlow setStreams(List<Stream> streams) {
         this.streams = streams;
+        return this;
         }
 
 
