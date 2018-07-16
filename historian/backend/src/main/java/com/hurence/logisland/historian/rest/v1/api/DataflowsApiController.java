@@ -51,6 +51,12 @@ public class DataflowsApiController implements DataflowsApi {
     public ResponseEntity<DataFlow> pollDataflowConfiguration(
             @ApiParam(value = "the dataflow name (aka the logisland job name)",required=true) @PathVariable("dataflowName") String dataflowName,
             @ApiParam(value = "Timestamp of last response" ) @RequestHeader(value="If-Modified-Since", required=false) String ifModifiedSinceString) {
-        return null;
+        Optional<DataFlow> dataflow = service.getDataflow(dataflowName);
+        if (dataflow.isPresent()) {
+            return new ResponseEntity<DataFlow>(dataflow.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<DataFlow>(HttpStatus.NOT_FOUND);
+
+        }
     }
 }

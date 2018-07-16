@@ -1569,6 +1569,10 @@ definitions:
     allOf:
       - $ref: "#/definitions/Versioned"
       - properties:
+          id:
+            type: string
+            description: The id of the dataflow.
+            writeOnly: true
           services:
             type: array
             description: The service controllers.

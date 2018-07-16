@@ -57,10 +57,10 @@ public class DataflowsApiService {
         return repository.findById(dataflowName);
     }
 
-    public Optional<DataFlowWithId> updateOpcDataflow() {
+    public Optional<DataFlow> updateOpcDataflow() {
         List<Datasource> datasources = datasourcesApiService.getAllDatasources("*");
         if (datasources.isEmpty()) {
-            DataFlowWithId df = this.buildOpcDataflow(datasources);
+            DataFlow df = this.buildOpcDataflow(datasources);
             repository.save(df);
             return Optional.of(df);
         } else {
@@ -68,8 +68,8 @@ public class DataflowsApiService {
         }
     }
 
-    private DataFlowWithId buildOpcDataflow(List<Datasource> datasources) {
-        DataFlowWithId df = new DataFlowWithId();
+    private DataFlow buildOpcDataflow(List<Datasource> datasources) {
+        DataFlow df = new DataFlow();
         df.setId(opcDataflowName);
         df.setLastModified(OffsetDateTime.now());
         df.setModificationReason("Modified tags to retrieve");

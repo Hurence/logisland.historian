@@ -25,10 +25,10 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * A streaming pipeline.
 */
     @ApiModel(description = "A streaming pipeline.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-16T17:43:03.007+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-16T17:53:31.203+02:00")
 
 
-@SolrDocument(solrCoreName = "dataflow")
+@SolrDocument(solrCoreName = "historian")
 public class DataFlow  implements Serializable {
         @JsonProperty("lastModified")
         @Indexed(name = "lastModified")
@@ -37,6 +37,10 @@ public class DataFlow  implements Serializable {
         @JsonProperty("modificationReason")
         @Indexed(name = "modificationReason")
         private String modificationReason = null;
+
+        @JsonProperty("id")
+        @Indexed(name = "id")
+        private String id = null;
 
         @JsonProperty("services")
         @Indexed(name = "services")
@@ -89,6 +93,28 @@ public class DataFlow  implements Serializable {
 
         public DataFlow setModificationReason(String modificationReason) {
         this.modificationReason = modificationReason;
+        return this;
+        }
+
+        public DataFlow id(String id) {
+        this.id = id;
+        return this;
+        }
+
+    /**
+        * The id of the dataflow.
+    * @return id
+    **/
+        @JsonProperty("id")
+    @ApiModelProperty(value = "The id of the dataflow.")
+    
+
+  public String getId() {
+    return id;
+    }
+
+        public DataFlow setId(String id) {
+        this.id = id;
         return this;
         }
 
@@ -166,13 +192,14 @@ public class DataFlow  implements Serializable {
         DataFlow dataFlow = (DataFlow) o;
         return Objects.equals(this.lastModified, dataFlow.lastModified) &&
         Objects.equals(this.modificationReason, dataFlow.modificationReason) &&
+        Objects.equals(this.id, dataFlow.id) &&
         Objects.equals(this.services, dataFlow.services) &&
         Objects.equals(this.streams, dataFlow.streams);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(lastModified, modificationReason, services, streams);
+    return Objects.hash(lastModified, modificationReason, id, services, streams);
     }
 
 
@@ -183,6 +210,7 @@ sb.append("class DataFlow {\n");
 
 sb.append("    lastModified: ").append(toIndentedString(lastModified)).append("\n");
 sb.append("    modificationReason: ").append(toIndentedString(modificationReason)).append("\n");
+sb.append("    id: ").append(toIndentedString(id)).append("\n");
 sb.append("    services: ").append(toIndentedString(services)).append("\n");
 sb.append("    streams: ").append(toIndentedString(streams)).append("\n");
 sb.append("}");

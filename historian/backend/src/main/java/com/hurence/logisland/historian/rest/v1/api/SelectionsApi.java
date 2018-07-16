@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-16T17:43:03.007+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-16T17:53:31.203+02:00")
 
 @Api(value = "selections", description = "the selections API")
     public interface SelectionsApi {
