@@ -60,3 +60,10 @@ h1 {
       position: initial;
     }
     }
+
+    @media (min-width: 768px) {
+
+        .sticky-top {
+            z-index: 2;
+          }
+        }
