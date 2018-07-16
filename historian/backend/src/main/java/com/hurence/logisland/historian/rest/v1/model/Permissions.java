@@ -21,7 +21,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 * a Permissions can allow to share something with others. It describes permission for one item.
 */
     @ApiModel(description = "a Permissions can allow to share something with others. It describes permission for one item.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T11:41:16.398+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Permissions  implements Serializable {
@@ -58,8 +59,9 @@ public class Permissions  implements Serializable {
     return ownerSharing;
     }
 
-        public void setOwnerSharing(List<String> ownerSharing) {
+        public Permissions setOwnerSharing(List<String> ownerSharing) {
         this.ownerSharing = ownerSharing;
+        return this;
         }
 
         public Permissions roleSharing(List<String> roleSharing) {
@@ -87,8 +89,9 @@ public class Permissions  implements Serializable {
     return roleSharing;
     }
 
-        public void setRoleSharing(List<String> roleSharing) {
+        public Permissions setRoleSharing(List<String> roleSharing) {
         this.roleSharing = roleSharing;
+        return this;
         }
 
 

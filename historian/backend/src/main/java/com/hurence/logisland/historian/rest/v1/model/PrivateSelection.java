@@ -22,7 +22,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * PrivateSelection
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T11:41:16.398+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class PrivateSelection  implements Serializable {
@@ -72,8 +73,9 @@ public class PrivateSelection  implements Serializable {
     return name;
     }
 
-        public void setName(String name) {
+        public PrivateSelection setName(String name) {
         this.name = name;
+        return this;
         }
 
         public PrivateSelection description(String description) {
@@ -93,8 +95,9 @@ public class PrivateSelection  implements Serializable {
     return description;
     }
 
-        public void setDescription(String description) {
+        public PrivateSelection setDescription(String description) {
         this.description = description;
+        return this;
         }
 
         public PrivateSelection owner(String owner) {
@@ -114,8 +117,9 @@ public class PrivateSelection  implements Serializable {
     return owner;
     }
 
-        public void setOwner(String owner) {
+        public PrivateSelection setOwner(String owner) {
         this.owner = owner;
+        return this;
         }
 
         public PrivateSelection permissions(Permissions permissions) {
@@ -136,8 +140,9 @@ public class PrivateSelection  implements Serializable {
     return permissions;
     }
 
-        public void setPermissions(Permissions permissions) {
+        public PrivateSelection setPermissions(Permissions permissions) {
         this.permissions = permissions;
+        return this;
         }
 
         public PrivateSelection tagIds(List<String> tagIds) {
@@ -163,8 +168,9 @@ public class PrivateSelection  implements Serializable {
     return tagIds;
     }
 
-        public void setTagIds(List<String> tagIds) {
+        public PrivateSelection setTagIds(List<String> tagIds) {
         this.tagIds = tagIds;
+        return this;
         }
 
         public PrivateSelection id(String id) {
@@ -185,8 +191,9 @@ public class PrivateSelection  implements Serializable {
     return id;
     }
 
-        public void setId(String id) {
+        public PrivateSelection setId(String id) {
         this.id = id;
+        return this;
         }
 
         public PrivateSelection recordType(String recordType) {
@@ -207,8 +214,9 @@ public class PrivateSelection  implements Serializable {
     return recordType;
     }
 
-        public void setRecordType(String recordType) {
+        public PrivateSelection setRecordType(String recordType) {
         this.recordType = recordType;
+        return this;
         }
 
 

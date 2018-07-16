@@ -20,14 +20,14 @@ import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
 /**
-* A logisland &#39;processor&#39;.
+* A logisland &#39;controller service&#39;.
 */
-    @ApiModel(description = "A logisland 'processor'.")
+    @ApiModel(description = "A logisland 'controller service'.")
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
-public class Processor  implements Serializable {
+public class Service  implements Serializable {
         @JsonProperty("name")
         @Indexed(name = "name")
         private String name = null;
@@ -44,7 +44,7 @@ public class Processor  implements Serializable {
         @Indexed(name = "config")
         private List<Property> config = null;
 
-        public Processor name(String name) {
+        public Service name(String name) {
         this.name = name;
         return this;
         }
@@ -62,12 +62,12 @@ public class Processor  implements Serializable {
     return name;
     }
 
-        public Processor setName(String name) {
+        public Service setName(String name) {
         this.name = name;
         return this;
         }
 
-        public Processor component(String component) {
+        public Service component(String component) {
         this.component = component;
         return this;
         }
@@ -85,12 +85,12 @@ public class Processor  implements Serializable {
     return component;
     }
 
-        public Processor setComponent(String component) {
+        public Service setComponent(String component) {
         this.component = component;
         return this;
         }
 
-        public Processor documentation(String documentation) {
+        public Service documentation(String documentation) {
         this.documentation = documentation;
         return this;
         }
@@ -107,17 +107,17 @@ public class Processor  implements Serializable {
     return documentation;
     }
 
-        public Processor setDocumentation(String documentation) {
+        public Service setDocumentation(String documentation) {
         this.documentation = documentation;
         return this;
         }
 
-        public Processor config(List<Property> config) {
+        public Service config(List<Property> config) {
         this.config = config;
         return this;
         }
 
-            public Processor addConfigItem(Property configItem) {
+            public Service addConfigItem(Property configItem) {
                 if (this.config == null) {
                 this.config = new ArrayList<Property>();
                 }
@@ -138,7 +138,7 @@ public class Processor  implements Serializable {
     return config;
     }
 
-        public Processor setConfig(List<Property> config) {
+        public Service setConfig(List<Property> config) {
         this.config = config;
         return this;
         }
@@ -152,11 +152,11 @@ public class Processor  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
     return false;
     }
-        Processor processor = (Processor) o;
-        return Objects.equals(this.name, processor.name) &&
-        Objects.equals(this.component, processor.component) &&
-        Objects.equals(this.documentation, processor.documentation) &&
-        Objects.equals(this.config, processor.config);
+        Service service = (Service) o;
+        return Objects.equals(this.name, service.name) &&
+        Objects.equals(this.component, service.component) &&
+        Objects.equals(this.documentation, service.documentation) &&
+        Objects.equals(this.config, service.config);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class Processor  implements Serializable {
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Processor {\n");
+sb.append("class Service {\n");
 
 sb.append("    name: ").append(toIndentedString(name)).append("\n");
 sb.append("    component: ").append(toIndentedString(component)).append("\n");

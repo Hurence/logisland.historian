@@ -4,6 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.hurence.logisland.historian.rest.v1.model.Component;
+import com.hurence.logisland.historian.rest.v1.model.Pipeline;
 import com.hurence.logisland.historian.rest.v1.model.Property;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,14 +21,13 @@ import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
 /**
-* A logisland &#39;processor&#39;.
+* Stream
 */
-    @ApiModel(description = "A logisland 'processor'.")
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
-public class Processor  implements Serializable {
+public class Stream  implements Serializable {
         @JsonProperty("name")
         @Indexed(name = "name")
         private String name = null;
@@ -44,7 +44,11 @@ public class Processor  implements Serializable {
         @Indexed(name = "config")
         private List<Property> config = null;
 
-        public Processor name(String name) {
+        @JsonProperty("pipeline")
+        @Indexed(name = "pipeline")
+        private Pipeline pipeline = null;
+
+        public Stream name(String name) {
         this.name = name;
         return this;
         }
@@ -62,12 +66,12 @@ public class Processor  implements Serializable {
     return name;
     }
 
-        public Processor setName(String name) {
+        public Stream setName(String name) {
         this.name = name;
         return this;
         }
 
-        public Processor component(String component) {
+        public Stream component(String component) {
         this.component = component;
         return this;
         }
@@ -85,12 +89,12 @@ public class Processor  implements Serializable {
     return component;
     }
 
-        public Processor setComponent(String component) {
+        public Stream setComponent(String component) {
         this.component = component;
         return this;
         }
 
-        public Processor documentation(String documentation) {
+        public Stream documentation(String documentation) {
         this.documentation = documentation;
         return this;
         }
@@ -107,17 +111,17 @@ public class Processor  implements Serializable {
     return documentation;
     }
 
-        public Processor setDocumentation(String documentation) {
+        public Stream setDocumentation(String documentation) {
         this.documentation = documentation;
         return this;
         }
 
-        public Processor config(List<Property> config) {
+        public Stream config(List<Property> config) {
         this.config = config;
         return this;
         }
 
-            public Processor addConfigItem(Property configItem) {
+            public Stream addConfigItem(Property configItem) {
                 if (this.config == null) {
                 this.config = new ArrayList<Property>();
                 }
@@ -138,8 +142,31 @@ public class Processor  implements Serializable {
     return config;
     }
 
-        public Processor setConfig(List<Property> config) {
+        public Stream setConfig(List<Property> config) {
         this.config = config;
+        return this;
+        }
+
+        public Stream pipeline(Pipeline pipeline) {
+        this.pipeline = pipeline;
+        return this;
+        }
+
+    /**
+        * Get pipeline
+    * @return pipeline
+    **/
+        @JsonProperty("pipeline")
+    @ApiModelProperty(value = "")
+    
+  @Valid
+
+  public Pipeline getPipeline() {
+    return pipeline;
+    }
+
+        public Stream setPipeline(Pipeline pipeline) {
+        this.pipeline = pipeline;
         return this;
         }
 
@@ -152,28 +179,30 @@ public class Processor  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
     return false;
     }
-        Processor processor = (Processor) o;
-        return Objects.equals(this.name, processor.name) &&
-        Objects.equals(this.component, processor.component) &&
-        Objects.equals(this.documentation, processor.documentation) &&
-        Objects.equals(this.config, processor.config);
+        Stream stream = (Stream) o;
+        return Objects.equals(this.name, stream.name) &&
+        Objects.equals(this.component, stream.component) &&
+        Objects.equals(this.documentation, stream.documentation) &&
+        Objects.equals(this.config, stream.config) &&
+        Objects.equals(this.pipeline, stream.pipeline);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(name, component, documentation, config);
+    return Objects.hash(name, component, documentation, config, pipeline);
     }
 
 
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Processor {\n");
+sb.append("class Stream {\n");
 
 sb.append("    name: ").append(toIndentedString(name)).append("\n");
 sb.append("    component: ").append(toIndentedString(component)).append("\n");
 sb.append("    documentation: ").append(toIndentedString(documentation)).append("\n");
 sb.append("    config: ").append(toIndentedString(config)).append("\n");
+sb.append("    pipeline: ").append(toIndentedString(pipeline)).append("\n");
 sb.append("}");
 return sb.toString();
 }

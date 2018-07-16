@@ -18,7 +18,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Property
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T11:41:16.398+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Property  implements Serializable {
@@ -52,8 +53,9 @@ public class Property  implements Serializable {
     return key;
     }
 
-        public void setKey(String key) {
+        public Property setKey(String key) {
         this.key = key;
+        return this;
         }
 
         public Property type(String type) {
@@ -73,8 +75,9 @@ public class Property  implements Serializable {
     return type;
     }
 
-        public void setType(String type) {
+        public Property setType(String type) {
         this.type = type;
+        return this;
         }
 
         public Property value(String value) {
@@ -95,8 +98,9 @@ public class Property  implements Serializable {
     return value;
     }
 
-        public void setValue(String value) {
+        public Property setValue(String value) {
         this.value = value;
+        return this;
         }
 
 

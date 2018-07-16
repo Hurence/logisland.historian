@@ -18,7 +18,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Datasource
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T11:41:16.398+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Datasource  implements Serializable {
@@ -79,8 +80,9 @@ public class Datasource  implements Serializable {
     return recordType;
     }
 
-        public void setRecordType(String recordType) {
+        public Datasource setRecordType(String recordType) {
         this.recordType = recordType;
+        return this;
         }
 
         public Datasource id(String id) {
@@ -101,8 +103,9 @@ public class Datasource  implements Serializable {
     return id;
     }
 
-        public void setId(String id) {
+        public Datasource setId(String id) {
         this.id = id;
+        return this;
         }
 
         public Datasource description(String description) {
@@ -122,8 +125,9 @@ public class Datasource  implements Serializable {
     return description;
     }
 
-        public void setDescription(String description) {
+        public Datasource setDescription(String description) {
         this.description = description;
+        return this;
         }
 
         public Datasource clsid(String clsid) {
@@ -143,8 +147,9 @@ public class Datasource  implements Serializable {
     return clsid;
     }
 
-        public void setClsid(String clsid) {
+        public Datasource setClsid(String clsid) {
         this.clsid = clsid;
+        return this;
         }
 
         public Datasource datasourceType(String datasourceType) {
@@ -164,8 +169,9 @@ public class Datasource  implements Serializable {
     return datasourceType;
     }
 
-        public void setDatasourceType(String datasourceType) {
+        public Datasource setDatasourceType(String datasourceType) {
         this.datasourceType = datasourceType;
+        return this;
         }
 
         public Datasource progId(String progId) {
@@ -185,8 +191,9 @@ public class Datasource  implements Serializable {
     return progId;
     }
 
-        public void setProgId(String progId) {
+        public Datasource setProgId(String progId) {
         this.progId = progId;
+        return this;
         }
 
         public Datasource host(String host) {
@@ -207,8 +214,9 @@ public class Datasource  implements Serializable {
     return host;
     }
 
-        public void setHost(String host) {
+        public Datasource setHost(String host) {
         this.host = host;
+        return this;
         }
 
         public Datasource domain(String domain) {
@@ -228,8 +236,9 @@ public class Datasource  implements Serializable {
     return domain;
     }
 
-        public void setDomain(String domain) {
+        public Datasource setDomain(String domain) {
         this.domain = domain;
+        return this;
         }
 
         public Datasource user(String user) {
@@ -249,8 +258,9 @@ public class Datasource  implements Serializable {
     return user;
     }
 
-        public void setUser(String user) {
+        public Datasource setUser(String user) {
         this.user = user;
+        return this;
         }
 
         public Datasource password(String password) {
@@ -270,8 +280,9 @@ public class Datasource  implements Serializable {
     return password;
     }
 
-        public void setPassword(String password) {
+        public Datasource setPassword(String password) {
         this.password = password;
+        return this;
         }
 
 

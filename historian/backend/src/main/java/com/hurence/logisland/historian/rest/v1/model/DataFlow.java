@@ -3,7 +3,8 @@ package com.hurence.logisland.historian.rest.v1.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.hurence.logisland.historian.rest.v1.model.Processor;
+import com.hurence.logisland.historian.rest.v1.model.Service;
+import com.hurence.logisland.historian.rest.v1.model.Stream;
 import com.hurence.logisland.historian.rest.v1.model.Versioned;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,14 +22,14 @@ import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
 /**
-* Tracks stream processing pipeline configuration
+* A streaming pipeline.
 */
-    @ApiModel(description = "Tracks stream processing pipeline configuration")
+    @ApiModel(description = "A streaming pipeline.")
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
-public class Pipeline  implements Serializable {
+public class DataFlow  implements Serializable {
         @JsonProperty("lastModified")
         @Indexed(name = "lastModified")
         private OffsetDateTime lastModified = null;
@@ -37,11 +38,15 @@ public class Pipeline  implements Serializable {
         @Indexed(name = "modificationReason")
         private String modificationReason = null;
 
-        @JsonProperty("processors")
-        @Indexed(name = "processors")
-        private List<Processor> processors = null;
+        @JsonProperty("services")
+        @Indexed(name = "services")
+        private List<Service> services = null;
 
-        public Pipeline lastModified(OffsetDateTime lastModified) {
+        @JsonProperty("streams")
+        @Indexed(name = "streams")
+        private List<Stream> streams = null;
+
+        public DataFlow lastModified(OffsetDateTime lastModified) {
         this.lastModified = lastModified;
         return this;
         }
@@ -60,12 +65,12 @@ public class Pipeline  implements Serializable {
     return lastModified;
     }
 
-        public Pipeline setLastModified(OffsetDateTime lastModified) {
+        public DataFlow setLastModified(OffsetDateTime lastModified) {
         this.lastModified = lastModified;
         return this;
         }
 
-        public Pipeline modificationReason(String modificationReason) {
+        public DataFlow modificationReason(String modificationReason) {
         this.modificationReason = modificationReason;
         return this;
         }
@@ -82,39 +87,70 @@ public class Pipeline  implements Serializable {
     return modificationReason;
     }
 
-        public Pipeline setModificationReason(String modificationReason) {
+        public DataFlow setModificationReason(String modificationReason) {
         this.modificationReason = modificationReason;
         return this;
         }
 
-        public Pipeline processors(List<Processor> processors) {
-        this.processors = processors;
+        public DataFlow services(List<Service> services) {
+        this.services = services;
         return this;
         }
 
-            public Pipeline addProcessorsItem(Processor processorsItem) {
-                if (this.processors == null) {
-                this.processors = new ArrayList<Processor>();
+            public DataFlow addServicesItem(Service servicesItem) {
+                if (this.services == null) {
+                this.services = new ArrayList<Service>();
                 }
-            this.processors.add(processorsItem);
+            this.services.add(servicesItem);
             return this;
             }
 
     /**
-        * Get processors
-    * @return processors
+        * The service controllers.
+    * @return services
     **/
-        @JsonProperty("processors")
-    @ApiModelProperty(value = "")
+        @JsonProperty("services")
+    @ApiModelProperty(value = "The service controllers.")
     
   @Valid
 
-  public List<Processor> getProcessors() {
-    return processors;
+  public List<Service> getServices() {
+    return services;
     }
 
-        public Pipeline setProcessors(List<Processor> processors) {
-        this.processors = processors;
+        public DataFlow setServices(List<Service> services) {
+        this.services = services;
+        return this;
+        }
+
+        public DataFlow streams(List<Stream> streams) {
+        this.streams = streams;
+        return this;
+        }
+
+            public DataFlow addStreamsItem(Stream streamsItem) {
+                if (this.streams == null) {
+                this.streams = new ArrayList<Stream>();
+                }
+            this.streams.add(streamsItem);
+            return this;
+            }
+
+    /**
+        * The engine properties.
+    * @return streams
+    **/
+        @JsonProperty("streams")
+    @ApiModelProperty(value = "The engine properties.")
+    
+  @Valid
+
+  public List<Stream> getStreams() {
+    return streams;
+    }
+
+        public DataFlow setStreams(List<Stream> streams) {
+        this.streams = streams;
         return this;
         }
 
@@ -127,26 +163,28 @@ public class Pipeline  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
     return false;
     }
-        Pipeline pipeline = (Pipeline) o;
-        return Objects.equals(this.lastModified, pipeline.lastModified) &&
-        Objects.equals(this.modificationReason, pipeline.modificationReason) &&
-        Objects.equals(this.processors, pipeline.processors);
+        DataFlow dataFlow = (DataFlow) o;
+        return Objects.equals(this.lastModified, dataFlow.lastModified) &&
+        Objects.equals(this.modificationReason, dataFlow.modificationReason) &&
+        Objects.equals(this.services, dataFlow.services) &&
+        Objects.equals(this.streams, dataFlow.streams);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(lastModified, modificationReason, processors);
+    return Objects.hash(lastModified, modificationReason, services, streams);
     }
 
 
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Pipeline {\n");
+sb.append("class DataFlow {\n");
 
 sb.append("    lastModified: ").append(toIndentedString(lastModified)).append("\n");
 sb.append("    modificationReason: ").append(toIndentedString(modificationReason)).append("\n");
-sb.append("    processors: ").append(toIndentedString(processors)).append("\n");
+sb.append("    services: ").append(toIndentedString(services)).append("\n");
+sb.append("    streams: ").append(toIndentedString(streams)).append("\n");
 sb.append("}");
 return sb.toString();
 }

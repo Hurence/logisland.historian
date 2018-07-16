@@ -18,7 +18,8 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 /**
 * Error
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-12T11:41:16.398+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Error  implements Serializable {
@@ -48,8 +49,9 @@ public class Error  implements Serializable {
     return code;
     }
 
-        public void setCode(Integer code) {
+        public Error setCode(Integer code) {
         this.code = code;
+        return this;
         }
 
         public Error message(String message) {
@@ -70,8 +72,9 @@ public class Error  implements Serializable {
     return message;
     }
 
-        public void setMessage(String message) {
+        public Error setMessage(String message) {
         this.message = message;
+        return this;
         }
 
 

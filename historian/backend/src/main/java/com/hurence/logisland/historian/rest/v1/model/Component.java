@@ -3,7 +3,6 @@ package com.hurence.logisland.historian.rest.v1.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.hurence.logisland.historian.rest.v1.model.Component;
 import com.hurence.logisland.historian.rest.v1.model.Property;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,14 +19,13 @@ import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
 /**
-* A logisland &#39;processor&#39;.
+* Component
 */
-    @ApiModel(description = "A logisland 'processor'.")
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-13T12:16:03.361+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
-public class Processor  implements Serializable {
+public class Component  implements Serializable {
         @JsonProperty("name")
         @Indexed(name = "name")
         private String name = null;
@@ -44,7 +42,7 @@ public class Processor  implements Serializable {
         @Indexed(name = "config")
         private List<Property> config = null;
 
-        public Processor name(String name) {
+        public Component name(String name) {
         this.name = name;
         return this;
         }
@@ -62,12 +60,12 @@ public class Processor  implements Serializable {
     return name;
     }
 
-        public Processor setName(String name) {
+        public Component setName(String name) {
         this.name = name;
         return this;
         }
 
-        public Processor component(String component) {
+        public Component component(String component) {
         this.component = component;
         return this;
         }
@@ -85,12 +83,12 @@ public class Processor  implements Serializable {
     return component;
     }
 
-        public Processor setComponent(String component) {
+        public Component setComponent(String component) {
         this.component = component;
         return this;
         }
 
-        public Processor documentation(String documentation) {
+        public Component documentation(String documentation) {
         this.documentation = documentation;
         return this;
         }
@@ -107,17 +105,17 @@ public class Processor  implements Serializable {
     return documentation;
     }
 
-        public Processor setDocumentation(String documentation) {
+        public Component setDocumentation(String documentation) {
         this.documentation = documentation;
         return this;
         }
 
-        public Processor config(List<Property> config) {
+        public Component config(List<Property> config) {
         this.config = config;
         return this;
         }
 
-            public Processor addConfigItem(Property configItem) {
+            public Component addConfigItem(Property configItem) {
                 if (this.config == null) {
                 this.config = new ArrayList<Property>();
                 }
@@ -138,7 +136,7 @@ public class Processor  implements Serializable {
     return config;
     }
 
-        public Processor setConfig(List<Property> config) {
+        public Component setConfig(List<Property> config) {
         this.config = config;
         return this;
         }
@@ -152,11 +150,11 @@ public class Processor  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
     return false;
     }
-        Processor processor = (Processor) o;
-        return Objects.equals(this.name, processor.name) &&
-        Objects.equals(this.component, processor.component) &&
-        Objects.equals(this.documentation, processor.documentation) &&
-        Objects.equals(this.config, processor.config);
+        Component component = (Component) o;
+        return Objects.equals(this.name, component.name) &&
+        Objects.equals(this.component, component.component) &&
+        Objects.equals(this.documentation, component.documentation) &&
+        Objects.equals(this.config, component.config);
     }
 
     @Override
@@ -168,7 +166,7 @@ public class Processor  implements Serializable {
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Processor {\n");
+sb.append("class Component {\n");
 
 sb.append("    name: ").append(toIndentedString(name)).append("\n");
 sb.append("    component: ").append(toIndentedString(component)).append("\n");

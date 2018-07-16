@@ -8,6 +8,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 */{{#description}}
     @ApiModel(description = "{{{description}}}"){{/description}}
 {{>generatedAnnotation}}
+
 @SolrDocument(solrCoreName = "historian")
 public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#serializableModel}}implements Serializable{{/serializableModel}} {
 {{#vars}}
@@ -97,8 +98,9 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#seriali
     }
     {{^isReadOnly}}
 
-        public void {{setter}}({{{datatypeWithEnum}}} {{name}}) {
+        public {{classname}} {{setter}}({{{datatypeWithEnum}}} {{name}}) {
         this.{{name}} = {{name}};
+        return this;
         }
     {{/isReadOnly}}
 
