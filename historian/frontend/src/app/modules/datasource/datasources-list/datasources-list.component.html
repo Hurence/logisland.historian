@@ -1,4 +1,4 @@
-<div class="h-100 list-container">
+<div class="h-100 list-container sticky-top">
   <div class="row no-gutters">
     <div *ngFor="let datasource of datasources$ | async" (click)="onSelect(datasource)"
           class="col-lg-12 col-md-12 datasource-element">
@@ -11,7 +11,7 @@
         </div>
 
         <div class="col-lg-2 col-md-2">
-          <button type="button" class="btn"
+          <button type="button" class="btn delete-datasource"
           (click)="onDeleteDatasource(datasource)">
             <i class="fa fa-trash" aria-hidden="true"></i>
           </button>
