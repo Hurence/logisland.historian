@@ -303,8 +303,3 @@ mark, .mark {
 .color-green {
   color: green;
 }
-@media screen and (max-width: 768px) {
-.sticky-top {
-  z-index: 2;
-}
-}
