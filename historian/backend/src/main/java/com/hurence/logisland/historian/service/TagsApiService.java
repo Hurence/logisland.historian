@@ -21,6 +21,7 @@ import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.rest.v1.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.FacetPivotFieldEntry;
@@ -40,12 +41,20 @@ public class TagsApiService {
     @Resource
     private SolrTagRepository repository;
 
+    private DataflowsApiService dataflowsApiService;
+
+    @Autowired
+    public void setDataflowsApiService(DataflowsApiService dataflowsApiService) {
+        this.dataflowsApiService = dataflowsApiService;
+    }
+
 
     public Optional<Tag> deleteTag(String itemId) {
         logger.info("deleting Tag {}", itemId);
         Optional<Tag> tagToRemove = repository.findById(itemId);
         if (tagToRemove.isPresent()) {
             repository.delete(tagToRemove.get());
+            dataflowsApiService.updateOpcDataflow();
         }
         return tagToRemove;
     }
@@ -60,7 +69,9 @@ public class TagsApiService {
     public Optional<Tag> updateTag(Tag tag) {
         logger.debug("updating Tag {}", tag.getId());
         if (repository.existsById(tag.getId())) {
-            return Optional.of(repository.save(tag));
+            Tag savedTag = repository.save(tag);
+            dataflowsApiService.updateOpcDataflow();
+            return Optional.of(savedTag);
         } else {
             logger.error("Tag {} not found, unable to update", tag.getId());
             return Optional.empty();
@@ -96,7 +107,9 @@ public class TagsApiService {
             return Optional.empty();
         } else {
             body.setId(itemId);
-            return Optional.of(repository.save(body));
+            Tag savedTag = repository.save(body);
+            dataflowsApiService.updateOpcDataflow();
+            return Optional.of(savedTag);
         }
     }
 

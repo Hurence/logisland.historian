@@ -4,6 +4,7 @@ import com.hurence.logisland.historian.service.TagsApiService;
 import org.threeten.bp.OffsetDateTime;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class DatasourceFlowElements {
@@ -63,18 +64,20 @@ public class DatasourceFlowElements {
         strBuilder.append("2000");
         strBuilder.append("\n");
         strBuilder.append("host=");
-        strBuilder.append(datasource.getHost()); //TODO verify there is no port 192.168.99.100
+        strBuilder.append(datasource.getHost());
         strBuilder.append("\n");
         strBuilder.append("tags=");
-        List<Tag> tags = tagsApiService.getAllTagsFromDatasource(datasource.getId());
-        for (Tag tag: tags) {
+        Iterator<Tag> it = tagsApiService.getAllTagsFromDatasource(datasource.getId()).iterator();
+        Tag tag;
+        while (it.hasNext()) {
+            tag = it.next();
             strBuilder.append(tag.getTagName());
-            strBuilder.append(","); // TODO verify semantic
-            strBuilder.append(tag.getUpdateRate());
+            if (tag.getUpdateRate() != null) {
+                strBuilder.append(":");
+                strBuilder.append(tag.getUpdateRate());
+            }
+            if (it.hasNext()) strBuilder.append(",");
         }
-
-        // TODO generate this property depending on tags currently selected !
-        strBuilder.append("TODO");
         return strBuilder.toString();
     }
 
