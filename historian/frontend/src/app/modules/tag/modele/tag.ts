@@ -1,23 +1,22 @@
-import { IHistorianTag } from './HistorianTag';
+import { environment } from '../../../../environments/environment';
+
 
 export interface ITag {
-    id?: string;
-    datasource_id?: string;
-    domain?: string;
-    server?: string;
-    group?: string;
-    tag_name?: string;
-    data_type?: TagDataType;
-    // text: string[];//catch all field
+    id: string;
+    datasource_id: string;
+    domain: string;
+    server: string;
+    group: string;
+    tag_name: string;
+    data_type: TagDataType;
+    update_rate: number;
     creation_date?: number;
     last_modification_date?: number;
     last_polling_date?: number;
-    // update_rate: number;
     min_numeric_value?: number;
     max_numeric_value?: number;
     last_numeric_value?: number;
     last_quality?: number;
-
 }
 
 export const enum TagType {
@@ -37,41 +36,24 @@ export const enum TagDataType {
 }
 
 export abstract class Tag implements ITag {
-    id?: string;
-    datasource_id?: string;
-    domain?: string;
-    server?: string;
-    group?: string;
-    tag_name?: string;
-    data_type?: TagDataType;
-    // text: string[];//catch all field
+    id: string;
+    datasource_id: string;
+    domain: string;
+    server: string;
+    group: string;
+    tag_name: string;
+    data_type: TagDataType;
+    update_rate: number;
     creation_date?: number;
     last_modification_date?: number;
     last_polling_date?: number;
-    // update_rate: number;
     min_numeric_value?: number;
     max_numeric_value?: number;
     last_numeric_value?: number;
     last_quality?: number;
 
-    constructor(options: ITag = {
-        id: '',
-        domain: '',
-        server: '',
-        group: '',
-        tag_name: '',
-        data_type: TagDataType.BOOLEAN,
-      }) {
+    constructor(options: ITag) {
         Object.assign(this, options);
-    }
-
-    public static isHistorianTag(tag: ITag): tag is IHistorianTag {
-        return (tag as IHistorianTag).isHistorianTag === true;
-    }
-    public static markAsHistorianTag(obj: any): void {
-        obj.isHistorianTag = true;
-    }
-    public static markAsOpcTag(obj: any): void {
-        obj.isHistorianTag = false;
+        if (this.update_rate === null || this.update_rate === null) this.update_rate = environment.TAG_UPDATE_RATE_DEFAUT;
     }
 }

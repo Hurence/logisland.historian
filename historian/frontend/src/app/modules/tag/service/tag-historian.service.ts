@@ -10,10 +10,10 @@ import { environment } from '../../../../environments/environment';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
 import { IModelService } from '../../../shared/base-model-service';
 import { Utilities } from '../../../shared/utilities.service';
-import { IHistorianTag } from '../modele/HistorianTag';
+import { HistorianTag } from '../modele/HistorianTag';
 
 @Injectable()
-export class TagHistorianService implements IModelService<IHistorianTag> {
+export class TagHistorianService implements IModelService<HistorianTag> {
 
   private tagsUrl = `${environment.HISTORIAN_API_URL}`;
   private SUCCESSFULLY_SAVED_MSG = 'successfully added tag';
@@ -23,20 +23,20 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
               private help: Utilities,
               private messageService: MessageService) { }
 
-  getAll(): Observable<IHistorianTag[]> {
-    return this.http.get<IHistorianTag[]>(`${this.tagsUrl}tags`)
+  getAll(): Observable<HistorianTag[]> {
+    return this.http.get<HistorianTag[]>(`${this.tagsUrl}tags`)
       .pipe(
-        map(tags => tags.map(this.markAsHistTag)),
+        map(tags => tags.map(t => new HistorianTag(t))),
         catchError(this.help.handleError('getAll()', []))
       );
   }
 
-  getAllFromDatasources(datasourceIds: string[]): Observable<IHistorianTag[]> {
+  getAllFromDatasources(datasourceIds: string[]): Observable<HistorianTag[]> {
     const query = datasourceIds.map(id => `datasource_id:"${id}"`).join(' OR ');
     return this.getQuery(query);
   }
 
-  getAllWithIds(tagIds: string[]): Observable<IHistorianTag[]> {
+  getAllWithIds(tagIds: string[]): Observable<HistorianTag[]> {
     if (tagIds.length === 0) {
       return Observable.of([]);
     } else {
@@ -45,10 +45,10 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     }
   }
 
-  getQuery(query: string): Observable<IHistorianTag[]> {
+  getQuery(query: string): Observable<HistorianTag[]> {
     if (query && query.length !== 0) {
       console.log('query is "' + query + '"');
-      return this.http.get<IHistorianTag[]>(
+      return this.http.get<HistorianTag[]>(
         `${this.tagsUrl}tags`,
         {
           params: {
@@ -56,7 +56,7 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
           }
         }
       ).pipe(
-        map(tags => tags.map(this.markAsHistTag)),
+        map(tags => tags.map(t => new HistorianTag(t))),
         tap(tags => console.log(`found ${tags.length} historian tags from getQuery(${query})`)),
         catchError(this.help.handleError(`getQuery(${query})`, []))
       );
@@ -65,17 +65,17 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     }
   }
 
-  get(id: string): Observable<IHistorianTag> {
-    return this.http.get<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(id)}`)
+  get(id: string): Observable<HistorianTag> {
+    return this.http.get<HistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(id)}`)
     .pipe(
-      map(this.markAsHistTag),
+      map(t => new HistorianTag(t)),
       catchError(this.help.handleError(`get(${id})`))
     );
   }
 
-  save(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.post<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj).pipe(
-      map(this.markAsHistTag),
+  save(obj: HistorianTag): Observable<HistorianTag> {
+    return this.http.post<HistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj).pipe(
+      map(t => new HistorianTag(t)),
       tap(tag => {
         const detail = `Saved tag with id ${tag.id}`;
         this.messageService.add({
@@ -87,9 +87,9 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     );
   }
 
-  saveMany(objs: IHistorianTag[]): Observable<IHistorianTag[]> {
-    return this.http.post<IHistorianTag[]>(`${this.tagsUrl}tags/batch`, objs).pipe(
-      map(tags => tags.map(this.markAsHistTag)),
+  saveMany(objs: HistorianTag[]): Observable<HistorianTag[]> {
+    return this.http.post<HistorianTag[]>(`${this.tagsUrl}tags/batch`, objs).pipe(
+      map(tags => tags.map(t => new HistorianTag(t))),
       tap(tags => {
         let detail;
         if (tags.length > 1) {
@@ -106,15 +106,15 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     );
   }
 
-  update(obj: IHistorianTag): Observable<IHistorianTag> {
-    return this.http.put<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj).pipe(
-      map(this.markAsHistTag)
+  update(obj: HistorianTag): Observable<HistorianTag> {
+    return this.http.put<HistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj).pipe(
+      map(t => new HistorianTag(t))
     );
   }
 
-  delete(id: string): Observable<IHistorianTag> {
-    return this.http.delete<IHistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(id)}`).pipe(
-      map(this.markAsHistTag),
+  delete(id: string): Observable<HistorianTag> {
+    return this.http.delete<HistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(id)}`).pipe(
+      map(t => new HistorianTag(t)),
       tap(tag => {
         const detail = `Deleted tag with id ${tag.id}`;
         this.messageService.add({
@@ -126,9 +126,9 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     );
   }
 
-  deleteMany(ids: string[]): Observable<IHistorianTag[]> {
-    return this.http.request<IHistorianTag[]>('delete', `${this.tagsUrl}tags/batch`, { body: ids }).pipe(
-      map(tags => tags.map(this.markAsHistTag)),
+  deleteMany(ids: string[]): Observable<HistorianTag[]> {
+    return this.http.request<HistorianTag[]>('delete', `${this.tagsUrl}tags/batch`, { body: ids }).pipe(
+      map(tags => tags.map(t => new HistorianTag(t))),
       tap(tags => {
         let detail;
         if (tags.length > 1) {
@@ -150,10 +150,5 @@ export class TagHistorianService implements IModelService<IHistorianTag> {
     .pipe(
       catchError(this.help.handleError('getTreeTag', []))
     );
-  }
-
-  private markAsHistTag(tag: IHistorianTag): IHistorianTag {
-    tag.isHistorianTag = true;
-    return tag;
   }
 }

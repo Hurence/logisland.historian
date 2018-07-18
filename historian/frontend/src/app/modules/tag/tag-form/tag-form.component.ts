@@ -12,6 +12,7 @@ import { ITagFormInput } from './TagFormInput';
 import { ITagFormOutput, TagFormOutput } from './TagFormOutput';
 import { QuestionService } from '../../../shared/dynamic-form/question.service';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { TagUtils } from '../modele/TagUtils';
 
 @Component({
   selector: 'app-tag-form',
@@ -110,7 +111,7 @@ export class TagFormComponent implements OnInit, OnChanges {
     const objForForm = this.prepareObjForForm();
     this.form.reset(objForForm);
     const concatenedLabels: Set<string> = this.tags.reduce((p, c) => {
-      if (Tag.isHistorianTag(c.tag) && c.tag.labels) {
+      if (TagUtils.isHistorianTag(c.tag) && c.tag.labels) {
         c.tag.labels.forEach(label => p.add(label));
       }
       return p;

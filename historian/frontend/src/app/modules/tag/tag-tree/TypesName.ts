@@ -1,4 +1,5 @@
 import { ITag, Tag } from '../modele/tag';
+import { TagUtils } from '../modele/TagUtils';
 
 export enum TypesName {
     TAGS = 'tags',
@@ -12,7 +13,7 @@ export enum TypesName {
 
   export namespace TypesName {
     export function getType(tag: ITag): TypesName {
-      if (Tag.isHistorianTag(tag)) return TypesName.TAG_HISTORIAN;
+      if (TagUtils.isHistorianTag(tag)) return TypesName.TAG_HISTORIAN;
       return TypesName.TAG_OPC;
     }
   }

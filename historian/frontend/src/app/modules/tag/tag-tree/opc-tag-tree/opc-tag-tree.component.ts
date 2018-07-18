@@ -9,6 +9,8 @@ import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { TagHistorianService } from '../../service/tag-historian.service';
+import { TagUtils } from '../../modele/TagUtils';
+import { OpcTag } from '../../modele/OpcTag';
 
 @Component({
   selector: 'app-opc-tag-tree',
@@ -92,7 +94,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     this.tagHistorianService.deleteMany(tagsToDelete).subscribe(deletedTags => {
       tagNodes.forEach(n => {
         if (n.type === TypesName.TAG_HISTORIAN) {
-          Tag.markAsOpcTag(n.data);
+          n.data = new OpcTag(n.data);
           n.type = TypesName.TAG_OPC;
           n.icon = n.type;
         }
@@ -103,7 +105,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   deleteTag(node: TreeNode): void {
     this.tagHistorianService.delete(node.data.id).subscribe(deletedTag => {
       if (node.type === TypesName.TAG_HISTORIAN) {
-        Tag.markAsOpcTag(node.data);
+        node.data = new OpcTag(node.data);
         node.type = TypesName.TAG_OPC;
         node.icon = node.type;
       }
@@ -122,7 +124,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     } else {
       Object.assign(nodeToUpdate.data, tag);
       if (nodeToUpdate.type === TypesName.TAG_OPC) {
-        Tag.markAsHistorianTag(nodeToUpdate.data);
+        nodeToUpdate.data = new HistorianTag(nodeToUpdate.data);
         nodeToUpdate.type = TypesName.TAG_HISTORIAN;
         nodeToUpdate.icon = nodeToUpdate.type;
       }

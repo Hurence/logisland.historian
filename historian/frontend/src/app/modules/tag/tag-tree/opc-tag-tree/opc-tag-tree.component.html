@@ -6,7 +6,7 @@
 </div>
 <p-tree [value]="treeNodes" [loading]="loading" id="historian-tree">
     <ng-template let-node pTemplate="domain">
-        <div class="">
+    <div class="">
         <div class='row'>
             <div class='col-auto mr-auto label-container text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}} ({{node.children.length}} servers)</div>
@@ -25,7 +25,7 @@
     </div>
     </ng-template>
     <ng-template let-node pTemplate="server">
-            <div class="">
+    <div class="">
             <div class='row'>
             <div class='col-auto mr-auto label-container text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}} ({{node.children.length}} groups)</div>
@@ -43,7 +43,7 @@
     </div>
     </ng-template>
     <ng-template let-node pTemplate="group">
-            <div class="">
+    <div class="">
         <div class='row'>
             <div class='col-auto mr-auto  text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}} ({{node.children.length}} tags)</div>        
@@ -61,12 +61,12 @@
     </div>
     </ng-template>
     <ng-template let-node pTemplate="historian-tag" class="h-100">
-            <div class="">
+    <div class="">
         <div class='row'>
             <div class='col-auto mr-auto  text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
-                   <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="right"> {{node.data.update_rate}}</i>
+                    <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="right"> {{node.data.update_rate}}</i>
                     <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                     class="mx-1 my-1"
                     icon="fa fa-edit"></button>
@@ -80,12 +80,12 @@
     </div>
     </ng-template>
     <ng-template let-node pTemplate="opc-tag">
-            <div class="">
+    <div class="">
         <div class='row'>
             <div class='col-auto mr-auto label-container text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
-                    {{node.data.update_rate}}<i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="top">  {{node.data.update_rate}}</i>
+                    <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="top">  {{node.data.update_rate}}</i>
                     <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                     class="mx-1 my-1"
                     icon="fa fa-edit"></button>
@@ -101,9 +101,6 @@
     </ng-template>
     <ng-template let-node pTemplate="none">
         No tag found
-    </ng-template>
-    <ng-template let-node pTemplate="default">
-        hi
     </ng-template>
 </p-tree>
 <!-- tag form -->
