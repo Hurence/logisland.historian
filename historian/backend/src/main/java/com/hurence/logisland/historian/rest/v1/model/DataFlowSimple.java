@@ -29,7 +29,7 @@ import org.threeten.bp.OffsetDateTime;
 public class DataFlowSimple  implements Serializable {
         @JsonProperty("lastModified")
         @Indexed(name = "lastModified")
-        private String lastModified = null;
+        private Long lastModified = null;
 
         @JsonProperty("modificationReason")
         @Indexed(name = "modificationReason")
@@ -47,10 +47,6 @@ public class DataFlowSimple  implements Serializable {
         @Indexed(name = "streams")
         private String streams = null;
 
-        public DataFlowSimple lastModified(String lastModified) {
-        this.lastModified = lastModified;
-        return this;
-        }
 
     /**
         * the last modified timestamp of this pipeline (used to trigger changes).
@@ -61,11 +57,11 @@ public class DataFlowSimple  implements Serializable {
       @NotNull
 
 
-  public String getLastModified() {
+  public Long getLastModified() {
     return lastModified;
     }
 
-        public DataFlowSimple setLastModified(String lastModified) {
+        public DataFlowSimple setLastModified(Long lastModified) {
         this.lastModified = lastModified;
         return this;
         }

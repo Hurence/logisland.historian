@@ -1,5 +1,11 @@
 package com.hurence.logisland.historian.rest.v1.model;
 
+import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZoneOffset;
+import org.threeten.bp.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +70,11 @@ public final class DataFlowUtil {
     public static DataFlow convertDfstoDf(DataFlowSimple dfs) {
         DataFlow df = new DataFlow();
         df.setId(dfs.getId());
-        df.setLastModified(dfs.getLastModified());
+        df.setLastModified(
+                DateUtil.toUtcDateForSolr(
+                        OffsetDateTime.ofInstant(Instant.ofEpochMilli(dfs.getLastModified()), ZoneOffset.UTC)
+                )
+        );
         df.setModificationReason(dfs.getModificationReason());
         df.setStreams(converter.fromJson(dfs.getStreams(),List.class, Stream.class));
         df.setServices(converter.fromJson(dfs.getServices(),List.class, Service.class));
@@ -73,28 +83,15 @@ public final class DataFlowUtil {
     public static DataFlowSimple convertDftoDfs(DataFlow df) {
         DataFlowSimple dfs = new DataFlowSimple();
         dfs.setId(df.getId());
-        dfs.setLastModified(df.getLastModified());
+        dfs.setLastModified(
+                OffsetDateTime.parse(
+                        df.getLastModified(), DateTimeFormatter.ISO_DATE_TIME
+                ).toEpochSecond() * 1000L
+        );
         dfs.setModificationReason(df.getModificationReason());
         dfs.setStreams(converter.toJson(df.getStreams()));
         dfs.setServices(converter.toJson(df.getServices()));
         return dfs;
     }
-//    public static Stream convertDftoDfs(String df) {
-//        DataFlowSimple dfs = new DataFlowSimple();
-//        dfs.setId(df.getId());
-//        dfs.setLastModified(df.getLastModified());
-//        dfs.setModificationReason(df.getModificationReason());
-//        dfs.setStreams(df.getStreams());
-//        dfs.setServices(df.getServices());
-//        return dfs; //TODO
-//    }
-//    public static DataFlowSimple convertDftoDfs(DataFlow df) {
-//        DataFlowSimple dfs = new DataFlowSimple();
-//        dfs.setId(df.getId());
-//        dfs.setLastModified(df.getLastModified());
-//        dfs.setModificationReason(df.getModificationReason());
-//        dfs.setStreams(df.getStreams());
-//        dfs.setServices(df.getServices());
-//        return dfs; //TODO
-//    }
+
 }
