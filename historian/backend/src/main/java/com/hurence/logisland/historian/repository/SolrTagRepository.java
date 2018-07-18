@@ -38,7 +38,7 @@ public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
     @Query(value = "record_type:tag", filters = { "record_type:tag", "domain:?0"})
     List<Tag> findByDomain(String domain);
 
-    @Query(value = "record_type:tag", filters = { "record_type:tag", "datasource_id:?0"})
+    @Query(value = "record_type:tag", filters = { "record_type:tag", "datasource_id:\"?0\""})
     List<Tag> findByDatasource(String datasource_id);
 
     @Query(value = "record_type:tag", filters = { "record_type:tag", "domain:?0", "server:?1"})

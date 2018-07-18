@@ -15,14 +15,20 @@ public class DatasourceFlowElements {
                                   String consoleServiceName,
                                   TagsApiService tagsApiService) {
 
+        Iterator<Tag> it = tagsApiService.getAllTagsFromDatasource(datasource.getId()).iterator();
+        if (it.hasNext()) {
+            String opcConfig = buildOpcConfig(datasource, it);
+            String serviceName = dataflowName + "_" + datasource.getId();
+            this.service = this.buildDatasourceService(serviceName, opcConfig);
+            this.stream = this.buildDatasourceStream(datasource.getId(),
+                    chronixServiceName,
+                    service.getName(),
+                    consoleServiceName);
+        } else {
+            this.service = null;
+            this.stream = null;
+        }
 
-        String opcConfig = buildOpcConfig(datasource, tagsApiService);
-        String serviceName = dataflowName + "_" + datasource.getId();
-        this.service = this.buildDatasourceService(serviceName, opcConfig);
-        this.stream = this.buildDatasourceStream(datasource.getId(),
-                chronixServiceName,
-                service.getName(),
-                consoleServiceName);
     }
 
     private final Service service;
@@ -42,7 +48,7 @@ public class DatasourceFlowElements {
 
 
     private String buildOpcConfig(Datasource datasource,
-                                  TagsApiService tagsApiService) {
+                                  Iterator<Tag> tags) {
 
         StringBuilder strBuilder = new StringBuilder();
         strBuilder.append("clsId=");
@@ -67,16 +73,15 @@ public class DatasourceFlowElements {
         strBuilder.append(datasource.getHost());
         strBuilder.append("\n");
         strBuilder.append("tags=");
-        Iterator<Tag> it = tagsApiService.getAllTagsFromDatasource(datasource.getId()).iterator();
         Tag tag;
-        while (it.hasNext()) {
-            tag = it.next();
+        while (tags.hasNext()) {
+            tag = tags.next();
             strBuilder.append(tag.getTagName());
             if (tag.getUpdateRate() != null) {
                 strBuilder.append(":");
                 strBuilder.append(tag.getUpdateRate());
             }
-            if (it.hasNext()) strBuilder.append(",");
+            if (tags.hasNext()) strBuilder.append(",");
         }
         return strBuilder.toString();
     }

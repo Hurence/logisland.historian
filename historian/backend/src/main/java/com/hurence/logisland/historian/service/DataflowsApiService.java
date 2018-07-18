@@ -91,8 +91,8 @@ public class DataflowsApiService {
                     ds, chronix.getName(), opcDataflowName, console.getName(), tagsApiService
             );
             if (dsElem.isActive()) {
-                services.add(dsElem.getService());
-                streams.add(dsElem.getStream());
+                if (dsElem.getService() != null) services.add(dsElem.getService());
+                if (dsElem.getStream() != null) streams.add(dsElem.getStream());;
             }
         }
         df.setServices(services);
