@@ -16,9 +16,9 @@
  */
 package com.hurence.logisland.historian.repository;
 
-import com.hurence.logisland.historian.rest.v1.model.DataFlow;
+import com.hurence.logisland.historian.rest.v1.model.DataFlowSimple;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SolrDataflowRepository extends SolrCrudRepository<DataFlow, String> { }
+public interface SolrDataflowRepository extends SolrCrudRepository<DataFlowSimple, String> { }

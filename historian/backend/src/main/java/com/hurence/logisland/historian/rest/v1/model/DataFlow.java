@@ -10,29 +10,28 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import org.threeten.bp.OffsetDateTime;
 import java.io.Serializable;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
 
 /**
 * A streaming pipeline.
 */
     @ApiModel(description = "A streaming pipeline.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-16T17:53:31.203+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T09:24:34.438+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
 public class DataFlow  implements Serializable {
         @JsonProperty("lastModified")
         @Indexed(name = "lastModified")
-        private OffsetDateTime lastModified = null;
+        private String lastModified = null;
 
         @JsonProperty("modificationReason")
         @Indexed(name = "modificationReason")
@@ -50,7 +49,7 @@ public class DataFlow  implements Serializable {
         @Indexed(name = "streams")
         private List<Stream> streams = null;
 
-        public DataFlow lastModified(OffsetDateTime lastModified) {
+        public DataFlow lastModified(String lastModified) {
         this.lastModified = lastModified;
         return this;
         }
@@ -63,13 +62,12 @@ public class DataFlow  implements Serializable {
     @ApiModelProperty(required = true, value = "the last modified timestamp of this pipeline (used to trigger changes).")
       @NotNull
 
-  @Valid
 
-  public OffsetDateTime getLastModified() {
+  public String getLastModified() {
     return lastModified;
     }
 
-        public DataFlow setLastModified(OffsetDateTime lastModified) {
+        public DataFlow setLastModified(String lastModified) {
         this.lastModified = lastModified;
         return this;
         }
@@ -206,7 +204,7 @@ public class DataFlow  implements Serializable {
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class DataFlow {\n");
+sb.append("{\n");
 
 sb.append("    lastModified: ").append(toIndentedString(lastModified)).append("\n");
 sb.append("    modificationReason: ").append(toIndentedString(modificationReason)).append("\n");
@@ -217,14 +215,17 @@ sb.append("}");
 return sb.toString();
 }
 
-/**
-* Convert the given object to string with each line indented by 4 spaces
-* (except the first line).
-*/
-private String toIndentedString(java.lang.Object o) {
-if (o == null) {
-return "null";
-}
-return o.toString().replace("\n", "\n    ");
-}
+    /**
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
+    private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

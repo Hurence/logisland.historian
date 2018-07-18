@@ -140,13 +140,17 @@ public class TagsApiService {
      * @return true if all items were created. If at least one tag was updated (existed before), it returns false.
      */
     public List<Tag> SaveOrUpdateMany(List<Tag> tags) {
-        return tags.stream().map(tag -> repository.save(tag)).collect(Collectors.toList());
+        List<Tag> updatedTags = tags.stream().map(tag -> repository.save(tag)).collect(Collectors.toList());
+        dataflowsApiService.updateOpcDataflow();
+        return updatedTags;
     }
 
     public List<Tag> deleteManyTag(List<String> tagIds) {
-        return tagIds.stream().map(id -> this.deleteTag(id))
+        List<Tag> supressedTags = tagIds.stream().map(id -> this.deleteTag(id))
                 .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty())
                 .collect(Collectors.toList());
+        dataflowsApiService.updateOpcDataflow();
+        return supressedTags;
     }
 
 }

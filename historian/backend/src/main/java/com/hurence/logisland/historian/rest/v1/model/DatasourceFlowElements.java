@@ -125,7 +125,7 @@ public class DatasourceFlowElements {
 
     private Pipeline buildDatasourcePipeline(String chronixServiceName) {
         Pipeline pipeline = new Pipeline();
-        pipeline.setLastModified(OffsetDateTime.now());
+        pipeline.setLastModified(DateUtil.toUtcDateForSolr(OffsetDateTime.now()));
         pipeline.setModificationReason("rebuilt whole dataflow");
         pipeline.setProcessors(buildDatasourceProcessors(chronixServiceName));
         return pipeline;

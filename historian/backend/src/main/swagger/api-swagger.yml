@@ -1534,7 +1534,6 @@ definitions:
       properties:
         lastModified:
           type: string
-          format: date-time
           description: the last modified timestamp of this pipeline (used to trigger changes).
         modificationReason:
           type: string

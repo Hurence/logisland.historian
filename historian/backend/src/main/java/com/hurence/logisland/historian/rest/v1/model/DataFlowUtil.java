@@ -9,6 +9,7 @@ public final class DataFlowUtil {
 
     public final static String CONSOLE_SERVICE_NAME_SUFFIX = "_console_service";
     public final static String CHRONIX_SERVICE_NAME_SUFFIX = "_chronix_service";
+    private final static JacksonConverter converter = JacksonConverter.instance();
 
     public static Service buildConsoleService(String dataflowName) {
         Service service = new Service();
@@ -59,4 +60,41 @@ public final class DataFlowUtil {
         }
         return properties;
     }
+
+    public static DataFlow convertDfstoDf(DataFlowSimple dfs) {
+        DataFlow df = new DataFlow();
+        df.setId(dfs.getId());
+        df.setLastModified(dfs.getLastModified());
+        df.setModificationReason(dfs.getModificationReason());
+        df.setStreams(converter.fromJson(dfs.getStreams(),List.class, Stream.class));
+        df.setServices(converter.fromJson(dfs.getServices(),List.class, Service.class));
+        return df;
+    }
+    public static DataFlowSimple convertDftoDfs(DataFlow df) {
+        DataFlowSimple dfs = new DataFlowSimple();
+        dfs.setId(df.getId());
+        dfs.setLastModified(df.getLastModified());
+        dfs.setModificationReason(df.getModificationReason());
+        dfs.setStreams(converter.toJson(df.getStreams()));
+        dfs.setServices(converter.toJson(df.getServices()));
+        return dfs;
+    }
+//    public static Stream convertDftoDfs(String df) {
+//        DataFlowSimple dfs = new DataFlowSimple();
+//        dfs.setId(df.getId());
+//        dfs.setLastModified(df.getLastModified());
+//        dfs.setModificationReason(df.getModificationReason());
+//        dfs.setStreams(df.getStreams());
+//        dfs.setServices(df.getServices());
+//        return dfs; //TODO
+//    }
+//    public static DataFlowSimple convertDftoDfs(DataFlow df) {
+//        DataFlowSimple dfs = new DataFlowSimple();
+//        dfs.setId(df.getId());
+//        dfs.setLastModified(df.getLastModified());
+//        dfs.setModificationReason(df.getModificationReason());
+//        dfs.setStreams(df.getStreams());
+//        dfs.setServices(df.getServices());
+//        return dfs; //TODO
+//    }
 }

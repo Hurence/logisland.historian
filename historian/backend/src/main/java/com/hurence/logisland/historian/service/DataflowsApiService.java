@@ -54,14 +54,15 @@ public class DataflowsApiService {
 
     public Optional<DataFlow> getDataflow(String dataflowName) {
         logger.debug("getting DataFlow {}", dataflowName);
-        return repository.findById(dataflowName);
+        return repository.findById(dataflowName).map(DataFlowUtil::convertDfstoDf);
     }
 
     public Optional<DataFlow> updateOpcDataflow() {
         List<Datasource> datasources = datasourcesApiService.getAllDatasources("*");
-        if (datasources.isEmpty()) {
+        if (!datasources.isEmpty()) {
             DataFlow df = this.buildOpcDataflow(datasources);
-            repository.save(df);
+            DataFlowSimple dfs = DataFlowUtil.convertDftoDfs(df);
+            repository.save(dfs);
             return Optional.of(df);
         } else {
             return Optional.empty();
@@ -71,7 +72,7 @@ public class DataflowsApiService {
     private DataFlow buildOpcDataflow(List<Datasource> datasources) {
         DataFlow df = new DataFlow();
         df.setId(opcDataflowName);
-        df.setLastModified(OffsetDateTime.now());
+        df.setLastModified(DateUtil.toUtcDateForSolr(OffsetDateTime.now()));
         df.setModificationReason("Modified tags to retrieve");
 
         // Services

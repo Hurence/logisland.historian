@@ -3,7 +3,6 @@ package com.hurence.logisland.historian.rest.v1.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.hurence.logisland.historian.rest.v1.model.Processor;
 import com.hurence.logisland.historian.rest.v1.model.Versioned;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,14 +19,14 @@ import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.OffsetDateTime;
 
 /**
-* Tracks stream processing pipeline configuration
+* A streaming pipeline.
 */
-    @ApiModel(description = "Tracks stream processing pipeline configuration")
+    @ApiModel(description = "A streaming pipeline.")
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T09:24:34.438+02:00")
 
 
-@SolrDocument(solrCoreName = "historian")
-public class Pipeline  implements Serializable {
+@SolrDocument(solrCoreName = "dataflow")
+public class DataFlowSimple  implements Serializable {
         @JsonProperty("lastModified")
         @Indexed(name = "lastModified")
         private String lastModified = null;
@@ -36,11 +35,19 @@ public class Pipeline  implements Serializable {
         @Indexed(name = "modificationReason")
         private String modificationReason = null;
 
-        @JsonProperty("processors")
-        @Indexed(name = "processors")
-        private List<Processor> processors = null;
+        @JsonProperty("id")
+        @Indexed(name = "id")
+        private String id = null;
 
-        public Pipeline lastModified(String lastModified) {
+        @JsonProperty("services")
+        @Indexed(name = "services")
+        private String services = null;
+
+        @JsonProperty("streams")
+        @Indexed(name = "streams")
+        private String streams = null;
+
+        public DataFlowSimple lastModified(String lastModified) {
         this.lastModified = lastModified;
         return this;
         }
@@ -58,12 +65,12 @@ public class Pipeline  implements Serializable {
     return lastModified;
     }
 
-        public Pipeline setLastModified(String lastModified) {
+        public DataFlowSimple setLastModified(String lastModified) {
         this.lastModified = lastModified;
         return this;
         }
 
-        public Pipeline modificationReason(String modificationReason) {
+        public DataFlowSimple modificationReason(String modificationReason) {
         this.modificationReason = modificationReason;
         return this;
         }
@@ -80,39 +87,75 @@ public class Pipeline  implements Serializable {
     return modificationReason;
     }
 
-        public Pipeline setModificationReason(String modificationReason) {
+        public DataFlowSimple setModificationReason(String modificationReason) {
         this.modificationReason = modificationReason;
         return this;
         }
 
-        public Pipeline processors(List<Processor> processors) {
-        this.processors = processors;
+        public DataFlowSimple id(String id) {
+        this.id = id;
         return this;
         }
 
-            public Pipeline addProcessorsItem(Processor processorsItem) {
-                if (this.processors == null) {
-                this.processors = new ArrayList<Processor>();
-                }
-            this.processors.add(processorsItem);
-            return this;
-            }
-
     /**
-        * Get processors
-    * @return processors
+        * The id of the dataflow.
+    * @return id
     **/
-        @JsonProperty("processors")
-    @ApiModelProperty(value = "")
+        @JsonProperty("id")
+    @ApiModelProperty(value = "The id of the dataflow.")
     
-  @Valid
 
-  public List<Processor> getProcessors() {
-    return processors;
+  public String getId() {
+    return id;
     }
 
-        public Pipeline setProcessors(List<Processor> processors) {
-        this.processors = processors;
+        public DataFlowSimple setId(String id) {
+        this.id = id;
+        return this;
+        }
+
+        public DataFlowSimple services(String services) {
+        this.services = services;
+        return this;
+        }
+
+    /**
+        * The service controllers.
+    * @return services
+    **/
+        @JsonProperty("services")
+    @ApiModelProperty(value = "The service controllers.")
+    
+
+  public String getServices() {
+    return services;
+    }
+
+        public DataFlowSimple setServices(String services) {
+        this.services = services;
+        return this;
+        }
+
+        public DataFlowSimple streams(String streams) {
+        this.streams = streams;
+        return this;
+        }
+
+
+    /**
+        * The engine properties.
+    * @return streams
+    **/
+        @JsonProperty("streams")
+    @ApiModelProperty(value = "The engine properties.")
+    
+
+  public String getStreams() {
+    return streams;
+    }
+
+        public DataFlowSimple setStreams(String streams) {
+        this.streams = streams;
         return this;
         }
 
@@ -125,15 +168,17 @@ public class Pipeline  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
     return false;
     }
-        Pipeline pipeline = (Pipeline) o;
-        return Objects.equals(this.lastModified, pipeline.lastModified) &&
-        Objects.equals(this.modificationReason, pipeline.modificationReason) &&
-        Objects.equals(this.processors, pipeline.processors);
+        DataFlowSimple dataFlowSimple = (DataFlowSimple) o;
+        return Objects.equals(this.lastModified, dataFlowSimple.lastModified) &&
+        Objects.equals(this.modificationReason, dataFlowSimple.modificationReason) &&
+        Objects.equals(this.id, dataFlowSimple.id) &&
+        Objects.equals(this.services, dataFlowSimple.services) &&
+        Objects.equals(this.streams, dataFlowSimple.streams);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(lastModified, modificationReason, processors);
+    return Objects.hash(lastModified, modificationReason, id, services, streams);
     }
 
 
@@ -144,7 +189,9 @@ sb.append("{\n");
 
 sb.append("    lastModified: ").append(toIndentedString(lastModified)).append("\n");
 sb.append("    modificationReason: ").append(toIndentedString(modificationReason)).append("\n");
-sb.append("    processors: ").append(toIndentedString(processors)).append("\n");
+sb.append("    id: ").append(toIndentedString(id)).append("\n");
+sb.append("    services: ").append(toIndentedString(services)).append("\n");
+sb.append("    streams: ").append(toIndentedString(streams)).append("\n");
 sb.append("}");
 return sb.toString();
 }
