@@ -8,7 +8,6 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { initializer } from './app-init';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DialogService } from './dialog/dialog.service';
 import { MeasuresService } from './measure/measures.service';
 import { DatasourceService } from './modules/datasource/datasource.service';
 import { SelectionModule } from './modules/selection/selection.module';
@@ -29,6 +28,7 @@ import { TodoComponent } from './todo/todo.component';
 import { NgTreenodeService } from './modules/tag/service/ng-treenode.service';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ArrayUtil } from './shared/array-util';
+import {ConfirmationService} from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -64,7 +64,6 @@ import { ArrayUtil } from './shared/array-util';
     TagOpcService,
     TagHistorianService,
     DatasourceService,
-    DialogService,
     QuestionService,
     QuestionControlService,
     Utilities,
@@ -73,6 +72,7 @@ import { ArrayUtil } from './shared/array-util';
     NgTreenodeService,
     ArrayUtil,
     MessageService,
+    ConfirmationService,
   ],
   bootstrap: [AppComponent],
 })

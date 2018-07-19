@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/components/common/selectitem';
 
-import { DialogService } from '../../../dialog/dialog.service';
 import { ProfilService } from '../../../profil/profil.service';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
 import { TagsSelection, TagsSelectionArray } from '../Selection';
 import { SelectionFormComponent } from '../selection-form/selection-form.component';
 import { SelectionService } from '../selection.service';
+import { ConfirmationService } from 'primeng/components/common/api';
 
 @Component({
   selector: 'app-selection-dashboard',
@@ -31,7 +31,7 @@ export class SelectionDashboardComponent implements OnInit {
   @ViewChild(SelectionFormComponent) private tagSelectionFormComp: SelectionFormComponent;
 
   constructor(public profilService: ProfilService,
-              private dialogService: DialogService,
+              private confirmationService: ConfirmationService,
               private selectionService: SelectionService) {}
 
   ngOnInit() {
@@ -69,15 +69,20 @@ export class SelectionDashboardComponent implements OnInit {
 
   delete(selection: TagsSelection) {
     const msg = `Delete selection of tags ${selection.name} (${selection.description}) ?`;
-    this.dialogService.confirm(msg, this.CANCEL_MSG, this.REMOVE_SELECTION_MSG)
-      .subscribe(ok => {
-        if (ok) {
-          this.selectionService.delete(selection.getId())
-            .subscribe(deletedSelection => {
-              this.actualizeListOfTagsSelection();
-            });
-        }
-      });
+    this.confirmationService.confirm({
+      message: msg,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      rejectLabel: this.CANCEL_MSG,
+      acceptLabel: this.REMOVE_SELECTION_MSG,
+      accept: () => {
+        this.selectionService.delete(selection.getId())
+          .subscribe(deletedSelection => {
+            this.actualizeListOfTagsSelection();
+          });
+      },
+      reject: () => { }
+    });
   }
 
   private getMyQuestions(): QuestionBase<any>[]  {

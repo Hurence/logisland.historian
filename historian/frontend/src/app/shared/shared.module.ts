@@ -14,7 +14,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { PanelModule } from 'primeng/panel';
-import { DialogModule } from 'primeng/dialog';
 import { TreeModule } from 'primeng/tree';
 import { TreeDragDropService } from 'primeng/api';
 import { AccordionModule } from 'primeng/accordion';
@@ -24,6 +23,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 import { GrowlModule } from 'primeng/growl';
 import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-rate-selection.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   imports: [
@@ -36,7 +37,6 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
     PanelMenuModule,
     FormsModule,
     PanelModule,
-    DialogModule,
     TreeModule,
     AccordionModule,
     TabViewModule,
@@ -44,6 +44,8 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
     TooltipModule,
     ButtonModule,
     GrowlModule,
+    ConfirmDialogModule,
+    DialogModule,
   ],
   exports: [
     CommonModule,
@@ -59,7 +61,6 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
     PanelMenuModule,
     FormsModule,
     PanelModule,
-    DialogModule,
     TreeModule,
     AccordionModule,
     RefreshRateSelectionComponent,
@@ -68,6 +69,8 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
     TooltipModule,
     ButtonModule,
     GrowlModule,
+    ConfirmDialogModule,
+    DialogModule,
   ],
   providers: [
     TreeDragDropService,

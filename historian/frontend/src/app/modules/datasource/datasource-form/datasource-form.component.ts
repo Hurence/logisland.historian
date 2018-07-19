@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { DialogService } from '../../../dialog/dialog.service';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
+import { ConfirmationService } from 'primeng/components/common/api';
 
 @Component({
   selector: 'app-datasource-form',
@@ -39,8 +39,8 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private FAILED_UPDATED_MSG = 'error while updating data source.';
 
   constructor(private fb: FormBuilder,
-    private datasourceService: DatasourceService,
-    private dialogService: DialogService) {
+    private confirmationService: ConfirmationService,
+    private datasourceService: DatasourceService) {
 
     this.createForm();
     this.resetCredWhenNone();
@@ -72,10 +72,15 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   // restore form with clean values
   revert() { // TODO could be factorized
-    this.dialogService.confirm(this.DISCARD_CHANGE_QUESTION_MSG)
-      .subscribe(ok => {
-        if (ok) this.rebuildForm();
-      });
+    this.confirmationService.confirm({
+      message: this.DISCARD_CHANGE_QUESTION_MSG,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.rebuildForm();
+      },
+      reject: () => { }
+    });
   }
 
   formIsClean(): boolean { return this.dsForm.dirty; } // TODO could be factorized

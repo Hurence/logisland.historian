@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 
 import { CanComponentDeactivate } from '../../../can-deactivate-guard.service';
-import { DialogService } from '../../../dialog/dialog.service';
 import { ProfilService } from '../../../profil/profil.service';
 import { Datasource } from '../Datasource';
 import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
@@ -11,6 +10,7 @@ import { DatasourcesListComponent } from '../datasources-list/datasources-list.c
 import { ITag } from '../../tag/modele/tag';
 import { TagService } from '../../tag/service/tag.service';
 import { OpcTagTreeComponent } from '../../tag/tag-tree/opc-tag-tree/opc-tag-tree.component';
+import { ConfirmationService } from 'primeng/components/common/api';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -38,7 +38,7 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private dialogService: DialogService,
+              private confirmationService: ConfirmationService,
               private profilService: ProfilService,
               private tagService: TagService) { }
 
@@ -94,7 +94,21 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
 
   canDeactivate(): Observable<boolean> | boolean {
     if (this.dsFormIsClean()) return true;
-    return this.dialogService.confirm(this.DISCARD_CHANGE_QUESTION_MSG);
+    return Observable.create((observer: Observer<boolean>) => {
+      this.confirmationService.confirm({
+          message: this.DISCARD_CHANGE_QUESTION_MSG,
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+              observer.next(true);
+              observer.complete();
+          },
+          reject: () => {
+              observer.next(false);
+              observer.complete();
+          }
+      });
+    });
   }
 
   private selectDatasource(datasource: Datasource) {

@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { DialogService } from '../../../dialog/dialog.service';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { QuestionControlService } from '../../../shared/dynamic-form/question-control.service';
 import { IHistorianTag } from '../modele/HistorianTag';
@@ -13,6 +12,7 @@ import { ITagFormOutput, TagFormOutput } from './TagFormOutput';
 import { QuestionService } from '../../../shared/dynamic-form/question.service';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { TagUtils } from '../modele/TagUtils';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-tag-form',
@@ -34,7 +34,7 @@ export class TagFormComponent implements OnInit, OnChanges {
 
   constructor(private qcs: QuestionControlService,
               private fb: FormBuilder,
-              private dialogService: DialogService,
+              private confirmationService: ConfirmationService,
               private qs: QuestionService,
               private tagHistorianService: TagHistorianService,
               private messageService: MessageService) { }
@@ -77,10 +77,15 @@ export class TagFormComponent implements OnInit, OnChanges {
 
 
   revert() { // TODO could be factorized
-    this.dialogService.confirm(this.DISCARD_CHANGE_MSG)
-      .subscribe(ok => {
-        if (ok) this.rebuildForm();
-      });
+    this.confirmationService.confirm({
+      message: this.DISCARD_CHANGE_MSG,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.rebuildForm();
+      },
+      reject: () => { }
+    });
   }
 
 
