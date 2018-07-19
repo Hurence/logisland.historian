@@ -48,6 +48,9 @@ export class DatasourcesListComponent implements OnInit {
         this.datasourceService.delete(datasource.id)
         .subscribe(deletedDs => {
           this.getDatasources();
+          if (this.selectedDatasource.id === deletedDs.id) {
+            this.onSelect(null);
+          }
         });
       },
       reject: () => { }
