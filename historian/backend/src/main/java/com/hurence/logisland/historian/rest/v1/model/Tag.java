@@ -23,7 +23,7 @@ import org.threeten.bp.OffsetDateTime;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T09:24:34.438+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T17:02:10.968+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
@@ -146,6 +146,10 @@ public class Tag  implements Serializable {
         @JsonProperty("last_quality")
         @Indexed(name = "last_quality")
         private Integer lastQuality = null;
+
+        @JsonProperty("enabled")
+        @Indexed(name = "enabled")
+        private Boolean enabled = null;
 
         public Tag recordType(String recordType) {
         this.recordType = recordType;
@@ -584,6 +588,29 @@ public class Tag  implements Serializable {
         return this;
         }
 
+        public Tag enabled(Boolean enabled) {
+        this.enabled = enabled;
+        return this;
+        }
+
+    /**
+        * polling delay in ms
+    * @return enabled
+    **/
+        @JsonProperty("enabled")
+    @ApiModelProperty(required = true, value = "polling delay in ms")
+      @NotNull
+
+
+  public Boolean isEnabled() {
+    return enabled;
+    }
+
+        public Tag setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+        return this;
+        }
+
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -612,12 +639,13 @@ public class Tag  implements Serializable {
         Objects.equals(this.minNumericValue, tag.minNumericValue) &&
         Objects.equals(this.maxNumericValue, tag.maxNumericValue) &&
         Objects.equals(this.lastNumericValue, tag.lastNumericValue) &&
-        Objects.equals(this.lastQuality, tag.lastQuality);
+        Objects.equals(this.lastQuality, tag.lastQuality) &&
+        Objects.equals(this.enabled, tag.enabled);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id, datasourceId, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality);
+    return Objects.hash(recordType, id, datasourceId, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled);
     }
 
 
@@ -645,6 +673,7 @@ sb.append("    minNumericValue: ").append(toIndentedString(minNumericValue)).app
 sb.append("    maxNumericValue: ").append(toIndentedString(maxNumericValue)).append("\n");
 sb.append("    lastNumericValue: ").append(toIndentedString(lastNumericValue)).append("\n");
 sb.append("    lastQuality: ").append(toIndentedString(lastQuality)).append("\n");
+sb.append("    enabled: ").append(toIndentedString(enabled)).append("\n");
 sb.append("}");
 return sb.toString();
 }

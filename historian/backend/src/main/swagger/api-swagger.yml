@@ -349,9 +349,9 @@ paths:
      put:
        tags:
         - tag
-       summary:  update tag
-       description: update an existing tag
-       operationId: updateTag
+       summary: create or replace a tag
+       description: create or replace a tag
+       operationId: createOrReplaceATag
        parameters:
          - name: itemId
            in: path
@@ -365,43 +365,17 @@ paths:
            schema:
              $ref: '#/definitions/Tag'
        responses:
-        '404':
-          description: Tag resource not found
         '400':
           description: Invalid ID supplied
+        '201':
+          description: Tag successfuly created
+          schema:
+            $ref: '#/definitions/Tag'
         '200':
-         description: Tag successfuly updated
-         schema:
-           $ref: '#/definitions/Tag'
-     post:
-       tags:
-        - tag
-       summary:  create new tag
-       description:  store a new tag
-       operationId: addTagWithId
-       parameters:
-         - name: body
-           in: body
-           description: Tag resource to add
-           required: true
-           schema:
-             $ref: '#/definitions/Tag'
-         - name: itemId
-           in: path
-           description: itemId to
-           required: true
-           type: string
-       responses:
-         '400':
-           description: Invalid ID supplied
-         '200':
-           description: Tag successfuly created
-           schema:
-             $ref: '#/definitions/Tag'
-         default:
-           description: unexpected error
-           schema:
-             $ref: '#/definitions/Error'
+          description: Tag successfuly replaced
+          schema:
+            $ref: '#/definitions/Tag'
+
   /tags/{itemId}/measures:
      get:
        tags:
@@ -1367,6 +1341,7 @@ definitions:
       - item_name
       - datasource_id
       - data_type
+      - enabled
     properties:
       record_type:
         type: string
@@ -1436,6 +1411,9 @@ definitions:
         format: double
       last_quality:
         type: integer
+      enabled:
+        description: polling delay in ms
+        type: boolean
 
   Measures:
     type: object

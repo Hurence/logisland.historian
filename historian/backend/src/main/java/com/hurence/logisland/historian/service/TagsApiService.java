@@ -18,6 +18,7 @@ package com.hurence.logisland.historian.service;
 
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.rest.v1.model.TagReplaceReport;
 import com.hurence.logisland.historian.rest.v1.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,24 +66,24 @@ public class TagsApiService {
         return repository.findById(itemId);
     }
 
-
-    public Optional<Tag> updateTag(Tag tag) {
-        logger.debug("updating Tag {}", tag.getId());
+    private TagReplaceReport createOrReplaceATag(Tag tag) {
+        logger.debug("create or replace Tag {}", tag.getId());
         if (repository.existsById(tag.getId())) {
             Tag savedTag = repository.save(tag);
             dataflowsApiService.updateOpcDataflow();
-            return Optional.of(savedTag);
+            return new TagReplaceReport(Optional.of(savedTag), false);
         } else {
-            logger.error("Tag {} not found, unable to update", tag.getId());
-            return Optional.empty();
+            Tag savedTag = repository.save(tag);
+            dataflowsApiService.updateOpcDataflow();
+            return new TagReplaceReport(Optional.of(savedTag), true);
         }
     }
 
-    public Optional<Tag> updateTag(Tag tag, String itemId) {
+    public TagReplaceReport createOrReplaceATag(Tag tag, String itemId) {
         if (!tag.getId().equals(itemId)) {
-            return updateTag(tag.id(itemId));
+            return createOrReplaceATag(tag.id(itemId));
         } else {
-            return updateTag(tag);
+            return createOrReplaceATag(tag);
         }
     }
 
@@ -94,23 +95,8 @@ public class TagsApiService {
         return tags;
     }
 
-
     public List<Tag> getAllTagsFromDatasource(String datasourceId) {
         return repository.findByDatasource(datasourceId);
-    }
-
-    public Optional<Tag> addTagWithId(Tag body, String itemId) {
-
-        Optional<Tag> datasourceToRemove = getTag(itemId);
-        if (datasourceToRemove.isPresent()) {
-            logger.info("Tag already {} exists, delete it first", itemId);
-            return Optional.empty();
-        } else {
-            body.setId(itemId);
-            Tag savedTag = repository.save(body);
-            dataflowsApiService.updateOpcDataflow();
-            return Optional.of(savedTag);
-        }
     }
 
     public List<TreeNode> getTreeTag(int page, int limit) {

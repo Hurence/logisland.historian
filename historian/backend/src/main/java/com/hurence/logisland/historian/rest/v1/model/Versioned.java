@@ -19,7 +19,7 @@ import org.threeten.bp.OffsetDateTime;
 * a versioned component
 */
     @ApiModel(description = "a versioned component")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T09:24:34.438+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T17:02:10.968+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")

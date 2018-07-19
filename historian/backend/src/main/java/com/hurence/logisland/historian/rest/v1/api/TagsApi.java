@@ -28,7 +28,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T09:24:34.438+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T17:02:10.968+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -43,14 +43,14 @@ import java.util.List;
         ResponseEntity<List<Tag>> addManyTags(@ApiParam(value = "tags to create or update." ,required=true )  @Valid @RequestBody List<Tag> tags);
 
 
-            @ApiOperation(value = "create new tag", nickname = "addTagWithId", notes = "store a new tag", response = Tag.class, tags={ "tag", })
+            @ApiOperation(value = "create or replace a tag", nickname = "createOrReplaceATag", notes = "create or replace a tag", response = Tag.class, tags={ "tag", })
             @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "Tag successfuly created", response = Tag.class),
-                @ApiResponse(code = 400, message = "Invalid ID supplied"),
-                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+                @ApiResponse(code = 200, message = "Tag successfuly replaced", response = Tag.class),
+                @ApiResponse(code = 201, message = "Tag successfuly created", response = Tag.class),
+                @ApiResponse(code = 400, message = "Invalid ID supplied") })
             @RequestMapping(value = "/api/v1/tags/{itemId}",
-            method = RequestMethod.POST)
-        ResponseEntity<Tag> addTagWithId(@ApiParam(value = "Tag resource to add" ,required=true )  @Valid @RequestBody Tag body,@ApiParam(value = "itemId to",required=true) @PathVariable("itemId") String itemId);
+            method = RequestMethod.PUT)
+        ResponseEntity<Tag> createOrReplaceATag(@ApiParam(value = "itemId to be updated",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "new Tag definition" ,required=true )  @Valid @RequestBody Tag tag);
 
 
             @ApiOperation(value = "delete tags", nickname = "deleteManyTags", notes = "delete the corresponding tags", response = Tag.class, responseContainer = "List", tags={ "tag", })
@@ -148,15 +148,5 @@ import java.util.List;
                 produces = { "application/json" }, 
             method = RequestMethod.POST)
         ResponseEntity<BulkLoad> postTagMeasuresGenerator(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile config,@ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields,@ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue="false") Boolean cleanImport);
-
-
-            @ApiOperation(value = "update tag", nickname = "updateTag", notes = "update an existing tag", response = Tag.class, tags={ "tag", })
-            @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "Tag successfuly updated", response = Tag.class),
-                @ApiResponse(code = 400, message = "Invalid ID supplied"),
-                @ApiResponse(code = 404, message = "Tag resource not found") })
-            @RequestMapping(value = "/api/v1/tags/{itemId}",
-            method = RequestMethod.PUT)
-        ResponseEntity<Tag> updateTag(@ApiParam(value = "itemId to be updated",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "new Tag definition" ,required=true )  @Valid @RequestBody Tag tag);
 
         }

@@ -43,14 +43,19 @@ public class TagsApiController implements TagsApi {
         return new ResponseEntity<List<Tag>>(service.SaveOrUpdateMany(tags), HttpStatus.OK);
     }
 
-    public ResponseEntity<Tag> addTagWithId(@ApiParam(value = "Tag resource to add", required = true) @Valid @RequestBody Tag body, @ApiParam(value = "itemId to", required = true) @PathVariable("itemId") String itemId) {
-        Optional<Tag> tag = service.addTagWithId(body, itemId);
-        if (tag.isPresent()) {
-            return new ResponseEntity<Tag>(tag.get(), HttpStatus.OK);
-
+    @Override
+    public ResponseEntity<Tag> createOrReplaceATag(
+            @ApiParam(value = "itemId to be updated",required=true) @PathVariable("itemId") String itemId,
+            @ApiParam(value = "new Tag definition" ,required=true )  @Valid @RequestBody Tag tag) {
+        TagReplaceReport report = service.createOrReplaceATag(tag, itemId);
+        if (report.tag.isPresent()) {
+            if (report.created) {
+                return new ResponseEntity<Tag>(report.tag.get(), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<Tag>(report.tag.get(), HttpStatus.OK);
+            }
         } else {
-            return new ResponseEntity<Tag>(HttpStatus.BAD_REQUEST);
-
+            return new ResponseEntity<Tag>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -126,17 +131,6 @@ public class TagsApiController implements TagsApi {
 
 
         return new ResponseEntity<BulkLoad>(measuresApiService.uploadTagMeasures(content, csvDelimiter, dateFormat, numberFormat, attributeFields, cleanImport, pointsByChunk), HttpStatus.OK);
-    }
-
-    public ResponseEntity<Tag> updateTag(@ApiParam(value = "itemId to be updated", required = true) @PathVariable("itemId") String itemId, @ApiParam(value = "new Tag definition", required = true) @Valid @RequestBody Tag tag) {
-        Optional<Tag> updatedTag = service.updateTag(tag, itemId);
-        if (updatedTag.isPresent()) {
-            return new ResponseEntity<Tag>(updatedTag.get(), HttpStatus.OK);
-
-        } else {
-            return new ResponseEntity<Tag>(HttpStatus.NOT_FOUND);
-
-        }
     }
 
     @Override
