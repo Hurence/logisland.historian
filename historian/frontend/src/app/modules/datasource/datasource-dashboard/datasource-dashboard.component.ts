@@ -100,7 +100,7 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
   private selectDatasource(datasource: Datasource) {
     if (datasource === null || datasource.id === this.selectedDatasource.id) {
       this.isCreation = true;
-      this.selectedDatasource = new Datasource('', 'OPC-DA');
+      this.selectedDatasource = new Datasource({id: '', datasource_type: 'OPC-DA'});
       this.tags = [];
       this.selectedTab = this.DATASOURCE_FORM_TAB_INDEX;
     } else {

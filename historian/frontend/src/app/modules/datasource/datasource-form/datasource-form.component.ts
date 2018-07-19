@@ -147,30 +147,22 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   onSubmit() {
     this.datasource = this.prepareSaveDatasource();
     if (this.isCreation) {
-      this.subscribeToUpdate(this.datasourceService.save(this.datasource),
-        this.SUCCESSFULLY_SAVED_MSG,
-        this.FAILED_SAVED_MSG);
+      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource));
     } else {
-      this.subscribeToUpdate(this.datasourceService.update(this.datasource),
-      this.SUCCESSFULLY_UPDATED_MSG,
-      this.FAILED_UPDATED_MSG);
+      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource));
     }
   }
   /* subscribe to update or save request
      emitting saved datasource, testing if it is reachable then alerting user when it is done.
   */
-  private subscribeToUpdate(submitted: Observable<Datasource>,
-                            msgSuccess: string,
-                            msgError: string): void {
+  private subscribeToUpdate(submitted: Observable<Datasource>): void {
     submitted.subscribe(
       datasource => {
         this.submitted.emit(datasource);
         this.isReachable();
-        this.dialogService.alert(msgSuccess);
       },
       error => {
         console.error(JSON.stringify(error));
-        this.dialogService.alert(msgError);
       }
     );
   }
