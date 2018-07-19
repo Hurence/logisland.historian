@@ -27,6 +27,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   // tag form dialog props
   displayRegister = false;
   tagsInputForForm: ITagFormInput[] = [];
+  tagFormTitle: string;
   // memory to update tree
   nodeForRegister: TreeNode;
 
@@ -41,6 +42,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     this.treeNodes = this.ngTreenodeService.buildOpcTagTree(this.tags);
     this.loading = false;
     this.expandAll();
+    this.updateTagFormTitile();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -48,6 +50,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
       this.treeNodes = this.ngTreenodeService.buildOpcTagTree(this.tags);
       this.loading = false;
       this.expandAll();
+      this.updateTagFormTitile();
     }
   }
 
@@ -57,6 +60,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
 
   private showRegisterDialog(tags: ITag[]): void {
     this.tagsInputForForm = tags.map(tag => new TagFormInput(tag));
+    this.updateTagFormTitile();
     this.displayRegister = true;
   }
 
@@ -189,24 +193,34 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     return undefined;
   }
 
-  /**
- * return node of tag or undefined if not found
- */
-private applyToNodeOfTag(node: TreeNode, method: (TreeNode: TreeNode) => void,
-                        conditionOnTag: (tag: Tag) => boolean): void {
-  if (node === undefined) return undefined;
-  switch (node.type) {
-    case TypesName.TAG_HISTORIAN:
-    case TypesName.TAG_OPC:
-      if (conditionOnTag(node.data)) method(node);
-     break;
-    default: {
-      node.children.forEach(n => this.applyToNodeOfTag(n, method, conditionOnTag));
+    /**
+   * return node of tag or undefined if not found
+   */
+  private applyToNodeOfTag(node: TreeNode, method: (TreeNode: TreeNode) => void,
+                          conditionOnTag: (tag: Tag) => boolean): void {
+    if (node === undefined) return undefined;
+    switch (node.type) {
+      case TypesName.TAG_HISTORIAN:
+      case TypesName.TAG_OPC:
+        if (conditionOnTag(node.data)) method(node);
+      break;
+      default: {
+        node.children.forEach(n => this.applyToNodeOfTag(n, method, conditionOnTag));
+      }
     }
   }
-}
 
   protected loadANodeIfNeeded(node: TreeNode): boolean {
     return false;
+  }
+
+  private updateTagFormTitile() {
+    if (this.tagsInputForForm.length === 1) {
+      this.tagFormTitle = 'Save this tag';
+    } else if (this.tagsInputForForm.length !== 0) {
+      this.tagFormTitle = `Save those ${this.tagsInputForForm.length} tags`;
+    } else { // should not happen
+      this.tagFormTitle = 'No Tag Selected !';
+    }
   }
 }

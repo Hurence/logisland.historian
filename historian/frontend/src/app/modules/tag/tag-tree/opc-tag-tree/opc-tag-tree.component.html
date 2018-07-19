@@ -106,7 +106,7 @@
 <!-- tag form -->
 <p-dialog [(visible)]="displayRegister" [modal]="true">
     <p-header>
-        Save this/those tag(s) with following values
+        {{tagFormTitle}}
     </p-header>
     <app-tag-form [tags]="tagsInputForForm"
                     (submitted)="onTagSaved($event)"></app-tag-form>
