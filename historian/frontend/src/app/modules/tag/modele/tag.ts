@@ -37,7 +37,7 @@ export const enum TagDataType {
 }
 
 export abstract class Tag implements ITag {
-    static TAG_UPDATE_RATE_DEFAUT: number = environment.TAG_UPDATE_RATE_DEFAUT
+    static TAG_UPDATE_RATE_DEFAUT: number = environment.TAG_UPDATE_RATE_DEFAUT;
 
     id: string;
     datasource_id: string;

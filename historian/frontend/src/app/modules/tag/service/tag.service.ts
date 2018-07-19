@@ -62,7 +62,7 @@ export class TagService implements IModelService<Tag> {
         if (r.has(v.id)) {
           const oldTag = r.get(v.id);
           if (TagUtils.isHistorianTag(oldTag)) {
-            Object.assign(oldTag, v)
+            Object.assign(oldTag, v);
           } else {
             r.set(v.id, new HistorianTag(v));
           }

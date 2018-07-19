@@ -77,8 +77,8 @@ export class TagHistorianService {
   createOrReplace(obj: HistorianTag): Observable<HistorianTag> {
     return this.http.put<HistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj, { observe: 'response' }).pipe(
       tap(resp => {
-        const tag : IHistorianTag = resp.body;
-        switch(resp.status) {
+        const tag: IHistorianTag = resp.body;
+        switch (resp.status) {
           case 201: {
             this.messageService.add({
               severity: 'success',
@@ -96,7 +96,7 @@ export class TagHistorianService {
             break;
           }
           default: {
-            console.error(`createOrReplace(${obj}) failed`, resp)
+            console.error(`createOrReplace(${obj}) failed`, resp);
             break;
           }
        }

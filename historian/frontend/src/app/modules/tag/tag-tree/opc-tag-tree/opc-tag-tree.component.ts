@@ -113,8 +113,8 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
 
   toggleEnableds(node: TreeNode): void {
     const enabledRootNode = node.data;
-    this.applyToNodeOfTag(node, 
-      this.forceToggleEnabled.bind(this, enabledRootNode), 
+    this.applyToNodeOfTag(node,
+      this.forceToggleEnabled.bind(this, enabledRootNode),
       this.conditionToggle.bind(this, enabledRootNode));
   }
 
