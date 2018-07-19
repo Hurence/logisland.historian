@@ -25,8 +25,9 @@
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/primeng.min.css",
-              "src/theme.css",
-              "src/styles.css"
+              "src/assets/css/theme.css",
+              "src/assets/css/styles.css",
+              "src/assets/css/button.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -123,7 +124,9 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/font-awesome/css/font-awesome.css",
-              "src/styles.css"
+              "src/assets/css/theme.css",
+              "src/assets/css/styles.css",
+              "src/assets/css/button.css"
             ],
             "assets": [
               "src/assets",
