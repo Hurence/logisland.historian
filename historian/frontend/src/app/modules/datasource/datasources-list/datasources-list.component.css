@@ -28,3 +28,6 @@
     outline: 0;
     box-shadow: 0 0 0 0 rgba(44,62,80,0);
 }
+.delete-datasource:hover {
+    background-color: #272c33;
+}
