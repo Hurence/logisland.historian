@@ -63,7 +63,16 @@ export class DatasourceService {
   }
 
   delete(id: string): Observable<Datasource> {
-    return this.http.delete<Datasource>(this.datasourcesUrl + '/' + encodeURIComponent(id));
+    return this.http.delete<Datasource>(this.datasourcesUrl + '/' + encodeURIComponent(id)).pipe(
+      tap(ds => {
+        const detail = `Deleted datasource with id ${ds.id}`;
+        this.messageService.add({
+          severity: 'success',
+          summary: this.SUCCESSFULLY_DELETED_MSG,
+          detail: detail,
+        });
+      })
+    );
   }
 
   datasourceIsReachable(id: string): Observable<boolean> {
