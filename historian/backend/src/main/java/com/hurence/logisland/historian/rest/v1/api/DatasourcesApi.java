@@ -24,19 +24,19 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T17:02:10.968+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
 
 @Api(value = "datasources", description = "the datasources API")
     public interface DatasourcesApi {
 
-            @ApiOperation(value = "create new Datasource", nickname = "addDatasourceWithId", notes = "store a new Datasource", response = Datasource.class, tags={ "datasource", })
+            @ApiOperation(value = "create or replace a Datasource", nickname = "createOrReplaceADatasource", notes = "create or replace a Datasource", response = Datasource.class, tags={ "datasource", })
             @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "Datasource successfuly created", response = Datasource.class),
-                @ApiResponse(code = 400, message = "Invalid ID supplied"),
-                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+                @ApiResponse(code = 200, message = "Datasource successfuly replaced", response = Datasource.class),
+                @ApiResponse(code = 201, message = "Datasource successfuly created", response = Datasource.class),
+                @ApiResponse(code = 400, message = "Invalid ID supplied") })
             @RequestMapping(value = "/api/v1/datasources/{datasourceId}",
-            method = RequestMethod.POST)
-        ResponseEntity<Datasource> addDatasourceWithId(@ApiParam(value = "Datasource resource to add" ,required=true )  @Valid @RequestBody Datasource body,@ApiParam(value = "datasourceId to",required=true) @PathVariable("datasourceId") String datasourceId);
+            method = RequestMethod.PUT)
+        ResponseEntity<Datasource> createOrReplaceADatasource(@ApiParam(value = "datasourceId to be added/replaced",required=true) @PathVariable("datasourceId") String datasourceId,@ApiParam(value = "Datasource definition" ,required=true )  @Valid @RequestBody Datasource datasource);
 
 
             @ApiOperation(value = "delete Datasource", nickname = "deleteDatasource", notes = "remove the corresponding Datasource", response = Datasource.class, tags={ "datasource", })
@@ -89,15 +89,5 @@ import java.util.List;
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
         ResponseEntity<Datasource> getDatasource(@ApiParam(value = "id of the Datasource to return",required=true) @PathVariable("datasourceId") String datasourceId);
-
-
-            @ApiOperation(value = "update Datasource", nickname = "updateDatasource", notes = "update an existing Datasource", response = Datasource.class, tags={ "datasource", })
-            @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "Datasource successfuly updated", response = Datasource.class),
-                @ApiResponse(code = 400, message = "Invalid ID supplied"),
-                @ApiResponse(code = 404, message = "Datasource resource not found") })
-            @RequestMapping(value = "/api/v1/datasources/{datasourceId}",
-            method = RequestMethod.PUT)
-        ResponseEntity<Datasource> updateDatasource(@ApiParam(value = "datasourceId to be updated",required=true) @PathVariable("datasourceId") String datasourceId,@ApiParam(value = "new Datasource definition" ,required=true )  @Valid @RequestBody Datasource datasource);
 
         }

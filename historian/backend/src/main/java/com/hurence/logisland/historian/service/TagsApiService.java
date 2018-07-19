@@ -18,8 +18,9 @@ package com.hurence.logisland.historian.service;
 
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
-import com.hurence.logisland.historian.rest.v1.model.TagReplaceReport;
 import com.hurence.logisland.historian.rest.v1.model.TreeNode;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.TagReplaceReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,20 +67,20 @@ public class TagsApiService {
         return repository.findById(itemId);
     }
 
-    private TagReplaceReport createOrReplaceATag(Tag tag) {
+    private ReplaceReport<Tag> createOrReplaceATag(Tag tag) {
         logger.debug("create or replace Tag {}", tag.getId());
         if (repository.existsById(tag.getId())) {
             Tag savedTag = repository.save(tag);
             dataflowsApiService.updateOpcDataflow();
-            return new TagReplaceReport(Optional.of(savedTag), false);
+            return new TagReplaceReport(savedTag, false);
         } else {
             Tag savedTag = repository.save(tag);
             dataflowsApiService.updateOpcDataflow();
-            return new TagReplaceReport(Optional.of(savedTag), true);
+            return new TagReplaceReport(savedTag, true);
         }
     }
 
-    public TagReplaceReport createOrReplaceATag(Tag tag, String itemId) {
+    public ReplaceReport<Tag> createOrReplaceATag(Tag tag, String itemId) {
         if (!tag.getId().equals(itemId)) {
             return createOrReplaceATag(tag.id(itemId));
         } else {

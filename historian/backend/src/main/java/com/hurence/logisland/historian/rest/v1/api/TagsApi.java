@@ -28,7 +28,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T17:02:10.968+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -50,7 +50,7 @@ import java.util.List;
                 @ApiResponse(code = 400, message = "Invalid ID supplied") })
             @RequestMapping(value = "/api/v1/tags/{itemId}",
             method = RequestMethod.PUT)
-        ResponseEntity<Tag> createOrReplaceATag(@ApiParam(value = "itemId to be updated",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "new Tag definition" ,required=true )  @Valid @RequestBody Tag tag);
+        ResponseEntity<Tag> createOrReplaceATag(@ApiParam(value = "itemId to be creted/replaced",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "Tag definition" ,required=true )  @Valid @RequestBody Tag tag);
 
 
             @ApiOperation(value = "delete tags", nickname = "deleteManyTags", notes = "delete the corresponding tags", response = Tag.class, responseContainer = "List", tags={ "tag", })
@@ -84,7 +84,7 @@ import java.util.List;
         ResponseEntity<List<Tag>> getAllTags(@ApiParam(value = "filter query (lucene syntax like fq=\"labels:opc AND datasources:win32\")") @Valid @RequestParam(value = "fq", required = false) String fq);
 
 
-            @ApiOperation(value = "get tag", nickname = "getTag", notes = "get the corresponding Tag", response = Tag.class, tags={ "tag", })
+            @ApiOperation(value = "get tag", nickname = "getItem", notes = "get the corresponding Tag", response = Tag.class, tags={ "tag", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "tag", response = Tag.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),

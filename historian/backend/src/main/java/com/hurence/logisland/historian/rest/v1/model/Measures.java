@@ -22,7 +22,7 @@ import org.threeten.bp.OffsetDateTime;
 * holds a double array of values for a Tag between start &amp; stop
 */
     @ApiModel(description = "holds a double array of values for a Tag between start & stop")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-18T17:02:10.968+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")

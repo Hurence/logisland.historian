@@ -1,6 +1,10 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
-import com.hurence.logisland.historian.rest.v1.model.*;
+import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
+import com.hurence.logisland.historian.rest.v1.model.Measures;
+import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.rest.v1.model.TreeNode;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
 import com.hurence.logisland.historian.service.MeasuresApiService;
 import com.hurence.logisland.historian.service.TagsApiService;
 import io.swagger.annotations.ApiParam;
@@ -18,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T14:55:12.030+02:00")
 
@@ -47,12 +50,12 @@ public class TagsApiController implements TagsApi {
     public ResponseEntity<Tag> createOrReplaceATag(
             @ApiParam(value = "itemId to be updated",required=true) @PathVariable("itemId") String itemId,
             @ApiParam(value = "new Tag definition" ,required=true )  @Valid @RequestBody Tag tag) {
-        TagReplaceReport report = service.createOrReplaceATag(tag, itemId);
-        if (report.tag.isPresent()) {
-            if (report.created) {
-                return new ResponseEntity<Tag>(report.tag.get(), HttpStatus.CREATED);
+        ReplaceReport<Tag> report = service.createOrReplaceATag(tag, itemId);
+        if (report.getItem().isPresent()) {
+            if (report.isCreated()) {
+                return new ResponseEntity<Tag>(report.getItem().get(), HttpStatus.CREATED);
             } else {
-                return new ResponseEntity<Tag>(report.tag.get(), HttpStatus.OK);
+                return new ResponseEntity<Tag>(report.getItem().get(), HttpStatus.OK);
             }
         } else {
             return new ResponseEntity<Tag>(HttpStatus.INTERNAL_SERVER_ERROR);

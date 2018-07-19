@@ -158,115 +158,85 @@ paths:
              $ref: '#/definitions/Error'
 
   /datasources/{datasourceId}:
-     get:
-       tags:
-         - datasource
-       summary: get Datasource
-       description: get the corresponding Datasource
-       operationId: getDatasource
-       produces:
-         - application/json
-       parameters:
-         - name: datasourceId
-           in: path
-           description: id of the Datasource to return
-           required: true
-           type: string
-       responses:
-         '200':
-           description: Datasource found
-           schema:
-             $ref: '#/definitions/Datasource'
-         '404':
-            description: Datasource resource not found
-         default:
-           description: unexpected error
-           schema:
-             $ref: '#/definitions/Error'
-     delete:
-       tags:
-         - datasource
-       summary: delete Datasource
-       description: remove the corresponding Datasource
-       operationId: deleteDatasource
-       parameters:
-         - name: datasourceId
-           in: path
-           description: id of the Datasource to be deleted
-           required: true
-           type: string
-       responses:
-         '404':
-           description: Datasource resource not found
-         '400':
-           description: Invalid ID supplied
-         '200':
-           description: Datasource successfully removed
-           schema:
-             $ref: '#/definitions/Datasource'
-         default:
-           description: unexpected error
-           schema:
-             $ref: '#/definitions/Error'
-     put:
-       tags:
-        - datasource
-       summary:  update Datasource
-       description: update an existing Datasource
-       operationId: updateDatasource
-       parameters:
-         - name: datasourceId
-           in: path
-           description: datasourceId to be updated
-           required: true
-           type: string
-         - name: datasource
-           in: body
-           description: new Datasource definition
-           required: true
-           schema:
-             $ref: '#/definitions/Datasource'
-       responses:
-        '404':
-          description: Datasource resource not found
-        '400':
-          description: Invalid ID supplied
-        '200':
-         description: Datasource successfuly updated
+    get:
+     tags:
+       - datasource
+     summary: get Datasource
+     description: get the corresponding Datasource
+     operationId: getDatasource
+     produces:
+       - application/json
+     parameters:
+       - name: datasourceId
+         in: path
+         description: id of the Datasource to return
+         required: true
+         type: string
+     responses:
+       '200':
+         description: Datasource found
          schema:
            $ref: '#/definitions/Datasource'
-     post:
-       tags:
-        - datasource
-       summary:  create new Datasource
-       description:  store a new Datasource
-       operationId: addDatasourceWithId
-       parameters:
-         - name: body
-           in: body
-           description: Datasource resource to add
-           required: true
-           schema:
-             $ref: '#/definitions/Datasource'
-         - name: datasourceId
-           in: path
-           description: datasourceId to
-           required: true
-           type: string
-       responses:
-         '400':
-           description: Invalid ID supplied
-         '200':
-           description: Datasource successfuly created
-           schema:
-             $ref: '#/definitions/Datasource'
-         default:
-           description: unexpected error
-           schema:
-             $ref: '#/definitions/Error'
-
-
-
+       '404':
+          description: Datasource resource not found
+       default:
+         description: unexpected error
+         schema:
+           $ref: '#/definitions/Error'
+    delete:
+     tags:
+       - datasource
+     summary: delete Datasource
+     description: remove the corresponding Datasource
+     operationId: deleteDatasource
+     parameters:
+       - name: datasourceId
+         in: path
+         description: id of the Datasource to be deleted
+         required: true
+         type: string
+     responses:
+       '404':
+         description: Datasource resource not found
+       '400':
+         description: Invalid ID supplied
+       '200':
+         description: Datasource successfully removed
+         schema:
+           $ref: '#/definitions/Datasource'
+       default:
+         description: unexpected error
+         schema:
+           $ref: '#/definitions/Error'
+    put:
+     tags:
+      - datasource
+     summary:  create or replace a Datasource
+     description: create or replace a Datasource
+     operationId: createOrReplaceADatasource
+     parameters:
+       - name: datasourceId
+         in: path
+         description: datasourceId to be added/replaced
+         required: true
+         type: string
+       - name: datasource
+         in: body
+         description: Datasource definition
+         required: true
+         schema:
+           $ref: '#/definitions/Datasource'
+     responses:
+      '400':
+        description: Invalid ID supplied
+      '201':
+        description: Datasource successfuly created
+        schema:
+          $ref: '#/definitions/Datasource'
+      '200':
+       description: Datasource successfuly replaced
+       schema:
+         $ref: '#/definitions/Datasource'
 
    # Tags API
   /tags:
@@ -301,7 +271,7 @@ paths:
          - tag
        summary: get tag
        description: get the corresponding Tag
-       operationId: getTag
+       operationId: getItem
        produces:
          - application/json
        parameters:
@@ -355,12 +325,12 @@ paths:
        parameters:
          - name: itemId
            in: path
-           description: itemId to be updated
+           description: itemId to be creted/replaced
            required: true
            type: string
          - name: tag
            in: body
-           description: new Tag definition
+           description: Tag definition
            required: true
            schema:
              $ref: '#/definitions/Tag'

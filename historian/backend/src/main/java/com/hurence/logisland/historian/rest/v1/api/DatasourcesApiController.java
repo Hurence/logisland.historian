@@ -2,6 +2,7 @@ package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.Datasource;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
 import com.hurence.logisland.historian.service.DatasourcesApiService;
 import com.hurence.logisland.historian.service.OpcService;
 import io.swagger.annotations.ApiParam;
@@ -38,15 +39,19 @@ public class DatasourcesApiController implements DatasourcesApi {
         this.opcService = opcService;
     }
 
-    public ResponseEntity<Datasource> addDatasourceWithId(@ApiParam(value = "Datasource resource to add", required = true) @Valid @RequestBody Datasource body, @ApiParam(value = "datasourceId to", required = true) @PathVariable("datasourceId") String datasourceId) {
-
-        Optional<Datasource> Datasource = service.addDatasourceWithId(body, datasourceId);
-        if (Datasource.isPresent()) {
-            return new ResponseEntity<Datasource>(Datasource.get(), HttpStatus.OK);
-
+    @Override
+    public ResponseEntity<Datasource> createOrReplaceADatasource(
+            @ApiParam(value = "datasourceId to be added/replaced",required=true) @PathVariable("datasourceId") String datasourceId,
+            @ApiParam(value = "Datasource definition" ,required=true )  @Valid @RequestBody Datasource datasource) {
+        ReplaceReport<Datasource> report = service.createOrReplaceADatasource(datasource, datasourceId);
+        if (report.getItem().isPresent()) {
+            if (report.isCreated()) {
+                return new ResponseEntity<Datasource>(report.getItem().get(), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<Datasource>(report.getItem().get(), HttpStatus.OK);
+            }
         } else {
-            return new ResponseEntity<Datasource>(HttpStatus.BAD_REQUEST);
-
+            return new ResponseEntity<Datasource>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -86,15 +91,5 @@ public class DatasourcesApiController implements DatasourcesApi {
         }
     }
 
-    public ResponseEntity<Datasource> updateDatasource(@ApiParam(value = "datasourceId to be updated", required = true) @PathVariable("datasourceId") String datasourceId, @ApiParam(value = "new Datasource definition", required = true) @Valid @RequestBody Datasource datasource) {
-        Optional<Datasource> updatedDatasource = service.updateDatasource(datasource, datasourceId);
-        if (updatedDatasource.isPresent()) {
-            return new ResponseEntity<Datasource>(updatedDatasource.get(), HttpStatus.OK);
-
-        } else {
-            return new ResponseEntity<Datasource>(HttpStatus.NOT_FOUND);
-
-        }
-    }
 
 }
