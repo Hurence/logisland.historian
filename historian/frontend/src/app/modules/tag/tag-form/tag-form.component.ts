@@ -80,6 +80,8 @@ export class TagFormComponent implements OnInit, OnChanges {
     this.confirmationService.confirm({
       message: this.DISCARD_CHANGE_MSG,
       header: 'Confirmation',
+      rejectLabel: 'Cancel',
+      acceptLabel: 'Ok',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.rebuildForm();

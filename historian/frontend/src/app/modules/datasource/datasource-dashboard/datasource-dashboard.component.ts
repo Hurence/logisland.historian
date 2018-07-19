@@ -97,6 +97,8 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
     return Observable.create((observer: Observer<boolean>) => {
       this.confirmationService.confirm({
           message: this.DISCARD_CHANGE_QUESTION_MSG,
+          rejectLabel: 'Cancel',
+          acceptLabel: 'Ok',
           header: 'Confirmation',
           icon: 'pi pi-exclamation-triangle',
           accept: () => {
