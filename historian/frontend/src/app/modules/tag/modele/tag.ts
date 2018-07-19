@@ -10,6 +10,7 @@ export interface ITag {
     tag_name: string;
     data_type: TagDataType;
     update_rate: number;
+    enabled: boolean;
     creation_date?: number;
     last_modification_date?: number;
     last_polling_date?: number;
@@ -36,6 +37,8 @@ export const enum TagDataType {
 }
 
 export abstract class Tag implements ITag {
+    static TAG_UPDATE_RATE_DEFAUT: number = environment.TAG_UPDATE_RATE_DEFAUT
+
     id: string;
     datasource_id: string;
     domain: string;
@@ -44,6 +47,7 @@ export abstract class Tag implements ITag {
     tag_name: string;
     data_type: TagDataType;
     update_rate: number;
+    enabled: boolean;
     creation_date?: number;
     last_modification_date?: number;
     last_polling_date?: number;
@@ -54,6 +58,7 @@ export abstract class Tag implements ITag {
 
     constructor(options: ITag) {
         Object.assign(this, options);
-        if (this.update_rate === null || this.update_rate === null) this.update_rate = environment.TAG_UPDATE_RATE_DEFAUT;
+        if (this.update_rate === null || this.update_rate === undefined) this.update_rate = Tag.TAG_UPDATE_RATE_DEFAUT;
+        if (this.enabled === null || this.enabled === undefined) this.enabled = false;
     }
 }

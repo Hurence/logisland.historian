@@ -53,11 +53,11 @@ export class NgTreenodeService {
     }
 
   private getOrCreateChildForNode(obj: TreeNode, value: string, typeNode: string): TreeNode {
-    const found = obj.children.find(n => n.data === value);
+    const found = obj.children.find(n => n.label === value);
     if (found) return found;
     const node: TreeNode = {
         label: value,
-        data: value,
+        data: false,
         leaf: false,
         type: typeNode,
         children: [],
@@ -67,11 +67,11 @@ export class NgTreenodeService {
   }
 
   private getOrCreateChildForNodes(children: TreeNode[], value: string, typeNode: string): TreeNode {
-    const found = children.find(n => n.data === value);
+    const found = children.find(n => n.label === value);
     if (found) return found;
     const node: TreeNode = {
         label: value,
-        data: value,
+        data: false,
         leaf: false,
         type: typeNode,
         children: [],

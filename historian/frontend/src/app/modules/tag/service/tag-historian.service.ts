@@ -1,6 +1,6 @@
 import 'rxjs/add/observable/of';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Observable } from 'rxjs';
@@ -10,13 +10,14 @@ import { environment } from '../../../../environments/environment';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
 import { IModelService } from '../../../shared/base-model-service';
 import { Utilities } from '../../../shared/utilities.service';
-import { HistorianTag } from '../modele/HistorianTag';
+import { HistorianTag, IHistorianTag } from '../modele/HistorianTag';
 
 @Injectable()
-export class TagHistorianService implements IModelService<HistorianTag> {
+export class TagHistorianService {
 
   private tagsUrl = `${environment.HISTORIAN_API_URL}`;
   private SUCCESSFULLY_SAVED_MSG = 'successfully added tag';
+  private SUCCESSFULLY_UPDATED_MSG = 'successfully modified tag';
   private SUCCESSFULLY_DELETED_MSG = 'successfully deleted tag';
 
   constructor(private http: HttpClient,
@@ -73,16 +74,35 @@ export class TagHistorianService implements IModelService<HistorianTag> {
     );
   }
 
-  save(obj: HistorianTag): Observable<HistorianTag> {
-    return this.http.post<HistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj).pipe(
-      map(t => new HistorianTag(t)),
-      tap(tag => {
-        const detail = `Saved tag with id ${tag.id}`;
-        this.messageService.add({
-          severity: 'success',
-          summary: this.SUCCESSFULLY_SAVED_MSG,
-          detail: detail,
-        });
+  createOrReplace(obj: HistorianTag): Observable<HistorianTag> {
+    return this.http.put<HistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj, { observe: 'response' }).pipe(
+      tap(resp => {
+        const tag : IHistorianTag = resp.body;
+        switch(resp.status) {
+          case 201: {
+            this.messageService.add({
+              severity: 'success',
+              summary: this.SUCCESSFULLY_SAVED_MSG,
+              detail: `Saved tag with id ${tag.id}`,
+            });
+            break;
+          }
+          case 200: {
+            this.messageService.add({
+              severity: 'success',
+              summary: this.SUCCESSFULLY_UPDATED_MSG,
+              detail: `Modified tag with id ${tag.id}`,
+            });
+            break;
+          }
+          default: {
+            console.error(`createOrReplace(${obj}) failed`, resp)
+            break;
+          }
+       }
+      }),
+      map(resp => {
+        return new HistorianTag(resp.body);
       }),
     );
   }
@@ -103,12 +123,6 @@ export class TagHistorianService implements IModelService<HistorianTag> {
           detail: detail,
         });
       })
-    );
-  }
-
-  update(obj: HistorianTag): Observable<HistorianTag> {
-    return this.http.put<HistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj).pipe(
-      map(t => new HistorianTag(t))
     );
   }
 

@@ -18,7 +18,7 @@
                     <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
                     class="mx-1 my-1"
                     icon="fa fa-trash"></button>
-                    <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
+                    <p-inputSwitch [(ngModel)]="node.data" (click)="toggleEnableds(node);$event.stopPropagation();"></p-inputSwitch>
             </div>
 
         </div>
@@ -36,7 +36,7 @@
                     <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
                     class="mx-1 my-1"
                     icon="fa fa-trash"></button>
-                    <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
+                    <p-inputSwitch [(ngModel)]="node.data" (click)="toggleEnableds(node);$event.stopPropagation();"></p-inputSwitch>
             </div>
 
         </div>
@@ -54,7 +54,7 @@
                 <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
                 class="mx-1 my-1"
                 icon="fa fa-trash"></button>
-                <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
+                <p-inputSwitch [(ngModel)]="node.data" (click)="toggleEnableds(node);$event.stopPropagation();"></p-inputSwitch>
             </div>
 
         </div>
@@ -73,7 +73,7 @@
                     <button pButton type="button" (click)="deleteTag(node); $event.stopPropagation();"
                     class="mx-1 my-1"
                     icon="fa fa-trash"></button>
-                    <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="$event.stopPropagation();"></p-inputSwitch>
+                    <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="toggleEnabled(node);$event.stopPropagation();"></p-inputSwitch>
             </div>
             
         </div>
@@ -93,7 +93,7 @@
                     styleClass="mx-1 my-1"
                     icon="fa fa-trash"
                     disabled="true"></p-button>
-                    <p-inputSwitch [(ngModel)]="node.data.enabled"></p-inputSwitch>
+                    <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="toggleEnabled(node);$event.stopPropagation();"></p-inputSwitch>
             </div>
             
         </div>

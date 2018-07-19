@@ -92,23 +92,50 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     const tagNodes = this.getNodesFromNode(node, [TypesName.TAG_HISTORIAN]);
     const tagsToDelete: string[] = tagNodes.map(tagNode => (<IHistorianTag>tagNode.data).id);
     this.tagHistorianService.deleteMany(tagsToDelete).subscribe(deletedTags => {
-      tagNodes.forEach(n => {
-        if (n.type === TypesName.TAG_HISTORIAN) {
-          n.data = new OpcTag(n.data);
-          n.type = TypesName.TAG_OPC;
-          n.icon = n.type;
-        }
-      });
+      tagNodes.forEach(n => this.updateNodeAfterDeletingTag(n));
     });
   }
 
   deleteTag(node: TreeNode): void {
-    this.tagHistorianService.delete(node.data.id).subscribe(deletedTag => {
-      if (node.type === TypesName.TAG_HISTORIAN) {
-        node.data = new OpcTag(node.data);
-        node.type = TypesName.TAG_OPC;
-        node.icon = node.type;
-      }
+    this.tagHistorianService.delete(node.data.id).subscribe(deletedTag => this.updateNodeAfterDeletingTag(node));
+  }
+
+  private updateNodeAfterDeletingTag(node: TreeNode): void {
+    if (node.type === TypesName.TAG_HISTORIAN) {
+      (<IHistorianTag>node.data).update_rate = null;
+      (<IHistorianTag>node.data).enabled = false;
+      const opcTag = new OpcTag(node.data);
+      node.data = opcTag;
+      node.type = TypesName.TAG_OPC;
+      node.icon = node.type;
+    }
+  }
+
+  toggleEnableds(node: TreeNode): void {
+    const enabledRootNode = node.data;
+    this.applyToNodeOfTag(node, 
+      this.forceToggleEnabled.bind(this, enabledRootNode), 
+      this.conditionToggle.bind(this, enabledRootNode));
+  }
+
+  private conditionToggle(enable: boolean, tag: Tag): boolean {
+    if (tag.enabled === enable) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private forceToggleEnabled(enabled: boolean, node: TreeNode): void {
+    node.data.enabled = enabled;
+    this.tagHistorianService.createOrReplace(new HistorianTag(node.data)).subscribe(t => {
+      this.updateNodeAfteSavingTag(node, t);
+    });
+  }
+
+  toggleEnabled(node: TreeNode): void {
+    this.tagHistorianService.createOrReplace(new HistorianTag(node.data)).subscribe(t => {
+      this.updateNodeAfteSavingTag(node, t);
     });
   }
 
@@ -122,12 +149,16 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
         detail: `Tag id was '${tag.id}'`,
       });
     } else {
-      Object.assign(nodeToUpdate.data, tag);
-      if (nodeToUpdate.type === TypesName.TAG_OPC) {
-        nodeToUpdate.data = new HistorianTag(nodeToUpdate.data);
-        nodeToUpdate.type = TypesName.TAG_HISTORIAN;
-        nodeToUpdate.icon = nodeToUpdate.type;
-      }
+      this.updateNodeAfteSavingTag(nodeToUpdate, tag);
+    }
+  }
+
+  private updateNodeAfteSavingTag(node: TreeNode, tag: HistorianTag): void {
+    Object.assign(node.data, tag);
+    if (node.type === TypesName.TAG_OPC) {
+      node.data = new HistorianTag(node.data);
+      node.type = TypesName.TAG_HISTORIAN;
+      node.icon = node.type;
     }
   }
 /**
@@ -157,6 +188,23 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     }
     return undefined;
   }
+
+  /**
+ * return node of tag or undefined if not found
+ */
+private applyToNodeOfTag(node: TreeNode, method: (TreeNode: TreeNode) => void,
+                        conditionOnTag: (tag: Tag) => boolean): void {
+  if (node === undefined) return undefined;
+  switch (node.type) {
+    case TypesName.TAG_HISTORIAN:
+    case TypesName.TAG_OPC:
+      if (conditionOnTag(node.data)) method(node);
+     break;
+    default: {
+      node.children.forEach(n => this.applyToNodeOfTag(n, method, conditionOnTag));
+    }
+  }
+}
 
   protected loadANodeIfNeeded(node: TreeNode): boolean {
     return false;
