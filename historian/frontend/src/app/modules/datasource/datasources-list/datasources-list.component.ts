@@ -2,10 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { Observable ,  of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { Dataset } from '../../../dataset/dataset';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
-import { DialogService } from '../../../dialog/dialog.service';
+import { ConfirmationService } from 'primeng/components/common/api';
 
 @Component({
   selector: 'app-datasources-list',
@@ -15,7 +14,6 @@ import { DialogService } from '../../../dialog/dialog.service';
 export class DatasourcesListComponent implements OnInit {
 
   datasources$: Observable<Datasource[]>;
-  @Input() dataSet: Dataset;
   @Input() selectedDatasource: Datasource;
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();
 
@@ -23,7 +21,7 @@ export class DatasourcesListComponent implements OnInit {
   private REMOVE_DATASOURCE_MSG = 'Remove data source';
 
   constructor(private datasourceService: DatasourceService,
-              private dialogService: DialogService) { }
+              private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
     this.getDatasources();
@@ -38,37 +36,29 @@ export class DatasourcesListComponent implements OnInit {
       .pipe(catchError(error => of([])));
   }
 
-  private onDeleteDatasource(datasource: Datasource): void {
+  onDeleteDatasource(datasource: Datasource): void {
     const msg = `Delete data source ${datasource.description} ${datasource.datasource_type} ?`;
-    this.dialogService.confirm(msg, this.CANCEL_MSG, this.REMOVE_DATASOURCE_MSG)
-      .subscribe(ok => {
-        if (ok) {
-          this.datasourceService.delete(datasource.id)
-            .subscribe(deletedDs => {
-              this.dataSet.removeDatasource(deletedDs);
-              this.getDatasources();
-            });
-        }
-      });
+    this.confirmationService.confirm({
+      message: msg,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      rejectLabel: this.CANCEL_MSG,
+      acceptLabel: this.REMOVE_DATASOURCE_MSG,
+      accept: () => {
+        this.datasourceService.delete(datasource.id)
+        .subscribe(deletedDs => {
+          this.getDatasources();
+          if (this.selectedDatasource.id === deletedDs.id) {
+            this.onSelect(null);
+          }
+        });
+      },
+      reject: () => { }
+    });
   }
 
-  private onSelect(datasource: Datasource) {
+  onSelect(datasource: Datasource) {
     this.selectedDatasourceE.emit(datasource);
-  }
-
-  private onAddToDataset(datasource: Datasource) {
-    this.dataSet.addDatasource(datasource);
-  }
-
-  private onRemoveFromDataset(datasource: Datasource) {
-    this.dataSet.removeDatasource(datasource);
-  }
-
-  private dataSetContain(datasource: Datasource): boolean {
-    if (this.dataSet) {
-      return this.dataSet.containDatasource(datasource);
-    }
-    return false;
   }
 
 }

@@ -1,31 +1,23 @@
+<div class="h-100 list-container sticky-top">
+  <div class="row no-gutters">
+    <div *ngFor="let datasource of datasources$ | async"
+          class="col-lg-12 col-md-12 datasource-element">
+      <div class="row no-gutters">
+        <div class="col-lg-10 col-md-10" (click)="onSelect(datasource)">
+          <app-button-labelled class="h-100"
+            [centerLabel]="datasource.id" [topRightLabel]="datasource.datasource_type"
+            [isActive]="datasource.id === selectedDatasource.id"
+            [styleClass]="'blue-on-hover'">
+          </app-button-labelled>
+        </div>
 
-
-
-<!-- <h6>editing dataset: {{dataSet?.name}}</h6> -->
-
-
-<div *ngFor="let datasource of datasources$ | async" (click)="onSelect(datasource)">
-
-  <app-button-labelled [centerLabel]="datasource.description" [topRightLabel]="datasource.datasource_type"
-                        [isActive]="datasource.id === selectedDatasource.id">
-  </app-button-labelled>
-
-  <button type="button" class="btn btn-outline-primary text-uppercase" 
-          (click)="onAddToDataset(datasource)" *ngIf="!dataSetContain(datasource)"
-          i18n="add a data source to current data set|button to add the data source to the selection">
-    ADD TO DATA SET
-  </button>
-
-  <button type="button" class="btn btn-danger text-uppercase" 
-          (click)="onRemoveFromDataset(datasource)" *ngIf="dataSetContain(datasource)"
-          i18n="remove a data source from current data set|button to remove the data source from the selection">
-    REMOVE FROM DATA SET
-  </button>
-
-  <button type="button" class="btn btn-outline-danger text-uppercase" 
-          (click)="onDeleteDatasource(datasource)"
-          i18n="remove a data source definitely from the application|button to remove the data source from the application">
-    remove data source
-  </button>
-
+        <div class="col-lg-2 col-md-2">
+          <button type="button" class="btn"
+          (click)="onDeleteDatasource(datasource)">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

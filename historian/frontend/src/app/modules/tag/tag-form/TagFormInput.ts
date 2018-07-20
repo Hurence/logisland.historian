@@ -1,4 +1,5 @@
 import { ITag, Tag } from '../modele/tag';
+import { TagUtils } from '../modele/TagUtils';
 
 export interface ITagFormInput {
     tag: ITag;
@@ -11,7 +12,7 @@ export class TagFormInput implements ITagFormInput {
 
     constructor(tag: ITag) {
         this.tag = tag;
-        if (Tag.isHistorianTag(tag)) {
+        if (TagUtils.isHistorianTag(tag)) {
             this.isCreation = false;
         } else {
             this.isCreation = true;

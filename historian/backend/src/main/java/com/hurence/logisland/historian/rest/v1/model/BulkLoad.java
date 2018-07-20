@@ -12,15 +12,16 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
 
 /**
 * BulkLoad
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class BulkLoad  implements Serializable {
@@ -65,8 +66,9 @@ public class BulkLoad  implements Serializable {
     return startTime;
     }
 
-        public void setStartTime(String startTime) {
+        public BulkLoad setStartTime(String startTime) {
         this.startTime = startTime;
+        return this;
         }
 
         public BulkLoad generationDuration(Integer generationDuration) {
@@ -86,8 +88,9 @@ public class BulkLoad  implements Serializable {
     return generationDuration;
     }
 
-        public void setGenerationDuration(Integer generationDuration) {
+        public BulkLoad setGenerationDuration(Integer generationDuration) {
         this.generationDuration = generationDuration;
+        return this;
         }
 
         public BulkLoad importDuration(Integer importDuration) {
@@ -107,8 +110,9 @@ public class BulkLoad  implements Serializable {
     return importDuration;
     }
 
-        public void setImportDuration(Integer importDuration) {
+        public BulkLoad setImportDuration(Integer importDuration) {
         this.importDuration = importDuration;
+        return this;
         }
 
         public BulkLoad numMetricsImported(Integer numMetricsImported) {
@@ -128,8 +132,9 @@ public class BulkLoad  implements Serializable {
     return numMetricsImported;
     }
 
-        public void setNumMetricsImported(Integer numMetricsImported) {
+        public BulkLoad setNumMetricsImported(Integer numMetricsImported) {
         this.numMetricsImported = numMetricsImported;
+        return this;
         }
 
         public BulkLoad numPointsImported(Long numPointsImported) {
@@ -149,8 +154,9 @@ public class BulkLoad  implements Serializable {
     return numPointsImported;
     }
 
-        public void setNumPointsImported(Long numPointsImported) {
+        public BulkLoad setNumPointsImported(Long numPointsImported) {
         this.numPointsImported = numPointsImported;
+        return this;
         }
 
         public BulkLoad metrics(List<String> metrics) {
@@ -178,8 +184,9 @@ public class BulkLoad  implements Serializable {
     return metrics;
     }
 
-        public void setMetrics(List<String> metrics) {
+        public BulkLoad setMetrics(List<String> metrics) {
         this.metrics = metrics;
+        return this;
         }
 
 
@@ -209,7 +216,7 @@ public class BulkLoad  implements Serializable {
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class BulkLoad {\n");
+sb.append("{\n");
 
 sb.append("    startTime: ").append(toIndentedString(startTime)).append("\n");
 sb.append("    generationDuration: ").append(toIndentedString(generationDuration)).append("\n");
@@ -221,14 +228,17 @@ sb.append("}");
 return sb.toString();
 }
 
-/**
-* Convert the given object to string with each line indented by 4 spaces
-* (except the first line).
-*/
-private String toIndentedString(java.lang.Object o) {
-if (o == null) {
-return "null";
-}
-return o.toString().replace("\n", "\n    ");
-}
+    /**
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
+    private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

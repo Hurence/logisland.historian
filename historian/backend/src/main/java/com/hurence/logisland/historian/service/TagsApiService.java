@@ -19,8 +19,11 @@ package com.hurence.logisland.historian.service;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.rest.v1.model.TreeNode;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.TagReplaceReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.FacetPivotFieldEntry;
@@ -30,6 +33,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class TagsApiService {
@@ -39,12 +43,20 @@ public class TagsApiService {
     @Resource
     private SolrTagRepository repository;
 
+    private DataflowsApiService dataflowsApiService;
+
+    @Autowired
+    public void setDataflowsApiService(DataflowsApiService dataflowsApiService) {
+        this.dataflowsApiService = dataflowsApiService;
+    }
+
 
     public Optional<Tag> deleteTag(String itemId) {
         logger.info("deleting Tag {}", itemId);
         Optional<Tag> tagToRemove = repository.findById(itemId);
         if (tagToRemove.isPresent()) {
             repository.delete(tagToRemove.get());
+            dataflowsApiService.updateOpcDataflow();
         }
         return tagToRemove;
     }
@@ -55,22 +67,24 @@ public class TagsApiService {
         return repository.findById(itemId);
     }
 
-
-    public Optional<Tag> updateTag(Tag tag) {
-        logger.debug("updating Tag {}", tag.getId());
+    private ReplaceReport<Tag> createOrReplaceATag(Tag tag) {
+        logger.debug("create or replace Tag {}", tag.getId());
         if (repository.existsById(tag.getId())) {
-            return Optional.of(repository.save(tag));
+            Tag savedTag = repository.save(tag);
+            dataflowsApiService.updateOpcDataflow();
+            return new TagReplaceReport(savedTag, false);
         } else {
-            logger.error("Tag {} not found, unable to update", tag.getId());
-            return Optional.empty();
+            Tag savedTag = repository.save(tag);
+            dataflowsApiService.updateOpcDataflow();
+            return new TagReplaceReport(savedTag, true);
         }
     }
 
-    public Optional<Tag> updateTag(Tag tag, String itemId) {
+    public ReplaceReport<Tag> createOrReplaceATag(Tag tag, String itemId) {
         if (!tag.getId().equals(itemId)) {
-            return updateTag(tag.id(itemId));
+            return createOrReplaceATag(tag.id(itemId));
         } else {
-            return updateTag(tag);
+            return createOrReplaceATag(tag);
         }
     }
 
@@ -82,16 +96,8 @@ public class TagsApiService {
         return tags;
     }
 
-    public Optional<Tag> addTagWithId(Tag body, String itemId) {
-
-        Optional<Tag> datasourceToRemove = getTag(itemId);
-        if (datasourceToRemove.isPresent()) {
-            logger.info("Tag already {} exists, delete it first", itemId);
-            return Optional.empty();
-        } else {
-            body.setId(itemId);
-            return Optional.of(repository.save(body));
-        }
+    public List<Tag> getAllTagsFromDatasource(String datasourceId) {
+        return repository.findByDatasource(datasourceId);
     }
 
     public List<TreeNode> getTreeTag(int page, int limit) {
@@ -114,4 +120,24 @@ public class TagsApiService {
         node.setChildren(children);
         return node;
     }
+
+    /**
+     *
+     * @param tags
+     * @return true if all items were created. If at least one tag was updated (existed before), it returns false.
+     */
+    public List<Tag> SaveOrUpdateMany(List<Tag> tags) {
+        List<Tag> updatedTags = tags.stream().map(tag -> repository.save(tag)).collect(Collectors.toList());
+        dataflowsApiService.updateOpcDataflow();
+        return updatedTags;
+    }
+
+    public List<Tag> deleteManyTag(List<String> tagIds) {
+        List<Tag> supressedTags = tagIds.stream().map(id -> this.deleteTag(id))
+                .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty())
+                .collect(Collectors.toList());
+        dataflowsApiService.updateOpcDataflow();
+        return supressedTags;
+    }
+
 }

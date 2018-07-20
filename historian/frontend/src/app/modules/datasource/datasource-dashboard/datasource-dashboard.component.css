@@ -1,0 +1,67 @@
+.col-lg-4.col-md-4.bg-secondary.content, .col-lg-8.col-md-8.content{
+    background-color: #ffffff !important;
+    background-color: #ffffff !important;
+}
+.datasource-detail-title {
+    height: 10%;
+    max-height: 10%;
+    background-color: #186ba0;
+}
+.datasource-detail-content {
+    position: relative;
+    height: 100%;
+}
+h1 {
+    font-size: 1rem;
+    height: 100%;
+}
+.row.content {
+    height: 90%;
+    max-height: 90%;
+}
+.datasource-tag-detail-container {
+    height: 50%;
+}
+.h-inherit {
+    height: inherit;
+    max-height: inherit;
+}
+.w-inherit {
+    height: inherit;
+    max-height: inherit;
+}
+.col-lg-12, .col-md-12 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    /* margin-top: 0.5rem; */
+    margin-bottom: 0.5rem;
+}
+.datasource-dashboard-title {
+    margin: 0;
+}
+.rigth-panel {
+    padding: 2%;
+}
+.left-panel {
+    padding: 2%;
+    min-height: 600px;
+}
+.small-column {
+    max-height: 70px;
+}
+.content-header {
+    position: relative;
+    padding: 15px 15px 0 15px;
+}
+
+@media (max-width: 768px) {
+    .sticky-top {
+      z-index: 2;
+      position: initial;
+    }
+}
+@media (min-width: 768px) {
+    .sticky-top {
+        z-index: 2;
+    }
+}

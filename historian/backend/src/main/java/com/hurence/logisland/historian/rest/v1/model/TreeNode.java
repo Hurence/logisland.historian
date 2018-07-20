@@ -13,15 +13,16 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
 
 /**
 * TreeNode
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class TreeNode  implements Serializable {
@@ -55,8 +56,9 @@ public class TreeNode  implements Serializable {
     return value;
     }
 
-        public void setValue(String value) {
+        public TreeNode setValue(String value) {
         this.value = value;
+        return this;
         }
 
         public TreeNode totalChildNumber(Long totalChildNumber) {
@@ -77,8 +79,9 @@ public class TreeNode  implements Serializable {
     return totalChildNumber;
     }
 
-        public void setTotalChildNumber(Long totalChildNumber) {
+        public TreeNode setTotalChildNumber(Long totalChildNumber) {
         this.totalChildNumber = totalChildNumber;
+        return this;
         }
 
         public TreeNode children(List<TreeNode> children) {
@@ -105,8 +108,9 @@ public class TreeNode  implements Serializable {
     return children;
     }
 
-        public void setChildren(List<TreeNode> children) {
+        public TreeNode setChildren(List<TreeNode> children) {
         this.children = children;
+        return this;
         }
 
 
@@ -133,7 +137,7 @@ public class TreeNode  implements Serializable {
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class TreeNode {\n");
+sb.append("{\n");
 
 sb.append("    value: ").append(toIndentedString(value)).append("\n");
 sb.append("    totalChildNumber: ").append(toIndentedString(totalChildNumber)).append("\n");
@@ -142,14 +146,17 @@ sb.append("}");
 return sb.toString();
 }
 
-/**
-* Convert the given object to string with each line indented by 4 spaces
-* (except the first line).
-*/
-private String toIndentedString(java.lang.Object o) {
-if (o == null) {
-return "null";
-}
-return o.toString().replace("\n", "\n    ");
-}
+    /**
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
+    private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

@@ -1,36 +1,29 @@
 <!-- {{question | json}} -->
   <!-- CHOOSE CONTROL TYPE -->
-  <div [ngSwitch]="question.controlType" class="input-group mb-3  text-capitalize">
+  <div [formGroup]="form"  [ngSwitch]="question.controlType" class="form-group mb-3  text-capitalize">
+      <label id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
 
-    <div class="input-group-prepend">
-      <span class="input-group-text bg-primary" id="question.key" [attr.for]="question.key">{{question.label}}</span>
-    </div>
+
 
     <!-- TEXTBOX -->
     <ng-container *ngSwitchCase="'textbox'">
-      <div [formGroup]="form" class="input-group-container">
         <input [formControlName]="question.key" class="form-control"
           [placeholder]="question.placeholder" [id]="question.key" [type]="question.type"
           [required]="question.required">
-      </div>
     </ng-container>
 
     <!-- NUMBER -->
     <ng-container *ngSwitchCase="'number'">
-    <div [formGroup]="form" class="input-group-container">
       <input [formControlName]="question.key" class="form-control"
         [placeholder]="question.placeholder" [id]="question.key" [type]="'number'"
         [required]="question.required">
-    </div>
     </ng-container>
 
     <!-- SELECT (DROPDOWN)-->
     <ng-container *ngSwitchCase="'dropdown'">
-      <div [formGroup]="form" class="input-group-container">
         <select [id]="question.key" [formControlName]="question.key" class]="form-control" [required]="question.required">
           <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
         </select>
-      </div>
     </ng-container>
 
     <!-- ARRAY -->

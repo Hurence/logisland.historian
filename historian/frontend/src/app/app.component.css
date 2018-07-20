@@ -1,3 +1,11 @@
+header {
+  height: 10%;
+  min-height: 10px;
+  max-height: 60px;
+}
+.row.content {
+  height: 88%;
+}
 #sidebar .list-group-item {
     /* border-radius: 0;
     background-color: #333;
@@ -17,8 +25,6 @@ text-decoration: underline;
   }
 #sidebar {
   background: #272c33;
-  height: 100vh;
-  min-height: 100%;
 }
 /* .nav-toggle{
   left: -10px;
@@ -32,7 +38,9 @@ text-decoration: underline;
 #sidebar .list-group-item:not(.collapsed) {
     background-color: #272c33;
 }
-
+.fa-navicon:before, .fa-reorder:before, .fa-bars:before{
+  color: #fff;
+}
 /* closed state */
 #sidebar .list-group .list-group-item[aria-expanded="false"]::after {
   content: " \f0d7";
@@ -86,7 +94,9 @@ text-decoration: underline;
         display:none;
     }
 }
-
+#sidebar i.fa {
+  width: 20px;
+}
 /* change transition animation to width when entire sidebar is toggled */
 #sidebar.collapse {
   -webkit-transition-timing-function: ease;

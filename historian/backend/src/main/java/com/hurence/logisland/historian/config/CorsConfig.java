@@ -18,15 +18,19 @@ package com.hurence.logisland.historian.config;
 
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter;
 import org.keycloak.adapters.springsecurity.filter.KeycloakPreAuthActionsFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
@@ -57,6 +61,8 @@ public class CorsConfig {
     }
 
     @Configuration
+    @EnableWebSecurity
+    @ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
     public static class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
 
@@ -84,6 +90,9 @@ public class CorsConfig {
             return new NullAuthenticatedSessionStrategy();
         }
 
+        public void configure(WebSecurity web) throws Exception {
+            web.ignoring().antMatchers("/api/v1/dataflows/**");
+        }
 
         @Override
         protected void configure(final HttpSecurity http) throws Exception {
@@ -97,7 +106,7 @@ public class CorsConfig {
         }
 
         @Bean
-        KeycloakConfigResolver keycloakConfigResolver() {
+        public KeycloakConfigResolver keycloakConfigResolver() {
             return new KeycloakSpringBootConfigResolver();
         }
 

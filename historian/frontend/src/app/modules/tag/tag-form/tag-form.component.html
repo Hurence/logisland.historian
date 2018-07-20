@@ -1,28 +1,12 @@
-<h6 _ngcontent-c2="" class="text-uppercase">TAGS CONFIGURATION <small _ngcontent-c2="" class="text-muted">Modify the label, description and update rate of a tag or multiple tags</small></h6>
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
 
-
-
-<div *ngIf="visible">
-  <form (ngSubmit)="onSubmit()" [formGroup]="form">
-
-    <div *ngFor="let question of questionsMultiSelection" class="">
-      <app-question [question]="question" [form]="form"></app-question>
-    </div>
-
-    <div class="form-row">
-      <button class="btn btn-success" type="submit" [disabled]="!form.valid">{{submitBtnMsg}}</button>
-    </div>
-
-    <ng-container *ngIf="showEntireForm">
-      <div *ngFor="let question of questionsSingleSelection" class="">
-        <app-question [question]="question" [form]="form"></app-question>
-      </div>
-    </ng-container>
-  </form>
-
-  <div *ngIf="payLoad" class="form-row">
-    <p>
-    <strong>Saved the following values</strong><br>{{payLoad}}
-    </p>
+  <div *ngFor="let question of questions" class="">
+    <app-question [question]="question" [form]="form"></app-question>
   </div>
-</div>
+
+  <div class="form-row">
+    <button type="button" (click)="revert()" class="btn btn-danger" [disabled]="!form.valid">Cancel</button>
+
+    <button class="btn btn-success" type="submit" [disabled]="!form.valid">{{submitBtnMsg}}</button>
+  </div>
+</form>

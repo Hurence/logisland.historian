@@ -10,15 +10,16 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
 
 /**
 * Property
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Property  implements Serializable {
@@ -52,8 +53,9 @@ public class Property  implements Serializable {
     return key;
     }
 
-        public void setKey(String key) {
+        public Property setKey(String key) {
         this.key = key;
+        return this;
         }
 
         public Property type(String type) {
@@ -73,8 +75,9 @@ public class Property  implements Serializable {
     return type;
     }
 
-        public void setType(String type) {
+        public Property setType(String type) {
         this.type = type;
+        return this;
         }
 
         public Property value(String value) {
@@ -95,8 +98,9 @@ public class Property  implements Serializable {
     return value;
     }
 
-        public void setValue(String value) {
+        public Property setValue(String value) {
         this.value = value;
+        return this;
         }
 
 
@@ -123,7 +127,7 @@ public class Property  implements Serializable {
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Property {\n");
+sb.append("{\n");
 
 sb.append("    key: ").append(toIndentedString(key)).append("\n");
 sb.append("    type: ").append(toIndentedString(type)).append("\n");
@@ -132,14 +136,17 @@ sb.append("}");
 return sb.toString();
 }
 
-/**
-* Convert the given object to string with each line indented by 4 spaces
-* (except the first line).
-*/
-private String toIndentedString(java.lang.Object o) {
-if (o == null) {
-return "null";
-}
-return o.toString().replace("\n", "\n    ");
-}
+    /**
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
+    private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

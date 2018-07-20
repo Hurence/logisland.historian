@@ -11,15 +11,16 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
 
 /**
 * Alert
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Alert  implements Serializable {
@@ -60,8 +61,9 @@ public class Alert  implements Serializable {
     return recordType;
     }
 
-        public void setRecordType(String recordType) {
+        public Alert setRecordType(String recordType) {
         this.recordType = recordType;
+        return this;
         }
 
         public Alert timestamp(Long timestamp) {
@@ -81,8 +83,9 @@ public class Alert  implements Serializable {
     return timestamp;
     }
 
-        public void setTimestamp(Long timestamp) {
+        public Alert setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+        return this;
         }
 
         public Alert message(String message) {
@@ -102,8 +105,9 @@ public class Alert  implements Serializable {
     return message;
     }
 
-        public void setMessage(String message) {
+        public Alert setMessage(String message) {
         this.message = message;
+        return this;
         }
 
         public Alert severity(Integer severity) {
@@ -123,8 +127,9 @@ public class Alert  implements Serializable {
     return severity;
     }
 
-        public void setSeverity(Integer severity) {
+        public Alert setSeverity(Integer severity) {
         this.severity = severity;
+        return this;
         }
 
         public Alert tagId(Tag tagId) {
@@ -145,8 +150,9 @@ public class Alert  implements Serializable {
     return tagId;
     }
 
-        public void setTagId(Tag tagId) {
+        public Alert setTagId(Tag tagId) {
         this.tagId = tagId;
+        return this;
         }
 
 
@@ -175,7 +181,7 @@ public class Alert  implements Serializable {
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Alert {\n");
+sb.append("{\n");
 
 sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
@@ -186,14 +192,17 @@ sb.append("}");
 return sb.toString();
 }
 
-/**
-* Convert the given object to string with each line indented by 4 spaces
-* (except the first line).
-*/
-private String toIndentedString(java.lang.Object o) {
-if (o == null) {
-return "null";
-}
-return o.toString().replace("\n", "\n    ");
-}
+    /**
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
+    private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

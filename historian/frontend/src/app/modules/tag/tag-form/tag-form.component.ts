@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { DialogService } from '../../../dialog/dialog.service';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { QuestionControlService } from '../../../shared/dynamic-form/question-control.service';
 import { IHistorianTag } from '../modele/HistorianTag';
@@ -10,6 +9,10 @@ import { ITag, Tag } from '../modele/tag';
 import { TagHistorianService } from '../service/tag-historian.service';
 import { ITagFormInput } from './TagFormInput';
 import { ITagFormOutput, TagFormOutput } from './TagFormOutput';
+import { QuestionService } from '../../../shared/dynamic-form/question.service';
+import { MessageService } from 'primeng/components/common/messageservice';
+import { TagUtils } from '../modele/TagUtils';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-tag-form',
@@ -19,10 +22,7 @@ import { ITagFormOutput, TagFormOutput } from './TagFormOutput';
 export class TagFormComponent implements OnInit, OnChanges {
 
   form: FormGroup;
-  @Input() questionsMultiSelection: QuestionBase<any>[] = [];
-  @Input() questionsSingleSelection: QuestionBase<any>[] = [];
-  visible = true;
-  showEntireForm = true;
+  questions: QuestionBase<any>[] = [];
   @Input() tags: ITagFormInput[];
 
   @Output() submitted = new EventEmitter<IHistorianTag>();
@@ -30,35 +30,25 @@ export class TagFormComponent implements OnInit, OnChanges {
   private BTN_MSG_ADD = 'Save';
   private BTN_MSG_UPDATE = 'Update';
   private DISCARD_CHANGE_MSG = 'Are you sure you want to discard changes ?';
-  private SUCCESSFULLY_SAVED_MSG = 'successfully added tag';
   private FAILED_SAVED_MSG = 'error while saving tag.';
-  private SUCCESSFULLY_UPDATED_MSG = 'successfully updated tag';
-  private FAILED_UPDATED_MSG = 'error while updating tag.';
 
   constructor(private qcs: QuestionControlService,
               private fb: FormBuilder,
-              private dialogService: DialogService,
-              private tagHistorianService: TagHistorianService) { }
+              private confirmationService: ConfirmationService,
+              private qs: QuestionService,
+              private tagHistorianService: TagHistorianService,
+              private messageService: MessageService) { }
 
   ngOnInit() {
-    this.form = this.qcs.toFormGroup(this.questionsMultiSelection.concat(this.questionsSingleSelection));
+    this.questions = this.qs.getTagForm();
+    this.form = this.qcs.toFormGroup(this.questions);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tags) {
-      if (changes.tags.currentValue.length !== 0) {
-        this.visible = true;
-        if (changes.tags.currentValue.length > 1) {
-          this.showEntireForm = false;
-        } else {
-          this.showEntireForm = true;
-        }
-        if (changes.tags.previousValue !== changes.tags.currentValue) {
-          this.rebuildForm();
-          this.updateBtn();
-        }
-      } else {
-        this.visible = false;
+    if (changes.tags && changes.tags.currentValue && changes.tags.currentValue.length !== 0) {
+      if (changes.tags.previousValue !== changes.tags.currentValue) {
+        this.rebuildForm();
+        this.updateBtn();
       }
     }
   }
@@ -87,26 +77,36 @@ export class TagFormComponent implements OnInit, OnChanges {
 
 
   revert() { // TODO could be factorized
-    this.dialogService.confirm(this.DISCARD_CHANGE_MSG)
-      .subscribe(ok => {
-        if (ok) this.rebuildForm();
-      });
+    this.confirmationService.confirm({
+      message: this.DISCARD_CHANGE_MSG,
+      header: 'Confirmation',
+      rejectLabel: 'Cancel',
+      acceptLabel: 'Ok',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.rebuildForm();
+      },
+      reject: () => { }
+    });
   }
 
 
   /* save datasource when submitting */
   onSubmit() {
-    this.prepareSaveTag().map(o => {
-      if (o.isCreation) {
-        this.subscribeToUpdate(this.tagHistorianService.save(o.tag),
-        this.SUCCESSFULLY_SAVED_MSG,
-        this.FAILED_SAVED_MSG);
-      } else {
-        this.subscribeToUpdate(this.tagHistorianService.update(o.tag),
-        this.SUCCESSFULLY_UPDATED_MSG,
-        this.FAILED_UPDATED_MSG);
+    const tagsToSave = this.prepareSaveTag().map(o => o.tag);
+    this.tagHistorianService.saveMany(tagsToSave).subscribe(
+      tags => {
+        tags.forEach(tag => this.submitted.emit(tag));
+      },
+      error => {
+        console.error(JSON.stringify(error));
+        this.messageService.add({
+          severity: 'error',
+          summary: error.status,
+          detail: this.FAILED_SAVED_MSG,
+        });
       }
-    });
+    );
   }
 
   private prepareSaveTag(): ITagFormOutput[] {
@@ -118,7 +118,7 @@ export class TagFormComponent implements OnInit, OnChanges {
     const objForForm = this.prepareObjForForm();
     this.form.reset(objForForm);
     const concatenedLabels: Set<string> = this.tags.reduce((p, c) => {
-      if (Tag.isHistorianTag(c.tag) && c.tag.labels) {
+      if (TagUtils.isHistorianTag(c.tag) && c.tag.labels) {
         c.tag.labels.forEach(label => p.add(label));
       }
       return p;
@@ -132,22 +132,6 @@ export class TagFormComponent implements OnInit, OnChanges {
     const obj = Object.assign({}, this.tags[this.tags.length - 1].tag as any);
     delete obj.labels;
     return obj;
-  }
-
-  private subscribeToUpdate(submitted: Observable<IHistorianTag>,
-                            msgSuccess: string,
-                            msgError: string): void {
-    submitted.subscribe(
-      tag => {
-        this.submitted.emit(tag);
-        // this.dialogService.alert(msgSuccess);
-        // TODO use a popup see issue #90
-      },
-      error => {
-        console.error(JSON.stringify(error));
-        this.dialogService.alert(`${msgError} : code ${error.status}`);
-      }
-    );
   }
 
   private setLabels(labels: Set<string>): void {

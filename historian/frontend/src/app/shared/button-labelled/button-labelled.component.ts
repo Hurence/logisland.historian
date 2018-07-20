@@ -11,6 +11,7 @@ export class ButtonLabelledComponent implements OnInit {
   @Input() topRightLabel?: string;
   @Input() bottomRightLabel?: string;
   @Input() isActive: boolean;
+  @Input() styleClass: string;
 
   constructor() { }
 

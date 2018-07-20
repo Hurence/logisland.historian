@@ -13,16 +13,17 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
 
 /**
 * holds a double array of values for a Tag between start &amp; stop
 */
     @ApiModel(description = "holds a double array of values for a Tag between start & stop")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Measures  implements Serializable {
@@ -83,8 +84,9 @@ public class Measures  implements Serializable {
     return name;
     }
 
-        public void setName(String name) {
+        public Measures setName(String name) {
         this.name = name;
+        return this;
         }
 
         public Measures start(Long start) {
@@ -104,8 +106,9 @@ public class Measures  implements Serializable {
     return start;
     }
 
-        public void setStart(Long start) {
+        public Measures setStart(Long start) {
         this.start = start;
+        return this;
         }
 
         public Measures end(Long end) {
@@ -125,8 +128,9 @@ public class Measures  implements Serializable {
     return end;
     }
 
-        public void setEnd(Long end) {
+        public Measures setEnd(Long end) {
         this.end = end;
+        return this;
         }
 
         public Measures queryDuration(Long queryDuration) {
@@ -146,8 +150,9 @@ public class Measures  implements Serializable {
     return queryDuration;
     }
 
-        public void setQueryDuration(Long queryDuration) {
+        public Measures setQueryDuration(Long queryDuration) {
         this.queryDuration = queryDuration;
+        return this;
         }
 
         public Measures quality(Double quality) {
@@ -167,8 +172,9 @@ public class Measures  implements Serializable {
     return quality;
     }
 
-        public void setQuality(Double quality) {
+        public Measures setQuality(Double quality) {
         this.quality = quality;
+        return this;
         }
 
         public Measures numChunks(Long numChunks) {
@@ -188,8 +194,9 @@ public class Measures  implements Serializable {
     return numChunks;
     }
 
-        public void setNumChunks(Long numChunks) {
+        public Measures setNumChunks(Long numChunks) {
         this.numChunks = numChunks;
+        return this;
         }
 
         public Measures numPoints(Integer numPoints) {
@@ -209,8 +216,9 @@ public class Measures  implements Serializable {
     return numPoints;
     }
 
-        public void setNumPoints(Integer numPoints) {
+        public Measures setNumPoints(Integer numPoints) {
         this.numPoints = numPoints;
+        return this;
         }
 
         public Measures timestamps(List<Long> timestamps) {
@@ -238,8 +246,9 @@ public class Measures  implements Serializable {
     return timestamps;
     }
 
-        public void setTimestamps(List<Long> timestamps) {
+        public Measures setTimestamps(List<Long> timestamps) {
         this.timestamps = timestamps;
+        return this;
         }
 
         public Measures values(List<Double> values) {
@@ -267,8 +276,9 @@ public class Measures  implements Serializable {
     return values;
     }
 
-        public void setValues(List<Double> values) {
+        public Measures setValues(List<Double> values) {
         this.values = values;
+        return this;
         }
 
         public Measures functions(List<Function> functions) {
@@ -297,8 +307,9 @@ public class Measures  implements Serializable {
     return functions;
     }
 
-        public void setFunctions(List<Function> functions) {
+        public Measures setFunctions(List<Function> functions) {
         this.functions = functions;
+        return this;
         }
 
 
@@ -332,7 +343,7 @@ public class Measures  implements Serializable {
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Measures {\n");
+sb.append("{\n");
 
 sb.append("    name: ").append(toIndentedString(name)).append("\n");
 sb.append("    start: ").append(toIndentedString(start)).append("\n");
@@ -348,14 +359,17 @@ sb.append("}");
 return sb.toString();
 }
 
-/**
-* Convert the given object to string with each line indented by 4 spaces
-* (except the first line).
-*/
-private String toIndentedString(java.lang.Object o) {
-if (o == null) {
-return "null";
-}
-return o.toString().replace("\n", "\n    ");
-}
+    /**
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
+    private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

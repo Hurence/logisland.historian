@@ -23,17 +23,16 @@
             "styles": [
               "src/bootstrap-flatly.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
-              "node_modules/jstree/dist/themes/default/style.min.css",
               "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/themes/omega/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
-              "src/styles.css"
+              "src/assets/css/theme.css",
+              "src/assets/css/styles.css",
+              "src/assets/css/button.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "node_modules/jstree/dist/jstree.min.js",
               "node_modules/moment/min/moment.min.js",
               "node_modules/chart.js/dist/Chart.js",
               "src/scripts.js"
@@ -120,14 +119,14 @@
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "node_modules/jstree/dist/jstree.min.js",
               "src/scripts.js"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/font-awesome/css/font-awesome.css",
-              "node_modules/jstree/dist/themes/default/style.min.css",
-              "src/styles.css"
+              "src/assets/css/theme.css",
+              "src/assets/css/styles.css",
+              "src/assets/css/button.css"
             ],
             "assets": [
               "src/assets",

@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { DialogService } from '../../../dialog/dialog.service';
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
+import { ConfirmationService } from 'primeng/components/common/api';
 
 @Component({
   selector: 'app-datasource-form',
@@ -19,12 +19,15 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private password: AbstractControl;
   datasourceTypes: string[];
 
+  private red = 'color-red';
+  private green = 'color-green';
+  statusClass: string = this.red;
+
   @Input() isCreation: boolean;
   @Input() datasource: Datasource;
   @Output() submitted = new EventEmitter<Datasource>();
 
   submitBtnMsg: string;
-  datasourceIsReachable$: Observable<boolean>;
   private BTN_MSG_ADD = 'Add Data source';
   private BTN_MSG_UPDATE = 'Update Data source';
   private CREADENTIAL_NONE = 'none';
@@ -36,8 +39,8 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private FAILED_UPDATED_MSG = 'error while updating data source.';
 
   constructor(private fb: FormBuilder,
-    private datasourceService: DatasourceService,
-    private dialogService: DialogService) {
+    private confirmationService: ConfirmationService,
+    private datasourceService: DatasourceService) {
 
     this.createForm();
     this.resetCredWhenNone();
@@ -56,7 +59,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       if (this.isCreation) {
         this.enableName();
         this.submitBtnMsg = this.BTN_MSG_ADD;
-        this.datasourceIsReachable$ = null;
+        this.statusClass = this.red;
       } else {
         this.disableName();
         this.submitBtnMsg = this.BTN_MSG_UPDATE;
@@ -69,10 +72,17 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   // restore form with clean values
   revert() { // TODO could be factorized
-    this.dialogService.confirm(this.DISCARD_CHANGE_QUESTION_MSG)
-      .subscribe(ok => {
-        if (ok) this.rebuildForm();
-      });
+    this.confirmationService.confirm({
+      message: this.DISCARD_CHANGE_QUESTION_MSG,
+      header: 'Confirmation',
+      rejectLabel: 'Cancel',
+      acceptLabel: 'Ok',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.rebuildForm();
+      },
+      reject: () => { }
+    });
   }
 
   formIsClean(): boolean { return this.dsForm.dirty; } // TODO could be factorized
@@ -144,30 +154,22 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   onSubmit() {
     this.datasource = this.prepareSaveDatasource();
     if (this.isCreation) {
-      this.subscribeToUpdate(this.datasourceService.save(this.datasource),
-        this.SUCCESSFULLY_SAVED_MSG,
-        this.FAILED_SAVED_MSG);
+      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource));
     } else {
-      this.subscribeToUpdate(this.datasourceService.update(this.datasource),
-      this.SUCCESSFULLY_UPDATED_MSG,
-      this.FAILED_UPDATED_MSG);
+      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource));
     }
   }
   /* subscribe to update or save request
      emitting saved datasource, testing if it is reachable then alerting user when it is done.
   */
-  private subscribeToUpdate(submitted: Observable<Datasource>,
-                            msgSuccess: string,
-                            msgError: string): void {
+  private subscribeToUpdate(submitted: Observable<Datasource>): void {
     submitted.subscribe(
       datasource => {
         this.submitted.emit(datasource);
         this.isReachable();
-        this.dialogService.alert(msgSuccess);
       },
       error => {
         console.error(JSON.stringify(error));
-        this.dialogService.alert(msgError);
       }
     );
   }
@@ -194,7 +196,11 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   /* update the test (datasourceIsReachable) if server can connect to the datasource */
   private isReachable(): void {
     if (this.datasource) {
-      this.datasourceIsReachable$ = this.datasourceService.datasourceIsReachable(this.datasource.id);
+      this.datasourceService.datasourceIsReachable(this.datasource.id)
+      .subscribe(reachable => {
+        const newClass = reachable ? this.green : this.red;
+        this.statusClass = newClass;
+      });
     }
   }
 

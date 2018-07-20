@@ -1,0 +1,10 @@
+.list-container {
+    overflow-y: auto;
+    max-height: 90%;
+}
+.btn {
+    text-align: center;    
+}
+.btn:hover {
+    background-color: #2399e5;
+}

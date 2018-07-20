@@ -76,7 +76,9 @@ export class Utilities {
 
   zipObs<T>(ob1: Observable<T[]>, ob2: Observable<T[]>): Observable<T[]> {
     return Observable.zip(ob1, ob2).pipe(
-      map(([a, b]) => a.concat(b))
+      map(([a, b]) => {
+        return a.concat(b);
+      })
     );
   }
 

@@ -4,6 +4,7 @@ import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Measures;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.rest.v1.model.TreeNode;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
 import com.hurence.logisland.historian.service.MeasuresApiService;
 import com.hurence.logisland.historian.service.TagsApiService;
 import io.swagger.annotations.ApiParam;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,15 +41,30 @@ public class TagsApiController implements TagsApi {
         this.measuresApiService = measuresApiService;
     }
 
-    public ResponseEntity<Tag> addTagWithId(@ApiParam(value = "Tag resource to add", required = true) @Valid @RequestBody Tag body, @ApiParam(value = "itemId to", required = true) @PathVariable("itemId") String itemId) {
-        Optional<Tag> tag = service.addTagWithId(body, itemId);
-        if (tag.isPresent()) {
-            return new ResponseEntity<Tag>(tag.get(), HttpStatus.OK);
+    @Override
+    public ResponseEntity<List<Tag>> addManyTags(@ApiParam(value = "tags to create or update." ,required=true )  @Valid @RequestBody List<Tag> tags) {
+        return new ResponseEntity<List<Tag>>(service.SaveOrUpdateMany(tags), HttpStatus.OK);
+    }
 
+    @Override
+    public ResponseEntity<Tag> createOrReplaceATag(
+            @ApiParam(value = "itemId to be updated",required=true) @PathVariable("itemId") String itemId,
+            @ApiParam(value = "new Tag definition" ,required=true )  @Valid @RequestBody Tag tag) {
+        ReplaceReport<Tag> report = service.createOrReplaceATag(tag, itemId);
+        if (report.getItem().isPresent()) {
+            if (report.isCreated()) {
+                return new ResponseEntity<Tag>(report.getItem().get(), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<Tag>(report.getItem().get(), HttpStatus.OK);
+            }
         } else {
-            return new ResponseEntity<Tag>(HttpStatus.BAD_REQUEST);
-
+            return new ResponseEntity<Tag>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public ResponseEntity<List<Tag>> deleteManyTags(@ApiParam(value = "id of the tags to be deleted." ,required=true )  @Valid @RequestBody List<String> tagIds) {
+        return new ResponseEntity<List<Tag>>(service.deleteManyTag(tagIds), HttpStatus.OK);
     }
 
     public ResponseEntity<Tag> deleteTag(@ApiParam(value = "id of the tag to be deleted", required = true) @PathVariable("itemId") String itemId) {
@@ -119,17 +134,6 @@ public class TagsApiController implements TagsApi {
 
 
         return new ResponseEntity<BulkLoad>(measuresApiService.uploadTagMeasures(content, csvDelimiter, dateFormat, numberFormat, attributeFields, cleanImport, pointsByChunk), HttpStatus.OK);
-    }
-
-    public ResponseEntity<Tag> updateTag(@ApiParam(value = "itemId to be updated", required = true) @PathVariable("itemId") String itemId, @ApiParam(value = "new Tag definition", required = true) @Valid @RequestBody Tag tag) {
-        Optional<Tag> updatedTag = service.updateTag(tag, itemId);
-        if (updatedTag.isPresent()) {
-            return new ResponseEntity<Tag>(updatedTag.get(), HttpStatus.OK);
-
-        } else {
-            return new ResponseEntity<Tag>(HttpStatus.NOT_FOUND);
-
-        }
     }
 
     @Override

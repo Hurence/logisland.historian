@@ -7,6 +7,7 @@ package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Error;
+import java.util.List;
 import com.hurence.logisland.historian.rest.v1.model.Measures;
 import org.springframework.core.io.Resource;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
@@ -27,19 +28,39 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
 
-            @ApiOperation(value = "create new tag", nickname = "addTagWithId", notes = "store a new tag", response = Tag.class, tags={ "tag", })
+            @ApiOperation(value = "create or update many tags", nickname = "addManyTags", notes = "create or update the given tags", response = Tag.class, responseContainer = "List", tags={ "tag", })
             @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "Tag successfuly created", response = Tag.class),
-                @ApiResponse(code = 400, message = "Invalid ID supplied"),
+                @ApiResponse(code = 200, message = "Ok.", response = Tag.class, responseContainer = "List"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/tags/{itemId}",
+            @RequestMapping(value = "/api/v1/tags/batch",
+                produces = { "application/json" }, 
             method = RequestMethod.POST)
-        ResponseEntity<Tag> addTagWithId(@ApiParam(value = "Tag resource to add" ,required=true )  @Valid @RequestBody Tag body,@ApiParam(value = "itemId to",required=true) @PathVariable("itemId") String itemId);
+        ResponseEntity<List<Tag>> addManyTags(@ApiParam(value = "tags to create or update." ,required=true )  @Valid @RequestBody List<Tag> tags);
+
+
+            @ApiOperation(value = "create or replace a tag", nickname = "createOrReplaceATag", notes = "create or replace a tag", response = Tag.class, tags={ "tag", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "Tag successfuly replaced", response = Tag.class),
+                @ApiResponse(code = 201, message = "Tag successfuly created", response = Tag.class),
+                @ApiResponse(code = 400, message = "Invalid ID supplied") })
+            @RequestMapping(value = "/api/v1/tags/{itemId}",
+            method = RequestMethod.PUT)
+        ResponseEntity<Tag> createOrReplaceATag(@ApiParam(value = "itemId to be creted/replaced",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "Tag definition" ,required=true )  @Valid @RequestBody Tag tag);
+
+
+            @ApiOperation(value = "delete tags", nickname = "deleteManyTags", notes = "delete the corresponding tags", response = Tag.class, responseContainer = "List", tags={ "tag", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "Tags successfully removed or not found.", response = Tag.class, responseContainer = "List"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/tags/batch",
+                produces = { "application/json" }, 
+            method = RequestMethod.DELETE)
+        ResponseEntity<List<Tag>> deleteManyTags(@ApiParam(value = "id of the tags to be deleted." ,required=true )  @Valid @RequestBody List<String> tagIds);
 
 
             @ApiOperation(value = "delete tag", nickname = "deleteTag", notes = "remove the corresponding Tag", response = Tag.class, tags={ "tag", })
@@ -63,7 +84,7 @@ import java.util.List;
         ResponseEntity<List<Tag>> getAllTags(@ApiParam(value = "filter query (lucene syntax like fq=\"labels:opc AND datasources:win32\")") @Valid @RequestParam(value = "fq", required = false) String fq);
 
 
-            @ApiOperation(value = "get tag", nickname = "getTag", notes = "get the corresponding Tag", response = Tag.class, tags={ "tag", })
+            @ApiOperation(value = "get tag", nickname = "getItem", notes = "get the corresponding Tag", response = Tag.class, tags={ "tag", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "tag", response = Tag.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
@@ -127,15 +148,5 @@ import java.util.List;
                 produces = { "application/json" }, 
             method = RequestMethod.POST)
         ResponseEntity<BulkLoad> postTagMeasuresGenerator(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile config,@ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields,@ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue="false") Boolean cleanImport);
-
-
-            @ApiOperation(value = "update tag", nickname = "updateTag", notes = "update an existing tag", response = Tag.class, tags={ "tag", })
-            @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "Tag successfuly updated", response = Tag.class),
-                @ApiResponse(code = 400, message = "Invalid ID supplied"),
-                @ApiResponse(code = 404, message = "Tag resource not found") })
-            @RequestMapping(value = "/api/v1/tags/{itemId}",
-            method = RequestMethod.PUT)
-        ResponseEntity<Tag> updateTag(@ApiParam(value = "itemId to be updated",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "new Tag definition" ,required=true )  @Valid @RequestBody Tag tag);
 
         }

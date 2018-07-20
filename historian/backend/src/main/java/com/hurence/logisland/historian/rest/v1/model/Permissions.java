@@ -12,16 +12,17 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
 
 /**
 * a Permissions can allow to share something with others. It describes permission for one item.
 */
     @ApiModel(description = "a Permissions can allow to share something with others. It describes permission for one item.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-02T16:15:54.369+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Permissions  implements Serializable {
@@ -58,8 +59,9 @@ public class Permissions  implements Serializable {
     return ownerSharing;
     }
 
-        public void setOwnerSharing(List<String> ownerSharing) {
+        public Permissions setOwnerSharing(List<String> ownerSharing) {
         this.ownerSharing = ownerSharing;
+        return this;
         }
 
         public Permissions roleSharing(List<String> roleSharing) {
@@ -87,8 +89,9 @@ public class Permissions  implements Serializable {
     return roleSharing;
     }
 
-        public void setRoleSharing(List<String> roleSharing) {
+        public Permissions setRoleSharing(List<String> roleSharing) {
         this.roleSharing = roleSharing;
+        return this;
         }
 
 
@@ -114,7 +117,7 @@ public class Permissions  implements Serializable {
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Permissions {\n");
+sb.append("{\n");
 
 sb.append("    ownerSharing: ").append(toIndentedString(ownerSharing)).append("\n");
 sb.append("    roleSharing: ").append(toIndentedString(roleSharing)).append("\n");
@@ -122,14 +125,17 @@ sb.append("}");
 return sb.toString();
 }
 
-/**
-* Convert the given object to string with each line indented by 4 spaces
-* (except the first line).
-*/
-private String toIndentedString(java.lang.Object o) {
-if (o == null) {
-return "null";
-}
-return o.toString().replace("\n", "\n    ");
-}
+    /**
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
+    private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

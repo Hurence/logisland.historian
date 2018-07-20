@@ -1,59 +1,53 @@
-<div class="container-fluid h-100">
-  <div class="row h-100">
-    <div class="col-lg-12 col-md-12 pt-0 pb-0">
-
-      <div class="row mt-0 h-100">
-        <div class="col-lg-4"
-             [ngClass]="{'col-md-4' : !isHelpHidden(), 'col-md-6 col-lg-6' : isHelpHidden()}">
-          <div class="card h-100">
-
-            <div class="card-body">
-              <button type="button" class="btn btn-outline-primary text-uppercase float-right" (click)="onClickAddDatasource()">Add Data source</button>
-              <app-datasource-form [datasource]="selectedDatasource"
-                                   [isCreation]="isCreation"
-                                   (submitted)="onSubmitted($event)"></app-datasource-form>
-
-            </div>
+<div class="container-fluid no-padding">
+  <div class="row no-gutters h-100">
+    <!-- <div class="col-lg-12 col-md-12 bg-dark h-10 small-column">
+      <div class="row no-gutters h-100">
+          <div class="col-lg-12 col-md-12 datasource-dashboard-title text-center h-100">
+            <h1>Datasources</h1>
           </div>
-        </div>
-
-        <div class="col-lg-4"
-             [ngClass]="{'col-md-4' : !isHelpHidden(), 'col-md-6 col-lg-6' : isHelpHidden()}">
-          <div class="card h-100 datasources-list">
-
-            <div class="card-body">
-
-              <h6 _ngcontent-c2="" class="text-uppercase"
-                  i18n="data sources|text above data sources list">
-                data sources
-                <small _ngcontent-c2="" class="text-muted">data sources list</small>
-              </h6>
-
-              <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12 ">
-                  <app-search [placeHolder]="filterPlaceHolder"
-                              (queryString)="onFilterQuery($event)"></app-search>
-                </div>
+      </div>
+    </div> -->
+    <section class="content-header">
+        <h1>
+            Datasources &amp; Tags
+          <small></small>
+        </h1>
+      </section>
+    <div class="col-lg-12 col-md-12 h-90">
+      <div class="row content no-gutters h-100">
+        <div class="col-lg-4 col-md-4 col-sm-12 h-100 left-panel sticky-top">
+          <div class="row mt-0 h-100 no-gutters">
+            <div class="col-lg-12 col-md-12 small-column no-padding no-margin">
+              <div class="align-top">
+                  <app-search [placeHolder]="filterPlaceHolder" (queryString)="onFilterQuery($event)"></app-search>
               </div>
-
-              <app-datasources-list [dataSet]="dataSet"
-                                    [selectedDatasource]="selectedDatasource"
-                                    (selectedDatasourceE)="onSelectDatasource($event)"></app-datasources-list>
+            </div>
+            <div class="col-lg-12 col-md-12 small-column">
+              <button type="button" class="float-right ui-button-text ui-button ui-widget ui-state-default ui-corner-all" (click)="onClickAddDatasource()">
+                <i class="fa fa-plus" aria-hidden="true"></i>Add new datasource
+              </button>
+            </div>
+            <div class="col-lg-12 col-md-12 large-column">
+              <app-datasources-list [selectedDatasource]="selectedDatasource" (selectedDatasourceE)="onSelectDatasource($event)"></app-datasources-list>
             </div>
           </div>
         </div>
-
-        <div class="help-content col-lg-4"
-             [ngClass]="{'col-md-4' : !isHelpHidden(), 'col-md-6 col-lg-6' : isHelpHidden()}"
-             *ngIf="!isHelpHidden()">
-          <div class="card h-100">
-            <div class="card-body">
-              <app-datasource-help></app-datasource-help>
-            </div>
+        <div class="col-lg-8 col-md-8 col-sm-12 rigth-panel h-100">
+          <!-- <div class="datasource-detail-title text-center h-10 align-bottom small-column">
+            <h2>Datasource Detail</h2>
+          </div> -->
+          <div class="datasource-detail-content h-100">
+            <p-tabView [activeIndex]="selectedTab">
+              <p-tabPanel header="Collected Tags">
+                <app-opc-tag-tree [tags]="tags"></app-opc-tag-tree>
+              </p-tabPanel>
+              <p-tabPanel header="Datasource Configuration" [disabled]="false">
+                <app-datasource-form [datasource]="selectedDatasource" [isCreation]="isCreation" (submitted)="onSubmitted($event)"></app-datasource-form>
+              </p-tabPanel>
+            </p-tabView>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </div>
