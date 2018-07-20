@@ -93,7 +93,8 @@
                     styleClass="mx-1 my-1"
                     icon="fa fa-trash"
                     disabled="true"></p-button>
-                    <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="toggleEnabled(node);$event.stopPropagation();"></p-inputSwitch>
+                    <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="toggleEnabled(node);$event.stopPropagation();"
+                    onLabel="On" offLabel="Off"></p-inputSwitch>
             </div>
             
         </div>
