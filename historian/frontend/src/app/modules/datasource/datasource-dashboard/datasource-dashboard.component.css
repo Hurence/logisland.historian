@@ -59,11 +59,9 @@ h1 {
       z-index: 2;
       position: initial;
     }
+}
+@media (min-width: 768px) {
+    .sticky-top {
+        z-index: 2;
     }
-
-    @media (min-width: 768px) {
-
-        .sticky-top {
-            z-index: 2;
-          }
-        }
+}

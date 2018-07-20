@@ -27,9 +27,6 @@
     opacity: 1;
 }
 
-.btn:hover {
-    background-color: #272c33;
-}
 .btn:not(:disabled):not(.disabled).active, .btn:not(:disabled):not(.disabled):active{
     background-color: black;
     color:white;
