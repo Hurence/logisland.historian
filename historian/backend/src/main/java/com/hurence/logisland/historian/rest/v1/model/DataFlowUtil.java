@@ -33,7 +33,8 @@ public final class DataFlowUtil {
                 new Property().setKey("solr.connection").setValue("chronix"),
                 new Property().setKey("solr.concurrent.requests").setValue("4"),
                 new Property().setKey("flush.interval").setValue("2000"),
-                new Property().setKey("batch.size").setValue("500")
+                new Property().setKey("batch.size").setValue("500"),
+                new Property().setKey("solr.collection").setValue("chronix")
         ));
         return service;
     }
@@ -54,7 +55,8 @@ public final class DataFlowUtil {
         proc.setName("send_to_chronix");
         proc.setComponent("com.hurence.logisland.processor.datastore.BulkPut");
         proc.setConfig(buildProperties(
-                new Property().setKey("datastore.client.service").setValue(chronixServiceName) //TODO put real service
+                new Property().setKey("datastore.client.service").setValue(chronixServiceName),
+                new Property().setKey("default.collection").setValue("chronix")
         ));
         return proc;
     }

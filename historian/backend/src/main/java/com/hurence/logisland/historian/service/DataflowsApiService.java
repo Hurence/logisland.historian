@@ -58,6 +58,7 @@ public class DataflowsApiService {
     }
 
     public Optional<DataFlow> updateOpcDataflow() {
+        logger.info("gnerating new DataFlow '{}'", opcDataflowName);
         List<Datasource> datasources = datasourcesApiService.getAllDatasources("*");
         if (!datasources.isEmpty()) {
             DataFlow df = this.buildOpcDataflow(datasources);
