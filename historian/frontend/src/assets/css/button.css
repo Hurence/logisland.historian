@@ -1,6 +1,5 @@
 .btn {
     display: inline-block;
-    background-color: #f6f7f9;
     font-weight: 400;
     text-align: left;
     white-space: nowrap;
@@ -75,4 +74,8 @@
 .btn-white-blue {
     background-color: #ffffff;
     border-color: #186ba0;
+}
+
+.btn-white {
+    background-color: #f6f7f9;
 }
