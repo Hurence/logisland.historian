@@ -138,7 +138,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
         user: datasource.user,
         password: datasource.password,
       },
-      tagBrowsing: datasource.tagBrowsing
+      tagBrowsing: datasource.tag_browsing
     };
   }
 
@@ -190,7 +190,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       password: formModel.auth.password,
       record_type: 'datasource',
       datasource_type: formModel.type,
-      tagBrowsing: formModel.tagBrowsing,
+      tag_browsing: formModel.tagBrowsing,
     };
     return saveDatasource;
   }
