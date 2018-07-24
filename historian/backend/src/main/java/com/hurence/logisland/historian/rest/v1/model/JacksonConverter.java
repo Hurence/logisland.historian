@@ -1,5 +1,6 @@
 package com.hurence.logisland.historian.rest.v1.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ public class JacksonConverter {
 
     private JacksonConverter() {
         this.objectMapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 //        this.objectMapper.setDateFormat(new SimpleDateFormat(Dates.ISO_DATE_FORMAT));
     }
     public TypeFactory getTypeFactory() {

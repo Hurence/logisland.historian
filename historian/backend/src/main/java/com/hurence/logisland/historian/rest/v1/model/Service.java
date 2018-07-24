@@ -1,8 +1,6 @@
 package com.hurence.logisland.historian.rest.v1.model;
 
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.hurence.logisland.historian.rest.v1.model.Component;
@@ -25,11 +23,10 @@ import org.threeten.bp.OffsetDateTime;
 * A logisland &#39;controller service&#39;.
 */
     @ApiModel(description = "A logisland 'controller service'.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-24T21:20:56.826+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Service  implements Serializable {
         @JsonProperty("name")
         @Indexed(name = "name")

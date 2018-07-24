@@ -3,6 +3,7 @@ package com.hurence.logisland.historian.rest.v1.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -18,7 +19,7 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * Datasource
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-24T21:20:56.826+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
@@ -62,6 +63,41 @@ public class Datasource  implements Serializable {
         @JsonProperty("password")
         @Indexed(name = "password")
         private String password = null;
+
+              /**
+   * Gets or Sets tagBrowsing
+   */
+  public enum TagBrowsingEnum {
+    AUTOMATIC("automatic"),
+    
+    MANUAL("manual");
+
+    private String value;
+
+    TagBrowsingEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static TagBrowsingEnum fromValue(String text) {
+      for (TagBrowsingEnum b : TagBrowsingEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
+        @JsonProperty("tag_browsing")
+        @Indexed(name = "tag_browsing")
+        private TagBrowsingEnum tagBrowsing = null;
 
         public Datasource recordType(String recordType) {
         this.recordType = recordType;
@@ -285,6 +321,28 @@ public class Datasource  implements Serializable {
         return this;
         }
 
+        public Datasource tagBrowsing(TagBrowsingEnum tagBrowsing) {
+        this.tagBrowsing = tagBrowsing;
+        return this;
+        }
+
+    /**
+        * Get tagBrowsing
+    * @return tagBrowsing
+    **/
+        @JsonProperty("tag_browsing")
+    @ApiModelProperty(value = "")
+    
+
+  public TagBrowsingEnum getTagBrowsing() {
+    return tagBrowsing;
+    }
+
+        public Datasource setTagBrowsing(TagBrowsingEnum tagBrowsing) {
+        this.tagBrowsing = tagBrowsing;
+        return this;
+        }
+
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -304,12 +362,13 @@ public class Datasource  implements Serializable {
         Objects.equals(this.host, datasource.host) &&
         Objects.equals(this.domain, datasource.domain) &&
         Objects.equals(this.user, datasource.user) &&
-        Objects.equals(this.password, datasource.password);
+        Objects.equals(this.password, datasource.password) &&
+        Objects.equals(this.tagBrowsing, datasource.tagBrowsing);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id, description, clsid, datasourceType, progId, host, domain, user, password);
+    return Objects.hash(recordType, id, description, clsid, datasourceType, progId, host, domain, user, password, tagBrowsing);
     }
 
 
@@ -328,6 +387,7 @@ sb.append("    host: ").append(toIndentedString(host)).append("\n");
 sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
 sb.append("    user: ").append(toIndentedString(user)).append("\n");
 sb.append("    password: ").append(toIndentedString(password)).append("\n");
+sb.append("    tagBrowsing: ").append(toIndentedString(tagBrowsing)).append("\n");
 sb.append("}");
 return sb.toString();
 }

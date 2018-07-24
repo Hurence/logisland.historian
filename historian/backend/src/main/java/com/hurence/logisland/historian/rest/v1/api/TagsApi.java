@@ -28,7 +28,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-24T21:20:56.826+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -48,9 +48,9 @@ import java.util.List;
                 @ApiResponse(code = 200, message = "Tag successfuly replaced", response = Tag.class),
                 @ApiResponse(code = 201, message = "Tag successfuly created", response = Tag.class),
                 @ApiResponse(code = 400, message = "Invalid ID supplied") })
-            @RequestMapping(value = "/api/v1/tags/{itemId}",
+            @RequestMapping(value = "/api/v1/tags/{tagId}",
             method = RequestMethod.PUT)
-        ResponseEntity<Tag> createOrReplaceATag(@ApiParam(value = "itemId to be creted/replaced",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "Tag definition" ,required=true )  @Valid @RequestBody Tag tag);
+        ResponseEntity<Tag> createOrReplaceATag(@ApiParam(value = "tagId to be created/replaced",required=true) @PathVariable("tagId") String tagId,@ApiParam(value = "Tag definition" ,required=true )  @Valid @RequestBody Tag tag);
 
 
             @ApiOperation(value = "delete tags", nickname = "deleteManyTags", notes = "delete the corresponding tags", response = Tag.class, responseContainer = "List", tags={ "tag", })
@@ -69,9 +69,9 @@ import java.util.List;
                 @ApiResponse(code = 400, message = "Invalid ID supplied"),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/tags/{itemId}",
+            @RequestMapping(value = "/api/v1/tags/{tagId}",
             method = RequestMethod.DELETE)
-        ResponseEntity<Tag> deleteTag(@ApiParam(value = "id of the tag to be deleted",required=true) @PathVariable("itemId") String itemId);
+        ResponseEntity<Tag> deleteTag(@ApiParam(value = "id of the tag to be deleted",required=true) @PathVariable("tagId") String tagId);
 
 
             @ApiOperation(value = "get all saved tags", nickname = "getAllTags", notes = "retrieve all OPC tags", response = Tag.class, responseContainer = "List", tags={ "tag", })
@@ -84,15 +84,15 @@ import java.util.List;
         ResponseEntity<List<Tag>> getAllTags(@ApiParam(value = "filter query (lucene syntax like fq=\"labels:opc AND datasources:win32\")") @Valid @RequestParam(value = "fq", required = false) String fq);
 
 
-            @ApiOperation(value = "get tag", nickname = "getItem", notes = "get the corresponding Tag", response = Tag.class, tags={ "tag", })
+            @ApiOperation(value = "get tag", nickname = "getTag", notes = "get the corresponding Tag", response = Tag.class, tags={ "tag", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "tag", response = Tag.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/tags/{itemId}",
+            @RequestMapping(value = "/api/v1/tags/{tagId}",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        ResponseEntity<Tag> getTag(@ApiParam(value = "id of the tag to return",required=true) @PathVariable("itemId") String itemId);
+        ResponseEntity<Tag> getTag(@ApiParam(value = "id of the tag to return",required=true) @PathVariable("tagId") String tagId);
 
 
             @ApiOperation(value = "get tag measures", nickname = "getTagMeasures", notes = "get the corresponding Tag measures between start and end time", response = Measures.class, tags={ "tag","measure", })
@@ -100,10 +100,10 @@ import java.util.List;
                 @ApiResponse(code = 200, message = "tag", response = Measures.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/tags/{itemId}/measures",
+            @RequestMapping(value = "/api/v1/tags/{tagId}/measures",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        ResponseEntity<Measures> getTagMeasures(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end,@ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions,@ApiParam(value = "will retrieve only function values, no data points", defaultValue = "false") @Valid @RequestParam(value = "no_values", required = false, defaultValue="false") Boolean noValues);
+        ResponseEntity<Measures> getTagMeasures(@ApiParam(value = "id of the tag",required=true) @PathVariable("tagId") String tagId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end,@ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions,@ApiParam(value = "will retrieve only function values, no data points", defaultValue = "false") @Valid @RequestParam(value = "no_values", required = false, defaultValue="false") Boolean noValues);
 
 
             @ApiOperation(value = "get tag measures stats", nickname = "getTagStats", notes = "get the corresponding Tag mesures for last chunk", response = Measures.class, tags={ "tag","measure", })
@@ -111,10 +111,10 @@ import java.util.List;
                 @ApiResponse(code = 200, message = "tag", response = Measures.class),
                 @ApiResponse(code = 404, message = "Tag resource not found"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/tags/{itemId}/stats",
+            @RequestMapping(value = "/api/v1/tags/{tagId}/stats",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        ResponseEntity<Measures> getTagStats(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId);
+        ResponseEntity<Measures> getTagStats(@ApiParam(value = "id of the tag",required=true) @PathVariable("tagId") String tagId);
 
 
             @ApiOperation(value = "get tag tree by fields", nickname = "getTreeTag", notes = "get tag tree by fields for each value of chosen fields", response = TreeNode.class, responseContainer = "List", tags={ "tag", })

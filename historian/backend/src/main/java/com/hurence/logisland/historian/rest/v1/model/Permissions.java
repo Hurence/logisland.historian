@@ -21,7 +21,7 @@ import org.threeten.bp.OffsetDateTime;
 * a Permissions can allow to share something with others. It describes permission for one item.
 */
     @ApiModel(description = "a Permissions can allow to share something with others. It describes permission for one item.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-19T09:33:39.714+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-24T21:20:56.826+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
