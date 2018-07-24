@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { Datasource } from '../Datasource';
+import { Datasource, TagBrowsingMode } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
 import { ConfirmationService } from 'primeng/components/common/api';
 
@@ -28,15 +28,14 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   @Output() submitted = new EventEmitter<Datasource>();
 
   submitBtnMsg: string;
+
   private BTN_MSG_ADD = 'Add Data source';
   private BTN_MSG_UPDATE = 'Update Data source';
+
   private CREADENTIAL_NONE = 'none';
   private CREADENTIAL_NORMAL = 'normal';
+
   private DISCARD_CHANGE_QUESTION_MSG = 'Are you sure you want to discard changes ?';
-  private SUCCESSFULLY_SAVED_MSG = 'successfully added datasource';
-  private FAILED_SAVED_MSG = 'error while saving data source.';
-  private SUCCESSFULLY_UPDATED_MSG = 'successfully updated datasource';
-  private FAILED_UPDATED_MSG = 'error while updating data source.';
 
   constructor(private fb: FormBuilder,
     private confirmationService: ConfirmationService,
@@ -102,6 +101,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
         user: [{ value: '', disabled: true }, Validators.required],
         password: [{ value: '', disabled: true }, Validators.required],
       }),
+      tagBrowsing: [TagBrowsingMode.AUTOMATIC, Validators.required],
     });
     this.name = this.dsForm.get('name');
     this.user = this.dsForm.get('auth.user');
@@ -138,6 +138,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
         user: datasource.user,
         password: datasource.password,
       },
+      tagBrowsing: datasource.tagBrowsing
     };
   }
 
@@ -188,7 +189,8 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       user: formModel.auth.user,
       password: formModel.auth.password,
       record_type: 'datasource',
-      datasource_type: formModel.type
+      datasource_type: formModel.type,
+      tagBrowsing: formModel.tagBrowsing,
     };
     return saveDatasource;
   }
