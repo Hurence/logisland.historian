@@ -10,7 +10,7 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
 
-  private profil: Keycloak.KeycloakProfile;
+  username: string;
   logoutUrl: string;
 
   constructor(private keycloakService: KeycloakService,
@@ -20,7 +20,9 @@ export class AppComponent implements OnInit {
               }
 
   public ngOnInit(): void {
-    this.keycloakService.loadUserProfile().then(profil => this.profil = profil);
+    this.keycloakService.loadUserProfile().then(profil => {
+      this.username = profil.username;
+    });
   }
 
   toggleHelp(): void {

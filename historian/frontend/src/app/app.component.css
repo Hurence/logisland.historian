@@ -7,13 +7,6 @@ header {
   height: 88%;
 }
 #sidebar .list-group-item {
-    /* border-radius: 0;
-    background-color: #333;
-    color: #ccc;
-    border-left: 0;
-    border-right: 0;
-    border-color: #2c2c2c;
-    white-space: nowrap; */
     color: #ccc;
 }
 .list-group-item {
@@ -26,14 +19,7 @@ text-decoration: underline;
 #sidebar {
   background: #272c33;
 }
-/* .nav-toggle{
-  left: -10px;
-  position: absolute;
-}
-.nav-toggle.collapsed{
-  left: 0px;
-  position: inherit;
-} */
+
 /* highlight active menu */
 #sidebar .list-group-item:not(.collapsed) {
     background-color: #272c33;
