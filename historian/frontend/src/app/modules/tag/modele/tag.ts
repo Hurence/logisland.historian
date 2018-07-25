@@ -1,4 +1,5 @@
 import { environment } from '../../../../environments/environment';
+import { CanGetId } from '../../../shared/dynamic-form/BaseDynamicFormComponent';
 
 
 export interface ITag {
@@ -36,7 +37,7 @@ export const enum TagDataType {
     BOOLEAN = 'boolean'
 }
 
-export abstract class Tag implements ITag {
+export abstract class Tag implements ITag, CanGetId {
     static TAG_UPDATE_RATE_DEFAUT: number = environment.TAG_UPDATE_RATE_DEFAUT;
 
     id: string;
@@ -60,5 +61,9 @@ export abstract class Tag implements ITag {
         Object.assign(this, options);
         if (this.update_rate === null || this.update_rate === undefined) this.update_rate = Tag.TAG_UPDATE_RATE_DEFAUT;
         if (this.enabled === null || this.enabled === undefined) this.enabled = false;
+    }
+
+    getId(): string {
+        return this.id;
     }
 }

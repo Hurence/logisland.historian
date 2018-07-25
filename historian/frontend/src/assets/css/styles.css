@@ -44,6 +44,7 @@ mark, .mark {
 }
 .navbar {
     line-height: 3.4;
+    color: white;
 }
 .navbar a{
   font-size: 0.7rem;
@@ -58,9 +59,17 @@ mark, .mark {
   cursor: pointer;
 }
 
-.navbar .nav-item.avatar .dropdown-toggle img {
+.nav-item.avatar img {
   height: 35px;
 }
+.nav-item {
+  margin-left: 2px;
+  margin-right: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding: auto;
+}
+
 
 /*.ng-valid.required  */
 .ng-valid[required] {

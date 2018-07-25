@@ -48,9 +48,9 @@ public class TagsApiController implements TagsApi {
 
     @Override
     public ResponseEntity<Tag> createOrReplaceATag(
-            @ApiParam(value = "itemId to be updated",required=true) @PathVariable("itemId") String itemId,
+            @ApiParam(value = "tagId to be updated",required=true) @PathVariable("tagId") String tagId,
             @ApiParam(value = "new Tag definition" ,required=true )  @Valid @RequestBody Tag tag) {
-        ReplaceReport<Tag> report = service.createOrReplaceATag(tag, itemId);
+        ReplaceReport<Tag> report = service.createOrReplaceATag(tag, tagId);
         if (report.getItem().isPresent()) {
             if (report.isCreated()) {
                 return new ResponseEntity<Tag>(report.getItem().get(), HttpStatus.CREATED);
@@ -67,9 +67,9 @@ public class TagsApiController implements TagsApi {
         return new ResponseEntity<List<Tag>>(service.deleteManyTag(tagIds), HttpStatus.OK);
     }
 
-    public ResponseEntity<Tag> deleteTag(@ApiParam(value = "id of the tag to be deleted", required = true) @PathVariable("itemId") String itemId) {
+    public ResponseEntity<Tag> deleteTag(@ApiParam(value = "id of the tag to be deleted", required = true) @PathVariable("tagId") String tagId) {
 
-        Optional<Tag> tag = service.deleteTag(itemId);
+        Optional<Tag> tag = service.deleteTag(tagId);
         if (tag.isPresent()) {
             return new ResponseEntity<Tag>(tag.get(), HttpStatus.OK);
 
@@ -84,8 +84,8 @@ public class TagsApiController implements TagsApi {
     }
 
 
-    public ResponseEntity<Tag> getTag(@ApiParam(value = "id of the tag to return", required = true) @PathVariable("itemId") String itemId) {
-        Optional<Tag> tag = service.getTag(itemId);
+    public ResponseEntity<Tag> getTag(@ApiParam(value = "id of the tag to return", required = true) @PathVariable("tagId") String tagId) {
+        Optional<Tag> tag = service.getTag(tagId);
         if (tag.isPresent()) {
             return new ResponseEntity<Tag>(tag.get(), HttpStatus.OK);
 
@@ -96,8 +96,8 @@ public class TagsApiController implements TagsApi {
     }
 
     @Override
-    public ResponseEntity<Measures> getTagMeasures(@ApiParam(value = "id of the tag", required = true) @PathVariable("itemId") String itemId, @ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start, @ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end, @ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions, @ApiParam(value = "will retrieve only function values, no data points", defaultValue = "false") @Valid @RequestParam(value = "no_values", required = false, defaultValue = "false") Boolean noValues) {
-        Optional<Measures> measures = measuresApiService.getTagMeasures(itemId, start, end, functions, noValues);
+    public ResponseEntity<Measures> getTagMeasures(@ApiParam(value = "id of the tag", required = true) @PathVariable("tagId") String tagId, @ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start, @ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end, @ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions, @ApiParam(value = "will retrieve only function values, no data points", defaultValue = "false") @Valid @RequestParam(value = "no_values", required = false, defaultValue = "false") Boolean noValues) {
+        Optional<Measures> measures = measuresApiService.getTagMeasures(tagId, start, end, functions, noValues);
         if (measures.isPresent()) {
             return new ResponseEntity<Measures>(measures.get(), HttpStatus.OK);
 
@@ -109,10 +109,10 @@ public class TagsApiController implements TagsApi {
 
 
     @Override
-    public ResponseEntity<Measures> getTagStats(@ApiParam(value = "id of the tag",required=true) @PathVariable("itemId") String itemId) {
+    public ResponseEntity<Measures> getTagStats(@ApiParam(value = "id of the tag",required=true) @PathVariable("tagId") String tagId) {
 
 
-        Optional<Measures> measures = measuresApiService.getTagStats(itemId);
+        Optional<Measures> measures = measuresApiService.getTagStats(tagId);
         if (measures.isPresent()) {
             return new ResponseEntity<Measures>(measures.get(), HttpStatus.OK);
 

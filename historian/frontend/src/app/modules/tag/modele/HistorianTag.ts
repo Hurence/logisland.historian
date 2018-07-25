@@ -1,4 +1,5 @@
 import { Tag, ITag } from './tag';
+import { CanGetId } from '../../../shared/dynamic-form/BaseDynamicFormComponent';
 
 export interface IHistorianTag extends ITag {
     description?: string;

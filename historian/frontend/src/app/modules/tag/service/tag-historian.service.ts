@@ -13,7 +13,7 @@ import { Utilities } from '../../../shared/utilities.service';
 import { HistorianTag, IHistorianTag } from '../modele/HistorianTag';
 
 @Injectable()
-export class TagHistorianService {
+export class TagHistorianService implements IModelService<HistorianTag> {
 
   private tagsUrl = `${environment.HISTORIAN_API_URL}`;
   private SUCCESSFULLY_SAVED_MSG = 'successfully added tag';
@@ -30,6 +30,11 @@ export class TagHistorianService {
         map(tags => tags.map(t => new HistorianTag(t))),
         catchError(this.help.handleError('getAll()', []))
       );
+  }
+
+  getAllFromDatasource(datasourceId: string): Observable<HistorianTag[]> {
+    const query = `datasource_id:"${datasourceId}"`;
+    return this.getQuery(query);
   }
 
   getAllFromDatasources(datasourceIds: string[]): Observable<HistorianTag[]> {
@@ -73,7 +78,12 @@ export class TagHistorianService {
       catchError(this.help.handleError(`get(${id})`))
     );
   }
-
+  save(obj: HistorianTag, id: string): Observable<HistorianTag> {
+    return this.createOrReplace(obj);
+  }
+  update(obj: HistorianTag, id: string): Observable<HistorianTag> {
+    return this.createOrReplace(obj);
+  }
   createOrReplace(obj: HistorianTag): Observable<HistorianTag> {
     return this.http.put<HistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj, { observe: 'response' }).pipe(
       tap(resp => {
