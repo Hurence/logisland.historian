@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
 import { ITag } from '../modele/tag';
 import { TypesName } from '../tag-tree/TypesName';
+import { HistorianTag } from '../modele/HistorianTag';
 // import { NodeTree } from '../../../shared/js-tree/NodeTree';
 
 @Injectable()
@@ -23,12 +24,27 @@ export class NgTreenodeService {
         return this.buildTagTreeNodes2(tags);
     }
 
+    addTagNode(nodes: TreeNode[], tag: HistorianTag): void {
+        const domain = this.getOrCreateChildForNodes(nodes, tag.domain, TypesName.DOMAIN);
+        const server = this.getOrCreateChildForNode(domain, tag.server, TypesName.SERVER);
+        const group = this.getOrCreateChildForNode(server, tag.group, TypesName.GROUP);
+        const child: TreeNode = {
+            label: tag.tag_name,
+            data: tag,
+            icon: TypesName.TAG_HISTORIAN,
+            leaf: true,
+            type: TypesName.TAG_HISTORIAN,
+            children: [],
+        };
+        group.children.push(child);
+    }
+
     private buildTagTreeNodes2(tags: ITag[]): TreeNode[] {
         const treeTag = tags.reduce(
             (prev, cur, i, a) => {
-                const domain = this.getOrCreateChildForNodes(prev, cur['domain'], 'domain');
-                const server = this.getOrCreateChildForNode(domain, cur['server'], 'server');
-                const group = this.getOrCreateChildForNode(server, cur['group'], 'group');
+                const domain = this.getOrCreateChildForNodes(prev, cur['domain'], TypesName.DOMAIN);
+                const server = this.getOrCreateChildForNode(domain, cur['server'], TypesName.SERVER);
+                const group = this.getOrCreateChildForNode(server, cur['group'], TypesName.GROUP);
 
                 const nodeType: string = TypesName.getType(cur);
                 const children: TreeNode = {

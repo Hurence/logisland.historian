@@ -12,19 +12,12 @@ export interface CanGetId {
   getId(): string;
 }
 
-export interface CanGetId {
-  getId(): string;
-}
-
 export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements OnInit, OnChanges {
 
   @Input() questions: QuestionBase<any>[] = [];
   @Input() item: T;
   @Output() submitted = new EventEmitter<T>();
   form: FormGroup;
-  protected SUCCESSFULLY_SAVED_MSG = 'successfully added tag';
-  protected FAILED_SAVED_MSG = 'error while saving tag.';
-
 
   constructor(protected qcs: QuestionControlService,
               protected service: IModelService<B>) { }
@@ -42,9 +35,7 @@ export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements
 
   onSubmit() {
     const objToSave = this.prepareSaveItem();
-    this.subscribeToUpdate(this.service.save(objToSave, objToSave.getId()),
-      this.SUCCESSFULLY_SAVED_MSG,
-      this.FAILED_SAVED_MSG);
+    this.subscribeToUpdate(this.service.save(objToSave, objToSave.getId()));
   }
 
   /* Fill in form with current datasource properties */
@@ -61,9 +52,7 @@ export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements
     return item;
   }
 
-  private subscribeToUpdate(submitted: Observable<B>,
-                            msgSuccess: string,
-                            msgError: string): void {
+  private subscribeToUpdate(submitted: Observable<B>): void {
     submitted.subscribe(
       obj => {
         const converted = this.convert(obj);

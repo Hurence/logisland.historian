@@ -1,14 +1,14 @@
-import { IHistorianTag } from '../modele/HistorianTag';
+import { IHistorianTag, HistorianTag } from '../modele/HistorianTag';
 import { TagFormInput } from './TagFormInput';
 import { FormGroup, FormArray } from '@angular/forms';
 
 export interface ITagFormOutput {
-    tag: IHistorianTag;
+    tag: HistorianTag;
     isCreation: boolean;
 }
 
 export class TagFormOutput implements ITagFormOutput {
-    tag: IHistorianTag;
+    tag: HistorianTag;
     isCreation: boolean;
 
     constructor(input: TagFormInput, form: FormGroup) {
@@ -32,6 +32,6 @@ export class TagFormOutput implements ITagFormOutput {
         });
         const tag = Object.assign({}, input.tag);
         Object.assign(tag, formModel);
-        this.tag = tag as IHistorianTag;
+        this.tag = tag as HistorianTag;
     }
 }

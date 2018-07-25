@@ -27,6 +27,11 @@
                 <i class="fa fa-plus" aria-hidden="true"></i>Add new datasource
               </button>
             </div>
+            <div *ngIf="!isCreation" class="col-lg-12 col-md-12 small-column">
+                <button type="button" class="float-right ui-button-text ui-button ui-widget ui-state-default ui-corner-all" (click)="onClickAddTag()">
+                  <i class="fa fa-plus" aria-hidden="true"></i>Add new tag
+                </button>
+            </div>
             <div class="col-lg-12 col-md-12 large-column">
               <app-datasources-list [selectedDatasource]="selectedDatasource" (selectedDatasourceE)="onSelectDatasource($event)"></app-datasources-list>
             </div>
@@ -51,3 +56,14 @@
     </div>
   </div>
 </div>
+<!-- tag form add new tag -->
+<!-- <div *ngIf="datasource !== null"> -->
+  <p-dialog [(visible)]="disaplyAddTagForm" [modal]="true">
+      <p-header>
+          Add manually a new tag to datasource : '{{selectedDatasource.id}}'
+      </p-header>
+      <app-add-tag-form [questions]="tagQuestions" [item]="createdTag" (submitted)="onTagCreated($event)"></app-add-tag-form>
+      <p-footer>
+      </p-footer>
+  </p-dialog>
+<!-- </div> -->
