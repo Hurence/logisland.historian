@@ -1239,6 +1239,10 @@ definitions:
         type: string
       datasource_type:
         type: string
+        enum:
+          - 'OPC-DA'
+          - 'OPC-UA'
+        default: 'OPC-UA'
       prog_id:
         type: string
       host:
@@ -1254,6 +1258,7 @@ definitions:
         enum:
           - 'automatic'
           - 'manual'
+        default: 'automatic'
 
   Selection:
     type: object

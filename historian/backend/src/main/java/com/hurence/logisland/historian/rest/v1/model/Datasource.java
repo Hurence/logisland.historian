@@ -19,7 +19,7 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * Datasource
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-24T21:20:56.826+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-25T16:53:02.030+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
@@ -40,9 +40,40 @@ public class Datasource  implements Serializable {
         @Indexed(name = "clsid")
         private String clsid = null;
 
+              /**
+   * Gets or Sets datasourceType
+   */
+  public enum DatasourceTypeEnum {
+    DA("OPC-DA"),
+    
+    UA("OPC-UA");
+
+    private String value;
+
+    DatasourceTypeEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static DatasourceTypeEnum fromValue(String text) {
+      for (DatasourceTypeEnum b : DatasourceTypeEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
         @JsonProperty("datasource_type")
         @Indexed(name = "datasource_type")
-        private String datasourceType = null;
+        private DatasourceTypeEnum datasourceType = DatasourceTypeEnum.UA;
 
         @JsonProperty("prog_id")
         @Indexed(name = "prog_id")
@@ -97,7 +128,7 @@ public class Datasource  implements Serializable {
 
         @JsonProperty("tag_browsing")
         @Indexed(name = "tag_browsing")
-        private TagBrowsingEnum tagBrowsing = null;
+        private TagBrowsingEnum tagBrowsing = TagBrowsingEnum.AUTOMATIC;
 
         public Datasource recordType(String recordType) {
         this.recordType = recordType;
@@ -188,7 +219,7 @@ public class Datasource  implements Serializable {
         return this;
         }
 
-        public Datasource datasourceType(String datasourceType) {
+        public Datasource datasourceType(DatasourceTypeEnum datasourceType) {
         this.datasourceType = datasourceType;
         return this;
         }
@@ -201,11 +232,11 @@ public class Datasource  implements Serializable {
     @ApiModelProperty(value = "")
     
 
-  public String getDatasourceType() {
+  public DatasourceTypeEnum getDatasourceType() {
     return datasourceType;
     }
 
-        public Datasource setDatasourceType(String datasourceType) {
+        public Datasource setDatasourceType(DatasourceTypeEnum datasourceType) {
         this.datasourceType = datasourceType;
         return this;
         }

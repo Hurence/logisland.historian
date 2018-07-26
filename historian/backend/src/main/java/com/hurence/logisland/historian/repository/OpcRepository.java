@@ -20,12 +20,19 @@ package com.hurence.logisland.historian.repository;
 import com.hurence.opc.OpcTagInfo;
 import com.hurence.opc.da.OpcDaConnectionProfile;
 import com.hurence.opc.da.OpcDaOperations;
+import com.hurence.opc.da.OpcDaTemplate;
+import com.hurence.opc.ua.OpcUaConnectionProfile;
+import com.hurence.opc.ua.OpcUaOperations;
+import com.hurence.opc.ua.OpcUaTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.net.URI;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -48,11 +55,11 @@ public class OpcRepository {
      * @return a never empty {@link Collection}
      */
     public Collection<OpcTagInfo> fetchAllTags(@Valid OpcDaConnectionProfile connectionProfile) {
-        OpcDaOperations opcDaOperations = new OpcDaOperations();
+        OpcDaOperations opcDaOperations = new OpcDaTemplate();
         try {
             opcDaOperations.connect(connectionProfile);
             if (!opcDaOperations.awaitConnected()) {
-                logger.error("Unable to fetch tags from opc server {}.Please check your connectivity and your settings", connectionProfile.getHost());
+                logger.error("Unable to fetch tags from opc server {}.Please check your connectivity and your settings", connectionProfile.getConnectionUri());
                 return Collections.emptyList();
             }
             return opcDaOperations.browseTags();
@@ -61,4 +68,23 @@ public class OpcRepository {
         }
     }
 
+    /**
+     * Fetches all tags available on a OPC-DA server.
+     *
+     * @param connectionProfile the connection information.
+     * @return a never empty {@link Collection}
+     */
+    public Collection<OpcTagInfo> fetchAllTags(@Valid OpcUaConnectionProfile connectionProfile) {
+        OpcUaOperations opcUaOperations = new OpcUaTemplate();
+        try {
+            opcUaOperations.connect(connectionProfile);
+            if (!opcUaOperations.awaitConnected()) {
+                logger.error("Unable to fetch tags from opc server {}.Please check your connectivity and your settings", connectionProfile.getConnectionUri());
+                return Collections.emptyList();
+            }
+            return opcUaOperations.browseTags();
+        } finally {
+            opcUaOperations.disconnect();
+        }
+    }
 }
