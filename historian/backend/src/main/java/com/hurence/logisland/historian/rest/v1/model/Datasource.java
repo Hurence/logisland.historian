@@ -19,7 +19,7 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * Datasource
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-25T16:53:02.030+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-26T10:30:44.115+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
@@ -44,9 +44,11 @@ public class Datasource  implements Serializable {
    * Gets or Sets datasourceType
    */
   public enum DatasourceTypeEnum {
-    DA("OPC-DA"),
+    OPC_DA("OPC-DA"),
     
-    UA("OPC-UA");
+    OPC_UA("OPC-UA"),
+    
+    UNKNOWN("UNKNOWN");
 
     private String value;
 
@@ -73,7 +75,7 @@ public class Datasource  implements Serializable {
 
         @JsonProperty("datasource_type")
         @Indexed(name = "datasource_type")
-        private DatasourceTypeEnum datasourceType = DatasourceTypeEnum.UA;
+        private DatasourceTypeEnum datasourceType = DatasourceTypeEnum.OPC_UA;
 
         @JsonProperty("prog_id")
         @Indexed(name = "prog_id")

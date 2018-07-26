@@ -1242,6 +1242,7 @@ definitions:
         enum:
           - 'OPC-DA'
           - 'OPC-UA'
+          - 'UNKNOWN' # Needed so that bin/codegen.sh generate enum as OPC_DA/OPC_UA instead of DA/UA....
         default: 'OPC-UA'
       prog_id:
         type: string

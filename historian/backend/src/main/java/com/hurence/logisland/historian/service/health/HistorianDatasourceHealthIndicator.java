@@ -17,7 +17,6 @@
 
 package com.hurence.logisland.historian.service.health;
 
-import com.hurence.logisland.historian.dictionary.DatasourceTypes;
 import com.hurence.logisland.historian.rest.v1.model.Datasource;
 import com.hurence.logisland.historian.service.DatasourcesApiService;
 import org.slf4j.Logger;
@@ -42,6 +41,7 @@ public class HistorianDatasourceHealthIndicator extends AbstractHealthIndicator 
     private final static Logger logger = LoggerFactory.getLogger(HistorianDatasourceHealthIndicator.class);
     private final static DatasourceHealthChecker unknownDatasourceChecker = (ds -> Health.unknown().build());
     private final static OpcDaDatasourceHealthChecker opcDaDatasourceChecker = new OpcDaDatasourceHealthChecker();
+    private final static OpcUaDatasourceHealthChecker opcUaDatasourceChecker = new OpcUaDatasourceHealthChecker();
 
     @Autowired
     private DatasourcesApiService datasourcesApiService;
@@ -79,13 +79,14 @@ public class HistorianDatasourceHealthIndicator extends AbstractHealthIndicator 
             logger.error("Datasource or its type cannot be null");
             return unknownDatasourceChecker;
         }
-        String datasourceType = datasource.getDatasourceType();
-        if (datasourceType.equals(DatasourceTypes.OPC_DA_TYPE)) {
-            return opcDaDatasourceChecker;
-        } else {
-            logger.warn("Unhandled datasource type {}", datasourceType);
-            return unknownDatasourceChecker;
+        switch (datasource.getDatasourceType()) {
+            case OPC_DA:
+                return opcDaDatasourceChecker;
+            case OPC_UA:
+                return opcUaDatasourceChecker;
+            default:
+                logger.warn("Unhandled datasource type {}", datasource.getDatasourceType());
+                return unknownDatasourceChecker;
         }
-
     }
 }

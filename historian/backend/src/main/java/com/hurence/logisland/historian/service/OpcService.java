@@ -117,9 +117,9 @@ public class OpcService {
                 "Unable to find datasource with id " + datasourceId));
         logger.info("Fetching tags for datasource id {}", datasourceId);
         switch (datasource.getDatasourceType()) {
-            case DA:
+            case OPC_DA:
                 return browseTagOpcDa(datasource);
-            case UA:
+            case OPC_UA:
                 return browseTagOpcUa(datasource);
             default:
                 throw new RuntimeException("Unknown datasource type" + datasource.getDatasourceType());
