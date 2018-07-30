@@ -27,11 +27,6 @@
                 <i class="fa fa-plus" aria-hidden="true"></i>Add new datasource
               </button>
             </div>
-            <div *ngIf="!isCreation" class="col-lg-12 col-md-12 small-column">
-                <button type="button" class="float-right ui-button-text ui-button ui-widget ui-state-default ui-corner-all" (click)="onClickAddTag()">
-                  <i class="fa fa-plus" aria-hidden="true"></i>Add new tag
-                </button>
-            </div>
             <div class="col-lg-12 col-md-12 large-column">
               <app-datasources-list [selectedDatasource]="selectedDatasource" (selectedDatasourceE)="onSelectDatasource($event)"></app-datasources-list>
             </div>
@@ -41,15 +36,16 @@
           <!-- <div class="datasource-detail-title text-center h-10 align-bottom small-column">
             <h2>Datasource Detail</h2>
           </div> -->
-          <div class="datasource-detail-content h-100">
-            <p-tabView [activeIndex]="selectedTab">
-              <p-tabPanel header="Collected Tags">
-                <app-opc-tag-tree [tags]="tags"></app-opc-tag-tree>
-              </p-tabPanel>
-              <p-tabPanel header="Datasource Configuration" [disabled]="false">
-                <app-datasource-form [datasource]="selectedDatasource" [isCreation]="isCreation" (submitted)="onSubmitted($event)"></app-datasource-form>
-              </p-tabPanel>
-            </p-tabView>
+          <div class="row">
+            <div class="col-12 small-column">
+              <button type="button" class="float-right ui-button-text ui-button ui-widget ui-state-default ui-corner-all" 
+                      (click)="onClickAddTag()" [disabled]="isAddTagDisabled(selectedDatasource)">
+                <i class="fa fa-plus" aria-hidden="true"></i>Add new tag
+              </button>
+            </div>
+            <div class="col-12 datasource-detail-content h-100">
+              <app-opc-tag-tree [tags]="tags"></app-opc-tag-tree>
+            </div>
           </div>
         </div>
       </div>
@@ -58,12 +54,20 @@
 </div>
 <!-- tag form add new tag -->
 <!-- <div *ngIf="datasource !== null"> -->
-  <p-dialog [(visible)]="disaplyAddTagForm" [modal]="true">
-      <p-header>
-          Add manually a new tag to datasource : '{{selectedDatasource.id}}'
-      </p-header>
-      <app-add-tag-form [questions]="tagQuestions" [item]="createdTag" (submitted)="onTagCreated($event)"></app-add-tag-form>
-      <p-footer>
-      </p-footer>
-  </p-dialog>
+<p-dialog [(visible)]="disaplyAddTagForm" [modal]="true">
+  <p-header>
+      Add manually a new tag to datasource : '{{selectedDatasource?.id}}'
+  </p-header>
+  <app-add-tag-form [questions]="tagQuestions" [item]="createdTag" (submitted)="onTagCreated($event)"></app-add-tag-form>
+  <p-footer>
+  </p-footer>
+</p-dialog>
+<p-dialog [(visible)]="displayAddDatasource" [modal]="true" appendTo="body" [dismissableMask]="true">
+  <p-header>
+      Add a new datasource
+  </p-header>
+  <app-datasource-form [datasource]="datasourceToCreate" [isCreation]="true" (submitted)="onSubmitted($event)"></app-datasource-form>
+  <p-footer>
+  </p-footer>
+</p-dialog>
 <!-- </div> -->

@@ -115,59 +115,60 @@ export class QuestionService {
         key: 'id',
         label: 'Id',
         order: 1,
-        disabled: false
-      }),
-      new TextboxQuestion({
-        key: 'tag_name',
-        label: 'tag name',
-        order: 2,
         disabled: false,
+        required: true
       }),
+      // new TextboxQuestion({
+      //   key: 'tag_name',
+      //   label: 'tag name',
+      //   order: 2,
+      //   disabled: false,
+      // }),
 
-      new TextboxQuestion({
-        key: 'datasource_id',
-        label: 'Datasource Name',
-        order: 3,
-        disabled: true,
-      }),
+      // new TextboxQuestion({
+      //   key: 'datasource_id',
+      //   label: 'Datasource Name',
+      //   order: 3,
+      //   disabled: true,
+      // }),
 
-      new TextboxQuestion({
-        key: 'description',
-        label: 'Description',
-        placeholder: 'description...',
-        required: true,
-        order: 4
-      }),
+      // new TextboxQuestion({
+      //   key: 'description',
+      //   label: 'Description',
+      //   placeholder: 'description...',
+      //   required: true,
+      //   order: 4
+      // }),
 
-      new NumberQuestion({
-        key: 'update_rate',
-        label: 'update rate',
-        order: 5,
-        required: true,
-        value: 60000,
-        min: 0,
-      }),
+      // new NumberQuestion({
+      //   key: 'update_rate',
+      //   label: 'update rate',
+      //   order: 5,
+      //   required: true,
+      //   value: 60000,
+      //   min: 0,
+      // }),
 
-      new TextboxQuestion({
-        key: 'domain',
-        label: 'Domain',
-        order: 6,
-        disabled: true
-      }),
+      // new TextboxQuestion({
+      //   key: 'domain',
+      //   label: 'Domain',
+      //   order: 6,
+      //   disabled: true
+      // }),
 
-      new TextboxQuestion({
-        key: 'server',
-        label: 'Server',
-        order: 7,
-        disabled: true
-      }),
+      // new TextboxQuestion({
+      //   key: 'server',
+      //   label: 'Server',
+      //   order: 7,
+      //   disabled: true
+      // }),
 
-      new TextboxQuestion({
-        key: 'group',
-        label: 'Group',
-        order: 8,
-        disabled: false
-      }),
+      // new TextboxQuestion({
+      //   key: 'group',
+      //   label: 'Group',
+      //   order: 8,
+      //   disabled: false
+      // }),
       // new ArrayQuestion<string>({
       //   key: 'labels',
       //   label: 'Labels',

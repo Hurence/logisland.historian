@@ -23,7 +23,6 @@ export abstract class AbstractModelServiceCreateOrReplace<M> implements IModelSe
 
   protected baseUrl: string;
   protected objNameForMsg: string;
-  
 
   constructor(protected http: HttpClient,
               protected help: Utilities,
@@ -89,7 +88,7 @@ export abstract class AbstractModelServiceCreateOrReplace<M> implements IModelSe
 
   delete(id: string): Observable<M> {
     return this.http.delete<M>(this.baseUrl + '/' + encodeURIComponent(id)).pipe(
-      tap(item => {        
+      tap(item => {
         this.messageService.add({
           severity: 'success',
           summary: `successfully deleted ${this.objNameForMsg}`,

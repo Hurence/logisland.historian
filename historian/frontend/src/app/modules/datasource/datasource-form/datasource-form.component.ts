@@ -47,7 +47,6 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.datasourceTypes = this.datasourceService.getDatasourceTypes(); // TODO should disappear when using dynamic form
-    this.submitBtnMsg = this.BTN_MSG_ADD;
   }
 
   ngOnChanges(changes: SimpleChanges) {

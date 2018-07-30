@@ -38,4 +38,7 @@ export class Datasource implements IDatasource {
         Object.assign(this, options);
     }
 
+    isManual(): boolean {
+        return this.tag_browsing === TagBrowsingMode.MANUAL;
+    }
 }

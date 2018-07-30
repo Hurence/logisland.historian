@@ -23,17 +23,14 @@ import { QuestionService } from '../../../shared/dynamic-form/question.service';
 })
 export class DatasourceDashboardComponent implements OnInit, CanComponentDeactivate {
 
-  private DATASOURCE_FORM_TAB_INDEX = 1;
-  private DATASOURCE_TAGS_TAB_INDEX = 0;
-
-  selectedTab = this.DATASOURCE_TAGS_TAB_INDEX;
   selectedDatasource: Datasource;
+  datasourceToCreate: Datasource;
   tags: ITag[];
-  isCreation: boolean;
   filterPlaceHolder = 'Type to filter by type or by description...';
   // add tag form
   createdTag: HistorianTag;
   disaplyAddTagForm = false;
+  displayAddDatasource = false;
   tagQuestions: QuestionBase<any>[];
 
   @ViewChild(DatasourceFormComponent)
@@ -72,8 +69,7 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
               }
 
   ngOnInit() {
-    this.isCreation = true;
-    this.selectDatasource(null);
+    this.tags = [];
     this.tagQuestions = this.questionService.getAddTagForm();
   }
 
@@ -108,14 +104,9 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
     return this.profilService.isHelpHidden();
   }
 
-  onSubmitted(ds: Datasource) {
-    this.dslistComp.getDatasources();
-    this.selectedDatasource = ds;
-    this.isCreation = false;
-  }
-
   onClickAddDatasource() {
-    this.onSelectDatasource(null);
+    this.datasourceToCreate = new Datasource({id: '', datasource_type: DatasourceType.OPC_UA});
+    this.displayAddDatasource = true;
   }
 
   onClickAddTag() {
@@ -170,13 +161,7 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
   }
 
   private selectDatasource(datasource: Datasource) {
-    if (datasource === null || datasource.id === this.selectedDatasource.id) {
-      this.isCreation = true;
-      this.selectedDatasource = new Datasource({id: '', datasource_type: DatasourceType.UNKNOWN});
-      this.tags = [];
-      this.selectedTab = this.DATASOURCE_FORM_TAB_INDEX;
-    } else {
-      this.isCreation = false;
+    if (datasource !== null && (this.selectedDatasource === undefined || datasource.id !== this.selectedDatasource.id)) {
       this.selectedDatasource = datasource;
       this.tagTree.setLoading();
       switch (datasource.tag_browsing) {
@@ -194,7 +179,6 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
           console.error('unknown TagBrowsingMode type :', datasource.tag_browsing);
           break;
       }
-      this.selectedTab = this.DATASOURCE_TAGS_TAB_INDEX;
     }
   }
 
@@ -208,5 +192,9 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
   onTagCreated(tag: HistorianTag): void {
     this.disaplyAddTagForm = false;
     this.tagTree.addNodeFromTag(tag);
+  }
+
+  isAddTagDisabled(ds: Datasource): boolean {
+    return (ds === null || ds === undefined || !ds.isManual());
   }
 }
