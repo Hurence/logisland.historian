@@ -35,7 +35,16 @@ export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements
 
   onSubmit() {
     const objToSave = this.prepareSaveItem();
-    this.subscribeToUpdate(this.service.save(objToSave, objToSave.getId()));
+    this.service.save(objToSave, objToSave.getId()).subscribe(
+      obj => {
+        const converted = this.convert(obj);
+        this.item = converted;
+        this.submitted.emit(converted);
+      },
+      error => {
+        console.error(JSON.stringify(error));
+      }
+    );
   }
 
   /* Fill in form with current datasource properties */
@@ -50,19 +59,6 @@ export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements
     const item = this.create(this.item);
     Object.assign(item, formModel);
     return item;
-  }
-
-  private subscribeToUpdate(submitted: Observable<B>): void {
-    submitted.subscribe(
-      obj => {
-        const converted = this.convert(obj);
-        this.item = converted;
-        this.submitted.emit(converted);
-      },
-      error => {
-        console.error(JSON.stringify(error));
-      }
-    );
   }
 
   protected abstract create(item: T): B;

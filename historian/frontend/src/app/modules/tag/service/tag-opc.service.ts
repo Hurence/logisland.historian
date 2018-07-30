@@ -23,6 +23,14 @@ export class TagOpcService {
     );
   }
 
+  searchForTag(datasourceId: string, tagId: string): Observable<OpcTag> {
+    return this.http.get<OpcTag>(`${this.tagsUrl}datasources/${encodeURIComponent(datasourceId)}/tags/${encodeURIComponent(tagId)}`)
+    .pipe(
+      map(tag => new OpcTag(tag)),
+      catchError(this.help.handleError(`searchForTag(${datasourceId}, ${tagId})`, undefined))
+    );
+  }
+
   get(datasourceId: string): Observable<OpcTag[]> {
     return this.http.get<OpcTag[]>(`${this.tagsUrl}datasources/${encodeURIComponent(datasourceId)}/tags`)
     .pipe(
