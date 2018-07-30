@@ -100,7 +100,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
         user: [{ value: '', disabled: true }, Validators.required],
         password: [{ value: '', disabled: true }, Validators.required],
       }),
-      tagBrowsing: [TagBrowsingMode.AUTOMATIC, Validators.required],
+      tagBrowsing: [TagBrowsingMode.MANUAL, Validators.required],
     });
     this.name = this.dsForm.get('name');
     this.user = this.dsForm.get('auth.user');
@@ -154,9 +154,9 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   onSubmit() {
     this.datasource = this.prepareSaveDatasource();
     if (this.isCreation) {
-      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource));
+      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource, this.datasource.id));
     } else {
-      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource));
+      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource, this.datasource.id));
     }
   }
   /* subscribe to update or save request
@@ -178,7 +178,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private prepareSaveDatasource(): Datasource {
     const formModel = this.dsForm.value;
 
-    const saveDatasource: Datasource = {
+    const saveDatasource: Datasource = new Datasource({
       id: formModel.name || this.datasource.id, // when disabled
       description: formModel.description,
       host: formModel.host,
@@ -187,10 +187,9 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       progId: formModel.progId,
       user: formModel.auth.user,
       password: formModel.auth.password,
-      record_type: 'datasource',
       datasource_type: formModel.type,
       tag_browsing: formModel.tagBrowsing,
-    };
+    });
     return saveDatasource;
   }
 

@@ -105,7 +105,11 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
   }
 
   onClickAddDatasource() {
-    this.datasourceToCreate = new Datasource({id: '', datasource_type: DatasourceType.OPC_UA});
+    this.datasourceToCreate = new Datasource({
+      id: '',
+      datasource_type: DatasourceType.OPC_UA,
+      tag_browsing: TagBrowsingMode.MANUAL
+    });
     this.displayAddDatasource = true;
   }
 
