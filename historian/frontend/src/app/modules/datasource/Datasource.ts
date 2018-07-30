@@ -2,9 +2,14 @@ export enum TagBrowsingMode {
     AUTOMATIC = 'automatic',
     MANUAL = 'manual',
 }
+export enum DatasourceType {
+    OPC_DA = 'OPC-DA',
+    OPC_UA = 'OPC-UA',
+    UNKNOWN = '',
+}
 export class IDatasource {
     public id: string;
-    public datasource_type: string;
+    public datasource_type: DatasourceType;
     public description?: string;
     public host?: string;
     public domain?: string;
@@ -17,7 +22,7 @@ export class IDatasource {
 export class Datasource implements IDatasource {
 
     public id: string;
-    public datasource_type: string;
+    public datasource_type: DatasourceType = DatasourceType.OPC_UA;
     public tag_browsing: TagBrowsingMode = TagBrowsingMode.AUTOMATIC;
     public description?: string;
     public host?: string;

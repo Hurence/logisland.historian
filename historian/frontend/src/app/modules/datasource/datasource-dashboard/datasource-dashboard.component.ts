@@ -4,7 +4,7 @@ import { Observable, Observer } from 'rxjs';
 
 import { CanComponentDeactivate } from '../../../can-deactivate-guard.service';
 import { ProfilService } from '../../../profil/profil.service';
-import { Datasource, TagBrowsingMode } from '../Datasource';
+import { Datasource, TagBrowsingMode, DatasourceType } from '../Datasource';
 import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
 import { DatasourcesListComponent } from '../datasources-list/datasources-list.component';
 import { ITag, TagDataType } from '../../tag/modele/tag';
@@ -172,7 +172,7 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
   private selectDatasource(datasource: Datasource) {
     if (datasource === null || datasource.id === this.selectedDatasource.id) {
       this.isCreation = true;
-      this.selectedDatasource = new Datasource({id: '', datasource_type: 'OPC-DA'});
+      this.selectedDatasource = new Datasource({id: '', datasource_type: DatasourceType.UNKNOWN});
       this.tags = [];
       this.selectedTab = this.DATASOURCE_FORM_TAB_INDEX;
     } else {

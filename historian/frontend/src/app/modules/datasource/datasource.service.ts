@@ -4,7 +4,7 @@ import { Observable ,  of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Tag } from '../tag/modele/tag';
-import { Datasource } from './Datasource';
+import { Datasource, DatasourceType } from './Datasource';
 import { IModelService } from '../../shared/base-model-service';
 import { Utilities } from '../../shared/utilities.service';
 import { environment } from '../../../environments/environment';
@@ -98,7 +98,12 @@ export class DatasourceService {
   }
 
   getDatasourceTypes(): string[] {
-    return ['', 'OPC-DA', 'OPC-UA'];
+    const datasourceTypes: string[] = [];
+    const keys: (keyof typeof DatasourceType)[] = <(keyof typeof DatasourceType)[]>Object.keys(DatasourceType);
+    for (const key of keys) {
+      datasourceTypes.push(DatasourceType[key]);
+    }
+    return datasourceTypes;
   }
 
 

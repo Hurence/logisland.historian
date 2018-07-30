@@ -16,7 +16,7 @@
 
   <div [ngSwitch]="dsForm.get('type').value">
 
-    <div *ngSwitchCase="'OPC-DA'" id="opc-da-form">
+    <div *ngSwitchCase="dsForm.get('type').value==='OPC-DA' || dsForm.get('type').value==='OPC-UA'? dsForm.get('type').value:'notInCase'" id="opc-da-form">
       <div class="form-group label-small text-capitalize">
         <label for="name" i18n="name of the datasource|label for name datasource input">name</label>
         <input type="text" class="form-control" formControlName="name" name="name" required>
