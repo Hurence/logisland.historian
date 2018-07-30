@@ -4,7 +4,7 @@
         <div *ngFor="let question of questions" class="">
             <app-question [question]="question" [form]="form"></app-question>
         </div>
-        {{ item | json }}
+        <!-- {{ item | json }} -->
         <div class="form-row">
             <button class="btn btn-success" type="submit" [disabled]="!form.valid">Save</button>
         </div>

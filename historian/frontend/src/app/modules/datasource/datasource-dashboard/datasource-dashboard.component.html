@@ -56,7 +56,7 @@
 <!-- <div *ngIf="datasource !== null"> -->
 <p-dialog [(visible)]="disaplyAddTagForm" [modal]="true">
   <p-header>
-      Add manually a new tag to datasource : '{{selectedDatasource?.id}}'
+      Add tag to datasource : '{{selectedDatasource?.id}}'
   </p-header>
   <app-add-tag-form [questions]="tagQuestions" [item]="createdTag" (submitted)="onTagCreated($event)"></app-add-tag-form>
   <p-footer>
