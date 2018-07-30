@@ -201,4 +201,10 @@ export class DatasourceDashboardComponent implements OnInit, CanComponentDeactiv
   isAddTagDisabled(ds: Datasource): boolean {
     return (ds === null || ds === undefined || !ds.isManual());
   }
+
+  onSubmitted(ds: Datasource) {
+    this.dslistComp.getDatasources();
+    this.selectedDatasource = ds;
+    this.displayAddDatasource = false;
+  }
 }
