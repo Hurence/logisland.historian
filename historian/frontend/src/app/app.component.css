@@ -9,6 +9,9 @@ header {
 #sidebar .list-group-item {
     color: #ccc;
 }
+#sidebar .sub-menu {
+  margin-left: 5%;
+}
 .list-group-item {
     background-color: transparent;
     border: 0px solid rgba(0,0,0,.125);
