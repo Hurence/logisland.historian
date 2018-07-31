@@ -135,8 +135,8 @@ paths:
         - tag
         - datasource
        operationId: getAllTagsFromDatasource
-       summary:  get all tags from a given datasource
-       description: retrieve all tags through this datasource
+       summary:  Browse tags from a given datasource
+       description: Browsetags through this datasource
        produces:
           - application/json
        parameters:
@@ -145,13 +145,55 @@ paths:
            description: id of the Datasource to return
            required: true
            type: string
+         - name: root
+           in: query
+           description: The root tag to start browsing from
+           required: false
+           type: string
+         - name: depth
+           in: query
+           description: The depth of the visit
+           required: false
+           type: integer
+           default: 1
        responses:
          '200':
-           description: Tag list
+           description: The list of browsed tags
            schema:
              type: array
              items:
                $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+  /datasources/{datasourceId}/tags/{tagId}:
+    get:
+       tags:
+        - tag
+        - datasource
+       operationId: fetchTagMetadataFromDatasource
+       summary:  fetch tag properties from a datasource
+       description: fetch tag properties from a datasource
+       produces:
+          - application/json
+       parameters:
+         - name: datasourceId
+           in: path
+           description: id of the Datasource to connect to
+           required: true
+           type: string
+         - name: tagId
+           in: path
+           description: id of the tag to inspect
+           required: true
+           type: string
+       responses:
+         '200':
+           description: Tag information
+           schema:
+            $ref: '#/definitions/Tag'
          default:
            description: unexpected error
            schema:

@@ -21,17 +21,18 @@ import com.hurence.logisland.historian.repository.OpcRepository;
 import com.hurence.logisland.historian.rest.v1.api.NotFoundException;
 import com.hurence.logisland.historian.rest.v1.model.Datasource;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.opc.OpcObjectInfo;
 import com.hurence.opc.OpcTagInfo;
 import com.hurence.opc.auth.UsernamePasswordCredentials;
 import com.hurence.opc.da.OpcDaConnectionProfile;
 import com.hurence.opc.ua.OpcUaConnectionProfile;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import scala.Tuple2;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -41,7 +42,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -101,10 +104,37 @@ public class OpcService {
     public List<Tag> browseAllTags() {
         return datasourcesApiService.getAllDatasources("*").stream()
                 .map(Datasource::getId)
-                .map(this::browseDatasourceTag)
+                .map(id -> browseDatasourceTag(id, null, null))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Fetch metadata from a tag in a certain datasource.
+     * @param datasourceId the id of the historian datasource.
+     * @param tag the tag if
+     * @return the {@link Tag} information.
+     */
+    public Tag fetchMetadata(String datasourceId, String tag) {
+        Datasource datasource = datasourcesApiService.getDatasource(datasourceId).orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND.value(),
+                "Unable to find datasource with id " + datasourceId));
+        logger.info("Fetching tags for datasource id {}", datasourceId);
+        OpcObjectInfo info;
+        switch (datasource.getDatasourceType()) {
+            case OPC_DA:
+                info = opcRepository.fetchTagMetadata(createOpcDaConnectionProfile(datasource), tag);
+                break;
+            case OPC_UA:
+                info = opcRepository.fetchTagMetadata(createOpcUaConnectionProfile(datasource), tag);
+                break;
+            default:
+                throw new RuntimeException("Unknown datasource type" + datasource.getDatasourceType());
+        }
+        return convertOpcTagInfoToHistorianTag(info, null, datasource);
+    }
+
+
+
 
     /**
      * Browse all the tags available in a datasource.
@@ -112,67 +142,97 @@ public class OpcService {
      * @param datasourceId the datasource to browse.
      * @return the never null list of {@link Tag}
      */
-    public List<Tag> browseDatasourceTag(String datasourceId) {
+    public List<Tag> browseDatasourceTag(String datasourceId, String rootTag, Integer depth) {
         Datasource datasource = datasourcesApiService.getDatasource(datasourceId).orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND.value(),
                 "Unable to find datasource with id " + datasourceId));
         logger.info("Fetching tags for datasource id {}", datasourceId);
         switch (datasource.getDatasourceType()) {
             case OPC_DA:
-                return browseTagOpcDa(datasource);
+                return browseTagOpcDa(datasource, rootTag, depth);
             case OPC_UA:
-                return browseTagOpcUa(datasource);
+                return browseTagOpcUa(datasource, rootTag, depth);
             default:
                 throw new RuntimeException("Unknown datasource type" + datasource.getDatasourceType());
         }
 
     }
 
-    private List<Tag> browseTagOpcDa(Datasource datasource) throws IllegalArgumentException {
-        OpcDaConnectionProfile connectionProfile;
+    private OpcDaConnectionProfile createOpcDaConnectionProfile(Datasource datasource) {
         try {
-            connectionProfile = new OpcDaConnectionProfile()
+            return new OpcDaConnectionProfile()
                     .withComClsId(datasource.getClsid())
                     .withComProgId(datasource.getProgId())
                     .withDomain(datasource.getDomain())
                     .withCredentials(new UsernamePasswordCredentials()
                             .withUser(datasource.getUser())
                             .withPassword(datasource.getPassword()))
-                    .withConnectionUri(new URI("opcda://" + datasource.getHost()))
+                    .withConnectionUri(new URI("opc.da://" + datasource.getHost()))
                     .withSocketTimeout(Duration.of(socketTimeoutMillis, ChronoUnit.MILLIS));
         } catch (URISyntaxException ex) {
             throw new IllegalArgumentException(String.format("Error while creating connection instance with host '%s'", datasource.getHost()), ex);
         }
-        return opcRepository.fetchAllTags(connectionProfile).stream()
-                .map(tag -> convertOpcTagInfoToHistorianTag(tag, datasource))
-                .filter(tag -> tag != null)
-                .collect(Collectors.toList());
     }
-    private List<Tag> browseTagOpcUa(Datasource datasource) {
-        OpcUaConnectionProfile connectionProfile = new OpcUaConnectionProfile()
+
+    private OpcUaConnectionProfile createOpcUaConnectionProfile(Datasource datasource) {
+        return new OpcUaConnectionProfile()
                 .withConnectionUri(URI.create(datasource.getHost()))//"opc.tcp://localhost:53530/OPCUA/SimulationServer"
                 .withClientIdUri("none")//hurence:opc-simple:client:test
                 .withClientName("Simple OPC test client")
                 .withSocketTimeout(Duration.of(socketTimeoutMillis, ChronoUnit.MILLIS));
+    }
 
-        return opcRepository.fetchAllTags(connectionProfile).stream()
-                .map(tag -> convertOpcTagInfoToHistorianTag(tag, datasource))
+    private List<Tag> browseTagOpcDa(Datasource datasource, String rootTag, Integer depth) throws IllegalArgumentException {
+        OpcDaConnectionProfile connectionProfile = createOpcDaConnectionProfile(datasource);
+        Map<String, Collection<OpcObjectInfo>> tagMap = (rootTag != null && depth != null) ?
+                opcRepository.fetchTagNames(connectionProfile, rootTag, depth) :
+                Collections.singletonMap(null, opcRepository.fetchAllTags(connectionProfile).stream().map(a -> (OpcObjectInfo) a).collect(Collectors.toList()));
+        return tagMap.entrySet().stream()
+                .flatMap(entry -> entry.getValue().stream().map(t -> Tuple2.apply(entry.getKey(), t)))
+                .map(tuple -> convertOpcTagInfoToHistorianTag(tuple._2(), tuple._1(), datasource))
                 .filter(tag -> tag != null)
                 .collect(Collectors.toList());
     }
 
-    private Tag convertOpcTagInfoToHistorianTag(OpcTagInfo opcTagInfo, Datasource datasource) {
+    private List<Tag> browseTagOpcUa(Datasource datasource, String rootTag, Integer depth) throws IllegalArgumentException {
+        OpcUaConnectionProfile connectionProfile = createOpcUaConnectionProfile(datasource);
+        Map<String, Collection<OpcObjectInfo>> tagMap = (rootTag != null && depth != null) ?
+                opcRepository.fetchTagNames(connectionProfile, rootTag, depth) :
+                Collections.singletonMap(null, opcRepository.fetchAllTags(connectionProfile).stream().map(a -> (OpcObjectInfo) a).collect(Collectors.toList()));
+        return tagMap.entrySet().stream()
+                .flatMap(entry -> entry.getValue().stream().map(t -> Tuple2.apply(entry.getKey(), t)))
+                .map(tuple -> convertOpcTagInfoToHistorianTag(tuple._2(), tuple._1(), datasource))
+                .filter(tag -> tag != null)
+                .collect(Collectors.toList());
+    }
+
+    private Tag convertOpcTagInfoToHistorianTag(OpcObjectInfo opcObjectInfo, String root, Datasource datasource) {
         try {
-            return new Tag()
+            Tag t = new Tag()
                     .server(datasource.getHost())
                     .domain(datasource.getDomain())
-                    .group(opcTagInfo.getGroup())
-                    .tagName(opcTagInfo.getName())
-                    .dataType(mapDataType(opcTagInfo.getType()))
+                    .tagName(opcObjectInfo.getName())
                     .datasourceId(datasource.getId())
-                    .id(StringUtils.join(new String[]{datasource.getDomain(),
-                            datasource.getHost(), opcTagInfo.getName()}, "|"));
+                    .id(opcObjectInfo.getId())
+                    .dataType(null)
+                    .recordType(opcObjectInfo instanceof OpcTagInfo ? "tag" : "folder");
+
+            if (root != null) {
+                t.setGroup(root);
+            }
+            if (opcObjectInfo.getDescription() != null && opcObjectInfo.getDescription().isPresent()) {
+                t.setDescription(opcObjectInfo.getDescription().get().toString());
+            }
+            if (opcObjectInfo instanceof OpcTagInfo) {
+                OpcTagInfo tmp = (OpcTagInfo) opcObjectInfo;
+                t.setDataType(tmp.getType() != null ? mapDataType(tmp.getType()) : null);
+                if (tmp.getScanRate() != null && tmp.getScanRate().isPresent()) {
+                    t.setUpdateRate((int) tmp.getScanRate().get().toMillis());
+                }
+
+            }
+            return t;
         } catch (Exception e) {
-            logger.warn("Unable to parse tag " + opcTagInfo.getName(), e);
+            logger.warn("Unable to parse tag " + opcObjectInfo.getName(), e);
             return null;
         }
     }
