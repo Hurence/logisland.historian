@@ -10,10 +10,10 @@ import java.util.List;
 @Repository
 public interface SolrSelectionRepository extends SolrCrudRepository<PrivateSelection, String> {
 
-    @Query(value = "*:*", filters = { "?0", "record_type:selection" })
+    @Query(value = "*:*", filters = { "?0"})
     List<PrivateSelection>      findByText(String text);
 
-    @Query(value = "owner:?0", filters = { "record_type:selection" })
+    @Query(value = "*:*", filters = { "owner:?0" })
     List<PrivateSelection> findByOwner(String owner);
 
 }

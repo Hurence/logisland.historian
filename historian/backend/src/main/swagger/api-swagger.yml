@@ -134,7 +134,7 @@ paths:
        tags:
         - tag
         - datasource
-       operationId: getAllTagsFromDatasource
+       operationId: browseTagsFromDatasource
        summary:  Browse tags from a given datasource
        description: Browsetags through this datasource
        produces:
@@ -1270,9 +1270,6 @@ definitions:
       - id
       - host
     properties:
-      record_type:
-        type: string
-        default: 'datasource'
       id:
         type: string
       description:
@@ -1333,14 +1330,10 @@ definitions:
         required:
           - id
           - owner
-          - record_type
         properties:
           id:
             description: concatenation of owner with name for example
             type: string
-          record_type:
-            type: string
-            default: 'selection'
 
   Permissions:
     type: object
@@ -1369,9 +1362,10 @@ definitions:
       record_type:
         type: string
         default: 'tag'
+      _id_:
+        type: string
       id:
         type: string
-        default: 'mySweetUniqueId'
       datasource_id:
         type: string
       domain:

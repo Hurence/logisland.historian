@@ -23,18 +23,22 @@ import org.threeten.bp.OffsetDateTime;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-26T10:30:44.115+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-31T18:49:06.852+02:00")
 
 
-@SolrDocument(solrCoreName = "historian")
+@SolrDocument(solrCoreName = "tag")
 public class Tag  implements Serializable {
         @JsonProperty("record_type")
         @Indexed(name = "record_type")
         private String recordType = "tag";
 
+        @JsonProperty("_id_")
+        @Indexed(name = "_id_")
+        private String id_ = null;
+
         @JsonProperty("id")
         @Indexed(name = "id")
-        private String id = "mySweetUniqueId";
+        private String id = null;
 
         @JsonProperty("datasource_id")
         @Indexed(name = "datasource_id")
@@ -170,6 +174,28 @@ public class Tag  implements Serializable {
 
         public Tag setRecordType(String recordType) {
         this.recordType = recordType;
+        return this;
+        }
+
+        public Tag id_(String id_) {
+        this.id_ = id_;
+        return this;
+        }
+
+    /**
+        * Get id_
+    * @return id_
+    **/
+        @JsonProperty("_id_")
+    @ApiModelProperty(value = "")
+    
+
+  public String getId_() {
+    return id_;
+    }
+
+        public Tag setId_(String id_) {
+        this.id_ = id_;
         return this;
         }
 
@@ -622,6 +648,7 @@ public class Tag  implements Serializable {
     }
         Tag tag = (Tag) o;
         return Objects.equals(this.recordType, tag.recordType) &&
+        Objects.equals(this.id_, tag.id_) &&
         Objects.equals(this.id, tag.id) &&
         Objects.equals(this.datasourceId, tag.datasourceId) &&
         Objects.equals(this.domain, tag.domain) &&
@@ -645,7 +672,7 @@ public class Tag  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id, datasourceId, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled);
+    return Objects.hash(recordType, id_, id, datasourceId, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled);
     }
 
 
@@ -655,6 +682,7 @@ StringBuilder sb = new StringBuilder();
 sb.append("{\n");
 
 sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
+sb.append("    id_: ").append(toIndentedString(id_)).append("\n");
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
 sb.append("    datasourceId: ").append(toIndentedString(datasourceId)).append("\n");
 sb.append("    domain: ").append(toIndentedString(domain)).append("\n");

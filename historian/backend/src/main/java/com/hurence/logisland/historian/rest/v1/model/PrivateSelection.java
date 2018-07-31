@@ -22,10 +22,10 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * PrivateSelection
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-26T10:30:44.115+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-31T18:49:06.852+02:00")
 
 
-@SolrDocument(solrCoreName = "historian")
+@SolrDocument(solrCoreName = "selection")
 public class PrivateSelection  implements Serializable {
         @JsonProperty("name")
         @Indexed(name = "name")
@@ -50,10 +50,6 @@ public class PrivateSelection  implements Serializable {
         @JsonProperty("id")
         @Indexed(name = "id")
         private String id = null;
-
-        @JsonProperty("record_type")
-        @Indexed(name = "record_type")
-        private String recordType = "selection";
 
         public PrivateSelection name(String name) {
         this.name = name;
@@ -196,29 +192,6 @@ public class PrivateSelection  implements Serializable {
         return this;
         }
 
-        public PrivateSelection recordType(String recordType) {
-        this.recordType = recordType;
-        return this;
-        }
-
-    /**
-        * Get recordType
-    * @return recordType
-    **/
-        @JsonProperty("record_type")
-    @ApiModelProperty(required = true, value = "")
-      @NotNull
-
-
-  public String getRecordType() {
-    return recordType;
-    }
-
-        public PrivateSelection setRecordType(String recordType) {
-        this.recordType = recordType;
-        return this;
-        }
-
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -234,13 +207,12 @@ public class PrivateSelection  implements Serializable {
         Objects.equals(this.owner, privateSelection.owner) &&
         Objects.equals(this.permissions, privateSelection.permissions) &&
         Objects.equals(this.tagIds, privateSelection.tagIds) &&
-        Objects.equals(this.id, privateSelection.id) &&
-        Objects.equals(this.recordType, privateSelection.recordType);
+        Objects.equals(this.id, privateSelection.id);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(name, description, owner, permissions, tagIds, id, recordType);
+    return Objects.hash(name, description, owner, permissions, tagIds, id);
     }
 
 
@@ -255,7 +227,6 @@ sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
 sb.append("    permissions: ").append(toIndentedString(permissions)).append("\n");
 sb.append("    tagIds: ").append(toIndentedString(tagIds)).append("\n");
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
-sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("}");
 return sb.toString();
 }

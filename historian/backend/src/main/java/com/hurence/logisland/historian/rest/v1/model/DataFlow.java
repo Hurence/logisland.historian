@@ -24,7 +24,7 @@ import org.threeten.bp.OffsetDateTime;
 * A streaming pipeline.
 */
     @ApiModel(description = "A streaming pipeline.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-26T10:30:44.115+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-31T18:49:06.852+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
