@@ -17,6 +17,9 @@
 
 package com.hurence.logisland.historian.repository;
 
+import com.hurence.opc.OpcContainerInfo;
+import com.hurence.opc.OpcObjectInfo;
+import com.hurence.opc.OpcOperations;
 import com.hurence.opc.OpcTagInfo;
 import com.hurence.opc.da.OpcDaConnectionProfile;
 import com.hurence.opc.da.OpcDaOperations;
@@ -30,11 +33,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import java.net.URI;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * OPC repository access stub.
@@ -67,6 +69,106 @@ public class OpcRepository {
             opcDaOperations.disconnect();
         }
     }
+
+    /**
+     * Fetch tag names browsing the tree till the specified depth.
+     *
+     * @param connectionProfile the connection profile
+     * @param rootTagId         the root tag the browse should begin from.
+     * @param depth             the depth
+     * @return a map whose key is the root and the value is the children of the root.
+     */
+    public Map<String, Collection<OpcObjectInfo>> fetchTagNames(OpcUaConnectionProfile connectionProfile, String rootTagId, int depth) {
+        Map<String, Collection<OpcObjectInfo>> ret = new HashMap<>();
+        try (OpcOperations opcUaTemplate = createOpcUaTemplate(connectionProfile)) {
+            doFetchTag(opcUaTemplate, rootTagId, depth, ret);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to fetch tag names", e);
+        }
+        return ret;
+    }
+
+    /**
+     * Fetch tag names browsing the tree till the specified depth.
+     *
+     * @param connectionProfile the connection profile
+     * @param rootTagId         the root tag the browse should begin from.
+     * @param depth             the depth
+     * @return a map whose key is the root and the value is the children of the root.
+     */
+    public Map<String, Collection<OpcObjectInfo>> fetchTagNames(OpcDaConnectionProfile connectionProfile, String rootTagId, int depth) {
+        Map<String, Collection<OpcObjectInfo>> ret = new HashMap<>();
+        try (OpcOperations opcDaTemplate = createOpcDaTemplate(connectionProfile)) {
+            doFetchTag(opcDaTemplate, rootTagId, depth, ret);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to fetch tag names", e);
+        }
+        return ret;
+    }
+
+    private void doFetchTag(OpcOperations opcOperations, String currentRoot, int remaining, Map<String, Collection<OpcObjectInfo>> result) {
+        if (remaining <= 0) {
+            return;
+        }
+        Collection<OpcObjectInfo> info = opcOperations.fetchNextTreeLevel(currentRoot);
+        if (info.isEmpty()) {
+            return;
+        }
+        result.put(currentRoot, info);
+        info.stream().filter(opcObjectInfo -> opcObjectInfo instanceof OpcContainerInfo)
+                .forEach(opcObjectInfo -> doFetchTag(opcOperations, opcObjectInfo.getId(), remaining - 1, result));
+
+    }
+
+    /**
+     * Fetch metadata
+     *
+     * @param connectionProfile the connection profile
+     * @param tagId             the tag id.
+     * @return the tag metadata or an exception is something wrong.
+     */
+    public OpcTagInfo fetchTagMetadata(OpcUaConnectionProfile connectionProfile, String tagId) {
+        try (OpcUaOperations opcUaTemplate = createOpcUaTemplate(connectionProfile)) {
+            return opcUaTemplate.fetchMetadata(tagId).stream().findFirst().orElseThrow(() -> new RuntimeException("No metadata found"));
+        } catch (Throwable e) {
+            throw new RuntimeException("Unable to fetch metadata for tag " + tagId, e);
+        }
+    }
+
+    /**
+     * Fetch metadata
+     *
+     * @param connectionProfile the connection profile
+     * @param tagId             the tag id.
+     * @return the tag metadata or an exception is something wrong.
+     */
+    public OpcTagInfo fetchTagMetadata(OpcDaConnectionProfile connectionProfile, String tagId) {
+        try (OpcDaOperations opcDaTemplate = createOpcDaTemplate(connectionProfile)) {
+            return opcDaTemplate.fetchMetadata(tagId).stream().findFirst().orElseThrow(() -> new RuntimeException("No metadata found"));
+        } catch (Throwable e) {
+            throw new RuntimeException("Unable to fetch metadata for tag " + tagId, e);
+        }
+    }
+
+    private OpcUaOperations createOpcUaTemplate(OpcUaConnectionProfile connectionProfile) {
+        OpcUaOperations ret = new OpcUaTemplate();
+        ret.connect(connectionProfile);
+        if (!ret.awaitConnected()) {
+            throw new RuntimeException("Unable to connect to OPC-UA server " + connectionProfile.getConnectionUri());
+        }
+        return ret;
+    }
+
+
+    private OpcDaOperations createOpcDaTemplate(OpcDaConnectionProfile connectionProfile) {
+        OpcDaOperations ret = new OpcDaTemplate();
+        ret.connect(connectionProfile);
+        if (!ret.awaitConnected()) {
+            throw new RuntimeException("Unable to connect to OPC-DA server " + connectionProfile.getConnectionUri());
+        }
+        return ret;
+    }
+
 
     /**
      * Fetches all tags available on a OPC-DA server.

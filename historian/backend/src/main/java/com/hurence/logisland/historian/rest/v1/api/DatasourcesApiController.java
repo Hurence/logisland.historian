@@ -41,8 +41,8 @@ public class DatasourcesApiController implements DatasourcesApi {
 
     @Override
     public ResponseEntity<Datasource> createOrReplaceADatasource(
-            @ApiParam(value = "datasourceId to be added/replaced",required=true) @PathVariable("datasourceId") String datasourceId,
-            @ApiParam(value = "Datasource definition" ,required=true )  @Valid @RequestBody Datasource datasource) {
+            @ApiParam(value = "datasourceId to be added/replaced", required = true) @PathVariable("datasourceId") String datasourceId,
+            @ApiParam(value = "Datasource definition", required = true) @Valid @RequestBody Datasource datasource) {
         ReplaceReport<Datasource> report = service.createOrReplaceADatasource(datasource, datasourceId);
         if (report.getItem().isPresent()) {
             if (report.isCreated()) {
@@ -71,16 +71,31 @@ public class DatasourcesApiController implements DatasourcesApi {
         return new ResponseEntity<List<Datasource>>(service.getAllDatasources(fq), HttpStatus.OK);
     }
 
+
+    @Override
     public ResponseEntity<List<Tag>> getAllDatasourcesTags() {
         return ResponseEntity.ok(opcService.browseAllTags());
     }
 
-    public ResponseEntity<List<Tag>> getAllTagsFromDatasource(@ApiParam(value = "id of the Datasource to return",required=true) @PathVariable("datasourceId") String datasourceId){
-
-        return ResponseEntity.ok(opcService.browseDatasourceTag(datasourceId));
+    @Override
+    public ResponseEntity<Tag> fetchTagMetadataFromDatasource(@PathVariable("datasourceId") String datasourceId,
+                                                              @PathVariable("tagId") String tagId) {
+        return ResponseEntity.ok(opcService.fetchMetadata(datasourceId, tagId));
     }
 
-    public ResponseEntity<Datasource> getDatasource(@ApiParam(value = "id of the Datasource to return", required = true) @PathVariable("datasourceId") String datasourceId) {
+    @Override
+    public ResponseEntity<List<Tag>> browseTagsFromDatasource(@PathVariable("datasourceId") String datasourceId,
+                                                              @Valid @RequestParam(value = "root", required = false) String root,
+                                                              @Valid @RequestParam(value = "depth", required = false, defaultValue = "1") Integer depth) {
+
+        return ResponseEntity.ok(opcService.browseDatasourceTag(datasourceId, root, depth));
+
+    }
+
+
+    public ResponseEntity<Datasource> getDatasource
+            (@ApiParam(value = "id of the Datasource to return", required = true) @PathVariable("datasourceId") String
+                     datasourceId) {
         Optional<Datasource> Datasource = service.getDatasource(datasourceId);
         if (Datasource.isPresent()) {
             return new ResponseEntity<Datasource>(Datasource.get(), HttpStatus.OK);

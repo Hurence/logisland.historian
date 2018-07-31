@@ -128,12 +128,10 @@
         </dependency>
 
 
-
-
         <dependency>
             <groupId>com.github.Hurence</groupId>
             <artifactId>opc-simple</artifactId>
-            <version>1.2.1</version>
+            <version>develop-1.2.1-g491df83-4</version>
         </dependency>
 
         <dependency>
@@ -208,7 +206,6 @@
             <artifactId>spring-restdocs-mockmvc</artifactId>
             <scope>test</scope>
         </dependency>
-
 
 
     </dependencies>
