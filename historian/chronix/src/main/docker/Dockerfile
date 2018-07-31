@@ -47,13 +47,17 @@ COPY solr/chronix/conf /opt/solr/server/solr/chronix/conf
 COPY solr/chronix/lib/chronix-server-query-handler-0.5-beta.jar /opt/solr/server/solr/chronix/lib
 COPY solr/chronix/lib/chronix-server-type-metric-0.5-beta.jar /opt/solr/server/solr/chronix/lib
 
-RUN mkdir -p /opt/solr/server/solr/historian/data/snapshot_metadata
-RUN mkdir -p /opt/solr/server/solr/historian/data/index
-COPY solr/historian /opt/solr/server/solr/historian
-
 RUN mkdir -p /opt/solr/server/solr/dataflow/data/snapshot_metadata
 RUN mkdir -p /opt/solr/server/solr/dataflow/data/index
 COPY solr/dataflow /opt/solr/server/solr/dataflow
+
+RUN mkdir -p /opt/solr/server/solr/datasource/data/snapshot_metadata
+RUN mkdir -p /opt/solr/server/solr/datasource/data/index
+COPY solr/datasource /opt/solr/server/solr/datasource
+
+RUN mkdir -p /opt/solr/server/solr/selection/data/snapshot_metadata
+RUN mkdir -p /opt/solr/server/solr/selection/data/index
+COPY solr/selection /opt/solr/server/solr/selection
 
 RUN mkdir -p /opt/solr/server/solr/tag/data/snapshot_metadata
 RUN mkdir -p /opt/solr/server/solr/tag/data/index
