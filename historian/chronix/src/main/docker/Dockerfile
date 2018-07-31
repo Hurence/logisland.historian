@@ -51,6 +51,14 @@ RUN mkdir -p /opt/solr/server/solr/historian/data/snapshot_metadata
 RUN mkdir -p /opt/solr/server/solr/historian/data/index
 COPY solr/historian /opt/solr/server/solr/historian
 
+RUN mkdir -p /opt/solr/server/solr/dataflow/data/snapshot_metadata
+RUN mkdir -p /opt/solr/server/solr/dataflow/data/index
+COPY solr/dataflow /opt/solr/server/solr/dataflow
+
+RUN mkdir -p /opt/solr/server/solr/tag/data/snapshot_metadata
+RUN mkdir -p /opt/solr/server/solr/tag/data/index
+COPY solr/tag /opt/solr/server/solr/tag
+
 COPY scripts /opt/docker-solr/scripts
 RUN chown -R $SOLR_USER:$SOLR_GROUP /opt/solr/server
 
