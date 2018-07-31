@@ -161,6 +161,7 @@ public class OpcService {
         try {
             return new OpcDaConnectionProfile()
                     .withComClsId(datasource.getClsid())
+                    .withComProgId(datasource.getProgId())
                     .withDomain(datasource.getDomain())
                     .withCredentials(new UsernamePasswordCredentials()
                             .withUser(datasource.getUser())
