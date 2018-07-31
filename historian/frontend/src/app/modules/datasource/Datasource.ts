@@ -16,7 +16,7 @@ export class IDatasource {
     public user?: string;
     public password?: string;
     public clsid?: string;
-    public progId?: string;
+    public prog_id?: string;
     public tag_browsing?: TagBrowsingMode;
 }
 export class Datasource implements IDatasource {
@@ -30,7 +30,7 @@ export class Datasource implements IDatasource {
     public user?: string;
     public password?: string;
     public clsid?: string;
-    public progId?: string;
+    public prog_id?: string;
 
     public record_type = 'datasource';
 
