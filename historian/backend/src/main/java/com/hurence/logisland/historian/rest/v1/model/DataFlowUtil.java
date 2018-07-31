@@ -7,6 +7,7 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class DataFlowUtil {
@@ -21,6 +22,7 @@ public final class DataFlowUtil {
         Service service = new Service();
         service.setName(dataflowName + CONSOLE_SERVICE_NAME_SUFFIX);
         service.setComponent("com.hurence.logisland.stream.spark.structured.provider.ConsoleStructuredStreamProviderService");
+        service.setConfig(Collections.emptyList());
         return service;
     }
     public static Service buildChronixService(String dataflowName) {

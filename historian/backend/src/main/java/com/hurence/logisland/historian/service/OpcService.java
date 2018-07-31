@@ -132,11 +132,12 @@ public class OpcService {
         try {
             connectionProfile = new OpcDaConnectionProfile()
                     .withComClsId(datasource.getClsid())
+                    .withComProgId(datasource.getProgId())
                     .withDomain(datasource.getDomain())
                     .withCredentials(new UsernamePasswordCredentials()
                             .withUser(datasource.getUser())
                             .withPassword(datasource.getPassword()))
-                    .withConnectionUri(new URI(datasource.getHost()))
+                    .withConnectionUri(new URI("opcda://" + datasource.getHost()))
                     .withSocketTimeout(Duration.of(socketTimeoutMillis, ChronoUnit.MILLIS));
         } catch (URISyntaxException ex) {
             throw new IllegalArgumentException(String.format("Error while creating connection instance with host '%s'", datasource.getHost()), ex);
