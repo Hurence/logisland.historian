@@ -131,7 +131,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       host: datasource.host,
       domain: datasource.domain,
       clsid: datasource.clsid,
-      progId: datasource.progId,
+      progId: datasource.prog_id,
       auth: {
         cred: this.findCredentialForDatasource(datasource),
         user: datasource.user,
@@ -184,7 +184,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       host: formModel.host,
       domain: formModel.domain,
       clsid: formModel.clsid,
-      progId: formModel.progId,
+      prog_id: formModel.progId,
       user: formModel.auth.user,
       password: formModel.auth.password,
       datasource_type: formModel.type,
