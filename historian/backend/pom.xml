@@ -131,7 +131,7 @@
         <dependency>
             <groupId>com.github.Hurence</groupId>
             <artifactId>opc-simple</artifactId>
-            <version>develop-1.2.1-g491df83-4</version>
+            <version>develop-1.2.1-g2e08208-5</version>
         </dependency>
 
         <dependency>
