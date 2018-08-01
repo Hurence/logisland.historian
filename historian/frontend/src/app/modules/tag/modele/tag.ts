@@ -6,8 +6,6 @@ export interface ITag {
     record_type: TagRecordType;
     id: string;
     datasource_id: string;
-    domain: string;
-    server: string;
     group: string;
     tag_name: string;
     data_type: TagDataType;
@@ -49,8 +47,6 @@ export abstract class Tag implements ITag, CanGetId {
     record_type: TagRecordType;
     id: string;
     datasource_id: string;
-    domain: string;
-    server: string;
     group: string;
     tag_name: string;
     data_type: TagDataType;

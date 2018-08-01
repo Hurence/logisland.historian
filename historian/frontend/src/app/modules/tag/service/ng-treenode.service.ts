@@ -26,9 +26,9 @@ export class NgTreenodeService {
     }
 
     addTagNode(nodes: TreeNode[], tag: HistorianTag): void {
-        const domain = this.getOrCreateChildForNodes(nodes, tag.domain, TypesName.DOMAIN);
-        const server = this.getOrCreateChildForNode(domain, tag.server, TypesName.SERVER);
-        const group = this.getOrCreateChildForNode(server, tag.group, TypesName.GROUP);
+        // const domain = this.getOrCreateChildForNodes(nodes, tag.domain, TypesName.DOMAIN);
+        // const server = this.getOrCreateChildForNode(domain, tag.server, TypesName.SERVER);
+        const group = this.getOrCreateChildForNodes(nodes, tag.group, TypesName.GROUP);
         const child: TreeNode = {
             label: tag.tag_name,
             data: tag,
