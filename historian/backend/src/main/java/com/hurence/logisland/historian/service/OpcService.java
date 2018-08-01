@@ -208,8 +208,6 @@ public class OpcService {
     private Tag convertOpcTagInfoToHistorianTag(OpcObjectInfo opcObjectInfo, String root, Datasource datasource) {
         try {
             Tag t = new Tag()
-                    .server(datasource.getHost())
-                    .domain(datasource.getDomain())
                     .tagName(opcObjectInfo.getName())
                     .datasourceId(datasource.getId())
                     .id(opcObjectInfo.getId())
