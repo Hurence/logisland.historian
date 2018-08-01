@@ -11,6 +11,8 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { TagHistorianService } from '../../service/tag-historian.service';
 import { TagUtils } from '../../modele/TagUtils';
 import { OpcTag } from '../../modele/OpcTag';
+import { Datasource, TagBrowsingMode } from '../../../datasource/Datasource';
+import { TagOpcService } from '../../service/tag-opc.service';
 
 @Component({
   selector: 'app-opc-tag-tree',
@@ -20,7 +22,7 @@ import { OpcTag } from '../../modele/OpcTag';
 export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit, OnChanges {
 
 
-  @Input() tags: ITag[];
+  @Input() datasource: Datasource;
   // tag detail props
   tagClicked: ITag;
   displayTagDetail = false;
@@ -33,24 +35,50 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
 
   constructor(private ngTreenodeService: NgTreenodeService,
               private messageService: MessageService,
+              private tagOpcService: TagOpcService,
               private tagHistorianService: TagHistorianService) {
                 super();
                 this.tagsInputForForm = [];
                }
 
   ngOnInit() {
-    this.treeNodes = this.ngTreenodeService.buildOpcTagTree(this.tags);
     this.loading = false;
-    this.expandAll();
     this.updateTagFormTitle();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tags && !changes.tags.isFirstChange()) {
-      this.treeNodes = this.ngTreenodeService.buildOpcTagTree(this.tags);
+    if (changes.datasource && !changes.datasource.isFirstChange()) {
+      this.treeNodes = [];
+      this.setLoading();
+      switch (this.datasource.tag_browsing) {
+        case TagBrowsingMode.AUTOMATIC:
+          this.tagOpcService.browseTags(this.datasource.id, { nodeId: this.datasource.findRootNodeId(), depth: 1 }).subscribe(tags => {
+            this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromOpcTag(tag));
+          });
+          break;
+        case TagBrowsingMode.MANUAL:
+          this.tagHistorianService.getAllFromDatasource(this.datasource.id).subscribe(tags => {
+            this.treeNodes.concat(this.ngTreenodeService.buildOpcTagTree(tags))
+          });
+          break;
+        default:
+          console.error('unknown TagBrowsingMode type :', this.datasource.tag_browsing);
+          break;
+      }
       this.loading = false;
-      this.expandAll();
+      // this.expandAll();
       this.updateTagFormTitle();
+    }
+  }
+
+  loadNode(event): void {
+    const node: TreeNode = event.node;
+    if (node && node.type === TypesName.FOLDER && (!node.children  || node.children.length === 0)) {
+      this.loading = true;
+      this.tagOpcService.browseTags(this.datasource.id, { nodeId: node.data.id , depth: 1 }).subscribe(tags => {
+        node.children = tags.map(tag => this.ngTreenodeService.buildNodeFromOpcTag(tag));
+        this.loading = false;
+      });
     }
   }
 

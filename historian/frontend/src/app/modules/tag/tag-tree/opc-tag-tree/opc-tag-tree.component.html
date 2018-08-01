@@ -4,49 +4,12 @@
     <button pButton type="button" label="Collapse all" (click)="collapseAll()" class="mx-2 my-2"></button>
     <!-- <button pButton type="button" label="Register selected tags" (click)="showRegisterDialog()"></button> -->
 </div>
-<p-tree [value]="treeNodes" [loading]="loading" id="historian-tree">
-    <ng-template let-node pTemplate="domain">
-    <div class="">
-        <div class='row'>
-            <div class='col-auto mr-auto label-container text-truncate'
-            pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}} ({{node.children.length}} servers)</div>
-            <div class='col-auto'>
-
-                    <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
-                    class="mx-1 my-1"
-                    icon="fa fa-edit"></button>
-                    <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
-                    class="mx-1 my-1"
-                    icon="fa fa-trash"></button>
-                    <p-inputSwitch [(ngModel)]="node.data" (click)="toggleEnableds(node);$event.stopPropagation();"></p-inputSwitch>
-            </div>
-
-        </div>
-    </div>
-    </ng-template>
-    <ng-template let-node pTemplate="server">
-    <div class="">
-            <div class='row'>
-            <div class='col-auto mr-auto label-container text-truncate'
-            pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}} ({{node.children.length}} groups)</div>
-            <div class='col-auto'>
-                    <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
-                    class="mx-1 my-1"
-                    icon="fa fa-edit"></button>
-                    <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
-                    class="mx-1 my-1"
-                    icon="fa fa-trash"></button>
-                    <p-inputSwitch [(ngModel)]="node.data" (click)="toggleEnableds(node);$event.stopPropagation();"></p-inputSwitch>
-            </div>
-
-        </div>
-    </div>
-    </ng-template>
-    <ng-template let-node pTemplate="group">
+<p-tree [value]="treeNodes" [loading]="loading" id="historian-tree" (onNodeExpand)="loadNode($event)">
+    <ng-template let-node pTemplate="folder">
     <div class="">
         <div class='row'>
             <div class='col-auto mr-auto  text-truncate'
-            pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}} ({{node.children.length}} tags)</div>        
+            pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
                 <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                 class="mx-1 my-1"
@@ -56,7 +19,6 @@
                 icon="fa fa-trash"></button>
                 <p-inputSwitch [(ngModel)]="node.data" (click)="toggleEnableds(node);$event.stopPropagation();"></p-inputSwitch>
             </div>
-
         </div>
     </div>
     </ng-template>
@@ -75,7 +37,6 @@
                     icon="fa fa-trash"></button>
                     <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="toggleEnabled(node);$event.stopPropagation();"></p-inputSwitch>
             </div>
-            
         </div>
     </div>
     </ng-template>
@@ -96,7 +57,6 @@
                     <p-inputSwitch [(ngModel)]="node.data.enabled" (click)="toggleEnabled(node);$event.stopPropagation();"
                     onLabel="On" offLabel="Off"></p-inputSwitch>
             </div>
-            
         </div>
     </div>
     </ng-template>

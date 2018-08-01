@@ -41,4 +41,16 @@ export class Datasource implements IDatasource {
     isManual(): boolean {
         return this.tag_browsing === TagBrowsingMode.MANUAL;
     }
+
+    findRootNodeId(): string {
+        switch (this.datasource_type) {
+            case DatasourceType.OPC_UA:
+                return 'ns=0;i=84';
+            case DatasourceType.OPC_DA:
+                return '';
+            default:
+                console.error('unknown datasourcetype');
+                return '';
+        }
+    }
 }

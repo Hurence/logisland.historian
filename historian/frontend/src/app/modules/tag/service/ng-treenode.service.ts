@@ -5,9 +5,10 @@ import { Observable } from 'rxjs/Observable';
 import { TagHistorianService } from './tag-historian.service';
 import { map } from 'rxjs/operators';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
-import { ITag } from '../modele/tag';
+import { ITag, TagRecordType } from '../modele/tag';
 import { TypesName } from '../tag-tree/TypesName';
 import { HistorianTag } from '../modele/HistorianTag';
+import { OpcTag } from '../modele/OpcTag';
 // import { NodeTree } from '../../../shared/js-tree/NodeTree';
 
 @Injectable()
@@ -37,6 +38,33 @@ export class NgTreenodeService {
             children: [],
         };
         group.children.push(child);
+    }
+
+    buildNodeFromOpcTag(tag: OpcTag): TreeNode {
+        let child: TreeNode;
+        switch (tag.record_type) {
+            case TagRecordType.TAG:
+                child = {
+                    label: tag.tag_name,
+                    data: tag,
+                    icon: TypesName.TAG_OPC,
+                    leaf: true,
+                    type: TypesName.TAG_OPC,
+                    children: [],
+                };
+                break;
+            case TagRecordType.FOLDER:
+                child = {
+                    label: tag.tag_name,
+                    data: tag,
+                    icon: TypesName.FOLDER,
+                    leaf: false,
+                    type: TypesName.FOLDER,
+                    children: [],
+                };
+                break;
+        }
+        return child;
     }
 
     private buildTagTreeNodes2(tags: ITag[]): TreeNode[] {
