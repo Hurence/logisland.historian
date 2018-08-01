@@ -16,7 +16,7 @@
 
   <div [ngSwitch]="dsForm.get('type').value">
 
-    <div *ngSwitchCase="dsForm.get('type').value==='OPC-DA' || dsForm.get('type').value==='OPC-UA'? dsForm.get('type').value:'notInCase'" id="opc-da-form">
+    <div *ngSwitchCase="dsForm.get('type').value==='OPC-DA' || dsForm.get('type').value==='OPC-UA'? dsForm.get('type').value:'notInCase'">
       <div class="form-group label-small text-capitalize">
         <label for="name" i18n="name of the datasource|label for name datasource input">name</label>
         <input type="text" class="form-control" formControlName="name" name="name" required>
@@ -69,13 +69,13 @@
             AUTHENTIFICATION
           </h6>
           <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" value="none" name="cred" formControlName="cred" id="withoutCred" class="custom-control-input">
-            <label class="custom-control-label text-uppercase" for="withoutCred"
+            <input type="radio" value="none" name="cred" formControlName="cred" id="{{prefixId}}withoutCred" class="custom-control-input">
+            <label class="custom-control-label text-uppercase" for="{{prefixId}}withoutCred"
                     i18n="no authentification needed|if the data source does not need any authentification information">none</label>
           </div>
           <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" value="normal" name="cred" formControlName="cred" id="withCred" class="custom-control-input">
-            <label class="custom-control-label text-uppercase" for="withCred"
+            <input type="radio" value="normal" name="cred" formControlName="cred" id="{{prefixId}}withCred" class="custom-control-input">
+            <label class="custom-control-label text-uppercase" for="{{prefixId}}withCred"
                     i18n="need credential information|if the data source does need authentification information">CREDENTIALS</label>
           </div>
 
@@ -106,12 +106,12 @@
         Tag Browsing Mode
       </h6>
       <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" value="automatic" name="tagBrowsing" formControlName="tagBrowsing" id="automaticBrowsing" class="custom-control-input">
-        <label class="custom-control-label text-uppercase" for="automaticBrowsing">automatic</label>
+        <input type="radio" value="automatic" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}automaticBrowsing" class="custom-control-input">
+        <label class="custom-control-label text-uppercase" for="{{prefixId}}automaticBrowsing">automatic</label>
       </div>
       <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" value="manual" name="tagBrowsing" formControlName="tagBrowsing" id="manualBrowsing" class="custom-control-input">
-        <label class="custom-control-label text-uppercase" for="manualBrowsing">manual</label>
+        <input type="radio" value="manual" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}manualBrowsing" class="custom-control-input">
+        <label class="custom-control-label text-uppercase" for="{{prefixId}}manualBrowsing">manual</label>
       </div>
     </div>
 

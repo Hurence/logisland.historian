@@ -26,11 +26,12 @@
     </div>
   </div>
 </div>
-<p-dialog [(visible)]="displayEditDatasource" [modal]="true" appendTo="body" [dismissableMask]="true">
+<p-dialog [(visible)]="displayEditDatasource" [modal]="true" [dismissableMask]="true" appendTo="body">
   <p-header>
       Edit datasource : '{{datasourceToEdit?.id}}'
   </p-header>
-  <app-datasource-form [datasource]="datasourceToEdit" [isCreation]="false" (submitted)="onSubmitted($event)"></app-datasource-form>
+  <app-datasource-form [datasource]="datasourceToEdit" [isCreation]="false"
+                      [prefixId]="'edit-datasource-'" (submitted)="onSubmitted($event)"></app-datasource-form>
   <p-footer>
   </p-footer>
 </p-dialog>

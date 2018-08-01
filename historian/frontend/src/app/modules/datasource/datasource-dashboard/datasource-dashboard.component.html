@@ -66,7 +66,8 @@
   <p-header>
       Add a new datasource
   </p-header>
-  <app-datasource-form [datasource]="datasourceToCreate" [isCreation]="true" (submitted)="onSubmitted($event)"></app-datasource-form>
+  <app-datasource-form [datasource]="datasourceToCreate" [isCreation]="true"
+                      [prefixId]="'add-datasource-'" (submitted)="onSubmitted($event)"></app-datasource-form>
   <p-footer>
   </p-footer>
 </p-dialog>

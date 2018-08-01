@@ -25,6 +25,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   @Input() isCreation: boolean;
   @Input() datasource: Datasource;
+  @Input() prefixId: string;
   @Output() submitted = new EventEmitter<Datasource>();
 
   submitBtnMsg: string;
