@@ -7,6 +7,7 @@
         <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
         <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
         <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
+        <fieldType name="boolean" class="solr.BoolField" omitNorms="true" sortMissingLast="true"/>
         <fieldType name="binary" class="solr.BinaryField"/>
         <fieldType name="date" class="solr.TrieDateField"  sortMissingLast="true" omitNorms="true"/>
         <fieldType name="uuid" class="solr.UUIDField" indexed="true"/>
@@ -36,10 +37,8 @@
         <field name="last_numeric_value" type="double" indexed="true" stored="true" required="false"/>
         <field name="last_quality" type="int" indexed="true" stored="true" required="false"/>
         <field name="datasource_id" type="string" indexed="true" stored="true" required="false"/>
-        <field name="domain" type="string" indexed="true" stored="true" required="false"/>
-        <field name="server" type="string" indexed="true" stored="true" required="false"/>
         <field name="group" type="string" indexed="true" stored="true" required="false"/>
-        <field name="host" type="string" indexed="true" stored="true" required="false"/>
+        <field name="enabled" type="boolean" indexed="true" stored="true" required="false"/>
         <!--catch all fields-->
         <field name="text" type="string" indexed="true" multiValued="true"/>
 
@@ -47,14 +46,11 @@
         <!--<dynamicField name="*_s" type="string" indexed="true" stored="true"/>-->
     </fields>
 
-    <copyField source="domain" dest="text"/>
-    <copyField source="server" dest="text"/>
     <copyField source="group" dest="text"/>
     <copyField source="tag_name" dest="text"/>
     <copyField source="labels" dest="text"/>
     <copyField source="data_type" dest="text"/>
     <copyField source="description" dest="text"/>
-    <copyField source="host" dest="text"/>
     <copyField source="labels" dest="text"/>
     <copyField source="datasource_id" dest="text"/>
 

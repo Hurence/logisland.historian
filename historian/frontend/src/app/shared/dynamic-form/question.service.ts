@@ -52,19 +52,19 @@ export class QuestionService {
         min: 0,
       }),
 
-      new TextboxQuestion({
-        key: 'domain',
-        label: 'Domain',
-        order: 6,
-        disabled: true
-      }),
+      // new TextboxQuestion({
+      //   key: 'domain',
+      //   label: 'Domain',
+      //   order: 6,
+      //   disabled: true
+      // }),
 
-      new TextboxQuestion({
-        key: 'server',
-        label: 'Server',
-        order: 7,
-        disabled: true
-      }),
+      // new TextboxQuestion({
+      //   key: 'server',
+      //   label: 'Server',
+      //   order: 7,
+      //   disabled: true
+      // }),
 
       new TextboxQuestion({
         key: 'group',

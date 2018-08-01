@@ -19,7 +19,7 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * Alert
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-31T18:49:06.852+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-01T16:23:26.659+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")

@@ -1368,10 +1368,6 @@ definitions:
         type: string
       datasource_id:
         type: string
-      domain:
-        type: string
-      server:
-        type: string
       group:
         type: string
       tag_name:

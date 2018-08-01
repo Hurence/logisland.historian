@@ -23,7 +23,7 @@ import org.threeten.bp.OffsetDateTime;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-31T18:49:06.852+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-01T16:23:26.659+02:00")
 
 
 @SolrDocument(solrCoreName = "tag")
@@ -43,14 +43,6 @@ public class Tag  implements Serializable {
         @JsonProperty("datasource_id")
         @Indexed(name = "datasource_id")
         private String datasourceId = null;
-
-        @JsonProperty("domain")
-        @Indexed(name = "domain")
-        private String domain = null;
-
-        @JsonProperty("server")
-        @Indexed(name = "server")
-        private String server = null;
 
         @JsonProperty("group")
         @Indexed(name = "group")
@@ -241,50 +233,6 @@ public class Tag  implements Serializable {
 
         public Tag setDatasourceId(String datasourceId) {
         this.datasourceId = datasourceId;
-        return this;
-        }
-
-        public Tag domain(String domain) {
-        this.domain = domain;
-        return this;
-        }
-
-    /**
-        * Get domain
-    * @return domain
-    **/
-        @JsonProperty("domain")
-    @ApiModelProperty(value = "")
-    
-
-  public String getDomain() {
-    return domain;
-    }
-
-        public Tag setDomain(String domain) {
-        this.domain = domain;
-        return this;
-        }
-
-        public Tag server(String server) {
-        this.server = server;
-        return this;
-        }
-
-    /**
-        * Get server
-    * @return server
-    **/
-        @JsonProperty("server")
-    @ApiModelProperty(value = "")
-    
-
-  public String getServer() {
-    return server;
-    }
-
-        public Tag setServer(String server) {
-        this.server = server;
         return this;
         }
 
@@ -651,8 +599,6 @@ public class Tag  implements Serializable {
         Objects.equals(this.id_, tag.id_) &&
         Objects.equals(this.id, tag.id) &&
         Objects.equals(this.datasourceId, tag.datasourceId) &&
-        Objects.equals(this.domain, tag.domain) &&
-        Objects.equals(this.server, tag.server) &&
         Objects.equals(this.group, tag.group) &&
         Objects.equals(this.tagName, tag.tagName) &&
         Objects.equals(this.labels, tag.labels) &&
@@ -672,7 +618,7 @@ public class Tag  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id_, id, datasourceId, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled);
+    return Objects.hash(recordType, id_, id, datasourceId, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled);
     }
 
 
@@ -685,8 +631,6 @@ sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("    id_: ").append(toIndentedString(id_)).append("\n");
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
 sb.append("    datasourceId: ").append(toIndentedString(datasourceId)).append("\n");
-sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
-sb.append("    server: ").append(toIndentedString(server)).append("\n");
 sb.append("    group: ").append(toIndentedString(group)).append("\n");
 sb.append("    tagName: ").append(toIndentedString(tagName)).append("\n");
 sb.append("    labels: ").append(toIndentedString(labels)).append("\n");

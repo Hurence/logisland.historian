@@ -26,7 +26,6 @@
         <field name="host" type="string" indexed="true" stored="true" required="false"/>
         <field name="user" type="string" indexed="true" stored="true" required="false"/>
         <field name="password" type="string" indexed="true" stored="true" required="false"/>
-        <field name="enabled" type="boolean" indexed="true" stored="true" required="false"/>
         <field name="tag_browsing" type="string" indexed="true" stored="true" required="false"/>
 
         <!-- Alert API -->
