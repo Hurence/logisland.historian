@@ -125,7 +125,7 @@ export class DatasourceDashboardComponent implements OnInit {
   }
 
   private selectDatasource(datasource: Datasource) {
-    if (datasource !== null && this.selectedDatasource === undefined) {
+    if (datasource !== null) {
       this.selectedDatasource = datasource;
     }
   }
