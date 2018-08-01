@@ -76,7 +76,7 @@ public class DatasourceFlowElements {
         Tag tag;
         while (tags.hasNext()) {
             tag = tags.next();
-            strBuilder.append(tag.getTagName());
+            strBuilder.append(tag.getId());
             if (tag.getUpdateRate() != null) {
                 strBuilder.append(":");
                 strBuilder.append(tag.getUpdateRate());
