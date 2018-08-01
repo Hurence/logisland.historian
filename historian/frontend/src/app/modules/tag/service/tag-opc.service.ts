@@ -27,14 +27,14 @@ export class TagOpcService {
  * If nodeId is not specified it will browse all tags.
  * See documentation of historian backend.
  */
-  browseTags(datasourceId: string, options?: { nodeId?: string, depth?:number }): Observable<OpcTag[]> {
+  browseTags(datasourceId: string, options?: { nodeId?: string, depth?: number }): Observable<OpcTag[]> {
     let params = new HttpParams();
     if (options) {
       if (options.nodeId !== null && options.nodeId !== undefined) {
-        params = params.set("root", options.nodeId);
+        params = params.set('root', options.nodeId);
       }
       if (options.depth !== null && options.depth !== undefined) {
-        params = params.set("depth", options.depth.toString());
+        params = params.set('depth', options.depth.toString());
       }
     }
     return this.http.get<OpcTag[]>(`${this.tagsUrl}datasources/${encodeURIComponent(datasourceId)}/tags`, {params: params})

@@ -31,7 +31,7 @@ export class QuestionService {
 
       new TextboxQuestion({
         key: 'datasource_id',
-        label: 'Datasource Name',
+        label: 'Datasourqce Name',
         order: 3,
         disabled: true,
       }),

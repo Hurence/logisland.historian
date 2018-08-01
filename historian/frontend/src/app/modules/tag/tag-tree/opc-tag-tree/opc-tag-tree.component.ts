@@ -58,7 +58,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
           break;
         case TagBrowsingMode.MANUAL:
           this.tagHistorianService.getAllFromDatasource(this.datasource.id).subscribe(tags => {
-            this.treeNodes.concat(this.ngTreenodeService.buildOpcTagTree(tags))
+            this.treeNodes.concat(this.ngTreenodeService.buildOpcTagTree(tags));
           });
           break;
         default:
