@@ -4,14 +4,14 @@ header {
 .row.content {
   height: 94%;
 }
-@media (max-height:24em) {
+/* @media (max-height:24em) {
   header {
     height: 40px;
   }
   .row.content {
     height: calc(100% - 40px);
   }
-}
+} */
 
 #sidebar .list-group-item {
     color: #ccc;

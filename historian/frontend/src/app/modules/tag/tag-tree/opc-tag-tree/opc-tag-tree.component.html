@@ -28,7 +28,7 @@
             <div class='col-auto mr-auto  text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
-                    <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="right"> {{node.data.update_rate}}</i>
+                    <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="right"><span class="update-rate"> {{node.data.update_rate}}</span></i>
                     <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                     class="mx-1 my-1"
                     icon="fa fa-edit"></button>
@@ -46,7 +46,7 @@
             <div class='col-auto mr-auto label-container text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
-                    <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="top">  {{node.data.update_rate}}</i>
+                    <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="top"><span class="update-rate"> {{node.data.update_rate}}</span></i>
                     <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                     class="mx-1 my-1"
                     icon="fa fa-edit"></button>
