@@ -27,6 +27,7 @@ import com.hurence.opc.da.OpcDaTemplate;
 import com.hurence.opc.ua.OpcUaConnectionProfile;
 import com.hurence.opc.ua.OpcUaOperations;
 import com.hurence.opc.ua.OpcUaTemplate;
+import org.eclipse.milo.opcua.stack.core.Identifiers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -81,7 +82,7 @@ public class OpcRepository {
     public Map<String, Collection<OpcObjectInfo>> fetchTagNames(OpcUaConnectionProfile connectionProfile, String rootTagId, int depth) {
         Map<String, Collection<OpcObjectInfo>> ret = new HashMap<>();
         try (OpcOperations opcUaTemplate = createOpcUaTemplate(connectionProfile)) {
-            doFetchTag(opcUaTemplate, rootTagId, depth, ret);
+            doFetchTag(opcUaTemplate, "".equals(rootTagId) ? Identifiers.RootFolder.toParseableString() : rootTagId, depth, ret);
         } catch (Exception e) {
             throw new RuntimeException("Unable to fetch tag names", e);
         }
