@@ -57,6 +57,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
           });
           break;
         case TagBrowsingMode.MANUAL:
+          // TODO manual mode
           this.tagHistorianService.getAllFromDatasource(this.datasource.id).subscribe(tags => {
             this.treeNodes.concat(this.ngTreenodeService.buildOpcTagTree(tags));
           });
@@ -76,7 +77,12 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     if (node && node.type === TypesName.FOLDER && (!node.children  || node.children.length === 0)) {
       this.loading = true;
       this.tagOpcService.browseTags(this.datasource.id, { nodeId: node.data.id , depth: 1 }).subscribe(tags => {
-        node.children = tags.map(tag => this.ngTreenodeService.buildNodeFromOpcTag(tag));
+        const children = tags.map(tag => this.ngTreenodeService.buildNodeFromOpcTag(tag));
+        if (children.length === 0) {
+          node.children = [this.ngTreenodeService.getEmptyNode()];
+        } else {
+          node.children = children;
+        }
         this.loading = false;
       });
     }

@@ -14,6 +14,10 @@ import { OpcTag } from '../modele/OpcTag';
 @Injectable()
 export class NgTreenodeService {
 
+    private EMPTY_NODE: TreeNode = {
+        type: 'none',
+    }
+
   constructor(private tagService: TagHistorianService) { }
 
   /*
@@ -38,6 +42,10 @@ export class NgTreenodeService {
             children: [],
         };
         group.children.push(child);
+    }
+
+    getEmptyNode(): TreeNode {
+        return this.EMPTY_NODE;
     }
 
     buildNodeFromOpcTag(tag: OpcTag): TreeNode {

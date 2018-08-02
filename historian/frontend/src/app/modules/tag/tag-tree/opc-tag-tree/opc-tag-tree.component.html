@@ -65,7 +65,7 @@
     </ng-template>
 </p-tree>
 <!-- tag form edit -->
-<p-dialog [(visible)]="displayRegister" [modal]="true">
+<p-dialog [(visible)]="displayRegister" [modal]="true" [dismissableMask]="true">
     <p-header>
         {{tagFormTitle}}
     </p-header>
@@ -75,11 +75,11 @@
     </p-footer>
 </p-dialog>
 <!-- tag detail -->
-<p-dialog [(visible)]="displayTagDetail" [modal]="true">
+<!-- <p-dialog [(visible)]="displayTagDetail" [modal]="true"   [dismissableMask]="true">
     <p-header>
         Tag details
-    </p-header>
+    </p-header> -->
     <!-- <app-tag-detail [tag]="tagClicked"></app-tag-detail> -->
-    <p-footer>
+    <!-- <p-footer>
     </p-footer>
-</p-dialog>
+</p-dialog> -->
