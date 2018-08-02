@@ -2,7 +2,7 @@
   <!-- CHOOSE CONTROL TYPE -->
   <div [formGroup]="form"  [ngSwitch]="question.controlType" class="form-group mb-3  text-capitalize">
 
-      <label *ngIf="question.type !== 'hidden'" id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
+      <label *ngIf="!question.hidden" id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
 
 
 
