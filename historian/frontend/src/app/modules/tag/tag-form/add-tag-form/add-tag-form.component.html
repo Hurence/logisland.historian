@@ -6,7 +6,8 @@
         </div>
         <!-- {{ item | json }} -->
         <div class="form-row">
-            <button class="btn btn-success" type="submit" [disabled]="!form.valid">Save</button>
+            <button class="btn btn-warning" type="button" [disabled]="!form.valid" (click)="onFetchMetaData()">Fetch Metadata</button>
+            <button class="btn btn-success" type="submit" [disabled]="!canSubmit">Save</button>
         </div>
     </form>
 </div>

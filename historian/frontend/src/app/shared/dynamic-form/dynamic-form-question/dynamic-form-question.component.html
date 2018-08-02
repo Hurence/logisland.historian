@@ -1,7 +1,8 @@
 <!-- {{question | json}} -->
   <!-- CHOOSE CONTROL TYPE -->
   <div [formGroup]="form"  [ngSwitch]="question.controlType" class="form-group mb-3  text-capitalize">
-      <label id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
+
+      <label *ngIf="question.type !== 'hidden'" id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
 
 
 
@@ -9,14 +10,14 @@
     <ng-container *ngSwitchCase="'textbox'">
         <input [formControlName]="question.key" class="form-control"
           [placeholder]="question.placeholder" [id]="question.key" [type]="question.type"
-          [required]="question.required">
+          [required]="question.required" [readonly]="question.readonly">
     </ng-container>
 
     <!-- NUMBER -->
     <ng-container *ngSwitchCase="'number'">
       <input [formControlName]="question.key" class="form-control"
         [placeholder]="question.placeholder" [id]="question.key" [type]="'number'"
-        [required]="question.required">
+        [required]="question.required" [readonly]="question.readonly">
     </ng-container>
 
     <!-- SELECT (DROPDOWN)-->

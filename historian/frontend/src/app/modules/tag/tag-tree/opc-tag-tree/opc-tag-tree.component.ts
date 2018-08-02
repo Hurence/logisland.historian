@@ -56,13 +56,12 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
             this.datasource.id,
             { nodeId: this.datasource.findRootNodeId(), depth: 1 }
           ).subscribe(tags => {
-            this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromOpcTag(tag));
+            this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
           });
           break;
         case TagBrowsingMode.MANUAL:
-          // TODO manual mode
           this.tagHistorianService.getAllFromDatasource(this.datasource.id).subscribe(tags => {
-            this.treeNodes.concat(this.ngTreenodeService.buildOpcTagTree(tags));
+            this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
           });
           break;
         default:
@@ -92,7 +91,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     if (node && node.type === TypesName.FOLDER && (!node.children  || node.children.length === 0)) {
       this.loading = true;
       this.tagOpcService.browseTags(this.datasource.id, { nodeId: node.data.node_id , depth: 1 }).subscribe(tags => {
-        const children = tags.map(tag => this.ngTreenodeService.buildNodeFromOpcTag(tag));
+        const children = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
         if (children.length === 0) {
           node.children = [this.ngTreenodeService.getEmptyNode()];
         } else {

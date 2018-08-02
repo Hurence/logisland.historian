@@ -5,10 +5,11 @@ import { Observable } from 'rxjs/Observable';
 import { TagHistorianService } from './tag-historian.service';
 import { map } from 'rxjs/operators';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
-import { ITag, TagRecordType } from '../modele/tag';
+import { ITag, TagRecordType, Tag } from '../modele/tag';
 import { TypesName } from '../tag-tree/TypesName';
 import { HistorianTag } from '../modele/HistorianTag';
 import { OpcTag } from '../modele/OpcTag';
+import { TagUtils } from '../modele/TagUtils';
 // import { NodeTree } from '../../../shared/js-tree/NodeTree';
 
 @Injectable()
@@ -48,31 +49,63 @@ export class NgTreenodeService {
         return this.EMPTY_NODE;
     }
 
-    buildNodeFromOpcTag(tag: OpcTag): TreeNode {
+    /**
+     * Build OpcTag node
+     */
+    buildNodeFromTag(tag: Tag): TreeNode {
         let child: TreeNode;
         switch (tag.record_type) {
             case TagRecordType.TAG:
-                child = {
-                    label: tag.tag_name,
-                    data: tag,
-                    icon: TypesName.TAG_OPC,
-                    leaf: true,
-                    type: TypesName.TAG_OPC,
-                    children: [],
-                };
+                if (TagUtils.isHistorianTag(tag)) {
+                    child = this.buildNodeFromHistorianTag(tag);
+                } else {
+                    child = this.buildNodeFromOpcTag(tag);
+                }
                 break;
             case TagRecordType.FOLDER:
-                child = {
-                    label: tag.tag_name,
-                    data: tag,
-                    icon: TypesName.FOLDER,
-                    leaf: false,
-                    type: TypesName.FOLDER,
-                    children: [],
-                };
+                child = this.buildFolderNode(tag);
                 break;
         }
         return child;
+    }
+    /**
+     * Build OpcTag node
+     */
+    private buildNodeFromOpcTag(tag: OpcTag): TreeNode {
+        return {
+            label: tag.tag_name,
+            data: tag,
+            icon: TypesName.TAG_OPC,
+            leaf: true,
+            type: TypesName.TAG_OPC,
+            children: [],
+        };
+    }
+    /**
+     * Build HistorianTag node
+     */
+    private buildNodeFromHistorianTag(tag: HistorianTag): TreeNode {
+        return {
+            label: tag.tag_name,
+            data: tag,
+            icon: TypesName.TAG_HISTORIAN,
+            leaf: true,
+            type: TypesName.TAG_HISTORIAN,
+            children: [],
+        };
+    }
+    /**
+     * Build folder node
+     */
+    private buildFolderNode(tag: Tag): TreeNode {
+        return {
+            label: tag.tag_name,
+            data: tag,
+            icon: TypesName.FOLDER,
+            leaf: false,
+            type: TypesName.FOLDER,
+            children: [],
+        };
     }
 
     private buildTagTreeNodes2(tags: ITag[]): TreeNode[] {

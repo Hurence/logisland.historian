@@ -13,24 +13,27 @@ import { map } from 'rxjs/operators';
 })
 export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, HistorianTag> {
 
+  canSubmit = false;
+
   constructor(protected qcs: QuestionControlService,
               protected service: TagHistorianService,
               protected tagOpcService: TagOpcService) {
     super(qcs, service);
+    this.canSubmit = false;
   }
 
-  onSubmit() {
-    const objToSave: HistorianTag = this.prepareSaveItem();
-    this.tagOpcService.searchForTag(objToSave.datasource_id, objToSave.id).pipe(
+  onFetchMetaData() {
+    const tagWithNodeId = this.prepareSaveItem();
+    this.tagOpcService.searchForTag(tagWithNodeId.datasource_id, tagWithNodeId.node_id).pipe(
       map(opcTag => new HistorianTag(opcTag))
     ).subscribe(
-      obj => {
-        const converted = this.convert(obj);
-        this.item = converted;
-        this.submitted.emit(converted);
+      historianTag => {
+        this.form.reset(historianTag);
+        this.canSubmit = true;
       },
       error => {
         console.error(JSON.stringify(error));
+        this.canSubmit = false;
       }
     );
   }

@@ -13,6 +13,7 @@ export class IQuestionBase<T> implements IQuestion {
   required?: boolean;
   disabled?: boolean;
   placeholder?: string;
+  readonly?: boolean;
 }
 
 export class QuestionBase<T> implements IQuestionBase<T> {
@@ -24,6 +25,7 @@ export class QuestionBase<T> implements IQuestionBase<T> {
   order: number;
   controlType: string;
   placeholder: string;
+  readonly: boolean;
 
   constructor(options: IQuestionBase<T>) {
     this.value = options.value;
@@ -34,6 +36,7 @@ export class QuestionBase<T> implements IQuestionBase<T> {
     this.disabled = !!options.disabled;
     this.order = options.order === undefined ? 1 : options.order;
     this.placeholder = options.placeholder || '';
+    this.readonly = options.readonly || false;
   }
 
   public static isNumberQuestion(arg: IQuestion): arg is NumberQuestion {
