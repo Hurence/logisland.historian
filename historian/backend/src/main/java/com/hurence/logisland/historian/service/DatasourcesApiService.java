@@ -81,11 +81,11 @@ public class DatasourcesApiService {
         logger.debug("create or replace Datasource {}", datasource.getId());
         if (repository.existsById(datasource.getId())) {
             Datasource savedDatasource = repository.save(datasource);
-          //  dataflowsApiService.updateOpcDataflow();
+            dataflowsApiService.updateOpcDataflow();
             return new DatasourceReplaceReport(savedDatasource, false);
         } else {
             Datasource savedDatasource = repository.save(datasource);
-            //dataflowsApiService.updateOpcDataflow();
+            dataflowsApiService.updateOpcDataflow();
             return new DatasourceReplaceReport(savedDatasource, true);
         }
     }
