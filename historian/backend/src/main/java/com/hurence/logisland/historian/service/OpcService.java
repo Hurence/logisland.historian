@@ -87,7 +87,7 @@ public class OpcService {
                 return Tag.DataTypeEnum.DOUBLE;
             } else if (Boolean.class.equals(cls)) {
                 return Tag.DataTypeEnum.BOOLEAN;
-            } else if (String.class.equals(cls)) {
+            } else if (String.class.equals(cls) || Void.class.equals(cls)) {
                 return Tag.DataTypeEnum.STRING;
             }
         }
@@ -245,7 +245,7 @@ public class OpcService {
         this.opcRepository = opcRepository;
     }
 
-    @Value("${opc.socket.timeout:2000}")
+    @Value("${opc.socket.timeout:15000}")
     public void setSocketTimeoutMillis(long socketTimeoutMillis) {
         this.socketTimeoutMillis = socketTimeoutMillis;
     }
