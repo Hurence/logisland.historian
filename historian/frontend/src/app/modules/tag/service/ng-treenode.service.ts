@@ -16,7 +16,7 @@ export class NgTreenodeService {
 
     private EMPTY_NODE: TreeNode = {
         type: 'none',
-    }
+    };
 
   constructor(private tagService: TagHistorianService) { }
 
