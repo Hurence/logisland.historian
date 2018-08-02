@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,47 +52,49 @@ public class TagsApiService {
     }
 
 
-    public Optional<Tag> deleteTag(String itemId) {
-        Optional<Tag> tagToRemove = this.deleteTagWithoutGeneratingConf(itemId);
+    public Optional<Tag> deleteTag(String id_) {
+        Optional<Tag> tagToRemove = this.deleteTagWithoutGeneratingConf(id_);
         if (tagToRemove.isPresent()) {
             dataflowsApiService.updateOpcDataflow();
         }
         return tagToRemove;
     }
 
-    private Optional<Tag> deleteTagWithoutGeneratingConf(String itemId) {
-        logger.info("deleting Tag {}", itemId);
-        Optional<Tag> tagToRemove = repository.findById(itemId);
+    private Optional<Tag> deleteTagWithoutGeneratingConf(String id_) {
+        logger.info("deleting Tag {}", id_);
+        Optional<Tag> tagToRemove = repository.findById(id_);
         if (tagToRemove.isPresent()) {
             repository.delete(tagToRemove.get());
         }
         return tagToRemove;
     }
 
-    public Optional<Tag> getTag(String itemId) {
-        logger.debug("getting Tag {}", itemId);
-        return repository.findById(itemId);
+    public Optional<Tag> getTag(String id_) {
+        logger.debug("getting Tag {}", id_);
+        return repository.findById(id_);
     }
 
     private ReplaceReport<Tag> createOrReplaceATag(Tag tag) {
         logger.debug("create or replace Tag {}", tag.getId());
-        if (repository.existsById(tag.getId())) {
-            Tag savedTag = repository.save(tag);
-            dataflowsApiService.updateOpcDataflow();
+        Optional<Tag> tagToReplace = repository.findByIdAndDatasourceId(tag.getId(), tag.getDatasourceId());
+        if (tagToReplace.isPresent()) {
+            Tag savedTag = updateTag(tag, tagToReplace.get().getId_());
             return new TagReplaceReport(savedTag, false);
         } else {
-            Tag savedTag = repository.save(tag);
-            dataflowsApiService.updateOpcDataflow();
+            Tag savedTag = saveTag(tag);
             return new TagReplaceReport(savedTag, true);
         }
     }
 
     public ReplaceReport<Tag> createOrReplaceATag(Tag tag, String itemId) {
+        ReplaceReport<Tag> report;
         if (!tag.getId().equals(itemId)) {
-            return createOrReplaceATag(tag.id(itemId));
+            report = createOrReplaceATag(tag.id(itemId));
         } else {
-            return createOrReplaceATag(tag);
+            report = createOrReplaceATag(tag);
         }
+        dataflowsApiService.updateOpcDataflow();
+        return report;
     }
 
     public List<Tag> getAllTags(String fq) {
@@ -137,7 +140,9 @@ public class TagsApiService {
      * @return true if all items were created. If at least one tag was updated (existed before), it returns false.
      */
     public List<Tag> SaveOrUpdateMany(List<Tag> tags) {
-        List<Tag> updatedTags = tags.stream().map(tag -> repository.save(tag)).collect(Collectors.toList());
+        List<Tag> updatedTags = tags.stream().map(tag -> createOrReplaceATag(tag).getItem())
+                .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty())
+                .collect(Collectors.toList());
         dataflowsApiService.updateOpcDataflow();
         return updatedTags;
     }
@@ -148,6 +153,16 @@ public class TagsApiService {
                 .collect(Collectors.toList());
         dataflowsApiService.updateOpcDataflow();
         return supressedTags;
+    }
+
+    public Tag saveTag(Tag tag) {
+        tag.setId_(UUID.randomUUID().toString());
+        return repository.save(tag);
+    }
+
+    public Tag updateTag(Tag tag, String id_) {
+        tag.setId_(id_);
+        return repository.save(tag);
     }
 
 }

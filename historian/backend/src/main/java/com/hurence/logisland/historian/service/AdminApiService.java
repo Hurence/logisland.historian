@@ -117,6 +117,7 @@ public class AdminApiService {
             String group = groups.get(random.nextInt(groups.size()));
             String tagName = group.toLowerCase().replaceAll("[^\\x00-\\x7F]", "") + '-' + UUID.randomUUID().toString().substring(0, 5);
             Tag t = IdUtils.setId(new Tag()
+                    .setId_(UUID.randomUUID().toString())
                     .group(group)
                     .tagName(tagName));
 

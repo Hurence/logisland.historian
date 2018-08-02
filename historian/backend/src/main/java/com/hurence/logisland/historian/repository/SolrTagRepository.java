@@ -24,12 +24,16 @@ import org.springframework.data.solr.repository.Pivot;
 import org.springframework.data.solr.repository.Query;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
 
+    @Query(value = "*:*", filters = { "id:\"?0\"", "datasource_id:\"?1\"", "record_type:tag" })
+    Optional<Tag> findByIdAndDatasourceId(String id, String datasource_id);
 
     // catch all query
     @Query(value = "*:*", filters = { "?0", "record_type:tag" })
