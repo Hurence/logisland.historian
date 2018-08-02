@@ -6,7 +6,7 @@ services:
     environment:
       - JAVA_MEMORY=4g
     hostname: chronix
-    image: 'hurence/historian-chronix:0.4.0'
+    image: 'hurence/historian-chronix:0.4.1'
     ports:
       - '8983:8983'
     network_mode: bridge

@@ -210,7 +210,7 @@ public class OpcService {
             Tag t = new Tag()
                     .tagName(opcObjectInfo.getName())
                     .datasourceId(datasource.getId())
-                    .id(opcObjectInfo.getId())
+                    .nodeId(opcObjectInfo.getId())
                     .dataType(null)
                     .recordType(opcObjectInfo instanceof OpcTagInfo ? "tag" : "folder");
 

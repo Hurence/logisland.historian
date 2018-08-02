@@ -23,7 +23,7 @@ import org.threeten.bp.OffsetDateTime;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-01T16:23:26.659+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-02T11:47:49.850+02:00")
 
 
 @SolrDocument(solrCoreName = "tag")
@@ -32,13 +32,13 @@ public class Tag  implements Serializable {
         @Indexed(name = "record_type")
         private String recordType = "tag";
 
-        @JsonProperty("_id_")
-        @Indexed(name = "_id_")
-        private String id_ = null;
-
         @JsonProperty("id")
         @Indexed(name = "id")
         private String id = null;
+
+        @JsonProperty("node_id")
+        @Indexed(name = "node_id")
+        private String nodeId = null;
 
         @JsonProperty("datasource_id")
         @Indexed(name = "datasource_id")
@@ -169,28 +169,6 @@ public class Tag  implements Serializable {
         return this;
         }
 
-        public Tag id_(String id_) {
-        this.id_ = id_;
-        return this;
-        }
-
-    /**
-        * Get id_
-    * @return id_
-    **/
-        @JsonProperty("_id_")
-    @ApiModelProperty(value = "")
-    
-
-  public String getId_() {
-    return id_;
-    }
-
-        public Tag setId_(String id_) {
-        this.id_ = id_;
-        return this;
-        }
-
         public Tag id(String id) {
         this.id = id;
         return this;
@@ -210,6 +188,28 @@ public class Tag  implements Serializable {
 
         public Tag setId(String id) {
         this.id = id;
+        return this;
+        }
+
+        public Tag nodeId(String nodeId) {
+        this.nodeId = nodeId;
+        return this;
+        }
+
+    /**
+        * Get nodeId
+    * @return nodeId
+    **/
+        @JsonProperty("node_id")
+    @ApiModelProperty(value = "")
+    
+
+  public String getNodeId() {
+    return nodeId;
+    }
+
+        public Tag setNodeId(String nodeId) {
+        this.nodeId = nodeId;
         return this;
         }
 
@@ -596,8 +596,8 @@ public class Tag  implements Serializable {
     }
         Tag tag = (Tag) o;
         return Objects.equals(this.recordType, tag.recordType) &&
-        Objects.equals(this.id_, tag.id_) &&
         Objects.equals(this.id, tag.id) &&
+        Objects.equals(this.nodeId, tag.nodeId) &&
         Objects.equals(this.datasourceId, tag.datasourceId) &&
         Objects.equals(this.group, tag.group) &&
         Objects.equals(this.tagName, tag.tagName) &&
@@ -618,7 +618,7 @@ public class Tag  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id_, id, datasourceId, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled);
+    return Objects.hash(recordType, id, nodeId, datasourceId, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled);
     }
 
 
@@ -628,8 +628,8 @@ StringBuilder sb = new StringBuilder();
 sb.append("{\n");
 
 sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
-sb.append("    id_: ").append(toIndentedString(id_)).append("\n");
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
+sb.append("    nodeId: ").append(toIndentedString(nodeId)).append("\n");
 sb.append("    datasourceId: ").append(toIndentedString(datasourceId)).append("\n");
 sb.append("    group: ").append(toIndentedString(group)).append("\n");
 sb.append("    tagName: ").append(toIndentedString(tagName)).append("\n");

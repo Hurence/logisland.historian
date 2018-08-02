@@ -49,6 +49,7 @@ export class DatasourceDashboardComponent implements OnInit {
                 this.createdTag = new HistorianTag({
                   record_type: TagRecordType.TAG,
                   id: '',
+                  node_id: '',
                   datasource_id: '',
                   group: '',
                   tag_name: '',
@@ -100,6 +101,7 @@ export class DatasourceDashboardComponent implements OnInit {
     return new HistorianTag({
       record_type: TagRecordType.TAG,
       id: '',
+      node_id: '',
       datasource_id: this.selectedDatasource.id,
       group: '',
       tag_name: '',

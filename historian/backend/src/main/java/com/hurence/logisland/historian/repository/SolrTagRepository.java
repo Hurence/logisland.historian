@@ -32,8 +32,8 @@ import java.util.Optional;
 @Repository
 public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
 
-    @Query(value = "*:*", filters = { "id:\"?0\"", "datasource_id:\"?1\"", "record_type:tag" })
-    Optional<Tag> findByIdAndDatasourceId(String id, String datasource_id);
+    @Query(value = "*:*", filters = { "node_id:\"?0\"", "datasource_id:\"?1\"", "record_type:tag" })
+    Optional<Tag> findByNodeIdAndDatasourceId(String nodeId, String datasource_id);
 
     // catch all query
     @Query(value = "*:*", filters = { "?0", "record_type:tag" })

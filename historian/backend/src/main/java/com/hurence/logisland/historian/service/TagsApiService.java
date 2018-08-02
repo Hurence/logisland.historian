@@ -52,33 +52,34 @@ public class TagsApiService {
     }
 
 
-    public Optional<Tag> deleteTag(String id_) {
-        Optional<Tag> tagToRemove = this.deleteTagWithoutGeneratingConf(id_);
+    public Optional<Tag> deleteTag(String id) {
+        Optional<Tag> tagToRemove = this.deleteTagWithoutGeneratingConf(id);
         if (tagToRemove.isPresent()) {
             dataflowsApiService.updateOpcDataflow();
         }
         return tagToRemove;
     }
 
-    private Optional<Tag> deleteTagWithoutGeneratingConf(String id_) {
-        logger.info("deleting Tag {}", id_);
-        Optional<Tag> tagToRemove = repository.findById(id_);
+    private Optional<Tag> deleteTagWithoutGeneratingConf(String id) {
+        logger.info("deleting Tag {}", id);
+        Optional<Tag> tagToRemove = repository.findById(id);
         if (tagToRemove.isPresent()) {
             repository.delete(tagToRemove.get());
+//            repository.deleteById(tagToRemove.get().getId_());
         }
         return tagToRemove;
     }
 
-    public Optional<Tag> getTag(String id_) {
-        logger.debug("getting Tag {}", id_);
-        return repository.findById(id_);
+    public Optional<Tag> getTag(String id) {
+        logger.debug("getting Tag {}", id);
+        return repository.findById(id);
     }
 
     private ReplaceReport<Tag> createOrReplaceATag(Tag tag) {
         logger.debug("create or replace Tag {}", tag.getId());
-        Optional<Tag> tagToReplace = repository.findByIdAndDatasourceId(tag.getId(), tag.getDatasourceId());
+        Optional<Tag> tagToReplace = repository.findByNodeIdAndDatasourceId(tag.getNodeId(), tag.getDatasourceId());
         if (tagToReplace.isPresent()) {
-            Tag savedTag = updateTag(tag, tagToReplace.get().getId_());
+            Tag savedTag = updateTag(tag, tagToReplace.get().getId());
             return new TagReplaceReport(savedTag, false);
         } else {
             Tag savedTag = saveTag(tag);
@@ -86,10 +87,10 @@ public class TagsApiService {
         }
     }
 
-    public ReplaceReport<Tag> createOrReplaceATag(Tag tag, String itemId) {
+    public ReplaceReport<Tag> createOrReplaceATag(Tag tag, String id) {
         ReplaceReport<Tag> report;
-        if (!tag.getId().equals(itemId)) {
-            report = createOrReplaceATag(tag.id(itemId));
+        if (!tag.getId().equals(id)) {
+            report = createOrReplaceATag(tag.id(id));
         } else {
             report = createOrReplaceATag(tag);
         }
@@ -156,12 +157,12 @@ public class TagsApiService {
     }
 
     public Tag saveTag(Tag tag) {
-        tag.setId_(UUID.randomUUID().toString());
+        tag.setId(UUID.randomUUID().toString());
         return repository.save(tag);
     }
 
-    public Tag updateTag(Tag tag, String id_) {
-        tag.setId_(id_);
+    public Tag updateTag(Tag tag, String id) {
+        tag.setId(id);
         return repository.save(tag);
     }
 

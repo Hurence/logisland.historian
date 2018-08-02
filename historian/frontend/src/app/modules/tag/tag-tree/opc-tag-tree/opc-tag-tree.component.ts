@@ -52,7 +52,10 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
       this.setLoading();
       switch (this.datasource.tag_browsing) {
         case TagBrowsingMode.AUTOMATIC:
-          this.tagOpcService.browseTags(this.datasource.id, { nodeId: this.datasource.findRootNodeId(), depth: 1 }).subscribe(tags => {
+          this.tagOpcService.browseTags(
+            this.datasource.id,
+            { nodeId: this.datasource.findRootNodeId(), depth: 1 }
+          ).subscribe(tags => {
             this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromOpcTag(tag));
           });
           break;
@@ -72,11 +75,23 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     }
   }
 
+  hasTagChildren(node: TreeNode): boolean {
+    if (node.children && node.children.length !== 0) {
+      if (node.children[0].type !== TypesName.FOLDER) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   loadNode(event): void {
     const node: TreeNode = event.node;
     if (node && node.type === TypesName.FOLDER && (!node.children  || node.children.length === 0)) {
       this.loading = true;
-      this.tagOpcService.browseTags(this.datasource.id, { nodeId: node.data.id , depth: 1 }).subscribe(tags => {
+      this.tagOpcService.browseTags(this.datasource.id, { nodeId: node.data.node_id , depth: 1 }).subscribe(tags => {
         const children = tags.map(tag => this.ngTreenodeService.buildNodeFromOpcTag(tag));
         if (children.length === 0) {
           node.children = [this.ngTreenodeService.getEmptyNode()];
@@ -146,7 +161,8 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   }
 
   deleteTag(node: TreeNode): void {
-    this.tagHistorianService.delete(node.data.id).subscribe(deletedTag => this.updateNodeAfterDeletingTag(node));
+    const tag: HistorianTag = node.data;
+    this.tagHistorianService.delete(tag.id).subscribe(deletedTag => this.updateNodeAfterDeletingTag(node));
   }
 
   private updateNodeAfterDeletingTag(node: TreeNode): void {
@@ -239,22 +255,17 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     switch (node.type) {
       case TypesName.TAG_HISTORIAN:
       case TypesName.TAG_OPC:
-       if (node.data.id === tag.id) return node;
+       if (node.data.node_id === tag.node_id) return node;
        break;
-      case TypesName.GROUP:
-        return this.nodeForRegister.children.find(n => n.data.id === tag.id);
-      case TypesName.SERVER:
-        this.nodeForRegister.children.forEach(n => {
-          const found = this.findNodeOfTag(n, tag);
-          if (found) return found;
-        });
-        break;
-      case TypesName.DOMAIN:
-        this.nodeForRegister.children.forEach(n => {
-          const found = this.findNodeOfTag(n, tag);
-          if (found) return found;
-        });
-        break;
+      // case TypesName.GROUP:
+      //   return node.children.find(n => n.data.node_id === tag.node_id);
+      case TypesName.FOLDER:
+        return node.children.find(n => n.data.node_id === tag.node_id);
+        // node.children.forEach(n => {
+        //   const found = this.findNodeOfTag(n, tag);
+        //   if (found) return found;
+        // });
+        // break;
     }
     return null;
   }

@@ -5,6 +5,7 @@ import { CanGetId } from '../../../shared/dynamic-form/BaseDynamicFormComponent'
 export interface ITag {
     record_type: TagRecordType;
     id: string;
+    node_id: string;
     datasource_id: string;
     group: string;
     tag_name: string;
@@ -46,6 +47,7 @@ export abstract class Tag implements ITag, CanGetId {
 
     record_type: TagRecordType;
     id: string;
+    node_id: string;
     datasource_id: string;
     group: string;
     tag_name: string;
@@ -65,6 +67,8 @@ export abstract class Tag implements ITag, CanGetId {
         if (this.update_rate === null || this.update_rate === undefined) this.update_rate = Tag.TAG_UPDATE_RATE_DEFAUT;
         if (this.enabled === null || this.enabled === undefined) this.enabled = false;
         if (this.record_type === null || this.record_type === undefined) this.record_type = TagRecordType.TAG;
+        if (this.id === null || this.id === undefined) this.id = 'idToBeGenerated';
+        if (this.data_type === null || this.data_type === undefined) this.data_type = TagDataType.DOUBLE;
     }
 
     getId(): string {

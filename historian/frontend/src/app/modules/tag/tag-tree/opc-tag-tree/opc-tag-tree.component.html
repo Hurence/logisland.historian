@@ -10,7 +10,7 @@
         <div class='row'>
             <div class='col-auto mr-auto  text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
-            <div class='col-auto'>
+            <div *ngIf="hasTagChildren(node)" class='col-auto'>
                 <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                 class="mx-1 my-1"
                 icon="fa fa-edit"></button>
