@@ -1354,10 +1354,11 @@ definitions:
     type: object
     description: a Tag is an identifier to an OPC value
     required:
-      - item_name
+      - node_id
       - datasource_id
       - data_type
       - enabled
+      - update_rate
     properties:
       record_type:
         type: string
@@ -1411,7 +1412,9 @@ definitions:
         format: int64
       update_rate:
         description: polling delay in ms
-        default: 1000
+        type: integer
+      server_scan_rate:
+        description: scan rate of server in ms
         type: integer
       min_numeric_value:
         type: number

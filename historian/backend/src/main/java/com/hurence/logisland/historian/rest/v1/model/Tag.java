@@ -23,7 +23,7 @@ import org.threeten.bp.OffsetDateTime;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-02T11:47:49.850+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-03T16:12:01.612+02:00")
 
 
 @SolrDocument(solrCoreName = "tag")
@@ -127,6 +127,10 @@ public class Tag  implements Serializable {
         @Indexed(name = "update_rate")
         private Integer updateRate = null;
 
+        @JsonProperty("server_scan_rate")
+        @Indexed(name = "server_scan_rate")
+        private Integer serverScanRate = null;
+
         @JsonProperty("min_numeric_value")
         @Indexed(name = "min_numeric_value")
         private BigDecimal minNumericValue = null;
@@ -201,8 +205,9 @@ public class Tag  implements Serializable {
     * @return nodeId
     **/
         @JsonProperty("node_id")
-    @ApiModelProperty(value = "")
-    
+    @ApiModelProperty(required = true, value = "")
+      @NotNull
+
 
   public String getNodeId() {
     return nodeId;
@@ -461,8 +466,9 @@ public class Tag  implements Serializable {
     * @return updateRate
     **/
         @JsonProperty("update_rate")
-    @ApiModelProperty(value = "polling delay in ms")
-    
+    @ApiModelProperty(required = true, value = "polling delay in ms")
+      @NotNull
+
 
   public Integer getUpdateRate() {
     return updateRate;
@@ -470,6 +476,28 @@ public class Tag  implements Serializable {
 
         public Tag setUpdateRate(Integer updateRate) {
         this.updateRate = updateRate;
+        return this;
+        }
+
+        public Tag serverScanRate(Integer serverScanRate) {
+        this.serverScanRate = serverScanRate;
+        return this;
+        }
+
+    /**
+        * scan rate of server in ms
+    * @return serverScanRate
+    **/
+        @JsonProperty("server_scan_rate")
+    @ApiModelProperty(value = "scan rate of server in ms")
+    
+
+  public Integer getServerScanRate() {
+    return serverScanRate;
+    }
+
+        public Tag setServerScanRate(Integer serverScanRate) {
+        this.serverScanRate = serverScanRate;
         return this;
         }
 
@@ -609,6 +637,7 @@ public class Tag  implements Serializable {
         Objects.equals(this.lastModificationDate, tag.lastModificationDate) &&
         Objects.equals(this.lastPollingDate, tag.lastPollingDate) &&
         Objects.equals(this.updateRate, tag.updateRate) &&
+        Objects.equals(this.serverScanRate, tag.serverScanRate) &&
         Objects.equals(this.minNumericValue, tag.minNumericValue) &&
         Objects.equals(this.maxNumericValue, tag.maxNumericValue) &&
         Objects.equals(this.lastNumericValue, tag.lastNumericValue) &&
@@ -618,7 +647,7 @@ public class Tag  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id, nodeId, datasourceId, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled);
+    return Objects.hash(recordType, id, nodeId, datasourceId, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, serverScanRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled);
     }
 
 
@@ -641,6 +670,7 @@ sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\
 sb.append("    lastModificationDate: ").append(toIndentedString(lastModificationDate)).append("\n");
 sb.append("    lastPollingDate: ").append(toIndentedString(lastPollingDate)).append("\n");
 sb.append("    updateRate: ").append(toIndentedString(updateRate)).append("\n");
+sb.append("    serverScanRate: ").append(toIndentedString(serverScanRate)).append("\n");
 sb.append("    minNumericValue: ").append(toIndentedString(minNumericValue)).append("\n");
 sb.append("    maxNumericValue: ").append(toIndentedString(maxNumericValue)).append("\n");
 sb.append("    lastNumericValue: ").append(toIndentedString(lastNumericValue)).append("\n");

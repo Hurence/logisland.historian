@@ -12,7 +12,7 @@
             <p-message *ngIf="canSubmit" severity="success" text="found node with id '{{this.form.value.node_id}}''"></p-message>
         </div>
         <div class="d-flex align-items-center">
-            <button class="btn btn-success" type="submit" [disabled]="!canSubmit">Save</button>
+            <button class="btn btn-success" type="submit" [disabled]="!form.valid">Save</button>
         </div>
     </form>
 </div>

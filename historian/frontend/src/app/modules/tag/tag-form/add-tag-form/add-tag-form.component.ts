@@ -6,8 +6,6 @@ import { QuestionControlService } from '../../../../shared/dynamic-form/question
 import { HistorianTag } from '../../modele/HistorianTag';
 import { TagHistorianService } from '../../service/tag-historian.service';
 import { TagOpcService } from '../../service/tag-opc.service';
-import { Questions } from '../../../../shared/dynamic-form/question-helper';
-import { IQuestionBase } from '../../../../shared/dynamic-form/question-base';
 
 @Component({
   selector: 'app-add-tag-form',
@@ -16,17 +14,17 @@ import { IQuestionBase } from '../../../../shared/dynamic-form/question-base';
 })
 export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, HistorianTag> {
 
-  private static QUESTION_BEFORE_FETCHING_DATA = new Map<string, IQuestionBase<any>>([
-    ["node_id", { key: "node_id", readonly: false}],
-    ["update_rate", { key: "update_rate", readonly: true}],
-    ["description", { key: "description", readonly: true}],
-  ])
+  // private static QUESTION_BEFORE_FETCHING_DATA = new Map<string, IQuestionBase<any>>([
+  //   ['node_id', { key: 'node_id', readonly: false}],
+  //   ['update_rate', { key: 'update_rate', readonly: true}],
+  //   ['description', { key: 'description', readonly: true}],
+  // ]);
 
-  private static QUESTION_AFTER_FETCHING_DATA = new Map<string, IQuestionBase<any>>([
-    ["node_id", { key: "node_id", readonly: true}],
-    ["update_rate", { key: "update_rate", readonly: false}],
-    ["description", { key: "description", readonly: false}],
-  ])
+  // private static QUESTION_AFTER_FETCHING_DATA = new Map<string, IQuestionBase<any>>([
+  //   ['node_id', { key: 'node_id', readonly: true}],
+  //   ['update_rate', { key: 'update_rate', readonly: false}],
+  //   ['description', { key: 'description', readonly: false}],
+  // ]);
 
   canSubmit = false;
   displayNotFoundMsg = false;
@@ -37,7 +35,12 @@ export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, 
               protected service: TagHistorianService,
               protected tagOpcService: TagOpcService) {
     super(qcs, service);
-    this.canSubmit = false;
+    this.canSubmit = true;
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+    this.copyNodeIdToTagName();
   }
 
   onFetchMetaData() {
@@ -49,7 +52,7 @@ export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, 
       historianTag => {
         this.form.reset(historianTag);
         this.displaySucess();
-        Questions.modifyQuestions(this.questions, AddTagFormComponent.QUESTION_AFTER_FETCHING_DATA);
+        // Questions.modifyQuestions(this.questions, AddTagFormComponent.QUESTION_AFTER_FETCHING_DATA);
       },
       error => {
         // const httpError = (<HttpErrorResponse> error)
@@ -60,27 +63,34 @@ export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, 
   }
 
   resetDisplay(): void {
-    this.canSubmit = false;
+    // this.canSubmit = false;
     this.loading = false;
     this.displayNotFoundMsg = false;
-    Questions.modifyQuestions(this.questions, AddTagFormComponent.QUESTION_BEFORE_FETCHING_DATA);
+    // Questions.modifyQuestions(this.questions, AddTagFormComponent.QUESTION_BEFORE_FETCHING_DATA);
+  }
+
+  private copyNodeIdToTagName(): void {
+    this.form.get('node_id').valueChanges.forEach(
+      (nodeId: string) => {
+        this.form.get('tag_name').patchValue(nodeId);
+    });
   }
 
   private displayLoading(): void {
     this.displayNotFoundMsg = false;
-    this.canSubmit = false;
+    // this.canSubmit = false;
     this.loading = true;
   }
 
   private displaySucess(): void {
     this.displayNotFoundMsg = false;
     this.loading = false;
-    this.canSubmit = true;
+    // this.canSubmit = true;
   }
 
   private displayError(error: string): void {
     this.nodeFoundMsd = error;
-    this.canSubmit = false;
+    // this.canSubmit = false;
     this.loading = false;
     this.displayNotFoundMsg = true;
   }

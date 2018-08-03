@@ -1,4 +1,4 @@
-import { QuestionBase, IQuestionBase } from "./question-base";
+import { QuestionBase, IQuestionBase } from './question-base';
 
 export class Questions {
 
@@ -10,6 +10,6 @@ export class Questions {
             if (mododifications.has(q.key)) {
                 Object.assign(q, mododifications.get(q.key));
             }
-        })
+        });
     }
 }

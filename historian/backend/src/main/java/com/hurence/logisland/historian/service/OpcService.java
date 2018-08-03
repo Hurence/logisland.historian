@@ -224,7 +224,7 @@ public class OpcService {
                 OpcTagInfo tmp = (OpcTagInfo) opcObjectInfo;
                 t.setDataType(tmp.getType() != null ? mapDataType(tmp.getType()) : null);
                 if (tmp.getScanRate() != null && tmp.getScanRate().isPresent()) {
-                    t.setUpdateRate((int) tmp.getScanRate().get().toMillis());
+                    t.setServerScanRate((int) tmp.getScanRate().get().toMillis());
                 }
 
             }

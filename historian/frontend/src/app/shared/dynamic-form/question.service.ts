@@ -85,31 +85,39 @@ export class QuestionService {
         key: 'tag_name',
         label: 'tag name',
         order: 3,
-        readonly: true
+        readonly: true,
       }),
 
       new TextboxQuestion({
         key: 'datasource_id',
-        label: 'Datasourqce Name',
+        label: 'Datasource Name',
         order: 4,
-        readonly: true
+        readonly: true,
+        hidden: true,
       }),
 
       new TextboxQuestion({
         key: 'description',
         label: 'Description',
-        placeholder: 'description...',
-        required: true,
         readonly: true,
         order: 5,
       }),
 
       new NumberQuestion({
-        key: 'update_rate',
-        label: 'update rate',
+        key: 'server_scan_rate',
+        label: 'Server scan rate',
         order: 6,
-        required: true,
+        required: false,
         readonly: true,
+        min: 0,
+      }),
+
+      new NumberQuestion({
+        key: 'update_rate',
+        label: 'Update rate',
+        order: 7,
+        required: true,
+        readonly: false,
         min: 0,
       }),
     ];

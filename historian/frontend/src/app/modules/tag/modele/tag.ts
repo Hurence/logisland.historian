@@ -67,7 +67,7 @@ export abstract class Tag implements ITag, CanGetId {
         if (this.update_rate === null || this.update_rate === undefined) this.update_rate = Tag.TAG_UPDATE_RATE_DEFAUT;
         if (this.enabled === null || this.enabled === undefined) this.enabled = false;
         if (this.record_type === null || this.record_type === undefined) this.record_type = TagRecordType.TAG;
-        if (this.id === null || this.id === undefined) this.id = 'idToBeGenerated';
+        if (this.id === null || this.id === undefined || this.id === '') this.id = 'idToBeGenerated';
         if (this.data_type === null || this.data_type === undefined) this.data_type = TagDataType.DOUBLE;
     }
 
