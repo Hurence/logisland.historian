@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import { BaseDynamicFormComponent } from '../../../../shared/dynamic-form/BaseDynamicFormComponent';
@@ -12,7 +12,7 @@ import { TagOpcService } from '../../service/tag-opc.service';
   templateUrl: './add-tag-form.component.html',
   styleUrls: ['./add-tag-form.component.css']
 })
-export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, HistorianTag> {
+export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, HistorianTag> implements OnInit {
 
   // private static QUESTION_BEFORE_FETCHING_DATA = new Map<string, IQuestionBase<any>>([
   //   ['node_id', { key: 'node_id', readonly: false}],

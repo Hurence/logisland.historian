@@ -28,6 +28,7 @@ import { DialogModule } from 'primeng/dialog';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CheckboxModule } from 'primeng/checkbox';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     MessagesModule,
     MessageModule,
     ProgressSpinnerModule,
+    CheckboxModule,
   ],
   exports: [
     CommonModule,
@@ -81,6 +83,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     MessagesModule,
     MessageModule,
     ProgressSpinnerModule,
+    CheckboxModule,
   ],
   providers: [
     TreeDragDropService,

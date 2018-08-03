@@ -228,7 +228,8 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   }
 
   private addNodeAfterSavingTag(nodes: TreeNode[], tag: HistorianTag): void {
-    this.ngTreenodeService.addTagNode(nodes, tag);
+    const nodeToAppend = this.ngTreenodeService.buildNodeFromTag(tag);
+    nodes.push(nodeToAppend);
   }
 
   addNodeFromTag(tag: HistorianTag) {

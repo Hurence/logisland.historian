@@ -5,6 +5,7 @@ import { QuestionBase } from './question-base';
 import { DropdownQuestion } from './question-dropdown';
 import { TextboxQuestion } from './question-textbox';
 import { NumberQuestion } from './question-number';
+import { BooleanQuestion } from './question-boolean';
 
 @Injectable()
 export class QuestionService {
@@ -21,6 +22,14 @@ export class QuestionService {
         label: 'Node Id',
         order: 1,
         disabled: true,
+      }),
+
+      new NumberQuestion({
+        key: 'update_rate',
+        label: 'Sampling rate',
+        order: 5,
+        required: true,
+        min: 0,
       }),
 
       new TextboxQuestion({
@@ -51,17 +60,9 @@ export class QuestionService {
         required: true,
         order: 4
       }),
-
-      new NumberQuestion({
-        key: 'update_rate',
-        label: 'Sampling rate',
-        order: 5,
-        required: true,
-        min: 0,
-      }),
     ];
 
-    return questions.sort((a, b) => a.order - b.order);
+    return questions;
   }
 
   getAddTagForm(): QuestionBase<any>[]  {
@@ -73,6 +74,41 @@ export class QuestionService {
         label: 'Node Id',
         order: 1,
         required: true
+      }),
+
+      new NumberQuestion({
+        key: 'update_rate',
+        label: 'Sampling rate',
+        order: 7,
+        required: true,
+        readonly: false,
+        min: 0,
+      }),
+
+      // new NumberQuestion({
+      //   key: 'polling subscribe',
+      //   label: 'polling subscribe',
+      //   order: 6,
+      //   required: false,
+      //   readonly: true,
+      //   min: 0,
+      // }),
+
+      new BooleanQuestion({
+        key: 'enabled',
+        label: 'Start monitoring tag ?',
+        order: 6,
+        required: true,
+        value: true,
+      }),
+
+      new NumberQuestion({
+        key: 'server_scan_rate',
+        label: 'Server scan rate',
+        order: 6,
+        required: false,
+        readonly: true,
+        min: 0,
       }),
 
       new TextboxQuestion({
@@ -103,24 +139,7 @@ export class QuestionService {
         order: 5,
       }),
 
-      new NumberQuestion({
-        key: 'server_scan_rate',
-        label: 'Server scan rate',
-        order: 6,
-        required: false,
-        readonly: true,
-        min: 0,
-      }),
-
-      new NumberQuestion({
-        key: 'update_rate',
-        label: 'Sampling rate',
-        order: 7,
-        required: true,
-        readonly: false,
-        min: 0,
-      }),
     ];
-    return questions.sort((a, b) => a.order - b.order);
+    return questions;
   }
 }
