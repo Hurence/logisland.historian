@@ -39,6 +39,7 @@
         <field name="last_quality" type="int" indexed="true" stored="true" required="false"/>
         <field name="group" type="string" indexed="true" stored="true" required="false"/>
         <field name="enabled" type="boolean" indexed="true" stored="true" required="true"/>
+        <field name="polling_mode" type="string" indexed="true" stored="true" required="true"/>
         <!--catch all fields-->
         <field name="text" type="string" indexed="true" multiValued="true"/>
 

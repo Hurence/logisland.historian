@@ -19,6 +19,7 @@ export interface ITag {
     max_numeric_value?: number;
     last_numeric_value?: number;
     last_quality?: number;
+    pollingMode?: PollingMode;
 }
 
 export const enum TagType {
@@ -29,6 +30,11 @@ export const enum TagType {
 export const enum TagRecordType {
     TAG = 'tag',
     FOLDER = 'folder'
+}
+
+export const enum PollingMode {
+    POLLING = 'polling',
+    SUBSCRIBE = 'subscribe'
 }
 
 export const enum TagDataType {
@@ -54,6 +60,7 @@ export abstract class Tag implements ITag, CanGetId {
     data_type: TagDataType;
     update_rate: number;
     enabled: boolean;
+    pollingMode: PollingMode;
     creation_date?: number;
     last_modification_date?: number;
     last_polling_date?: number;

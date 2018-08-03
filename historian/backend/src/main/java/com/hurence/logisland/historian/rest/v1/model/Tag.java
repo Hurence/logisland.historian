@@ -23,7 +23,7 @@ import org.threeten.bp.OffsetDateTime;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-03T16:12:01.612+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-03T18:03:11.160+02:00")
 
 
 @SolrDocument(solrCoreName = "tag")
@@ -150,6 +150,41 @@ public class Tag  implements Serializable {
         @JsonProperty("enabled")
         @Indexed(name = "enabled")
         private Boolean enabled = null;
+
+              /**
+   * Gets or Sets pollingMode
+   */
+  public enum PollingModeEnum {
+    POLLING("polling"),
+    
+    SUBSCRIBE("subscribe");
+
+    private String value;
+
+    PollingModeEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static PollingModeEnum fromValue(String text) {
+      for (PollingModeEnum b : PollingModeEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
+        @JsonProperty("polling_mode")
+        @Indexed(name = "polling_mode")
+        private PollingModeEnum pollingMode = PollingModeEnum.POLLING;
 
         public Tag recordType(String recordType) {
         this.recordType = recordType;
@@ -613,6 +648,28 @@ public class Tag  implements Serializable {
         return this;
         }
 
+        public Tag pollingMode(PollingModeEnum pollingMode) {
+        this.pollingMode = pollingMode;
+        return this;
+        }
+
+    /**
+        * Get pollingMode
+    * @return pollingMode
+    **/
+        @JsonProperty("polling_mode")
+    @ApiModelProperty(value = "")
+    
+
+  public PollingModeEnum getPollingMode() {
+    return pollingMode;
+    }
+
+        public Tag setPollingMode(PollingModeEnum pollingMode) {
+        this.pollingMode = pollingMode;
+        return this;
+        }
+
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -642,12 +699,13 @@ public class Tag  implements Serializable {
         Objects.equals(this.maxNumericValue, tag.maxNumericValue) &&
         Objects.equals(this.lastNumericValue, tag.lastNumericValue) &&
         Objects.equals(this.lastQuality, tag.lastQuality) &&
-        Objects.equals(this.enabled, tag.enabled);
+        Objects.equals(this.enabled, tag.enabled) &&
+        Objects.equals(this.pollingMode, tag.pollingMode);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id, nodeId, datasourceId, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, serverScanRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled);
+    return Objects.hash(recordType, id, nodeId, datasourceId, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, serverScanRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled, pollingMode);
     }
 
 
@@ -676,6 +734,7 @@ sb.append("    maxNumericValue: ").append(toIndentedString(maxNumericValue)).app
 sb.append("    lastNumericValue: ").append(toIndentedString(lastNumericValue)).append("\n");
 sb.append("    lastQuality: ").append(toIndentedString(lastQuality)).append("\n");
 sb.append("    enabled: ").append(toIndentedString(enabled)).append("\n");
+sb.append("    pollingMode: ").append(toIndentedString(pollingMode)).append("\n");
 sb.append("}");
 return sb.toString();
 }

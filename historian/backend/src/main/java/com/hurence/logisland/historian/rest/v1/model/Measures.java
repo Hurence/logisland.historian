@@ -21,11 +21,11 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * holds a double array of values for a Tag between start &amp; stop
 */
-@ApiModel(description = "holds a double array of values for a Tag between start & stop")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-03T16:12:01.612+02:00")
+    @ApiModel(description = "holds a double array of values for a Tag between start & stop")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-03T18:03:11.160+02:00")
 
 
-@SolrDocument(solrCoreName = "chronix")
+@SolrDocument(solrCoreName = "historian")
 public class Measures  implements Serializable {
         @JsonProperty("name")
         @Indexed(name = "name")

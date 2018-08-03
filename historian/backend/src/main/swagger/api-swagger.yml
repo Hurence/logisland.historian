@@ -1430,6 +1430,12 @@ definitions:
       enabled:
         description: polling delay in ms
         type: boolean
+      polling_mode:
+        type: string
+        enum:
+          - 'polling'
+          - 'subscribe'
+        default: 'polling'
 
   Measures:
     type: object
