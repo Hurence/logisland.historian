@@ -25,6 +25,8 @@ import { GrowlModule } from 'primeng/growl';
 import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-rate-selection.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
   imports: [
@@ -46,6 +48,8 @@ import { DialogModule } from 'primeng/dialog';
     GrowlModule,
     ConfirmDialogModule,
     DialogModule,
+    MessagesModule,
+    MessageModule,
   ],
   exports: [
     CommonModule,
@@ -71,6 +75,8 @@ import { DialogModule } from 'primeng/dialog';
     GrowlModule,
     ConfirmDialogModule,
     DialogModule,
+    MessagesModule,
+    MessageModule,
   ],
   providers: [
     TreeDragDropService,

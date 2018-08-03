@@ -14,6 +14,7 @@ import { map } from 'rxjs/operators';
 export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, HistorianTag> {
 
   canSubmit = false;
+  displayNotFoundMsg = false;
 
   constructor(protected qcs: QuestionControlService,
               protected service: TagHistorianService,
@@ -29,11 +30,13 @@ export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, 
     ).subscribe(
       historianTag => {
         this.form.reset(historianTag);
+        this.displayNotFoundMsg = false;
         this.canSubmit = true;
       },
       error => {
         console.error(JSON.stringify(error));
         this.canSubmit = false;
+        this.displayNotFoundMsg = true;
       }
     );
   }

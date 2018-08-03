@@ -4,9 +4,10 @@
         <div *ngFor="let question of questions" class="">
             <app-question [question]="question" [form]="form"></app-question>
         </div>
-        <!-- {{ item | json }} -->
         <div class="form-row">
             <button class="btn btn-warning" type="button" [disabled]="!form.valid" (click)="onFetchMetaData()">Fetch Metadata</button>
+            <p-message *ngIf="displayNotFoundMsg" severity="info" text="No node found with id '{{this.form.value.node_id}}''"></p-message>
+            <p-message *ngIf="canSubmit" severity="success" text="found node with id '{{this.form.value.node_id}}''"></p-message>
             <button class="btn btn-success" type="submit" [disabled]="!canSubmit">Save</button>
         </div>
     </form>
