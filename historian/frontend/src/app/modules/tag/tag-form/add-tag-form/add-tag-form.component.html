@@ -4,10 +4,14 @@
         <div *ngFor="let question of questions" class="">
             <app-question [question]="question" [form]="form"></app-question>
         </div>
-        <div class="form-row">
-            <button class="btn btn-warning" type="button" [disabled]="!form.valid" (click)="onFetchMetaData()">Fetch Metadata</button>
-            <p-message *ngIf="displayNotFoundMsg" severity="info" text="No node found with id '{{this.form.value.node_id}}''"></p-message>
+        <div class="d-flex align-items-center">
+            <button class="btn btn-warning align-middle" type="button" [disabled]="!form.valid" (click)="onFetchMetaData()">Fetch Metadata</button>
+            <p-progressSpinner *ngIf="loading" [style]="{width: '30px', height: '30px'}"
+                                strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
+            <p-message *ngIf="displayNotFoundMsg" severity="info" text="{{nodeFoundMsd}}"></p-message>
             <p-message *ngIf="canSubmit" severity="success" text="found node with id '{{this.form.value.node_id}}''"></p-message>
+        </div>
+        <div class="d-flex align-items-center">
             <button class="btn btn-success" type="submit" [disabled]="!canSubmit">Save</button>
         </div>
     </form>

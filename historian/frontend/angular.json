@@ -27,7 +27,8 @@
               "node_modules/primeng/resources/primeng.min.css",
               "src/assets/css/theme.css",
               "src/assets/css/styles.css",
-              "src/assets/css/button.css"
+              "src/assets/css/button.css",
+              "src/assets/css/progress-bar.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -126,7 +127,8 @@
               "node_modules/font-awesome/css/font-awesome.css",
               "src/assets/css/theme.css",
               "src/assets/css/styles.css",
-              "src/assets/css/button.css"
+              "src/assets/css/button.css",
+              "src/assets/css/progress-bar.css"
             ],
             "assets": [
               "src/assets",

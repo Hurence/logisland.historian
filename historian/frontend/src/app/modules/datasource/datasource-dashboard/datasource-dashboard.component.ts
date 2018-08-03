@@ -15,6 +15,7 @@ import { TagHistorianService } from '../../tag/service/tag-historian.service';
 import { HistorianTag } from '../../tag/modele/HistorianTag';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { QuestionService } from '../../../shared/dynamic-form/question.service';
+import { AddTagFormComponent } from '../../tag/tag-form/add-tag-form/add-tag-form.component';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -37,6 +38,8 @@ export class DatasourceDashboardComponent implements OnInit {
   private dslistComp: DatasourcesListComponent;
   @ViewChild(OpcTagTreeComponent)
   private tagTree: OpcTagTreeComponent;
+  @ViewChild(AddTagFormComponent)
+  private addTagForm: AddTagFormComponent;
   private DISCARD_CHANGE_QUESTION_MSG = 'Discard changes ?';
 
   constructor(private router: Router,
@@ -148,5 +151,9 @@ export class DatasourceDashboardComponent implements OnInit {
     this.dslistComp.getDatasources();
     this.selectedDatasource = ds;
     this.displayAddDatasource = false;
+  }
+
+  onCloseAddTag() {
+    this.addTagForm.resetDisplay();
   }
 }

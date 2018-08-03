@@ -27,6 +27,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 
 @NgModule({
   imports: [
@@ -50,6 +52,7 @@ import { MessageModule } from 'primeng/message';
     DialogModule,
     MessagesModule,
     MessageModule,
+    ProgressSpinnerModule,
   ],
   exports: [
     CommonModule,
@@ -77,6 +80,7 @@ import { MessageModule } from 'primeng/message';
     DialogModule,
     MessagesModule,
     MessageModule,
+    ProgressSpinnerModule,
   ],
   providers: [
     TreeDragDropService,
