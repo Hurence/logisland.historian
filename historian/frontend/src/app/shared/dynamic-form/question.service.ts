@@ -59,13 +59,6 @@ export class QuestionService {
         required: true,
         min: 0,
       }),
-
-      new TextboxQuestion({
-        key: 'group',
-        label: 'Group',
-        order: 8,
-        disabled: true
-      }),
     ];
 
     return questions.sort((a, b) => a.order - b.order);
@@ -79,7 +72,6 @@ export class QuestionService {
         key: 'node_id',
         label: 'Node Id',
         order: 1,
-        disabled: false,
         required: true
       }),
 
@@ -87,7 +79,6 @@ export class QuestionService {
         key: 'id',
         label: 'Id',
         order: 2,
-        type: 'hidden',
         hidden: true,
       }),
       new TextboxQuestion({
@@ -109,7 +100,8 @@ export class QuestionService {
         label: 'Description',
         placeholder: 'description...',
         required: true,
-        order: 5
+        readonly: true,
+        order: 5,
       }),
 
       new NumberQuestion({
@@ -117,13 +109,8 @@ export class QuestionService {
         label: 'update rate',
         order: 6,
         required: true,
+        readonly: true,
         min: 0,
-      }),
-
-      new TextboxQuestion({
-        key: 'group',
-        label: 'Group',
-        order: 7,
       }),
     ];
     return questions.sort((a, b) => a.order - b.order);
