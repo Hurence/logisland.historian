@@ -27,7 +27,8 @@ export class QuestionService {
         key: 'id',
         label: 'Id',
         order: 1,
-        type: 'hidden'
+        type: 'hidden',
+        hidden: true,
       }),
       new TextboxQuestion({
         key: 'tag_name',
@@ -86,7 +87,8 @@ export class QuestionService {
         key: 'id',
         label: 'Id',
         order: 2,
-        type: 'hidden'
+        type: 'hidden',
+        hidden: true,
       }),
       new TextboxQuestion({
         key: 'tag_name',
@@ -124,7 +126,6 @@ export class QuestionService {
         order: 7,
       }),
     ];
-
     return questions.sort((a, b) => a.order - b.order);
   }
 }

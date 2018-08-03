@@ -39,7 +39,7 @@ export class QuestionBase<T> implements IQuestionBase<T> {
     this.order = options.order === undefined ? 1 : options.order;
     this.placeholder = options.placeholder || '';
     this.readonly = options.readonly || false;
-    this.hidden = options.readonly || false;
+    this.hidden = options.hidden || false;
   }
 
   public static isNumberQuestion(arg: IQuestion): arg is NumberQuestion {
