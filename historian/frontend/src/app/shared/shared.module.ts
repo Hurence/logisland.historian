@@ -29,7 +29,8 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CheckboxModule } from 'primeng/checkbox';
-
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { DynamicFormQuestionRadioComponent } from './dynamic-form/dynamic-form-question-radio/dynamic-form-question-radio.component';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { CheckboxModule } from 'primeng/checkbox';
     MessageModule,
     ProgressSpinnerModule,
     CheckboxModule,
+    RadioButtonModule,
   ],
   exports: [
     CommonModule,
@@ -84,6 +86,7 @@ import { CheckboxModule } from 'primeng/checkbox';
     MessageModule,
     ProgressSpinnerModule,
     CheckboxModule,
+    RadioButtonModule,
   ],
   providers: [
     TreeDragDropService,
@@ -95,6 +98,7 @@ import { CheckboxModule } from 'primeng/checkbox';
     DynamicFormQuestionComponent,
     DynamicFormQuestionArrayComponent,
     RefreshRateSelectionComponent,
+    DynamicFormQuestionRadioComponent,
   ],
 })
 export class SharedModule { }

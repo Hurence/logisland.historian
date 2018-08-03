@@ -7,6 +7,10 @@ export enum DatasourceType {
     OPC_UA = 'OPC-UA',
     UNKNOWN = '',
 }
+export namespace DatasourceTypeUtil {
+    export const keys: (keyof typeof DatasourceType)[] = <(keyof typeof DatasourceType)[]>Object.keys(DatasourceType);
+    export const values: string[] = keys.map(k => DatasourceType[k]);
+}
 export class IDatasource {
     public id: string;
     public datasource_type: DatasourceType;

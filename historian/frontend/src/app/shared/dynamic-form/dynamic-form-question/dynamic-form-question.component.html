@@ -23,6 +23,11 @@
       <p-checkbox id="question.key" [formControlName]="question.key" binary="true" [label]="question.label"></p-checkbox>
     </ng-container>
 
+    <!-- RADIO -->
+    <ng-container *ngSwitchCase="'radio'">
+      <h6>{{question.label}}</h6>
+      <app-dynamic-form-question-radio [question]="question" [form]="form"></app-dynamic-form-question-radio>
+    </ng-container>
     <!-- SELECT (DROPDOWN)-->
     <ng-container *ngSwitchCase="'dropdown'">
         <label *ngIf="!question.hidden" id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
@@ -33,9 +38,8 @@
 
     <!-- ARRAY -->
     <ng-container *ngSwitchCase="'array'">
-    <label *ngIf="!question.hidden" id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
-      <app-dynamic-form-question-array [question]="question"
-        [form]="form"></app-dynamic-form-question-array>
+      <label *ngIf="!question.hidden" id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
+      <app-dynamic-form-question-array [question]="question" [form]="form"></app-dynamic-form-question-array>
     </ng-container>
   </div>
 

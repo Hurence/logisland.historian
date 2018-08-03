@@ -1,0 +1,5 @@
+<div [formGroup]="form">
+    <p-radioButton *ngFor="let value of question.possibleValues" name="question.key" [value]="value"
+                [formControlName]="question.key" [label]="value"></p-radioButton>
+</div>
+    

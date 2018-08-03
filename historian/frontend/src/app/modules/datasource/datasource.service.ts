@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 import { AbstractModelServiceCreateOrReplace } from '../../shared/base-model-service-create-or-replace';
 import { Utilities } from '../../shared/utilities.service';
 import { Tag } from '../tag/modele/tag';
-import { Datasource, DatasourceType } from './Datasource';
+import { Datasource, DatasourceType, DatasourceTypeUtil } from './Datasource';
 
 @Injectable()
 export class DatasourceService extends AbstractModelServiceCreateOrReplace<Datasource> {
@@ -42,12 +42,7 @@ export class DatasourceService extends AbstractModelServiceCreateOrReplace<Datas
   }
 
   getDatasourceTypes(): string[] {
-    const datasourceTypes: string[] = [];
-    const keys: (keyof typeof DatasourceType)[] = <(keyof typeof DatasourceType)[]>Object.keys(DatasourceType);
-    for (const key of keys) {
-      datasourceTypes.push(DatasourceType[key]);
-    }
-    return datasourceTypes;
+    return DatasourceTypeUtil.values;
   }
 
   protected create(item: Datasource): Datasource {

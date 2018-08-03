@@ -6,6 +6,8 @@ import { DropdownQuestion } from './question-dropdown';
 import { TextboxQuestion } from './question-textbox';
 import { NumberQuestion } from './question-number';
 import { BooleanQuestion } from './question-boolean';
+import { RadioQuestion } from './question-radio';
+import { PollingMode, PollingModeUtil } from '../../modules/tag/modele/tag';
 
 @Injectable()
 export class QuestionService {
@@ -85,14 +87,14 @@ export class QuestionService {
         min: 0,
       }),
 
-      // new NumberQuestion({
-      //   key: 'polling subscribe',
-      //   label: 'polling subscribe',
-      //   order: 6,
-      //   required: false,
-      //   readonly: true,
-      //   min: 0,
-      // }),
+      new RadioQuestion({
+        key: 'polling_mode',
+        label: 'Method to retrieve data',
+        order: 6,
+        required: false,
+        readonly: true,
+        possibleValues: PollingModeUtil.values,
+      }),
 
       new BooleanQuestion({
         key: 'enabled',

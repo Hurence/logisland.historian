@@ -19,7 +19,7 @@ export interface ITag {
     max_numeric_value?: number;
     last_numeric_value?: number;
     last_quality?: number;
-    pollingMode?: PollingMode;
+    polling_mode?: PollingMode;
 }
 
 export const enum TagType {
@@ -32,11 +32,14 @@ export const enum TagRecordType {
     FOLDER = 'folder'
 }
 
-export const enum PollingMode {
+export enum PollingMode {
     POLLING = 'polling',
     SUBSCRIBE = 'subscribe'
 }
-
+export namespace PollingModeUtil {
+    export const keys: (keyof typeof PollingMode)[] = <(keyof typeof PollingMode)[]>Object.keys(PollingMode);
+    export const values: string[] = keys.map(k => PollingMode[k]);
+}
 export const enum TagDataType {
     INT = 'int',
     LONG = 'long',
@@ -47,6 +50,8 @@ export const enum TagDataType {
     BYTES = 'bytes',
     BOOLEAN = 'boolean'
 }
+
+
 
 export abstract class Tag implements ITag, CanGetId {
     static TAG_UPDATE_RATE_DEFAUT: number = environment.TAG_UPDATE_RATE_DEFAUT;
@@ -60,7 +65,7 @@ export abstract class Tag implements ITag, CanGetId {
     data_type: TagDataType;
     update_rate: number;
     enabled: boolean;
-    pollingMode: PollingMode;
+    polling_mode: PollingMode;
     creation_date?: number;
     last_modification_date?: number;
     last_polling_date?: number;
