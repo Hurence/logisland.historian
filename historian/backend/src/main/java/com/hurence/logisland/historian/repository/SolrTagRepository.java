@@ -32,6 +32,11 @@ import java.util.Optional;
 @Repository
 public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
 
+    /* Delete queries */
+    long deleteByDatasourceId(String datasource_id);
+
+    /* Search queries */
+
     @Query(value = "*:*", filters = { "node_id:\"?0\"", "datasource_id:\"?1\"", "record_type:tag" })
     Optional<Tag> findByNodeIdAndDatasourceId(String nodeId, String datasource_id);
 
@@ -65,6 +70,8 @@ public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
     @Query(value = "record_type:tag", filters = { "record_type:tag", "domain:?0", "server:?1" })
     @Facet(fields = { "group" }, limit = 100)
     FacetPage<Tag> findAllFacetOnGroupKnowingDomainAndServer(String domain, String server, Pageable page);
+
+    /* Facet queries */
 
     @Query(value = "record_type:tag", filters = { "record_type:tag" })
     @Facet(pivots = @Pivot({ "datasource_id", "group" }), pivotMinCount = 1, limit = 10000)

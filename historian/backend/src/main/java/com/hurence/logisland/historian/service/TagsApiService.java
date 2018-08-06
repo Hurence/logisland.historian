@@ -60,6 +60,15 @@ public class TagsApiService {
         return tagToRemove;
     }
 
+    /**
+     * delete tags of datasource. Return number of tag deleted.
+     */
+    public long deleteTagsOfDatasource(String datasourceId) {
+        long numberOfTagDeleted = repository.deleteByDatasourceId(datasourceId);
+        logger.info("deleted all {} tags of Datasource {}", numberOfTagDeleted, datasourceId);
+        return numberOfTagDeleted;
+    }
+
     private Optional<Tag> deleteTagWithoutGeneratingConf(String id) {
         logger.info("deleting Tag {}", id);
         Optional<Tag> tagToRemove = repository.findById(id);

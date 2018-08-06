@@ -36,10 +36,16 @@ public class DatasourcesApiService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private DataflowsApiService dataflowsApiService;
+    private TagsApiService tagsApiService;
 
     @Autowired
     public void setDataflowsApiService(DataflowsApiService dataflowsApiService) {
         this.dataflowsApiService = dataflowsApiService;
+    }
+
+    @Autowired
+    public void setTagsApiService(TagsApiService tagsApiService) {
+        this.tagsApiService = tagsApiService;
     }
 
     @Resource
@@ -52,6 +58,7 @@ public class DatasourcesApiService {
         Optional<Datasource> datasourceToRemove = repository.findById(itemId);
         if (datasourceToRemove.isPresent()) {
             repository.delete(datasourceToRemove.get());
+            long numberOfTagDeleted = tagsApiService.deleteTagsOfDatasource(datasourceToRemove.get().getId());
             dataflowsApiService.updateOpcDataflow();
         }
         return datasourceToRemove;
