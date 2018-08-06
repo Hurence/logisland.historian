@@ -1,6 +1,6 @@
 <!-- {{question | json}} -->
   <!-- CHOOSE CONTROL TYPE -->
-  <div [formGroup]="form"  [ngSwitch]="question.controlType" class="form-group mb-3  text-capitalize">
+  <div [formGroup]="form"  [ngSwitch]="question.controlType" class="form-group mb-3">
 
     <!-- TEXTBOX -->
     <ng-container *ngSwitchCase="'textbox'">

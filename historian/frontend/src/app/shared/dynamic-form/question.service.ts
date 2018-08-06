@@ -28,7 +28,7 @@ export class QuestionService {
 
       new NumberQuestion({
         key: 'update_rate',
-        label: 'Sampling rate(milliseconds)',
+        label: 'Sampling rate in milliseconds',
         order: 7,
         required: true,
         readonly: false,
@@ -54,7 +54,7 @@ export class QuestionService {
 
       new NumberQuestion({
         key: 'server_scan_rate',
-        label: 'Server scan rate',
+        label: 'Server scan rate in milliseconds',
         order: 6,
         required: false,
         readonly: true,
@@ -69,7 +69,7 @@ export class QuestionService {
       }),
       new TextboxQuestion({
         key: 'tag_name',
-        label: 'tag name',
+        label: 'Tag name',
         order: 3,
         readonly: true,
       }),
@@ -105,7 +105,7 @@ export class QuestionService {
 
       new NumberQuestion({
         key: 'update_rate',
-        label: 'Sampling rate(milliseconds)',
+        label: 'Sampling rate in milliseconds',
         order: 7,
         required: true,
         readonly: false,
@@ -131,7 +131,7 @@ export class QuestionService {
 
       new NumberQuestion({
         key: 'server_scan_rate',
-        label: 'Server scan rate',
+        label: 'Server scan rate in milliseconds',
         order: 6,
         required: false,
         readonly: true,
@@ -146,7 +146,7 @@ export class QuestionService {
       }),
       new TextboxQuestion({
         key: 'tag_name',
-        label: 'tag name',
+        label: 'Tag name',
         order: 3,
         readonly: true,
       }),
