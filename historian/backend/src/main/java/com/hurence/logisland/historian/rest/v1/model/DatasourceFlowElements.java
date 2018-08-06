@@ -15,7 +15,7 @@ public class DatasourceFlowElements {
                                   String consoleServiceName,
                                   TagsApiService tagsApiService) {
 
-        Iterator<Tag> it = tagsApiService.getAllTagsFromDatasource(datasource.getId()).iterator();
+        Iterator<Tag> it = tagsApiService.getAllEnabledTagsFromDatasource(datasource.getId()).iterator();
         if (it.hasNext()) {
             String opcConfig = buildOpcConfig(datasource, it);
             String serviceName = dataflowName + "_" + datasource.getId();
