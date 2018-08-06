@@ -31,7 +31,7 @@ public final class DataFlowUtil {
         service.setComponent("com.hurence.logisland.service.solr.Solr_6_4_2_ChronixClientService");
         service.setConfig(buildProperties(
                 new Property().setKey("solr.cloud").setValue("false"),
-                new Property().setKey("solr.connection.string").setValue("http://localhost:8983/solr"),
+                new Property().setKey("solr.connection.string").setValue("http://chronix:8983/solr"),
                 new Property().setKey("solr.connection").setValue("chronix"),
                 new Property().setKey("solr.concurrent.requests").setValue("4"),
                 new Property().setKey("flush.interval").setValue("2000"),
