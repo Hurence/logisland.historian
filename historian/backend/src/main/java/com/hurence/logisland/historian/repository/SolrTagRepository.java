@@ -67,9 +67,12 @@ public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
     FacetPage<Tag> findAllFacetOnGroupKnowingDomainAndServer(String domain, String server, Pageable page);
 
     @Query(value = "record_type:tag", filters = { "record_type:tag" })
+    @Facet(pivots = @Pivot({ "datasource_id", "group" }), pivotMinCount = 1, limit = 10000)
+    FacetPage<Tag> findTreeFacetOnDatasourceIdThenGroup(Pageable page);
+
+    @Query(value = "record_type:tag", filters = { "record_type:tag" })
     @Facet(pivots = @Pivot({ "domain", "server", "group" }), pivotMinCount = 1, limit = 100)
     FacetPage<Tag> findTreeFacetOnDomainThenServerThenGroup(Pageable page);
-    //TODO give a dynamic limit
 
     @Query(value = "record_type:tag", filters = { "?0", "record_type:tag" })
     @Facet(pivots = @Pivot({ "domain", "server", "group" }), pivotMinCount = 0, limit = 100)

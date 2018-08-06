@@ -115,8 +115,8 @@ public class TagsApiService {
     }
 
     public List<TreeNode> getTreeTag(int page, int limit) {
-        FacetPage<Tag> facet = repository.findTreeFacetOnDomainThenServerThenGroup(PageRequest.of(page, limit));
-        List<FacetPivotFieldEntry> domainPiv = facet.getPivot("domain,server,group");
+        FacetPage<Tag> facet = repository.findTreeFacetOnDatasourceIdThenGroup(PageRequest.of(page, limit));
+        List<FacetPivotFieldEntry> domainPiv = facet.getPivot("datasource_id,group");
         return buildTreeNodes(domainPiv);
     }
 

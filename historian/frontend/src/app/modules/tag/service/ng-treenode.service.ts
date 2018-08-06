@@ -157,7 +157,7 @@ export class NgTreenodeService {
     */
     getHistTagTree(): Observable<TreeNode[]> {
         return this.tagService.getTreeTag().pipe(
-            map(nodes => this.buildTagTreeNodes(nodes, ['domain', 'server', 'group'], 0))
+            map(nodes => this.buildTagTreeNodes(nodes, ['datasource_id', 'group'], 0))
         );
     }
     // TODO implement generic version of this
