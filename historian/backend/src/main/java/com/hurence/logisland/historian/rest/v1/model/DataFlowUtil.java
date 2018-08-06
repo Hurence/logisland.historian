@@ -32,8 +32,6 @@ public final class DataFlowUtil {
         service.setConfig(buildProperties(
                 new Property().setKey("solr.cloud").setValue("false"),
                 new Property().setKey("solr.connection.string").setValue("http://chronix:8983/solr"),
-                new Property().setKey("solr.connection").setValue("chronix"),
-                new Property().setKey("solr.concurrent.requests").setValue("4"),
                 new Property().setKey("flush.interval").setValue("2000"),
                 new Property().setKey("batch.size").setValue("500"),
                 new Property().setKey("solr.collection").setValue("chronix")

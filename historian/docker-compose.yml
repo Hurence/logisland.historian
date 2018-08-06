@@ -25,43 +25,41 @@ services:
       - '8080:8080'
     network_mode: bridge
 
-  historian-backend:
-    container_name: historian-backend
-    image: 'hurence/historian-backend:0.3.0'
+  # historian-backend:
+  #   container_name: historian-backend
+  #   image: 'hurence/historian-backend:0.3.0'
+  #   ports:
+  #     - '8701:8701'
+  #   links:
+  #     - chronix
+  #     - redis
+  #     - keycloak
+  #   network_mode: bridge
+
+  # historian-frontend:
+  #   container_name: historian-frontend
+  #   image: 'hurence/historian-frontend:0.3.0'
+  #   ports:
+  #     - '4200:80'
+  #   links:
+  #     - historian-backend
+  #     - keycloak
+  #   network_mode: bridge
+
+  logisland:
+    container_name: logisland
+    image: 'hurence/logisland:0.14.1-develop'
+    command: tail -f bin/logisland.sh
+    hostname: logisland
     ports:
-      - '8701:8701'
+      - '4050:4050'
     links:
+      # - zookeeper
+      # - kafka
+      # - elasticsearch
       - chronix
       - redis
-      - keycloak
+      # - historian-backend
+    extra_hosts:
+      - "historian:172.17.0.1"
     network_mode: bridge
-
-
-  historian-frontend:
-    container_name: historian-frontend
-    image: 'hurence/historian-frontend:0.3.0'
-    ports:
-      - '4200:80'
-    links:
-      - historian-backend
-      - keycloak
-    network_mode: bridge
-
-#
-#  logisland:
-#    #command: /bin/bash bin/logisland.sh --conf conf/mqtt-to-historian.yml
-#    command: tail -f bin/logisland.sh
-#    environment:
-#      - MQTT_BROKER_URL=tcp://51.15.164.141:1883
-#
-#    hostname: kapua-logisland
-#    container_name: kapua-logisland
-#    image: 'hurence/logisland:0.12.0'
-#    ports:
-#      - '4050:4050'
-#      - '8008:8008'
-#    volumes:
-#      - ./conf/logisland:/conf
-#      - ./data/logisland:/data
-#    networks:
-#      - itnet
