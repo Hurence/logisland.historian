@@ -26,7 +26,6 @@ export class DatasourceDashboardComponent implements OnInit {
 
   selectedDatasource: Datasource;
   datasourceToCreate: Datasource;
-  tags: ITag[];
   filterPlaceHolder = 'Type to filter by type or by description...';
   // add tag form
   createdTag: HistorianTag;
@@ -44,10 +43,7 @@ export class DatasourceDashboardComponent implements OnInit {
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private confirmationService: ConfirmationService,
               private profilService: ProfilService,
-              private tagService: TagService,
-              private tagHistorianService: TagHistorianService,
               private questionService: QuestionService) {
                 this.createdTag = new HistorianTag({
                   record_type: TagRecordType.TAG,
@@ -70,7 +66,6 @@ export class DatasourceDashboardComponent implements OnInit {
               }
 
   ngOnInit() {
-    this.tags = [];
     this.tagQuestions = this.questionService.getAddTagForm();
   }
 
@@ -126,9 +121,7 @@ export class DatasourceDashboardComponent implements OnInit {
   }
 
   private selectDatasource(datasource: Datasource) {
-    if (datasource !== null) {
-      this.selectedDatasource = datasource;
-    }
+    this.selectedDatasource = datasource;
   }
 
 

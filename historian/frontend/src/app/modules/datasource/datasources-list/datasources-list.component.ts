@@ -55,7 +55,9 @@ export class DatasourcesListComponent implements OnInit {
           }
         });
       },
-      reject: () => { }
+      reject: () => {
+        console.error('An error occured while deleting datasource.');
+      }
     });
   }
 

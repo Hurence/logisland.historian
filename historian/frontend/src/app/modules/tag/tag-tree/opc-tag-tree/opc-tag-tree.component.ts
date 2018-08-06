@@ -49,28 +49,29 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   ngOnChanges(changes: SimpleChanges) {
     if (changes.datasource && !changes.datasource.isFirstChange()) {
       this.treeNodes = [];
-      this.setLoading();
-      switch (this.datasource.tag_browsing) {
-        case TagBrowsingMode.AUTOMATIC:
-          this.tagOpcService.browseTags(
-            this.datasource.id,
-            { nodeId: this.datasource.findRootNodeId(), depth: 1 }
-          ).subscribe(tags => {
-            this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
-          });
-          break;
-        case TagBrowsingMode.MANUAL:
-          this.tagHistorianService.getAllFromDatasource(this.datasource.id).subscribe(tags => {
-            this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
-          });
-          break;
-        default:
-          console.error('unknown TagBrowsingMode type :', this.datasource.tag_browsing);
-          break;
+      if (this.datasource !== null) {
+        this.setLoading();
+        switch (this.datasource.tag_browsing) {
+          case TagBrowsingMode.AUTOMATIC:
+            this.tagOpcService.browseTags(
+              this.datasource.id,
+              { nodeId: this.datasource.findRootNodeId(), depth: 1 }
+            ).subscribe(tags => {
+              this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+            });
+            break;
+          case TagBrowsingMode.MANUAL:
+            this.tagHistorianService.getAllFromDatasource(this.datasource.id).subscribe(tags => {
+              this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+            });
+            break;
+          default:
+            console.error('unknown TagBrowsingMode type :', this.datasource.tag_browsing);
+            break;
+        }
+        this.loading = false;
+        this.updateTagFormTitle();
       }
-      this.loading = false;
-      // this.expandAll();
-      this.updateTagFormTitle();
     }
   }
 

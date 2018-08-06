@@ -22,7 +22,7 @@ export interface IModelService<M> {
 export abstract class AbstractModelServiceCreateOrReplace<M> implements IModelService<M> {
 
   protected baseUrl: string;
-  protected objNameForMsg: string;
+  protected abstract objNameForMsg: string;
 
   constructor(protected http: HttpClient,
               protected help: Utilities,

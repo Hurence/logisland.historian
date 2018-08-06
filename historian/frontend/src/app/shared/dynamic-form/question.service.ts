@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { ArrayQuestion } from './question-array';
+import { PollingModeUtil } from '../../modules/tag/modele/tag';
 import { QuestionBase } from './question-base';
-import { DropdownQuestion } from './question-dropdown';
-import { TextboxQuestion } from './question-textbox';
-import { NumberQuestion } from './question-number';
 import { BooleanQuestion } from './question-boolean';
+import { NumberQuestion } from './question-number';
 import { RadioQuestion } from './question-radio';
-import { PollingMode, PollingModeUtil } from '../../modules/tag/modele/tag';
+import { TextboxQuestion } from './question-textbox';
 
 @Injectable()
 export class QuestionService {

@@ -13,6 +13,8 @@ import { Datasource, DatasourceType, DatasourceTypeUtil } from './Datasource';
 @Injectable()
 export class DatasourceService extends AbstractModelServiceCreateOrReplace<Datasource> {
 
+  protected objNameForMsg = 'datasource';
+
   constructor(protected http: HttpClient,
               protected help: Utilities,
               protected messageService: MessageService) {
