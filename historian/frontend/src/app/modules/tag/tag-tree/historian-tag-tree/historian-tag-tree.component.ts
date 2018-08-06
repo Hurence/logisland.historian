@@ -25,7 +25,7 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
 
   constructor(private ngTreenodeService: NgTreenodeService,
               private tagService: TagHistorianService,
-              private profilService: ProfilService) { 
+              private profilService: ProfilService) {
                 super();
               }
 
