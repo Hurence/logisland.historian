@@ -15,10 +15,10 @@ export class IQuestionBase<T> implements IQuestion {
   placeholder?: string;
   readonly?: boolean;
   hidden?: boolean;
+  elementId?: string;
 }
 
 export class QuestionBase<T> implements IQuestionBase<T> {
-  value?: T;
   key: string;
   label: string;
   required: boolean;
@@ -27,6 +27,8 @@ export class QuestionBase<T> implements IQuestionBase<T> {
   controlType: string;
   placeholder: string;
   readonly: boolean;
+  elementId: string;
+  value?: T;
   hidden?: boolean;
 
   constructor(options: IQuestionBase<T>) {
@@ -40,6 +42,7 @@ export class QuestionBase<T> implements IQuestionBase<T> {
     this.placeholder = options.placeholder || '';
     this.readonly = options.readonly || false;
     this.hidden = options.hidden || false;
+    this.elementId = options.elementId || this.key;
   }
 
   public static isNumberQuestion(arg: IQuestion): arg is NumberQuestion {

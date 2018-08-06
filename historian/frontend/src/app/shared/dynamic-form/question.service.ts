@@ -98,7 +98,7 @@ export class QuestionService {
         key: 'node_id',
         label: 'Node Id',
         order: 1,
-        required: true
+        required: true,
       }),
 
       new NumberQuestion({
@@ -165,6 +165,7 @@ export class QuestionService {
       }),
 
     ];
+    questions.forEach(question => question.elementId = 'add-' + question.elementId);
     return questions;
   }
 }

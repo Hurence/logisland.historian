@@ -4,23 +4,23 @@
 
     <!-- TEXTBOX -->
     <ng-container *ngSwitchCase="'textbox'">
-        <label *ngIf="!question.hidden" id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
+        <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
         <input [formControlName]="question.key" class="form-control"
-          [placeholder]="question.placeholder" [id]="question.key" [type]="question.type"
+          [placeholder]="question.placeholder" [id]="question.elementId" [type]="question.type"
           [required]="question.required" [readonly]="question.readonly">
     </ng-container>
 
     <!-- NUMBER -->
     <ng-container *ngSwitchCase="'number'">
-      <label *ngIf="!question.hidden" id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
+      <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
       <input [formControlName]="question.key" class="form-control"
-        [placeholder]="question.placeholder" [id]="question.key" [type]="'number'"
+        [placeholder]="question.placeholder" [id]="question.elementId" [type]="'number'"
         [required]="question.required" [readonly]="question.readonly">
     </ng-container>
 
     <!-- BOOLEAN -->
     <ng-container *ngSwitchCase="'boolean'">
-      <p-checkbox id="question.key" [formControlName]="question.key" binary="true" [label]="question.label"></p-checkbox>
+      <p-checkbox [id]="question.elementId" [formControlName]="question.key" binary="true" [label]="question.label"></p-checkbox>
     </ng-container>
 
     <!-- RADIO -->
@@ -30,15 +30,15 @@
     </ng-container>
     <!-- SELECT (DROPDOWN)-->
     <ng-container *ngSwitchCase="'dropdown'">
-        <label *ngIf="!question.hidden" id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
-        <select [id]="question.key" [formControlName]="question.key" class]="form-control" [required]="question.required">
+        <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
+        <select [id]="question.elementId" [formControlName]="question.key" class]="form-control" [required]="question.required">
           <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
         </select>
     </ng-container>
 
     <!-- ARRAY -->
     <ng-container *ngSwitchCase="'array'">
-      <label *ngIf="!question.hidden" id="question.key" [attr.for]="question.key" for="question.key">{{question.label}}</label>
+      <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
       <app-dynamic-form-question-array [question]="question" [form]="form"></app-dynamic-form-question-array>
     </ng-container>
   </div>
