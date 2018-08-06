@@ -28,7 +28,7 @@ export class QuestionService {
 
       new NumberQuestion({
         key: 'update_rate',
-        label: 'Sampling rate',
+        label: 'Sampling rate(milliseconds)',
         order: 7,
         required: true,
         readonly: false,
@@ -105,7 +105,7 @@ export class QuestionService {
 
       new NumberQuestion({
         key: 'update_rate',
-        label: 'Sampling rate',
+        label: 'Sampling rate(milliseconds)',
         order: 7,
         required: true,
         readonly: false,
