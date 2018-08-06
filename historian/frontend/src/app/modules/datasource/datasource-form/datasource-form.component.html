@@ -92,7 +92,7 @@
 
           <div class="form-group label-small text-capitalize">
             <label for="pwd" i18n="password of the datasource for connection|label for password datasource input">password</label>
-            <input type="text" class="form-control" formControlName="password" name="password" required>
+            <input type="password" class="form-control" formControlName="password" name="password" required>
           </div>
           <div [hidden]="dsForm.get('auth.password').valid || dsForm.get('auth.password').pristine" class="alert alert-danger"
                 i18n="password of the datasource is required|appears when user input is not valid">
