@@ -52,6 +52,29 @@ public final class DataFlowUtil {
         return proc;
     }
 
+    public static Processor buildAddDatasourceIdProcessor(String datasourceId) {
+        Processor proc = new Processor();
+        proc.setName("add_datasource_id");
+        proc.setComponent("com.hurence.logisland.processor.AddFields");
+        proc.setDocumentation("Add datasource_id from which the tag correspond to");
+        proc.setConfig(buildProperties(
+                new Property().setKey("conflict.resolution.policy").setValue("overwrite_existing"),
+                new Property().setKey("datasource_id").setValue(datasourceId)
+        ));
+        return proc;
+    }
+
+    public static Processor buildAddDebugProcessor() {
+        Processor proc = new Processor();
+        proc.setName("stream_debugger");
+        proc.setComponent("com.hurence.logisland.processor.DebugStream");
+        proc.setDocumentation("debug records");
+        proc.setConfig(buildProperties(
+                new Property().setKey("event.serializer").setValue("json")
+        ));
+        return proc;
+    }
+
     public static Processor buildSendToChronixProcessor(String chronixServiceName) {
         Processor proc = new Processor();
         proc.setName("send_to_chronix");
