@@ -1,5 +1,7 @@
 <div [formGroup]="form">
-    <p-radioButton *ngFor="let value of question.possibleValues" name="question.key" [value]="value"
-                [formControlName]="question.key" [label]="value"></p-radioButton>
+    <span *ngFor="let value of question.possibleValues" style="margin-right: 40px;">
+        <p-radioButton name="question.key" [value]="value"
+        [formControlName]="question.key" [label]="value"></p-radioButton>
+    </span>
 </div>
     

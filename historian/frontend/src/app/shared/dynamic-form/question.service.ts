@@ -23,47 +23,72 @@ export class QuestionService {
         key: 'node_id',
         label: 'Node Id',
         order: 1,
-        disabled: true,
+        required: true
       }),
 
       new NumberQuestion({
         key: 'update_rate',
         label: 'Sampling rate',
-        order: 5,
+        order: 7,
         required: true,
+        readonly: false,
+        min: 0,
+      }),
+
+      new RadioQuestion({
+        key: 'polling_mode',
+        label: 'Method to retrieve data',
+        order: 6,
+        required: false,
+        readonly: true,
+        possibleValues: PollingModeUtil.values,
+      }),
+
+      new BooleanQuestion({
+        key: 'enabled',
+        label: 'Tag Monitored ?',
+        order: 6,
+        required: true,
+        value: true,
+      }),
+
+      new NumberQuestion({
+        key: 'server_scan_rate',
+        label: 'Server scan rate',
+        order: 6,
+        required: false,
+        readonly: true,
         min: 0,
       }),
 
       new TextboxQuestion({
         key: 'id',
         label: 'Id',
-        order: 1,
-        type: 'hidden',
+        order: 2,
         hidden: true,
       }),
       new TextboxQuestion({
         key: 'tag_name',
         label: 'tag name',
-        order: 2,
-        disabled: true,
+        order: 3,
+        readonly: true,
       }),
 
       new TextboxQuestion({
         key: 'datasource_id',
-        label: 'Datasourqce Name',
-        order: 3,
-        disabled: true,
+        label: 'Datasource Name',
+        order: 4,
+        readonly: true,
+        hidden: true,
       }),
 
       new TextboxQuestion({
         key: 'description',
         label: 'Description',
-        placeholder: 'description...',
-        required: true,
-        order: 4
+        readonly: true,
+        order: 5,
       }),
     ];
-
     return questions;
   }
 
