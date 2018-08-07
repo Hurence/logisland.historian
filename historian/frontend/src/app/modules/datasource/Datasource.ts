@@ -46,6 +46,10 @@ export class Datasource implements IDatasource {
         return this.tag_browsing === TagBrowsingMode.MANUAL;
     }
 
+    isAutomatic(): boolean {
+        return this.tag_browsing === TagBrowsingMode.AUTOMATIC;
+    }
+
     findRootNodeId(): string {
         switch (this.datasource_type) {
             case DatasourceType.OPC_UA:

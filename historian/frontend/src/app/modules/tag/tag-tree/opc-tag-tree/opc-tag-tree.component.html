@@ -1,7 +1,7 @@
 
 <div class="mx-auto" style="width: 20rem;">
-    <button pButton type="button" label="Expand all" (click)="expandAll()" class="mx-2 my-2"></button>
-    <button pButton type="button" label="Collapse all" (click)="collapseAll()" class="mx-2 my-2"></button>
+    <button *ngIf="withExpandAll" pButton type="button" label="Expand all" (click)="expandAll()" class="mx-2 my-2"></button>
+    <button *ngIf="withCollapseAll" pButton type="button" label="Collapse all" (click)="collapseAll()" class="mx-2 my-2"></button>
     <!-- <button pButton type="button" label="Register selected tags" (click)="showRegisterDialog()"></button> -->
 </div>
 <p-tree [value]="treeNodes" [loading]="loading" id="historian-tree" (onNodeExpand)="loadNode($event)">

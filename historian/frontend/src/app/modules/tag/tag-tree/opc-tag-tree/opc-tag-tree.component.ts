@@ -21,7 +21,8 @@ import { TagOpcService } from '../../service/tag-opc.service';
 })
 export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit, OnChanges {
 
-
+  @Input() withExpandAll?: boolean = true;
+  @Input() withCollapseAll?: boolean = true;
   @Input() datasource: Datasource;
   // tag detail props
   tagClicked: ITag;
@@ -89,18 +90,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
 
   loadNode(event): void {
     const node: TreeNode = event.node;
-    if (node && node.type === TypesName.FOLDER && (!node.children  || node.children.length === 0)) {
-      this.loading = true;
-      this.tagOpcService.browseTags(this.datasource.id, { nodeId: node.data.node_id , depth: 1 }).subscribe(tags => {
-        const children = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
-        if (children.length === 0) {
-          node.children = [this.ngTreenodeService.getEmptyNode()];
-        } else {
-          node.children = children;
-        }
-        this.loading = false;
-      });
-    }
+    this.loadANodeIfNeeded(node);
   }
 
   setLoading(): void {
@@ -289,6 +279,19 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   }
 
   protected loadANodeIfNeeded(node: TreeNode): boolean {
+    if (node && node.type === TypesName.FOLDER && (!node.children  || node.children.length === 0)) {
+      this.loading = true;
+      this.tagOpcService.browseTags(this.datasource.id, { nodeId: node.data.node_id , depth: 1 }).subscribe(tags => {
+        const children = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+        if (children.length === 0) {
+          node.children = [this.ngTreenodeService.getEmptyNode()];
+        } else {
+          node.children = children;
+        }
+        this.loading = false;
+      });
+      return true;
+    }
     return false;
   }
 

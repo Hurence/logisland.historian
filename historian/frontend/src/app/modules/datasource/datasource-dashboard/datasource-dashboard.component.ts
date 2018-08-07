@@ -140,6 +140,10 @@ export class DatasourceDashboardComponent implements OnInit {
     return (ds === null || ds === undefined || !ds.isManual());
   }
 
+  isDatasourceAutomatic(ds: Datasource): boolean {
+    return (ds !== null && ds !== undefined && ds.isAutomatic());
+  }
+
   onSubmitted(ds: Datasource) {
     this.dslistComp.getDatasources();
     this.selectedDatasource = ds;
