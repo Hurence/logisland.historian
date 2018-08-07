@@ -68,9 +68,9 @@
       </div>
       <!-- Authentification -->
       <div formGroupName="auth" class="mt-3">
-          <h6 _ngcontent-c2="" class="text-uppercase"
+          <h6 _ngcontent-c2=""
               i18n="authentification section of the form for datasource|label for section of the form">
-            AUTHENTIFICATION
+              Authentication
           </h6>
         <div *ngIf="dsForm.get('auth.cred').value !== 'none'">
           <div class="form-group label-small text-capitalize">
@@ -95,15 +95,15 @@
 
       <!-- Tag Browsing -->
       <h6 _ngcontent-c2="" class="text-uppercase">
-        Tag Browsing Mode
+        Tag browsing mode
       </h6>
       <div class="custom-control custom-radio custom-control-inline">
         <input type="radio" value="automatic" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}automaticBrowsing" class="custom-control-input">
-        <label class="custom-control-label text-uppercase" for="{{prefixId}}automaticBrowsing">automatic</label>
+        <label class="custom-control-label" for="{{prefixId}}automaticBrowsing">Automatic</label>
       </div>
       <div class="custom-control custom-radio custom-control-inline">
         <input type="radio" value="manual" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}manualBrowsing" class="custom-control-input">
-        <label class="custom-control-label text-uppercase" for="{{prefixId}}manualBrowsing">manual</label>
+        <label class="custom-control-label" for="{{prefixId}}manualBrowsing">Manual</label>
       </div>
     </div>
 
@@ -141,19 +141,19 @@
 
       <!-- Authentification -->
       <div formGroupName="auth" class="mt-3">
-          <h6 _ngcontent-c2="" class="text-uppercase"
+          <h6 _ngcontent-c2=""
               i18n="authentification section of the form for datasource|label for section of the form">
-            AUTHENTIFICATION
+              Authentication
           </h6>
           <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" value="none" name="cred" formControlName="cred" id="{{prefixId}}withoutCred" class="custom-control-input">
-            <label class="custom-control-label text-uppercase" for="{{prefixId}}withoutCred"
-                    i18n="no authentification needed|if the data source does not need any authentification information">none</label>
+            <label class="custom-control-label" for="{{prefixId}}withoutCred"
+                    i18n="no authentification needed|if the data source does not need any authentification information">None</label>
           </div>
           <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" value="normal" name="cred" formControlName="cred" id="{{prefixId}}withCred" class="custom-control-input">
-            <label class="custom-control-label text-uppercase" for="{{prefixId}}withCred"
-                    i18n="need credential information|if the data source does need authentification information">CREDENTIALS</label>
+            <label class="custom-control-label" for="{{prefixId}}withCred"
+                    i18n="need credential information|if the data source does need authentification information">User/Password</label>
           </div>
 
 
@@ -179,16 +179,16 @@
       </div>
 
       <!-- Tag Browsing -->
-      <h6 _ngcontent-c2="" class="text-uppercase">
-        Tag Browsing Mode
+      <h6 _ngcontent-c2="">
+        Tag browsing mode
       </h6>
       <div class="custom-control custom-radio custom-control-inline">
         <input type="radio" value="automatic" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}automaticBrowsing" class="custom-control-input">
-        <label class="custom-control-label text-uppercase" for="{{prefixId}}automaticBrowsing">automatic</label>
+        <label class="custom-control-label" for="{{prefixId}}automaticBrowsing">Automatic</label>
       </div>
       <div class="custom-control custom-radio custom-control-inline">
         <input type="radio" value="manual" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}manualBrowsing" class="custom-control-input">
-        <label class="custom-control-label text-uppercase" for="{{prefixId}}manualBrowsing">manual</label>
+        <label class="custom-control-label" for="{{prefixId}}manualBrowsing">Manual</label>
       </div>
     </div>
 
