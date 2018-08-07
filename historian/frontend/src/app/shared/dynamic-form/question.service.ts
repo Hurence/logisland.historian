@@ -35,7 +35,7 @@ export class QuestionService {
 
       new RadioQuestion({
         key: 'polling_mode',
-        label: 'Method to retrieve data',
+        label: 'Read mode',
         order: 6,
         required: false,
         readonly: true,
@@ -112,7 +112,7 @@ export class QuestionService {
 
       new RadioQuestion({
         key: 'polling_mode',
-        label: 'Method to retrieve data',
+        label: 'Read mode',
         order: 6,
         required: false,
         readonly: true,

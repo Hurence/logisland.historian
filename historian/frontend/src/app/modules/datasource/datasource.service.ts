@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Observable, of } from 'rxjs';
@@ -26,6 +26,21 @@ export class DatasourceService extends AbstractModelServiceCreateOrReplace<Datas
       .pipe(
         map(tags => true),
         catchError(error => of(false))
+      );
+  }
+
+  doesIdExist(id: string): Observable<boolean> {
+    return this.get(id)
+      .pipe(
+        map(ds => { return true; }),
+        catchError(error => {
+          const err: HttpErrorResponse = error;
+          if (err.status === 404) {
+            return of(false);
+          } else {
+            return of(true);
+          }
+        })
       );
   }
 

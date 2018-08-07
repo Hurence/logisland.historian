@@ -35,16 +35,14 @@ export abstract class AbstractModelServiceCreateOrReplace<M> implements IModelSe
   getAll(): Observable<M[]> {
     return this.http.get<M[]>(`${this.baseUrl}`)
       .pipe(
-        map(items => items.map(item => this.create(item))),
-        catchError(this.help.handleError('getAll()', []))
+        map(items => items.map(item => this.create(item)))
       );
   }
 
   get(id: string): Observable<M> {
     return this.http.get<M>(`${this.baseUrl}/${encodeURIComponent(id)}`)
       .pipe(
-        map(item => this.create(item)),
-        catchError(this.help.handleError(`get(${id})`))
+        map(item => this.create(item))
       );
   }
 

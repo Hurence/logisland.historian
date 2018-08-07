@@ -1,7 +1,7 @@
 
 <div class="mx-auto" style="width: 20rem;">
-    <button pButton type="button" label="Expand all" (click)="expandAll()" class="mx-2 my-2"></button>
-    <button pButton type="button" label="Collapse all" (click)="collapseAll()" class="mx-2 my-2"></button>
+    <button *ngIf="withExpandAll" pButton type="button" label="Expand all" (click)="expandAll()" class="mx-2 my-2"></button>
+    <button *ngIf="withCollapseAll" pButton type="button" label="Collapse all" (click)="collapseAll()" class="mx-2 my-2"></button>
     <!-- <button pButton type="button" label="Register selected tags" (click)="showRegisterDialog()"></button> -->
 </div>
 <p-tree [value]="treeNodes" [loading]="loading" id="historian-tree" (onNodeExpand)="loadNode($event)">
@@ -10,7 +10,7 @@
         <div class='row'>
             <div class='col-auto mr-auto  text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
-            <div *ngIf="hasTagChildren(node)" class='col-auto'>
+            <!-- <div *ngIf="hasTagChildren(node)" class='col-auto'>
                 <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
                 class="mx-1 my-1"
                 icon="fa fa-edit"></button>
@@ -18,7 +18,7 @@
                 class="mx-1 my-1"
                 icon="fa fa-trash"></button>
                 <p-inputSwitch [(ngModel)]="node.data" (click)="toggleEnableds(node);$event.stopPropagation();"></p-inputSwitch>
-            </div>
+            </div> -->
         </div>
     </div>
     </ng-template>

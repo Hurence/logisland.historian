@@ -2,16 +2,16 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { QuestionBase } from '../../../shared/dynamic-form/question-base';
-import { QuestionControlService } from '../../../shared/dynamic-form/question-control.service';
-import { IHistorianTag } from '../modele/HistorianTag';
-import { ITag, Tag } from '../modele/tag';
-import { TagHistorianService } from '../service/tag-historian.service';
-import { ITagFormInput } from './TagFormInput';
-import { ITagFormOutput, TagFormOutput } from './TagFormOutput';
-import { QuestionService } from '../../../shared/dynamic-form/question.service';
+import { QuestionBase } from '../../../../shared/dynamic-form/question-base';
+import { QuestionControlService } from '../../../../shared/dynamic-form/question-control.service';
+import { IHistorianTag } from '../../modele/HistorianTag';
+import { ITag, Tag } from '../../modele/tag';
+import { TagHistorianService } from '../../service/tag-historian.service';
+import { ITagFormInput } from '../TagFormInput';
+import { ITagFormOutput, TagFormOutput } from '../TagFormOutput';
+import { QuestionService } from '../../../../shared/dynamic-form/question.service';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { TagUtils } from '../modele/TagUtils';
+import { TagUtils } from '../../modele/TagUtils';
 import { ConfirmationService } from 'primeng/api';
 
 @Component({

@@ -81,6 +81,7 @@ export abstract class Tag implements ITag, CanGetId {
         if (this.record_type === null || this.record_type === undefined) this.record_type = TagRecordType.TAG;
         if (this.id === null || this.id === undefined || this.id === '') this.id = 'idToBeGenerated';
         if (this.data_type === null || this.data_type === undefined) this.data_type = TagDataType.DOUBLE;
+        if (this.polling_mode === null || this.polling_mode === undefined) this.polling_mode = PollingMode.POLLING;
     }
 
     getId(): string {

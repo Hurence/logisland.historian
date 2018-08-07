@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { ConfirmationService } from 'primeng/components/common/api';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
+import { DatasourceType } from '../Datasource';
 import { Datasource, TagBrowsingMode } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
-import { ConfirmationService } from 'primeng/components/common/api';
 
 @Component({
   selector: 'app-datasource-form',
@@ -17,6 +19,9 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private name: AbstractControl;
   private user: AbstractControl;
   private password: AbstractControl;
+  private domain: AbstractControl;
+  private clsId: AbstractControl;
+  private progId: AbstractControl;
   datasourceTypes: string[];
 
   private red = 'color-red';
@@ -43,7 +48,9 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     private datasourceService: DatasourceService) {
 
     this.createForm();
+    this.updateControlsDependingOnDatasourceType();
     this.resetCredWhenNone();
+    this.mutallyExclusiveClsidAndProgId();
   }
 
   ngOnInit() {
@@ -90,7 +97,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private createForm(): void { // TODO should disappear when using dynamic form
     this.dsForm = this.fb.group({
       type: ['OPC-DA', Validators.required],
-      name: [{ value: '', disabled: false }, Validators.required],
+      name: [{ value: '', disabled: false }, Validators.required, this.doesIdExist.bind(this)],
       description: ['', Validators.required],
       host: ['', Validators.required],
       domain: ['', Validators.required],
@@ -106,6 +113,21 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     this.name = this.dsForm.get('name');
     this.user = this.dsForm.get('auth.user');
     this.password = this.dsForm.get('auth.password');
+    this.domain = this.dsForm.get('domain');
+    this.clsId = this.dsForm.get('clsid');
+    this.progId = this.dsForm.get('progId');
+  }
+
+  private doesIdExist(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    return this.datasourceService.doesIdExist(control.value)
+    .pipe(
+      map(exist => {
+        if (exist) {
+          return { 'datasourceIdExists': true};
+        }
+        return null;
+      })
+    );
   }
 
   private disableName(): void {
@@ -221,6 +243,56 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
         } else {
           this.user.enable();
           this.password.enable();
+        }
+      }
+    );
+  }
+
+  /* Listen to auth.cred controller so it resets credentials when selecting none */
+  private updateControlsDependingOnDatasourceType(): void {
+    this.dsForm.get('type').valueChanges.forEach(
+      (typ: string) => {
+        if (typ === DatasourceType.OPC_DA) {
+          this.domain.enable();
+          this.clsId.enable();
+          this.progId.enable();
+          this.dsForm.patchValue({
+            auth: {
+              cred: this.CREADENTIAL_NORMAL,
+            }
+          });
+        } else if (typ === DatasourceType.OPC_UA) {
+          this.domain.disable();
+          this.clsId.disable();
+          this.progId.disable();
+        }
+      }
+    );
+  }
+  private mutallyExclusiveClsidAndProgId(): void {
+    this.clsId.valueChanges.forEach(
+      (text: string) => {
+        if (this.progId.enabled) {
+          if (text !== null && text !== undefined && text.length > 0) {
+            this.progId.disable();
+          }
+        } else {
+          if (text === null || text === undefined || text.length === 0) {
+            this.progId.enable();
+          }
+        }
+      }
+    );
+    this.progId.valueChanges.forEach(
+      (text: string) => {
+        if (this.clsId.enabled) {
+          if (text !== null && text !== undefined && text.length > 0) {
+            this.clsId.disable();
+          }
+        } else {
+          if (text === null || text === undefined || text.length === 0) {
+            this.clsId.enable();
+          }
         }
       }
     );
