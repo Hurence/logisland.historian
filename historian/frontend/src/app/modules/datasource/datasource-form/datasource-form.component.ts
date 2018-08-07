@@ -50,6 +50,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     this.createForm();
     this.updateControlsDependingOnDatasourceType()
     this.resetCredWhenNone();
+    this.mutallyExclusiveClsidAndProgId();
   }
 
   ngOnInit() {
@@ -264,6 +265,34 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
           this.domain.disable();
           this.clsId.disable();
           this.progId.disable();
+        }
+      }
+    );
+  }
+  private mutallyExclusiveClsidAndProgId(): void {
+    this.clsId.valueChanges.forEach(
+      (text: string) => {
+        if (this.progId.enabled) {
+          if (text !== null && text !== undefined && text.length > 0) {
+            this.progId.disable();
+          }
+        } else {
+          if (text === null || text === undefined || text.length === 0) {
+            this.progId.enable();
+          }
+        }
+      }
+    );
+    this.progId.valueChanges.forEach(
+      (text: string) => {
+        if (this.clsId.enabled) {
+          if (text !== null && text !== undefined && text.length > 0) {
+            this.clsId.disable();
+          }
+        } else {
+          if (text === null || text === undefined || text.length === 0) {
+            this.clsId.enable();
+          }
         }
       }
     );
