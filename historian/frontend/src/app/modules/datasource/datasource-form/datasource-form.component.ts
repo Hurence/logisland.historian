@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators, FormControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { ConfirmationService } from 'primeng/components/common/api';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
+import { DatasourceType } from '../Datasource';
 import { Datasource, TagBrowsingMode } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
-import { ConfirmationService } from 'primeng/components/common/api';
-import { map } from 'rxjs/operators';
-import { DatasourceType } from '../../../../../target/docker/src/app/modules/datasource/Datasource';
 
 @Component({
   selector: 'app-datasource-form',
