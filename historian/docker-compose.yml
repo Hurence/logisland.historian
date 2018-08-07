@@ -49,17 +49,17 @@ services:
   logisland:
     container_name: logisland
     image: 'hurence/logisland:0.14.1-develop'
-    command: tail -f bin/logisland.sh
+    command: bin/logisland.sh --conf /conf/historian-remote.yaml
     hostname: logisland
     ports:
       - '4050:4050'
+    volumes:
+      - ./conf/logisland:/conf
     links:
       # - zookeeper
       # - kafka
       # - elasticsearch
       - chronix
       - redis
-      # - historian-backend
-    extra_hosts:
-      - "historian:172.17.0.1"
+      - historian-backend
     network_mode: bridge
