@@ -20,9 +20,13 @@
       <div class="form-group label-small text-capitalize">
         <label for="name" i18n="name of the datasource|label for name datasource input">name</label>
         <input type="text" class="form-control" formControlName="name" name="name" required>
-        <div [hidden]="name.valid || name.pristine" class="alert alert-danger"
-              i18n="name of the datasource is required|appears when user input is not valid">
-              Name is required
+        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+          <div *ngIf="dsForm.get('name').hasError('required')" class="error">
+            Name is required
+          </div>
+          <div *ngIf="dsForm.get('name').hasError('datasourceIdExists')" class="error">
+            Name aleady exist.
+          </div>
         </div>
       </div>
 

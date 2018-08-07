@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators, FormControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { Datasource, TagBrowsingMode } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
 import { ConfirmationService } from 'primeng/components/common/api';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-datasource-form',
@@ -90,7 +91,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private createForm(): void { // TODO should disappear when using dynamic form
     this.dsForm = this.fb.group({
       type: ['OPC-DA', Validators.required],
-      name: [{ value: '', disabled: false }, Validators.required],
+      name: [{ value: '', disabled: false }, Validators.required, this.doesIdExist.bind(this)],
       description: ['', Validators.required],
       host: ['', Validators.required],
       domain: ['', Validators.required],
@@ -106,6 +107,18 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     this.name = this.dsForm.get('name');
     this.user = this.dsForm.get('auth.user');
     this.password = this.dsForm.get('auth.password');
+  }
+
+  private doesIdExist(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    return this.datasourceService.doesIdExist(control.value)
+    .pipe(
+      map(exist => {
+        if (exist) {
+          return { 'datasourceIdExists': true};
+        }
+        return null;
+      })
+    );
   }
 
   private disableName(): void {
