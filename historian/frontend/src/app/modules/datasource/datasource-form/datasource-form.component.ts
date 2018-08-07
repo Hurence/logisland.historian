@@ -19,6 +19,9 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private name: AbstractControl;
   private user: AbstractControl;
   private password: AbstractControl;
+  private domain: AbstractControl;
+  private clsId: AbstractControl;
+  private progId: AbstractControl;
   datasourceTypes: string[];
 
   private red = 'color-red';
@@ -45,7 +48,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     private datasourceService: DatasourceService) {
 
     this.createForm();
-    this.updateControlsWhenDA()
+    this.updateControlsDependingOnDatasourceType()
     this.resetCredWhenNone();
   }
 
@@ -109,6 +112,9 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     this.name = this.dsForm.get('name');
     this.user = this.dsForm.get('auth.user');
     this.password = this.dsForm.get('auth.password');
+    this.domain = this.dsForm.get('domain');
+    this.clsId = this.dsForm.get('clsid');
+    this.progId = this.dsForm.get('progId');
   }
 
   private doesIdExist(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
@@ -242,15 +248,22 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   }
 
   /* Listen to auth.cred controller so it resets credentials when selecting none */
-  private updateControlsWhenDA(): void {
+  private updateControlsDependingOnDatasourceType(): void {
     this.dsForm.get('type').valueChanges.forEach(
       (typ: string) => {
         if (typ === DatasourceType.OPC_DA) {
+          this.domain.enable();
+          this.clsId.enable();
+          this.progId.enable();
           this.dsForm.patchValue({
             auth: {
               cred: this.CREADENTIAL_NORMAL,
             }
           });
+        } else if (typ === DatasourceType.OPC_UA) {
+          this.domain.disable();
+          this.clsId.disable();
+          this.progId.disable();
         }
       }
     );
