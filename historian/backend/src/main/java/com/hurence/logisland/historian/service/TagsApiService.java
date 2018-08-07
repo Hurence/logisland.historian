@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,47 +52,59 @@ public class TagsApiService {
     }
 
 
-    public Optional<Tag> deleteTag(String itemId) {
-        Optional<Tag> tagToRemove = this.deleteTagWithoutGeneratingConf(itemId);
+    public Optional<Tag> deleteTag(String id) {
+        Optional<Tag> tagToRemove = this.deleteTagWithoutGeneratingConf(id);
         if (tagToRemove.isPresent()) {
             dataflowsApiService.updateOpcDataflow();
         }
         return tagToRemove;
     }
 
-    private Optional<Tag> deleteTagWithoutGeneratingConf(String itemId) {
-        logger.info("deleting Tag {}", itemId);
-        Optional<Tag> tagToRemove = repository.findById(itemId);
+    /**
+     * delete tags of datasource. Return number of tag deleted.
+     */
+    public long deleteTagsOfDatasource(String datasourceId) {
+        long numberOfTagDeleted = repository.deleteByDatasourceId(datasourceId);
+        logger.info("deleted all {} tags of Datasource {}", numberOfTagDeleted, datasourceId);
+        return numberOfTagDeleted;
+    }
+
+    private Optional<Tag> deleteTagWithoutGeneratingConf(String id) {
+        logger.info("deleting Tag {}", id);
+        Optional<Tag> tagToRemove = repository.findById(id);
         if (tagToRemove.isPresent()) {
             repository.delete(tagToRemove.get());
+//            repository.deleteById(tagToRemove.get().getId_());
         }
         return tagToRemove;
     }
 
-    public Optional<Tag> getTag(String itemId) {
-        logger.debug("getting Tag {}", itemId);
-        return repository.findById(itemId);
+    public Optional<Tag> getTag(String id) {
+        logger.debug("getting Tag {}", id);
+        return repository.findById(id);
     }
 
     private ReplaceReport<Tag> createOrReplaceATag(Tag tag) {
         logger.debug("create or replace Tag {}", tag.getId());
-        if (repository.existsById(tag.getId())) {
-            Tag savedTag = repository.save(tag);
-            dataflowsApiService.updateOpcDataflow();
+        Optional<Tag> tagToReplace = repository.findByNodeIdAndDatasourceId(tag.getNodeId(), tag.getDatasourceId());
+        if (tagToReplace.isPresent()) {
+            Tag savedTag = updateTag(tag, tagToReplace.get().getId());
             return new TagReplaceReport(savedTag, false);
         } else {
-            Tag savedTag = repository.save(tag);
-            dataflowsApiService.updateOpcDataflow();
+            Tag savedTag = saveTag(tag);
             return new TagReplaceReport(savedTag, true);
         }
     }
 
-    public ReplaceReport<Tag> createOrReplaceATag(Tag tag, String itemId) {
-        if (!tag.getId().equals(itemId)) {
-            return createOrReplaceATag(tag.id(itemId));
+    public ReplaceReport<Tag> createOrReplaceATag(Tag tag, String id) {
+        ReplaceReport<Tag> report;
+        if (!tag.getId().equals(id)) {
+            report = createOrReplaceATag(tag.id(id));
         } else {
-            return createOrReplaceATag(tag);
+            report = createOrReplaceATag(tag);
         }
+        dataflowsApiService.updateOpcDataflow();
+        return report;
     }
 
     public List<Tag> getAllTags(String fq) {
@@ -106,9 +119,13 @@ public class TagsApiService {
         return repository.findByDatasource(datasourceId);
     }
 
+    public List<Tag> getAllEnabledTagsFromDatasource(String datasourceId) {
+        return repository.findByAllEnabledFromDatasource(datasourceId);
+    }
+
     public List<TreeNode> getTreeTag(int page, int limit) {
-        FacetPage<Tag> facet = repository.findTreeFacetOnDomainThenServerThenGroup(PageRequest.of(page, limit));
-        List<FacetPivotFieldEntry> domainPiv = facet.getPivot("domain,server,group");
+        FacetPage<Tag> facet = repository.findTreeFacetOnDatasourceIdThenGroup(PageRequest.of(page, limit));
+        List<FacetPivotFieldEntry> domainPiv = facet.getPivot("datasource_id,group");
         return buildTreeNodes(domainPiv);
     }
 
@@ -133,7 +150,9 @@ public class TagsApiService {
      * @return true if all items were created. If at least one tag was updated (existed before), it returns false.
      */
     public List<Tag> SaveOrUpdateMany(List<Tag> tags) {
-        List<Tag> updatedTags = tags.stream().map(tag -> repository.save(tag)).collect(Collectors.toList());
+        List<Tag> updatedTags = tags.stream().map(tag -> createOrReplaceATag(tag).getItem())
+                .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty())
+                .collect(Collectors.toList());
         dataflowsApiService.updateOpcDataflow();
         return updatedTags;
     }
@@ -144,6 +163,16 @@ public class TagsApiService {
                 .collect(Collectors.toList());
         dataflowsApiService.updateOpcDataflow();
         return supressedTags;
+    }
+
+    public Tag saveTag(Tag tag) {
+        tag.setId(UUID.randomUUID().toString());
+        return repository.save(tag);
+    }
+
+    public Tag updateTag(Tag tag, String id) {
+        tag.setId(id);
+        return repository.save(tag);
     }
 
 }

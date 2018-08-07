@@ -1,5 +1,5 @@
 <div [formGroup]="form">
-  <div [formArrayName]="question.key" class="" [id]="question.key">
+  <div [formArrayName]="question.key" class="" [id]="question.elementId">
     <div *ngFor="let control of formArray.controls; let i=index" [formGroupName]="i">
 
       <div style="margin-left: 1em;">

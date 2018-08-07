@@ -14,3 +14,9 @@
 .ui-tree .ui-treenode-label{
     vertical-align:initial !important;
 } */
+.update-rate{
+    font-family: Lato,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+} 

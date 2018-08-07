@@ -13,6 +13,5 @@ export class HistorianTag extends Tag implements IHistorianTag {
 
     constructor(options: IHistorianTag) {
           super(options);
-          if (this.description === undefined || this.description === null) this.description = 'default description';
     }
 }

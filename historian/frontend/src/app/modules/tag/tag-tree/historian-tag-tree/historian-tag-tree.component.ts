@@ -8,13 +8,14 @@ import { IHistorianTag } from '../../modele/HistorianTag';
 import { TagHistorianService } from '../../service/tag-historian.service';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
 import { ProfilService } from '../../../../profil/profil.service';
+import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 
 @Component({
   selector: 'app-historian-tag-tree',
   templateUrl: './historian-tag-tree.component.html',
   styleUrls: ['./historian-tag-tree.component.css']
 })
-export class HistorianTagTreeComponent implements OnInit, OnChanges {
+export class HistorianTagTreeComponent extends BaseTagTreeComponent implements OnInit, OnChanges {
 
   @Input() tagsSelection: TagsSelection;
 
@@ -24,7 +25,9 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
 
   constructor(private ngTreenodeService: NgTreenodeService,
               private tagService: TagHistorianService,
-              private profilService: ProfilService) { }
+              private profilService: ProfilService) {
+                super();
+              }
 
   ngOnInit() {
     this.selectedNodes = [];
@@ -66,18 +69,6 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
 
   }
 
-  expandAll() {
-    this.treeNodes.forEach(node => {
-        this.expandRecursive(node, true, true);
-    } );
-  }
-
-  collapseAll() {
-    this.treeNodes.forEach(node => {
-        this.expandRecursive(node, false, false);
-    } );
-  }
-
   private getNodeTree(): Observable<TreeNode[]> {
     return this.ngTreenodeService.getHistTagTree();
   }
@@ -90,16 +81,6 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
     if (node.children) {
         node.children.forEach( childNode => {
             this.initializeTreeWithTagsSelection(childNode, tagsSelection);
-        } );
-    }
-  }
-
-  private expandRecursive(node: TreeNode, isExpand: boolean, loadChildren: boolean) {
-    node.expanded = isExpand;
-    if (loadChildren) this.loadANodeIfNeeded(node);
-    if (node.children) {
-        node.children.forEach( childNode => {
-            this.expandRecursive(childNode, isExpand, loadChildren);
         } );
     }
   }
@@ -142,7 +123,7 @@ export class HistorianTagTreeComponent implements OnInit, OnChanges {
     return 'historian-tag';
   }
 
-  private loadANodeIfNeeded(node: TreeNode): boolean {
+  protected loadANodeIfNeeded(node: TreeNode): boolean {
     if (node && node.type === 'group' && (!node.children  || node.children.length === 0)) {
       this.loadChildren(node);
       return true;

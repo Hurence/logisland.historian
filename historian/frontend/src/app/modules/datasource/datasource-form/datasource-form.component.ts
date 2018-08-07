@@ -25,6 +25,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   @Input() isCreation: boolean;
   @Input() datasource: Datasource;
+  @Input() prefixId: string;
   @Output() submitted = new EventEmitter<Datasource>();
 
   submitBtnMsg: string;
@@ -47,7 +48,6 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.datasourceTypes = this.datasourceService.getDatasourceTypes(); // TODO should disappear when using dynamic form
-    this.submitBtnMsg = this.BTN_MSG_ADD;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -101,7 +101,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
         user: [{ value: '', disabled: true }, Validators.required],
         password: [{ value: '', disabled: true }, Validators.required],
       }),
-      tagBrowsing: [TagBrowsingMode.AUTOMATIC, Validators.required],
+      tagBrowsing: [TagBrowsingMode.MANUAL, Validators.required],
     });
     this.name = this.dsForm.get('name');
     this.user = this.dsForm.get('auth.user');
@@ -132,7 +132,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       host: datasource.host,
       domain: datasource.domain,
       clsid: datasource.clsid,
-      progId: datasource.progId,
+      progId: datasource.prog_id,
       auth: {
         cred: this.findCredentialForDatasource(datasource),
         user: datasource.user,
@@ -155,9 +155,9 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   onSubmit() {
     this.datasource = this.prepareSaveDatasource();
     if (this.isCreation) {
-      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource));
+      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource, this.datasource.id));
     } else {
-      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource));
+      this.subscribeToUpdate(this.datasourceService.createOrReplace(this.datasource, this.datasource.id));
     }
   }
   /* subscribe to update or save request
@@ -179,19 +179,18 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   private prepareSaveDatasource(): Datasource {
     const formModel = this.dsForm.value;
 
-    const saveDatasource: Datasource = {
+    const saveDatasource: Datasource = new Datasource({
       id: formModel.name || this.datasource.id, // when disabled
       description: formModel.description,
       host: formModel.host,
       domain: formModel.domain,
       clsid: formModel.clsid,
-      progId: formModel.progId,
+      prog_id: formModel.progId,
       user: formModel.auth.user,
       password: formModel.auth.password,
-      record_type: 'datasource',
       datasource_type: formModel.type,
       tag_browsing: formModel.tagBrowsing,
-    };
+    });
     return saveDatasource;
   }
 

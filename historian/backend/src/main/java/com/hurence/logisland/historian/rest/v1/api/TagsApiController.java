@@ -72,7 +72,6 @@ public class TagsApiController implements TagsApi {
         Optional<Tag> tag = service.deleteTag(tagId);
         if (tag.isPresent()) {
             return new ResponseEntity<Tag>(tag.get(), HttpStatus.OK);
-
         } else {
             return new ResponseEntity<Tag>(HttpStatus.NOT_FOUND);
 

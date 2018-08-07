@@ -546,6 +546,18 @@
           -->
     </requestHandler>
 
+    <!--<requestHandler name="/update" class="solr.UpdateRequestHandler">-->
+        <!--
+        See below for information on defining
+                updateRequestProcessorChains that can be used by name
+                on each Update Request
+
+       -->
+        <!--<lst name="defaults">-->
+            <!--<str name="update.chain">uuid</str>-->
+        <!--</lst>-->
+    <!--</requestHandler>-->
+
     <!-- CUSTOM Request Handler -->
     <requestHandler name="/instock" class="solr.SearchHandler">
         <lst name="defaults">
@@ -1047,11 +1059,11 @@
          results for a given query regardless of the normal lucene
          scoring.
       -->
-    <searchComponent name="elevator" class="solr.QueryElevationComponent" >
-        <!-- pick a fieldType to analyze queries -->
-        <str name="queryFieldType">string</str>
-        <str name="config-file">elevate.xml</str>
-    </searchComponent>
+    <!--<searchComponent name="elevator" class="solr.QueryElevationComponent" >-->
+        <!--&lt;!&ndash; pick a fieldType to analyze queries &ndash;&gt;-->
+        <!--<str name="queryFieldType">string</str>-->
+        <!--<str name="config-file">elevate.xml</str>-->
+    <!--</searchComponent>-->
 
     <!-- A request handler for demonstrating the elevator component -->
     <requestHandler name="/elevate" class="solr.SearchHandler" startup="lazy">
@@ -1200,6 +1212,13 @@
          <processor class="solr.RunUpdateProcessorFactory" />
        </updateRequestProcessorChain>
       -->
+    <!--<updateRequestProcessorChain name="uuid">-->
+        <!--<processor class="solr.UUIDUpdateProcessorFactory">-->
+            <!--<str name="fieldName">_id_</str>-->
+        <!--</processor>-->
+        <!--<processor class="solr.RunUpdateProcessorFactory"/>-->
+    <!--</updateRequestProcessorChain>-->
+
 
     <updateRequestProcessorChain name="concatFields">
         <processor class="solr.CloneFieldUpdateProcessorFactory">

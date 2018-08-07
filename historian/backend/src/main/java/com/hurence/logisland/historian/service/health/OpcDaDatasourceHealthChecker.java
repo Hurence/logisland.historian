@@ -17,12 +17,15 @@
 
 package com.hurence.logisland.historian.service.health;
 
-import com.hurence.logisland.historian.dictionary.DatasourceTypes;
 import com.hurence.logisland.historian.rest.v1.model.Datasource;
+import com.hurence.opc.auth.UsernamePasswordCredentials;
 import com.hurence.opc.da.OpcDaConnectionProfile;
 import com.hurence.opc.da.OpcDaOperations;
+import com.hurence.opc.da.OpcDaTemplate;
 import org.springframework.boot.actuate.health.Health;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Duration;
 
 /**
@@ -34,32 +37,35 @@ public class OpcDaDatasourceHealthChecker implements DatasourceHealthChecker {
 
     @Override
     public Health doHealthCheck(Datasource datasource) {
-        if (datasource == null || !DatasourceTypes.OPC_DA_TYPE.equals(datasource.getDatasourceType())) {
+        if (datasource == null || !Datasource.DatasourceTypeEnum.OPC_DA.equals(datasource.getDatasourceType())) {
             throw new IllegalArgumentException("Datasource is undefined or  type is not supported");
         }
-        String hostParts[] = datasource.getHost().split(":");
-        OpcDaConnectionProfile connectionProfile = new OpcDaConnectionProfile()
-                .withSocketTimeout(Duration.ofSeconds(2))
-                .withPassword(datasource.getPassword())
-                .withHost(hostParts[0])
-                .withDomain(datasource.getDomain())
-                .withUser(datasource.getUser())
-                .withComClsId(datasource.getClsid())
-                .withComProgId(datasource.getProgId());
-        if (hostParts.length > 1) {
-            connectionProfile.setPort(Integer.parseInt(hostParts[1]));
+        OpcDaConnectionProfile connectionProfile;
+        try {
+            connectionProfile = new OpcDaConnectionProfile()
+                    .withComClsId(datasource.getClsid())
+                    .withComProgId(datasource.getProgId())
+                    .withDomain(datasource.getDomain())
+                    .withCredentials(new UsernamePasswordCredentials()
+                            .withUser(datasource.getUser())
+                            .withPassword(datasource.getPassword()))
+                    .withConnectionUri(new URI(datasource.getHost())) // TODO should be getUri
+                    .withSocketTimeout(Duration.ofSeconds(2));
+        } catch (URISyntaxException ex) {
+            throw new IllegalArgumentException(String.format("Error while creating connection instance with host '%s'", datasource.getHost()), ex);
         }
-
-        try (OpcDaOperations opcDaOperations = new OpcDaOperations()) {
+        OpcDaOperations opcDaOperations = new OpcDaTemplate();
+        try {
             opcDaOperations.connect(connectionProfile);
             if (opcDaOperations.awaitConnected()) {
                 return Health.up().build();
             } else {
                 return Health.down().withDetail("error", "Unable to reach datasource").build();
             }
-
         } catch (Exception e) {
             return Health.down(e).build();
+        } finally {
+            opcDaOperations.disconnect();
         }
     }
 }

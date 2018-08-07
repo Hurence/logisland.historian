@@ -134,9 +134,9 @@ paths:
        tags:
         - tag
         - datasource
-       operationId: getAllTagsFromDatasource
-       summary:  get all tags from a given datasource
-       description: retrieve all tags through this datasource
+       operationId: browseTagsFromDatasource
+       summary:  Browse tags from a given datasource
+       description: Browsetags through this datasource
        produces:
           - application/json
        parameters:
@@ -145,13 +145,55 @@ paths:
            description: id of the Datasource to return
            required: true
            type: string
+         - name: root
+           in: query
+           description: The root tag to start browsing from
+           required: false
+           type: string
+         - name: depth
+           in: query
+           description: The depth of the visit
+           required: false
+           type: integer
+           default: 1
        responses:
          '200':
-           description: Tag list
+           description: The list of browsed tags
            schema:
              type: array
              items:
                $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+  /datasources/{datasourceId}/tags/{tagId}:
+    get:
+       tags:
+        - tag
+        - datasource
+       operationId: fetchTagMetadataFromDatasource
+       summary:  fetch tag properties from a datasource
+       description: fetch tag properties from a datasource
+       produces:
+          - application/json
+       parameters:
+         - name: datasourceId
+           in: path
+           description: id of the Datasource to connect to
+           required: true
+           type: string
+         - name: tagId
+           in: path
+           description: id of the tag to inspect
+           required: true
+           type: string
+       responses:
+         '200':
+           description: Tag information
+           schema:
+            $ref: '#/definitions/Tag'
          default:
            description: unexpected error
            schema:
@@ -1228,9 +1270,6 @@ definitions:
       - id
       - host
     properties:
-      record_type:
-        type: string
-        default: 'datasource'
       id:
         type: string
       description:
@@ -1239,6 +1278,11 @@ definitions:
         type: string
       datasource_type:
         type: string
+        enum:
+          - 'OPC-DA'
+          - 'OPC-UA'
+          - 'UNKNOWN' # Needed so that bin/codegen.sh generate enum as OPC_DA/OPC_UA instead of DA/UA....
+        default: 'OPC-UA'
       prog_id:
         type: string
       host:
@@ -1254,6 +1298,7 @@ definitions:
         enum:
           - 'automatic'
           - 'manual'
+        default: 'automatic'
 
   Selection:
     type: object
@@ -1285,14 +1330,10 @@ definitions:
         required:
           - id
           - owner
-          - record_type
         properties:
           id:
             description: concatenation of owner with name for example
             type: string
-          record_type:
-            type: string
-            default: 'selection'
 
   Permissions:
     type: object
@@ -1313,22 +1354,20 @@ definitions:
     type: object
     description: a Tag is an identifier to an OPC value
     required:
-      - item_name
+      - node_id
       - datasource_id
       - data_type
       - enabled
+      - update_rate
     properties:
       record_type:
         type: string
         default: 'tag'
       id:
         type: string
-        default: 'mySweetUniqueId'
+      node_id:
+        type: string
       datasource_id:
-        type: string
-      domain:
-        type: string
-      server:
         type: string
       group:
         type: string
@@ -1373,7 +1412,9 @@ definitions:
         format: int64
       update_rate:
         description: polling delay in ms
-        default: 1000
+        type: integer
+      server_scan_rate:
+        description: scan rate of server in ms
         type: integer
       min_numeric_value:
         type: number
@@ -1389,6 +1430,12 @@ definitions:
       enabled:
         description: polling delay in ms
         type: boolean
+      polling_mode:
+        type: string
+        enum:
+          - 'polling'
+          - 'subscribe'
+        default: 'polling'
 
   Measures:
     type: object

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { ArrayQuestion } from './question-array';
+import { PollingModeUtil } from '../../modules/tag/modele/tag';
 import { QuestionBase } from './question-base';
-import { DropdownQuestion } from './question-dropdown';
-import { TextboxQuestion } from './question-textbox';
+import { BooleanQuestion } from './question-boolean';
 import { NumberQuestion } from './question-number';
+import { RadioQuestion } from './question-radio';
+import { TextboxQuestion } from './question-textbox';
 
 @Injectable()
 export class QuestionService {
@@ -17,94 +18,76 @@ export class QuestionService {
     const questions: QuestionBase<any>[] = [
 
       new TextboxQuestion({
+        key: 'node_id',
+        label: 'Node Id',
+        order: 1,
+        required: true
+      }),
+
+      new NumberQuestion({
+        key: 'update_rate',
+        label: 'Sampling rate in milliseconds',
+        order: 7,
+        required: true,
+        readonly: false,
+        min: 0,
+      }),
+
+      new RadioQuestion({
+        key: 'polling_mode',
+        label: 'Method to retrieve data',
+        order: 6,
+        required: false,
+        readonly: true,
+        possibleValues: PollingModeUtil.values,
+      }),
+
+      new BooleanQuestion({
+        key: 'enabled',
+        label: 'Tag Monitored ?',
+        order: 6,
+        required: true,
+        value: true,
+      }),
+
+      new NumberQuestion({
+        key: 'server_scan_rate',
+        label: 'Server scan rate in milliseconds',
+        order: 6,
+        required: false,
+        readonly: true,
+        min: 0,
+      }),
+
+      new TextboxQuestion({
         key: 'id',
         label: 'Id',
-        order: 1,
-        disabled: true
+        order: 2,
+        hidden: true,
       }),
       new TextboxQuestion({
         key: 'tag_name',
-        label: 'tag name',
-        order: 2,
-        disabled: true,
+        label: 'Tag name',
+        order: 3,
+        readonly: true,
       }),
 
       new TextboxQuestion({
         key: 'datasource_id',
         label: 'Datasource Name',
-        order: 3,
-        disabled: true,
+        order: 4,
+        readonly: true,
+        hidden: true,
       }),
 
       new TextboxQuestion({
         key: 'description',
         label: 'Description',
-        placeholder: 'description...',
-        required: true,
-        order: 4
-      }),
-
-      new NumberQuestion({
-        key: 'update_rate',
-        label: 'update rate',
+        readonly: true,
         order: 5,
-        required: true,
-        min: 0,
       }),
-
-      new TextboxQuestion({
-        key: 'domain',
-        label: 'Domain',
-        order: 6,
-        disabled: true
-      }),
-
-      new TextboxQuestion({
-        key: 'server',
-        label: 'Server',
-        order: 7,
-        disabled: true
-      }),
-
-      new TextboxQuestion({
-        key: 'group',
-        label: 'Group',
-        order: 8,
-        disabled: true
-      }),
-      // new ArrayQuestion<string>({
-      //   key: 'labels',
-      //   label: 'Labels',
-      //   order: 1,
-      //   questions: [
-      //     new TextboxQuestion({
-      //       key: 'label',
-      //       label: 'Label',
-      //       placeholder: 'label...',
-      //     })
-      //   ]
-      // }),
-      // new TextboxQuestion({
-      //   key: 'creation_date',
-      //   label: 'creation date',
-      //   order: 9,
-      //   disabled: true
-      // }),
-      // new TextboxQuestion({
-      //   key: 'last_modification_date',
-      //   label: 'last modification date',
-      //   order: 10,
-      //   disabled: true
-      // }),
-      // new TextboxQuestion({
-      //   key: 'last_polling_date',
-      //   label: 'last polling date',
-      //   order: 11,
-      //   disabled: true
-      // })
     ];
-
-    return questions.sort((a, b) => a.order - b.order);
+    return questions;
   }
 
   getAddTagForm(): QuestionBase<any>[]  {
@@ -112,94 +95,77 @@ export class QuestionService {
     const questions: QuestionBase<any>[] = [
 
       new TextboxQuestion({
+        key: 'node_id',
+        label: 'Node Id',
+        order: 1,
+        required: true,
+      }),
+
+      new NumberQuestion({
+        key: 'update_rate',
+        label: 'Sampling rate in milliseconds',
+        order: 7,
+        required: true,
+        readonly: false,
+        min: 0,
+      }),
+
+      new RadioQuestion({
+        key: 'polling_mode',
+        label: 'Method to retrieve data',
+        order: 6,
+        required: false,
+        readonly: true,
+        possibleValues: PollingModeUtil.values,
+      }),
+
+      new BooleanQuestion({
+        key: 'enabled',
+        label: 'Start monitoring tag ?',
+        order: 6,
+        required: true,
+        value: true,
+      }),
+
+      new NumberQuestion({
+        key: 'server_scan_rate',
+        label: 'Server scan rate in milliseconds',
+        order: 6,
+        required: false,
+        readonly: true,
+        min: 0,
+      }),
+
+      new TextboxQuestion({
         key: 'id',
         label: 'Id',
-        order: 1,
-        disabled: false
+        order: 2,
+        hidden: true,
       }),
       new TextboxQuestion({
         key: 'tag_name',
-        label: 'tag name',
-        order: 2,
-        disabled: false,
+        label: 'Tag name',
+        order: 3,
+        readonly: true,
       }),
 
       new TextboxQuestion({
         key: 'datasource_id',
         label: 'Datasource Name',
-        order: 3,
-        disabled: true,
+        order: 4,
+        readonly: true,
+        hidden: true,
       }),
 
       new TextboxQuestion({
         key: 'description',
         label: 'Description',
-        placeholder: 'description...',
-        required: true,
-        order: 4
-      }),
-
-      new NumberQuestion({
-        key: 'update_rate',
-        label: 'update rate',
+        readonly: true,
         order: 5,
-        required: true,
-        value: 60000,
-        min: 0,
       }),
 
-      new TextboxQuestion({
-        key: 'domain',
-        label: 'Domain',
-        order: 6,
-        disabled: true
-      }),
-
-      new TextboxQuestion({
-        key: 'server',
-        label: 'Server',
-        order: 7,
-        disabled: true
-      }),
-
-      new TextboxQuestion({
-        key: 'group',
-        label: 'Group',
-        order: 8,
-        disabled: false
-      }),
-      // new ArrayQuestion<string>({
-      //   key: 'labels',
-      //   label: 'Labels',
-      //   order: 1,
-      //   questions: [
-      //     new TextboxQuestion({
-      //       key: 'label',
-      //       label: 'Label',
-      //       placeholder: 'label...',
-      //     })
-      //   ]
-      // }),
-      // new TextboxQuestion({
-      //   key: 'creation_date',
-      //   label: 'creation date',
-      //   order: 9,
-      //   disabled: true
-      // }),
-      // new TextboxQuestion({
-      //   key: 'last_modification_date',
-      //   label: 'last modification date',
-      //   order: 10,
-      //   disabled: true
-      // }),
-      // new TextboxQuestion({
-      //   key: 'last_polling_date',
-      //   label: 'last polling date',
-      //   order: 11,
-      //   disabled: true
-      // })
     ];
-
-    return questions.sort((a, b) => a.order - b.order);
+    questions.forEach(question => question.elementId = 'add-' + question.elementId);
+    return questions;
   }
 }

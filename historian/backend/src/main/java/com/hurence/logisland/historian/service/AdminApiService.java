@@ -116,11 +116,10 @@ public class AdminApiService {
             String server = servers.get(random.nextInt(servers.size()));
             String group = groups.get(random.nextInt(groups.size()));
             String tagName = group.toLowerCase().replaceAll("[^\\x00-\\x7F]", "") + '-' + UUID.randomUUID().toString().substring(0, 5);
-            Tag t = IdUtils.setId(new Tag()
-                    .domain(domain)
-                    .server(server)
+            Tag t = new Tag()
+                    .setId(UUID.randomUUID().toString())
                     .group(group)
-                    .tagName(tagName));
+                    .tagName(tagName);
 
             tags.add(t);
             solrTagRepository.save(t);

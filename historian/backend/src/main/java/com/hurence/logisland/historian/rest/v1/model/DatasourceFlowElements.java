@@ -15,7 +15,7 @@ public class DatasourceFlowElements {
                                   String consoleServiceName,
                                   TagsApiService tagsApiService) {
 
-        Iterator<Tag> it = tagsApiService.getAllTagsFromDatasource(datasource.getId()).iterator();
+        Iterator<Tag> it = tagsApiService.getAllEnabledTagsFromDatasource(datasource.getId()).iterator();
         if (it.hasNext()) {
             String opcConfig = buildOpcConfig(datasource, it);
             String serviceName = dataflowName + "_" + datasource.getId();
@@ -23,7 +23,8 @@ public class DatasourceFlowElements {
             this.stream = this.buildDatasourceStream(datasource.getId(),
                     chronixServiceName,
                     service.getName(),
-                    consoleServiceName);
+                    consoleServiceName,
+                    datasource.getId());
         } else {
             this.service = null;
             this.stream = null;
@@ -76,7 +77,7 @@ public class DatasourceFlowElements {
         Tag tag;
         while (tags.hasNext()) {
             tag = tags.next();
-            strBuilder.append(tag.getTagName());
+            strBuilder.append(tag.getNodeId());
             if (tag.getUpdateRate() != null) {
                 strBuilder.append(":");
                 strBuilder.append(tag.getUpdateRate());
@@ -110,7 +111,8 @@ public class DatasourceFlowElements {
     private Stream buildDatasourceStream(String streamName,
                                          String chronixServiceName,
                                          String datasourceServiceName,
-                                         String consoleServiceName) {
+                                         String consoleServiceName,
+                                         String dataourceId) {
         Stream stream = new Stream();
         stream.setName(streamName);
         stream.setComponent("com.hurence.logisland.stream.spark.structured.StructuredStream");
@@ -124,21 +126,23 @@ public class DatasourceFlowElements {
                 new Property().setKey("write.topics.serializer").setValue("com.hurence.logisland.serializer.JsonSerializer"),
                 new Property().setKey("write.topics.key.serializer").setValue("com.hurence.logisland.serializer.StringSerializer")
         ));
-        stream.setPipeline(buildDatasourcePipeline(chronixServiceName));
+        stream.setPipeline(buildDatasourcePipeline(chronixServiceName, dataourceId));
         return stream;
     }
 
-    private Pipeline buildDatasourcePipeline(String chronixServiceName) {
+    private Pipeline buildDatasourcePipeline(String chronixServiceName, String dataourceId) {
         Pipeline pipeline = new Pipeline();
         pipeline.setLastModified(DateUtil.toUtcDateForSolr(OffsetDateTime.now()));
         pipeline.setModificationReason("rebuilt whole dataflow");
-        pipeline.setProcessors(buildDatasourceProcessors(chronixServiceName));
+        pipeline.setProcessors(buildDatasourceProcessors(chronixServiceName, dataourceId));
         return pipeline;
     }
 
-    private List<Processor> buildDatasourceProcessors(String chronixServiceName) {
+    private List<Processor> buildDatasourceProcessors(String chronixServiceName, String dataourceId) {
         List<Processor> processors = new ArrayList<>();
         processors.add(DataFlowUtil.buildFlattenProcessor());
+        processors.add(DataFlowUtil.buildAddDatasourceIdProcessor(dataourceId));
+//        processors.add(DataFlowUtil.buildAddDebugProcessor());
         processors.add(DataFlowUtil.buildSendToChronixProcessor(chronixServiceName));
         return processors;
     }

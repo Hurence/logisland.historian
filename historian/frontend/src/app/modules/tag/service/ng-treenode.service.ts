@@ -5,13 +5,19 @@ import { Observable } from 'rxjs/Observable';
 import { TagHistorianService } from './tag-historian.service';
 import { map } from 'rxjs/operators';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
-import { ITag } from '../modele/tag';
+import { ITag, TagRecordType, Tag } from '../modele/tag';
 import { TypesName } from '../tag-tree/TypesName';
 import { HistorianTag } from '../modele/HistorianTag';
+import { OpcTag } from '../modele/OpcTag';
+import { TagUtils } from '../modele/TagUtils';
 // import { NodeTree } from '../../../shared/js-tree/NodeTree';
 
 @Injectable()
 export class NgTreenodeService {
+
+    private EMPTY_NODE: TreeNode = {
+        type: 'none',
+    };
 
   constructor(private tagService: TagHistorianService) { }
 
@@ -24,11 +30,47 @@ export class NgTreenodeService {
         return this.buildTagTreeNodes2(tags);
     }
 
-    addTagNode(nodes: TreeNode[], tag: HistorianTag): void {
-        const domain = this.getOrCreateChildForNodes(nodes, tag.domain, TypesName.DOMAIN);
-        const server = this.getOrCreateChildForNode(domain, tag.server, TypesName.SERVER);
-        const group = this.getOrCreateChildForNode(server, tag.group, TypesName.GROUP);
-        const child: TreeNode = {
+    getEmptyNode(): TreeNode {
+        return this.EMPTY_NODE;
+    }
+
+    /**
+     * Build OpcTag node
+     */
+    buildNodeFromTag(tag: Tag): TreeNode {
+        let child: TreeNode;
+        switch (tag.record_type) {
+            case TagRecordType.TAG:
+                if (TagUtils.isHistorianTag(tag)) {
+                    child = this.buildNodeFromHistorianTag(tag);
+                } else {
+                    child = this.buildNodeFromOpcTag(tag);
+                }
+                break;
+            case TagRecordType.FOLDER:
+                child = this.buildFolderNode(tag);
+                break;
+        }
+        return child;
+    }
+    /**
+     * Build OpcTag node
+     */
+    private buildNodeFromOpcTag(tag: OpcTag): TreeNode {
+        return {
+            label: tag.tag_name,
+            data: tag,
+            icon: TypesName.TAG_OPC,
+            leaf: true,
+            type: TypesName.TAG_OPC,
+            children: [],
+        };
+    }
+    /**
+     * Build HistorianTag node
+     */
+    private buildNodeFromHistorianTag(tag: HistorianTag): TreeNode {
+        return {
             label: tag.tag_name,
             data: tag,
             icon: TypesName.TAG_HISTORIAN,
@@ -36,7 +78,19 @@ export class NgTreenodeService {
             type: TypesName.TAG_HISTORIAN,
             children: [],
         };
-        group.children.push(child);
+    }
+    /**
+     * Build folder node
+     */
+    private buildFolderNode(tag: Tag): TreeNode {
+        return {
+            label: tag.tag_name,
+            data: tag,
+            icon: TypesName.FOLDER,
+            leaf: false,
+            type: TypesName.FOLDER,
+            children: [],
+        };
     }
 
     private buildTagTreeNodes2(tags: ITag[]): TreeNode[] {
@@ -103,7 +157,7 @@ export class NgTreenodeService {
     */
     getHistTagTree(): Observable<TreeNode[]> {
         return this.tagService.getTreeTag().pipe(
-            map(nodes => this.buildTagTreeNodes(nodes, ['domain', 'server', 'group'], 0))
+            map(nodes => this.buildTagTreeNodes(nodes, ['datasource_id', 'group'], 0))
         );
     }
     // TODO implement generic version of this

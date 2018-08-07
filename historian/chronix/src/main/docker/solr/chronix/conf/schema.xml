@@ -31,9 +31,12 @@
 	<field name="date" type="string" indexed="true" stored="true" required="false"/>
 	<!-- OPC-DA / LogIsland -->
         <field name="update_period_millis" type="long" indexed="true" stored="true" required="false"/>
-        <field name="quality" type="int" indexed="true" stored="true" required="false"/>
+        <field name="quality" type="string" indexed="true" stored="true" required="false"/>
         <field name="tag_timestamp" type="long" indexed="true" stored="true" required="false"/>
-        <field name="error_code" type="int" indexed="true" stored="true" required="false"/>
+        <field name="error_code" type="string" indexed="true" stored="true" required="false"/>
+        <field name="error_reason" type="string" indexed="true" stored="true" required="false"/>
+        <field name="tag_id" type="string" indexed="true" stored="true" required="false"/>
+        <field name="datasource_id" type="string" indexed="true" stored="true" required="false"/>
         <field name="server" type="string" indexed="true" stored="true" required="false"/>
         <field name="domain" type="string" indexed="true" stored="true" required="false"/>
         <field name="record_key" type="string" indexed="true" stored="true" required="false"/>

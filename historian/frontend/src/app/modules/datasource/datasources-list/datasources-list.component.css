@@ -1,6 +1,6 @@
 .list-container {
     overflow-y: auto;
-    max-height: 90%;
+    max-height: 600px;
 }
 .btn {
     text-align: center;    

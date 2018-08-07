@@ -16,6 +16,8 @@ export class DatasourcesListComponent implements OnInit {
   datasources$: Observable<Datasource[]>;
   @Input() selectedDatasource: Datasource;
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();
+  datasourceToEdit: Datasource;
+  displayEditDatasource = false;
 
   private CANCEL_MSG = 'Cancel';
   private REMOVE_DATASOURCE_MSG = 'Remove data source';
@@ -53,7 +55,9 @@ export class DatasourcesListComponent implements OnInit {
           }
         });
       },
-      reject: () => { }
+      reject: () => {
+        console.error('An error occured while deleting datasource.');
+      }
     });
   }
 
@@ -61,4 +65,20 @@ export class DatasourcesListComponent implements OnInit {
     this.selectedDatasourceE.emit(datasource);
   }
 
+  onEditDatasource(datasource: Datasource) {
+    this.datasourceToEdit = datasource;
+    this.displayEditDatasource = true;
+  }
+
+  onSubmitted(ds: Datasource) {
+    this.getDatasources();
+    this.selectedDatasource = ds;
+    this.displayEditDatasource = false;
+  }
+
+  isActive(ds: Datasource): boolean {
+    return (this.selectedDatasource !== null
+       && this.selectedDatasource !== undefined
+       && this.selectedDatasource.id === ds.id);
+  }
 }

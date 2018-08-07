@@ -22,10 +22,10 @@ import org.threeten.bp.OffsetDateTime;
 * a Selection is a selection of tags.
 */
     @ApiModel(description = "a Selection is a selection of tags.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-07-24T21:20:56.826+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-03T18:03:11.160+02:00")
 
 
-@SolrDocument(solrCoreName = "historian")
+@SolrDocument(solrCoreName = "selection")
 public class Selection  implements Serializable {
         @JsonProperty("name")
         @Indexed(name = "name")

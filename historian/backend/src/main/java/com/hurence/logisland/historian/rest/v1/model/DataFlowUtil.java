@@ -7,6 +7,7 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class DataFlowUtil {
@@ -21,6 +22,7 @@ public final class DataFlowUtil {
         Service service = new Service();
         service.setName(dataflowName + CONSOLE_SERVICE_NAME_SUFFIX);
         service.setComponent("com.hurence.logisland.stream.spark.structured.provider.ConsoleStructuredStreamProviderService");
+        service.setConfig(Collections.emptyList());
         return service;
     }
     public static Service buildChronixService(String dataflowName) {
@@ -29,9 +31,7 @@ public final class DataFlowUtil {
         service.setComponent("com.hurence.logisland.service.solr.Solr_6_4_2_ChronixClientService");
         service.setConfig(buildProperties(
                 new Property().setKey("solr.cloud").setValue("false"),
-                new Property().setKey("solr.connection.string").setValue("http://localhost:8983/solr"),
-                new Property().setKey("solr.connection").setValue("chronix"),
-                new Property().setKey("solr.concurrent.requests").setValue("4"),
+                new Property().setKey("solr.connection.string").setValue("http://chronix:8983/solr"),
                 new Property().setKey("flush.interval").setValue("2000"),
                 new Property().setKey("batch.size").setValue("500"),
                 new Property().setKey("solr.collection").setValue("chronix")
@@ -47,6 +47,29 @@ public final class DataFlowUtil {
                 new Property().setKey("keep.root.record").setValue("false"),
                 new Property().setKey("copy.root.record.fields").setValue("true")
                 ));
+        return proc;
+    }
+
+    public static Processor buildAddDatasourceIdProcessor(String datasourceId) {
+        Processor proc = new Processor();
+        proc.setName("add_datasource_id");
+        proc.setComponent("com.hurence.logisland.processor.AddFields");
+        proc.setDocumentation("Add datasource_id from which the tag correspond to");
+        proc.setConfig(buildProperties(
+                new Property().setKey("conflict.resolution.policy").setValue("overwrite_existing"),
+                new Property().setKey("datasource_id").setValue(datasourceId)
+        ));
+        return proc;
+    }
+
+    public static Processor buildAddDebugProcessor() {
+        Processor proc = new Processor();
+        proc.setName("stream_debugger");
+        proc.setComponent("com.hurence.logisland.processor.DebugStream");
+        proc.setDocumentation("debug records");
+        proc.setConfig(buildProperties(
+                new Property().setKey("event.serializer").setValue("json")
+        ));
         return proc;
     }
 

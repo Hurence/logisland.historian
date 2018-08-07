@@ -25,6 +25,12 @@ import { GrowlModule } from 'primeng/growl';
 import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-rate-selection.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CheckboxModule } from 'primeng/checkbox';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { DynamicFormQuestionRadioComponent } from './dynamic-form/dynamic-form-question-radio/dynamic-form-question-radio.component';
 
 @NgModule({
   imports: [
@@ -46,6 +52,11 @@ import { DialogModule } from 'primeng/dialog';
     GrowlModule,
     ConfirmDialogModule,
     DialogModule,
+    MessagesModule,
+    MessageModule,
+    ProgressSpinnerModule,
+    CheckboxModule,
+    RadioButtonModule,
   ],
   exports: [
     CommonModule,
@@ -71,6 +82,11 @@ import { DialogModule } from 'primeng/dialog';
     GrowlModule,
     ConfirmDialogModule,
     DialogModule,
+    MessagesModule,
+    MessageModule,
+    ProgressSpinnerModule,
+    CheckboxModule,
+    RadioButtonModule,
   ],
   providers: [
     TreeDragDropService,
@@ -82,6 +98,7 @@ import { DialogModule } from 'primeng/dialog';
     DynamicFormQuestionComponent,
     DynamicFormQuestionArrayComponent,
     RefreshRateSelectionComponent,
+    DynamicFormQuestionRadioComponent,
   ],
 })
 export class SharedModule { }

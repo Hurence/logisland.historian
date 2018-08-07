@@ -11,5 +11,8 @@ export class TextboxQuestion extends QuestionBase<string> implements ITextboxQue
   constructor(options: ITextboxQuestion) {
     super(options);
     this.type = options['type'] || '';
+    if (this.hidden) {
+      this.type = 'hidden';
+    }
   }
 }

@@ -24,12 +24,21 @@ import org.springframework.data.solr.repository.Pivot;
 import org.springframework.data.solr.repository.Query;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
 
+    /* Delete queries */
+    long deleteByDatasourceId(String datasource_id);
+
+    /* Search queries */
+
+    @Query(value = "*:*", filters = { "node_id:\"?0\"", "datasource_id:\"?1\"", "record_type:tag" })
+    Optional<Tag> findByNodeIdAndDatasourceId(String nodeId, String datasource_id);
 
     // catch all query
     @Query(value = "*:*", filters = { "?0", "record_type:tag" })
@@ -40,6 +49,9 @@ public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
 
     @Query(value = "record_type:tag", filters = { "record_type:tag", "datasource_id:\"?0\""})
     List<Tag> findByDatasource(String datasource_id);
+
+    @Query(value = "record_type:tag", filters = { "record_type:tag", "datasource_id:\"?0\"", "enabled:true"})
+    List<Tag> findByAllEnabledFromDatasource(String datasource_id);
 
     @Query(value = "record_type:tag", filters = { "record_type:tag", "domain:?0", "server:?1"})
     List<Tag> findByDomainAndServer(String domain, String server);
@@ -59,10 +71,15 @@ public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
     @Facet(fields = { "group" }, limit = 100)
     FacetPage<Tag> findAllFacetOnGroupKnowingDomainAndServer(String domain, String server, Pageable page);
 
+    /* Facet queries */
+
+    @Query(value = "record_type:tag", filters = { "record_type:tag" })
+    @Facet(pivots = @Pivot({ "datasource_id", "group" }), pivotMinCount = 1, limit = 10000)
+    FacetPage<Tag> findTreeFacetOnDatasourceIdThenGroup(Pageable page);
+
     @Query(value = "record_type:tag", filters = { "record_type:tag" })
     @Facet(pivots = @Pivot({ "domain", "server", "group" }), pivotMinCount = 1, limit = 100)
     FacetPage<Tag> findTreeFacetOnDomainThenServerThenGroup(Pageable page);
-    //TODO give a dynamic limit
 
     @Query(value = "record_type:tag", filters = { "?0", "record_type:tag" })
     @Facet(pivots = @Pivot({ "domain", "server", "group" }), pivotMinCount = 0, limit = 100)
