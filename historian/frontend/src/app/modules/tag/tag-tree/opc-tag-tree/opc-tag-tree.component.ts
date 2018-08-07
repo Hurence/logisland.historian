@@ -13,6 +13,7 @@ import { TagUtils } from '../../modele/TagUtils';
 import { OpcTag } from '../../modele/OpcTag';
 import { Datasource, TagBrowsingMode } from '../../../datasource/Datasource';
 import { TagOpcService } from '../../service/tag-opc.service';
+import { ArrayUtil } from '../../../../shared/array-util';
 
 @Component({
   selector: 'app-opc-tag-tree',
@@ -37,7 +38,8 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   constructor(private ngTreenodeService: NgTreenodeService,
               private messageService: MessageService,
               private tagOpcService: TagOpcService,
-              private tagHistorianService: TagHistorianService) {
+              private tagHistorianService: TagHistorianService,
+              private arrayUtil: ArrayUtil) {
                 super();
                 this.tagsInputForForm = [];
                }
@@ -156,13 +158,27 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   }
 
   private updateNodeAfterDeletingTag(node: TreeNode): void {
-    if (node.type === TypesName.TAG_HISTORIAN) {
-      (<IHistorianTag>node.data).update_rate = null;
-      (<IHistorianTag>node.data).enabled = false;
-      const opcTag = new OpcTag(node.data);
-      node.data = opcTag;
-      node.type = TypesName.TAG_OPC;
-      node.icon = node.type;
+    switch (this.datasource.tag_browsing) {
+      case TagBrowsingMode.AUTOMATIC:
+        if (node.type === TypesName.TAG_HISTORIAN) {
+          (<IHistorianTag>node.data).update_rate = null;
+          (<IHistorianTag>node.data).enabled = false;
+          const opcTag = new OpcTag(node.data);
+          node.data = opcTag;
+          node.type = TypesName.TAG_OPC;
+          node.icon = node.type;
+        }
+        break;
+      case TagBrowsingMode.MANUAL:
+        if (node.parent) {
+          this.arrayUtil.remove(node.parent.children, n => n.data.id === node.data.id);
+        } else {
+          this.arrayUtil.remove(this.treeNodes, n => n.data.id === node.data.id);
+        }
+        break;
+      default:
+        console.error('unknown TagBrowsingMode type :', this.datasource.tag_browsing);
+        break;
     }
   }
 
