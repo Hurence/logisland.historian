@@ -48,7 +48,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     private datasourceService: DatasourceService) {
 
     this.createForm();
-    this.updateControlsDependingOnDatasourceType()
+    this.updateControlsDependingOnDatasourceType();
     this.resetCredWhenNone();
     this.mutallyExclusiveClsidAndProgId();
   }
