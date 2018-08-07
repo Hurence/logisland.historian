@@ -14,7 +14,7 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 # install and cache app dependencies
 COPY package.json /usr/src/app/package.json
-RUN npm install
+RUN yarn install
 RUN npm install -g @angular/cli@6.0.3 --unsafe
 
 # add app
@@ -24,7 +24,7 @@ COPY . /usr/src/app
 #RUN ng test --watch=false
 
 # generate build
-RUN npm run build
+RUN ng build --prod
 
 ##################
 ### production ###

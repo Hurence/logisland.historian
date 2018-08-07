@@ -25,26 +25,26 @@ services:
       - '8080:8080'
     network_mode: bridge
 
-  # historian-backend:
-  #   container_name: historian-backend
-  #   image: 'hurence/historian-backend:0.3.0'
-  #   ports:
-  #     - '8701:8701'
-  #   links:
-  #     - chronix
-  #     - redis
-  #     - keycloak
-  #   network_mode: bridge
+  historian-backend:
+    container_name: historian-backend
+    image: 'hurence/historian-backend:0.4.3'
+    ports:
+      - '8701:8701'
+    links:
+      - chronix
+      - redis
+      - keycloak
+    network_mode: bridge
 
-  # historian-frontend:
-  #   container_name: historian-frontend
-  #   image: 'hurence/historian-frontend:0.3.0'
-  #   ports:
-  #     - '4200:80'
-  #   links:
-  #     - historian-backend
-  #     - keycloak
-  #   network_mode: bridge
+  historian-frontend:
+    container_name: historian-frontend
+    image: 'hurence/historian-frontend:0.4.3'
+    ports:
+      - '4200:80'
+    links:
+      - historian-backend
+      - keycloak
+    network_mode: bridge
 
   logisland:
     container_name: logisland
