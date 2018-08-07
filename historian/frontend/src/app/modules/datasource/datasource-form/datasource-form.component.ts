@@ -6,6 +6,7 @@ import { Datasource, TagBrowsingMode } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
 import { ConfirmationService } from 'primeng/components/common/api';
 import { map } from 'rxjs/operators';
+import { DatasourceType } from '../../../../../target/docker/src/app/modules/datasource/Datasource';
 
 @Component({
   selector: 'app-datasource-form',
@@ -44,6 +45,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
     private datasourceService: DatasourceService) {
 
     this.createForm();
+    this.updateControlsWhenDA()
     this.resetCredWhenNone();
   }
 
@@ -234,6 +236,21 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
         } else {
           this.user.enable();
           this.password.enable();
+        }
+      }
+    );
+  }
+
+  /* Listen to auth.cred controller so it resets credentials when selecting none */
+  private updateControlsWhenDA(): void {
+    this.dsForm.get('type').valueChanges.forEach(
+      (typ: string) => {
+        if (typ === DatasourceType.OPC_DA) {
+          this.dsForm.patchValue({
+            auth: {
+              cred: this.CREADENTIAL_NORMAL,
+            }
+          });
         }
       }
     );
