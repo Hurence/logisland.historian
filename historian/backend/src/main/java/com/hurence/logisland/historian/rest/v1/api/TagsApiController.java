@@ -126,14 +126,19 @@ public class TagsApiController implements TagsApi {
     @Override
     public ResponseEntity<Measures> getTagStats(@ApiParam(value = "id of the tag",required=true) @PathVariable("tagId") String tagId) {
 
+        Optional<Tag> tagO = service.getTag(tagId);
+        if (tagO.isPresent()) {
+            Tag tag = tagO.get();
+            Optional<Measures> measures = measuresApiService.getTagStats(tag.getNodeId(), tag.getDatasourceId());
+            if (measures.isPresent()) {
+                return new ResponseEntity<Measures>(measures.get(), HttpStatus.OK);
 
-        Optional<Measures> measures = measuresApiService.getTagStats(tagId);
-        if (measures.isPresent()) {
-            return new ResponseEntity<Measures>(measures.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<Measures>(HttpStatus.NOT_FOUND);
 
+            }
         } else {
             return new ResponseEntity<Measures>(HttpStatus.NOT_FOUND);
-
         }
     }
 

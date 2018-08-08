@@ -176,13 +176,26 @@ public class MeasuresApiService {
     /**
      * Retrieve the stats (last,min,max,avg) values for the last chunk of a given tag
      *
-     * @param name
+     * @param nodeId
+     * @param datasourceId
      * @return
      */
-    public Optional<Measures>  getTagStats(String name) {
+    public Optional<Measures>  getTagStats(String nodeId, String datasourceId) {
         try {
             long startTime = System.currentTimeMillis();
-            SolrQuery q = new SolrQuery("name:" + name);
+
+            StringBuilder queryBuilder = new StringBuilder();
+
+            if (nodeId != null && !nodeId.isEmpty())
+                queryBuilder.append("tag_id:\"").append(nodeId).append("\" ");
+
+            if (datasourceId != null && !datasourceId.isEmpty())
+                queryBuilder.append("AND datasource_id:\"").append(datasourceId).append("\" ");
+
+            queryBuilder.deleteCharAt(queryBuilder.length() - 1); // remove trailing space
+
+
+            final SolrQuery q = new SolrQuery(queryBuilder.toString());
             q.setRows(1);
             q.addSort("end", SolrQuery.ORDER.desc);
 
@@ -192,7 +205,7 @@ public class MeasuresApiService {
             long end = (long) docs.get(0).get("end");
             long numChunks = docs.getNumFound();
 
-            SolrQuery query = new SolrQuery("name:" + name + " AND start:" + start + " AND end:" + end);
+            SolrQuery query = new SolrQuery(queryBuilder.toString() + " AND start:" + start + " AND end:" + end);
             query.setParam("cf", "metric{last;avg;count;min;max;trend}");
 
 
