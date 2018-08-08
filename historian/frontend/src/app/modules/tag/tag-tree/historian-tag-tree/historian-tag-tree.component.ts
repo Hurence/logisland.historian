@@ -9,7 +9,7 @@ import { TagHistorianService } from '../../service/tag-historian.service';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
 import { ProfilService } from '../../../../profil/profil.service';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
-import { TypesName } from '../../../../../../target/docker/src/app/modules/tag/tag-tree/TypesName';
+import { TypesName } from '../TypesName';
 
 @Component({
   selector: 'app-historian-tag-tree',
