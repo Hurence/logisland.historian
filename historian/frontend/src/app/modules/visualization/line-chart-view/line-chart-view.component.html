@@ -1,3 +1,12 @@
 <!-- REFRESH RATE -->
-<app-refresh-rate-selection [(refreshRate)]="refreshRate"></app-refresh-rate-selection>
-<app-line-chart [refreshRate]="refreshRate"></app-line-chart>
+<div class='ui-g'>
+<div class='ui-g-6'>
+    <app-refresh-rate-selection [(refreshRate)]="refreshRate"></app-refresh-rate-selection>
+</div>
+<div class='ui-g-6'>
+    <app-time-range-selection [(timeRange)]="timeRange"></app-time-range-selection>
+</div>
+<div class='ui-g-12'>
+    <app-line-chart [refreshRate]="refreshRate" [timeRange]="timeRange"></app-line-chart>
+</div>
+</div>
