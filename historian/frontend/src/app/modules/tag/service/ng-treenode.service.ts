@@ -162,16 +162,19 @@ export class NgTreenodeService {
     }
     // TODO implement generic version of this
     private buildTagTreeNodes(nodes: RestTreeNode[], fields: string[], index: number, parent?: TreeNode): TreeNode[] {
-        const currentType: string = fields[index];
+        const tagField: string = fields[index];
         const newIndex = index + 1;
         return nodes.map(node => {
             const currentNode: TreeNode = {
                 label: node.value,
-                data: currentType,
-                expandedIcon: 'fa fa-folder-open',
-                collapsedIcon: 'fa fa-folder',
+                data: {
+                    key: tagField,
+                    value: node.value
+                },
+                // expandedIcon: 'fa fa-folder-open',
+                // collapsedIcon: 'fa fa-folder',
                 leaf: false,
-                type: currentType,
+                type: TypesName.FOLDER,
             };
             const children: TreeNode[] = this.buildTagTreeNodes(node.children, fields, newIndex, currentNode);
             currentNode.children = children;

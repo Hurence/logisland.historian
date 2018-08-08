@@ -1,12 +1,16 @@
-<button type="text" (click)="showDialogTagManagement()" pButton icon="pi pi-info-circle" label="Show">Modify Selection</button>
-<p-dialog [(visible)]="displayTagManagement" [resizable]="true">
-    <p-header>
-        Manage your selection
-    </p-header>
-    <app-selection-dashboard></app-selection-dashboard>
-    <p-footer>
-    </p-footer>
-</p-dialog>
-<div class="ui-g-12">
-        <router-outlet></router-outlet>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <button type="text" (click)="showDialogTagManagement()" pButton icon="pi pi-info-circle" label="Modify selection"></button>
+        <p-dialog [(visible)]="displayTagManagement" [resizable]="true">
+            <p-header>
+                Manage your selection
+            </p-header>
+            <app-selection-dashboard></app-selection-dashboard>
+            <p-footer>
+            </p-footer>
+        </p-dialog>
+    </div>
+    <div class="ui-g-12">
+            <router-outlet></router-outlet>
+    </div>
 </div>

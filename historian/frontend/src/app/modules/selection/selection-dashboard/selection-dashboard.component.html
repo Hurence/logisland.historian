@@ -4,8 +4,8 @@
     <p-dropdown [options]="selectionOptions"  placeholder="choose a selection of tag" [(ngModel)]="this.profilService.currentTagsSelection"
     (onChange)="onSelectionChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
 
-    <button type="text" (click)="showDialog()" pButton icon="pi pi-info-circle" label="Show">Add</button>
-    <button type="text" (click)="delete(this.profilService.currentTagsSelection)" pButton icon="pi pi-info-circle" label="Show">Delete</button>
+    <button type="text" (click)="showDialog()" pButton icon="pi pi-info-circle" label="Add"></button>
+    <button type="text" (click)="delete(this.profilService.currentTagsSelection)" pButton icon="pi pi-info-circle" label="Delete"></button>
 </div>
 <div class="ui-g-12">
     <app-historian-tag-tree [tagsSelection]="this.profilService.currentTagsSelection"></app-historian-tag-tree>
