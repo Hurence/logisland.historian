@@ -119,21 +119,25 @@ public class MeasuresApiService {
     /**
      * returns a list of measures for a given Tag
      *
-     * @param itemId
+     * @param nodeId
+     * @param datasourceId
      * @param start
      * @param end
      * @param functions
      * @return
      */
-    public Optional<Measures> getTagMeasures(String itemId, String start, String end, String functions, Boolean noValues) {
+    public Optional<Measures> getTagMeasures(String nodeId, String datasourceId,
+                                             String start, String end, String functions, Boolean noValues) {
 
         long startTime = System.currentTimeMillis();
         StringBuilder queryBuilder = new StringBuilder();
 
 
-        if (itemId != null && !itemId.isEmpty())
-            queryBuilder.append("name:\"").append(itemId).append("\" ");
+        if (nodeId != null && !nodeId.isEmpty())
+            queryBuilder.append("tag_id:\"").append(nodeId).append("\" ");
 
+        if (datasourceId != null && !datasourceId.isEmpty())
+            queryBuilder.append("AND datasource_id:\"").append(datasourceId).append("\" ");
 
         if (start != null && !start.isEmpty())
             queryBuilder.append("AND start:").append(start).append(" ");

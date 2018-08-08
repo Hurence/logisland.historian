@@ -95,14 +95,30 @@ public class TagsApiController implements TagsApi {
     }
 
     @Override
-    public ResponseEntity<Measures> getTagMeasures(@ApiParam(value = "id of the tag", required = true) @PathVariable("tagId") String tagId, @ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start, @ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end, @ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions, @ApiParam(value = "will retrieve only function values, no data points", defaultValue = "false") @Valid @RequestParam(value = "no_values", required = false, defaultValue = "false") Boolean noValues) {
-        Optional<Measures> measures = measuresApiService.getTagMeasures(tagId, start, end, functions, noValues);
-        if (measures.isPresent()) {
-            return new ResponseEntity<Measures>(measures.get(), HttpStatus.OK);
+    public ResponseEntity<Measures> getTagMeasures(
+            @ApiParam(value = "id of the tag", required = true) @PathVariable("tagId") String tagId,
+            @ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ")
+                @Valid @RequestParam(value = "start", required = false) String start,
+            @ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ")
+                @Valid @RequestParam(value = "end", required = false) String end,
+            @ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ")
+                @Valid @RequestParam(value = "functions", required = false) String functions,
+            @ApiParam(value = "will retrieve only function values, no data points", defaultValue = "false")
+                @Valid @RequestParam(value = "no_values", required = false, defaultValue = "false") Boolean noValues) {
+        Optional<Tag> tagO = service.getTag(tagId);
+        if (tagO.isPresent()) {
+            Tag tag = tagO.get();
+            Optional<Measures> measures = measuresApiService.getTagMeasures(tag.getNodeId(), tag.getDatasourceId(),
+                    start, end, functions, noValues);
+            if (measures.isPresent()) {
+                return new ResponseEntity<Measures>(measures.get(), HttpStatus.OK);
 
+            } else {
+                return new ResponseEntity<Measures>(HttpStatus.NOT_FOUND);
+
+            }
         } else {
             return new ResponseEntity<Measures>(HttpStatus.NOT_FOUND);
-
         }
     }
 
