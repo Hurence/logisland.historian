@@ -34,7 +34,7 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
     this.selectedNodes = [];
     this.getNodeTree().subscribe(treeNodes => {
       this.treeNodes = treeNodes;
-      this.expandAll();
+      this.expandAll(false);
     });
   }
 
