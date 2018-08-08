@@ -21,7 +21,7 @@
         <field name="owner" type="string" indexed="true" stored="true" required="true"/>
         <field name="name" type="string" indexed="true" stored="true" required="true"/>
         <field name="description" type="string" indexed="true" stored="true" required="false"/>
-        <field name="tagIds" type="string" indexed="true" stored="true" required="true" multiValued="true"/>
+        <field name="tagIds" type="string" indexed="true" stored="true" required="false" multiValued="true"/>
 
     </fields>
 

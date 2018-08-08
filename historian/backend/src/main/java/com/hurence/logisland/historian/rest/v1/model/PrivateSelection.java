@@ -25,7 +25,7 @@ import org.threeten.bp.OffsetDateTime;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-03T18:03:11.160+02:00")
 
 
-@SolrDocument(solrCoreName = "historian")
+@SolrDocument(solrCoreName = "selection")
 public class PrivateSelection  implements Serializable {
         @JsonProperty("name")
         @Indexed(name = "name")
