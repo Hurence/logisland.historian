@@ -1,0 +1,19 @@
+<div class='ui-g'>
+  <p-panel class='ui-g-8' [toggleable]="true">
+      <p-header>
+          Visualization Menu
+      </p-header>
+      <div class="ui-g">
+        <div class='ui-xl-6 ui-md-6 ui-sm-12'>
+            <app-tags-selection-selection [(tagSelection)]="this.profilService.currentTagsSelection"></app-tags-selection-selection>
+        </div>
+        <div class='ui-xl-6 ui-md-6 ui-sm-12'>
+            <app-refresh-rate-selection [(refreshRate)]="refreshRate"></app-refresh-rate-selection>
+        </div>
+      </div>
+  </p-panel>
+  <div class='ui-g-12'>
+      <app-tag-dataview [refreshRate]="refreshRate"></app-tag-dataview>
+  </div>
+</div>
+  
