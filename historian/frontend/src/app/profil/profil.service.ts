@@ -15,7 +15,8 @@ export interface TagsSelectionEnriched {
 export class ProfilService implements OnDestroy {
 
   helpHidden = true;
-  currentTagsSelection: TagsSelection;
+  displayTagManagement = false;
+  private _currentTagsSelection: TagsSelection;
 
   private changeSelectionSubsrciption: Subscription;
   private changeSelections: BehaviorSubject<TagsSelectionEnriched>;
@@ -27,10 +28,17 @@ export class ProfilService implements OnDestroy {
     tagIds: new Set(),
   });
 
+  get currentTagsSelection(): TagsSelection {
+    return this._currentTagsSelection;
+  }
+
+  set currentTagsSelection(selection: TagsSelection) {
+    this.changeSelection(selection);
+  }
 
   constructor(private tagService: TagHistorianService) {
 
-    this.currentTagsSelection = this.getDefautSelection();
+    this._currentTagsSelection = this.getDefautSelection();
     this.changeSelections = new BehaviorSubject<TagsSelectionEnriched>({
       selection: this.getDefautSelection(),
       tags: []
@@ -40,7 +48,7 @@ export class ProfilService implements OnDestroy {
       debounceTime(400),
       // ignore new term if same as previous term
       distinctUntilChanged(),
-      tap(selection => this.currentTagsSelection = selection.selection),
+      tap(selection => this._currentTagsSelection = selection.selection),
     ).subscribe();
   }
 
@@ -51,7 +59,7 @@ export class ProfilService implements OnDestroy {
     this.removeTagToSelection.unsubscribe();
   }
 
-  changeSelection(selection: TagsSelection) {
+  private changeSelection(selection: TagsSelection) {
     this.tagService.getAllWithIds(selection.tagIdsArray).subscribe(tags => {
       this.changeSelections.next({
         selection: selection,
@@ -86,6 +94,10 @@ export class ProfilService implements OnDestroy {
 
   toggleHelp(): void {
       this.helpHidden = !this.helpHidden;
+  }
+
+  showDialogTagManagement(): void {
+    this.displayTagManagement = true;
   }
 
   getDefautSelection(): TagsSelection {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range-filter';
+import { ProfilService } from '../../../profil/profil.service';
 
 @Component({
   selector: 'app-line-chart-view',
@@ -11,7 +12,7 @@ export class LineChartViewComponent implements OnInit {
   refreshRate: number = 10000;
   timeRange: TimeRangeFilter = { start: 'NOW-15MINUTES', end: 'NOW' };
 
-  constructor() { }
+  constructor(public profilService: ProfilService) { }
 
   ngOnInit() {
   }

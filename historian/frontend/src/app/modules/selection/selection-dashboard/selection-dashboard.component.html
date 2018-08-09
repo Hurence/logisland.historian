@@ -1,11 +1,15 @@
 <h1>Choose your selection of tag</h1>
 <div class="ui-g-12">
     <!-- Select selection -->
-    <p-dropdown [options]="selectionOptions"  placeholder="choose a selection of tag" [(ngModel)]="this.profilService.currentTagsSelection"
-    (onChange)="onSelectionChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
+    <p-dropdown [options]="selectionOptions"  placeholder="choose a selection of tag"
+        [(ngModel)]="this.profilService.currentTagsSelection"
+        [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
 
-    <button type="text" (click)="showDialog()" pButton icon="pi pi-info-circle" label="Add"></button>
-    <button type="text" (click)="delete(this.profilService.currentTagsSelection)" pButton icon="pi pi-info-circle" label="Delete"></button>
+    <button type="button" (click)="delete(this.profilService.currentTagsSelection)" class="btn btn-danger ml-2">Delete</button>
+    <button type="button" (click)="update(this.profilService.currentTagsSelection)" class="btn btn-success ml-2">Update</button>
+    <button type="button" (click)="showDialog()" class="btn btn-info ml-2">
+      <i class="fa fa-plus" aria-hidden="true"></i>Add new selection
+    </button>
 </div>
 <div class="ui-g-12">
     <app-historian-tag-tree [tagsSelection]="this.profilService.currentTagsSelection"></app-historian-tag-tree>

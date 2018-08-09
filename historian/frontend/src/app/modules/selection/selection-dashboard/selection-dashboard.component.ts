@@ -40,21 +40,12 @@ export class SelectionDashboardComponent implements OnInit {
     this.actualizeListOfTagsSelection();
   }
 
-  onSelectionChange(event) {}
-
   showDialog() {
       this.display = true;
   }
 
   closeDialog() {
     this.display = false;
-  }
-
-  onCreated(selection: TagsSelection) {
-    this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
-    this.profilService.currentTagsSelection = selection;
-    this.actualizeListOfTagsSelection();
-    this.closeDialog();
   }
 
   actualizeListOfTagsSelection() {
@@ -64,6 +55,20 @@ export class SelectionDashboardComponent implements OnInit {
       this.selectionOptions = selectionsWithSet.map(selection => {
         return {label: selection.name, value: selection};
       });
+    });
+  }
+
+  onCreated(selection: TagsSelection) {
+    this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
+    this.profilService.currentTagsSelection = selection;
+    this.actualizeListOfTagsSelection();
+    this.closeDialog();
+  }
+
+  update(selection: TagsSelection) {
+    this.selectionService.update(new TagsSelectionArray(selection), selection.getId())
+      .subscribe(updated => {
+        this.actualizeListOfTagsSelection();
     });
   }
 

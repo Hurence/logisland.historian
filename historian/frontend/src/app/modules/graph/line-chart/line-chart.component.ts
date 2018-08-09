@@ -118,6 +118,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
   }
 
   selectData(event) {
+    // when user click on a point
     console.log(`Data Selected' : ${this.data.datasets[event.element._datasetIndex].data[event.element._index]}`);
   }
 
