@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { SelectItem } from 'primeng/components/common/selectitem';
 import { Subscription } from 'rxjs';
 
@@ -23,7 +23,7 @@ export class TagDataviewComponent extends AbsSubscriberToSelectionOfTag implemen
   sortField = 'tag_name'; // for dataview comp
   sortOrder: number; // for dataview comp
 
-  refreshRate = 10000; // in milli
+  @Input() refreshRate: number; // in milli
 
   loading: boolean; // for dataview comp
 

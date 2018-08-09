@@ -6,6 +6,7 @@ import { TagDataviewComponent } from '../tag/tag-dataview/tag-dataview.component
 import { TodoComponent } from '../../todo/todo.component';
 import { VisualizationComponent } from './visualization.component';
 import { LineChartViewComponent } from './line-chart-view/line-chart-view.component';
+import { TabularViewComponent } from './tabular-view/tabular-view.component';
 
 const visualizationRoutes: Routes = [
   {
@@ -14,7 +15,7 @@ const visualizationRoutes: Routes = [
     children: [
       {
         path: 'tabular',
-        component: TagDataviewComponent,
+        component: TabularViewComponent,
       },
       {
         path: 'lineChart',

@@ -35,6 +35,6 @@ export class TagsSelectionSelectionComponent implements OnInit {
       this.selectionOptions = selectionsWithSet.map(selection => {
         return {label: selection.name, value: selection};
       });
-    });    
+    });
   }
 }

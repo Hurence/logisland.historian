@@ -37,7 +37,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
     this.options = {
       title: {
         display: true,
-        text: 'Time series of tags',
+        text: 'Line Chart Graph',
         fontSize: 32
       },
       legend: {
