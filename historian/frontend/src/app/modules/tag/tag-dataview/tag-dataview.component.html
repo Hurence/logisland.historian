@@ -9,18 +9,28 @@ filterBy="data_type,description"
 <!-- [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords" -->
   <!-- HEADER -->
   <p-header><h2>List of Tags</h2>
-    <!-- SORT INPUT -->
-    <span>Sort by :</span>
-    <p-dropdown [options]="sortOptions"  placeholder="Sort By" [(ngModel)]="sortField"
-    (onChange)="onSortChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
-    <!-- FILTER INPUT -->
-    <span>Filter by :</span>
-    <input type="search" pInputText placeholder="Search by type" (keyup)="dv.filter($event.target.value)">    
-    <!-- REFRESH RATE -->
-    <app-refresh-rate-selection [(refreshRate)]="refreshRate"></app-refresh-rate-selection>
-    <!-- display option -->
-    <span>Choose display :</span>
-    <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+    <div class="ui-g">
+      <div class="ui-xl-3 ui-sm-12 ui-md-6">
+        <!-- SORT INPUT -->
+        <span>Sort by :</span>
+        <p-dropdown [options]="sortOptions"  placeholder="Sort By" [(ngModel)]="sortField"
+        (onChange)="onSortChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
+      </div>
+      <div class="ui-xl-3 ui-sm-12 ui-md-6">
+      <!-- FILTER INPUT -->
+        <span>Filter by :</span>
+        <input type="search" pInputText placeholder="Search by type" (keyup)="dv.filter($event.target.value)">
+      </div>
+      <div class="ui-xl-3 ui-sm-12 ui-md-6">
+        <!-- REFRESH RATE -->
+        <app-refresh-rate-selection [(refreshRate)]="refreshRate"></app-refresh-rate-selection>
+      </div>
+      <div class="ui-xl-3 ui-sm-12 ui-md-6">
+        <!-- display option -->
+        <span>Choose display :</span>
+        <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+      </div>
+    </div>
   </p-header>
   <!-- TEMPLATES -->
   <ng-template let-tag pTemplate="listItem">
