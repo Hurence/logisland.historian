@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   logoutUrl: string;
 
   constructor(private keycloakService: KeycloakService,
-              private profilService: ProfilService) {
+              public profilService: ProfilService) {
 
                 this.logoutUrl = environment.KEYCLOAK_LOGOUT_URL;
               }
