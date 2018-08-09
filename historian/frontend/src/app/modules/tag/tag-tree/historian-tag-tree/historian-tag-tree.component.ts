@@ -9,6 +9,7 @@ import { TagHistorianService } from '../../service/tag-historian.service';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
 import { ProfilService } from '../../../../profil/profil.service';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
+import { TypesName } from '../TypesName';
 
 @Component({
   selector: 'app-historian-tag-tree',
@@ -33,7 +34,7 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
     this.selectedNodes = [];
     this.getNodeTree().subscribe(treeNodes => {
       this.treeNodes = treeNodes;
-      this.expandAll();
+      this.expandAll(false);
     });
   }
 
@@ -124,7 +125,7 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
   }
 
   protected loadANodeIfNeeded(node: TreeNode): boolean {
-    if (node && node.type === 'group' && (!node.children  || node.children.length === 0)) {
+    if (node && node.type === TypesName.FOLDER && (!node.children  || node.children.length === 0)) {
       this.loadChildren(node);
       return true;
     }
@@ -172,7 +173,7 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
   }
 
   private buildQuery(node: TreeNode): string {
-    const query = `${node.type}:"${node.label}"`;
+    const query = `${node.data.key}:"${node.data.value}"`;
     if (node.parent) return `${query} AND ${this.buildQuery(node.parent)}`;
     return query;
   }

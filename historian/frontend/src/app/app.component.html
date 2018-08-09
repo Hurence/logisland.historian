@@ -34,7 +34,7 @@
 </header>
 
 
-<div class="row content">
+<div class="row content ui-g">
     <div class="col-md-2 col-xs-1 p-l-0 p-r-0 collapse in show h-100" id="sidebar">
         <div class="list-group panel">
             <!-- START menu-settings -->
@@ -60,9 +60,18 @@
             <!-- END menu-visualization -->
         </div>
     </div>
-    <main class="col-md col-xs-11 p-l-2 p-t-2 no-padding">
+    <main class="ui-g-10 col-md col-xs-11 p-l-2 p-t-2 no-padding">
         <p-growl></p-growl>
         <p-confirmDialog rejectLabel="Cancel" acceptLabel="Ok"></p-confirmDialog>
+        <p-dialog [(visible)]="this.profilService.displayTagManagement" [resizable]="true">
+            <p-header>
+                Manage your selection
+            </p-header>
+            <!-- [(tagSelection)]="this.profilService.currentTagsSelection" -->
+            <app-selection-dashboard></app-selection-dashboard>
+            <p-footer>
+            </p-footer>
+        </p-dialog>
         <router-outlet></router-outlet>
     </main>
 </div>

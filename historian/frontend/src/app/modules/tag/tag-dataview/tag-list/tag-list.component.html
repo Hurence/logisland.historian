@@ -1,34 +1,33 @@
-<div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
-    <div class="ui-g-12 ui-md-4" style="text-align:center">
-        <div class="ui-g-2 ui-sm-6">Name: </div>
-        <div class="ui-g-10 ui-sm-6"><b>{{tag.tag_name}}</b></div>
-
-        <div class="ui-g-2 ui-sm-6">Description: </div>
-        <div class="ui-g-10 ui-sm-6"><b>{{tag?.description}}</b></div>
-    </div>
-    <div class="ui-g-12 ui-md-4 car-details">
-        <div class="ui-g">   
-            <div class="ui-g-2 ui-sm-6">Type: </div>
-            <div class="ui-g-10 ui-sm-6"><b>{{tag.data_type}}</b></div>
+<div class="ui-g w-100" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
+  <div class="ui-g-12">
+    <ng-container *ngIf="notFound">
+      <!-- <div class="ui-g-12 ui-md-12" style="text-align:center"> -->
+          No stat found for this tag !
+      <!-- </div> -->
+    </ng-container>
+    <ng-container *ngIf="!notFound">
+      <div class="ui-g-2 ui-md-3" style="text-align:center">
+          Name:<b>{{tag.tag_name}}</b>
+      </div>
+      <div class="ui-g-2 ui-md-3" style="text-align:center">
+          Description:<b>{{tag?.description}}</b>
+      </div>
+      <div class="ui-g-2 ui-md-3" style="text-align:center">
+          Type:<b>{{tag.data_type}}</b>
+      </div>
+      <div class="ui-g-2 ui-md-3" style="text-align:center">
+          <span *ngIf="lastRefreshed">(tag last refreshed at {{lastRefreshed | date:'mediumTime'}})</span>
+      </div>
+      <ng-container *ngIf="stats">
+        <div *ngFor="let agg of stats.functions" class="ui-g-4">
+          <span class='important-agg' *ngIf="agg.name === 'last'">
+              <b>{{agg.name}} : {{agg.value}}</b>
+          </span>
+          <ng-container *ngIf="agg.name !== 'last'">
+              {{agg.name}} : {{agg.value}}
+          </ng-container>
         </div>
-        <div class="ui-g">   
-            <span *ngIf="lastRefreshed">(tag last refreshed at {{lastRefreshed | date:'mediumTime'}})</span>
-        </div>
-    </div>
-    <div class="ui-g-12 ui-md-4 car-details">
-        <div class="ui-g">
-            <ng-container *ngIf="stats">
-                <ng-container *ngFor="let agg of stats.functions">
-                    <div class="ui-g-2 ui-sm-6">{{agg.name}}: </div>
-                    <div class="ui-g-10 ui-sm-6"><b>{{agg.value}}</b></div>
-                </ng-container>
-            </ng-container>
-            <ng-container *ngIf="notFound">
-                    No stat found for this tag !
-            </ng-container>
-        </div>
-    </div>
-    <!-- <div class="ui-g-12 ui-md-1 search-icon">
-        <button pButton type="button" icon="pi pi-search" (click)="selectCar($event, car)"></button>
-    </div> -->
+      </ng-container>
+    </ng-container>
+  </div>
 </div>

@@ -31,6 +31,9 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DynamicFormQuestionRadioComponent } from './dynamic-form/dynamic-form-question-radio/dynamic-form-question-radio.component';
+import { TimeRangeSelectionComponent } from './time-range-selection/time-range-selection.component';
+import { TagsSelectionSelectionComponent } from './tags-selection-selection/tags-selection-selection.component';
+import { SelectionModule } from '../modules/selection/selection.module';
 
 @NgModule({
   imports: [
@@ -87,6 +90,8 @@ import { DynamicFormQuestionRadioComponent } from './dynamic-form/dynamic-form-q
     ProgressSpinnerModule,
     CheckboxModule,
     RadioButtonModule,
+    TimeRangeSelectionComponent,
+    TagsSelectionSelectionComponent,
   ],
   providers: [
     TreeDragDropService,
@@ -99,6 +104,8 @@ import { DynamicFormQuestionRadioComponent } from './dynamic-form/dynamic-form-q
     DynamicFormQuestionArrayComponent,
     RefreshRateSelectionComponent,
     DynamicFormQuestionRadioComponent,
+    TimeRangeSelectionComponent,
+    TagsSelectionSelectionComponent,
   ],
 })
 export class SharedModule { }

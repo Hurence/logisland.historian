@@ -4,9 +4,10 @@ import { SharedModule } from '../../shared/shared.module';
 import { GraphModule } from '../graph/graph.module';
 import { SelectionModule } from '../selection/selection.module';
 import { LineChartViewComponent } from './line-chart-view/line-chart-view.component';
+import { TabularViewComponent } from './tabular-view/tabular-view.component';
 import { VisualizationRoutingModule } from './visualization-routing.module';
 import { VisualizationComponent } from './visualization.component';
-import { RefreshRateSelectionComponent } from '../../shared/refresh-rate-selection/refresh-rate-selection.component';
+import { TagModule } from '../tag/tag.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { RefreshRateSelectionComponent } from '../../shared/refresh-rate-selecti
     SelectionModule,
     GraphModule,
     VisualizationRoutingModule,
+    TagModule,
   ],
-  declarations: [VisualizationComponent, LineChartViewComponent]
+  declarations: [VisualizationComponent, LineChartViewComponent, TabularViewComponent]
 })
 export class VisualizationModule { }

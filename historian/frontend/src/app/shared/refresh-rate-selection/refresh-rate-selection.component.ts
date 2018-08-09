@@ -32,9 +32,4 @@ export class RefreshRateSelectionComponent implements OnInit {
       {label: '60 secondes', value: '60000'},
     ];
   }
-
-  onRefreshChange(event): void {
-    const refreshRate = event.value; // convert into milli
-    this.refreshRate = refreshRate;
-  }
 }

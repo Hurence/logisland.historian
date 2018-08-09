@@ -17,7 +17,8 @@ import { AddTagFormComponent } from './tag-form/add-tag-form/add-tag-form.compon
   exports: [
     HistorianTagTreeComponent,
     OpcTagTreeComponent,
-    AddTagFormComponent
+    AddTagFormComponent,
+    TagDataviewComponent,
   ],
   declarations: [
     TagFormComponent,

@@ -6,9 +6,9 @@ export abstract class BaseTagTreeComponent {
   treeNodes: TreeNode[];
   selectedNodes: TreeNode[];
 
-  expandAll() {
+  expandAll(loadChildren?: boolean) {
     this.treeNodes.forEach(node => {
-        this.expandRecursive(node, true, true);
+        this.expandRecursive(node, true, loadChildren || false);
     } );
   }
 
@@ -19,9 +19,9 @@ export abstract class BaseTagTreeComponent {
   }
 
   protected expandRecursive(node: TreeNode, isExpand: boolean, loadChildren: boolean) {
-    node.expanded = isExpand;
     if (loadChildren) this.loadANodeIfNeeded(node);
-    if (node.children) {
+    if (node.children && node.children.length !== 0) {
+        node.expanded = isExpand;
         node.children.forEach(childNode => {
             this.expandRecursive(childNode, isExpand, loadChildren);
         } );

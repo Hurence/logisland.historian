@@ -6,7 +6,7 @@ services:
     environment:
       - JAVA_MEMORY=4g
     hostname: chronix
-    image: 'hurence/historian-chronix:0.4.3'
+    image: 'hurence/historian-chronix:0.4.4'
     ports:
       - '8983:8983'
     network_mode: bridge
@@ -27,7 +27,7 @@ services:
 
   historian-backend:
     container_name: historian-backend
-    image: 'hurence/historian-backend:0.4.3'
+    image: 'hurence/historian-backend:0.4.3-SNAPSHOT'
     ports:
       - '8701:8701'
     links:
@@ -38,7 +38,7 @@ services:
 
   historian-frontend:
     container_name: historian-frontend
-    image: 'hurence/historian-frontend:0.4.3'
+    image: 'hurence/historian-frontend:0.4.3-SNAPSHOT'
     ports:
       - '4200:80'
     links:

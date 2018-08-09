@@ -12,15 +12,8 @@
         </div>
       </div>
   </p-panel>
-  <p-panel class='ui-g-4 ui-sm-12' [toggleable]="true">
-      <p-header>
-          Graph Menu
-      </p-header>
-      <div>
-          <app-time-range-selection [(timeRange)]="timeRange"></app-time-range-selection>
-      </div>
-  </p-panel>
   <div class='ui-g-12'>
-      <app-line-chart [refreshRate]="refreshRate" [timeRange]="timeRange"></app-line-chart>
+      <app-tag-dataview [refreshRate]="refreshRate"></app-tag-dataview>
   </div>
 </div>
+  

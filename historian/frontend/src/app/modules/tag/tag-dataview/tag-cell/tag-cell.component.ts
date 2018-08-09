@@ -10,6 +10,7 @@ import { BaseElementTagComponent } from '../BaseElementTagComponent';
 })
 export class TagCellComponent  extends BaseElementTagComponent {
 
+
   constructor(protected measuresService: MeasuresService) {
     super();
   }

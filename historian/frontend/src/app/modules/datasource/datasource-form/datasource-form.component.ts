@@ -4,8 +4,7 @@ import { ConfirmationService } from 'primeng/components/common/api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { DatasourceType } from '../Datasource';
-import { Datasource, TagBrowsingMode } from '../Datasource';
+import { Datasource, DatasourceType, TagBrowsingMode } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
 
 @Component({
