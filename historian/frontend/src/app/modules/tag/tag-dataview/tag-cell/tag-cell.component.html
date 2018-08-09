@@ -1,14 +1,23 @@
-<p-panel [header]="tag.tag_name" [style]="{'text-align':'center'}">
-        <span *ngIf="lastRefreshed">(tag last refreshed at {{lastRefreshed | date:'mediumTime'}})</span>
-        <div class="tag-detail">{{tag?.description}} - {{tag.data_type}}</div>
-        <ng-container *ngIf="stats">
-                <div *ngFor="let agg of stats.functions">
-                        {{agg.name}} : {{agg.value}}
-                </div>
+<p-panel [style]="{'text-align':'center'}">
+  <p-header>
+    <b>{{tag.tag_name}}</b> - {{tag.data_type}} <span *ngIf="lastRefreshed">(last refresh: {{lastRefreshed | date:'mediumTime'}})</span>
+  </p-header>
+  <div class="ui-g">
+    <div class="ui-g-12" *ngIf="tag.description">{{tag.description}}</div>
+    <ng-container *ngIf="stats">
+      <div *ngFor="let agg of stats.functions" class="ui-g-4">
+        <span class='important-agg' *ngIf="agg.name === 'last'">
+            <b>{{agg.name}} : {{agg.value}}</b>
+        </span>
+        <ng-container *ngIf="agg.name !== 'last'">
+            {{agg.name}} : {{agg.value}}
         </ng-container>
-        <ng-container *ngIf="notFound">
-                No stat found for this tag !
-        </ng-container>
-        <hr class="ui-widget-content" style="border-top:0">
-        <!-- <button pButton type="button" icon="pi pi-search" (click)="selectCar($event, car)" style="margin-top:0"></button> -->
+      </div>
+    </ng-container>
+    <ng-container *ngIf="notFound">
+      No stat found for this tag !
+    </ng-container>
+    <hr class="ui-widget-content" style="border-top:0">
+<!-- <button pButton type="button" icon="pi pi-search" (click)="selectCar($event, car)" style="margin-top:0"></button> -->
+  </div>
 </p-panel>
