@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 import { AbsSubscriberToSelectionOfTagWithRefresh } from '../../../core/AbsSubscriberToSelectionOfTag';
 import { Measures } from '../../../measure/Measures';
@@ -6,15 +6,9 @@ import { MeasuresService } from '../../../measure/measures.service';
 import { MeasuresRequest } from '../../../measure/MeasuresRequest';
 import { ProfilService } from '../../../profil/profil.service';
 import { ArrayUtil } from '../../../shared/array-util';
+import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range-filter';
 import { IHistorianTag } from '../../tag/modele/HistorianTag';
 import { CartesianAxeType, ILineChartData, ILineChartDataset, ILineChartOption, TimeDistribution } from './LineChartModele';
-import { SelectItem } from 'primeng/api';
-
-export interface TimeRangeFilter {
-  label?: string;
-  start: string;
-  end: string;
-}
 
 @Component({
   selector: 'app-line-chart',

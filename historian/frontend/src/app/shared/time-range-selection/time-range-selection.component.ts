@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SelectItem } from 'primeng/api';
-import { TimeRangeFilter } from '../../modules/graph/line-chart/line-chart.component';
+import { TimeRangeFilter } from './time-range-filter';
 
 @Component({
   selector: 'app-time-range-selection',

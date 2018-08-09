@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TimeRangeFilter } from '../../graph/line-chart/line-chart.component';
+import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range-filter';
 
 @Component({
   selector: 'app-line-chart-view',
