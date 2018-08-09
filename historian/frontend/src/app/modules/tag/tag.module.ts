@@ -19,6 +19,7 @@ import { AddTagFormComponent } from './tag-form/add-tag-form/add-tag-form.compon
     OpcTagTreeComponent,
     AddTagFormComponent,
     TagDataviewComponent,
+    TagFormComponent,
   ],
   declarations: [
     TagFormComponent,
