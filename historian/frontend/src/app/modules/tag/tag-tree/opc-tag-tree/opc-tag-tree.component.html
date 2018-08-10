@@ -2,23 +2,13 @@
 <div class="mx-auto" style="width: 20rem;">
     <button *ngIf="withExpandAll" pButton type="button" label="Expand all" (click)="expandAll()" class="mx-2 my-2"></button>
     <button *ngIf="withCollapseAll" pButton type="button" label="Collapse all" (click)="collapseAll()" class="mx-2 my-2"></button>
-    <!-- <button pButton type="button" label="Register selected tags" (click)="showRegisterDialog()"></button> -->
 </div>
 <p-tree [value]="treeNodes" [loading]="loading" id="historian-tree" (onNodeExpand)="loadNode($event)">
     <ng-template let-node pTemplate="folder">
     <div class="">
         <div class='row'>
-            <div class='col-auto mr-auto  text-truncate'
+            <div class='col-auto mr-auto text-truncate'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
-            <!-- <div *ngIf="hasTagChildren(node)" class='col-auto'>
-                <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
-                class="mx-1 my-1"
-                icon="fa fa-edit"></button>
-                <button pButton type="button" (click)="deleteTags(node); $event.stopPropagation();"
-                class="mx-1 my-1"
-                icon="fa fa-trash"></button>
-                <p-inputSwitch [(ngModel)]="node.data" (click)="toggleEnableds(node);$event.stopPropagation();"></p-inputSwitch>
-            </div> -->
         </div>
     </div>
     </ng-template>
@@ -74,12 +64,3 @@
     <p-footer>
     </p-footer>
 </p-dialog>
-<!-- tag detail -->
-<!-- <p-dialog [(visible)]="displayTagDetail" [modal]="true"   [dismissableMask]="true">
-    <p-header>
-        Tag details
-    </p-header> -->
-    <!-- <app-tag-detail [tag]="tagClicked"></app-tag-detail> -->
-    <!-- <p-footer>
-    </p-footer>
-</p-dialog> -->

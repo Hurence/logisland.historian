@@ -1,19 +1,18 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { TreeNode } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 
-import { IHistorianTag, HistorianTag } from '../../modele/HistorianTag';
+import { ArrayUtil } from '../../../../shared/array-util';
+import { Datasource, TagBrowsingMode } from '../../../datasource/Datasource';
+import { HistorianTag, IHistorianTag } from '../../modele/HistorianTag';
+import { OpcTag } from '../../modele/OpcTag';
 import { ITag, Tag } from '../../modele/tag';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
+import { TagHistorianService } from '../../service/tag-historian.service';
+import { TagOpcService } from '../../service/tag-opc.service';
 import { ITagFormInput, TagFormInput } from '../../tag-form/TagFormInput';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { TagHistorianService } from '../../service/tag-historian.service';
-import { TagUtils } from '../../modele/TagUtils';
-import { OpcTag } from '../../modele/OpcTag';
-import { Datasource, TagBrowsingMode } from '../../../datasource/Datasource';
-import { TagOpcService } from '../../service/tag-opc.service';
-import { ArrayUtil } from '../../../../shared/array-util';
 
 @Component({
   selector: 'app-opc-tag-tree',
@@ -61,6 +60,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
               { nodeId: this.datasource.findRootNodeId(), depth: 1 }
             ).subscribe(tags => {
               this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+              this.updateAlreadyRegistredTags(this.treeNodes);
             });
             break;
           case TagBrowsingMode.MANUAL:
@@ -76,6 +76,31 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
         this.updateTagFormTitle();
       }
     }
+  }
+
+  /**
+   * For every tag node, look if it is already registred.
+   * If yes, then we fill tag with correponding data
+   * If not, do nothing.
+   */
+  private updateAlreadyRegistredTags(nodes: TreeNode[]): void {
+    nodes.forEach(n => {
+      if (n.type === TypesName.TAG_OPC) {
+        this.tagHistorianService.getByNodeIdAndDatasourceId(n.data.node_id, n.data.datasource_id).subscribe(
+          tags => {
+            switch (tags.length) {
+              case 1:
+                this.updateNodeWithHistorianTag(n, tags[0]);
+                break;
+              case 0:
+              default:
+                break;
+            }
+          },
+          error => { }
+        );
+      }
+    });
   }
 
   hasTagChildren(node: TreeNode): boolean {
@@ -200,13 +225,13 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   private forceToggleEnabled(enabled: boolean, node: TreeNode): void {
     node.data.enabled = enabled;
     this.tagHistorianService.createOrReplace(new HistorianTag(node.data)).subscribe(t => {
-      this.updateNodeAfterSavingTag(node, t);
+      this.updateNodeWithHistorianTag(node, t);
     });
   }
 
   toggleEnabled(node: TreeNode): void {
     this.tagHistorianService.createOrReplace(new HistorianTag(node.data)).subscribe(t => {
-      this.updateNodeAfterSavingTag(node, t);
+      this.updateNodeWithHistorianTag(node, t);
     });
   }
 
@@ -229,7 +254,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
           detail: `Tag id was '${tag.id}'`,
         });
       } else {
-        this.updateNodeAfterSavingTag(nodeToUpdate, tag);
+        this.updateNodeWithHistorianTag(nodeToUpdate, tag);
       }
     }
   }
@@ -243,7 +268,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     this.addNodeAfterSavingTag(this.treeNodes, tag);
   }
 
-  private updateNodeAfterSavingTag(node: TreeNode, tag: HistorianTag): void {
+  private updateNodeWithHistorianTag(node: TreeNode, tag: HistorianTag): void {
     Object.assign(node.data, tag);
     if (node.type === TypesName.TAG_OPC) {
       node.data = new HistorianTag(node.data);
@@ -299,6 +324,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
       this.loading = true;
       this.tagOpcService.browseTags(this.datasource.id, { nodeId: node.data.node_id , depth: 1 }).subscribe(tags => {
         const children = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+        this.updateAlreadyRegistredTags(children);
         if (children.length === 0) {
           node.children = [this.ngTreenodeService.getEmptyNode()];
         } else {
