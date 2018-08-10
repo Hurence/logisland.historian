@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 public class SelectionsApiController implements SelectionsApi {
@@ -92,7 +93,6 @@ public class SelectionsApiController implements SelectionsApi {
         Optional<PrivateSelection> selection = service.deleteSelection(id);
         if (selection.isPresent()) {
             return new ResponseEntity<Selection>(convertToSelection(selection.get()), HttpStatus.OK);
-
         } else {
             return new ResponseEntity<Selection>(HttpStatus.NOT_FOUND);
 
@@ -101,7 +101,17 @@ public class SelectionsApiController implements SelectionsApi {
 
     @Override
     public ResponseEntity<List<Tag>> getAllTagsFromSelection(@PathVariable("selectionName") String selectionName) {
-        return null;
+        String id = buildId(selectionName, securityService.getUserName());
+        Optional<PrivateSelection> selectionO = this.service.getSelection(id);
+        if (selectionO.isPresent()) {
+            List<Tag> selectionTags = selectionO.get().getTagIds().stream()
+                    .map(tagId -> this.tagApiService.getTag(tagId))
+                    .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty())
+                    .collect(Collectors.toList());
+            return new ResponseEntity<List<Tag>>(selectionTags, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<List<Tag>>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
