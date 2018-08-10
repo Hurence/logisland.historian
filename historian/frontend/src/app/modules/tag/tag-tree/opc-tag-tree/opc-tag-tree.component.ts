@@ -13,6 +13,8 @@ import { TagOpcService } from '../../service/tag-opc.service';
 import { ITagFormInput, TagFormInput } from '../../tag-form/TagFormInput';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
+import { QuestionBase } from '../../../../shared/dynamic-form/question-base';
+import { QuestionService } from '../../../../shared/dynamic-form/question.service';
 
 @Component({
   selector: 'app-opc-tag-tree',
@@ -24,28 +26,26 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   @Input() withExpandAll?: boolean = true;
   @Input() withCollapseAll?: boolean = true;
   @Input() datasource: Datasource;
-  // tag detail props
-  tagClicked: ITag;
-  displayTagDetail = false;
-  // tag form dialog props
-  displayRegister = false;
-  tagsInputForForm: ITagFormInput[] = [];
-  tagFormTitle: string;
+
+  displayEdit = false;
+  selectedTag: ITag;
   // memory to update tree
   nodeForRegister: TreeNode;
+  tagEditQuestions: QuestionBase<any>[];
 
   constructor(private ngTreenodeService: NgTreenodeService,
               private messageService: MessageService,
               private tagOpcService: TagOpcService,
               private tagHistorianService: TagHistorianService,
-              private arrayUtil: ArrayUtil) {
+              private arrayUtil: ArrayUtil,
+              private questionService: QuestionService) {
                 super();
-                this.tagsInputForForm = [];
+                // this.tagsInputForForm = [];
                }
 
   ngOnInit() {
+    this.tagEditQuestions = this.questionService.getTagForm();
     this.loading = false;
-    this.updateTagFormTitle();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -73,7 +73,6 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
             break;
         }
         this.loading = false;
-        this.updateTagFormTitle();
       }
     }
   }
@@ -124,26 +123,16 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     this.loading = true;
   }
 
-  private showRegisterDialog(tags: Tag[]): void {
-    this.tagsInputForForm = tags.map(tag => new TagFormInput(tag));
-    this.updateTagFormTitle();
-    this.displayRegister = true;
-  }
   /**
    *
    * @param node node that will be used when receiving saved tags to modify tags in tree
    *             Can be null, in this case tags will be considered as new tags and will be inserted in root.
    *             See method (onTagSaved)
    */
-  showRegisterDialogRecursive(node: TreeNode): void {
+  showEditDialog(node: TreeNode): void {
     this.nodeForRegister = node;
-    this.showRegisterDialog(this.getTagsFromNode(node));
-  }
-
-  showRegisterDialogToAddNewTag(tag: HistorianTag): void {
-    this.tagsInputForForm = [new TagFormInput(tag)];
-    this.updateTagFormTitle();
-    this.displayRegister = true;
+    this.selectedTag = node.data;
+    this.displayEdit = true;
   }
 
   private getTagsFromNode(node: TreeNode): Tag[] {
@@ -165,8 +154,8 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   }
 
   showDetailDialog(tag: ITag): void {
-    this.tagClicked = tag;
-    this.displayTagDetail = true;
+    this.selectedTag = tag;
+    // this.displayTagDetail = true;
   }
 
   deleteTags(node: TreeNode): void {
@@ -242,7 +231,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
    * @param tag saved in form by user
    */
   onTagSaved(tag: HistorianTag): void {
-    this.displayRegister = false;
+    this.displayEdit = false;
     if (this.nodeForRegister === null) {
       this.addNodeAfterSavingTag(this.treeNodes, tag);
     } else {
@@ -335,15 +324,5 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
       return true;
     }
     return false;
-  }
-
-  private updateTagFormTitle() {
-    if (this.tagsInputForForm.length === 1) {
-      this.tagFormTitle = 'Save this tag';
-    } else if (this.tagsInputForForm.length !== 0) {
-      this.tagFormTitle = `Save those ${this.tagsInputForForm.length} tags`;
-    } else { // should not happen
-      this.tagFormTitle = 'No Tag Selected !';
-    }
   }
 }

@@ -9,11 +9,11 @@ import { TagOpcService } from '../../service/tag-opc.service';
 import { ConfirmationService } from 'primeng/api';
 
 @Component({
-  selector: 'app-add-tag-form',
-  templateUrl: './add-tag-form.component.html',
-  styleUrls: ['./add-tag-form.component.css']
+  selector: 'app-edit-tag-form',
+  templateUrl: './edit-tag-form.component.html',
+  styleUrls: ['./edit-tag-form.component.css']
 })
-export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, HistorianTag> implements OnInit {
+export class EditTagFormComponent extends BaseDynamicFormComponent<HistorianTag, HistorianTag> implements OnInit {
 
   displayFoundMsg = false;
   displayNotFoundMsg = false;

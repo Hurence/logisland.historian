@@ -19,7 +19,7 @@
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
                     <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Sampling rate {{node.data.update_rate}}" tooltipPosition="right"><span class="update-rate"> {{node.data.update_rate}}</span></i>
-                    <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
+                    <button pButton type="button" (click)="showEditDialog(node); $event.stopPropagation();"
                     class="mx-1 my-1"
                     icon="fa fa-edit"></button>
                     <button pButton type="button" (click)="deleteTag(node); $event.stopPropagation();"
@@ -37,7 +37,7 @@
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
                     <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="top"><span class="update-rate"> {{node.data.update_rate}}</span></i>
-                    <button pButton type="button" (click)="showRegisterDialogRecursive(node); $event.stopPropagation();"
+                    <button pButton type="button" (click)="showEditDialog(node); $event.stopPropagation();"
                     class="mx-1 my-1"
                     icon="fa fa-edit"></button>
                     <p-button (click)="showDetailDialog(node.data)"
@@ -55,12 +55,11 @@
     </ng-template>
 </p-tree>
 <!-- tag form edit -->
-<p-dialog [(visible)]="displayRegister" [modal]="true" [dismissableMask]="true">
+<p-dialog [(visible)]="displayEdit" [modal]="true" [dismissableMask]="true">
     <p-header>
-        {{tagFormTitle}}
+        Edit tag from datasource : '{{datasource?.id}}'
     </p-header>
-    <app-tag-form [tags]="tagsInputForForm"
-                    (submitted)="onTagSaved($event)"></app-tag-form>
+    <app-edit-tag-form [questions]="tagEditQuestions" [item]="selectedTag" (submitted)="onTagSaved($event)"></app-edit-tag-form>
     <p-footer>
     </p-footer>
 </p-dialog>
