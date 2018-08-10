@@ -58,7 +58,7 @@ export class SelectionDashboardComponent implements OnInit {
   ngOnInit() {
     this.selectionQuestions = this.getMyQuestions();
     this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
-    this.actualizeListOfTagsSelection();
+    this.actualizeListOfTagsSelection(this.tagSelection);
   }
 
   showDialog() {
@@ -69,14 +69,25 @@ export class SelectionDashboardComponent implements OnInit {
     this.display = false;
   }
 
-  actualizeListOfTagsSelection() {
+  actualizeListOfTagsSelection(selectedSelection: TagsSelection) {
     this.selectionService.getAll().subscribe(selections => {
       const selectionsWithSet = selections.map(s => new TagsSelection(s));
       this.selectionOptions = selectionsWithSet.map(selection => {
         return {label: selection.name, value: selection};
       });
       if (this.selectionOptions.length !== 0) {
-        this.tagSelection = this.selectionOptions[0].value;
+        if (selectedSelection) {
+          const optionSelected = this.selectionOptions.find(s => s.value.name === selectedSelection.name);
+          if (optionSelected) {
+            this.tagSelection = optionSelected.value;
+          } else {
+            this.tagSelection = this.selectionOptions[0].value;
+          }
+        } else {
+          this.tagSelection = this.selectionOptions[0].value;
+        }
+      } else {
+        this.tagSelection = null;
       }
     });
   }
@@ -84,14 +95,14 @@ export class SelectionDashboardComponent implements OnInit {
   onCreated(selection: TagsSelection) {
     this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
     this.profilService.currentTagsSelection = selection;
-    this.actualizeListOfTagsSelection();
+    this.actualizeListOfTagsSelection(this.tagSelection);
     this.closeDialog();
   }
 
   update(selection: TagsSelection) {
     this.selectionService.update(new TagsSelectionArray(selection), selection.getId())
       .subscribe(updated => {
-        this.actualizeListOfTagsSelection();
+        this.actualizeListOfTagsSelection(this.tagSelection);
     });
   }
 
@@ -106,7 +117,7 @@ export class SelectionDashboardComponent implements OnInit {
       accept: () => {
         this.selectionService.delete(selection.getId())
           .subscribe(deletedSelection => {
-            this.actualizeListOfTagsSelection();
+            this.actualizeListOfTagsSelection(this.tagSelection);
           });
       },
       reject: () => { }

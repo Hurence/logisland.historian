@@ -1,5 +1,6 @@
 <h1>Choose your selection of tag</h1>
 <div class="ui-g-12">
+  {{tagSelection | json}}
     <!-- Select selection -->
     <p-dropdown [options]="selectionOptions"  placeholder="please create a selection"
         [(ngModel)]="tagSelection"
@@ -12,7 +13,8 @@
     </button>
 </div>
 <div class="ui-g-12">
-    <app-historian-tag-tree [(tagsSelection)]="tagSelection"></app-historian-tag-tree>
+    <app-historian-tag-tree [(tagsSelection)]="tagSelection" *ngIf="tagSelection"></app-historian-tag-tree>
+    <span *ngIf="!tagSelection">Please create a new selection.</span>
 </div>
 
 <p-dialog [(visible)]="display">

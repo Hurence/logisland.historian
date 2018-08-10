@@ -26,7 +26,6 @@ export class TagsSelectionSelectionComponent implements OnInit {
   set tagSelection(newVal: TagsSelection) {
     this._tagSelection = newVal;
     this.tagSelectionChange.emit(this._tagSelection);
-    this.profilService.currentTagsSelection = this._tagSelection;
   }
 
   ngOnInit() {
