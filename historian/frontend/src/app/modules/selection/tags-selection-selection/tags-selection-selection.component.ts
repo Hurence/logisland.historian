@@ -1,8 +1,8 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { ProfilService } from '../../profil/profil.service';
+import { ProfilService } from '../../../profil/profil.service';
 import { SelectItem } from 'primeng/api';
-import { TagsSelection } from '../../modules/selection/Selection';
-import { SelectionService } from '../../modules/selection/selection.service';
+import { TagsSelection } from '../Selection';
+import { SelectionService } from '../selection.service';
 
 @Component({
   selector: 'app-tags-selection-selection',
