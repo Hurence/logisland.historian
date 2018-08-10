@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, EventEmitter, Output } from '@angular/core';
 import { SelectItem } from 'primeng/components/common/selectitem';
 
 import { ProfilService } from '../../../profil/profil.service';
@@ -17,9 +17,10 @@ import { ConfirmationService } from 'primeng/components/common/api';
 export class SelectionDashboardComponent implements OnInit {
 
   // dropdown select current selection of tags
-  selectionOptions: SelectItem[];
-  private _currentSelection: TagsSelection;
-
+  private _selectionOptions: SelectItem[];
+  @Output() selectionOptionsChange = new EventEmitter<SelectItem[]>();
+  private _tagSelection: TagsSelection;
+  @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
   // Form to add new selection of tags
   display = false;
   selectionQuestions: QuestionBase<any>[];
@@ -29,6 +30,26 @@ export class SelectionDashboardComponent implements OnInit {
   private REMOVE_SELECTION_MSG = 'Remove selection of tags';
 
   @ViewChild(SelectionFormComponent) private tagSelectionFormComp: SelectionFormComponent;
+
+  @Input()
+  get tagSelection(): TagsSelection {
+    return this._tagSelection;
+  }
+
+  set tagSelection(newVal: TagsSelection) {
+    this._tagSelection = newVal;
+    this.tagSelectionChange.emit(this._tagSelection);
+  }
+
+  @Input()
+  get selectionOptions(): SelectItem[] {
+    return this._selectionOptions;
+  }
+
+  set selectionOptions(newVal: SelectItem[]) {
+    this._selectionOptions = newVal;
+    this.selectionOptionsChange.emit(this._selectionOptions);
+  }
 
   constructor(public profilService: ProfilService,
               private confirmationService: ConfirmationService,
@@ -41,7 +62,7 @@ export class SelectionDashboardComponent implements OnInit {
   }
 
   showDialog() {
-      this.display = true;
+    this.display = true;
   }
 
   closeDialog() {
@@ -51,10 +72,12 @@ export class SelectionDashboardComponent implements OnInit {
   actualizeListOfTagsSelection() {
     this.selectionService.getAll().subscribe(selections => {
       const selectionsWithSet = selections.map(s => new TagsSelection(s));
-      selectionsWithSet.push(this.profilService.getDefautSelection());
       this.selectionOptions = selectionsWithSet.map(selection => {
         return {label: selection.name, value: selection};
       });
+      if (this.selectionOptions.length !== 0) {
+        this.tagSelection = this.selectionOptions[0].value;
+      }
     });
   }
 

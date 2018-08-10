@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
@@ -18,11 +18,22 @@ import { TypesName } from '../TypesName';
 })
 export class HistorianTagTreeComponent extends BaseTagTreeComponent implements OnInit, OnChanges {
 
-  @Input() tagsSelection: TagsSelection;
+  private _tagsSelection: TagsSelection;
+  @Output() tagsSelectionChange = new EventEmitter<TagsSelection>();
 
   loading = false;
   treeNodes: TreeNode[];
   selectedNodes: TreeNode[];
+
+  @Input()
+  get tagsSelection(): TagsSelection {
+    return this._tagsSelection;
+  }
+
+  set tagsSelection(newVal: TagsSelection) {
+    this._tagsSelection = newVal;
+    this.tagsSelectionChange.emit(this._tagsSelection);
+  }
 
   constructor(private ngTreenodeService: NgTreenodeService,
               private tagService: TagHistorianService,
