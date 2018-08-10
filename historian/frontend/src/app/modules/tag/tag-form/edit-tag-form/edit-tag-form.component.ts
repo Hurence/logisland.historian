@@ -10,11 +10,11 @@ import { ConfirmationService } from 'primeng/api';
 import { BaseSingleTagForm } from '../BaseSingleTagForm';
 
 @Component({
-  selector: 'app-add-tag-form',
-  templateUrl: './add-tag-form.component.html',
-  styleUrls: ['./add-tag-form.component.css']
+  selector: 'app-edit-tag-form',
+  templateUrl: './edit-tag-form.component.html',
+  styleUrls: ['./edit-tag-form.component.css']
 })
-export class AddTagFormComponent extends BaseSingleTagForm implements OnInit {
+export class EditTagFormComponent extends BaseSingleTagForm implements OnInit {
 
   constructor(protected qcs: QuestionControlService,
               protected service: TagHistorianService,

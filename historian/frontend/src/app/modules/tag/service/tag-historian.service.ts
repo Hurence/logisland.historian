@@ -28,7 +28,6 @@ export class TagHistorianService implements IModelService<HistorianTag> {
     return this.http.get<HistorianTag[]>(`${this.tagsUrl}tags`)
       .pipe(
         map(tags => tags.map(t => new HistorianTag(t))),
-        catchError(this.help.handleError('getAll()', []))
       );
   }
 
@@ -64,7 +63,6 @@ export class TagHistorianService implements IModelService<HistorianTag> {
       ).pipe(
         map(tags => tags.map(t => new HistorianTag(t))),
         tap(tags => console.log(`found ${tags.length} historian tags from getQuery(${query})`)),
-        catchError(this.help.handleError(`getQuery(${query})`, []))
       );
     } else {
       return this.getAll();
@@ -75,9 +73,22 @@ export class TagHistorianService implements IModelService<HistorianTag> {
     return this.http.get<HistorianTag>(`${this.tagsUrl}tags/${encodeURIComponent(id)}`)
     .pipe(
       map(t => new HistorianTag(t)),
-      catchError(this.help.handleError(`get(${id})`))
     );
   }
+
+  getByNodeIdAndDatasourceId(nodeId: string, datasourceId: String): Observable<HistorianTag[]> {
+    return this.http.get<HistorianTag[]>(
+      `${this.tagsUrl}tags`,
+      {
+        params: {
+          fq : `node_id:"${nodeId}" AND datasource_id:"${datasourceId}"`
+        }
+      }
+    ).pipe(
+      map(tags => tags.map(t => new HistorianTag(t))),
+    );
+  }
+
   save(obj: HistorianTag, id: string): Observable<HistorianTag> {
     return this.createOrReplace(obj);
   }
@@ -170,9 +181,6 @@ export class TagHistorianService implements IModelService<HistorianTag> {
   }
 
   getTreeTag(): Observable<RestTreeNode[]> {
-    return this.http.get<RestTreeNode[]>(`${this.tagsUrl}tags/tree?limit=1`) // limit = 0 => solr facet only, return no tags
-    .pipe(
-      catchError(this.help.handleError('getTreeTag', []))
-    );
+    return this.http.get<RestTreeNode[]>(`${this.tagsUrl}tags/tree?limit=1`); // limit = 0 => solr facet only, return no tags
   }
 }
