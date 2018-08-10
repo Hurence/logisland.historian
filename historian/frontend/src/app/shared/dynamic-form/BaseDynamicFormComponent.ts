@@ -6,6 +6,7 @@ import { IModelService } from '../base-model-service';
 import { QuestionBase } from './question-base';
 import { QuestionControlService } from './question-control.service';
 import { isObject } from 'util';
+import { ConfirmationService } from 'primeng/api';
 
 
 export interface CanGetId {
@@ -19,8 +20,11 @@ export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements
   @Output() submitted = new EventEmitter<T>();
   form: FormGroup;
 
+  private DISCARD_CHANGE_MSG = 'Are you sure you want to reset form ?';
+
   constructor(protected qcs: QuestionControlService,
-              protected service: IModelService<B>) { }
+              protected service: IModelService<B>,
+              protected confirmationService: ConfirmationService) { }
 
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
@@ -45,6 +49,20 @@ export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements
         console.error(JSON.stringify(error));
       }
     );
+  }
+
+  reset() {
+    this.confirmationService.confirm({
+      message: this.DISCARD_CHANGE_MSG,
+      header: 'Confirmation',
+      rejectLabel: 'Cancel',
+      acceptLabel: 'Ok',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.rebuildForm();
+      },
+      reject: () => { }
+    });
   }
 
   /* Fill in form with current datasource properties */

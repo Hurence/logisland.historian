@@ -6,6 +6,7 @@ import { QuestionControlService } from '../../../../shared/dynamic-form/question
 import { HistorianTag } from '../../modele/HistorianTag';
 import { TagHistorianService } from '../../service/tag-historian.service';
 import { TagOpcService } from '../../service/tag-opc.service';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-add-tag-form',
@@ -33,8 +34,9 @@ export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, 
 
   constructor(protected qcs: QuestionControlService,
               protected service: TagHistorianService,
-              protected tagOpcService: TagOpcService) {
-    super(qcs, service);
+              protected tagOpcService: TagOpcService,
+              protected confirmationService: ConfirmationService) {
+    super(qcs, service, confirmationService);
     this.canSubmit = true;
   }
 

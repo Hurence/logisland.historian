@@ -4,7 +4,7 @@
         <div *ngFor="let question of questions" class="">
             <app-question [question]="question" [form]="form"></app-question>
         </div>
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center mb-2">
             <button class="btn btn-warning align-middle" type="button" [disabled]="!form.valid" (click)="onFetchMetaData()">Fetch Metadata</button>
             <p-progressSpinner *ngIf="loading" [style]="{width: '30px', height: '30px'}"
                                 strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
@@ -12,7 +12,8 @@
             <p-message *ngIf="canSubmit" severity="success" text="found node with id '{{this.form.value.node_id}}''"></p-message>
         </div>
         <div class="d-flex align-items-center">
-            <button class="btn btn-success" type="submit" [disabled]="!form.valid">Save</button>
+            <button type="button" (click)="reset()" class="btn btn-danger" [disabled]="form.pristine">Reset Form</button>
+            <button class="btn btn-success ml-2" type="submit" [disabled]="!form.valid">Save</button>
         </div>
     </form>
 </div>
