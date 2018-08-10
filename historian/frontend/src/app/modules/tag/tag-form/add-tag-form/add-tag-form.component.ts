@@ -27,7 +27,7 @@ export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, 
   //   ['description', { key: 'description', readonly: false}],
   // ]);
 
-  canSubmit = false;
+  displayFoundMsg = false;
   displayNotFoundMsg = false;
   nodeFoundMsd = 'RAS';
   loading = false;
@@ -37,7 +37,6 @@ export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, 
               protected tagOpcService: TagOpcService,
               protected confirmationService: ConfirmationService) {
     super(qcs, service, confirmationService);
-    this.canSubmit = true;
   }
 
   ngOnInit() {
@@ -65,7 +64,7 @@ export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, 
   }
 
   resetDisplay(): void {
-    // this.canSubmit = false;
+    this.displayFoundMsg = false;
     this.loading = false;
     this.displayNotFoundMsg = false;
     // Questions.modifyQuestions(this.questions, AddTagFormComponent.QUESTION_BEFORE_FETCHING_DATA);
@@ -80,19 +79,19 @@ export class AddTagFormComponent extends BaseDynamicFormComponent<HistorianTag, 
 
   private displayLoading(): void {
     this.displayNotFoundMsg = false;
-    // this.canSubmit = false;
+    this.displayFoundMsg = false;
     this.loading = true;
   }
 
   private displaySucess(): void {
     this.displayNotFoundMsg = false;
     this.loading = false;
-    // this.canSubmit = true;
+    this.displayFoundMsg = true;
   }
 
   private displayError(error: string): void {
     this.nodeFoundMsd = error;
-    // this.canSubmit = false;
+    this.displayFoundMsg = false;
     this.loading = false;
     this.displayNotFoundMsg = true;
   }
