@@ -24,4 +24,21 @@ services:
     ports:
       - '8080:8080'
     network_mode: bridge
-
+  logisland:
+      container_name: logisland
+      image: 'hurence/logisland:GH-404'
+      command: bin/logisland.sh --conf /conf/historian-remote.yaml
+      hostname: logisland
+      ports:
+        - '4050:4050'
+      volumes:
+        - ./conf/logisland:/conf
+      links:
+        # - zookeeper
+        # - kafka
+        # - elasticsearch
+        - chronix
+        - redis
+      network_mode: bridge
+      extra_hosts:
+        - "historian-backend:192.168.99.1"
