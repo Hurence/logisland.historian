@@ -74,7 +74,7 @@ export class TagFormComponent implements OnInit, OnChanges {
 
 
 
-  revert() { // TODO could be factorized
+  reset() { // TODO could be factorized
     this.confirmationService.confirm({
       message: this.DISCARD_CHANGE_MSG,
       header: 'Confirmation',

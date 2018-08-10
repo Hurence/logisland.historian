@@ -1,19 +1,20 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { TreeNode } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 
-import { IHistorianTag, HistorianTag } from '../../modele/HistorianTag';
+import { ArrayUtil } from '../../../../shared/array-util';
+import { Datasource, TagBrowsingMode } from '../../../datasource/Datasource';
+import { HistorianTag, IHistorianTag } from '../../modele/HistorianTag';
+import { OpcTag } from '../../modele/OpcTag';
 import { ITag, Tag } from '../../modele/tag';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
+import { TagHistorianService } from '../../service/tag-historian.service';
+import { TagOpcService } from '../../service/tag-opc.service';
 import { ITagFormInput, TagFormInput } from '../../tag-form/TagFormInput';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { TagHistorianService } from '../../service/tag-historian.service';
-import { TagUtils } from '../../modele/TagUtils';
-import { OpcTag } from '../../modele/OpcTag';
-import { Datasource, TagBrowsingMode } from '../../../datasource/Datasource';
-import { TagOpcService } from '../../service/tag-opc.service';
-import { ArrayUtil } from '../../../../shared/array-util';
+import { QuestionBase } from '../../../../shared/dynamic-form/question-base';
+import { QuestionService } from '../../../../shared/dynamic-form/question.service';
 
 @Component({
   selector: 'app-opc-tag-tree',
@@ -25,28 +26,26 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   @Input() withExpandAll?: boolean = true;
   @Input() withCollapseAll?: boolean = true;
   @Input() datasource: Datasource;
-  // tag detail props
-  tagClicked: ITag;
-  displayTagDetail = false;
-  // tag form dialog props
-  displayRegister = false;
-  tagsInputForForm: ITagFormInput[] = [];
-  tagFormTitle: string;
+
+  displayEdit = false;
+  selectedTag: ITag;
   // memory to update tree
   nodeForRegister: TreeNode;
+  tagEditQuestions: QuestionBase<any>[];
 
   constructor(private ngTreenodeService: NgTreenodeService,
               private messageService: MessageService,
               private tagOpcService: TagOpcService,
               private tagHistorianService: TagHistorianService,
-              private arrayUtil: ArrayUtil) {
+              private arrayUtil: ArrayUtil,
+              private questionService: QuestionService) {
                 super();
-                this.tagsInputForForm = [];
+                // this.tagsInputForForm = [];
                }
 
   ngOnInit() {
+    this.tagEditQuestions = this.questionService.getTagForm();
     this.loading = false;
-    this.updateTagFormTitle();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -61,6 +60,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
               { nodeId: this.datasource.findRootNodeId(), depth: 1 }
             ).subscribe(tags => {
               this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+              this.updateAlreadyRegistredTags(this.treeNodes);
             });
             break;
           case TagBrowsingMode.MANUAL:
@@ -73,9 +73,33 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
             break;
         }
         this.loading = false;
-        this.updateTagFormTitle();
       }
     }
+  }
+
+  /**
+   * For every tag node, look if it is already registred.
+   * If yes, then we fill tag with correponding data
+   * If not, do nothing.
+   */
+  private updateAlreadyRegistredTags(nodes: TreeNode[]): void {
+    nodes.forEach(n => {
+      if (n.type === TypesName.TAG_OPC) {
+        this.tagHistorianService.getByNodeIdAndDatasourceId(n.data.node_id, n.data.datasource_id).subscribe(
+          tags => {
+            switch (tags.length) {
+              case 1:
+                this.updateNodeWithHistorianTag(n, tags[0]);
+                break;
+              case 0:
+              default:
+                break;
+            }
+          },
+          error => { }
+        );
+      }
+    });
   }
 
   hasTagChildren(node: TreeNode): boolean {
@@ -99,26 +123,16 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     this.loading = true;
   }
 
-  private showRegisterDialog(tags: Tag[]): void {
-    this.tagsInputForForm = tags.map(tag => new TagFormInput(tag));
-    this.updateTagFormTitle();
-    this.displayRegister = true;
-  }
   /**
    *
    * @param node node that will be used when receiving saved tags to modify tags in tree
    *             Can be null, in this case tags will be considered as new tags and will be inserted in root.
    *             See method (onTagSaved)
    */
-  showRegisterDialogRecursive(node: TreeNode): void {
+  showEditDialog(node: TreeNode): void {
     this.nodeForRegister = node;
-    this.showRegisterDialog(this.getTagsFromNode(node));
-  }
-
-  showRegisterDialogToAddNewTag(tag: HistorianTag): void {
-    this.tagsInputForForm = [new TagFormInput(tag)];
-    this.updateTagFormTitle();
-    this.displayRegister = true;
+    this.selectedTag = node.data;
+    this.displayEdit = true;
   }
 
   private getTagsFromNode(node: TreeNode): Tag[] {
@@ -140,8 +154,8 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   }
 
   showDetailDialog(tag: ITag): void {
-    this.tagClicked = tag;
-    this.displayTagDetail = true;
+    this.selectedTag = tag;
+    // this.displayTagDetail = true;
   }
 
   deleteTags(node: TreeNode): void {
@@ -200,13 +214,13 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
   private forceToggleEnabled(enabled: boolean, node: TreeNode): void {
     node.data.enabled = enabled;
     this.tagHistorianService.createOrReplace(new HistorianTag(node.data)).subscribe(t => {
-      this.updateNodeAfterSavingTag(node, t);
+      this.updateNodeWithHistorianTag(node, t);
     });
   }
 
   toggleEnabled(node: TreeNode): void {
     this.tagHistorianService.createOrReplace(new HistorianTag(node.data)).subscribe(t => {
-      this.updateNodeAfterSavingTag(node, t);
+      this.updateNodeWithHistorianTag(node, t);
     });
   }
 
@@ -217,7 +231,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
    * @param tag saved in form by user
    */
   onTagSaved(tag: HistorianTag): void {
-    this.displayRegister = false;
+    this.displayEdit = false;
     if (this.nodeForRegister === null) {
       this.addNodeAfterSavingTag(this.treeNodes, tag);
     } else {
@@ -229,7 +243,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
           detail: `Tag id was '${tag.id}'`,
         });
       } else {
-        this.updateNodeAfterSavingTag(nodeToUpdate, tag);
+        this.updateNodeWithHistorianTag(nodeToUpdate, tag);
       }
     }
   }
@@ -243,7 +257,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
     this.addNodeAfterSavingTag(this.treeNodes, tag);
   }
 
-  private updateNodeAfterSavingTag(node: TreeNode, tag: HistorianTag): void {
+  private updateNodeWithHistorianTag(node: TreeNode, tag: HistorianTag): void {
     Object.assign(node.data, tag);
     if (node.type === TypesName.TAG_OPC) {
       node.data = new HistorianTag(node.data);
@@ -299,6 +313,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
       this.loading = true;
       this.tagOpcService.browseTags(this.datasource.id, { nodeId: node.data.node_id , depth: 1 }).subscribe(tags => {
         const children = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+        this.updateAlreadyRegistredTags(children);
         if (children.length === 0) {
           node.children = [this.ngTreenodeService.getEmptyNode()];
         } else {
@@ -309,15 +324,5 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
       return true;
     }
     return false;
-  }
-
-  private updateTagFormTitle() {
-    if (this.tagsInputForForm.length === 1) {
-      this.tagFormTitle = 'Save this tag';
-    } else if (this.tagsInputForForm.length !== 0) {
-      this.tagFormTitle = `Save those ${this.tagsInputForForm.length} tags`;
-    } else { // should not happen
-      this.tagFormTitle = 'No Tag Selected !';
-    }
   }
 }

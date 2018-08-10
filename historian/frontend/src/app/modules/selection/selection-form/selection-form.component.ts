@@ -4,6 +4,7 @@ import { BaseDynamicFormComponent } from '../../../shared/dynamic-form/BaseDynam
 import { QuestionControlService } from '../../../shared/dynamic-form/question-control.service';
 import { TagsSelection, TagsSelectionArray } from '../Selection';
 import { SelectionService } from '../selection.service';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-selection-form',
@@ -13,8 +14,9 @@ import { SelectionService } from '../selection.service';
 export class SelectionFormComponent extends BaseDynamicFormComponent<TagsSelection, TagsSelectionArray> {
 
   constructor(protected qcs: QuestionControlService,
-              protected service: SelectionService) {
-    super(qcs, service);
+              protected service: SelectionService,
+              protected confirmationService: ConfirmationService) {
+    super(qcs, service, confirmationService);
   }
 
   protected create(item: TagsSelection): TagsSelectionArray {

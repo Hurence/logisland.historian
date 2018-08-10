@@ -4,8 +4,7 @@
   </div>
 
   <div class="form-row">
-    <button type="button" (click)="revert()" class="btn btn-danger" [disabled]="!form.valid">Cancel</button>
-
-    <button class="btn btn-success" type="submit" [disabled]="!form.valid">{{submitBtnMsg}}</button>
+    <button type="button" (click)="reset()" class="btn btn-danger" [disabled]="form.pristine">Reset Form</button>
+    <button class="btn btn-success ml-2" type="submit" [disabled]="!form.valid">{{submitBtnMsg}}</button>
   </div>
 </form>

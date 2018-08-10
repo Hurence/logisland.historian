@@ -9,6 +9,7 @@ import { TagListComponent } from './tag-dataview/tag-list/tag-list.component';
 import { HistorianTagTreeComponent } from './tag-tree/historian-tag-tree/historian-tag-tree.component';
 import { OpcTagTreeComponent } from './tag-tree/opc-tag-tree/opc-tag-tree.component';
 import { AddTagFormComponent } from './tag-form/add-tag-form/add-tag-form.component';
+import { EditTagFormComponent } from './tag-form/edit-tag-form/edit-tag-form.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { AddTagFormComponent } from './tag-form/add-tag-form/add-tag-form.compon
     HistorianTagTreeComponent,
     OpcTagTreeComponent,
     AddTagFormComponent,
+    EditTagFormComponent,
   ],
   providers: [],
 })

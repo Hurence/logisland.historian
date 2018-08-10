@@ -196,8 +196,8 @@
 
   </div>
   <div class="mx-auto" style="width: 20rem;">
-    <button type="button" (click)="revert()" class="btn btn-danger" [disabled]="!dsForm.valid"
-            i18n="cancel button|revert all changes not saved for datasource">Cancel</button>
+    <button type="button" (click)="revert()" class="btn btn-danger" [disabled]="dsForm.pristine"
+            i18n="cancel button|revert all changes not saved for datasource">Reset Form</button>
 
     <button type="submit" class="btn btn-success ml-2" [disabled]="!dsForm.valid"
             i18n="submit button|save all change to datasource or save new datasource">{{submitBtnMsg}}</button>
