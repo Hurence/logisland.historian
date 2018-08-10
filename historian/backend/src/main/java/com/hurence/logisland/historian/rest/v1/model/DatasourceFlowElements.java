@@ -1,11 +1,17 @@
 package com.hurence.logisland.historian.rest.v1.model;
 
+import com.hurence.logisland.historian.config.bean.OpcConfigurationBean;
 import com.hurence.logisland.historian.service.TagsApiService;
 import org.threeten.bp.OffsetDateTime;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.UncheckedIOException;
+import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class DatasourceFlowElements {
 
@@ -13,13 +19,16 @@ public class DatasourceFlowElements {
                                   String chronixServiceName,
                                   String dataflowName,
                                   String consoleServiceName,
-                                  TagsApiService tagsApiService) {
+                                  TagsApiService tagsApiService,
+                                  OpcConfigurationBean opcConfigurationBean) {
+        this.opcConfigurationBean = opcConfigurationBean;
+        List<Tag> tagList = tagsApiService.getAllEnabledTagsFromDatasource(datasource.getId())
+                .stream().filter(Tag::isEnabled).collect(Collectors.toList());
 
-        Iterator<Tag> it = tagsApiService.getAllEnabledTagsFromDatasource(datasource.getId()).iterator();
-        if (it.hasNext()) {
-            String opcConfig = buildOpcConfig(datasource, it);
+        if (!tagList.isEmpty()) {
+            String opcConfig = buildOpcConfig(datasource, tagList);
             String serviceName = dataflowName + "_" + datasource.getId();
-            this.service = this.buildDatasourceService(serviceName, opcConfig);
+            this.service = this.buildDatasourceService(serviceName, datasource.getDatasourceType(), opcConfig);
             this.stream = this.buildDatasourceStream(datasource.getId(),
                     chronixServiceName,
                     service.getName(),
@@ -34,6 +43,7 @@ public class DatasourceFlowElements {
 
     private final Service service;
     private final Stream stream;
+    private final OpcConfigurationBean opcConfigurationBean;
 
     public Service getService() {
         return this.service;
@@ -48,46 +58,70 @@ public class DatasourceFlowElements {
     }
 
 
-    private String buildOpcConfig(Datasource datasource,
-                                  Iterator<Tag> tags) {
-
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append("clsId=");
-        strBuilder.append(datasource.getClsid());
-        strBuilder.append("\n");
-        strBuilder.append("domain=");
-        strBuilder.append(datasource.getDomain());
-        strBuilder.append("\n");
-        strBuilder.append("password=");
-        strBuilder.append(datasource.getPassword());
-        strBuilder.append("\n");
-        strBuilder.append("user=");
-        strBuilder.append(datasource.getUser());
-        strBuilder.append("\n");
-        strBuilder.append("defaultRefreshPeriodMillis=");
-        strBuilder.append("1000");
-        strBuilder.append("\n");
-        strBuilder.append("defaultSocketTimeoutMillis=");
-        strBuilder.append("2000");
-        strBuilder.append("\n");
-        strBuilder.append("host=");
-        strBuilder.append(datasource.getHost());
-        strBuilder.append("\n");
-        strBuilder.append("tags=");
-        Tag tag;
-        while (tags.hasNext()) {
-            tag = tags.next();
-            strBuilder.append(tag.getNodeId());
-            if (tag.getUpdateRate() != null) {
-                strBuilder.append(":");
-                strBuilder.append(tag.getUpdateRate());
-            }
-            if (tags.hasNext()) strBuilder.append(",");
+    private Properties generateOpcDaProperties(Datasource datasource, List<Tag> tags) {
+        Properties ret = new Properties();
+        if (datasource.getClsid() != null) {
+            ret.put("server.clsId", datasource.getClsid());
         }
-        return strBuilder.toString();
+        if (datasource.getProgId() != null) {
+            ret.put("server.progId", datasource.getProgId());
+        }
+        ret.put("auth.ntlm.user", datasource.getUser());
+        ret.put("auth.ntlm.password", datasource.getPassword());
+        ret.put("auth.ntlm.domain", datasource.getDomain());
+        ret.put("session.refreshPeriodMillis", Long.toString(
+                Math.max(opcConfigurationBean.getDa().getMinimumSessionGroupRefreshRate().toMillis(),
+                        tags.stream().mapToLong(Tag::getUpdateRate).min().orElse(0))));
+        ret.put("server.uri", "opc.da://" + datasource.getHost());
+
+        return ret;
     }
 
-    private Service buildDatasourceService(String serviceName,
+    private Properties generateOpcUaProperties(Datasource datasource) {
+        Properties ret = new Properties();
+        ret.put("session.publicationRate", opcConfigurationBean.getUa().getSessionPublicationRate().toString());
+        if (datasource.getUser() != null) {
+            ret.put("auth.basic.user", datasource.getUser());
+            ret.put("auth.basic.password", datasource.getPassword());
+        }
+        ret.put("server.uri", datasource.getHost());
+        return ret;
+    }
+
+    private String buildOpcConfig(Datasource datasource, List<Tag> tags) {
+        Properties properties = null;
+        switch (datasource.getDatasourceType()) {
+            case OPC_UA:
+                properties = generateOpcUaProperties(datasource);
+                break;
+            case OPC_DA:
+                properties = generateOpcDaProperties(datasource, tags);
+                break;
+            default:
+                throw new IllegalStateException("Unhandled datasource type " + datasource.getDatasourceType());
+        }
+        properties.put("connection.socketTimeoutMillis", Long.toString(opcConfigurationBean.getDefaultSocketTimeout().toMillis()));
+        properties.put("tags.id", tags.stream().map(Tag::getNodeId).collect(Collectors.joining(",")));
+        properties.put("tags.sampling.rate", tags.stream().map(Tag::getUpdateRate)
+                .map(Duration::ofMillis)
+                .map(Duration::toString)
+                .collect(Collectors.joining(",")));
+        properties.put("tags.stream.mode", tags.stream()
+                .map(t -> Tag.PollingModeEnum.POLLING.equals(t.getPollingMode()) ? "POLL" : "SUBSCRIBE")
+                .collect(Collectors.joining(",")));
+
+
+        try {
+            StringWriter stringWriter = new StringWriter();
+            properties.store(stringWriter, null);
+            return stringWriter.toString();
+
+        } catch (IOException e) {
+            throw new UncheckedIOException("Unable to generate properties for datasource " + datasource.getId(), e);
+        }
+    }
+
+    private Service buildDatasourceService(String serviceName, Datasource.DatasourceTypeEnum datasourceType,
                                            String opcConfig) {
         Service service = new Service();
         service.setName(serviceName);
@@ -98,7 +132,9 @@ public class DatasourceFlowElements {
                 new Property().setKey("kc.data.key.converter.properties").setValue("schemas.enable=false"),
                 new Property().setKey("kc.data.key.converter").setValue("org.apache.kafka.connect.storage.StringConverter"),
                 new Property().setKey("kc.worker.tasks.max").setValue("1"),
-                new Property().setKey("kc.connector.class").setValue("com.hurence.logisland.connect.opc.da.OpcDaSourceConnector"),
+                new Property().setKey("kc.connector.class").setValue(
+                        Datasource.DatasourceTypeEnum.OPC_DA.equals(datasourceType) ? "com.hurence.logisland.connect.opc.da.OpcDaSourceConnector" :
+                                "com.hurence.logisland.connect.opc.ua.OpcUaSourceConnector"),
                 new Property().setKey("kc.connector.offset.backing.store").setValue("memory"),
                 new Property().setKey("kc.connector.offset.backing.store.properties").setValue("foo=bar"),
                 new Property()
@@ -117,8 +153,8 @@ public class DatasourceFlowElements {
         stream.setName(streamName);
         stream.setComponent("com.hurence.logisland.stream.spark.structured.StructuredStream");
         stream.setConfig(DataFlowUtil.buildProperties(
-                new Property().setKey("read.topics").setValue("logisland_raw"),
-                new Property().setKey("write.topics").setValue("logisland_events"),
+                new Property().setKey("read.topics").setValue("none"),
+                new Property().setKey("write.topics").setValue("none"),
                 new Property().setKey("read.topics.serializer").setValue("com.hurence.logisland.serializer.KryoSerializer"),
                 new Property().setKey("read.topics.client.service").setValue(datasourceServiceName),
                 new Property().setKey("write.topics.client.service").setValue(consoleServiceName),
@@ -141,7 +177,9 @@ public class DatasourceFlowElements {
     private List<Processor> buildDatasourceProcessors(String chronixServiceName, String dataourceId) {
         List<Processor> processors = new ArrayList<>();
         processors.add(DataFlowUtil.buildFlattenProcessor());
-        processors.add(DataFlowUtil.buildAddDatasourceIdProcessor(dataourceId));
+        processors.add(DataFlowUtil.buildAddFields(dataourceId));
+        processors.add(DataFlowUtil.buildRenameFields());
+        processors.add(DataFlowUtil.buildRemoveFields());
 //        processors.add(DataFlowUtil.buildAddDebugProcessor());
         processors.add(DataFlowUtil.buildSendToChronixProcessor(chronixServiceName));
         return processors;

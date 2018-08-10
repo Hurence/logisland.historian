@@ -50,34 +50,25 @@ keycloak:
   cors-exposed-headers: "*"
 
 
-connections:
-  opc-da:
-    cls-id: F8582CF2-88FB-11D0-B850-00C0F0104305
-    domain: OPC-9167C0D9342
-    password: opc
-    user: OPC
-    refresh-period-millis: 100
-    timeout-millis: 2000
-    host: 192.168.56.101
 
-solr:
-  core: chronix
-  host: chronix
-  port: 8983
 management:
-
   endpoints:
     web:
       exposure:
         include: info, health, metrics
+      cors:
+        exposed-headers:
   endpoint:
     health:
       cache:
         time-to-live: 10s
       show-details: always
-
-
-
-
-
-
+logisland:
+  chronix:
+    batch-size: 500
+    default-collection: chronix
+    connection-url: ${spring.data.solr.host}
+    flush-interval: PT5S
+    group-by-fields:
+      - tag_id
+      - quality

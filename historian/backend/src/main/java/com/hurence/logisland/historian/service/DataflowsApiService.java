@@ -16,6 +16,7 @@
  */
 package com.hurence.logisland.historian.service;
 
+import com.hurence.logisland.historian.config.bean.LogislandConfigurationBean;
 import com.hurence.logisland.historian.repository.SolrDataflowRepository;
 import com.hurence.logisland.historian.rest.v1.model.*;
 import org.slf4j.Logger;
@@ -38,6 +39,9 @@ public class DataflowsApiService {
 
     @Resource
     private SolrDataflowRepository repository;
+
+    @Autowired
+    private LogislandConfigurationBean logislandConfigurationBean;
 
     private DatasourcesApiService datasourcesApiService;
     private TagsApiService tagsApiService;
@@ -82,18 +86,19 @@ public class DataflowsApiService {
                 DataFlowUtil.buildConsoleService(opcDataflowName);
         services.add(console);
         com.hurence.logisland.historian.rest.v1.model.Service chronix =
-                DataFlowUtil.buildChronixService(opcDataflowName);
+                DataFlowUtil.buildChronixService(opcDataflowName, logislandConfigurationBean.getChronix());
         services.add(chronix);
 
         // Streams
         List<Stream> streams = new ArrayList<>();
-        for (Datasource ds: datasources) {
-            DatasourceFlowElements dsElem = new DatasourceFlowElements(
-                    ds, chronix.getName(), opcDataflowName, console.getName(), tagsApiService
-            );
+        for (Datasource ds : datasources) {
+            DatasourceFlowElements dsElem = new DatasourceFlowElements(ds, chronix.getName(), opcDataflowName,
+                    console.getName(), tagsApiService, logislandConfigurationBean.getOpc());
+            
             if (dsElem.isActive()) {
                 if (dsElem.getService() != null) services.add(dsElem.getService());
-                if (dsElem.getStream() != null) streams.add(dsElem.getStream());;
+                if (dsElem.getStream() != null) streams.add(dsElem.getStream());
+                ;
             }
         }
         df.setServices(services);

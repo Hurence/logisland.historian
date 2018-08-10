@@ -18,6 +18,7 @@
 package com.hurence.logisland.historian.service.health;
 
 import com.hurence.logisland.historian.rest.v1.model.Datasource;
+import com.hurence.opc.auth.NtlmCredentials;
 import com.hurence.opc.auth.UsernamePasswordCredentials;
 import com.hurence.opc.da.OpcDaConnectionProfile;
 import com.hurence.opc.da.OpcDaOperations;
@@ -45,8 +46,8 @@ public class OpcDaDatasourceHealthChecker implements DatasourceHealthChecker {
             connectionProfile = new OpcDaConnectionProfile()
                     .withComClsId(datasource.getClsid())
                     .withComProgId(datasource.getProgId())
-                    .withDomain(datasource.getDomain())
-                    .withCredentials(new UsernamePasswordCredentials()
+                    .withCredentials(new NtlmCredentials()
+                            .withDomain(datasource.getDomain())
                             .withUser(datasource.getUser())
                             .withPassword(datasource.getPassword()))
                     .withConnectionUri(new URI(datasource.getHost())) // TODO should be getUri

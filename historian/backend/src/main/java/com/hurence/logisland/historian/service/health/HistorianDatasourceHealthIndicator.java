@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  *
  * @author amarziali
  */
-@Service
+
 public class HistorianDatasourceHealthIndicator extends AbstractHealthIndicator {
 
     private final static Logger logger = LoggerFactory.getLogger(HistorianDatasourceHealthIndicator.class);

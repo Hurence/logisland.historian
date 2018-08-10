@@ -6,7 +6,7 @@ services:
     environment:
       - JAVA_MEMORY=4g
     hostname: chronix
-    image: 'hurence/historian-chronix:0.3.0'
+    image: 'hurence/historian-chronix:0.4.4'
     ports:
       - '8983:8983'
     network_mode: bridge
@@ -24,6 +24,4 @@ services:
     ports:
       - '8080:8080'
     network_mode: bridge
-    volumes:
-       - ./frontend/keycloak/themes/logisland.historian/:/opt/jboss/keycloak/themes/logisland.historian
-       - ./frontend/keycloak/themes/base.logisland.historian/:/opt/jboss/keycloak/themes/base.logisland.historian
+

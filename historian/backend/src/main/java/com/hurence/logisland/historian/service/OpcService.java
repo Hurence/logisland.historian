@@ -23,7 +23,7 @@ import com.hurence.logisland.historian.rest.v1.model.Datasource;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.opc.OpcObjectInfo;
 import com.hurence.opc.OpcTagInfo;
-import com.hurence.opc.auth.UsernamePasswordCredentials;
+import com.hurence.opc.auth.NtlmCredentials;
 import com.hurence.opc.da.OpcDaConnectionProfile;
 import com.hurence.opc.ua.OpcUaConnectionProfile;
 import org.slf4j.Logger;
@@ -111,8 +111,9 @@ public class OpcService {
 
     /**
      * Fetch metadata from a tag in a certain datasource.
+     *
      * @param datasourceId the id of the historian datasource.
-     * @param tag the tag if
+     * @param tag          the tag if
      * @return the {@link Tag} information.
      */
     public Tag fetchMetadata(String datasourceId, String tag) {
@@ -132,8 +133,6 @@ public class OpcService {
         }
         return convertOpcTagInfoToHistorianTag(info, null, datasource);
     }
-
-
 
 
     /**
@@ -162,8 +161,8 @@ public class OpcService {
             return new OpcDaConnectionProfile()
                     .withComClsId(datasource.getClsid())
                     .withComProgId(datasource.getProgId())
-                    .withDomain(datasource.getDomain())
-                    .withCredentials(new UsernamePasswordCredentials()
+                    .withCredentials(new NtlmCredentials()
+                            .withDomain(datasource.getDomain())
                             .withUser(datasource.getUser())
                             .withPassword(datasource.getPassword()))
                     .withConnectionUri(new URI("opc.da://" + datasource.getHost()))
