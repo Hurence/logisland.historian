@@ -61,7 +61,7 @@ public final class DataFlowUtil {
                 new Property().setKey("conflict.resolution.policy").setValue("overwrite_existing"),
                 new Property().setKey("datasource_id").setValue(datasourceId),
                 new Property().setKey("record_name").setValue("${tag_id}"),
-                new Property().setKey("record_type").setValue("hurence_historian")
+                new Property().setKey("record_type").setValue("metric")
         ));
         return proc;
     }
