@@ -1126,22 +1126,22 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   background: #186ba0;
   color: #ffffff; }
 
-  /* historian added */
-  #historian-tree .col-auto{
-    margin-left: 0px;
-    margin-right: 35px;
-  }
-#historian-tree .ui-tree .ui-treenode-label{
-  vertical-align:initial !important;
+/* historian added */
+#historian-opc-tag-tree .col-auto{
+  margin-left: 0px;
+  margin-right: 35px;
 }
-#historian-tree .ui-widget-content .ui-button,#historian-tree .ui-widget.ui-button, #historian-tree .ui-button {
+#historian-opc-tag-tree .ui-tree .ui-treenode-label{
+  vertical-align:initial !important;  
+}
+#historian-opc-tag-tree .ui-widget-content .ui-button,#historian-opc-tag-tree .ui-widget.ui-button, #historian-opc-tag-tree .ui-button {
   border: 0px solid #2399e5;
   color: #000000;
   background: transparent;
   transition: background-color .2s;
 }
 
-#historian-tree .ui-widget-header .ui-button:enabled:hover,#historian-tree .ui-widget-header .ui-button:focus,#historian-tree .ui-widget-content .ui-button:enabled:hover,#historian-tree .ui-widget-content .ui-button:focus,#historian-tree .ui-widget.ui-button:enabled:hover,#historian-tree .ui-widget.ui-button:focus,#historian-tree .ui-button:enabled:hover,#historian-tree .ui-button:focus {
+#historian-opc-tag-tree .ui-widget-header .ui-button:enabled:hover,#historian-opc-tag-tree .ui-widget-header .ui-button:focus,#historian-opc-tag-tree .ui-widget-content .ui-button:enabled:hover,#historian-opc-tag-tree .ui-widget-content .ui-button:focus,#historian-opc-tag-tree .ui-widget.ui-button:enabled:hover,#historian-opc-tag-tree .ui-widget.ui-button:focus,#historian-opc-tag-tree .ui-button:enabled:hover,#historian-opc-tag-tree .ui-button:focus {
   border: 0px solid #1f89ce;
   background: transparent;
   outline: 0 none;
@@ -1188,7 +1188,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 /* tree */
 .ui-tree {
   width: 100%;
-  min-width: 400px;
+  min-width: 400px;  
 }
 .ui-treenode-label {
   width: 100%;
