@@ -22,6 +22,7 @@ export class ProfilService implements OnDestroy {
   private changeSelections: BehaviorSubject<TagsSelectionEnriched>;
   private addTagToSelection = new Subject<IHistorianTag>();
   private removeTagToSelection = new Subject<IHistorianTag>();
+  private emptySelection = new TagsSelection({tagIds: [], name: 'no selection selected'});
 
   get currentTagsSelection(): TagsSelection {
     return this._currentTagsSelection;
@@ -34,7 +35,7 @@ export class ProfilService implements OnDestroy {
   constructor(private tagService: TagHistorianService) {
 
     this.changeSelections = new BehaviorSubject<TagsSelectionEnriched>({
-      selection: null,
+      selection: this.emptySelection,
       tags: []
     });
     this.changeSelectionSubsrciption = this.changeSelections.pipe(
@@ -60,6 +61,11 @@ export class ProfilService implements OnDestroy {
           selection: selection,
           tags: tags
         });
+      });
+    } else {
+      this.changeSelections.next({
+        selection: this.emptySelection,
+        tags: []
       });
     }
   }
