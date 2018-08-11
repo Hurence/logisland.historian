@@ -38,10 +38,18 @@
           </div> -->
           <div class="row">
             <div class="col-12 small-column">
-              <button type="button" class="float-right ui-button-text ui-button ui-widget ui-state-default ui-corner-all" 
-                      (click)="onClickAddTag()" [disabled]="isAddTagDisabled(selectedDatasource)">
-                <i class="fa fa-plus" aria-hidden="true"></i>Add new tag
-              </button>
+              <div class="d-flex align-items-center">
+                <button type="button" class="ui-button-text ui-button ui-widget ui-state-default ui-corner-all"
+                    (click)="onClickAddTag()" [disabled]="isAddTagDisabled(selectedDatasource)">
+                  <i class="fa fa-plus" aria-hidden="true"></i>Add new tag
+                </button>
+                <button type="button" class="btn btn-warning ml-2"
+                      (click)="generateConfiguration()" [disabled]="!isApplyBtnEnabled">
+                  Apply changes
+                </button>
+                <p-progressSpinner *ngIf="!isApplyBtnEnabled" [style]="{width: '30px', height: '30px'}"
+                                strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
+              </div>
             </div>
             <div class="col-12 datasource-detail-content h-100">
               <app-opc-tag-tree [datasource]="selectedDatasource"
