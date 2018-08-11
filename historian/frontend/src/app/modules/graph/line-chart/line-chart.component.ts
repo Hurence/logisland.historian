@@ -22,6 +22,9 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
   tags: IHistorianTag[];
   @Input() refreshRate: number;
   @Input() timeRange: TimeRangeFilter;
+  private colorsForMetrics: Map<string, string> = new Map();
+  private colors: string[] = ['#d9080d','#6aba15','#241692','#e23eba',
+  '#7e461f','#7d30b2','#f5cb82','#fd3e6f','#d7e206','#b6cdce','#4bc0c0'];
 
 
   constructor(private measuresService: MeasuresService,
@@ -133,12 +136,18 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
         y: m.values[index]
       };
     });
+    if (!this.colorsForMetrics.has(m.name)) {
+      this.colorsForMetrics.set(m.name, this.getRandomColor())
+    }
     return  {
       label: m.name,
       data: timeSerie,
       fill: false,
-      borderColor: '#4bc0c0'
+      borderColor: this.colorsForMetrics.get(m.name)
     };
+  }
+  private getRandomColor(): string {
+    return this.colors[Math.floor(Math.random()*this.colors.length)];
   }
 
   private buildTagMeasureRequest(tag: IHistorianTag): MeasuresRequest {
