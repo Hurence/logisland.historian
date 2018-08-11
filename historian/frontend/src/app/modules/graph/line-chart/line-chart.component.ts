@@ -23,8 +23,8 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
   @Input() refreshRate: number;
   @Input() timeRange: TimeRangeFilter;
   private colorsForMetrics: Map<string, string> = new Map();
-  private colors: string[] = ['#d9080d','#6aba15','#241692','#e23eba',
-  '#7e461f','#7d30b2','#f5cb82','#fd3e6f','#d7e206','#b6cdce','#4bc0c0'];
+  private colors: string[] = ['#d9080d', '#6aba15', '#241692', '#e23eba',
+  '#7e461f', '#7d30b2', '#f5cb82', '#fd3e6f', '#d7e206', '#b6cdce', '#4bc0c0'];
 
 
   constructor(private measuresService: MeasuresService,
@@ -73,13 +73,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
     super.ngOnInit();
     this.changeSelectionSubscription = this.profilService.getSelectionPublisher().subscribe(newSelection => {
       this.tags = newSelection.tags;
-      this.tags.forEach(tag => {
-        const request = this.buildTagMeasureRequest(tag);
-        this.measuresService.get(request).subscribe(m => {
-          this.data.datasets.push(this.convertMeasureToDataset(m));
-          this.redrawGraph();
-        });
-      });
+      this.updateGraphData();
     });
     this.addTagSubscription = this.profilService.getAddTagPublisher().subscribe(tag => {
       this.tags.push(tag);
@@ -114,6 +108,9 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
         this.redrawGraph();
       });
     });
+    if (this.tags.length === 0) {
+      this.redrawGraph();
+    }
   }
 
   redrawGraph() {
@@ -137,7 +134,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
       };
     });
     if (!this.colorsForMetrics.has(m.name)) {
-      this.colorsForMetrics.set(m.name, this.getRandomColor())
+      this.colorsForMetrics.set(m.name, this.getRandomColor());
     }
     return  {
       label: m.name,
@@ -147,7 +144,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
     };
   }
   private getRandomColor(): string {
-    return this.colors[Math.floor(Math.random()*this.colors.length)];
+    return this.colors[Math.floor(Math.random() * this.colors.length)];
   }
 
   private buildTagMeasureRequest(tag: IHistorianTag): MeasuresRequest {

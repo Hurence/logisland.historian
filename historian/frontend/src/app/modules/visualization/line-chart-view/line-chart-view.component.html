@@ -5,7 +5,7 @@
       </p-header>
       <div class="ui-g">
         <div class='ui-xl-6 ui-md-6 ui-sm-12'>
-            <app-tags-selection-selection [(tagSelection)]="this.profilService.currentTagsSelection"></app-tags-selection-selection>
+            <app-tags-selection-selection (tagSelectionChange)="onSelectionChanged($event)"></app-tags-selection-selection>
         </div>
         <div class='ui-xl-6 ui-md-6 ui-sm-12'>
             <app-refresh-rate-selection [(refreshRate)]="refreshRate"></app-refresh-rate-selection>

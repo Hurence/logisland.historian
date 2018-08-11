@@ -2,14 +2,13 @@
 <p-dropdown [options]="selectionOptions"  placeholder="please create a selection" 
         [(ngModel)]="tagSelection"
         [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>        
-<button type="button" (click)="this.profilService.showDialogTagManagement()" class="btn btn-info btn-tag-selection">
+<button type="button" (click)="showDialogTagManagement()" class="btn btn-info btn-tag-selection">
   ...
 </button>
-<p-dialog *ngIf="this.profilService.displayTagManagement" [(visible)]="this.profilService.displayTagManagement" [resizable]="true">
+<p-dialog [(visible)]="displayTagManagement" [resizable]="true">
     <p-header>
         Manage your selection
-    </p-header>
-    <!-- [(tagSelection)]="this.profilService.currentTagsSelection" -->
+    </p-header>    
     <app-selection-dashboard [(tagSelection)]="tagSelection" [(selectionOptions)]="selectionOptions"></app-selection-dashboard>
     <p-footer>
     </p-footer>

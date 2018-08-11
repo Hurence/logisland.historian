@@ -37,8 +37,8 @@ export class SelectionDashboardComponent implements OnInit {
   }
 
   set tagSelection(newVal: TagsSelection) {
+    console.log(`SELECTION_DASHBORD set selection`);
     this._tagSelection = newVal;
-    this.tagSelectionChange.emit(this._tagSelection);
   }
 
   @Input()
@@ -51,14 +51,12 @@ export class SelectionDashboardComponent implements OnInit {
     this.selectionOptionsChange.emit(this._selectionOptions);
   }
 
-  constructor(public profilService: ProfilService,
-              private confirmationService: ConfirmationService,
+  constructor(private confirmationService: ConfirmationService,
               private selectionService: SelectionService) {}
 
   ngOnInit() {
     this.selectionQuestions = this.getMyQuestions();
     this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
-    this.actualizeListOfTagsSelection(this.tagSelection);
   }
 
   showDialog() {
@@ -79,22 +77,22 @@ export class SelectionDashboardComponent implements OnInit {
         if (selectedSelection) {
           const optionSelected = this.selectionOptions.find(s => s.value.name === selectedSelection.name);
           if (optionSelected) {
-            this.tagSelection = optionSelected.value;
+            this.tagSelectionChange.emit(optionSelected.value);
           } else {
-            this.tagSelection = this.selectionOptions[0].value;
+            this.tagSelectionChange.emit(this.selectionOptions[0].value);
           }
         } else {
-          this.tagSelection = this.selectionOptions[0].value;
+          this.tagSelectionChange.emit(this.selectionOptions[0].value);
         }
       } else {
-        this.tagSelection = null;
+        this.tagSelectionChange.emit(null);
       }
     });
   }
 
   onCreated(selection: TagsSelection) {
     this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
-    this.profilService.currentTagsSelection = selection;
+    this.tagSelection = selection;
     this.actualizeListOfTagsSelection(this.tagSelection);
     this.closeDialog();
   }
@@ -122,6 +120,11 @@ export class SelectionDashboardComponent implements OnInit {
       },
       reject: () => { }
     });
+  }
+
+  onSelectionChange(event) {
+    // console.log(`SELECTION_DASHBOARD dropdown change`);
+    this.tagSelectionChange.emit(event.value);
   }
 
   private getMyQuestions(): QuestionBase<any>[]  {

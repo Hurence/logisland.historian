@@ -1,5 +1,4 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { ProfilService } from '../../../profil/profil.service';
 import { SelectItem } from 'primeng/api';
 import { TagsSelection } from '../Selection';
 import { SelectionService } from '../selection.service';
@@ -14,16 +13,17 @@ export class TagsSelectionSelectionComponent implements OnInit {
   selectionOptions: SelectItem[];
   private _tagSelection: TagsSelection;
   @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
+  displayTagManagement: boolean = false;
 
-  constructor(private selectionService: SelectionService,
-              public profilService: ProfilService) { }
 
-  @Input()
+  constructor(private selectionService: SelectionService) { }
+
   get tagSelection(): TagsSelection {
     return this._tagSelection;
   }
 
   set tagSelection(newVal: TagsSelection) {
+    // console.log(`SELECTION_SELECTION set selection`);
     this._tagSelection = newVal;
     this.tagSelectionChange.emit(this._tagSelection);
   }
@@ -35,8 +35,12 @@ export class TagsSelectionSelectionComponent implements OnInit {
         return {label: selection.name, value: selection};
       });
       if (this.selectionOptions.length !== 0) {
-        this.tagSelection = this.selectionOptions[0].value;
+        this._tagSelection = this.selectionOptions[0].value;
       }
     });
+  }
+
+  showDialogTagManagement() {
+    this.displayTagManagement = true;
   }
 }

@@ -2,8 +2,9 @@
 <div class="ui-g-12">
     <!-- Select selection -->
     <p-dropdown [options]="selectionOptions"  placeholder="please create a selection"
-        [(ngModel)]="tagSelection"
-        [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
+        [ngModel]="tagSelection"
+        [autoWidth]="false" [style]="{'min-width':'15em'}"
+        (onChange)="onSelectionChange($event)"></p-dropdown>
 
     <button type="button" (click)="delete(tagSelection)" class="btn btn-danger ml-2">Delete</button>
     <button type="button" (click)="update(tagSelection)" class="btn btn-success ml-2">Update</button>
@@ -12,7 +13,7 @@
     </button>
 </div>
 <div class="ui-g-12">
-    <app-historian-tag-tree [(tagsSelection)]="tagSelection" *ngIf="tagSelection"></app-historian-tag-tree>
+    <app-historian-tag-tree [tagsSelection]="tagSelection" *ngIf="tagSelection"></app-historian-tag-tree>
     <span *ngIf="!tagSelection">Please create a new selection.</span>
 </div>
 

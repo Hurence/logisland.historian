@@ -40,7 +40,6 @@ export class MeasuresRequest implements IMeasuresRequest, CanBuildQuery {
         const parameters: string[] = [];
         Object.keys(this).forEach(key => {
             if (key !== 'itemId') {
-                console.log('key is', key);
                 if (this[key] !== undefined) {
                     parameters.push(`${key}=${encodeURIComponent(this[key])}`);
                 }

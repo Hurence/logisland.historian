@@ -1,18 +1,17 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
-import { TagsSelection } from '../../../selection/Selection';
-import { IHistorianTag, HistorianTag } from '../../modele/HistorianTag';
-import { TagHistorianService } from '../../service/tag-historian.service';
-import { NgTreenodeService } from '../../service/ng-treenode.service';
 import { ProfilService } from '../../../../profil/profil.service';
+import { ArrayUtil } from '../../../../shared/array-util';
+import { TagsSelection } from '../../../selection/Selection';
+import { SelectionService } from '../../../selection/selection.service';
+import { HistorianTag, IHistorianTag } from '../../modele/HistorianTag';
+import { NgTreenodeService } from '../../service/ng-treenode.service';
+import { TagHistorianService } from '../../service/tag-historian.service';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
-import { SelectionService } from '../../../selection/selection.service';
-import { ArrayUtil } from '../../../../shared/array-util';
-import { Tree } from 'primeng/tree';
 
 @Component({
   selector: 'app-historian-tag-tree',
@@ -22,7 +21,6 @@ import { Tree } from 'primeng/tree';
 export class HistorianTagTreeComponent extends BaseTagTreeComponent implements OnInit, OnChanges {
 
   private _tagsSelection: TagsSelection;
-  @Output() tagsSelectionChange = new EventEmitter<TagsSelection>();
 
   loading = false;
   treeNodes: TreeNode[];
@@ -35,7 +33,6 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
 
   set tagsSelection(newVal: TagsSelection) {
     this._tagsSelection = newVal;
-    this.tagsSelectionChange.emit(this._tagsSelection);
   }
 
   constructor(private ngTreenodeService: NgTreenodeService,
