@@ -35,7 +35,7 @@ public class DataflowsApiService {
 
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private static final String opcDataflowName = "OpcTagsInjector";
+    public static final String opcDataflowName = "OpcTagsInjector";
 
     @Resource
     private SolrDataflowRepository repository;
