@@ -13,7 +13,7 @@ export class DataFlowService {
 
     constructor(protected http: HttpClient, protected help: Utilities,
       protected messageService: MessageService) {}
-    
+
     autoUpdateConfiguration(dataFlowId: string): Observable<any> {
       return this.http.post(`${this.baseUrl}/${dataFlowId}/auto-update`, {});
     }
