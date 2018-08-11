@@ -61,18 +61,19 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
             ).subscribe(tags => {
               this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
               this.updateAlreadyRegistredTags(this.treeNodes);
+              this.loading = false;
             });
             break;
           case TagBrowsingMode.MANUAL:
             this.tagHistorianService.getAllFromDatasource(this.datasource.id).subscribe(tags => {
               this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+              this.loading = false;
             });
             break;
           default:
             console.error('unknown TagBrowsingMode type :', this.datasource.tag_browsing);
             break;
         }
-        this.loading = false;
       }
     }
   }
