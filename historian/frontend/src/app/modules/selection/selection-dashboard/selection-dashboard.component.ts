@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, EventEmitter, Output } from '@angular/core';
 import { SelectItem } from 'primeng/components/common/selectitem';
 
 import { ProfilService } from '../../../profil/profil.service';
@@ -17,9 +17,10 @@ import { ConfirmationService } from 'primeng/components/common/api';
 export class SelectionDashboardComponent implements OnInit {
 
   // dropdown select current selection of tags
-  selectionOptions: SelectItem[];
-  private _currentSelection: TagsSelection;
-
+  private _selectionOptions: SelectItem[];
+  @Output() selectionOptionsChange = new EventEmitter<SelectItem[]>();
+  private _tagSelection: TagsSelection;
+  @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
   // Form to add new selection of tags
   display = false;
   selectionQuestions: QuestionBase<any>[];
@@ -30,45 +31,76 @@ export class SelectionDashboardComponent implements OnInit {
 
   @ViewChild(SelectionFormComponent) private tagSelectionFormComp: SelectionFormComponent;
 
-  constructor(public profilService: ProfilService,
-              private confirmationService: ConfirmationService,
+  @Input()
+  get tagSelection(): TagsSelection {
+    return this._tagSelection;
+  }
+
+  set tagSelection(newVal: TagsSelection) {
+    console.log(`SELECTION_DASHBORD set selection`);
+    this._tagSelection = newVal;
+  }
+
+  @Input()
+  get selectionOptions(): SelectItem[] {
+    return this._selectionOptions;
+  }
+
+  set selectionOptions(newVal: SelectItem[]) {
+    this._selectionOptions = newVal;
+    this.selectionOptionsChange.emit(this._selectionOptions);
+  }
+
+  constructor(private confirmationService: ConfirmationService,
               private selectionService: SelectionService) {}
 
   ngOnInit() {
     this.selectionQuestions = this.getMyQuestions();
     this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
-    this.actualizeListOfTagsSelection();
   }
 
   showDialog() {
-      this.display = true;
+    this.display = true;
   }
 
   closeDialog() {
     this.display = false;
   }
 
-  actualizeListOfTagsSelection() {
+  actualizeListOfTagsSelection(selectedSelection: TagsSelection) {
     this.selectionService.getAll().subscribe(selections => {
       const selectionsWithSet = selections.map(s => new TagsSelection(s));
-      selectionsWithSet.push(this.profilService.getDefautSelection());
       this.selectionOptions = selectionsWithSet.map(selection => {
         return {label: selection.name, value: selection};
       });
+      if (this.selectionOptions.length !== 0) {
+        if (selectedSelection) {
+          const optionSelected = this.selectionOptions.find(s => s.value.name === selectedSelection.name);
+          if (optionSelected) {
+            this.tagSelectionChange.emit(optionSelected.value);
+          } else {
+            this.tagSelectionChange.emit(this.selectionOptions[0].value);
+          }
+        } else {
+          this.tagSelectionChange.emit(this.selectionOptions[0].value);
+        }
+      } else {
+        this.tagSelectionChange.emit(null);
+      }
     });
   }
 
   onCreated(selection: TagsSelection) {
     this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
-    this.profilService.currentTagsSelection = selection;
-    this.actualizeListOfTagsSelection();
+    this.tagSelection = selection;
+    this.actualizeListOfTagsSelection(this.tagSelection);
     this.closeDialog();
   }
 
   update(selection: TagsSelection) {
     this.selectionService.update(new TagsSelectionArray(selection), selection.getId())
       .subscribe(updated => {
-        this.actualizeListOfTagsSelection();
+        this.actualizeListOfTagsSelection(this.tagSelection);
     });
   }
 
@@ -83,11 +115,16 @@ export class SelectionDashboardComponent implements OnInit {
       accept: () => {
         this.selectionService.delete(selection.getId())
           .subscribe(deletedSelection => {
-            this.actualizeListOfTagsSelection();
+            this.actualizeListOfTagsSelection(this.tagSelection);
           });
       },
       reject: () => { }
     });
+  }
+
+  onSelectionChange(event) {
+    // console.log(`SELECTION_DASHBOARD dropdown change`);
+    this.tagSelectionChange.emit(event.value);
   }
 
   private getMyQuestions(): QuestionBase<any>[]  {

@@ -24,10 +24,10 @@ import org.threeten.bp.OffsetDateTime;
 * A streaming pipeline.
 */
     @ApiModel(description = "A streaming pipeline.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-03T18:03:11.160+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-11T07:44:45.292+02:00")
 
 
-@SolrDocument(solrCoreName = "historian")
+@SolrDocument(solrCoreName = "dataflow")
 public class DataFlow  implements Serializable {
         @JsonProperty("lastModified")
         @Indexed(name = "lastModified")

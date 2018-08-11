@@ -6,6 +6,7 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.DataFlow;
+import com.hurence.logisland.historian.rest.v1.model.Error;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-03T18:03:11.160+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-11T07:44:45.292+02:00")
 
 @Api(value = "dataflows", description = "the dataflows API")
     public interface DataflowsApi {
@@ -44,5 +45,15 @@ import java.util.List;
             @RequestMapping(value = "/api/v1/dataflows/{dataflowName}",
             method = RequestMethod.GET)
         ResponseEntity<DataFlow> pollDataflowConfiguration(@ApiParam(value = "the dataflow name (aka the logisland job name)",required=true) @PathVariable("dataflowName") String dataflowName,@ApiParam(value = "Timestamp of last response" ) @RequestHeader(value="If-Modified-Since", required=false) String ifModifiedSince);
+
+
+            @ApiOperation(value = "generate a new config for dataflow if handled", nickname = "updateDataflowConfiguration", notes = "generate a new config for dataflow if handled", response = DataFlow.class, tags={ "dataflow", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "Dataflow successfuly updated", response = DataFlow.class),
+                @ApiResponse(code = 404, message = "Dataflow not found"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/dataflows/{dataflowName}/auto-update",
+            method = RequestMethod.POST)
+        ResponseEntity<DataFlow> updateDataflowConfiguration(@ApiParam(value = "the dataflow name (aka the logisland job name)",required=true) @PathVariable("dataflowName") String dataflowName);
 
         }

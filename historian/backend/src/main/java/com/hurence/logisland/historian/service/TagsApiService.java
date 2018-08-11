@@ -53,11 +53,7 @@ public class TagsApiService {
 
 
     public Optional<Tag> deleteTag(String id) {
-        Optional<Tag> tagToRemove = this.deleteTagWithoutGeneratingConf(id);
-        if (tagToRemove.isPresent()) {
-            dataflowsApiService.updateOpcDataflow();
-        }
-        return tagToRemove;
+        return this.deleteTagWithoutGeneratingConf(id);
     }
 
     /**
@@ -103,7 +99,6 @@ public class TagsApiService {
         } else {
             report = createOrReplaceATag(tag);
         }
-        dataflowsApiService.updateOpcDataflow();
         return report;
     }
 
@@ -153,7 +148,6 @@ public class TagsApiService {
         List<Tag> updatedTags = tags.stream().map(tag -> createOrReplaceATag(tag).getItem())
                 .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty())
                 .collect(Collectors.toList());
-        dataflowsApiService.updateOpcDataflow();
         return updatedTags;
     }
 
@@ -161,7 +155,6 @@ public class TagsApiService {
         List<Tag> supressedTags = tagIds.stream().map(id -> this.deleteTagWithoutGeneratingConf(id))
                 .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty())
                 .collect(Collectors.toList());
-        dataflowsApiService.updateOpcDataflow();
         return supressedTags;
     }
 

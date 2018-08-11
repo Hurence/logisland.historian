@@ -1220,7 +1220,30 @@ paths:
             The server should return HTTP 200 OK.
             By the way, the response is ignored by Logisland since the operation
             has a *fire and forget* nature.
-
+  /dataflows/{dataflowName}/auto-update:
+    parameters:
+      - name: dataflowName
+        in: path
+        type: string
+        required: true
+        description: the dataflow name (aka the logisland job name)
+    post:
+      tags:
+       - dataflow
+      summary:  generate a new config for dataflow if handled
+      description: generate a new config for dataflow if handled
+      operationId: updateDataflowConfiguration
+      responses:
+        "404":
+          description: Dataflow not found
+        "200":
+          description: Dataflow successfuly updated
+          schema:
+            $ref: '#/definitions/DataFlow'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
 
 definitions:
 

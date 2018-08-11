@@ -22,6 +22,9 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
   tags: IHistorianTag[];
   @Input() refreshRate: number;
   @Input() timeRange: TimeRangeFilter;
+  private colorsForMetrics: Map<string, string> = new Map();
+  private colors: string[] = ['#d9080d', '#6aba15', '#241692', '#e23eba',
+  '#7e461f', '#7d30b2', '#f5cb82', '#fd3e6f', '#d7e206', '#b6cdce', '#4bc0c0'];
 
 
   constructor(private measuresService: MeasuresService,
@@ -70,13 +73,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
     super.ngOnInit();
     this.changeSelectionSubscription = this.profilService.getSelectionPublisher().subscribe(newSelection => {
       this.tags = newSelection.tags;
-      this.tags.forEach(tag => {
-        const request = this.buildTagMeasureRequest(tag);
-        this.measuresService.get(request).subscribe(m => {
-          this.data.datasets.push(this.convertMeasureToDataset(m));
-          this.redrawGraph();
-        });
-      });
+      this.updateGraphData();
     });
     this.addTagSubscription = this.profilService.getAddTagPublisher().subscribe(tag => {
       this.tags.push(tag);
@@ -111,6 +108,9 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
         this.redrawGraph();
       });
     });
+    if (this.tags.length === 0) {
+      this.redrawGraph();
+    }
   }
 
   redrawGraph() {
@@ -133,12 +133,32 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
         y: m.values[index]
       };
     });
+    if (!this.colorsForMetrics.has(m.name)) {
+      this.colorsForMetrics.set(m.name, this.getNextColorOrRandomColor());
+    }
     return  {
       label: m.name,
       data: timeSerie,
+      // cubicInterpolationMode: 'monotone',
+      cubicInterpolationMode: 'default',
+      lineTension: 0,
       fill: false,
-      borderColor: '#4bc0c0'
+      borderColor: this.colorsForMetrics.get(m.name)
     };
+  }
+  private getNextColorOrRandomColor(): string {
+    const color = this.colors.pop();
+    if (color) return color;
+    return this.getRandomColor();
+  }
+
+  private getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 
   private buildTagMeasureRequest(tag: IHistorianTag): MeasuresRequest {

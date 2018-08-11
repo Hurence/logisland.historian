@@ -34,7 +34,11 @@ export abstract class BaseSingleTagForm extends BaseDynamicFormComponent<Histori
       map(opcTag => new HistorianTag(opcTag))
     ).subscribe(
       historianTag => {
-        this.form.reset(historianTag);
+        historianTag.node_id = this.form.value.node_id;
+        historianTag.update_rate = this.form.value.update_rate;
+        historianTag.polling_mode = this.form.value.polling_mode;
+        historianTag.enabled = this.form.value.enabled;
+        this.form.patchValue(historianTag);
         this.displaySucess();
         // Questions.modifyQuestions(this.questions, AddTagFormComponent.QUESTION_AFTER_FETCHING_DATA);
       },

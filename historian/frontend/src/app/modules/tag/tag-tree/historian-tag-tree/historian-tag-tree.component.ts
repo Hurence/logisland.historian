@@ -3,11 +3,13 @@ import { TreeNode } from 'primeng/api';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
-import { TagsSelection } from '../../../selection/Selection';
-import { IHistorianTag } from '../../modele/HistorianTag';
-import { TagHistorianService } from '../../service/tag-historian.service';
-import { NgTreenodeService } from '../../service/ng-treenode.service';
 import { ProfilService } from '../../../../profil/profil.service';
+import { ArrayUtil } from '../../../../shared/array-util';
+import { TagsSelection } from '../../../selection/Selection';
+import { SelectionService } from '../../../selection/selection.service';
+import { HistorianTag, IHistorianTag } from '../../modele/HistorianTag';
+import { NgTreenodeService } from '../../service/ng-treenode.service';
+import { TagHistorianService } from '../../service/tag-historian.service';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
 
@@ -18,28 +20,41 @@ import { TypesName } from '../TypesName';
 })
 export class HistorianTagTreeComponent extends BaseTagTreeComponent implements OnInit, OnChanges {
 
-  @Input() tagsSelection: TagsSelection;
+  private _tagsSelection: TagsSelection;
 
   loading = false;
   treeNodes: TreeNode[];
   selectedNodes: TreeNode[];
 
+  @Input()
+  get tagsSelection(): TagsSelection {
+    return this._tagsSelection;
+  }
+
+  set tagsSelection(newVal: TagsSelection) {
+    this._tagsSelection = newVal;
+  }
+
   constructor(private ngTreenodeService: NgTreenodeService,
               private tagService: TagHistorianService,
-              private profilService: ProfilService) {
+              private selectionService: SelectionService,
+              private profilService: ProfilService,
+              private arrayUtil: ArrayUtil) {
                 super();
               }
 
   ngOnInit() {
     this.selectedNodes = [];
+    this.treeNodes = [];
     this.getNodeTree().subscribe(treeNodes => {
       this.treeNodes = treeNodes;
-      this.expandAll(false);
+      this.expandAll(true);
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tagsSelection && !changes.tagsSelection.isFirstChange()) {
+    if (changes.tagsSelection && !changes.tagsSelection.isFirstChange() && this.tagsSelection) {
+      this.loadNodeOfSelection(this.tagsSelection);
       this.selectedNodes.forEach(node => {
         this.restoreNodeTree(node);
       });
@@ -48,6 +63,29 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
         this.initializeTreeWithTagsSelection(node, this.tagsSelection);
       });
     }
+  }
+
+  private loadNodeOfSelection(tagsSelection: TagsSelection) {
+    this.selectionService.getAllTagsFromSelection(tagsSelection.name).subscribe(tags => {
+      const groupedTags = this.arrayUtil.groupBy(tags, t => t.datasource_id + '##' + t.group);
+      for (const key in groupedTags) {
+        if (groupedTags.hasOwnProperty(key)) {
+          const tagsForThisGroup = groupedTags[key];
+          const firstTag: HistorianTag = tagsForThisGroup[0];
+          const groupTreeNode: TreeNode = this.findGroupNode(firstTag);
+          this.loadANodeIfNeeded(groupTreeNode);
+          groupTreeNode.expanded = true;
+        }
+      }
+    });
+  }
+
+
+
+  private findGroupNode(tag: HistorianTag): TreeNode {
+    const nodeDatasourceId: TreeNode = this.treeNodes.find(node => node.data.value === tag[node.data.key]);
+    if (!nodeDatasourceId) return null;
+    return nodeDatasourceId.children.find(node => node.data.value === tag[node.data.key]);
   }
 
   selectNode(event) {
@@ -145,7 +183,7 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
       const tagId = (node.data as IHistorianTag).id;
       if (this.tagsSelection.containTag(tagId)) {
         this.selectedNodes.push(node);
-        this.selectNode(node);
+        this.selectRecursive(node, true);
       }
     });
     return nodes;

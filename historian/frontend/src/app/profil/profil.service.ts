@@ -22,11 +22,7 @@ export class ProfilService implements OnDestroy {
   private changeSelections: BehaviorSubject<TagsSelectionEnriched>;
   private addTagToSelection = new Subject<IHistorianTag>();
   private removeTagToSelection = new Subject<IHistorianTag>();
-
-  private defautSelection = new TagsSelection({
-    name: 'default selection',
-    tagIds: new Set(),
-  });
+  private emptySelection = new TagsSelection({tagIds: [], name: 'no selection selected'});
 
   get currentTagsSelection(): TagsSelection {
     return this._currentTagsSelection;
@@ -38,9 +34,8 @@ export class ProfilService implements OnDestroy {
 
   constructor(private tagService: TagHistorianService) {
 
-    this._currentTagsSelection = this.getDefautSelection();
     this.changeSelections = new BehaviorSubject<TagsSelectionEnriched>({
-      selection: this.getDefautSelection(),
+      selection: this.emptySelection,
       tags: []
     });
     this.changeSelectionSubsrciption = this.changeSelections.pipe(
@@ -60,12 +55,19 @@ export class ProfilService implements OnDestroy {
   }
 
   private changeSelection(selection: TagsSelection) {
-    this.tagService.getAllWithIds(selection.tagIdsArray).subscribe(tags => {
-      this.changeSelections.next({
-        selection: selection,
-        tags: tags
+    if (selection) {
+      this.tagService.getAllWithIds(selection.tagIdsArray).subscribe(tags => {
+        this.changeSelections.next({
+          selection: selection,
+          tags: tags
+        });
       });
-    });
+    } else {
+      this.changeSelections.next({
+        selection: this.emptySelection,
+        tags: []
+      });
+    }
   }
 
   addTag(tag: IHistorianTag) {
@@ -98,9 +100,5 @@ export class ProfilService implements OnDestroy {
 
   showDialogTagManagement(): void {
     this.displayTagManagement = true;
-  }
-
-  getDefautSelection(): TagsSelection {
-    return this.defautSelection;
   }
 }
