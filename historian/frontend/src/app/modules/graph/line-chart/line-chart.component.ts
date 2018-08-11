@@ -134,7 +134,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
       };
     });
     if (!this.colorsForMetrics.has(m.name)) {
-      this.colorsForMetrics.set(m.name, this.getRandomColor());
+      this.colorsForMetrics.set(m.name, this.getNextColorOrRandomColor());
     }
     return  {
       label: m.name,
@@ -143,8 +143,19 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
       borderColor: this.colorsForMetrics.get(m.name)
     };
   }
-  private getRandomColor(): string {
-    return this.colors[Math.floor(Math.random() * this.colors.length)];
+  private getNextColorOrRandomColor(): string {
+    const color = this.colors.pop();
+    if (color) return color;
+    return this.getRandomColor();
+  }
+
+  private getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 
   private buildTagMeasureRequest(tag: IHistorianTag): MeasuresRequest {
