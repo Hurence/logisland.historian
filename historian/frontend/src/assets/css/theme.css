@@ -1127,6 +1127,10 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   color: #ffffff; }
 
 /* historian added */
+#historian-opc-tag-tree .ui-tree {
+  width: 100%;
+  min-width: 400px;
+}
 #historian-opc-tag-tree .col-auto{
   margin-left: 0px;
   margin-right: 35px;
@@ -1185,11 +1189,6 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   max-height: 10%;
 }
 
-/* tree */
-.ui-tree {
-  width: 100%;
-  min-width: 400px;  
-}
 .ui-treenode-label {
   width: 100%;
 }
