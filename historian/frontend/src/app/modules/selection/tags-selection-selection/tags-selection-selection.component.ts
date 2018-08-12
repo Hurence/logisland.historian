@@ -41,9 +41,9 @@ export class TagsSelectionSelectionComponent implements OnInit {
           const selectionSelected = this.selectionOptions.find(option => {
             return option.value.name === this.profilService.currentTagsSelection.name &&
               option.value.owner === this.profilService.currentTagsSelection.owner;
-          }).value;
+          });
           if (selectionSelected) {
-            this._tagSelection = selectionSelected;
+            this._tagSelection = selectionSelected.value;
           } else {
             this._tagSelection = this.selectionOptions[0].value;
             this.profilService.currentTagsSelection = this._tagSelection;
