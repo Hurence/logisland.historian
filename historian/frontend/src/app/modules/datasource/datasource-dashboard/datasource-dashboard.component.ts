@@ -168,6 +168,7 @@ export class DatasourceDashboardComponent implements OnInit {
           severity: 'error',
           summary: `Failed to update configuration`,
         });
+        this.isApplyBtnEnabled = true;
       },
       () => {
         this.isApplyBtnEnabled = true;

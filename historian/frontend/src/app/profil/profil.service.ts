@@ -33,7 +33,6 @@ export class ProfilService implements OnDestroy {
   }
 
   constructor(private tagService: TagHistorianService) {
-
     this.changeSelections = new BehaviorSubject<TagsSelectionEnriched>({
       selection: this.emptySelection,
       tags: []

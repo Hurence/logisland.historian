@@ -1,7 +1,8 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { TagsSelection } from '../Selection';
 import { SelectionService } from '../selection.service';
+import { ProfilService } from '../../../profil/profil.service';
 
 @Component({
   selector: 'app-tags-selection-selection',
@@ -16,7 +17,8 @@ export class TagsSelectionSelectionComponent implements OnInit {
   displayTagManagement: boolean = false;
 
 
-  constructor(private selectionService: SelectionService) { }
+  constructor(private selectionService: SelectionService,
+    private profilService: ProfilService) { }
 
   get tagSelection(): TagsSelection {
     return this._tagSelection;
@@ -35,7 +37,21 @@ export class TagsSelectionSelectionComponent implements OnInit {
         return {label: selection.name, value: selection};
       });
       if (this.selectionOptions.length !== 0) {
-        this._tagSelection = this.selectionOptions[0].value;
+        if (this.profilService.currentTagsSelection) {
+          const selectionSelected = this.selectionOptions.find(option => {
+            return option.value.name === this.profilService.currentTagsSelection.name &&
+              option.value.owner === this.profilService.currentTagsSelection.owner;
+          }).value;
+          if (selectionSelected) {
+            this._tagSelection = selectionSelected;
+          } else {
+            this._tagSelection = this.selectionOptions[0].value;
+            this.profilService.currentTagsSelection = this._tagSelection;
+          }
+        } else {
+          this._tagSelection = this.selectionOptions[0].value;
+          this.profilService.currentTagsSelection = this._tagSelection;
+        }
       }
     });
   }
