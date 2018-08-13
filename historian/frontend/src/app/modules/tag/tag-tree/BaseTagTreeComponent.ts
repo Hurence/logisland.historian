@@ -19,7 +19,7 @@ export abstract class BaseTagTreeComponent {
   }
 
   protected expandRecursive(node: TreeNode, isExpand: boolean, loadChildren: boolean) {
-    if (loadChildren) this.loadANodeIfNeeded(node);
+    if (loadChildren) this.loadANodeIfNeeded(node, true);
     if (node.children && node.children.length !== 0) {
         node.expanded = isExpand;
         node.children.forEach(childNode => {
@@ -28,5 +28,5 @@ export abstract class BaseTagTreeComponent {
     }
   }
 
-  protected abstract loadANodeIfNeeded(node: TreeNode): boolean;
+  protected abstract loadANodeIfNeeded(node: TreeNode, initialization?: boolean): boolean;
 }

@@ -23,7 +23,7 @@ import org.threeten.bp.OffsetDateTime;
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-03T18:03:11.160+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-11T07:44:45.292+02:00")
 
 
 @SolrDocument(solrCoreName = "tag")

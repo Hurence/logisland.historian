@@ -59,4 +59,22 @@ public class DataflowsApiController implements DataflowsApi {
 
         }
     }
+
+    @Override
+    public ResponseEntity<DataFlow> updateDataflowConfiguration(
+            @ApiParam(value = "the dataflow name (aka the logisland job name)",required=true) @PathVariable("dataflowName") String dataflowName
+    ) {
+        if (dataflowName.equals(DataflowsApiService.opcDataflowName))  {
+            service.updateOpcDataflow();
+            Optional<DataFlow> dataflowO = service.getDataflow(dataflowName);
+            if (dataflowO.isPresent()) {
+                DataFlow df = dataflowO.get();
+                return new ResponseEntity<DataFlow>(df, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<DataFlow>(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<DataFlow>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

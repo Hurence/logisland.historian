@@ -29,6 +29,7 @@ import { NgTreenodeService } from './modules/tag/service/ng-treenode.service';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ArrayUtil } from './shared/array-util';
 import {ConfirmationService} from 'primeng/api';
+import { DataFlowService } from './dataflow.service';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import {ConfirmationService} from 'primeng/api';
     ArrayUtil,
     MessageService,
     ConfirmationService,
+    DataFlowService,
   ],
   bootstrap: [AppComponent],
 })

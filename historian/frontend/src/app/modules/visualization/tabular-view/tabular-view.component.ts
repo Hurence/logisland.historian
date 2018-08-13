@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfilService } from '../../../profil/profil.service';
+import { TagsSelection } from '../../selection/Selection';
 
 @Component({
   selector: 'app-tabular-view',
@@ -15,4 +16,7 @@ export class TabularViewComponent implements OnInit {
   ngOnInit() {
   }
 
+  onSelectionChanged(selection: TagsSelection) {
+    this.profilService.currentTagsSelection = selection;
+  }
 }

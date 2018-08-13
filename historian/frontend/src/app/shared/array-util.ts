@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { bloomAdd } from '@angular/core/src/render3/di';
 
 @Injectable()
 export class ArrayUtil {
@@ -11,4 +10,31 @@ export class ArrayUtil {
             array.splice(index, 1);
         }
     }
+
+       /** group the array by a key
+   *
+   * Example:
+   * {{{
+   *    groupBy(Array[1,2,3,4,5,6], (i) => i % 2)
+   * }}}
+   * will return the following object
+   * {{{
+   *    {
+   *      '0': [2, 4, 6],
+   *      '1': [1, 3, 5],
+   *    }
+   * }}}
+   *
+   * @param array the array to group
+   * @param key a method that return the key to group by
+   */
+  groupBy<T, K>(array: T[], key: (T) => string): any {
+    return array.reduce(
+      (r, v) => {
+        (r[key(v)] = r[key(v)] || []).push(v);
+        return r;
+      },
+      {}
+    );
+  }
 }

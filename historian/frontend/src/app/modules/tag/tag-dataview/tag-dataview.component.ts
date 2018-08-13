@@ -43,8 +43,13 @@ export class TagDataviewComponent extends AbsSubscriberToSelectionOfTag implemen
 
   ngOnInit() {
     this.changeSelectionSubscription = this.profilService.getSelectionPublisher().subscribe(newSelection => {
-      this.tags = newSelection.tags;
-      this.totalRecords = this.tags.length;
+      if (newSelection) {
+        this.tags = newSelection.tags;
+        this.totalRecords = this.tags.length;
+      } else {
+        this.tags = [];
+        this.totalRecords = 0;
+      }
       this.loading = false;
     });
     this.addTagSubscription = this.profilService.getAddTagPublisher().subscribe(tag => {

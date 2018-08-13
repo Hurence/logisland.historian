@@ -3,11 +3,13 @@ import { TreeNode } from 'primeng/api';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
-import { TagsSelection } from '../../../selection/Selection';
-import { IHistorianTag } from '../../modele/HistorianTag';
-import { TagHistorianService } from '../../service/tag-historian.service';
-import { NgTreenodeService } from '../../service/ng-treenode.service';
 import { ProfilService } from '../../../../profil/profil.service';
+import { ArrayUtil } from '../../../../shared/array-util';
+import { TagsSelection } from '../../../selection/Selection';
+import { SelectionService } from '../../../selection/selection.service';
+import { HistorianTag, IHistorianTag } from '../../modele/HistorianTag';
+import { NgTreenodeService } from '../../service/ng-treenode.service';
+import { TagHistorianService } from '../../service/tag-historian.service';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
 
@@ -18,28 +20,41 @@ import { TypesName } from '../TypesName';
 })
 export class HistorianTagTreeComponent extends BaseTagTreeComponent implements OnInit, OnChanges {
 
-  @Input() tagsSelection: TagsSelection;
+  private _tagsSelection: TagsSelection;
 
   loading = false;
   treeNodes: TreeNode[];
   selectedNodes: TreeNode[];
 
+  @Input()
+  get tagsSelection(): TagsSelection {
+    return this._tagsSelection;
+  }
+
+  set tagsSelection(newVal: TagsSelection) {
+    this._tagsSelection = newVal;
+  }
+
   constructor(private ngTreenodeService: NgTreenodeService,
               private tagService: TagHistorianService,
-              private profilService: ProfilService) {
+              private selectionService: SelectionService,
+              private profilService: ProfilService,
+              private arrayUtil: ArrayUtil) {
                 super();
               }
 
   ngOnInit() {
     this.selectedNodes = [];
+    this.treeNodes = [];
     this.getNodeTree().subscribe(treeNodes => {
       this.treeNodes = treeNodes;
-      this.expandAll(false);
+      this.expandAll(true);
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tagsSelection && !changes.tagsSelection.isFirstChange()) {
+    if (changes.tagsSelection && !changes.tagsSelection.isFirstChange() && this.tagsSelection) {
+      this.loadNodeOfSelection(this.tagsSelection);
       this.selectedNodes.forEach(node => {
         this.restoreNodeTree(node);
       });
@@ -50,16 +65,39 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
     }
   }
 
+  private loadNodeOfSelection(tagsSelection: TagsSelection) {
+    this.selectionService.getAllTagsFromSelection(tagsSelection.name).subscribe(tags => {
+      const groupedTags = this.arrayUtil.groupBy(tags, t => t.datasource_id + '##' + t.group);
+      for (const key in groupedTags) {
+        if (groupedTags.hasOwnProperty(key)) {
+          const tagsForThisGroup = groupedTags[key];
+          const firstTag: HistorianTag = tagsForThisGroup[0];
+          const groupTreeNode: TreeNode = this.findGroupNode(firstTag);
+          this.loadANodeIfNeeded(groupTreeNode, true);
+          groupTreeNode.expanded = true;
+        }
+      }
+    });
+  }
+
+
+
+  private findGroupNode(tag: HistorianTag): TreeNode {
+    const nodeDatasourceId: TreeNode = this.treeNodes.find(node => node.data.value === tag[node.data.key]);
+    if (!nodeDatasourceId) return null;
+    return nodeDatasourceId.children.find(node => node.data.value === tag[node.data.key]);
+  }
+
   selectNode(event) {
-    this.selectRecursive(event.node, true);
+    this.selectRecursive(event.node, true, true);
   }
 
   unSelectNode(event) {
-    this.selectRecursive(event.node, false);
+    this.selectRecursive(event.node, false, true);
   }
 
   loadNode(event) {
-    this.loadANodeIfNeeded(event.node);
+    this.loadANodeIfNeeded(event.node, false);
   }
 
   saveSelection() {
@@ -90,20 +128,22 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
    *
    * We do not need to add them in selectedNodes as it is done by defaut using checkbox selection
   */
-  private selectRecursive(node: TreeNode, isSelected: boolean) {
+  private selectRecursive(node: TreeNode, isSelected: boolean, modifySelection: boolean) {
     if (node.type === 'tag') {
       node.icon = this.findIcon(isSelected);
-      if (isSelected) {
-        this.tagsSelection.addTag(node.data.id);
-        this.profilService.addTag(node.data);
-      } else {
-        this.tagsSelection.removeTag(node.data.id);
-        this.profilService.removeTag(node.data);
+      if (modifySelection) {
+        if (isSelected) {
+          this.tagsSelection.addTag(node.data.id);
+          this.profilService.addTag(node.data);
+        } else  {
+          this.tagsSelection.removeTag(node.data.id);
+          this.profilService.removeTag(node.data);
+        }
       }
     }
     if (node.children) {
         node.children.forEach(childNode => {
-            this.selectRecursive(childNode, isSelected);
+            this.selectRecursive(childNode, isSelected, modifySelection);
         } );
     }
   }
@@ -124,36 +164,36 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
     return 'historian-tag';
   }
 
-  protected loadANodeIfNeeded(node: TreeNode): boolean {
+  protected loadANodeIfNeeded(node: TreeNode, initialization: boolean): boolean {
     if (node && node.type === TypesName.FOLDER && (!node.children  || node.children.length === 0)) {
-      this.loadChildren(node);
+      this.loadChildren(node, !initialization);
       return true;
     }
     return false;
   }
 
-  private getChildren(node: TreeNode): Observable<TreeNode[]> {
+  private getChildren(node: TreeNode, modifySelection: boolean): Observable<TreeNode[]> {
     const query: string = this.buildQuery(node);
     return this.tagService.getQuery(query).pipe(
-      map(tags => this.createNodesFromTags(tags))
+      map(tags => this.createNodesFromTags(tags, modifySelection))
     );
   }
 
-  private createNodesFromTags(tags: IHistorianTag[]): TreeNode[] {
+  private createNodesFromTags(tags: IHistorianTag[], modifySelection: boolean): TreeNode[] {
     const nodes = this.createNodes(tags);
     nodes.forEach(node => {
       const tagId = (node.data as IHistorianTag).id;
       if (this.tagsSelection.containTag(tagId)) {
         this.selectedNodes.push(node);
-        this.selectNode(node);
+        this.selectRecursive(node, true, modifySelection);
       }
     });
     return nodes;
   }
 
-  private loadChildren(node: TreeNode): void {
+  private loadChildren(node: TreeNode, modifySelection: boolean): void {
     this.loading = true;
-    this.getChildren(node).subscribe(nodes => {
+    this.getChildren(node, modifySelection).subscribe(nodes => {
       node.children = nodes;
       this.loading = false;
     });

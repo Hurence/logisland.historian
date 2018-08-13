@@ -1,21 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Observer } from 'rxjs';
 
-import { CanComponentDeactivate } from '../../../can-deactivate-guard.service';
+import { DataFlowService } from '../../../dataflow.service';
 import { ProfilService } from '../../../profil/profil.service';
-import { Datasource, TagBrowsingMode, DatasourceType } from '../Datasource';
-import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
-import { DatasourcesListComponent } from '../datasources-list/datasources-list.component';
-import { ITag, TagDataType, TagRecordType } from '../../tag/modele/tag';
-import { TagService } from '../../tag/service/tag.service';
-import { OpcTagTreeComponent } from '../../tag/tag-tree/opc-tag-tree/opc-tag-tree.component';
-import { ConfirmationService } from 'primeng/components/common/api';
-import { TagHistorianService } from '../../tag/service/tag-historian.service';
-import { HistorianTag } from '../../tag/modele/HistorianTag';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { QuestionService } from '../../../shared/dynamic-form/question.service';
+import { HistorianTag } from '../../tag/modele/HistorianTag';
+import { TagDataType, TagRecordType } from '../../tag/modele/tag';
 import { AddTagFormComponent } from '../../tag/tag-form/add-tag-form/add-tag-form.component';
+import { OpcTagTreeComponent } from '../../tag/tag-tree/opc-tag-tree/opc-tag-tree.component';
+import { Datasource, DatasourceType, TagBrowsingMode } from '../Datasource';
+import { DatasourcesListComponent } from '../datasources-list/datasources-list.component';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -33,6 +29,8 @@ export class DatasourceDashboardComponent implements OnInit {
   displayAddDatasource = false;
   tagQuestions: QuestionBase<any>[];
 
+  isApplyBtnEnabled: boolean = true;
+
   @ViewChild(DatasourcesListComponent)
   private dslistComp: DatasourcesListComponent;
   @ViewChild(OpcTagTreeComponent)
@@ -44,7 +42,9 @@ export class DatasourceDashboardComponent implements OnInit {
   constructor(private router: Router,
               private route: ActivatedRoute,
               private profilService: ProfilService,
-              private questionService: QuestionService) {
+              private questionService: QuestionService,
+              private dataFlowService: DataFlowService,
+              protected messageService: MessageService) {
                 this.createdTag = new HistorianTag({
                   record_type: TagRecordType.TAG,
                   id: '',
@@ -152,5 +152,27 @@ export class DatasourceDashboardComponent implements OnInit {
 
   onCloseAddTag() {
     this.addTagForm.resetDisplay();
+  }
+
+  generateConfiguration() {
+    this.isApplyBtnEnabled = false;
+    this.dataFlowService.autoUpdateConfiguration('OpcTagsInjector').subscribe(
+      success => {
+        this.messageService.add({
+          severity: 'success',
+          summary: `successfully updated configuration`,
+        });
+      },
+      error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: `Failed to update configuration`,
+        });
+        this.isApplyBtnEnabled = true;
+      },
+      () => {
+        this.isApplyBtnEnabled = true;
+      }
+    );
   }
 }

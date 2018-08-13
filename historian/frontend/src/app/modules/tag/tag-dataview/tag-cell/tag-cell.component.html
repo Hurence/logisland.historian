@@ -1,6 +1,6 @@
 <p-panel [style]="{'text-align':'center'}">
   <p-header>
-    <b>{{tag.tag_name}}</b> - {{tag.data_type}} <span *ngIf="lastRefreshed">(last refresh: {{lastRefreshed | date:'mediumTime'}})</span>
+    <b>{{tag.node_id}}</b> - {{tag.data_type}} <span *ngIf="lastRefreshed">(last refresh: {{lastRefreshed | date:'mediumTime'}})</span>
   </p-header>
   <div class="ui-g">
     <div class="ui-g-12" *ngIf="tag.description">{{tag.description}}</div>
