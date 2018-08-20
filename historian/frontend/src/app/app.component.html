@@ -18,14 +18,14 @@
                     </a>
                 </li>
                 <li class="nav-item avatar">
-                    <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" class="rounded-circle z-depth-0" alt="avatar image">     
+                    <i class="fa fa-user-circle" aria-hidden="true"></i>    
                 </li>
                 <li class="nav-item">
                     <b>{{username}}</b>
                 </li>
                 <li class="nav-item logout">
-                    <a [href]="logoutUrl" i18n="logout|to logout from the session">
-                        <i class="align-middle fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                    <a [href]="logoutUrl" class="nav-link logout" i18n="logout|to logout from the session" title="logout">
+                        <i class="fa fa-sign-out fa-3" aria-hidden="true" style="font-size: initial;"></i>
                     </a>
                 </li>
             </ul>

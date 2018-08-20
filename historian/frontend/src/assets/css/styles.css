@@ -64,6 +64,9 @@ mark, .mark {
 .navbar-nav .fa-question-circle:before{
   font-size: 1rem;
 }
+.navbar-dark .navbar-nav .nav-link.logout:hover {
+  color: red;
+}
 .nav.nav-pills a{
   font-size: 0.7rem;
 }
