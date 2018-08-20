@@ -23,8 +23,10 @@ export abstract class RefreshRateComponent implements OnInit, OnDestroy, OnChang
     abstract subscribeToRefreshChanges(t: number): void;
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.refreshRate) {
-            if (changes.refreshRate.currentValue !== changes.refreshRate.previousValue) {
+        if (changes.refreshRate && this.refreshChangesSubscription) {
+            if (changes.refreshRate === undefined) {
+              this.refreshChangesSubscription.unsubscribe();
+            } else if (changes.refreshRate.currentValue !== changes.refreshRate.previousValue) {
                 this.resfreshChanges.next(changes.refreshRate.currentValue);
             }
         }

@@ -6,16 +6,9 @@ services:
     environment:
       - JAVA_MEMORY=4g
     hostname: chronix
-    image: 'hurence/historian-chronix:0.4.3-SNAPSHOT'
+    image: 'andrea/cronix:1.0'
     ports:
       - '8983:8983'
-    network_mode: bridge
-
-  redis:
-    container_name: redis
-    image: 'redis:latest'
-    ports:
-      - '6379:6379'
     network_mode: bridge
 
   keycloak:
@@ -34,11 +27,7 @@ services:
       volumes:
         - ./conf/logisland:/conf
       links:
-        # - zookeeper
-        # - kafka
-        # - elasticsearch
         - chronix
-        - redis
       network_mode: bridge
       extra_hosts:
         - "historian-backend:192.168.99.1"

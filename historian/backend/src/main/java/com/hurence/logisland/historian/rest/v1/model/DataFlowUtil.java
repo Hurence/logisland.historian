@@ -36,7 +36,9 @@ public final class DataFlowUtil {
                 new Property().setKey("solr.connection.string").setValue(chronixConfigurationBean.getConnectionUrl().toString()),
                 new Property().setKey("flush.interval").setValue(Long.toString(chronixConfigurationBean.getFlushInterval().toMillis())),
                 new Property().setKey("batch.size").setValue(Long.toString(chronixConfigurationBean.getBatchSize())),
-                new Property().setKey("solr.collection").setValue(chronixConfigurationBean.getDefaultCollection())
+                new Property().setKey("solr.collection").setValue(chronixConfigurationBean.getDefaultCollection()),
+                new Property().setKey("group.by").setValue("tag_id,quality")
+
         ));
         return service;
     }

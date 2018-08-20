@@ -33,7 +33,7 @@ import java.util.List;
                 @ApiResponse(code = 200, message = "The server should return HTTP 200 OK. By the way, the response is ignored by Logisland since the operation has a *fire and forget* nature. ") })
             @RequestMapping(value = "/api/v1/dataflows/{dataflowName}",
             method = RequestMethod.POST)
-        ResponseEntity<Void> notifyDataflowConfiguration(@ApiParam(value = "the dataflow name (aka the logisland job name)",required=true) @PathVariable("dataflowName") String dataflowName,@ApiParam(value = "logisland job id (aka the engine name)",required=true) @PathVariable("jobId") String jobId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody DataFlow dataflow);
+        ResponseEntity<Void> notifyDataflowConfiguration(@ApiParam(value = "the dataflow name (aka the logisland job name)",required=true) @PathVariable("dataflowName") String dataflowName, @RequestBody DataFlow dataflow);
 
 
             @ApiOperation(value = "Retrieves the configuration for a specified dataflow", nickname = "pollDataflowConfiguration", notes = "A dataflow is a set of services and streams allowing a data flowing from one or more sources, being transformed and reach one or more destinations (sinks). Logisland will call this endpoint to know which configuration should be run.  This endpoint also supports HTTP caching (Last-Updated, If-Modified-Since) as per RFC 7232, section 3.3", response = DataFlow.class, tags={ "dataflow", })

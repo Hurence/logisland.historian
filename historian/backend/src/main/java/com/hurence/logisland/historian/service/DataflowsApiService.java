@@ -27,6 +27,7 @@ import org.threeten.bp.OffsetDateTime;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,13 +36,12 @@ public class DataflowsApiService {
 
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    public static final String opcDataflowName = "OpcTagsInjector";
-
-    @Resource
-    private SolrDataflowRepository repository;
 
     @Autowired
     private LogislandConfigurationBean logislandConfigurationBean;
+
+    @Resource
+    private SolrDataflowRepository repository;
 
     private DatasourcesApiService datasourcesApiService;
     private TagsApiService tagsApiService;
@@ -62,7 +62,7 @@ public class DataflowsApiService {
     }
 
     public Optional<DataFlow> updateOpcDataflow() {
-        logger.info("gnerating new DataFlow '{}'", opcDataflowName);
+        logger.info("generating new DataFlow '{}'", logislandConfigurationBean.getOpcDataflowName());
         List<Datasource> datasources = datasourcesApiService.getAllDatasources("*");
         if (!datasources.isEmpty()) {
             DataFlow df = this.buildOpcDataflow(datasources);
@@ -74,8 +74,15 @@ public class DataflowsApiService {
         }
     }
 
+    public void updateLastPing(String dataflowId, Date date) {
+        logger.info("Updating last ping timestamp for dataflow {}", dataflowId);
+        repository.updatePingTimestamp(dataflowId, date);
+
+    }
+
     private DataFlow buildOpcDataflow(List<Datasource> datasources) {
         DataFlow df = new DataFlow();
+        final String opcDataflowName = logislandConfigurationBean.getOpcDataflowName();
         df.setId(opcDataflowName);
         df.setLastModified(DateUtil.toUtcDateForSolr(OffsetDateTime.now()));
         df.setModificationReason("Modified tags to retrieve");
@@ -94,7 +101,7 @@ public class DataflowsApiService {
         for (Datasource ds : datasources) {
             DatasourceFlowElements dsElem = new DatasourceFlowElements(ds, chronix.getName(), opcDataflowName,
                     console.getName(), tagsApiService, logislandConfigurationBean.getOpc());
-            
+
             if (dsElem.isActive()) {
                 if (dsElem.getService() != null) services.add(dsElem.getService());
                 if (dsElem.getStream() != null) streams.add(dsElem.getStream());

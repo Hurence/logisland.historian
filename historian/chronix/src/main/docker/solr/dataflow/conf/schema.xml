@@ -6,6 +6,7 @@
         <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
         <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
         <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="date" class="solr.TrieDateField"/>
 
         <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
         <fieldType name="binary" class="solr.BinaryField"/>
@@ -20,6 +21,9 @@
         <field name="modificationReason" type="string" indexed="true" stored="true" multiValued="false"/>
         <field name="services" type="string" indexed="true" stored="true" multiValued="false"/>
         <field name="streams" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="lastPingDateTime" type="date" indexed="true" stored="true" multiValued="false"/>
+
+
     </fields>
 
     <uniqueKey>id</uniqueKey>

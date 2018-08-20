@@ -67,6 +67,7 @@ export class OpcTagTreeComponent extends BaseTagTreeComponent implements OnInit,
           case TagBrowsingMode.MANUAL:
             this.tagHistorianService.getAllFromDatasource(this.datasource.id).subscribe(tags => {
               this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+              this.treeNodes.forEach(node => node.label = node.data.node_id);
               this.loading = false;
             });
             break;

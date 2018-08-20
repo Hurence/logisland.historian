@@ -21,6 +21,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.Duration;
+
 @ConfigurationProperties(prefix = "logisland")
 @Configuration
 public class LogislandConfigurationBean {
@@ -30,6 +32,24 @@ public class LogislandConfigurationBean {
 
     @NestedConfigurationProperty
     private OpcConfigurationBean opc = new OpcConfigurationBean();
+
+    /**
+     * If the last logisland ping is older than this duration, logisland will be considered out of sync.
+     */
+    private Duration dataflowFreshnessDuration = Duration.ofMinutes(1);
+
+    /**
+     * The name of the dataflow handled by this application.
+     */
+    private String opcDataflowName;
+
+    public String getOpcDataflowName() {
+        return opcDataflowName;
+    }
+
+    public void setOpcDataflowName(String opcDataflowName) {
+        this.opcDataflowName = opcDataflowName;
+    }
 
     public OpcConfigurationBean getOpc() {
         return opc;
@@ -45,5 +65,13 @@ public class LogislandConfigurationBean {
 
     public void setChronix(ChronixConfigurationBean chronix) {
         this.chronix = chronix;
+    }
+
+    public Duration getDataflowFreshnessDuration() {
+        return dataflowFreshnessDuration;
+    }
+
+    public void setDataflowFreshnessDuration(Duration dataflowFreshnessDuration) {
+        this.dataflowFreshnessDuration = dataflowFreshnessDuration;
     }
 }

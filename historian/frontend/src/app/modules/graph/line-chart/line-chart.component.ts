@@ -140,7 +140,7 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
       label: m.name,
       data: timeSerie,
       // cubicInterpolationMode: 'monotone',
-      cubicInterpolationMode: 'default',
+      cubicInterpolationMode: 'monotone',
       lineTension: 0,
       fill: false,
       borderColor: this.colorsForMetrics.get(m.name)
@@ -165,7 +165,9 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
     return new MeasuresRequest({
       itemId: tag.id,
       start: this.timeRange.start,
-      end: this.timeRange.end
+      end: this.timeRange.end,
+      functions: 'savgbckt:300'
+
     });
   }
 }

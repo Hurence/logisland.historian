@@ -26,6 +26,7 @@ export class RefreshRateSelectionComponent implements OnInit {
 
   ngOnInit() {
     this.refreshOptions = [
+      {label: 'None', value: undefined},
       {label: '1 secondes', value: '1000'},
       {label: '5 secondes', value: '5000'},
       {label: '10 secondes', value: '10000'},

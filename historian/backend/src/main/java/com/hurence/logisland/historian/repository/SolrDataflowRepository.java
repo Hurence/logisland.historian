@@ -21,4 +21,4 @@ import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SolrDataflowRepository extends SolrCrudRepository<DataFlowSimple, String> { }
+public interface SolrDataflowRepository extends SolrCrudRepository<DataFlowSimple, String> , CustomSolrDataflowRepository{ }

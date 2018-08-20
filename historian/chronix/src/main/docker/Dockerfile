@@ -1,4 +1,5 @@
 
+
 FROM    openjdk:8-jre-alpine
 LABEL maintainer="thomas.bailet@hurence.com"
 
@@ -36,7 +37,7 @@ RUN cd /opt && unzip /opt/solr.zip  &&  mv  chronix-solr-6.4.2/* solr/ &&  \
   sed -i -e 's/"\$(whoami)" == "root"/$(id -u) == 0/' /opt/solr/bin/solr && \
   sed -i -e 's/lsof -PniTCP:/lsof -t -PniTCP:/' /opt/solr/bin/solr && \
   sed -i -e 's/#SOLR_PORT=8983/SOLR_PORT=8983/' /opt/solr/bin/solr.in.sh && \
-  sed -i -e '/-Dsolr.clustering.enabled=true/ a SOLR_OPTS="$SOLR_OPTS -Dsun.net.inetaddr.ttl=60 -Dsun.net.inetaddr.negative.ttl=60"' /opt/solr/bin/solr.in.sh && \
+  sed -i -e '/-Dsolr.clustering.enabled=true/ a SOLR_OPTS="$SOLR_OPTS -Dsun.net.inetaddr.ttl=60 -Dsun.net.inetaddr.negative.ttl=60 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"' /opt/solr/bin/solr.in.sh && \
   chown -R $SOLR_USER:$SOLR_GROUP /opt/solr
 
 
@@ -67,6 +68,7 @@ COPY scripts /opt/docker-solr/scripts
 RUN chown -R $SOLR_USER:$SOLR_GROUP /opt/solr/server
 
 EXPOSE 8983
+EXPOSE 5005
 WORKDIR /opt/solr
 USER $SOLR_USER
 
