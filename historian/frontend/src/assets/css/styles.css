@@ -40,7 +40,19 @@ mark, .mark {
 }
 
 .navbar-brand img {
-  width: 100px;
+  width: 230px;
+}
+.logo-hurence{
+  width: 200px;
+}
+.logo-hurence span{
+  position: fixed;
+  bottom: .5rem;
+  left:.5rem;
+  z-index: 1030;
+}
+.logo-hurence img{
+  width:100px;
 }
 .navbar {
     line-height: 3.4;
