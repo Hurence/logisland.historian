@@ -40,10 +40,10 @@ h1 {
     margin: 0;
 }
 .rigth-panel {
-    padding: 2%;
+    padding: 1rem;
 }
 .left-panel {
-    padding: 2%;
+    padding: 1rem;
     min-height: 600px;
 }
 .small-column {

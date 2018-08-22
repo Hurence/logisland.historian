@@ -1118,6 +1118,10 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   width: 100%;
   min-width: 400px;
 }
+#historian-opc-tag-tree {
+  margin-top: .8rem;
+  display: block;
+}
 #historian-opc-tag-tree .col-auto{
   margin-left: 0px;
   margin-right: 35px;
@@ -1196,10 +1200,14 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 } */
 
 .ui-tree .ui-tree-container{
+  padding: 1rem;
   max-width: 100%;
   overflow-x: hidden;
   font-family: Lato,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol" !important;
   line-height: 1 !important;
+}
+.ui-tree-empty-message{
+  padding: 1rem;
 }
 .ui-button .fa-plus{
   width: 20px;
