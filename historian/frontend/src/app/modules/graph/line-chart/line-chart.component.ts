@@ -39,9 +39,9 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
     };
     this.options = {
       title: {
-        display: true,
+        display: false,
         text: 'Line Chart Graph',
-        fontSize: 32
+        fontSize: 16
       },
       legend: {
         position: 'bottom'

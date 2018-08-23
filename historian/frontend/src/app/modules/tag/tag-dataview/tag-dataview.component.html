@@ -8,22 +8,23 @@ filterBy="data_type,description"
 [totalRecords]="totalRecords">
 <!-- [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords" -->
   <!-- HEADER -->
-  <p-header><h2>List of Tags</h2>
+  <p-header>
+    <!-- <h5>List of Tags</h5> -->
     <div class="ui-g">
       <div class="ui-xl-4 ui-sm-12 ui-md-12">
         <!-- SORT INPUT -->
-        <span>Sort by :</span>
+        <span>Sort by : </span>
         <p-dropdown [options]="sortOptions"  placeholder="Sort By" [(ngModel)]="sortField"
         (onChange)="onSortChange($event)" [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
       </div>
       <div class="ui-xl-4 ui-sm-12 ui-md-12">
       <!-- FILTER INPUT -->
-        <span>Filter by :</span>
+        <span>Filter by : </span>
         <input type="search" pInputText placeholder="Search by type" (keyup)="dv.filter($event.target.value)">
       </div>
       <div class="ui-xl-4 ui-sm-12 ui-md-12">
         <!-- display option -->
-        <span>Choose display :</span>
+        <span>Choose display : </span>
         <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
       </div>
     </div>

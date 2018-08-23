@@ -1,8 +1,8 @@
 <div class='ui-g'>
-  <p-panel class='ui-g-8 ui-sm-12' [toggleable]="true">
-      <p-header>
+  <p-panel class='ui-g-8 ui-sm-12' [toggleable]="false">
+      <!-- <p-header>
           Visualization Menu
-      </p-header>
+      </p-header> -->
       <div class="ui-g">
         <div class='ui-xl-6 ui-md-6 ui-sm-12'>
             <app-tags-selection-selection  (tagSelectionChange)="onSelectionChanged($event)"></app-tags-selection-selection>
@@ -12,10 +12,10 @@
         </div>
       </div>
   </p-panel>
-  <p-panel class='ui-g-4 ui-sm-12' [toggleable]="true">
-      <p-header>
+  <p-panel class='ui-g-4 ui-sm-12' [toggleable]="false">
+      <!-- <p-header>
           Graph Menu
-      </p-header>
+      </p-header> -->
       <div>
           <app-time-range-selection [(timeRange)]="timeRange"></app-time-range-selection>
       </div>

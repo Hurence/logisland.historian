@@ -34,8 +34,8 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
 
   submitBtnMsg: string;
 
-  private BTN_MSG_ADD = 'Add Data source';
-  private BTN_MSG_UPDATE = 'Update Data source';
+  private BTN_MSG_ADD = 'Add datasource';
+  private BTN_MSG_UPDATE = 'Update datasource';
 
   private CREADENTIAL_NONE = 'none';
   private CREADENTIAL_NORMAL = 'normal';
