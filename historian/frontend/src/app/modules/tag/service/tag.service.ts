@@ -16,7 +16,7 @@ import { TagOpcService } from './tag-opc.service';
 @Injectable()
 export class TagService implements IModelService<Tag> {
 
-  private tagsUrl = `${environment.HISTORIAN_API_URL}`;
+  private tagsUrl = `${environment.HISTORIAN_API_BASE_URL}`;
 
   constructor(private http: HttpClient,
     private help: Utilities,

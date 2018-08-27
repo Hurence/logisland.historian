@@ -12,7 +12,7 @@ export function initializer(keycloak: KeycloakService): () => Promise<any> {
         await keycloak.init({
           config: {
             realm: environment.KEYCLOAK_REALM,
-            url: environment.KEYCLOAK_URL,
+            url: `${environment.AUTHENTICATION_BASE_URL}auth`,
             clientId: environment.KEYCLOAK_CLIENTID,
             credentials: {
               secret: environment.KEYCLOAK_CLIENTID_SECRET

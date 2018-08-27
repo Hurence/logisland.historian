@@ -18,7 +18,7 @@ export class DatasourceService extends AbstractModelServiceCreateOrReplace<Datas
   constructor(protected http: HttpClient,
               protected help: Utilities,
               protected messageService: MessageService) {
-                super(http, help, messageService, `${environment.HISTORIAN_API_URL}datasources`);
+                super(http, help, messageService, `${environment.HISTORIAN_API_BASE_URL}datasources`);
                }
 
   datasourceIsReachable(id: string): Observable<boolean> {

@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class DataFlowService {
 
-    private baseUrl = `${environment.HISTORIAN_API_URL}dataflows`;
+    private baseUrl = `${environment.HISTORIAN_API_BASE_URL}dataflows`;
 
     constructor(protected http: HttpClient, protected help: Utilities,
       protected messageService: MessageService) {}
