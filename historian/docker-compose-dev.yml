@@ -19,7 +19,7 @@ services:
     network_mode: bridge
   logisland:
       container_name: logisland
-      image: 'hurence/logisland:GH-404'
+      image: 'hurence/logisland:0.14.1-develop'
       command: bin/logisland.sh --conf /conf/historian-remote.yaml
       hostname: logisland
       ports:
