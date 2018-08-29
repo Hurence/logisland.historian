@@ -30,6 +30,7 @@ import org.springframework.data.solr.core.query.result.FacetPivotFieldEntry;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -158,13 +159,26 @@ public class TagsApiService {
         return supressedTags;
     }
 
+    /**
+     *
+     * @param tag
+     * @return save tag generating a random id and setting LastModificationDate
+     */
     public Tag saveTag(Tag tag) {
         tag.setId(UUID.randomUUID().toString());
+        tag.setLastModificationDate(new Date().getTime());
         return repository.save(tag);
     }
 
+    /**
+     *
+     * @param tag
+     * @param id
+     * @return update tag with specified id with tag object setting LastModificationDate
+     */
     public Tag updateTag(Tag tag, String id) {
         tag.setId(id);
+        tag.setLastModificationDate(new Date().getTime());
         return repository.save(tag);
     }
 
