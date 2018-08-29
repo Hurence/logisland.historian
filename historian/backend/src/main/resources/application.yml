@@ -2,6 +2,7 @@ server:
   port: 8701
   servlet:
     path: /
+  address: 0.0.0.0
 
 
 spring:
@@ -13,7 +14,7 @@ spring:
 
   data:
     solr:
-      host: http://chronix:8983/solr
+      host: ${sorl_base_url:http://historian.hurence.com:10080/solr}
 
   cache:
     type: simple
@@ -34,7 +35,7 @@ info:
 
 keycloak:
   realm: logisland
-  auth-server-url: http://keycloak:8080/auth
+  auth-server-url: ${keycloak_base_url:http://historian.hurence.com:10080/auth}
   ssl-required: external
   resource: logisland-historian
   public-client: true
@@ -46,6 +47,7 @@ keycloak:
   cors-allowed-headers: "*"
   cors-allowed-methods: "*"
   cors-exposed-headers: "*"
+  proxy-url:
 
 
 

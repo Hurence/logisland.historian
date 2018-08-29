@@ -1,54 +1,73 @@
-version: "2"
-services:
+version: "3"
+networks:
+  historian-be:
 
+services:
   chronix:
     container_name: chronix
     environment:
       - JAVA_MEMORY=4g
     hostname: chronix
     image: 'hurence/historian-chronix:0.4.3-SNAPSHOT'
+    networks:
+      historian-be:
+        aliases:
+          - chronix
+
+  frontend:
+    container_name: historian-frontend
+    image: 'hurence/historian-frontend:0.4.3-SNAPSHOT'
     ports:
-      - '8983:8983'
-      - '5005:5005'
-    network_mode: bridge
+      - 4200:80
+    networks:
+      historian-be:
+        aliases:
+          - frontend
+
+  backend:
+    container_name: historian-backend
+    image: 'hurence/historian-backend:0.4.3-SNAPSHOT'
+    environment:
+      - sorl_base_url=${ENTRY_POINT_URL:-http://historian.hurence.com:10080}/solr
+      - keycloak_base_url=${ENTRY_POINT_URL:-http://historian.hurence.com:10080}/auth
+    networks:
+      historian-be:
+        aliases:
+          - backend
 
   keycloak:
     container_name: keycloak
     image: 'hurence/keycloak:0.2.0'
-    ports:
-      - '8080:8080'
-    network_mode: bridge
-
-  historian-backend:
-    container_name: historian-backend
-    image: 'hurence/historian-backend:0.4.3-SNAPSHOT'
-    ports:
-      - '8701:8701'
-    links:
-      - chronix
-      - keycloak
-    network_mode: bridge
-
-  historian-frontend:
-    container_name: historian-frontend
-    image: 'hurence/historian-frontend:0.4.3-SNAPSHOT'
-    ports:
-      - '4200:80'
-    links:
-      - historian-backend
-      - keycloak
-    network_mode: bridge
-
+    environment:
+      - PROXY_ADDRESS_FORWARDING=true
+    networks:
+      historian-be:
+        aliases:
+          - keycloak
   logisland:
     container_name: logisland
     image: 'hurence/logisland:0.14.1-develop'
-    command: bin/logisland.sh --conf /conf/historian-remote.yaml
-    hostname: logisland
+    command: "bin/logisland.sh --conf /conf/historian-remote.yaml"
     ports:
       - '4050:4050'
     volumes:
       - ./conf/logisland:/conf
-    links:
-      - chronix
-      - historian-backend
-    network_mode: bridge
+    networks:
+      historian-be:
+        aliases:
+          - logisland
+  nginx:
+   container_name: nginx
+   image: nginx:1.13
+   restart: always
+   ports:
+     - 10080:10080
+     - 10443:10443
+   environment:
+     - HISTORIAN_DOMAIN=${HISTORIAN_DOMAIN:-historian.hurence.com}
+   volumes:
+     - ./conf/nginx:/etc/nginx/conf.d
+   networks:
+     historian-be:
+       aliases:
+         - ${HISTORIAN_DOMAIN:-historian.hurence.com}
