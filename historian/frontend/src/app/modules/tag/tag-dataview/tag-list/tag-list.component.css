@@ -1,4 +1,26 @@
-.important-agg {
+.cell-container {
+  display: grid;
+  grid-template-rows: 100px;
+  height: 100%;
+  width: 100%;
+}
+
+.cell-element-important {
+  grid-row-start: 1;
   background-color: #2399e5;
   color: white;
+  padding: 20px;
+  border: 1px solid #fff;
+}
+
+.cell-element {
+  grid-row-start: 1;
+  background-color: #DDDDDD;
+  color: black;
+  padding: 20px;
+  border: 1px solid #fff;
+}
+
+.grid-container--fit {
+  grid-template-columns: repeat(auto-fit, minmax(100px, auto));
 }
