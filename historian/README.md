@@ -6,7 +6,7 @@
 
 Pre-requisites : Add the following line to your `/etc/hosts` files
 
-    127.0.0.1       keycloak chronix redis historian
+    127.0.0.1       historian.hurence.com
 
 
 ## Option A : all-in-one docker-compose
@@ -31,8 +31,8 @@ Keycloak admin console
 
 Chronix admin (chronix core for timeseries and historian core for configs)
 
-    http://chronix:8983/solr/#/chronix
-    http://chronix:8983/solr/#/historian
+    http://historian.hurence.com:10080/solr/#/chronix
+    http://historian.hurence.com:10080/solr/#/historian
     
 
 # Build and run
@@ -48,27 +48,26 @@ Run and build Logisland Historian
 Run spring boot application on port 8701
     
     cd historian/backend
-    mvn clean spring-boot:run -DappPort=8701
+    mvn clean spring-boot:run 
 
 
 # REST API
 
-Get swagger.json doc
+For more information please read the swagger spec in the project.
 
-    curl -XGET http://historian:8701/v2/api-docs
 
 Generate some sample data
 
-    curl -XPOST  http://historian:8701/api/v1/admin?flush=false
+    curl -XPOST  http://historian.hurence.com:10080/api/v1/admin?flush=false
     
 you can browse API 
 
-    curl -X GET 'http://localhost:8701/api/v1/datasources?fq=hurence'
+    curl -X GET 'http://historian.hurence.com:10080/api/v1/datasources?fq=hurence'
 
 ## Token based access
 
     curl -X POST \
-      http://keycloak:8080/auth/realms/logisland/protocol/openid-connect/token \
+      http://historian.hurence.com:10080/auth/realms/logisland/protocol/openid-connect/token \
       -H 'Cache-Control: no-cache' \
       -H 'Content-Type: application/x-www-form-urlencoded' \
       -H 'Postman-Token: 9454e224-4b3d-4b83-841f-6d1afd1ab24a' \
@@ -89,7 +88,7 @@ should give you an access token
 this access token can be used to access to securised API zone
 
     curl -X GET \
-      http://localhost:8701/api/v1/tags \
+      http://historian.hurence.com:10080/api/v1/tags \
       -H 'Accept: application/json' \
       -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJBeUdHWXdXSVBvd3JwWUhwMFhveWVZR0ljbEQyMUxQTXNSSzFtWlB1anJZIn0.eyJqdGkiOiJmZTE4NjZmNC03NGE4LTQzMDgtYjhhOS0yYzMwZGE5MGZhZGIiLCJleHAiOjE1MjQyMzI0MjEsIm5iZiI6MCwiaWF0IjoxNTI0MjMyMTIxLCJpc3MiOiJodHRwOi8va2V5Y2xvYWs6ODA4MC9hdXRoL3JlYWxtcy9sb2dpc2xhbmQiLCJhdWQiOiJsb2dpc2xhbmQtaGlzdG9yaWFuIiwic3ViIjoiYTY2Yzg1NTMtMmU3MC00NDZmLWE5OTQtNDgxNTVmMWNkOTJiIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoibG9naXNsYW5kLWhpc3RvcmlhbiIsImF1dGhfdGltZSI6MCwic2Vzc2lvbl9zdGF0ZSI6ImUzYjY5MGM3LTcwYjUtNDc0ZC05ZTU2LWVjMWM2ODk0NWY0YSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJ1bWFfYXV0aG9yaXphdGlvbiIsInVzZXIiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0b20ifQ.KRv-NXkVCVf1z3vC-Ky4O_hRauN8Cze41b3wIlemWH5ATOE3o6JfXpG2W--aWmlWogOWwN7cDAtb3Vz-A3wS8bD4N2EVxmrRrNUnGFGErzUX4XUmc3SDUShafXp0dC626I1Hrkhyq8GzHWnqS6nGr2BBJGkKrJ5hWAyGuPXgCW6lbIJ4x6XBg8MUsKqj6D6bVUzdbG7MPfePjMfBrcuc4NAJVe0MNVPuCHFdoT0TVIqDFhdWqA1msvSDdN9D212BL0f5GkOYTUBqsaCeJ2b9nfjx-ZYVQ-iW28hG0QXH4RaVDsWXiHb_yf0m93T4LCC8JQE9TCoMngMO_11lhQjULg' \
       -H 'Cache-Control: no-cache' \
@@ -103,7 +102,7 @@ If you want to upload some timeseries in a bulk fashion, you can use `POST /api/
 
 
     curl -X POST \
-      http://localhost:8701/api/v1/tags/measures \
+      http://historian.hurence.com:10080/api/v1/tags/measures \
       -H 'Cache-Control: no-cache' \
       -H 'Content-Type: multipart/form-data' \
       -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
@@ -136,7 +135,7 @@ should return something like :
 To retrieve a value for a tag just use `GET /api/v1/tags/{itemId}/measures`
 
     curl -X GET \
-      'http://localhost:8701/api/v1/tags/temperature_sensor_5/measures?start=1319783340000&end=1323898380000&functions=max;min;avg'
+      'http://historian.hurence.com:10080/api/v1/tags/temperature_sensor_5/measures?start=1319783340000&end=1323898380000&functions=max;min;avg'
     
     
 should send you back something like:
@@ -179,7 +178,7 @@ should send you back something like:
 To retrieve min, max, last values :
 
     curl -X GET \
-      'http://localhost:8701/api/v1/tags/temperature_sensor_1/stats?start=NOW-5MINUTES&end=NOW'
+      'http://historian.hurence.com:10080/api/v1/tags/temperature_sensor_1/stats?start=NOW-5MINUTES&end=NOW'
       
  the result is as follows:
  
@@ -227,7 +226,7 @@ To retrieve min, max, last values :
 Based on [TSimulus](https://rts-gen.readthedocs.io/en/latest/index.html) we can generate and inject realistic timeseries values 
 
     curl -X POST \
-      http://localhost:8701/api/v1/tags/measures/generator \
+      http://historian.hurence.com:10080/api/v1/tags/measures/generator \
       -H 'Cache-Control: no-cache' \
       -H 'Content-Type: multipart/form-data' \
       -H 'Postman-Token: a593bb88-f5ea-4b01-850f-c3ff744db8e0' \
@@ -323,7 +322,7 @@ Will generate 525600 measures points in about 6" and will import thme into chron
     
 To retrieve some stats :
 
-    curl -X GET http://localhost:8701/api/v1/tags/temperator/stats 
+    curl -X GET http://historian.hurence.com:10080/api/v1/tags/temperator/stats 
       
 as follows :
 
@@ -383,7 +382,7 @@ Generate some sample data
 Build and run historian as Docker container
  
     mvn -U -X package docker:build
-    docker run -idt -p 8701:8701 -e appPort=8701 hurence/historian:latest
+    docker run -idt -p 8701:8701 hurence/historian:latest
 
     mvn -U -X clean versions:set -DnewVersion=1.0.37
     mvn -U -X package docker:build -Dpush.image=true
@@ -392,17 +391,17 @@ Build and run historian as Docker container
 
 log in
        
-    http://keycloak:8080/auth
+    http://historian.hurence.com:10080/auth
     
 then go to client, select Logisland-hitorian and add those properties :
 
-    Valid Redirect URIs: http://localhost:4200/*
-    Web Origins: http://localhost:4200 
+    Valid Redirect URIs: http://historian.hurence.com:10080/*
+    Web Origins: http://historian.hurence.com:10080 
 
 Do not erase previous values just add those new ones.
 Now when you go on webapp at 
 
-    http://localhost:4200
+    http://historian.hurence.com:10080
     
 Keycloak authentification should be used if not you may not have ran the webapp, in this case tape in 'frontend' directory :
 

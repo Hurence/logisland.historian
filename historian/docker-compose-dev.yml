@@ -1,33 +1,78 @@
-version: "2"
-services:
+version: "3"
+networks:
+  historian-be:
 
+services:
   chronix:
     container_name: chronix
     environment:
-      - JAVA_MEMORY=4g
+      - JAVA_MEMORY=1g
     hostname: chronix
-    image: 'andrea/cronix:1.0'
+    image: 'hurence/historian-chronix:0.4.3-SNAPSHOT'
+    networks:
+      historian-be:
+        aliases:
+          - chronix
+
+  frontend:
+    image: node:10
+    command: bash -c "cd /app && npm install -g @angular/cli && yarn install && ng serve --host 0.0.0.0"
+    volumes:
+      - ./frontend:/app
+    networks:
+      historian-be:
+        aliases:
+          - frontend
+
+  backend:
+    image: java:8
+    container_name: backend
+    command: bash -c "java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -jar `ls /app/*.jar`"
+    volumes:
+      - ./backend/target:/app
     ports:
-      - '8983:8983'
-    network_mode: bridge
+      - 5005:5005
+    environment:
+      - sorl_base_url=${ENTRY_POINT_URL:-http://historian.hurence.com:10080}/solr
+      - keycloak_base_url=${ENTRY_POINT_URL:-http://historian.hurence.com:10080}/auth
+    networks:
+      historian-be:
+        aliases:
+          - backend
 
   keycloak:
     container_name: keycloak
     image: 'hurence/keycloak:0.2.0'
-    ports:
-      - '8080:8080'
-    network_mode: bridge
+    environment:
+      - PROXY_ADDRESS_FORWARDING=true
+    networks:
+      historian-be:
+        aliases:
+          - keycloak
   logisland:
-      container_name: logisland
-      image: 'hurence/logisland:0.14.1-develop'
-      command: bin/logisland.sh --conf /conf/historian-remote.yaml
-      hostname: logisland
-      ports:
-        - '4050:4050'
-      volumes:
-        - ./conf/logisland:/conf
-      links:
-        - chronix
-      network_mode: bridge
-      extra_hosts:
-        - "historian-backend:192.168.99.1"
+    container_name: logisland
+    image: 'hurence/logisland:0.14.1-develop'
+    command: "bin/logisland.sh --conf /conf/historian-remote.yaml"
+    ports:
+      - '4050:4050'
+    volumes:
+      - ./conf/logisland:/conf
+    networks:
+      historian-be:
+        aliases:
+          - logisland
+  nginx:
+   container_name: nginx
+   image: nginx:1.13
+   restart: always
+   ports:
+     - 10080:10080
+     - 10443:10443
+   environment:
+     - HISTORIAN_DOMAIN=${HISTORIAN_DOMAIN:-historian.hurence.com}
+   volumes:
+     - ./conf/nginx:/etc/nginx/conf.d
+   networks:
+     historian-be:
+       aliases:
+         - ${HISTORIAN_DOMAIN:-historian.hurence.com}

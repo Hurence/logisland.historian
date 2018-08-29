@@ -15,7 +15,7 @@ import { HistorianTag, IHistorianTag } from '../modele/HistorianTag';
 @Injectable()
 export class TagHistorianService implements IModelService<HistorianTag> {
 
-  private tagsUrl = `${environment.HISTORIAN_API_URL}`;
+  private tagsUrl = `${environment.HISTORIAN_API_BASE_URL}`;
   private SUCCESSFULLY_SAVED_MSG = 'successfully added tag';
   private SUCCESSFULLY_UPDATED_MSG = 'successfully modified tag';
   private SUCCESSFULLY_DELETED_MSG = 'successfully deleted tag';

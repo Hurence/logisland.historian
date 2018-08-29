@@ -27,6 +27,6 @@ engine:
     spark.streaming.ui.retainedBatches: 200
     spark.streaming.receiver.writeAheadLog.enable: false
     spark.ui.port: 4050
-    remote.api.baseUrl: http://historian-backend:8701/api/v1/
+    remote.api.baseUrl: http://historian.hurence.com:10080/api/v1/
     remote.api.polling.rate: 5000
     remote.api.push.rate: 10000

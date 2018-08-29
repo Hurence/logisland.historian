@@ -10,7 +10,7 @@ import { environment } from '../../../../environments/environment';
 @Injectable()
 export class TagOpcService {
 
-  private tagsUrl = `${environment.HISTORIAN_API_URL}`;
+  private tagsUrl = `${environment.HISTORIAN_API_BASE_URL}`;
 
   constructor(private http: HttpClient,
               private help: Utilities) { }

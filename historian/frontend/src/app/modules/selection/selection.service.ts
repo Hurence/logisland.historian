@@ -14,7 +14,7 @@ export class SelectionService extends AbstractModelService<TagsSelectionArray> {
 
     constructor(protected http: HttpClient,
         protected help: Utilities) {
-        super(http, help, `${environment.HISTORIAN_API_URL}selections`);
+        super(http, help, `${environment.HISTORIAN_API_BASE_URL}selections`);
     }
 
     getAllTagsFromSelection(selectionId: string): Observable<HistorianTag[]> {

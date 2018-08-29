@@ -11,7 +11,7 @@ import { MeasuresRequest } from './MeasuresRequest';
 @Injectable()
 export class MeasuresService {
 
-  private measuresUrl: string = environment.HISTORIAN_API_URL;
+  private measuresUrl: string = `${environment.HISTORIAN_API_BASE_URL}`;
 
   constructor(private http: HttpClient,
     private help: Utilities) { }

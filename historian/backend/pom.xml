@@ -293,8 +293,8 @@
 
     <repositories>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>central</id>
+            <url>http://repo1.maven.org/maven2/</url>
         </repository>
         <repository>
             <id>bintray</id>
@@ -312,6 +312,10 @@
             <id>maven-restlet</id>
             <name>Public online Restlet repository</name>
             <url>http://maven.restlet.org</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 

@@ -30,6 +30,22 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { ArrayUtil } from './shared/array-util';
 import {ConfirmationService} from 'primeng/api';
 import { DataFlowService } from './dataflow.service';
+import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
+
+/**
+ * This function is used internal to get a string instance of the `<base href="" />` value from `index.html`.
+ * This is an exported function, instead of a private function or inline lambda, to prevent this error:
+ *
+ * `Error encountered resolving symbol values statically.`
+ * `Function calls are not supported.`
+ * `Consider replacing the function or lambda with a reference to an exported function.`
+ *
+ * @param platformLocation an Angular service used to interact with a browser's URL
+ * @return a string instance of the `<base href="" />` value from `index.html`
+ */
+export function getBaseHref(platformLocation: PlatformLocation): string {
+  return platformLocation.getBaseHrefFromDOM();
+}
 
 @NgModule({
   declarations: [
@@ -59,6 +75,11 @@ import { DataFlowService } from './dataflow.service';
       provide: HTTP_INTERCEPTORS, // interceptor that add keycloack token to requests
       useClass: CustomHttpInterceptor,
       multi: true
+    },
+    {
+      provide: APP_BASE_HREF,
+      useFactory: getBaseHref,
+      deps: [PlatformLocation]
     },
     ProfilService,
     TagService,

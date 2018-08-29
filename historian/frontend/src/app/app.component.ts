@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { ProfilService } from './profil/profil.service';
 import { environment } from '../environments/environment';
+import { APP_BASE_HREF } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +15,10 @@ export class AppComponent implements OnInit {
   logoutUrl: string;
 
   constructor(private keycloakService: KeycloakService,
-              public profilService: ProfilService) {
-
-                this.logoutUrl = environment.KEYCLOAK_LOGOUT_URL;
+              public profilService: ProfilService,
+              @Inject(APP_BASE_HREF) private baseHref:string) {
+                const baseUri: string = "TODO"
+                this.logoutUrl = `${environment.AUTHENTICATION_BASE_URL}${environment.KEYCLOAK_LOGOUT_URL_REDIRECT}${baseHref}`;
               }
 
   public ngOnInit(): void {
