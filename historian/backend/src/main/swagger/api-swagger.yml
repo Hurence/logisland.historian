@@ -292,6 +292,17 @@ paths:
           description: filter query (lucene syntax like fq="labels:opc AND datasources:win32")
           required: false
           type: string
+        - name: limit
+          in: query
+          description: max number of elements to return
+          required: false
+          type: integer
+          format: int32
+        - name: sort
+          in: query
+          description: sort query <field name>+<direction>[,<field name>+<direction>] (syntax like sort=last_modification_date desc )
+          required: false
+          type: string
       summary:  get all saved tags
       description: retrieve all OPC tags
       produces:
@@ -1204,11 +1215,6 @@ paths:
         - Each time the a dataflow or a pipeline configuration change has been applied.
         This service can be seen as well as a liveness ping.
       parameters:
-        - name: jobId
-          in: path
-          type: string
-          required: true
-          description: logisland job id (aka the engine name)
         - in: body
           name: dataflow
           required: true

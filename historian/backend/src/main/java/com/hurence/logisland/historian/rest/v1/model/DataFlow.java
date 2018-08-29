@@ -1,245 +1,231 @@
 package com.hurence.logisland.historian.rest.v1.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.hurence.logisland.historian.rest.v1.model.Service;
+import com.hurence.logisland.historian.rest.v1.model.Stream;
+import com.hurence.logisland.historian.rest.v1.model.Versioned;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.Serializable;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
-import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import org.threeten.bp.OffsetDateTime;
 
 /**
- * A streaming pipeline.
- */
-@ApiModel(description = "A streaming pipeline.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-11T07:44:45.292+02:00")
+* A streaming pipeline.
+*/
+    @ApiModel(description = "A streaming pipeline.")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-29T22:27:12.655+02:00")
 
 
 @SolrDocument(solrCoreName = "dataflow")
-public class DataFlow implements Serializable {
-    @JsonProperty("lastModified")
-    @Indexed(name = "lastModified")
-    private String lastModified = null;
+public class DataFlow  implements Serializable {
+        @JsonProperty("lastModified")
+        @Indexed(name = "lastModified")
+        private String lastModified = null;
 
-    @JsonProperty("modificationReason")
-    @Indexed(name = "modificationReason")
-    private String modificationReason = null;
+        @JsonProperty("modificationReason")
+        @Indexed(name = "modificationReason")
+        private String modificationReason = null;
 
-    @JsonIgnore
-    @Indexed(name = "lastPingDateTime")
-    private Date lastPingDateTime;
+        @JsonProperty("id")
+        @Indexed(name = "id")
+        private String id = null;
 
-    @JsonProperty("id")
-    @Indexed(name = "id")
-    private String id = null;
+        @JsonProperty("services")
+        @Indexed(name = "services")
+        private List<Service> services = null;
 
-    @JsonProperty("services")
-    @Indexed(name = "services")
-    private List<Service> services = null;
+        @JsonProperty("streams")
+        @Indexed(name = "streams")
+        private List<Stream> streams = null;
 
-    @JsonProperty("streams")
-    @Indexed(name = "streams")
-    private List<Stream> streams = null;
-
-    public Date getLastPingDateTime() {
-        return lastPingDateTime;
-    }
-
-    public void setLastPingDateTime(Date lastPingDateTime) {
-        this.lastPingDateTime = lastPingDateTime;
-    }
-
-    public DataFlow lastModified(String lastModified) {
+        public DataFlow lastModified(String lastModified) {
         this.lastModified = lastModified;
         return this;
-    }
+        }
 
     /**
-     * the last modified timestamp of this pipeline (used to trigger changes).
-     *
-     * @return lastModified
-     **/
-    @JsonProperty("lastModified")
+        * the last modified timestamp of this pipeline (used to trigger changes).
+    * @return lastModified
+    **/
+        @JsonProperty("lastModified")
     @ApiModelProperty(required = true, value = "the last modified timestamp of this pipeline (used to trigger changes).")
-    @NotNull
+      @NotNull
 
 
-    public String getLastModified() {
-        return lastModified;
+  public String getLastModified() {
+    return lastModified;
     }
 
-    public DataFlow setLastModified(String lastModified) {
+        public DataFlow setLastModified(String lastModified) {
         this.lastModified = lastModified;
         return this;
-    }
+        }
 
-    public DataFlow modificationReason(String modificationReason) {
+        public DataFlow modificationReason(String modificationReason) {
         this.modificationReason = modificationReason;
         return this;
-    }
+        }
 
     /**
-     * Can be used to document latest changeset.
-     *
-     * @return modificationReason
-     **/
-    @JsonProperty("modificationReason")
+        * Can be used to document latest changeset.
+    * @return modificationReason
+    **/
+        @JsonProperty("modificationReason")
     @ApiModelProperty(value = "Can be used to document latest changeset.")
+    
 
-
-    public String getModificationReason() {
-        return modificationReason;
+  public String getModificationReason() {
+    return modificationReason;
     }
 
-    public DataFlow setModificationReason(String modificationReason) {
+        public DataFlow setModificationReason(String modificationReason) {
         this.modificationReason = modificationReason;
         return this;
-    }
+        }
 
-    public DataFlow id(String id) {
+        public DataFlow id(String id) {
         this.id = id;
         return this;
-    }
+        }
 
     /**
-     * The id of the dataflow.
-     *
-     * @return id
-     **/
-    @JsonProperty("id")
+        * The id of the dataflow.
+    * @return id
+    **/
+        @JsonProperty("id")
     @ApiModelProperty(value = "The id of the dataflow.")
+    
 
-
-    public String getId() {
-        return id;
+  public String getId() {
+    return id;
     }
 
-    public DataFlow setId(String id) {
+        public DataFlow setId(String id) {
         this.id = id;
         return this;
-    }
+        }
 
-    public DataFlow services(List<Service> services) {
+        public DataFlow services(List<Service> services) {
         this.services = services;
         return this;
-    }
-
-    public DataFlow addServicesItem(Service servicesItem) {
-        if (this.services == null) {
-            this.services = new ArrayList<Service>();
         }
-        this.services.add(servicesItem);
-        return this;
-    }
+
+            public DataFlow addServicesItem(Service servicesItem) {
+                if (this.services == null) {
+                this.services = new ArrayList<Service>();
+                }
+            this.services.add(servicesItem);
+            return this;
+            }
 
     /**
-     * The service controllers.
-     *
-     * @return services
-     **/
-    @JsonProperty("services")
+        * The service controllers.
+    * @return services
+    **/
+        @JsonProperty("services")
     @ApiModelProperty(value = "The service controllers.")
+    
+  @Valid
 
-    @Valid
-
-    public List<Service> getServices() {
-        return services;
+  public List<Service> getServices() {
+    return services;
     }
 
-    public DataFlow setServices(List<Service> services) {
+        public DataFlow setServices(List<Service> services) {
         this.services = services;
         return this;
-    }
+        }
 
-    public DataFlow streams(List<Stream> streams) {
+        public DataFlow streams(List<Stream> streams) {
         this.streams = streams;
         return this;
-    }
-
-    public DataFlow addStreamsItem(Stream streamsItem) {
-        if (this.streams == null) {
-            this.streams = new ArrayList<Stream>();
         }
-        this.streams.add(streamsItem);
-        return this;
-    }
+
+            public DataFlow addStreamsItem(Stream streamsItem) {
+                if (this.streams == null) {
+                this.streams = new ArrayList<Stream>();
+                }
+            this.streams.add(streamsItem);
+            return this;
+            }
 
     /**
-     * The engine properties.
-     *
-     * @return streams
-     **/
-    @JsonProperty("streams")
+        * The engine properties.
+    * @return streams
+    **/
+        @JsonProperty("streams")
     @ApiModelProperty(value = "The engine properties.")
+    
+  @Valid
 
-    @Valid
-
-    public List<Stream> getStreams() {
-        return streams;
+  public List<Stream> getStreams() {
+    return streams;
     }
 
-    public DataFlow setStreams(List<Stream> streams) {
+        public DataFlow setStreams(List<Stream> streams) {
         this.streams = streams;
         return this;
-    }
+        }
 
 
     @Override
     public boolean equals(java.lang.Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+    if (this == o) {
+    return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+    return false;
+    }
         DataFlow dataFlow = (DataFlow) o;
         return Objects.equals(this.lastModified, dataFlow.lastModified) &&
-                Objects.equals(this.modificationReason, dataFlow.modificationReason) &&
-                Objects.equals(this.id, dataFlow.id) &&
-                Objects.equals(this.services, dataFlow.services) &&
-                Objects.equals(this.streams, dataFlow.streams);
+        Objects.equals(this.modificationReason, dataFlow.modificationReason) &&
+        Objects.equals(this.id, dataFlow.id) &&
+        Objects.equals(this.services, dataFlow.services) &&
+        Objects.equals(this.streams, dataFlow.streams);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastModified, modificationReason, id, services, streams);
+    return Objects.hash(lastModified, modificationReason, id, services, streams);
     }
 
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\n");
+@Override
+public String toString() {
+StringBuilder sb = new StringBuilder();
+sb.append("{\n");
 
-        sb.append("    lastModified: ").append(toIndentedString(lastModified)).append("\n");
-        sb.append("    modificationReason: ").append(toIndentedString(modificationReason)).append("\n");
-        sb.append("    id: ").append(toIndentedString(id)).append("\n");
-        sb.append("    services: ").append(toIndentedString(services)).append("\n");
-        sb.append("    streams: ").append(toIndentedString(streams)).append("\n");
-        sb.append("}");
-        return sb.toString();
-    }
+sb.append("    lastModified: ").append(toIndentedString(lastModified)).append("\n");
+sb.append("    modificationReason: ").append(toIndentedString(modificationReason)).append("\n");
+sb.append("    id: ").append(toIndentedString(id)).append("\n");
+sb.append("    services: ").append(toIndentedString(services)).append("\n");
+sb.append("    streams: ").append(toIndentedString(streams)).append("\n");
+sb.append("}");
+return sb.toString();
+}
 
     /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
     private String toIndentedString(java.lang.Object o) {
-        if (o == null) {
-            return "null";
-        }
-        if (o instanceof OffsetDateTime) {
-            return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
-        }
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
         return o.toString().replace("\n", "\n    ");
     }
 }

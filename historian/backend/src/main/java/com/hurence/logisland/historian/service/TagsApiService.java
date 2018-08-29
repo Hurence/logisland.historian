@@ -16,20 +16,29 @@
  */
 package com.hurence.logisland.historian.service;
 
+import com.hurence.logisland.historian.parsing.QueryParsing;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.rest.v1.model.TreeNode;
 import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
 import com.hurence.logisland.historian.rest.v1.model.operation_report.TagReplaceReport;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.FacetPivotFieldEntry;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.swing.text.html.Option;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -103,12 +112,24 @@ public class TagsApiService {
         return report;
     }
 
-    public List<Tag> getAllTags(String fq) {
+    public List<Tag> getAllTags(String fq, Optional<Integer> limit,
+                                Optional<String> sortParam) {
         String query = fq;
         if (fq == null || fq.isEmpty())
             query = "*";
-        List<Tag> tags = repository.findByText(query);
-        return tags;
+        Sort sort = Sort.unsorted();
+        if (sortParam.isPresent()) {
+            sort = QueryParsing.parseSortParam(sortParam.get());
+        }
+        Pageable myPage = null;
+        if (limit.isPresent()) {
+            myPage = PageRequest.of(0, limit.get(), sort);
+        }
+        if (myPage == null) {
+            return repository.findByText(query, sort);
+        } else {
+            return repository.findByText(query, myPage);
+        }
     }
 
     public List<Tag> getAllTagsFromDatasource(String datasourceId) {

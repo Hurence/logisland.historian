@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 class MainController {
@@ -38,7 +39,7 @@ class MainController {
     public String getTags(Principal principal, Model model){
 
         long start = System.currentTimeMillis();
-        model.addAttribute("tags", tagsApiService.getAllTags("*"));
+        model.addAttribute("tags", tagsApiService.getAllTags("*", Optional.empty(), Optional.empty()));
         long requestTime  = System.currentTimeMillis() - start;
 
      //   model.addAttribute("principal",principal);
