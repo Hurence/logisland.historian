@@ -125,13 +125,14 @@ public class DatasourceFlowElements {
                                            String opcConfig) {
         Service service = new Service();
         service.setName(serviceName);
-        service.setComponent("com.hurence.logisland.stream.spark.provider.KafkaConnectStructuredProviderService");
+        service.setComponent("com.hurence.logisland.stream.spark.provider.KafkaConnectStructuredSourceProviderService");
         service.setConfig(DataFlowUtil.buildProperties(
                 new Property().setKey("kc.data.value.converter").setValue("com.hurence.logisland.connect.converter.LogIslandRecordConverter"),
                 new Property().setKey("kc.data.value.converter.properties").setValue("record.serializer=com.hurence.logisland.serializer.KryoSerializer"),
                 new Property().setKey("kc.data.key.converter.properties").setValue("schemas.enable=false"),
                 new Property().setKey("kc.data.key.converter").setValue("org.apache.kafka.connect.storage.StringConverter"),
                 new Property().setKey("kc.worker.tasks.max").setValue("1"),
+                new Property().setKey("kc.partitions.max").setValue("4"),
                 new Property().setKey("kc.connector.class").setValue(
                         Datasource.DatasourceTypeEnum.OPC_DA.equals(datasourceType) ? "com.hurence.logisland.connect.opc.da.OpcDaSourceConnector" :
                                 "com.hurence.logisland.connect.opc.ua.OpcUaSourceConnector"),

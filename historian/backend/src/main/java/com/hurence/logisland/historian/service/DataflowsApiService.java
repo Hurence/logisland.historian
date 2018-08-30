@@ -89,9 +89,9 @@ public class DataflowsApiService {
 
         // Services
         List<com.hurence.logisland.historian.rest.v1.model.Service> services = new ArrayList<>();
-        com.hurence.logisland.historian.rest.v1.model.Service console =
-                DataFlowUtil.buildConsoleService(opcDataflowName);
-        services.add(console);
+        com.hurence.logisland.historian.rest.v1.model.Service sink =
+                DataFlowUtil.buildSinkService(opcDataflowName);
+        services.add(sink);
         com.hurence.logisland.historian.rest.v1.model.Service chronix =
                 DataFlowUtil.buildChronixService(opcDataflowName, logislandConfigurationBean.getChronix());
         services.add(chronix);
@@ -100,7 +100,7 @@ public class DataflowsApiService {
         List<Stream> streams = new ArrayList<>();
         for (Datasource ds : datasources) {
             DatasourceFlowElements dsElem = new DatasourceFlowElements(ds, chronix.getName(), opcDataflowName,
-                    console.getName(), tagsApiService, logislandConfigurationBean.getOpc());
+                    sink.getName(), tagsApiService, logislandConfigurationBean.getOpc());
 
             if (dsElem.isActive()) {
                 if (dsElem.getService() != null) services.add(dsElem.getService());

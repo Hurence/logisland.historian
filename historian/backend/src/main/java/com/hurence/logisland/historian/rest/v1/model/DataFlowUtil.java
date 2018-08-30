@@ -7,7 +7,6 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public final class DataFlowUtil {
@@ -15,15 +14,24 @@ public final class DataFlowUtil {
     private DataFlowUtil() {
     }
 
-    public final static String CONSOLE_SERVICE_NAME_SUFFIX = "_console_service";
+    public final static String SINK_SERVICE_NAME_SUFFIX = "_sink_service";
     public final static String CHRONIX_SERVICE_NAME_SUFFIX = "_chronix_service";
     private final static JacksonConverter converter = JacksonConverter.instance();
 
-    public static Service buildConsoleService(String dataflowName) {
+    public static Service buildSinkService(String dataflowName) {
         Service service = new Service();
-        service.setName(dataflowName + CONSOLE_SERVICE_NAME_SUFFIX);
-        service.setComponent("com.hurence.logisland.stream.spark.structured.provider.ConsoleStructuredStreamProviderService");
-        service.setConfig(Collections.emptyList());
+        service.setName(dataflowName + SINK_SERVICE_NAME_SUFFIX);
+        service.setComponent("com.hurence.logisland.stream.spark.provider.KafkaConnectStructuredSinkProviderService");
+        service.setConfig(buildProperties(
+                new Property().setKey("kc.data.value.converter").setValue("org.apache.kafka.connect.storage.StringConverter"),
+                new Property().setKey("kc.data.value.converter.properties").setValue("foo=bar"),
+                new Property().setKey("kc.data.key.converter.properties").setValue("foo=bar"),
+                new Property().setKey("kc.data.key.converter").setValue("org.apache.kafka.connect.storage.StringConverter"),
+                new Property().setKey("kc.worker.tasks.max").setValue("1"),
+                new Property().setKey("kc.connector.offset.backing.store").setValue("memory"),
+                new Property().setKey("kc.connector.offset.backing.store.properties").setValue("foo=bar"),
+                new Property().setKey("kc.connector.properties").setValue("foo=bar"),
+                new Property().setKey("kc.connector.class").setValue("com.hurence.logisland.connect.sink.NullSink")));
         return service;
     }
 
