@@ -8,6 +8,8 @@ import { TagsSelection, TagsSelectionArray } from '../Selection';
 import { SelectionFormComponent } from '../selection-form/selection-form.component';
 import { SelectionService } from '../selection.service';
 import { ConfirmationService } from 'primeng/components/common/api';
+import { IModification } from '../../datasource/ConfigurationToApply';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-selection-dashboard',
@@ -90,11 +92,15 @@ export class SelectionDashboardComponent implements OnInit {
     });
   }
 
-  onCreated(selection: TagsSelection) {
-    this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
-    this.tagSelection = selection;
-    this.actualizeListOfTagsSelection(this.tagSelection);
-    this.closeDialog();
+  onSelectionSubmitted(selectionModif: IModification<TagsSelection>) {
+    this.selectionService.save(new TagsSelectionArray(selectionModif.item), selectionModif.item.getId()).pipe(
+      tap(selection => {
+        this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
+        this.tagSelection = new TagsSelection(selection);
+        this.actualizeListOfTagsSelection(this.tagSelection);
+        this.closeDialog();
+      })
+    ).subscribe();
   }
 
   update(selection: TagsSelection) {

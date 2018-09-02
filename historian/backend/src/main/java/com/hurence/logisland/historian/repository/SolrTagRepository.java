@@ -18,6 +18,7 @@ package com.hurence.logisland.historian.repository;
 
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.repository.Facet;
 import org.springframework.data.solr.repository.Pivot;
@@ -43,6 +44,14 @@ public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
     // catch all query
     @Query(value = "*:*", filters = { "?0", "record_type:tag" })
     List<Tag> findByText(String text);
+
+    // catch all query
+    @Query(value = "*:*", filters = { "?0", "record_type:tag" })
+    List<Tag> findByText(String text, Sort sort);
+
+    // catch all query
+    @Query(value = "*:*", filters = { "?0", "record_type:tag" })
+    List<Tag> findByText(String text, Pageable page);
 
     @Query(value = "record_type:tag", filters = { "record_type:tag", "domain:?0"})
     List<Tag> findByDomain(String domain);

@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { ConfirmationService } from 'primeng/api';
 
-import { BaseDynamicFormComponent } from '../../../../shared/dynamic-form/BaseDynamicFormComponent';
 import { QuestionControlService } from '../../../../shared/dynamic-form/question-control.service';
-import { HistorianTag } from '../../modele/HistorianTag';
 import { TagHistorianService } from '../../service/tag-historian.service';
 import { TagOpcService } from '../../service/tag-opc.service';
-import { ConfirmationService } from 'primeng/api';
 import { BaseSingleTagForm } from '../BaseSingleTagForm';
+import { Operation } from '../../../datasource/ConfigurationToApply';
 
 @Component({
   selector: 'app-edit-tag-form',
@@ -15,12 +13,12 @@ import { BaseSingleTagForm } from '../BaseSingleTagForm';
   styleUrls: ['./edit-tag-form.component.css']
 })
 export class EditTagFormComponent extends BaseSingleTagForm implements OnInit {
+  protected formOperation: Operation = Operation.UPDATE;
 
   constructor(protected qcs: QuestionControlService,
-              protected service: TagHistorianService,
               protected confirmationService: ConfirmationService,
               protected tagOpcService: TagOpcService) {
-    super(qcs, service, confirmationService, tagOpcService);
+    super(qcs, confirmationService, tagOpcService);
   }
 
   ngOnInit() {

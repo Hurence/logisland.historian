@@ -50,21 +50,30 @@ export class TagHistorianService implements IModelService<HistorianTag> {
     }
   }
 
-  getQuery(query: string): Observable<HistorianTag[]> {
-    if (query && query.length !== 0) {
-      console.log('query is "' + query + '"');
+  getQuery(query: string, limit?: number, sort?: string): Observable<HistorianTag[]> {
+    const params: {[k: string]: any} = {};
+    if (query) {
+      params.fq = query;
+    }
+    if (limit !== undefined && limit !== null) {
+      params.limit = limit;
+    }
+    if (sort) {
+      params.sort = sort;
+    }
+    if (params) {
+      console.log('param is', params);
       return this.http.get<HistorianTag[]>(
         `${this.tagsUrl}tags`,
         {
-          params: {
-            fq : query
-          }
+          params: params
         }
       ).pipe(
         map(tags => tags.map(t => new HistorianTag(t))),
         tap(tags => console.log(`found ${tags.length} historian tags from getQuery(${query})`)),
       );
     } else {
+      console.log('no given param');
       return this.getAll();
     }
   }

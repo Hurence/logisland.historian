@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-11T07:44:45.292+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-29T22:27:12.655+02:00")
 
 @Api(value = "dataflows", description = "the dataflows API")
     public interface DataflowsApi {
@@ -33,7 +33,7 @@ import java.util.List;
                 @ApiResponse(code = 200, message = "The server should return HTTP 200 OK. By the way, the response is ignored by Logisland since the operation has a *fire and forget* nature. ") })
             @RequestMapping(value = "/api/v1/dataflows/{dataflowName}",
             method = RequestMethod.POST)
-        ResponseEntity<Void> notifyDataflowConfiguration(@ApiParam(value = "the dataflow name (aka the logisland job name)",required=true) @PathVariable("dataflowName") String dataflowName, @RequestBody DataFlow dataflow);
+        ResponseEntity<Void> notifyDataflowConfiguration(@ApiParam(value = "the dataflow name (aka the logisland job name)",required=true) @PathVariable("dataflowName") String dataflowName,@ApiParam(value = "" ,required=true )  @Valid @RequestBody DataFlow dataflow);
 
 
             @ApiOperation(value = "Retrieves the configuration for a specified dataflow", nickname = "pollDataflowConfiguration", notes = "A dataflow is a set of services and streams allowing a data flowing from one or more sources, being transformed and reach one or more destinations (sinks). Logisland will call this endpoint to know which configuration should be run.  This endpoint also supports HTTP caching (Last-Updated, If-Modified-Since) as per RFC 7232, section 3.3", response = DataFlow.class, tags={ "dataflow", })

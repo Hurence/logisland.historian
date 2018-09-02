@@ -27,9 +27,9 @@
         <field name="tag_name" type="string" indexed="true" stored="true" required="false"/>
         <field name="data_type" type="string" indexed="true" stored="true" required="false"/>
         <field name="labels" type="string" indexed="true" stored="true" required="false" multiValued="true"/>
-        <field name="creation_date" type="date" indexed="true" stored="true" required="false"/>
-        <field name="last_modification_date" type="date" indexed="true" stored="true" required="false"/>
-        <field name="last_polling_date" type="date" indexed="true" stored="true" required="false"/>
+        <field name="creation_date" type="long" indexed="true" stored="true" required="false"/>
+        <field name="last_modification_date" type="long" indexed="true" stored="true" required="false"/>
+        <field name="last_polling_date" type="long" indexed="true" stored="true" required="false"/>
         <field name="last_base64_value" type="binary" indexed="true" stored="true" required="false"/>
         <field name="update_rate" type="int" indexed="true" stored="true" required="true"/>
         <field name="server_scan_rate" type="int" indexed="true" stored="true" required="false"/>

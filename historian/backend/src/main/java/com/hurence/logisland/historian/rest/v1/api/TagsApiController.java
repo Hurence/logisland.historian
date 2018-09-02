@@ -78,10 +78,18 @@ public class TagsApiController implements TagsApi {
         }
     }
 
-    public ResponseEntity<List<Tag>> getAllTags(@ApiParam(value = "filter query (lucene syntax like fq=\"labels:opc AND datasources:win32\")") @Valid @RequestParam(value = "fq", required = false) String fq) {
-        return new ResponseEntity<List<Tag>>(service.getAllTags(fq), HttpStatus.OK);
+    @Override
+    public ResponseEntity<List<Tag>> getAllTags(
+            @ApiParam(value = "filter query (lucene syntax like fq=\"labels:opc AND datasources:win32\")") @Valid @RequestParam(value = "fq", required = false) String fq,
+            @ApiParam(value = "max number of elements to return") @Valid @RequestParam(value = "limit", required = false) Integer limit,
+            @ApiParam(value = "sort query <field name>+<direction>[,<field name>+<direction>] (syntax like sort=last_modification_date desc )") @Valid @RequestParam(value = "sort", required = false) String sort) {
+        Optional<Integer> limitO = limit == null ? Optional.empty() : Optional.of(limit);
+        Optional<String> sortO = sort == null ? Optional.empty() : Optional.of(sort);
+        return new ResponseEntity<List<Tag>>(
+                service.getAllTags(fq, limitO, sortO),
+                HttpStatus.OK
+        );
     }
-
 
     public ResponseEntity<Tag> getTag(@ApiParam(value = "id of the tag to return", required = true) @PathVariable("tagId") String tagId) {
         Optional<Tag> tag = service.getTag(tagId);

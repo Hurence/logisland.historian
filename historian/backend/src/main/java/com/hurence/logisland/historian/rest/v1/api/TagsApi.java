@@ -28,7 +28,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-11T07:44:45.292+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-29T22:27:12.655+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -81,7 +81,7 @@ import java.util.List;
             @RequestMapping(value = "/api/v1/tags",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        ResponseEntity<List<Tag>> getAllTags(@ApiParam(value = "filter query (lucene syntax like fq=\"labels:opc AND datasources:win32\")") @Valid @RequestParam(value = "fq", required = false) String fq);
+        ResponseEntity<List<Tag>> getAllTags(@ApiParam(value = "filter query (lucene syntax like fq=\"labels:opc AND datasources:win32\")") @Valid @RequestParam(value = "fq", required = false) String fq,@ApiParam(value = "max number of elements to return") @Valid @RequestParam(value = "limit", required = false) Integer limit,@ApiParam(value = "sort query <field name>+<direction>[,<field name>+<direction>] (syntax like sort=last_modification_date desc )") @Valid @RequestParam(value = "sort", required = false) String sort);
 
 
             @ApiOperation(value = "get tag", nickname = "getTag", notes = "get the corresponding Tag", response = Tag.class, tags={ "tag", })

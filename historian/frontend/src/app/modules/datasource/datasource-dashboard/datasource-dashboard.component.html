@@ -47,14 +47,26 @@
                       (click)="generateConfiguration()" [disabled]="!isApplyBtnEnabled">
                   Apply changes
                 </button>
-                <p-progressSpinner *ngIf="!isApplyBtnEnabled" [style]="{width: '30px', height: '30px'}"
+                <p-progressSpinner *ngIf="isApplyingConf" [style]="{width: '30px', height: '30px'}"
                                 strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
               </div>
             </div>
             <div class="col-12 datasource-detail-content h-100">
-              <app-opc-tag-tree [datasource]="selectedDatasource"
-                                [withExpandAll]="isDatasourceAutomatic(selectedDatasource)"
-                                [withCollapseAll]="isDatasourceAutomatic(selectedDatasource)"></app-opc-tag-tree>
+              <ng-container *ngIf="selectedDatasource">
+                <ng-container [ngSwitch]="selectedDatasource.tag_browsing">        
+                  <app-opc-tag-tree-automatic *ngSwitchCase="'automatic'" [datasource]="selectedDatasource"
+                                    [withExpandAll]="false"
+                                    [withCollapseAll]="false"
+                                    (modifiedTag)="onModifiedTag($event)"></app-opc-tag-tree-automatic>
+                  <app-opc-tag-tree-manual *ngSwitchCase="'manual'" [datasource]="selectedDatasource"
+                                    [withExpandAll]="false"
+                                    [withCollapseAll]="false"
+                                    (modifiedTag)="onModifiedTag($event)"></app-opc-tag-tree-manual>
+                </ng-container>  
+              </ng-container>
+              <ng-container *ngIf="!selectedDatasource">
+                Please select or create a datasource.
+              </ng-container>
             </div>
           </div>
         </div>

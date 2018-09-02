@@ -1,17 +1,26 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataFlowService } from '../../../dataflow.service';
 import { ProfilService } from '../../../profil/profil.service';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { QuestionService } from '../../../shared/dynamic-form/question.service';
+import { Utilities } from '../../../shared/utilities.service';
 import { HistorianTag } from '../../tag/modele/HistorianTag';
 import { TagDataType, TagRecordType } from '../../tag/modele/tag';
+import { TagHistorianService } from '../../tag/service/tag-historian.service';
 import { AddTagFormComponent } from '../../tag/tag-form/add-tag-form/add-tag-form.component';
-import { OpcTagTreeComponent } from '../../tag/tag-tree/opc-tag-tree/opc-tag-tree.component';
+import {
+  OpcTagTreeAutomaticComponent,
+} from '../../tag/tag-tree/opc-tag-tree/opc-tag-tree-automatic/opc-tag-tree-automatic.component';
+import {
+  OpcTagTreeManualComponent,
+} from '../../tag/tag-tree/opc-tag-tree/opc-tag-tree-manual/opc-tag-tree-manual.component';
+import { IModification, TagConfigurationToApply } from '../ConfigurationToApply';
 import { Datasource, DatasourceType, TagBrowsingMode } from '../Datasource';
 import { DatasourcesListComponent } from '../datasources-list/datasources-list.component';
-import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'app-datasource-dashboard',
@@ -20,6 +29,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 })
 export class DatasourceDashboardComponent implements OnInit {
 
+  tagConfigurationToApply: TagConfigurationToApply;
   selectedDatasource: Datasource;
   datasourceToCreate: Datasource;
   filterPlaceHolder = 'Type to filter by type or by description...';
@@ -29,22 +39,27 @@ export class DatasourceDashboardComponent implements OnInit {
   displayAddDatasource = false;
   tagQuestions: QuestionBase<any>[];
 
-  isApplyBtnEnabled: boolean = true;
+  isApplyBtnEnabled: boolean = false;
+  isApplyingConf: boolean = false;
 
   @ViewChild(DatasourcesListComponent)
   private dslistComp: DatasourcesListComponent;
-  @ViewChild(OpcTagTreeComponent)
-  private tagTree: OpcTagTreeComponent;
+  @ViewChild(OpcTagTreeAutomaticComponent)
+  private tagTreeAutomatic: OpcTagTreeAutomaticComponent;
+  @ViewChild(OpcTagTreeManualComponent)
+  private tagTreeManual: OpcTagTreeManualComponent;
   @ViewChild(AddTagFormComponent)
   private addTagForm: AddTagFormComponent;
-  private DISCARD_CHANGE_QUESTION_MSG = 'Discard changes ?';
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private profilService: ProfilService,
               private questionService: QuestionService,
               private dataFlowService: DataFlowService,
-              protected messageService: MessageService) {
+              private tagHistorianService: TagHistorianService,
+              private observerUtil: Utilities,
+              protected messageService: MessageService,
+              protected confirmationService: ConfirmationService) {
                 this.createdTag = new HistorianTag({
                   record_type: TagRecordType.TAG,
                   id: '',
@@ -67,14 +82,26 @@ export class DatasourceDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.tagQuestions = this.questionService.getAddTagForm();
+    this.tagConfigurationToApply = new TagConfigurationToApply();
   }
 
   onSelectDatasource(datasource: Datasource) {
-    this.selectDatasource(datasource);
-  }
-
-  goToTags() {
-    this.router.navigate(['../tags'], { relativeTo: this.route });
+    if (this.tagConfigurationToApply.isClean()) {
+      this.selectDatasource(datasource);
+    } else {
+      this.confirmationService.confirm({
+        message: `Vous n'avez pas validé cos modifications pour la datasource actuelle.
+                  Voulez-vous les annulez ? Sinon merci d'anuller et d'appuyer sur le bouton apply.`,
+        header: 'Confirmation',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Ok',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.selectDatasource(datasource);
+        },
+        reject: () => {}
+      });
+    }
   }
 
   isHelpHidden(): boolean {
@@ -122,6 +149,8 @@ export class DatasourceDashboardComponent implements OnInit {
 
   private selectDatasource(datasource: Datasource) {
     this.selectedDatasource = datasource;
+    this.tagConfigurationToApply = new TagConfigurationToApply();
+    this.isApplyBtnEnabled = false;
   }
 
 
@@ -131,9 +160,15 @@ export class DatasourceDashboardComponent implements OnInit {
    * as the tag is considered to not be in tree.
    * @param tag saved in form by user
    */
-  onTagCreated(tag: HistorianTag): void {
+  onTagCreated(modifTag: IModification<HistorianTag>): void {
+    this.tagConfigurationToApply.addTagModification(modifTag);
+    if (this.tagConfigurationToApply.isClean()) {
+      this.isApplyBtnEnabled = false;
+    } else {
+      this.isApplyBtnEnabled = true;
+    }
     this.disaplyAddTagForm = false;
-    this.tagTree.addNodeFromTag(tag);
+    this.tagTreeManual.addNodeFromTag(modifTag.item);
   }
 
   isAddTagDisabled(ds: Datasource): boolean {
@@ -154,25 +189,48 @@ export class DatasourceDashboardComponent implements OnInit {
     this.addTagForm.resetDisplay();
   }
 
+  onModifiedTag(tagModification: IModification<HistorianTag>) {
+    this.tagConfigurationToApply.addTagModification(tagModification);
+    if (this.tagConfigurationToApply.isClean()) {
+      this.isApplyBtnEnabled = false;
+    } else {
+      this.isApplyBtnEnabled = true;
+    }
+  }
+
   generateConfiguration() {
     this.isApplyBtnEnabled = false;
-    this.dataFlowService.autoUpdateConfiguration('OpcTagsInjector').subscribe(
-      success => {
-        this.messageService.add({
-          severity: 'success',
-          summary: `successfully updated configuration`,
-        });
+    this.isApplyingConf = true;
+    this.tagConfigurationToApply.apply(this.tagHistorianService).subscribe(
+      report => {
+        this.dataFlowService.autoUpdateConfiguration('OpcTagsInjector').subscribe(
+          success => {
+            this.messageService.add({
+              severity: 'success',
+              summary: `successfully updated configuration`,
+            });
+            this.isApplyBtnEnabled = false;
+            this.isApplyingConf = false;
+          },
+          error => {
+            this.messageService.add({
+              severity: 'error',
+              summary: `Failed to update configuration.`,
+            });
+            this.isApplyBtnEnabled = true;
+            this.isApplyingConf = false;
+          }
+      );
       },
       error => {
         this.messageService.add({
           severity: 'error',
-          summary: `Failed to update configuration`,
+          summary: `Failed to update tags`,
         });
         this.isApplyBtnEnabled = true;
-      },
-      () => {
-        this.isApplyBtnEnabled = true;
+        this.isApplyingConf = false;
       }
     );
   }
+
 }

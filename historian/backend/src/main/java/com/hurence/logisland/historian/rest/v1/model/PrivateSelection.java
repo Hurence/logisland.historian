@@ -22,7 +22,7 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * PrivateSelection
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-11T07:44:45.292+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-29T22:27:12.655+02:00")
 
 
 @SolrDocument(solrCoreName = "selection")

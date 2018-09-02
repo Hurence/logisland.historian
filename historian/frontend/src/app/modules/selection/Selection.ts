@@ -1,4 +1,4 @@
-import { CanGetId } from '../../shared/dynamic-form/BaseDynamicFormComponent';
+import { CanGetId } from '../../shared/dynamic-form/BaseDynamicFormComponentEmitter';
 
 export interface ITagsSelection {
     name: string;

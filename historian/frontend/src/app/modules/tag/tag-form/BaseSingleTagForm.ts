@@ -1,14 +1,13 @@
 import { OnInit } from '@angular/core';
+import { ConfirmationService } from 'primeng/api';
 import { map } from 'rxjs/operators';
 
-import { BaseDynamicFormComponent } from '../../../shared/dynamic-form/BaseDynamicFormComponent';
+import { BaseDynamicFormComponentEmitter } from '../../../shared/dynamic-form/BaseDynamicFormComponentEmitter';
 import { QuestionControlService } from '../../../shared/dynamic-form/question-control.service';
 import { HistorianTag } from '../modele/HistorianTag';
-import { TagHistorianService } from '../service/tag-historian.service';
 import { TagOpcService } from '../service/tag-opc.service';
-import { ConfirmationService } from 'primeng/api';
 
-export abstract class BaseSingleTagForm extends BaseDynamicFormComponent<HistorianTag, HistorianTag> implements OnInit {
+export abstract class BaseSingleTagForm extends BaseDynamicFormComponentEmitter<HistorianTag> implements OnInit {
 
   displayFoundMsg = false;
   displayNotFoundMsg = false;
@@ -16,10 +15,9 @@ export abstract class BaseSingleTagForm extends BaseDynamicFormComponent<Histori
   loading = false;
 
   constructor(protected qcs: QuestionControlService,
-              protected service: TagHistorianService,
               protected confirmationService: ConfirmationService,
               protected tagOpcService: TagOpcService) {
-    super(qcs, service, confirmationService);
+    super(qcs, confirmationService);
   }
 
   ngOnInit() {
@@ -83,11 +81,7 @@ export abstract class BaseSingleTagForm extends BaseDynamicFormComponent<Histori
     this.displayNotFoundMsg = true;
   }
 
-  protected create(item: HistorianTag): HistorianTag {
-    return new HistorianTag(item);
-  }
-
-  protected convert(backObj: HistorianTag): HistorianTag {
-    return new HistorianTag(backObj);
+  protected create(): HistorianTag {
+    return new HistorianTag();
   }
 }

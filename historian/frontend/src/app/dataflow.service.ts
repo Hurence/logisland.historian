@@ -17,4 +17,8 @@ export class DataFlowService {
     autoUpdateConfiguration(dataFlowId: string): Observable<any> {
       return this.http.post(`${this.baseUrl}/${dataFlowId}/auto-update`, {});
     }
+
+    getConfiguration(dataFlowId: string): Observable<any> {
+      return this.http.get(`${this.baseUrl}/${dataFlowId}`);
+    }
 }
