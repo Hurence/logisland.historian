@@ -65,7 +65,12 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
     this.updateNodeAfterDeletingTag(node);
   }
 
-    /**
+  loadNode(event): void {
+    const node: TreeNode = event.node;
+    this.loadANodeIfNeeded(node);
+  }
+
+  /**
    *
    * @param node should be a leaf containing a tag
    */
