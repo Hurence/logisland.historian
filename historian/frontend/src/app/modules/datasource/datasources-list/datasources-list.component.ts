@@ -18,6 +18,8 @@ export class DatasourcesListComponent implements OnInit {
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();
   datasourceToEdit: Datasource;
   displayEditDatasource = false;
+  @Output() modifiedDatasource = new EventEmitter<Datasource>();
+
 
   private CANCEL_MSG = 'Cancel';
   private REMOVE_DATASOURCE_MSG = 'Remove data source';
@@ -50,6 +52,7 @@ export class DatasourcesListComponent implements OnInit {
         this.datasourceService.delete(datasource.id)
         .subscribe(deletedDs => {
           this.getDatasources();
+          this.modifiedDatasource.emit(deletedDs);
           if (this.selectedDatasource.id === deletedDs.id) {
             this.onSelect(null);
           }
@@ -71,6 +74,7 @@ export class DatasourcesListComponent implements OnInit {
   }
 
   onSubmitted(ds: Datasource) {
+    this.modifiedDatasource.emit(ds);
     this.getDatasources();
     this.selectedDatasource = ds;
     this.displayEditDatasource = false;

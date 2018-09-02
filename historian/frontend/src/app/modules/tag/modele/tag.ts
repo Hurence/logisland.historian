@@ -1,5 +1,5 @@
 import { environment } from '../../../../environments/environment';
-import { CanGetId } from '../../../shared/dynamic-form/BaseDynamicFormComponent';
+import { CanGetId } from '../../../shared/dynamic-form/BaseDynamicFormComponentEmitter';
 
 
 export interface ITag {
@@ -74,7 +74,7 @@ export abstract class Tag implements ITag, CanGetId {
     last_numeric_value?: number;
     last_quality?: number;
 
-    constructor(options: ITag) {
+    constructor(options?: ITag) {
         Object.assign(this, options);
         if (this.update_rate === null || this.update_rate === undefined) this.update_rate = Tag.TAG_UPDATE_RATE_DEFAUT;
         if (this.enabled === null || this.enabled === undefined) this.enabled = false;

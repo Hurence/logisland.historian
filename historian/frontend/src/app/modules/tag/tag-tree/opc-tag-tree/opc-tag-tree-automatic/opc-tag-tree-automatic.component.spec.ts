@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OpcTagTreeComponent } from './opc-tag-tree.component';
+import { OpcTagTreeComponent } from './opc-tag-tree-automatic.component';
 
 describe('OpcTagTreeComponent', () => {
   let component: OpcTagTreeComponent;

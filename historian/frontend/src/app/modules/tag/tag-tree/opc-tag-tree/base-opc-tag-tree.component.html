@@ -59,7 +59,7 @@
     <p-header>
         Edit tag from datasource : '{{datasource?.id}}'
     </p-header>
-    <app-edit-tag-form [questions]="tagEditQuestions" [item]="selectedTag" (submitted)="onTagSaved($event)"></app-edit-tag-form>
+    <app-edit-tag-form [questions]="tagEditQuestions" [item]="selectedTag" (submitted)="onTagModification($event)"></app-edit-tag-form>
     <p-footer>
     </p-footer>
 </p-dialog>

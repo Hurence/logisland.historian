@@ -1,29 +1,27 @@
-import { EventEmitter, Input, Output, OnInit, SimpleChanges, OnChanges } from '@angular/core';
+import { EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { ConfirmationService } from 'primeng/api';
 
-import { IModelService } from '../base-model-service';
 import { QuestionBase } from './question-base';
 import { QuestionControlService } from './question-control.service';
-import { isObject } from 'util';
-import { ConfirmationService } from 'primeng/api';
+import { IModification, Operation } from '../../modules/datasource/ConfigurationToApply';
 
 
 export interface CanGetId {
   getId(): string;
 }
 
-export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements OnInit, OnChanges {
+export abstract class BaseDynamicFormComponentEmitter<T> implements OnInit, OnChanges {
 
   @Input() questions: QuestionBase<any>[] = [];
   @Input() item: T;
-  @Output() submitted = new EventEmitter<T>();
+  @Output() submitted = new EventEmitter<IModification<T>>();
   form: FormGroup;
 
+  protected abstract formOperation: Operation;
   private DISCARD_CHANGE_MSG = 'Are you sure you want to reset form ?';
 
   constructor(protected qcs: QuestionControlService,
-              protected service: IModelService<B>,
               protected confirmationService: ConfirmationService) { }
 
   ngOnInit() {
@@ -38,17 +36,10 @@ export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements
   }
 
   onSubmit() {
-    const objToSave = this.prepareSaveItem();
-    this.service.save(objToSave, objToSave.getId()).subscribe(
-      obj => {
-        const converted = this.convert(obj);
-        this.item = converted;
-        this.submitted.emit(converted);
-      },
-      error => {
-        console.error(JSON.stringify(error));
-      }
-    );
+    this.submitted.emit({
+      operation: this.formOperation,
+      item: this.prepareSaveItem()
+    });
   }
 
   reset() {
@@ -72,14 +63,12 @@ export abstract class BaseDynamicFormComponent<T, B extends CanGetId> implements
   }
 
   /* Return a datasource based on formulaire inputs */
-  protected prepareSaveItem(): B {
-    const formModel = this.form.value;
-    const item = this.create(this.item);
-    Object.assign(item, formModel);
+  protected prepareSaveItem(): T {
+    const item: T = this.create();
+    Object.assign(item, this.item);
+    Object.assign(item, this.form.value);
     return item;
   }
 
-  protected abstract create(item: T): B;
-
-  protected abstract convert(backObj: B): T;
+  protected abstract create(): T;
 }
