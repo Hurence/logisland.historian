@@ -205,7 +205,12 @@ public class MeasuresApiService {
             long end = (long) docs.get(0).get("end");
             long numChunks = docs.getNumFound();
 
-            SolrQuery query = new SolrQuery(queryBuilder.toString() + " AND start:" + start + " AND end:" + end);
+            queryBuilder.append(" AND start:").append(start).append(" ");
+            if (start != end) {
+                queryBuilder.append("AND end:").append(end).append(" ");
+            }
+
+            SolrQuery query = new SolrQuery(queryBuilder.toString());
             query.setParam("cf", "metric{last;avg;count;min;max;trend}");
 
 

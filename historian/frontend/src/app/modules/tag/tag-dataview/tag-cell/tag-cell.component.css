@@ -1,7 +1,27 @@
 h1 {
     font-size: 1.2rem;
 }
-.important-agg {
+
+.cell-container {
+  display: grid;
+  /* grid-gap: 20px; */
+  height: 100%;
+}
+
+.cell-element-important {
   background-color: #2399e5;
   color: white;
+  padding: 20px;
+  border: 1px solid #fff;
+}
+
+.cell-element {
+  background-color: #DDDDDD;
+  color: black;
+  padding: 20px;
+  border: 1px solid #fff;
+}
+
+.grid-container--fit {
+  grid-template-columns: repeat(auto-fit, minmax(150px, auto));
 }

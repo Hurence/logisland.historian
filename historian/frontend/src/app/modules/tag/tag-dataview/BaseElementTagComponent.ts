@@ -14,11 +14,9 @@ export abstract class BaseElementTagComponent extends RefreshRateComponent imple
     protected measuresService: MeasuresService;
 
     subscribeToRefreshChanges(t: number): void {
-        this.notFound = true;
         this.measuresService.getStat(this.tag.id).subscribe(
             stats => {
                 this.lastRefreshed = new Date();
-                this.notFound = false;
                 this.stats = stats;
             },
             error => {
