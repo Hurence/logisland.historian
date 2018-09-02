@@ -8,7 +8,7 @@ export const environment = {
   KEYCLOAK_REALM: 'logisland',
   KEYCLOAK_CLIENTID: 'logisland-historian',
   KEYCLOAK_CLIENTID_SECRET: '4509b60c-4489-4fef-a24e-1ce9377b7d77',
-  KEYCLOAK_LOGOUT_URL_REDIRECT: 'auth/realms/logisland/protocol/openid-connect/logout?redirect_uri=',  
+  KEYCLOAK_LOGOUT_URL_REDIRECT: 'auth/realms/logisland/protocol/openid-connect/logout?redirect_uri=',
   HISTORIAN_API_BASE_URL: '/api/v1/',
   AUTHENTICATION_BASE_URL: '/',
   TAG_UPDATE_RATE_DEFAUT: 10000,

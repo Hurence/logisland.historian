@@ -16,8 +16,8 @@ export class AppComponent implements OnInit {
 
   constructor(private keycloakService: KeycloakService,
               public profilService: ProfilService,
-              @Inject(APP_BASE_HREF) private baseHref:string) {
-                const baseUri: string = "TODO"
+              @Inject(APP_BASE_HREF) private baseHref: string) {
+                const baseUri: string = 'TODO';
                 this.logoutUrl = `${environment.AUTHENTICATION_BASE_URL}${environment.KEYCLOAK_LOGOUT_URL_REDIRECT}${baseHref}`;
               }
 
