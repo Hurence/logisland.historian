@@ -42,7 +42,7 @@ services:
 
   keycloak:
     container_name: keycloak
-    image: 'hurence/keycloak:0.2.0'
+    image: 'hurence/keycloak:0.4.3-SNAPSHOT'
     environment:
       - PROXY_ADDRESS_FORWARDING=true
     networks:
