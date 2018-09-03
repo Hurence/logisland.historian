@@ -5,7 +5,7 @@ import { SourcesAndTagsComponent } from './sources-and-tags.component';
 import { ConfigurationComponent } from './configuration/configuration.component';
 import { DatasourceDashboardComponent } from '../datasource/datasource-dashboard/datasource-dashboard.component';
 import { ConfigurationGuard } from './configuration-guard';
-import { CanDeactivateGuard } from '../../can-deactivate-guard.service';
+import { CanDeactivateGuard } from '../../shared/can-deactivate-guard.service';
 
 const sourcesAndTagsRoutes: Routes = [
   {

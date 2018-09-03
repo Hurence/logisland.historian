@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CanDeactivateGuard } from './can-deactivate-guard.service';
+import { CanDeactivateGuard } from './shared/can-deactivate-guard.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SourcesAndTagsComponent } from './modules/sources-and-tags/sources-and-tags.component';
 import { VisualizationComponent } from './modules/visualization/visualization.component';
