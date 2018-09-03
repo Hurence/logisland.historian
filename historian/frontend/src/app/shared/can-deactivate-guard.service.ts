@@ -1,4 +1,4 @@
-import { Injectable }    from '@angular/core';
+import { Injectable, HostListener }    from '@angular/core';
 import { CanDeactivate } from '@angular/router';
 import { Observable }    from 'rxjs';
 
@@ -10,6 +10,13 @@ export interface CanComponentDeactivate {
 export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
 
   canDeactivate(component: CanComponentDeactivate) {
-    return component.canDeactivate ? component.canDeactivate() : true;
+    if (component.canDeactivate && !component.canDeactivate()) {
+      if (confirm('You have unsaved changes! If you leave, your changes will be lost.')) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return true;
   }
 }

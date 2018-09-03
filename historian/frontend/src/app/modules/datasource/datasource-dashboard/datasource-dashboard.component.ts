@@ -21,13 +21,15 @@ import {
 import { IModification, TagConfigurationToApply } from '../ConfigurationToApply';
 import { Datasource, DatasourceType, TagBrowsingMode } from '../Datasource';
 import { DatasourcesListComponent } from '../datasources-list/datasources-list.component';
+import { Observable } from 'rxjs';
+import { ComponentCanDeactivate } from '../../../shared/BaseCompoenentCanDeactivate';
 
 @Component({
   selector: 'app-datasource-dashboard',
   templateUrl: './datasource-dashboard.component.html',
   styleUrls: ['./datasource-dashboard.component.css']
 })
-export class DatasourceDashboardComponent implements OnInit {
+export class DatasourceDashboardComponent extends ComponentCanDeactivate implements OnInit {
 
   tagConfigurationToApply: TagConfigurationToApply;
   selectedDatasource: Datasource;
@@ -60,6 +62,7 @@ export class DatasourceDashboardComponent implements OnInit {
               private observerUtil: Utilities,
               protected messageService: MessageService,
               protected confirmationService: ConfirmationService) {
+                super();
                 this.createdTag = new HistorianTag({
                   record_type: TagRecordType.TAG,
                   id: '',
@@ -90,7 +93,7 @@ export class DatasourceDashboardComponent implements OnInit {
       this.selectDatasource(datasource);
     } else {
       this.confirmationService.confirm({
-        message: `Vous n'avez pas validé cos modifications pour la datasource actuelle.
+        message: `Vous n'avez pas validé vos modifications pour la datasource actuelle.
                   Voulez-vous les annulez ? Sinon merci d'anuller et d'appuyer sur le bouton apply.`,
         header: 'Confirmation',
         rejectLabel: 'Cancel',
@@ -102,6 +105,10 @@ export class DatasourceDashboardComponent implements OnInit {
         reject: () => {}
       });
     }
+  }
+
+  canDeactivate(): boolean {
+    return this.tagConfigurationToApply.isClean();
   }
 
   isHelpHidden(): boolean {
