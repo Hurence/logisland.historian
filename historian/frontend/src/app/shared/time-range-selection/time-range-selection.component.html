@@ -1,3 +1,35 @@
-<span>Time range : </span>
-<p-dropdown [options]="timeRangeOptions"  placeholder="Time range" [(ngModel)]="timeRange"
-  [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
+<b> '{{timeRange.label}}'</b>
+
+
+<div class="grid grid-container--fit">
+  <div class="timerange">
+    <span>Time range : </span>
+    <ul>
+      <li (click)="view='Quick'">Quick</li>
+      <li (click)="view='Custom'">Custom</li>      
+    </ul>
+  </div>  
+  <div [ngSwitch]="view"  class="what to show">
+      <div *ngSwitchCase="'Quick'">
+        <p-dropdown [options]="timeRangeOptions"  placeholder="Time range" [(ngModel)]="timeRange"
+        [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
+      </div>
+      <div *ngSwitchCase="'Custom'">
+        <div class="date-from">
+          <label><b>From</b></label>
+          <p-calendar [(ngModel)]="from" showButtonBar="true" view="date" 
+          [monthNavigator]="true" [yearNavigator]="true" yearRange="1990:2030"
+          dateFormat="dd/mm/yy" [showTime]="true"> 
+          </p-calendar>
+        </div>
+        <div class="date-to">
+          <label><b>To</b></label>          
+          <p-calendar [(ngModel)]="to" showButtonBar="true" view="date" 
+          [monthNavigator]="true" [yearNavigator]="true" yearRange="1990:2030"
+          dateFormat="dd/mm/yy" [showTime]="true">
+          </p-calendar>
+          <button type="button" (click)='setCustomTimeRange()'>Ok</button>
+        </div>        
+      </div>
+  </div>    
+</div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range-filter';
+import { TimeRangeFilter, timeRangeBuiltIn } from '../../../shared/time-range-selection/time-range-filter';
 import { ProfilService } from '../../../profil/profil.service';
 import { TagsSelection } from '../../selection/Selection';
 
@@ -11,7 +11,7 @@ import { TagsSelection } from '../../selection/Selection';
 export class LineChartViewComponent implements OnInit {
 
   refreshRate: number = 10000;
-  timeRange: TimeRangeFilter = { start: 'NOW-15MINUTES', end: 'NOW' };
+  timeRange: TimeRangeFilter = timeRangeBuiltIn.LAST_15_MINUTES;
 
   constructor(public profilService: ProfilService) { }
 
