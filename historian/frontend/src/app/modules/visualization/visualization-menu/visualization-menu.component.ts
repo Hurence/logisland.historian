@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range-filter';
 import { TagsSelection } from '../../selection/Selection';
+import { AutoRefreshInterval } from '../../../shared/refresh-rate-selection/auto-refresh-interval';
 
 @Component({
   selector: 'app-visualization-menu',
@@ -9,17 +10,18 @@ import { TagsSelection } from '../../selection/Selection';
 })
 export class VisualizationMenuComponent implements OnInit {
 
-  private _refreshRate: number;
-  @Output() refreshRateChange = new EventEmitter<number>();
+  private _autoRefreshInterval: AutoRefreshInterval;
+  @Output() autoRefreshIntervalChange = new EventEmitter<AutoRefreshInterval>();
 
   @Input()
-  get refreshRate(): number {
-    return this._refreshRate;
+  get autoRefreshInterval(): AutoRefreshInterval {
+    return this._autoRefreshInterval;
   }
 
-  set refreshRate(newVal: number) {
-    this._refreshRate = newVal;
-    this.refreshRateChange.emit(this._refreshRate);
+  set autoRefreshInterval(newVal: AutoRefreshInterval) {
+    this._autoRefreshInterval = newVal;
+    this.autoRefreshIntervalChange.emit(this._autoRefreshInterval);
+    this.menuItemActive = '';
   }
 
   private _timeRange: TimeRangeFilter;
@@ -33,6 +35,7 @@ export class VisualizationMenuComponent implements OnInit {
   set timeRange(newVal: TimeRangeFilter) {
     this._timeRange = newVal;
     this.timeRangeChange.emit(this._timeRange);
+    this.menuItemActive = '';
   }
 
   private _tagSelection: TagsSelection;
@@ -47,8 +50,9 @@ export class VisualizationMenuComponent implements OnInit {
     this.tagSelectionChange.emit(this._tagSelection);
   }
 
-  constructor() { }
+  menuItemActive: string = '';
 
+  constructor() { }
 
   ngOnInit() {
   }

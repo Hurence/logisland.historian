@@ -1,7 +1,4 @@
-<div (click)="toggleShowTimeRangeMenu()">
-  <b> '{{timeRange.label}}'</b>
-</div>
-<div [hidden]="!showTimeRangeMenu" class="timerange-menu">
+<div class="timerange-menu">
   <div class="w-100">
     <div class="timerange">
       <h4>Time Range</h4>
@@ -14,7 +11,7 @@
         <ng-container *ngSwitchCase="'Quick'">
           <ul class="quick-grid">
               <ng-container *ngFor="let timeRangeOption of timeRangeOptions">
-                  <li (click)='timeRange = timeRangeOption.value; toggleShowTimeRangeMenu();'>{{timeRangeOption.label}}</li>
+                  <li (click)='timeRange = timeRangeOption.value;'>{{timeRangeOption.label}}</li>
               </ng-container>          
           </ul>
           <!-- <p-dropdown [options]="timeRangeOptions"  placeholder="Time range" [(ngModel)]="timeRange"
@@ -38,7 +35,7 @@
             </div>                     
           </div>
           <div>
-            <button pbutton class="ui-button valid-timerange-button" type="button" (click)='setCustomTimeRange(); toggleShowTimeRangeMenu();'>Ok</button>
+            <button pbutton class="ui-button valid-timerange-button" type="button" (click)='setCustomTimeRange();'>Ok</button>
           </div>                
         </ng-container>
     </div>  

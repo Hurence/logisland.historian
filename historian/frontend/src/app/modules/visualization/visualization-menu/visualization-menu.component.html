@@ -1,16 +1,22 @@
-<p-panel class='ui-g-12' [toggleable]="false">
-    <!-- <p-header>
-        Visualization Menu
-    </p-header> -->
-    <div class="ui-g">
-      <div class='ui-xl-4 ui-md-4 ui-sm-12'>
-          <app-tags-selection-selection  [(tagSelection)]="tagSelection"></app-tags-selection-selection>
-      </div>
-      <div class='ui-xl-4 ui-md-4 ui-sm-12'>
-          <app-refresh-rate-selection [(refreshRate)]="refreshRate"></app-refresh-rate-selection>
-      </div>
-      <div class='ui-xl-4 ui-md-4 ui-sm-12'>
-          <app-time-range-selection [(timeRange)]="timeRange"></app-time-range-selection>
-      </div>
-    </div>
-</p-panel>
+<ul class="visualization-menu-list">
+  <li [ngClass]="{'active' : menuItemActive === 'selection'}" class="visualization-menu-element" (click)="menuItemActive='selection'">
+      <app-tags-selection-selection  [(tagSelection)]="tagSelection"></app-tags-selection-selection>
+  </li>
+  <li [ngClass]="{'active' : menuItemActive === 'autoRefreshInterval'}" class="visualization-menu-element" (click)="menuItemActive='autoRefreshInterval'">      
+    <ng-container *ngIf="autoRefreshInterval.refrashInterval; else noRefreshBlock">
+      {{autoRefreshInterval.label}}
+    </ng-container>
+    <ng-template #noRefreshBlock>
+      <i class="fa fa-repeat" aria-hidden="true"></i>Auto-refresh 
+    </ng-template>
+  </li>
+  <li [ngClass]="{'active' : menuItemActive === 'timeRange'}" class="visualization-menu-element" (click)="menuItemActive='timeRange'">
+      <i class="fa fa-clock-o" aria-hidden="true"></i>{{timeRange.label}}
+  </li>
+</ul>
+<div [hidden]="menuItemActive !== 'timeRange'">
+  <app-time-range-selection [(timeRange)]="timeRange"></app-time-range-selection>
+</div>
+<div [hidden]="menuItemActive !== 'autoRefreshInterval'">
+  <app-refresh-rate-selection [(autoRefreshInterval)]="autoRefreshInterval"></app-refresh-rate-selection>
+</div>

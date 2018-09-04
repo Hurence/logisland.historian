@@ -1,0 +1,21 @@
+.visualization-menu {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.visualization-menu-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  list-style-type: none;
+  border-bottom: 1px solid grey;
+}
+
+.visualization-menu-element {
+  padding: 8px;
+}
+
+.visualization-menu-element.active {
+  border-bottom: 2px solid blue;  
+}

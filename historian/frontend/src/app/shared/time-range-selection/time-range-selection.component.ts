@@ -15,7 +15,6 @@ export class TimeRangeSelectionComponent implements OnInit {
   timeRangeDisplay: string;
   @Output() timeRangeChange = new EventEmitter<TimeRangeFilter>();
   view: string = 'Quick';
-  showTimeRangeMenu: boolean = false;
   private _from: Date = new Date(0);
   private _to: Date  = new Date();
 
@@ -80,8 +79,5 @@ export class TimeRangeSelectionComponent implements OnInit {
       start: startMoment.valueOf().toString(),
       end: endMoment.valueOf().toString(),
     };
-  }
-  toggleShowTimeRangeMenu() {
-    this.showTimeRangeMenu = !this.showTimeRangeMenu;
   }
 }
