@@ -17,9 +17,9 @@ export class TagsSelectionSelectionComponent implements OnInit {
   displayTagManagement: boolean = false;
 
 
-  constructor(private selectionService: SelectionService,
-    private profilService: ProfilService) { }
+  constructor(private selectionService: SelectionService) { }
 
+  @Input()
   get tagSelection(): TagsSelection {
     return this._tagSelection;
   }
@@ -36,21 +36,24 @@ export class TagsSelectionSelectionComponent implements OnInit {
       this.selectionOptions = selectionsWithSet.map(selection => {
         return {label: selection.name, value: selection};
       });
+      /*
+      * workaround to select input selection as we do not have selection ID. (we should have id of selection to identify them)
+      */
       if (this.selectionOptions.length !== 0) {
-        if (this.profilService.currentTagsSelection) {
+        if (this.tagSelection) {
           const selectionSelected = this.selectionOptions.find(option => {
-            return option.value.name === this.profilService.currentTagsSelection.name &&
-              option.value.owner === this.profilService.currentTagsSelection.owner;
+            return option.value.name === this.tagSelection.name &&
+              option.value.owner === this.tagSelection.owner;
           });
           if (selectionSelected) {
             this._tagSelection = selectionSelected.value;
           } else {
             this._tagSelection = this.selectionOptions[0].value;
-            this.profilService.currentTagsSelection = this._tagSelection;
+            this.tagSelection = this._tagSelection;
           }
         } else {
           this._tagSelection = this.selectionOptions[0].value;
-          this.profilService.currentTagsSelection = this._tagSelection;
+          this.tagSelection = this._tagSelection;
         }
       }
     });

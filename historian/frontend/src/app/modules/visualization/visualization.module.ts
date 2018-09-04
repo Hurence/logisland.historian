@@ -8,6 +8,7 @@ import { TabularViewComponent } from './tabular-view/tabular-view.component';
 import { VisualizationRoutingModule } from './visualization-routing.module';
 import { VisualizationComponent } from './visualization.component';
 import { TagModule } from '../tag/tag.module';
+import { VisualizationMenuComponent } from './visualization-menu/visualization-menu.component';
 
 
 @NgModule({
@@ -18,6 +19,6 @@ import { TagModule } from '../tag/tag.module';
     VisualizationRoutingModule,
     TagModule,
   ],
-  declarations: [VisualizationComponent, LineChartViewComponent, TabularViewComponent]
+  declarations: [VisualizationComponent, LineChartViewComponent, TabularViewComponent, VisualizationMenuComponent]
 })
 export class VisualizationModule { }
