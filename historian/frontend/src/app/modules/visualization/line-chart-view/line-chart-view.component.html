@@ -1,8 +1,8 @@
-<div class='ui-g'> 
+<div class='ui-g'>
   <div class='ui-g-12'>
     <app-visualization-menu [(timeRange)]="timeRange" [(autoRefreshInterval)]="autoRefreshInterval" 
     (tagSelectionChange)="onSelectionChanged($event)"></app-visualization-menu>
-  </div>  
+  </div>
   <div class='ui-g-12'>
       <app-line-chart [refreshRate]="autoRefreshInterval.refrashInterval" [timeRange]="timeRange"></app-line-chart>
   </div>

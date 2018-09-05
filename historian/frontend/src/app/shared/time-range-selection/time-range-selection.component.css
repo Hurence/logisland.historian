@@ -41,6 +41,7 @@ ul.quick-grid {
   grid-template-columns: repeat(auto-fit, minmax(180px, auto));
   grid-template-rows: repeat(auto-fit, minmax(20px, auto));
   grid-auto-flow: row;
+  justify-content: start;
 }
 .custom-grid div {
   padding: 2px;
@@ -51,6 +52,7 @@ ul.quick-grid {
 }
 
 .valid-timerange-button {
-  float: right;
+  /* float: right; */
   width: 100px;
+  height: 30px;
 }

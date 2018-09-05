@@ -19,3 +19,7 @@
 .visualization-menu-element.active {
   border-bottom: 2px solid blue;  
 }
+
+.fa {
+  padding: 4px;
+}

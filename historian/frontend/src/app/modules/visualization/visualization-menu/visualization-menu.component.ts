@@ -10,6 +10,10 @@ import { AutoRefreshInterval } from '../../../shared/refresh-rate-selection/auto
 })
 export class VisualizationMenuComponent implements OnInit {
 
+  @Input() tagSelector?: boolean = true;
+  @Input() autoRefreshIntervalSelector?: boolean = true;
+  @Input() timeRangeSelector?: boolean = true;
+
   private _autoRefreshInterval: AutoRefreshInterval;
   @Output() autoRefreshIntervalChange = new EventEmitter<AutoRefreshInterval>();
 

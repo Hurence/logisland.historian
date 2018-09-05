@@ -1,14 +1,9 @@
 <div class='ui-g'>
-  <p-panel class='ui-g-8 ui-sm-12' [toggleable]="false">
-      <div class="ui-g">
-        <div class='ui-xl-6 ui-md-6 ui-sm-12'>
-            <app-tags-selection-selection (tagSelectionChange)="onSelectionChanged($event)"></app-tags-selection-selection>
-        </div>
-        <div class='ui-xl-6 ui-md-6 ui-sm-12'>
-            <app-refresh-rate-selection [(autoRefreshInterval)]="autoRefreshInterval"></app-refresh-rate-selection>
-        </div>
-      </div>
-  </p-panel>
+  <div class='ui-g-12'>
+    <app-visualization-menu [(autoRefreshInterval)]="autoRefreshInterval" 
+    (tagSelectionChange)="onSelectionChanged($event)"
+    [timeRangeSelector]="false"></app-visualization-menu>
+  </div>
   <div class='ui-g-12'>
       <app-tag-dataview [refreshRate]="autoRefreshInterval.refrashInterval"></app-tag-dataview>
   </div>

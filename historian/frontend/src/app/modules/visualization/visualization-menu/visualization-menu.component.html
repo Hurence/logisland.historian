@@ -1,22 +1,20 @@
 <ul class="visualization-menu-list">
-  <li [ngClass]="{'active' : menuItemActive === 'selection'}" class="visualization-menu-element" (click)="menuItemActive='selection'">
-      <app-tags-selection-selection  [(tagSelection)]="tagSelection"></app-tags-selection-selection>
+  <li *ngIf="tagSelector" [ngClass]="{'active' : menuItemActive === 'selection'}" class="visualization-menu-element" (click)="menuItemActive='selection'">
+      <i class="fa fa-tags" aria-hidden="true"></i>{{tagSelection?.name}}      
   </li>
-  <li [ngClass]="{'active' : menuItemActive === 'autoRefreshInterval'}" class="visualization-menu-element" (click)="menuItemActive='autoRefreshInterval'">      
-    <ng-container *ngIf="autoRefreshInterval.refrashInterval; else noRefreshBlock">
-      {{autoRefreshInterval.label}}
-    </ng-container>
-    <ng-template #noRefreshBlock>
-      <i class="fa fa-repeat" aria-hidden="true"></i>Auto-refresh 
-    </ng-template>
+  <li *ngIf="autoRefreshIntervalSelector" [ngClass]="{'active' : menuItemActive === 'autoRefreshInterval'}" class="visualization-menu-element" (click)="menuItemActive='autoRefreshInterval'">      
+    <i class="fa fa-repeat" aria-hidden="true"></i>{{autoRefreshInterval.label}}
   </li>
-  <li [ngClass]="{'active' : menuItemActive === 'timeRange'}" class="visualization-menu-element" (click)="menuItemActive='timeRange'">
-      <i class="fa fa-clock-o" aria-hidden="true"></i>{{timeRange.label}}
+  <li *ngIf="timeRangeSelector" [ngClass]="{'active' : menuItemActive === 'timeRange'}" class="visualization-menu-element" (click)="menuItemActive='timeRange'">
+    <i class="fa fa-clock-o" aria-hidden="true"></i>{{timeRange.label}}
   </li>
 </ul>
-<div [hidden]="menuItemActive !== 'timeRange'">
-  <app-time-range-selection [(timeRange)]="timeRange"></app-time-range-selection>
+<div *ngIf="tagSelector" [hidden]="menuItemActive !== 'selection'">
+  <app-tags-selection-selection  [(tagSelection)]="tagSelection"></app-tags-selection-selection>
 </div>
-<div [hidden]="menuItemActive !== 'autoRefreshInterval'">
+<div *ngIf="autoRefreshIntervalSelector" [hidden]="menuItemActive !== 'autoRefreshInterval'">
   <app-refresh-rate-selection [(autoRefreshInterval)]="autoRefreshInterval"></app-refresh-rate-selection>
+</div>
+<div *ngIf="timeRangeSelector" [hidden]="menuItemActive !== 'timeRange'">
+  <app-time-range-selection [(timeRange)]="timeRange"></app-time-range-selection>  
 </div>
