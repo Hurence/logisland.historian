@@ -61,8 +61,8 @@ export function getBaseHref(platformLocation: PlatformLocation): string {
     VisualizationModule,
     SelectionModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     SharedModule,
+    AppRoutingModule,
   ],
   providers: [
     {

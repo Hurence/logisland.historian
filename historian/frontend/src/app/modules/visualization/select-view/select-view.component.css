@@ -1,4 +1,4 @@
-.graph-choice-menu-list {
+.view-menu-list {
   display: flex;
   flex-direction: row;
   justify-content: start;
@@ -6,10 +6,14 @@
   border-bottom: 1px solid grey;
 }
 
-.graph-choice-menu-element {
+.view-menu-element {
   padding: 8px;
 }
 
-.graph-choice-menu-element.active {
+.view-menu-element.active {
   border-bottom: 2px solid blue;  
+}
+
+.fa {
+  padding: 4px;
 }

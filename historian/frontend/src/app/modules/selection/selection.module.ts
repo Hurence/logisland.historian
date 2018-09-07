@@ -4,7 +4,6 @@ import { SelectionDashboardComponent } from './selection-dashboard/selection-das
 import { SelectionFormComponent } from './selection-form/selection-form.component';
 import { SharedModule } from '../../shared/shared.module';
 import { TagModule } from '../tag/tag.module';
-import { TagsSelectionSelectionComponent } from './tags-selection-selection/tags-selection-selection.component';
 
 @NgModule({
   imports: [
@@ -13,12 +12,10 @@ import { TagsSelectionSelectionComponent } from './tags-selection-selection/tags
   ],
   exports: [
     SelectionDashboardComponent,
-    TagsSelectionSelectionComponent,
   ],
   declarations: [
     SelectionDashboardComponent,
     SelectionFormComponent,
-    TagsSelectionSelectionComponent,
   ]
 })
 export class SelectionModule { }

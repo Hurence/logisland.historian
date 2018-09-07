@@ -4,12 +4,17 @@ import { Injectable } from '@angular/core';
 export class ArrayUtil {
 
 
-    remove<T>(array: T[], find: (T) => boolean) {
-        const index = array.findIndex(find);
-        if (index !== -1) {
-            array.splice(index, 1);
-        }
-    }
+  exist<T>(array: T[], find: (T) => boolean): boolean {
+    const index = array.findIndex(find);
+    return (index !== -1);
+  }
+
+  remove<T>(array: T[], find: (T) => boolean) {
+      const index = array.findIndex(find);
+      if (index !== -1) {
+          array.splice(index, 1);
+      }
+  }
 
        /** group the array by a key
    *

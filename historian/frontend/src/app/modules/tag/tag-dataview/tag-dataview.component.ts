@@ -1,21 +1,17 @@
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { SelectItem } from 'primeng/components/common/selectitem';
 import { Subscription } from 'rxjs';
 
-import { ProfilService } from '../../../profil/profil.service';
-import { ArrayUtil } from '../../../shared/array-util';
-import { IHistorianTag } from '../modele/HistorianTag';
-import { TagHistorianService } from '../service/tag-historian.service';
-import { AbsSubscriberToSelectionOfTag } from '../../../core/AbsSubscriberToSelectionOfTag';
+import { HistorianTag } from '../modele/HistorianTag';
+
 
 @Component({
   selector: 'app-tag-dataview',
   templateUrl: './tag-dataview.component.html',
   styleUrls: ['./tag-dataview.component.css']
 })
-export class TagDataviewComponent extends AbsSubscriberToSelectionOfTag implements OnInit, OnDestroy {
+export class TagDataviewComponent implements OnInit {
 
-  tags: IHistorianTag[]; // for dataview comp
   totalRecords: number; // for dataview comp
 
   sortOptions: SelectItem[]; // for dropdown comp
@@ -24,6 +20,7 @@ export class TagDataviewComponent extends AbsSubscriberToSelectionOfTag implemen
   sortOrder: number; // for dataview comp
 
   @Input() refreshRate: number; // in milli
+  @Input() tags: HistorianTag[];
 
   loading: boolean; // for dataview comp
 
@@ -33,33 +30,12 @@ export class TagDataviewComponent extends AbsSubscriberToSelectionOfTag implemen
   protected addTagSubscription: Subscription;
   protected removeTagSubscription: Subscription;
 
-  constructor(private tagService: TagHistorianService,
-              protected profilService: ProfilService,
-              private arrayUtil: ArrayUtil) {
-    super(profilService);
-    this.loading = true;
+  constructor() {
+    this.loading = false;
     this.layout = 'grid';
   }
 
   ngOnInit() {
-    this.changeSelectionSubscription = this.profilService.getSelectionPublisher().subscribe(newSelection => {
-      if (newSelection) {
-        this.tags = newSelection.tags;
-        this.totalRecords = this.tags.length;
-      } else {
-        this.tags = [];
-        this.totalRecords = 0;
-      }
-      this.loading = false;
-    });
-    this.addTagSubscription = this.profilService.getAddTagPublisher().subscribe(tag => {
-      this.tags.push(tag);
-      this.totalRecords = this.tags.length;
-    });
-    this.removeTagSubscription = this.profilService.getRemoveTagPublisher().subscribe(tag => {
-      this.arrayUtil.remove(this.tags, elem => tag.id === elem.id);
-      this.totalRecords = this.tags.length;
-    });
     this.sortOptions = [
       {label: 'Name', value: 'tag_name'},
       {label: 'Alphabetical Description', value: '!description'},
@@ -90,5 +66,4 @@ export class TagDataviewComponent extends AbsSubscriberToSelectionOfTag implemen
       this.sortField = value;
     }
   }
-
 }

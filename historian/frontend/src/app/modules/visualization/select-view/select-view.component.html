@@ -1,0 +1,10 @@
+<ul class="view-menu-list">      
+  <li (click)="view = 'lineChart'"  
+  [ngClass]="{'active' : view === 'lineChart'}" class="view-menu-element">      
+    <i class="fa fa-line-chart" aria-hidden="true"></i>Line Chart
+  </li>
+  <li (click)="view = 'tabular'"  
+  [ngClass]="{'active' : view === 'tabular'}" class="view-menu-element">            
+    <i class="fa fa-table" aria-hidden="true"></i>Tabular
+  </li>
+</ul>

@@ -54,8 +54,7 @@
             <span class="hidden-sm-down">Visualization</span>
             </a>
             <div class="collapse show sub-menu" id="menu-visualization">
-            <a class="list-group-item" routerLinkActive="active" routerLink="/visualization/tabular" data-parent="#menu-visualization"><i class="fa fa-table" aria-hidden="true"></i>Tabular</a>
-            <a class="list-group-item" routerLinkActive="active" routerLink="/visualization/lineChart" data-parent="#menu-visualization"><i class="fa fa-line-chart" aria-hidden="true"></i>Line Chart</a>
+              <a class="list-group-item" routerLinkActive="active" [routerLink]="['/visualization', { view: 'tabular'}]" data-parent="#menu-visualization"><i class="fa fa-tags" aria-hidden="true"></i>Tags</a>              
             </div>
             <div class="mx-auto logo-hurence" >
                 <span>

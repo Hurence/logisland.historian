@@ -1,7 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+
+import { AutoRefreshInterval } from '../../../shared/refresh-rate-selection/auto-refresh-interval';
 import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range-filter';
 import { TagsSelection } from '../../selection/Selection';
-import { AutoRefreshInterval } from '../../../shared/refresh-rate-selection/auto-refresh-interval';
 
 @Component({
   selector: 'app-visualization-menu',
@@ -58,6 +59,5 @@ export class VisualizationMenuComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }
