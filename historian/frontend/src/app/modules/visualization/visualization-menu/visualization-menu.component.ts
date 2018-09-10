@@ -11,53 +11,48 @@ import { TagsSelection } from '../../selection/Selection';
 })
 export class VisualizationMenuComponent implements OnInit {
 
+  menuItemActive: string = '';
+
   @Input() tagSelector?: boolean = true;
   @Input() autoRefreshIntervalSelector?: boolean = true;
   @Input() timeRangeSelector?: boolean = true;
 
-  private _autoRefreshInterval: AutoRefreshInterval;
+  @Input() autoRefreshInterval: AutoRefreshInterval;
   @Output() autoRefreshIntervalChange = new EventEmitter<AutoRefreshInterval>();
 
-  @Input()
-  get autoRefreshInterval(): AutoRefreshInterval {
-    return this._autoRefreshInterval;
-  }
-
-  set autoRefreshInterval(newVal: AutoRefreshInterval) {
-    this._autoRefreshInterval = newVal;
-    this.autoRefreshIntervalChange.emit(this._autoRefreshInterval);
-    this.menuItemActive = '';
-  }
-
-  private _timeRange: TimeRangeFilter;
+  @Input() timeRange: TimeRangeFilter;
   @Output() timeRangeChange = new EventEmitter<TimeRangeFilter>();
 
-  @Input()
-  get timeRange(): TimeRangeFilter {
-    return this._timeRange;
-  }
+  @Input() tagSelection: TagsSelection;
+  @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
 
-  set timeRange(newVal: TimeRangeFilter) {
-    this._timeRange = newVal;
-    this.timeRangeChange.emit(this._timeRange);
+  @Input() view: string;
+  @Output() viewChange = new EventEmitter<string>();
+
+  onAutoRefreshIntervalChanged(newVal: AutoRefreshInterval) {
+    this.autoRefreshInterval = newVal;
+    this.autoRefreshIntervalChange.emit(this.autoRefreshInterval);
     this.menuItemActive = '';
   }
 
-  private _tagSelection: TagsSelection;
-  @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
-
-  get tagSelection(): TagsSelection {
-    return this._tagSelection;
+  onTimeRangeChanged(newVal: TimeRangeFilter) {
+    this.timeRange = newVal;
+    this.timeRangeChange.emit(this.timeRange);
+    this.menuItemActive = '';
   }
 
-  set tagSelection(newVal: TagsSelection) {
-    this._tagSelection = newVal;
-    this.tagSelectionChange.emit(this._tagSelection);
+  ontagSelectionChanged(newVal: TagsSelection) {
+    this.tagSelection = newVal;
+    this.tagSelectionChange.emit(this.tagSelection);
   }
 
-  menuItemActive: string = '';
+  onViewChanged(newVal: string) {
+    this.view = newVal;
+    this.viewChange.emit(this.view);
+  }
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {}
+
 }

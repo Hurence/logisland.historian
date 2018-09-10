@@ -20,7 +20,7 @@ export class SelectionDashboardComponent implements OnInit {
 
   selectionOptions: SelectItem[];
 
-  private _tagSelection: TagsSelection;
+  @Input() tagSelection: TagsSelection;
   @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
   // Form to add new selection of tags
   display = false;
@@ -31,16 +31,6 @@ export class SelectionDashboardComponent implements OnInit {
   private REMOVE_SELECTION_MSG = 'Remove selection of tags';
 
   @ViewChild(SelectionFormComponent) private tagSelectionFormComp: SelectionFormComponent;
-
-  @Input()
-  get tagSelection(): TagsSelection {
-    return this._tagSelection;
-  }
-
-  set tagSelection(newVal: TagsSelection) {
-    console.log(`SELECTION_DASHBORD set selection`);
-    this._tagSelection = newVal;
-  }
 
   constructor(private confirmationService: ConfirmationService,
               private selectionService: SelectionService) {}
@@ -124,7 +114,6 @@ export class SelectionDashboardComponent implements OnInit {
   }
 
   onSelectionChange(event) {
-    // console.log(`SELECTION_DASHBOARD dropdown change`);
     this.tagSelectionChange.emit(event.value);
   }
 

@@ -10,19 +10,14 @@ import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from './auto-refresh-
 export class RefreshRateSelectionComponent implements OnInit {
 
   refreshOptions: SelectItem[];
-  private _autoRefreshInterval: AutoRefreshInterval;
+  @Input() autoRefreshInterval: AutoRefreshInterval;
   @Output() autoRefreshIntervalChange = new EventEmitter<AutoRefreshInterval>();
 
   constructor() { }
 
-  @Input()
-  get autoRefreshInterval(): AutoRefreshInterval {
-    return this._autoRefreshInterval;
-  }
-
-  set autoRefreshInterval(newVal: AutoRefreshInterval) {
-    this._autoRefreshInterval = newVal;
-    this.autoRefreshIntervalChange.emit(this._autoRefreshInterval);
+  onAutoRefreshIntervalChange(newVal: AutoRefreshInterval) {
+    this.autoRefreshInterval = newVal;
+    this.autoRefreshIntervalChange.emit(this.autoRefreshInterval);
   }
 
   ngOnInit() {

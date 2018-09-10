@@ -31,6 +31,7 @@ import { QuestionService } from './shared/dynamic-form/question.service';
 import { SharedModule } from './shared/shared.module';
 import { Utilities } from './shared/utilities.service';
 import { TodoComponent } from './todo/todo.component';
+import { CookieService } from 'ngx-cookie-service';
 
 /**
  * This function is used internal to get a string instance of the `<base href="" />` value from `index.html`.
@@ -91,6 +92,7 @@ export function getBaseHref(platformLocation: PlatformLocation): string {
     MessageService,
     ConfirmationService,
     DataFlowService,
+    CookieService,
   ],
   bootstrap: [AppComponent],
 })

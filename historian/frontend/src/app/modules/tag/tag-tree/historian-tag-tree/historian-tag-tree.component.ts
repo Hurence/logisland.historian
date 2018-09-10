@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 
 import { ProfilService } from '../../../../profil/profil.service';
 import { ArrayUtil } from '../../../../shared/array-util';
-import { TagsSelection } from '../../../selection/Selection';
 import { SelectionService } from '../../../selection/selection.service';
 import { HistorianTag, IHistorianTag } from '../../modele/HistorianTag';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
@@ -23,28 +22,23 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
   @Input() selectedTags: HistorianTag[];
 
   loading = false;
-  treeNodes: TreeNode[];
+  @Input() treeNodes: TreeNode[];
   selectedNodes: TreeNode[];
 
-  constructor(private ngTreenodeService: NgTreenodeService,
-              private tagService: TagHistorianService,
-              private selectionService: SelectionService,
-              private profilService: ProfilService,
+  constructor(private tagService: TagHistorianService,
               private arrayUtil: ArrayUtil) {
                 super();
+                this.selectedNodes = [];
+                this.treeNodes = [];
               }
 
-  ngOnInit() {
-    this.selectedNodes = [];
-    this.treeNodes = [];
-    this.getNodeTree().subscribe(treeNodes => {
-      this.treeNodes = treeNodes;
-      this.expandAll(true);
-    });
-  }
+  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.selectedTags && !changes.selectedTags.isFirstChange() && this.selectedTags) {
+    if (changes.treeNodes && this.treeNodes) {
+      this.treeNodes = this.treeNodes;
+    }
+    if (changes.selectedTags && this.selectedTags && this.treeNodes.length !== 0) {
       this.loadNodeOfTags(this.selectedTags);
       this.selectedNodes.forEach(node => {
         this.restoreNodeTree(node);
@@ -93,10 +87,6 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
 
   revertSelection() {
 
-  }
-
-  private getNodeTree(): Observable<TreeNode[]> {
-    return this.ngTreenodeService.getHistTagTree();
   }
 
   private initializeTreeWithTags(node: TreeNode, tags: HistorianTag[]): void {

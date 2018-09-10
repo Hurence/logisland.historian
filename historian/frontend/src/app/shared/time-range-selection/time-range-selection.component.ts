@@ -11,12 +11,18 @@ import * as moment from 'moment';
 export class TimeRangeSelectionComponent implements OnInit {
 
   timeRangeOptions: SelectItem[];
-  private _timeRange: TimeRangeFilter;
   timeRangeDisplay: string;
-  @Output() timeRangeChange = new EventEmitter<TimeRangeFilter>();
   view: string = 'Quick';
   private _from: Date = new Date(0);
   private _to: Date  = new Date();
+
+  @Input() timeRange: TimeRangeFilter;
+  @Output() timeRangeChange = new EventEmitter<TimeRangeFilter>();
+
+  onTimeRangeChange(newVal: TimeRangeFilter) {
+    this.timeRange = newVal;
+    this.timeRangeChange.emit(this.timeRange);
+  }
 
   constructor() { }
 
@@ -43,15 +49,6 @@ export class TimeRangeSelectionComponent implements OnInit {
     this._to = newVal;
   }
 
-  @Input()
-  get timeRange(): TimeRangeFilter {
-    return this._timeRange;
-  }
-
-  set timeRange(newVal: TimeRangeFilter) {
-    this._timeRange = newVal;
-    this.timeRangeChange.emit(this._timeRange);
-  }
 
   ngOnInit() {
     this.timeRangeOptions = Object.keys(timeRangeBuiltIn).map(key => {
@@ -74,10 +71,10 @@ export class TimeRangeSelectionComponent implements OnInit {
       endMoment = moment(this.to);
       label += ' to ' + endMoment.utc().format(`YYYY-MM-DDThh:mm:ssZ`);
     }
-    this.timeRange = {
+    this.onTimeRangeChange({
       label: label,
       start: startMoment.valueOf().toString(),
       end: endMoment.valueOf().toString(),
-    };
+    });
   }
 }

@@ -36,6 +36,7 @@ import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-
 import { SearchComponent } from './search/search.component';
 import { TimeRangeSelectionComponent } from './time-range-selection/time-range-selection.component';
 import { CalendarModule } from 'primeng/calendar';
+import {MenubarModule} from 'primeng/menubar';
 
 @NgModule({
   imports: [
@@ -63,6 +64,7 @@ import { CalendarModule } from 'primeng/calendar';
     CheckboxModule,
     RadioButtonModule,
     CalendarModule,
+    MenubarModule,
   ],
   exports: [
     CommonModule,
@@ -95,6 +97,7 @@ import { CalendarModule } from 'primeng/calendar';
     RadioButtonModule,
     TimeRangeSelectionComponent,
     CalendarModule,
+    MenubarModule,
   ],
   providers: [
     TreeDragDropService,
