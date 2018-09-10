@@ -6,6 +6,7 @@ import { SelectionModule } from '../selection/selection.module';
 import { TagModule } from '../tag/tag.module';
 import { SelectViewComponent } from './select-view/select-view.component';
 import { VisualizationMenuComponent } from './visualization-menu/visualization-menu.component';
+import { VisualizationComponent } from './visualization.component';
 
 
 @NgModule({
@@ -15,6 +16,6 @@ import { VisualizationMenuComponent } from './visualization-menu/visualization-m
     GraphModule,
     TagModule,
   ],
-  declarations: [VisualizationMenuComponent, SelectViewComponent]
+  declarations: [VisualizationMenuComponent, SelectViewComponent, VisualizationComponent]
 })
 export class VisualizationModule { }

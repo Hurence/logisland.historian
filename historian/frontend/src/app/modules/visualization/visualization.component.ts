@@ -1,4 +1,4 @@
-import { OnDestroy, OnInit } from '@angular/core';
+import { OnDestroy, OnInit, Component } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -10,8 +10,11 @@ import { SelectionService } from '../selection/selection.service';
 import { HistorianTag } from '../tag/modele/HistorianTag';
 import { TagsSelection } from '../selection/Selection';
 
+@Component({  
+  templateUrl: './visualization.component.html',
+  styleUrls: ['./visualization.component.css']
+})
 export class VisualizationComponent implements OnInit, OnDestroy {
-
 
   tagSelectionId: string;
   view: string;
