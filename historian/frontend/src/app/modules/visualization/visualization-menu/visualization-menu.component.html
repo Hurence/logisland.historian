@@ -1,7 +1,11 @@
 <ul class="visualization-menu-list">
   <li *ngIf="tagSelector" [ngClass]="{'active' : menuItemActive === 'selection'}" 
-      class="visualization-menu-element" (click)="menuItemActive='selection'">
-      <i class="fa fa-tags" aria-hidden="true"></i>{{ tagSelection ? tagSelection.name: 'Click here to configure your set of tag' }}      
+      class="visualization-menu-element hurence-tooltip" (click)="menuItemActive='selection'">
+      <i class="fa fa-tags" aria-hidden="true"></i>{{ tagSelection ? tagSelection.name: 'None' }}
+      <span class="hurence-tooltiptext" 
+      [ngStyle]="{'visibility': tagSelection || menuItemActive === 'selection' ? 'hidden': 'visible'}">
+        Click here to configure your set of tag
+      </span>
   </li>
   <li *ngIf="autoRefreshIntervalSelector" [ngClass]="{'active' : menuItemActive === 'autoRefreshInterval'}" class="visualization-menu-element" (click)="menuItemActive='autoRefreshInterval'">      
     <i class="fa fa-repeat" aria-hidden="true"></i>{{ autoRefreshInterval.label }}

@@ -21,6 +21,7 @@ export class VisualizationComponent implements OnInit {
 
   paramSubscription$: Subscription;
   tagsSelection$: Observable<TagsSelection>;
+  currentTagsSelection: TagsSelection;
   tags: HistorianTag[] = [];
   treeNodes$: Observable<TreeNode[]>;
 
@@ -97,9 +98,13 @@ export class VisualizationComponent implements OnInit {
         }
         if (this.tagSelectionId) {
           return this.selectionService.get(this.tagSelectionId).pipe(
-            map(t => new TagsSelection(t)),
+            map(t => {
+              this.currentTagsSelection = new TagsSelection(t);
+              return this.currentTagsSelection;              
+            })
           );
         } else {
+          this.currentTagsSelection = null;
           return Observable.of(null);
         }
       }),

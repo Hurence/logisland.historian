@@ -24,8 +24,7 @@ export class SelectionDashboardComponent implements OnInit {
   @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
   // Form to add new selection of tags
   display = false;
-  selectionQuestions: QuestionBase<any>[];
-  selectionOfTagsInForm: TagsSelection;
+  selectionQuestions: QuestionBase<any>[];  
 
   private CANCEL_MSG = 'Cancel';
   private REMOVE_SELECTION_MSG = 'Remove selection of tags';
@@ -36,8 +35,7 @@ export class SelectionDashboardComponent implements OnInit {
               private selectionService: SelectionService) {}
 
   ngOnInit() {
-    this.selectionQuestions = this.getMyQuestions();
-    this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
+    this.selectionQuestions = this.getMyQuestions();    
     this.selectionService.getAll().subscribe(selections => {
       const selectionsWithSet = selections.map(s => new TagsSelection(s));
       this.selectionOptions = selectionsWithSet.map(selection => {
@@ -54,35 +52,35 @@ export class SelectionDashboardComponent implements OnInit {
     this.display = false;
   }
 
-  actualizeListOfTagsSelection(selectedSelection: TagsSelection) {
+  actualizeListOfTagsSelection(selectionIdSelected?: string) {
     this.selectionService.getAll().subscribe(selections => {
       const selectionsWithSet = selections.map(s => new TagsSelection(s));
       this.selectionOptions = selectionsWithSet.map(selection => {
         return {label: selection.name, value: selection};
       });
+      let tagSelectionSelected;
       if (this.selectionOptions.length !== 0) {
-        if (selectedSelection) {
-          const optionSelected = this.selectionOptions.find(s => s.value.name === selectedSelection.name);
+        if (selectionIdSelected) {
+          const optionSelected = this.selectionOptions.find(s => s.value.name === selectionIdSelected);
           if (optionSelected) {
-            this.tagSelectionChange.emit(optionSelected.value);
+            tagSelectionSelected = optionSelected.value;
           } else {
-            this.tagSelectionChange.emit(this.selectionOptions[0].value);
+            tagSelectionSelected = this.selectionOptions[0].value;
           }
         } else {
-          this.tagSelectionChange.emit(this.selectionOptions[0].value);
+          tagSelectionSelected = this.selectionOptions[0].value;          
         }
       } else {
-        this.tagSelectionChange.emit(null);
+        tagSelectionSelected = null;        
       }
+      this.tagSelectionChange.emit(tagSelectionSelected);
     });
   }
 
   onSelectionSubmitted(selectionModif: IModification<TagsSelection>) {
     this.selectionService.save(new TagsSelectionArray(selectionModif.item), selectionModif.item.getId()).pipe(
-      tap(selection => {
-        this.selectionOfTagsInForm = new TagsSelection({name: '', tagIds: new Set()});
-        this.tagSelection = new TagsSelection(selection);
-        this.actualizeListOfTagsSelection(this.tagSelection);
+      tap(selection => {             
+        this.actualizeListOfTagsSelection(selection.name);
         this.closeDialog();
       })
     ).subscribe();
@@ -91,7 +89,7 @@ export class SelectionDashboardComponent implements OnInit {
   update(selection: TagsSelection) {
     this.selectionService.update(new TagsSelectionArray(selection), selection.getId())
       .subscribe(updated => {
-        this.actualizeListOfTagsSelection(this.tagSelection);
+        this.actualizeListOfTagsSelection(updated.name);
     });
   }
 
@@ -106,7 +104,7 @@ export class SelectionDashboardComponent implements OnInit {
       accept: () => {
         this.selectionService.delete(selection.getId())
           .subscribe(deletedSelection => {
-            this.actualizeListOfTagsSelection(this.tagSelection);
+            this.actualizeListOfTagsSelection();
           });
       },
       reject: () => { }

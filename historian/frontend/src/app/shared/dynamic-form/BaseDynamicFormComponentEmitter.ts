@@ -14,7 +14,7 @@ export interface CanGetId {
 export abstract class BaseDynamicFormComponentEmitter<T> implements OnInit, OnChanges {
 
   @Input() questions: QuestionBase<any>[] = [];
-  @Input() item: T;
+  @Input() item?: T;
   @Output() submitted = new EventEmitter<IModification<T>>();
   form: FormGroup;
 
