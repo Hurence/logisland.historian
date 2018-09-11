@@ -1,5 +1,4 @@
-<div class="ui-g">    
-  {{currentTagsSelection | json}}
+<div class="ui-g">      
     <!-- MENU FOR VIEW -->
     <div class='ui-g-12'>
       <app-visualization-menu 
@@ -16,15 +15,15 @@
     <!-- MAIN CONTENT -->  
     <div class="ui-g-3 ui-sm-12">
       <ng-container *ngIf="treeNodes$ | async as treeNodes">        
-          <app-historian-tag-tree [selectedTags]="tags" [treeNodes]="treeNodes"></app-historian-tag-tree>      
-      </ng-container>        
+        <app-historian-tag-tree [selectedTags]="tags" [treeNodes]="treeNodes"></app-historian-tag-tree>      
+      </ng-container>
     </div>
-  <ng-container *ngIf="tagSelectionId && tagsSelection$ | async as tagsSelection">
-    <!-- <div class='ui-g-9' *ngIf="view === 'lineChart'">
+  <ng-container *ngIf="tagsSelection$ | async as tagsSelection">
+    <div class='ui-g-9' *ngIf="view === 'lineChart'">
       <app-line-chart [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval" [timeRange]="timeRange"></app-line-chart>
     </div>   
     <div class='ui-g-9' *ngIf="view === 'tabular'">      
       <app-tag-dataview [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval"></app-tag-dataview>
-    </div> -->
+    </div>
   </ng-container>
 </div>

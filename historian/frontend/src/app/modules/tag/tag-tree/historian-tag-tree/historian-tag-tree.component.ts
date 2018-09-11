@@ -37,6 +37,7 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
   ngOnChanges(changes: SimpleChanges) {
     if (changes.treeNodes && this.treeNodes) {
       this.treeNodes = this.treeNodes;
+      this.expandAll(false);
     }
     if (changes.selectedTags && this.selectedTags && this.treeNodes.length !== 0) {
       this.loadNodeOfTags(this.selectedTags);

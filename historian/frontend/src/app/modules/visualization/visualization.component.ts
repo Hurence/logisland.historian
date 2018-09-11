@@ -1,4 +1,4 @@
-import { OnDestroy, OnInit, Component } from '@angular/core';
+import { OnDestroy, OnInit, Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -12,12 +12,16 @@ import { TagsSelection } from '../selection/Selection';
 import { CookieService } from 'ngx-cookie-service';
 import { TreeNode } from 'primeng/api';
 import { NgTreenodeService } from '../tag/service/ng-treenode.service';
+import { HistorianTagTreeComponent } from '../tag/tag-tree/historian-tag-tree/historian-tag-tree.component';
 
 @Component({
   templateUrl: './visualization.component.html',
   styleUrls: ['./visualization.component.css']
 })
 export class VisualizationComponent implements OnInit {
+
+  @ViewChild(HistorianTagTreeComponent)
+  private treeTag: HistorianTagTreeComponent;
 
   paramSubscription$: Subscription;
   tagsSelection$: Observable<TagsSelection>;
@@ -96,29 +100,27 @@ export class VisualizationComponent implements OnInit {
         if (params.has('selectionId')) {
           this.tagSelectionId = params.get('selectionId');
         }
-        if (this.tagSelectionId) {
+        if (this.tagSelectionId && (!this.currentTagsSelection || this.currentTagsSelection.name !== this.tagSelectionId)) {
+          if (this.treeTag) {
+            this.treeTag.loading = true;
+          }          
           return this.selectionService.get(this.tagSelectionId).pipe(
             map(t => {
-              this.currentTagsSelection = new TagsSelection(t);
+              this.currentTagsSelection = new TagsSelection(t);      
+              console.log('loading selection', this.currentTagsSelection);                      
+              this.selectionService.getAllTagsFromSelection(this.currentTagsSelection.name).subscribe(tags => {
+                if (this.treeTag) {
+                  this.treeTag.loading = false;                
+                }                
+                this.tags = tags;
+              });
               return this.currentTagsSelection;              
             })
           );
         } else {
-          this.currentTagsSelection = null;
-          return Observable.of(null);
+          return Observable.of(this.currentTagsSelection);
         }
       }),
-      tap(selection => {
-        if (selection) {
-          console.log('loaging selection', selection.name);
-          this.selectionService.getAllTagsFromSelection(selection.name).subscribe(tags => {
-            this.tags = tags;
-          });
-        } else {
-          console.log('reset tags');
-          this.tags = [];
-        }
-      })
     );
   }
 
@@ -143,7 +145,7 @@ export class VisualizationComponent implements OnInit {
   }
 
   onTimeRangeChanged(timeRange: TimeRangeFilter): void {
-    if (timeRange.start !== this.timeRange.start && timeRange.end !== this.timeRange.end) {
+    if (timeRange.start !== this.timeRange.start || timeRange.end !== this.timeRange.end) {
       this.timeRange = timeRange;
       this.navigateLocal();
     }
