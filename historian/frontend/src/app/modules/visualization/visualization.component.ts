@@ -1,16 +1,15 @@
-import { OnDestroy, OnInit, Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
-
-import { ProfilService } from '../../profil/profil.service';
-import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from '../../shared/refresh-rate-selection/auto-refresh-interval';
-import { timeRangeBuiltIn, TimeRangeFilter } from '../../shared/time-range-selection/time-range-filter';
-import { SelectionService } from '../selection/selection.service';
-import { HistorianTag } from '../tag/modele/HistorianTag';
-import { TagsSelection } from '../selection/Selection';
 import { CookieService } from 'ngx-cookie-service';
 import { TreeNode } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+
+import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from '../../shared/refresh-rate-selection/auto-refresh-interval';
+import { timeRangeBuiltIn, TimeRangeFilter } from '../../shared/time-range-selection/time-range-filter';
+import { TagsSelection } from '../selection/Selection';
+import { SelectionService } from '../selection/selection.service';
+import { HistorianTag } from '../tag/modele/HistorianTag';
 import { NgTreenodeService } from '../tag/service/ng-treenode.service';
 import { HistorianTagTreeComponent } from '../tag/tag-tree/historian-tag-tree/historian-tag-tree.component';
 

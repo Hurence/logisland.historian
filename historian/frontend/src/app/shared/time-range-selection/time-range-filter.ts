@@ -1,7 +1,7 @@
 export interface TimeRangeFilter {
   label: string;
   start: string;
-  end: string;
+  end: string;  
 }
 /*
 TimeRangeFilter calue of start and end should be string understandable by chronix
@@ -36,3 +36,10 @@ export const timeRangeBuiltIn: {[key: string]: TimeRangeFilter} = {
   LAST_2_YEARS: {label: 'Last 2 years', start: 'NOW-2YEARS', end: 'NOW'},
   LAST_5_YEARS: {label: 'Last 5 year', start: 'NOW-5YEARS', end: 'NOW'}
 };
+
+export class TimeRangeFilterUtils {
+
+  public static equals(timeRangeA: TimeRangeFilter, timeRangeB: TimeRangeFilter): boolean {    
+    return timeRangeA && timeRangeB && timeRangeA.start == timeRangeB.start && timeRangeA.end == timeRangeB.end; 
+  }
+}

@@ -6,7 +6,7 @@ import { MeasuresService } from '../../../measure/measures.service';
 import { MeasuresRequest } from '../../../measure/MeasuresRequest';
 import { ProfilService } from '../../../profil/profil.service';
 import { ArrayUtil } from '../../../shared/array-util';
-import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range-filter';
+import { TimeRangeFilter, TimeRangeFilterUtils } from '../../../shared/time-range-selection/time-range-filter';
 import { IHistorianTag } from '../../tag/modele/HistorianTag';
 import { CartesianAxeType, ILineChartData, ILineChartDataset, ILineChartOption, TimeDistribution } from './LineChartModele';
 import { RefreshRateComponent } from '../../../shared/refresh-rate-selection/RefreshRateComponent';
@@ -74,10 +74,14 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
 
   ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
-    if (changes.timeRange && changes.timeRange.currentValue !== changes.timeRange.previousValue) {
+    if (changes.timeRange && !TimeRangeFilterUtils.equals(changes.timeRange.currentValue ,changes.timeRange.previousValue)) {      
+      // console.log('time range change from',  changes.timeRange.previousValue) 
+      // console.log('to time range ',  changes.timeRange.currentValue)     
       this.updateGraphData();
     }
     if (changes.tags && changes.tags.currentValue !== changes.tags.previousValue) {
+      // console.log('tags change from',  changes.tags.previousValue) 
+      // console.log('to tags',  changes.tags.currentValue)       
       this.updateGraphData();
     }
   }
