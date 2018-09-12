@@ -6,20 +6,25 @@ import { MeasuresService } from '../../../measure/measures.service';
 import { MeasuresRequest } from '../../../measure/MeasuresRequest';
 import { ProfilService } from '../../../profil/profil.service';
 import { ArrayUtil } from '../../../shared/array-util';
-import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range-filter';
+import { TimeRangeFilter, TimeRangeFilterUtils } from '../../../shared/time-range-selection/time-range-filter';
 import { IHistorianTag } from '../../tag/modele/HistorianTag';
 import { CartesianAxeType, ILineChartData, ILineChartDataset, ILineChartOption, TimeDistribution } from './LineChartModele';
+import { RefreshRateComponent } from '../../../shared/refresh-rate-selection/RefreshRateComponent';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { from } from 'rxjs';
+import {merge} from 'rxjs';
 
 @Component({
   selector: 'app-line-chart',
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css']
 })
-export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh implements OnInit, OnChanges {
+export class LineChartComponent extends RefreshRateComponent implements OnInit, OnChanges {
 
   data: ILineChartData;
   options: ILineChartOption;
-  tags: IHistorianTag[];
+  @Input() tags: IHistorianTag[];
   @Input() refreshRate: number;
   @Input() timeRange: TimeRangeFilter;
   private colorsForMetrics: Map<string, string> = new Map();
@@ -28,10 +33,8 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
 
 
   constructor(private measuresService: MeasuresService,
-              private arrayUtil: ArrayUtil,
               protected profilService: ProfilService) {
-    super(profilService);
-    this.tags = [];
+    super();
     this.data = {
       // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       // labels: [0, 5, 10, 15, 20, 25, 30],
@@ -71,49 +74,45 @@ export class LineChartComponent extends AbsSubscriberToSelectionOfTagWithRefresh
 
   ngOnInit() {
     super.ngOnInit();
-    this.changeSelectionSubscription = this.profilService.getSelectionPublisher().subscribe(newSelection => {
-      this.tags = newSelection.tags;
-      this.updateGraphData();
-    });
-    this.addTagSubscription = this.profilService.getAddTagPublisher().subscribe(tag => {
-      this.tags.push(tag);
-      const request = this.buildTagMeasureRequest(tag);
-      this.measuresService.get(request).subscribe(m => {
-        this.data.datasets.push(this.convertMeasureToDataset(m));
-        this.redrawGraph();
-      });
-    });
-    this.removeTagSubscription = this.profilService.getRemoveTagPublisher().subscribe(tag => {
-      this.arrayUtil.remove(this.tags, elem => tag.id === elem.id);
-      this.arrayUtil.remove(this.data.datasets, dataset => tag.id === dataset.label);
-      this.redrawGraph();
-    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
-    if (changes.timeRange) {
-      if (changes.timeRange.currentValue !== changes.timeRange.previousValue) {
-        this.updateGraphData();
-      }
+    if (
+      (changes.timeRange && !TimeRangeFilterUtils.equals(changes.timeRange.currentValue , changes.timeRange.previousValue)) ||
+      (changes.tags && changes.tags.currentValue !== changes.tags.previousValue)
+    ) {
+      this.updateGraphData();
     }
   }
 
   updateGraphData() {
+    console.log('UPDATE GRAPH DATA');
     this.data.datasets = [];
-    this.tags.forEach(tag => {
+    const measures: Observable<Measures>[] = this.tags.map(tag => {
       const request = this.buildTagMeasureRequest(tag);
-      this.measuresService.get(request).subscribe(m => {
-        this.data.datasets.push(this.convertMeasureToDataset(m));
-        this.redrawGraph();
-      });
+      return this.measuresService.get(request).pipe(
+          tap(m => {
+            this.data.datasets.push(this.convertMeasureToDataset(m));
+          })
+      );
     });
-    if (this.tags.length === 0) {
-      this.redrawGraph();
-    }
+    measures.reduce(
+      (r, v) => {
+        return merge(r, v);
+      },
+      Observable.of(new Measures())
+    ).subscribe(
+      done => {},
+      error => {},
+      () => {
+        this.redrawGraph();
+      }
+    );
   }
 
   redrawGraph() {
+    console.log('REDRAW GRAPH');
     this.data = Object.assign({}, this.data);
   }
 

@@ -35,6 +35,8 @@ import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { RefreshRateSelectionComponent } from './refresh-rate-selection/refresh-rate-selection.component';
 import { SearchComponent } from './search/search.component';
 import { TimeRangeSelectionComponent } from './time-range-selection/time-range-selection.component';
+import { CalendarModule } from 'primeng/calendar';
+import {MenubarModule} from 'primeng/menubar';
 
 @NgModule({
   imports: [
@@ -61,6 +63,8 @@ import { TimeRangeSelectionComponent } from './time-range-selection/time-range-s
     ProgressSpinnerModule,
     CheckboxModule,
     RadioButtonModule,
+    CalendarModule,
+    MenubarModule,
   ],
   exports: [
     CommonModule,
@@ -92,6 +96,8 @@ import { TimeRangeSelectionComponent } from './time-range-selection/time-range-s
     CheckboxModule,
     RadioButtonModule,
     TimeRangeSelectionComponent,
+    CalendarModule,
+    MenubarModule,
   ],
   providers: [
     TreeDragDropService,

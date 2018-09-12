@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 
 import { ProfilService } from '../../../../profil/profil.service';
 import { ArrayUtil } from '../../../../shared/array-util';
-import { TagsSelection } from '../../../selection/Selection';
 import { SelectionService } from '../../../selection/selection.service';
 import { HistorianTag, IHistorianTag } from '../../modele/HistorianTag';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
@@ -20,67 +19,50 @@ import { TypesName } from '../TypesName';
 })
 export class HistorianTagTreeComponent extends BaseTagTreeComponent implements OnInit, OnChanges {
 
-  private _tagsSelection: TagsSelection;
+  @Input() selectedTags: HistorianTag[];
 
   loading = false;
-  treeNodes: TreeNode[];
+  @Input() treeNodes: TreeNode[];
   selectedNodes: TreeNode[];
 
-  @Input()
-  get tagsSelection(): TagsSelection {
-    return this._tagsSelection;
-  }
-
-  set tagsSelection(newVal: TagsSelection) {
-    this._tagsSelection = newVal;
-  }
-
-  constructor(private ngTreenodeService: NgTreenodeService,
-              private tagService: TagHistorianService,
-              private selectionService: SelectionService,
-              private profilService: ProfilService,
+  constructor(private tagService: TagHistorianService,
               private arrayUtil: ArrayUtil) {
                 super();
+                this.selectedNodes = [];
+                this.treeNodes = [];
               }
 
-  ngOnInit() {
-    this.selectedNodes = [];
-    this.treeNodes = [];
-    this.getNodeTree().subscribe(treeNodes => {
-      this.treeNodes = treeNodes;
-      this.expandAll(true);
-    });
-  }
+  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tagsSelection && !changes.tagsSelection.isFirstChange() && this.tagsSelection) {
-      this.loadNodeOfSelection(this.tagsSelection);
+    if (changes.treeNodes && this.treeNodes) {
+      this.treeNodes = this.treeNodes;
+      this.expandAll(false);
+    }
+    if (changes.selectedTags && this.selectedTags && this.treeNodes.length !== 0) {
+      this.loadNodeOfTags(this.selectedTags);
       this.selectedNodes.forEach(node => {
         this.restoreNodeTree(node);
       });
       this.selectedNodes = [];
       this.treeNodes.forEach(node => {
-        this.initializeTreeWithTagsSelection(node, this.tagsSelection);
+        this.initializeTreeWithTags(node, this.selectedTags);
       });
     }
   }
 
-  private loadNodeOfSelection(tagsSelection: TagsSelection) {
-    this.selectionService.getAllTagsFromSelection(tagsSelection.name).subscribe(tags => {
-      const groupedTags = this.arrayUtil.groupBy(tags, t => t.datasource_id + '##' + t.group);
-      for (const key in groupedTags) {
-        if (groupedTags.hasOwnProperty(key)) {
-          const tagsForThisGroup = groupedTags[key];
-          const firstTag: HistorianTag = tagsForThisGroup[0];
-          const groupTreeNode: TreeNode = this.findGroupNode(firstTag);
-          this.loadANodeIfNeeded(groupTreeNode, true);
-          groupTreeNode.expanded = true;
-        }
+  private loadNodeOfTags(tags: HistorianTag[]) {
+    const groupedTags = this.arrayUtil.groupBy(tags, t => t.datasource_id + '##' + t.group);
+    for (const key in groupedTags) {
+      if (groupedTags.hasOwnProperty(key)) {
+        const tagsForThisGroup = groupedTags[key];
+        const firstTag: HistorianTag = tagsForThisGroup[0];
+        const groupTreeNode: TreeNode = this.findGroupNode(firstTag);
+        this.loadANodeIfNeeded(groupTreeNode, true);
+        groupTreeNode.expanded = true;
       }
-    });
+    }
   }
-
-
 
   private findGroupNode(tag: HistorianTag): TreeNode {
     const nodeDatasourceId: TreeNode = this.treeNodes.find(node => node.data.value === tag[node.data.key]);
@@ -108,21 +90,18 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
 
   }
 
-  private getNodeTree(): Observable<TreeNode[]> {
-    return this.ngTreenodeService.getHistTagTree();
-  }
-
-  private initializeTreeWithTagsSelection(node: TreeNode, tagsSelection: TagsSelection): void {
-    if (node && node.type === 'tag' && tagsSelection.containTag(node.data.id)) {
+  private initializeTreeWithTags(node: TreeNode, tags: HistorianTag[]): void {
+    if (node && node.type === 'tag' && this.arrayUtil.exist(tags, tag => tag.id === node.data.id)) {
         node.icon = this.findIcon(true);
         this.selectedNodes.push(node);
     }
     if (node.children) {
         node.children.forEach( childNode => {
-            this.initializeTreeWithTagsSelection(childNode, tagsSelection);
+            this.initializeTreeWithTags(childNode, tags);
         } );
     }
   }
+
   /** Change icon of selected or unselected tags
    * add or remove them from current tagsSelection
    *
@@ -133,11 +112,11 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
       node.icon = this.findIcon(isSelected);
       if (modifySelection) {
         if (isSelected) {
-          this.tagsSelection.addTag(node.data.id);
-          this.profilService.addTag(node.data);
-        } else  {
-          this.tagsSelection.removeTag(node.data.id);
-          this.profilService.removeTag(node.data);
+          if (!this.arrayUtil.exist(this.selectedTags, tag => tag.id === node.data.id)) {
+            this.selectedTags.push(node.data);
+          }
+        } else {
+          this.arrayUtil.remove(this.selectedTags, tag => tag.id === node.data.id);
         }
       }
     }
@@ -147,7 +126,10 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
         } );
     }
   }
-
+  /**
+   * restore normal node state (recursively)
+   * @param node
+   */
   private restoreNodeTree(node: TreeNode) {
     if (node.type === 'tag') {
       node.icon = this.findIcon(false);
@@ -183,7 +165,7 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
     const nodes = this.createNodes(tags);
     nodes.forEach(node => {
       const tagId = (node.data as IHistorianTag).id;
-      if (this.tagsSelection.containTag(tagId)) {
+      if (this.arrayUtil.exist(this.selectedTags, tag => tag.id === tagId)) {
         this.selectedNodes.push(node);
         this.selectRecursive(node, true, modifySelection);
       }

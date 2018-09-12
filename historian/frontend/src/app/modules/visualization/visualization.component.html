@@ -1,5 +1,29 @@
-<div class="ui-g">
-    <div class="ui-g-12">
-        <router-outlet></router-outlet>
+<div class="ui-g">      
+    <!-- MENU FOR VIEW -->
+    <div class='ui-g-12'>
+      <app-visualization-menu 
+      [timeRange]="timeRange" 
+      (timeRangeChange)="onTimeRangeChanged($event)"
+      [autoRefreshInterval]="autoRefreshInterval" 
+      (autoRefreshIntervalChange)="onAutoRefreshIntervalChanged($event)"
+      [tagSelection]="currentTagsSelection"
+      (tagSelectionChange)="onSelectionChanged($event)"
+      [view]="view"
+      (viewChange)="onViewChanged($event)"
+      [timeRangeSelector]="view !== 'tabular'"></app-visualization-menu>
     </div>
+    <!-- MAIN CONTENT -->  
+    <div class="ui-g-3 ui-sm-12">
+      <ng-container *ngIf="treeNodes$ | async as treeNodes">        
+        <app-historian-tag-tree [selectedTags]="tags" [treeNodes]="treeNodes"></app-historian-tag-tree>      
+      </ng-container>
+    </div>
+  <ng-container *ngIf="tagsSelection$ | async as tagsSelection">
+    <div class='ui-g-9' *ngIf="view === 'lineChart'">
+      <app-line-chart [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval" [timeRange]="timeRange"></app-line-chart>
+    </div>   
+    <div class='ui-g-9' *ngIf="view === 'tabular'">      
+      <app-tag-dataview [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval"></app-tag-dataview>
+    </div>
+  </ng-container>
 </div>

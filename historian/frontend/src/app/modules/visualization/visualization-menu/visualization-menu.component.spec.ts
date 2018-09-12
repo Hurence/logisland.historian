@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TabularViewComponent } from './tabular-view.component';
+import { VisualizationMenuComponent } from './visualization-menu.component';
 
-describe('TabularViewComponentComponent', () => {
-  let component: TabularViewComponent;
-  let fixture: ComponentFixture<TabularViewComponent>;
+describe('VisualizationMenuComponent', () => {
+  let component: VisualizationMenuComponent;
+  let fixture: ComponentFixture<VisualizationMenuComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TabularViewComponent ]
+      declarations: [ VisualizationMenuComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TabularViewComponent);
+    fixture = TestBed.createComponent(VisualizationMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

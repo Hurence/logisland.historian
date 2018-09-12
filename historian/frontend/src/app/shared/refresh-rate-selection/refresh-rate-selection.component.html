@@ -1,3 +1,8 @@
-<span>Refresh every : </span>
-<p-dropdown [options]="refreshOptions"  placeholder="Refresh every" [(ngModel)]="refreshRate"
-    [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown>
+<div>
+  <h4>Refresh Interval</h4>
+  <ul class="auto-refresh-grid">
+      <ng-container *ngFor="let refreshOption of refreshOptions">
+          <li (click)='onAutoRefreshIntervalChange(refreshOption.value)'>{{refreshOption.label}}</li>
+      </ng-container>          
+  </ul>
+</div>

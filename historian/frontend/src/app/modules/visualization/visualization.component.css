@@ -1,0 +1,15 @@
+.graph-choice-menu-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  list-style-type: none;
+  border-bottom: 1px solid grey;
+}
+
+.graph-choice-menu-element {
+  padding: 8px;
+}
+
+.graph-choice-menu-element.active {
+  border-bottom: 2px solid blue;  
+}

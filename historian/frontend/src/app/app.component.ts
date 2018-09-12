@@ -3,6 +3,9 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { environment } from '../environments/environment';
 import { ProfilService } from './profil/profil.service';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { Subscription, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
