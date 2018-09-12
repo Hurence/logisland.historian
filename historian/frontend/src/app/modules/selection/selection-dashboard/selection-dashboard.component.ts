@@ -24,7 +24,7 @@ export class SelectionDashboardComponent implements OnInit {
   @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
   // Form to add new selection of tags
   display = false;
-  selectionQuestions: QuestionBase<any>[];  
+  selectionQuestions: QuestionBase<any>[];
 
   private CANCEL_MSG = 'Cancel';
   private REMOVE_SELECTION_MSG = 'Remove selection of tags';
@@ -35,7 +35,7 @@ export class SelectionDashboardComponent implements OnInit {
               private selectionService: SelectionService) {}
 
   ngOnInit() {
-    this.selectionQuestions = this.getMyQuestions();    
+    this.selectionQuestions = this.getMyQuestions();
     this.selectionService.getAll().subscribe(selections => {
       const selectionsWithSet = selections.map(s => new TagsSelection(s));
       this.selectionOptions = selectionsWithSet.map(selection => {
@@ -68,10 +68,10 @@ export class SelectionDashboardComponent implements OnInit {
             tagSelectionSelected = this.selectionOptions[0].value;
           }
         } else {
-          tagSelectionSelected = this.selectionOptions[0].value;          
+          tagSelectionSelected = this.selectionOptions[0].value;
         }
       } else {
-        tagSelectionSelected = null;        
+        tagSelectionSelected = null;
       }
       this.tagSelectionChange.emit(tagSelectionSelected);
     });
@@ -79,7 +79,7 @@ export class SelectionDashboardComponent implements OnInit {
 
   onSelectionSubmitted(selectionModif: IModification<TagsSelection>) {
     this.selectionService.save(new TagsSelectionArray(selectionModif.item), selectionModif.item.getId()).pipe(
-      tap(selection => {             
+      tap(selection => {
         this.actualizeListOfTagsSelection(selection.name);
         this.closeDialog();
       })

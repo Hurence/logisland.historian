@@ -102,18 +102,18 @@ export class VisualizationComponent implements OnInit {
         if (this.tagSelectionId && (!this.currentTagsSelection || this.currentTagsSelection.name !== this.tagSelectionId)) {
           if (this.treeTag) {
             this.treeTag.loading = true;
-          }          
+          }
           return this.selectionService.get(this.tagSelectionId).pipe(
             map(t => {
-              this.currentTagsSelection = new TagsSelection(t);      
-              console.log('loading selection', this.currentTagsSelection);                      
+              this.currentTagsSelection = new TagsSelection(t);
+              console.log('loading selection', this.currentTagsSelection);
               this.selectionService.getAllTagsFromSelection(this.currentTagsSelection.name).subscribe(tags => {
                 if (this.treeTag) {
-                  this.treeTag.loading = false;                
-                }                
+                  this.treeTag.loading = false;
+                }
                 this.tags = tags;
               });
-              return this.currentTagsSelection;              
+              return this.currentTagsSelection;
             })
           );
         } else {

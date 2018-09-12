@@ -10,6 +10,10 @@ import { TimeRangeFilter, TimeRangeFilterUtils } from '../../../shared/time-rang
 import { IHistorianTag } from '../../tag/modele/HistorianTag';
 import { CartesianAxeType, ILineChartData, ILineChartDataset, ILineChartOption, TimeDistribution } from './LineChartModele';
 import { RefreshRateComponent } from '../../../shared/refresh-rate-selection/RefreshRateComponent';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { from } from 'rxjs';
+import {merge} from 'rxjs';
 
 @Component({
   selector: 'app-line-chart',
@@ -74,33 +78,41 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
 
   ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
-    if (changes.timeRange && !TimeRangeFilterUtils.equals(changes.timeRange.currentValue ,changes.timeRange.previousValue)) {      
-      // console.log('time range change from',  changes.timeRange.previousValue) 
-      // console.log('to time range ',  changes.timeRange.currentValue)     
-      this.updateGraphData();
-    }
-    if (changes.tags && changes.tags.currentValue !== changes.tags.previousValue) {
-      // console.log('tags change from',  changes.tags.previousValue) 
-      // console.log('to tags',  changes.tags.currentValue)       
+    if (
+      (changes.timeRange && !TimeRangeFilterUtils.equals(changes.timeRange.currentValue , changes.timeRange.previousValue)) ||
+      (changes.tags && changes.tags.currentValue !== changes.tags.previousValue)
+    ) {
       this.updateGraphData();
     }
   }
 
   updateGraphData() {
+    console.log('UPDATE GRAPH DATA');
     this.data.datasets = [];
-    this.tags.forEach(tag => {
+    const measures: Observable<Measures>[] = this.tags.map(tag => {
       const request = this.buildTagMeasureRequest(tag);
-      this.measuresService.get(request).subscribe(m => {
-        this.data.datasets.push(this.convertMeasureToDataset(m));
-        this.redrawGraph();
-      });
+      return this.measuresService.get(request).pipe(
+          tap(m => {
+            this.data.datasets.push(this.convertMeasureToDataset(m));
+          })
+      );
     });
-    if (this.tags.length === 0) {
-      this.redrawGraph();
-    }
+    measures.reduce(
+      (r, v) => {
+        return merge(r, v);
+      },
+      Observable.of(new Measures())
+    ).subscribe(
+      done => {},
+      error => {},
+      () => {
+        this.redrawGraph();
+      }
+    );
   }
 
   redrawGraph() {
+    console.log('REDRAW GRAPH');
     this.data = Object.assign({}, this.data);
   }
 
