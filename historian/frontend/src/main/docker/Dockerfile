@@ -3,7 +3,7 @@
 #########################
 
 # base image
-FROM node:9.6.1 as builder
+FROM node:8.12.0 as builder
 
 # set working directory
 RUN mkdir /usr/src/app
@@ -15,7 +15,7 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 # install and cache app dependencies
 COPY package.json /usr/src/app/package.json
 RUN yarn install
-RUN yarn global add @angular/cli@6.0.3 --unsafe
+RUN yarn global add @angular/cli@6.2.1
 
 # add app
 COPY . /usr/src/app
