@@ -30,25 +30,21 @@ export class VisualizationMenuComponent implements OnInit {
   @Output() viewChange = new EventEmitter<string>();
 
   onAutoRefreshIntervalChanged(newVal: AutoRefreshInterval) {
-    this.autoRefreshInterval = newVal;
-    this.autoRefreshIntervalChange.emit(this.autoRefreshInterval);
+    this.autoRefreshIntervalChange.emit(newVal);
     this.menuItemActive = '';
   }
 
   onTimeRangeChanged(newVal: TimeRangeFilter) {
-    this.timeRange = newVal;
-    this.timeRangeChange.emit(this.timeRange);
+    this.timeRangeChange.emit(newVal);
     this.menuItemActive = '';
   }
 
   ontagSelectionChanged(newVal: TagsSelection) {
-    this.tagSelection = newVal;
-    this.tagSelectionChange.emit(this.tagSelection);
+    this.tagSelectionChange.emit(newVal);
   }
 
   onViewChanged(newVal: string) {
-    this.view = newVal;
-    this.viewChange.emit(this.view);
+    this.viewChange.emit(newVal);
   }
 
   constructor() {}

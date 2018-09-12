@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from '../../shared/refresh-rate-selection/auto-refresh-interval';
-import { timeRangeBuiltIn, TimeRangeFilter } from '../../shared/time-range-selection/time-range-filter';
+import { timeRangeBuiltIn, TimeRangeFilter, TimeRangeFilterUtils } from '../../shared/time-range-selection/time-range-filter';
 import { TagsSelection } from '../selection/Selection';
 import { SelectionService } from '../selection/selection.service';
 import { HistorianTag } from '../tag/modele/HistorianTag';
@@ -23,6 +23,7 @@ export class VisualizationComponent implements OnInit {
   private treeTag: HistorianTagTreeComponent;
 
   paramSubscription$: Subscription;
+
   tagsSelection$: Observable<TagsSelection>;
   currentTagsSelection: TagsSelection;
   tags: HistorianTag[] = [];
@@ -99,7 +100,8 @@ export class VisualizationComponent implements OnInit {
         if (params.has('selectionId')) {
           this.tagSelectionId = params.get('selectionId');
         }
-        if (this.tagSelectionId && (!this.currentTagsSelection || this.currentTagsSelection.name !== this.tagSelectionId)) {
+        if (this.tagSelectionId && this.tagSelectionId !== 'null' &&
+            (!this.currentTagsSelection || this.currentTagsSelection.name !== this.tagSelectionId)) {
           if (this.treeTag) {
             this.treeTag.loading = true;
           }
@@ -123,11 +125,11 @@ export class VisualizationComponent implements OnInit {
     );
   }
 
-  // ngOnDestroy() {
-  //   if (this.treeNodesSubscription && !this.treeNodesSubscription.closed) {
-  //     this.treeNodesSubscription.unsubscribe();
-  //   }
-  // }
+  ngOnDestroy() {
+    if (this.treeNodesSubscription && !this.treeNodesSubscription.closed) {
+      this.treeNodesSubscription.unsubscribe();
+    }    
+  }
 
   onViewChanged(view: string): void {
     if (view !== this.view) {
@@ -139,12 +141,13 @@ export class VisualizationComponent implements OnInit {
   onSelectionChanged(selection: TagsSelection): void {
     if (selection && selection.name !== this.tagSelectionId) {
       this.tagSelectionId = selection.name;
+      this.currentTagsSelection = selection;
       this.navigateLocal();
     }
   }
 
   onTimeRangeChanged(timeRange: TimeRangeFilter): void {
-    if (timeRange.start !== this.timeRange.start || timeRange.end !== this.timeRange.end) {
+    if (!TimeRangeFilterUtils.equals(timeRange, this.timeRange)) {
       this.timeRange = timeRange;
       this.navigateLocal();
     }
@@ -155,6 +158,14 @@ export class VisualizationComponent implements OnInit {
       this.autoRefreshInterval = autoRefreshInterval;
       this.navigateLocal();
     }
+  }
+
+  onRemoveTag(tag: HistorianTag) {
+    this.currentTagsSelection.removeTag(tag.id);
+  }
+
+  onAddTag(tag: HistorianTag) {
+    this.currentTagsSelection.addTag(tag.id);
   }
 
   private navigateLocal(): void {
