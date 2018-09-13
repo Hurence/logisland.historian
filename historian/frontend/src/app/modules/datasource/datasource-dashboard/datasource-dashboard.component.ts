@@ -259,7 +259,7 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
 
   onSubmitted(ds: Datasource) {
     this.dslistComp.getDatasources();
-    this.selectedDatasource = ds;
+    this.selectDatasource(ds);
     this.displayAddDatasource = false;
   }
 
