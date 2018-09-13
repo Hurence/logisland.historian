@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Observable ,  of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { Datasource } from '../Datasource';
 import { DatasourceService } from '../datasource.service';
 import { ConfirmationService } from 'primeng/components/common/api';
+import { DatasourceFormComponent } from '../datasource-form/datasource-form.component';
 
 @Component({
   selector: 'app-datasources-list',
@@ -20,6 +21,8 @@ export class DatasourcesListComponent implements OnInit {
   displayEditDatasource = false;
   @Output() modifiedDatasource = new EventEmitter<Datasource>();
 
+  @ViewChild(DatasourceFormComponent)
+  private dsFormComp: DatasourceFormComponent;
 
   private CANCEL_MSG = 'Cancel';
   private REMOVE_DATASOURCE_MSG = 'Remove data source';
@@ -71,6 +74,7 @@ export class DatasourcesListComponent implements OnInit {
 
   onEditDatasource(datasource: Datasource) {
     this.datasourceToEdit = datasource;
+    this.dsFormComp.rebuildForm(datasource);
     this.displayEditDatasource = true;
   }
 

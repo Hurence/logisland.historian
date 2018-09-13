@@ -26,7 +26,8 @@
     </div>
   </div>
 </div>
-<p-dialog [(visible)]="displayEditDatasource" [modal]="true" [dismissableMask]="true" appendTo="body">
+<p-dialog [(visible)]="displayEditDatasource" [modal]="true" [dismissableMask]="false" appendTo="body" 
+    [closeOnEscape]="false">
   <p-header>
       Edit datasource : '{{datasourceToEdit?.id}}'
   </p-header>
