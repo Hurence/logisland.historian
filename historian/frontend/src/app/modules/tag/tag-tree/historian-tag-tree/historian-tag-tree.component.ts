@@ -24,8 +24,8 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
   loading = false;
   @Input() treeNodes: TreeNode[];
   selectedNodes: TreeNode[];
-  @Output() selectTag: EventEmitter<HistorianTag>;
-  @Output() unselectTag: EventEmitter<HistorianTag>;
+  @Output() selectTag: EventEmitter<HistorianTag> = new EventEmitter();
+  @Output() unselectTag: EventEmitter<HistorianTag> = new EventEmitter();
 
   constructor(private tagService: TagHistorianService,
               private arrayUtil: ArrayUtil) {
