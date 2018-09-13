@@ -318,6 +318,7 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
 
   private showHelpSelectDatasource(): boolean {
     // console.log('showHelpSelectDatasource');
-    return !this.showHelpCreateDatasource() && (this.selectedDatasource === null || this.selectedDatasource === undefined);
+    return !this.profilService.helpHidden && this.dslistComp.datasources &&
+    this.dslistComp.datasources.length !== 0 && (this.selectedDatasource === null || this.selectedDatasource === undefined);
   }
 }
