@@ -13,7 +13,7 @@ import { ConfirmationService } from 'primeng/components/common/api';
 })
 export class DatasourcesListComponent implements OnInit {
 
-  datasources$: Observable<Datasource[]>;
+  datasources: Datasource[];
   @Input() selectedDatasource: Datasource;
   @Output() selectedDatasourceE = new EventEmitter<Datasource>();
   datasourceToEdit: Datasource;
@@ -25,19 +25,20 @@ export class DatasourcesListComponent implements OnInit {
   private REMOVE_DATASOURCE_MSG = 'Remove data source';
 
   constructor(private datasourceService: DatasourceService,
-              private confirmationService: ConfirmationService) { }
+              private confirmationService: ConfirmationService) {}
 
   ngOnInit() {
     this.getDatasources();
   }
 
   getDatasources(): void {
-    this.datasources$ = this.datasourceService.getAll();
+    this.datasourceService.getAll().subscribe(ds => this.datasources = ds);
   }
 
   getDatasourcesQuery(queryParameter: string) {
-    this.datasources$ = this.datasourceService.getDatasourcesQuery(queryParameter)
-      .pipe(catchError(error => of([])));
+    this.datasourceService.getDatasourcesQuery(queryParameter)
+      .pipe(catchError(error => of([])))
+      .subscribe(ds => this.datasources = ds);
   }
 
   onDeleteDatasource(datasource: Datasource): void {

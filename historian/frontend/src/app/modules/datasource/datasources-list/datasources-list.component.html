@@ -1,6 +1,6 @@
 <div class="h-100 list-container sticky-top">
   <div class="row no-gutters">
-    <div *ngFor="let datasource of datasources$ | async"
+    <div *ngFor="let datasource of datasources"
           class="col-lg-12 col-md-12 datasource-element">
       <div class="row no-gutters">
         <div class="col" (click)="onSelect(datasource)">

@@ -17,7 +17,7 @@ import { HistorianTagTreeComponent } from '../tag/tag-tree/historian-tag-tree/hi
   templateUrl: './visualization.component.html',
   styleUrls: ['./visualization.component.css']
 })
-export class VisualizationComponent implements OnInit {
+export class VisualizationComponent implements OnInit, OnDestroy {
 
   @ViewChild(HistorianTagTreeComponent)
   private treeTag: HistorianTagTreeComponent;
@@ -128,7 +128,7 @@ export class VisualizationComponent implements OnInit {
   ngOnDestroy() {
     if (this.treeNodesSubscription && !this.treeNodesSubscription.closed) {
       this.treeNodesSubscription.unsubscribe();
-    }    
+    }
   }
 
   onViewChanged(view: string): void {
