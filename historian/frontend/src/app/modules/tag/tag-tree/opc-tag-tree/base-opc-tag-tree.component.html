@@ -52,7 +52,7 @@
 <!-- tag form edit -->
 <p-dialog [(visible)]="displayEdit" [modal]="true" [dismissableMask]="true">
     <p-header>
-        Edit tag from datasource : '{{datasource?.id}}'
+        Edit tag from datasource : '{{datasourceId}}'
     </p-header>
     <app-edit-tag-form [questions]="tagEditQuestions" [item]="selectedTag" (submitted)="onTagModification($event)"></app-edit-tag-form>
     <p-footer>

@@ -50,7 +50,7 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
   private treeNodes: TreeNode[];
   private errorMsg: string;
   private connectivityOk: boolean = false;
-  private loadingTags: boolean = false;
+  loadingTags: boolean = false;
   private loadTagsSubscription: Subscription;
 
   @ViewChild(DatasourcesListComponent)
@@ -311,12 +311,12 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
     );
   }
 
-  private showHelpCreateDatasource(): boolean {
+  showHelpCreateDatasource(): boolean {
     // console.log('showHelpCreateDatasource');
     return !this.profilService.helpHidden && this.dslistComp.datasources && this.dslistComp.datasources.length === 0;
   }
 
-  private showHelpSelectDatasource(): boolean {
+  showHelpSelectDatasource(): boolean {
     // console.log('showHelpSelectDatasource');
     return !this.profilService.helpHidden && this.dslistComp.datasources &&
     this.dslistComp.datasources.length !== 0 && (this.selectedDatasource === null || this.selectedDatasource === undefined);
