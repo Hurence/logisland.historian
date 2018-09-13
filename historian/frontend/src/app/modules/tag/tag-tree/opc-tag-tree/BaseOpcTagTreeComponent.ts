@@ -15,7 +15,8 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
 
   @Input() withExpandAll?: boolean = true;
   @Input() withCollapseAll?: boolean = true;
-  @Input() datasource: Datasource;
+  @Input() treeNodes: TreeNode[];
+  @Input() datasourceId: string;
   @Output() modifiedTag = new EventEmitter<IModification<HistorianTag>>();
 
   displayEdit = false;

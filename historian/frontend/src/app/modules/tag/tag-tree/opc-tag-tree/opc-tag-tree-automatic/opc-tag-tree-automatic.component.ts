@@ -26,26 +26,8 @@ export class OpcTagTreeAutomaticComponent extends BaseOpcTagTreeComponent implem
                }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.datasource && changes.datasource.currentValue) {
-      this.treeNodes = [];
-      if (this.datasource !== null) {
-        this.setLoading();
-        switch (this.datasource.tag_browsing) {
-          case TagBrowsingMode.AUTOMATIC:
-            this.tagOpcService.browseTags(
-              this.datasource.id,
-              { nodeId: this.datasource.findRootNodeId(), depth: 1 }
-            ).subscribe(tags => {
-              this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
-              this.updateAlreadyRegistredTags(this.treeNodes);
-              this.loading = false;
-            });
-            break;
-          default:
-            console.error('TagBrowsingMode should be AUTOMATIC :', this.datasource.tag_browsing);
-            break;
-        }
-      }
+    if (changes.treeNodes && changes.treeNodes.currentValue) {
+      this.updateAlreadyRegistredTags(this.treeNodes);
     }
   }
 
@@ -82,7 +64,7 @@ export class OpcTagTreeAutomaticComponent extends BaseOpcTagTreeComponent implem
   protected loadANodeIfNeeded(node: TreeNode): boolean {
     if (node && node.type === TypesName.FOLDER && (!node.children  || node.children.length === 0)) {
       this.loading = true;
-      this.tagOpcService.browseTags(this.datasource.id, { nodeId: node.data.node_id , depth: 1 }).subscribe(tags => {
+      this.tagOpcService.browseTags(this.datasourceId, { nodeId: node.data.node_id , depth: 1 }).subscribe(tags => {
         const children = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
         this.updateAlreadyRegistredTags(children);
         if (children.length === 0) {

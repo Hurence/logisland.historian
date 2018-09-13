@@ -270,6 +270,9 @@ mark, .mark {
 .ml-2 {
   margin-left: 2px;
 }
+.m-auto {
+  margin: auto;
+}
 
 .color-red {
   color: red;
@@ -279,4 +282,10 @@ mark, .mark {
 }
 .blue-on-hover:hover {
   background-color:#2399e5!important;
+}
+
+.center-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

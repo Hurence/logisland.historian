@@ -44,7 +44,7 @@
           <!-- <div class="datasource-detail-title text-center h-10 align-bottom small-column">
             <h2>Datasource Detail</h2>
           </div> -->
-          <div class="row">
+          <div class="row h-100">
             <div class="col-lg-12 col-md-12 small-column">
               <div class="d-flex float-right">
                 <button type="button" class="ui-button-text ui-button ui-widget ui-state-default ui-corner-all"
@@ -61,16 +61,32 @@
             </div>
             <div class="col-12 datasource-detail-content h-100">
               <ng-container *ngIf="selectedDatasource">
-                <ng-container [ngSwitch]="selectedDatasource.tag_browsing">        
-                  <app-opc-tag-tree-automatic *ngSwitchCase="'automatic'" [datasource]="selectedDatasource"
-                                    [withExpandAll]="false"
-                                    [withCollapseAll]="false"
-                                    (modifiedTag)="onModifiedTag($event)"></app-opc-tag-tree-automatic>
-                  <app-opc-tag-tree-manual *ngSwitchCase="'manual'" [datasource]="selectedDatasource"
-                                    [withExpandAll]="false"
-                                    [withCollapseAll]="false"
-                                    (modifiedTag)="onModifiedTag($event)"></app-opc-tag-tree-manual>
+                <ng-container *ngIf="connectivityOk && !loadingTags">
+                  <ng-container *ngIf="treeNodes">
+                    <ng-container [ngSwitch]="selectedDatasource.tag_browsing">                        
+                        <app-opc-tag-tree-automatic *ngSwitchCase="'automatic'"
+                                        [treeNodes]="treeNodes"
+                                        [datasourceId]="selectedDatasource.id"
+                                        [withExpandAll]="false"
+                                        [withCollapseAll]="false"
+                                        (modifiedTag)="onModifiedTag($event)"></app-opc-tag-tree-automatic>
+                        <app-opc-tag-tree-manual *ngSwitchCase="'manual'"
+                                        [datasourceId]="selectedDatasource.id"
+                                        [treeNodes]="treeNodes"
+                                        [withExpandAll]="false"
+                                        [withCollapseAll]="false"
+                                        (modifiedTag)="onModifiedTag($event)"></app-opc-tag-tree-manual>
+                    </ng-container> 
+                  </ng-container> 
                 </ng-container>  
+                <div *ngIf="!connectivityOk && !loadingTags" class="center-text h-100">
+                  {{ errorMsg }}
+                </div>
+                <div *ngIf="loadingTags" class="center-text h-100">
+                  CONNECTING...
+                  <p-progressSpinner [style]="{width: '30px', height: '30px'}"
+                                strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
+                </div>
               </ng-container>              
             </div>
           </div>
