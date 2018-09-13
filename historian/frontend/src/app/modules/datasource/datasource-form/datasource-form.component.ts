@@ -253,8 +253,12 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       (typ: string) => {
         if (typ === DatasourceType.OPC_DA) {
           this.domain.enable();
-          this.clsId.enable();
-          this.progId.enable();
+          if (!this.clsId.value || this.clsId.value.length === 0) {
+            this.progId.enable();
+          }
+          if (!this.progId.value || this.progId.value.length === 0) {
+            this.clsId.enable();
+          }
           this.dsForm.patchValue({
             auth: {
               cred: this.CREADENTIAL_NORMAL,
