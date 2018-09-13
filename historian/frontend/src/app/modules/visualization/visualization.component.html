@@ -1,4 +1,4 @@
-<div class="ui-g">        
+<div class="ui-g">
   <!-- MENU FOR VIEW -->
   <div class='ui-g-12'>
     <app-visualization-menu 
@@ -11,11 +11,12 @@
     [view]="view"
     (viewChange)="onViewChanged($event)"
     [timeRangeSelector]="view !== 'tabular'"></app-visualization-menu>
-  </div>
+  </div>  
   <!-- MAIN CONTENT -->  
   <div class="ui-g-3 ui-sm-12">
     <ng-container *ngIf="treeNodes$ | async as treeNodes">        
-      <app-historian-tag-tree [selectedTags]="tags" [treeNodes]="treeNodes"></app-historian-tag-tree>      
+      <app-historian-tag-tree [selectedTags]="tags" [treeNodes]="treeNodes"
+              (selectTag)="onAddTag($event)" (unselectTag)="onRemoveTag($event)"></app-historian-tag-tree>      
     </ng-container>
   </div>
   <ng-container *ngIf="tagsSelection$ | async as tagsSelection">
@@ -24,8 +25,7 @@
         <app-line-chart [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval" [timeRange]="timeRange"></app-line-chart>
       </div>
       <div class='ui-g-9' *ngIf="view === 'tabular'">      
-        <app-tag-dataview [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval"
-                          (selectTag)="onAddTag($event)" (unselectTag)="onRemoveTag($event)"></app-tag-dataview>
+        <app-tag-dataview [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval"></app-tag-dataview>
       </div>
     </ng-container>
   </ng-container>

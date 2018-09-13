@@ -165,7 +165,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
   }
 
   onAddTag(tag: HistorianTag) {
-    this.currentTagsSelection.addTag(tag.id);
+    this.currentTagsSelection.addTag(tag.id);    
   }
 
   private navigateLocal(): void {
