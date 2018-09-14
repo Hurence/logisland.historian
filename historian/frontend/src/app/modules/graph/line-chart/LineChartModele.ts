@@ -178,6 +178,9 @@ export interface ILineChartOption {
     showLines?: boolean;
     spanGaps?: boolean;
     scales?: ILineChartScale;
+    animation?: any;
+    hover?: any;
+    responsiveAnimationDuration?: any;
 }
 
 export interface ILineChartConfig {
