@@ -19,7 +19,6 @@ export class TagOpcService {
     return this.http.get<OpcTag[]>(`${this.tagsUrl}datasources/tags`)
     .pipe(
       map(tags => tags.map(t => new OpcTag(t))),
-      catchError(this.help.handleError('getAll()', []))
     );
   }
 /**
@@ -41,7 +40,6 @@ export class TagOpcService {
     .pipe(
       map(tags => tags.map(t => new OpcTag(t))),
       tap(tags => console.log(`found ${tags.length} opc tags from datasource '${datasourceId}'`)),
-      catchError(this.help.handleError(`get(${datasourceId})`, []))
     );
   }
 
@@ -57,14 +55,11 @@ export class TagOpcService {
     .pipe(
       map(tags => tags.map(t => new OpcTag(t))),
       tap(tags => console.log(`found ${tags.length} opc tags from datasource '${datasourceId}'`)),
-      catchError(this.help.handleError(`get(${datasourceId})`, []))
     );
   }
 
   gets(datasourceIds: string[]): Observable<OpcTag[]> {
     const requests: Observable<OpcTag[]>[] = datasourceIds.map(id => this.get(id));
-    return this.help.zip(requests).pipe(
-      catchError(this.help.handleError(`gets(${datasourceIds})`, []))
-    );
+    return this.help.zip(requests);
   }
 }

@@ -68,7 +68,18 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
               // suggestedMax: 80
             }
         }]
-      }
+      },
+      /*A bug occur when animation is on and we change dataset rapidly (low refreshRate)
+      Another solution would be to use chart.update apparently. See https://github.com/chartjs/Chart.js/issues/5149
+      */
+      animation: {
+          duration: 0
+      },
+      // IF YOU GOT error transition null this may help
+      // hover: {
+      //     animationDuration: 0
+      // },
+      // responsiveAnimationDuration: 0
     };
   }
 

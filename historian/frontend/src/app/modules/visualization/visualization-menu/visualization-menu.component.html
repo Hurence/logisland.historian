@@ -1,6 +1,6 @@
 <ul class="visualization-menu-list">
   <li *ngIf="tagSelector" [ngClass]="{'active' : menuItemActive === 'selection'}" 
-      class="visualization-menu-element hurence-tooltip" (click)="menuItemActive='selection'">
+      class="visualization-menu-element hurence-tooltip hurence-tooltip-bottom" (click)="menuItemActive='selection'">
       <i class="fa fa-tags" aria-hidden="true"></i>{{ tagSelection ? tagSelection.name: 'None' }}
       <span class="hurence-tooltiptext" 
       [ngStyle]="{'visibility': tagSelection || menuItemActive === 'selection' ? 'hidden': 'visible'}">

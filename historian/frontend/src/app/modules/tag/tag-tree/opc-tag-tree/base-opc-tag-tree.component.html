@@ -1,8 +1,3 @@
-
-<div class="mx-auto" style="width: 20rem;">
-    <!-- <button *ngIf="withExpandAll" pButton type="button" label="Expand all" (click)="expandAll()" class="mx-2 my-2"></button>
-    <button *ngIf="withCollapseAll" pButton type="button" label="Collapse all" (click)="collapseAll()" class="mx-2 my-2"></button> -->
-</div>
 <p-tree [value]="treeNodes" [loading]="loading" id="historian-opc-tag-tree" (onNodeExpand)="loadNode($event)">
     <ng-template let-node pTemplate="folder">
     <div class="">
@@ -57,7 +52,7 @@
 <!-- tag form edit -->
 <p-dialog [(visible)]="displayEdit" [modal]="true" [dismissableMask]="true">
     <p-header>
-        Edit tag from datasource : '{{datasource?.id}}'
+        Edit tag from datasource : '{{datasourceId}}'
     </p-header>
     <app-edit-tag-form [questions]="tagEditQuestions" [item]="selectedTag" (submitted)="onTagModification($event)"></app-edit-tag-form>
     <p-footer>

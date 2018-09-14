@@ -33,7 +33,6 @@ export abstract class AbstractModelService<M> implements IModelService<M> {
     return this.http.get<M[]>(`${this.baseUrl}`)
       .pipe(
         map(items => items.map(item => this.create(item))),
-        catchError(this.help.handleError('getAll()', []))
       );
   }
 
@@ -41,7 +40,6 @@ export abstract class AbstractModelService<M> implements IModelService<M> {
     return this.http.get<M>(`${this.baseUrl}/${encodeURIComponent(id)}`)
       .pipe(
         map(item => this.create(item)),
-        catchError(this.help.handleError(`get(${id})`))
       );
   }
 

@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, TreeNode } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataFlowService } from '../../../dataflow.service';
@@ -21,15 +21,18 @@ import {
 import { IModification, TagConfigurationToApply } from '../ConfigurationToApply';
 import { Datasource, DatasourceType, TagBrowsingMode } from '../Datasource';
 import { DatasourcesListComponent } from '../datasources-list/datasources-list.component';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ComponentCanDeactivate } from '../../../shared/BaseCompoenentCanDeactivate';
+import { HttpErrorResponse } from '@angular/common/http';
+import { NgTreenodeService } from '../../tag/service/ng-treenode.service';
+import { TagOpcService } from '../../tag/service/tag-opc.service';
 
 @Component({
   selector: 'app-datasource-dashboard',
   templateUrl: './datasource-dashboard.component.html',
   styleUrls: ['./datasource-dashboard.component.css']
 })
-export class DatasourceDashboardComponent extends ComponentCanDeactivate implements OnInit {
+export class DatasourceDashboardComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
 
   tagConfigurationToApply: TagConfigurationToApply;
   selectedDatasource: Datasource;
@@ -43,6 +46,12 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
 
   isApplyBtnEnabled: boolean = false;
   isApplyingConf: boolean = false;
+
+  private treeNodes: TreeNode[];
+  private errorMsg: string;
+  private connectivityOk: boolean = false;
+  loadingTags: boolean = false;
+  private loadTagsSubscription: Subscription;
 
   @ViewChild(DatasourcesListComponent)
   private dslistComp: DatasourcesListComponent;
@@ -59,6 +68,8 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
               private questionService: QuestionService,
               private dataFlowService: DataFlowService,
               private tagHistorianService: TagHistorianService,
+              private tagOpcService: TagOpcService,
+              private ngTreenodeService: NgTreenodeService,
               private observerUtil: Utilities,
               protected messageService: MessageService,
               protected confirmationService: ConfirmationService) {
@@ -86,6 +97,16 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
   ngOnInit() {
     this.tagQuestions = this.questionService.getAddTagForm();
     this.tagConfigurationToApply = new TagConfigurationToApply();
+  }
+
+  ngOnDestroy() {
+    this.unsubscribeLoadTags();
+  }
+
+  private unsubscribeLoadTags() {
+    if (this.loadTagsSubscription && !this.loadTagsSubscription.closed) {
+      this.loadTagsSubscription.unsubscribe();
+    }
   }
 
   onSelectDatasource(datasource: Datasource) {
@@ -158,6 +179,56 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
     this.selectedDatasource = datasource;
     this.tagConfigurationToApply = new TagConfigurationToApply();
     this.isApplyBtnEnabled = false;
+    // update tags
+    this.treeNodes = [];
+    if (datasource !== null) {
+      this.loadingTags = true;
+      this.unsubscribeLoadTags();
+      switch (datasource.tag_browsing) {
+        case TagBrowsingMode.MANUAL:
+          this.loadTagsSubscription = this.tagHistorianService.getAllFromDatasource(datasource.id).subscribe(
+            tags => {
+              this.connectivityOk = true;
+              this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+              this.treeNodes.forEach(node => node.label = node.data.node_id);
+              if (this.treeNodes.length === 0) {
+                this.treeNodes.push(this.ngTreenodeService.getEmptyNode());
+              }
+            },
+            error => {
+              this.errorMsg = `Could not connect to Datasource.`;
+              this.connectivityOk = false;
+              this.loadingTags = false;
+            },
+            () => {
+              this.loadingTags = false;
+            }
+          );
+          break;
+        case TagBrowsingMode.AUTOMATIC:
+          this.loadTagsSubscription = this.tagOpcService.browseTags(
+            datasource.id,
+            { nodeId: datasource.findRootNodeId(), depth: 1 }
+          ).subscribe(
+            tags => {
+              this.connectivityOk = true;
+              this.treeNodes = tags.map(tag => this.ngTreenodeService.buildNodeFromTag(tag));
+            },
+            error => {
+              this.errorMsg = `Could not connect to Datasource.`;
+              this.connectivityOk = false;
+              this.loadingTags = false;
+            },
+            () => {
+              this.loadingTags = false;
+            }
+          );
+          break;
+        default:
+          console.error('TagBrowsingMode should be MANUAL :', datasource.tag_browsing);
+          break;
+      }
+    }
   }
 
 
@@ -188,7 +259,7 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
 
   onSubmitted(ds: Datasource) {
     this.dslistComp.getDatasources();
-    this.selectedDatasource = ds;
+    this.selectDatasource(ds);
     this.displayAddDatasource = false;
   }
 
@@ -240,4 +311,14 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
     );
   }
 
+  showHelpCreateDatasource(): boolean {
+    // console.log('showHelpCreateDatasource');
+    return !this.profilService.helpHidden && this.dslistComp.datasources && this.dslistComp.datasources.length === 0;
+  }
+
+  showHelpSelectDatasource(): boolean {
+    // console.log('showHelpSelectDatasource');
+    return !this.profilService.helpHidden && this.dslistComp.datasources &&
+    this.dslistComp.datasources.length !== 0 && (this.selectedDatasource === null || this.selectedDatasource === undefined);
+  }
 }

@@ -1,18 +1,11 @@
 <div class="container-fluid no-padding h-100">
   <div class="row no-gutters">
-    <!-- <div class="col-lg-12 col-md-12 bg-dark h-10 small-column">
-      <div class="row no-gutters h-100">
-          <div class="col-lg-12 col-md-12 datasource-dashboard-title text-center h-100">
-            <h1>Datasources</h1>
-          </div>
-      </div>
-    </div> -->
     <section class="content-header">
       <h1>
           Datasources &amp; Tags
         <small></small>
       </h1>
-    </section>
+    </section>    
     <div class="col-lg-12 col-md-12">
       <div class="row content no-gutters h-100">
         <div class="col-lg-4 col-md-4 col-sm-12 left-panel sticky-top">
@@ -23,12 +16,20 @@
               </div>
             </div>
             <div class="col-lg-12 col-md-12 small-column">
-              <button type="button" class="float-right ui-button-text ui-button ui-widget ui-state-default ui-corner-all" (click)="onClickAddDatasource()">
+              <button type="button" class="hurence-tooltip hurence-tooltip-bottom float-right ui-button-text ui-button ui-widget ui-state-default ui-corner-all" (click)="onClickAddDatasource()">
                 <i class="fa fa-plus" aria-hidden="true"></i>Add new datasource
-              </button>
+                <span class="hurence-tooltiptext" 
+                [ngStyle]="{'visibility': showHelpCreateDatasource() ? 'visible' : 'hidden'}">
+                  Click here to configure your first datasource
+                </span>
+              </button>              
             </div>
-            <div class="col-lg-12 col-md-12 large-column">
+            <div class="col-lg-12 col-md-12 large-column hurence-tooltip hurence-tooltip-right">
               <app-datasources-list [selectedDatasource]="selectedDatasource" (selectedDatasourceE)="onSelectDatasource($event)"></app-datasources-list>
+              <span class="hurence-tooltiptext" 
+                [ngStyle]="{'visibility': showHelpSelectDatasource() ? 'visible': 'hidden'}">
+                  Select a datasource
+              </span>
             </div>
           </div>
         </div>
@@ -36,10 +37,10 @@
           <!-- <div class="datasource-detail-title text-center h-10 align-bottom small-column">
             <h2>Datasource Detail</h2>
           </div> -->
-          <div class="row">
+          <div class="row h-100">
             <div class="col-lg-12 col-md-12 small-column">
               <div class="d-flex float-right">
-                <button type="button" class="ui-button-text ui-button ui-widget ui-state-default ui-corner-all"
+                <button *ngIf="isAddTagDisabled(selectedDatasource)" type="button" class="ui-button-text ui-button ui-widget ui-state-default ui-corner-all"
                     (click)="onClickAddTag()" [disabled]="isAddTagDisabled(selectedDatasource)">
                   <i class="fa fa-plus" aria-hidden="true"></i>Add new tag
                 </button>
@@ -52,21 +53,34 @@
               </div>
             </div>
             <div class="col-12 datasource-detail-content h-100">
-              <ng-container *ngIf="selectedDatasource">
-                <ng-container [ngSwitch]="selectedDatasource.tag_browsing">        
-                  <app-opc-tag-tree-automatic *ngSwitchCase="'automatic'" [datasource]="selectedDatasource"
-                                    [withExpandAll]="false"
-                                    [withCollapseAll]="false"
-                                    (modifiedTag)="onModifiedTag($event)"></app-opc-tag-tree-automatic>
-                  <app-opc-tag-tree-manual *ngSwitchCase="'manual'" [datasource]="selectedDatasource"
-                                    [withExpandAll]="false"
-                                    [withCollapseAll]="false"
-                                    (modifiedTag)="onModifiedTag($event)"></app-opc-tag-tree-manual>
-                </ng-container>  
-              </ng-container>
-              <ng-container *ngIf="!selectedDatasource">
-                Please select or create a datasource.
-              </ng-container>
+              <ng-container [ngSwitch]="loadingTags">
+                <div *ngSwitchCase="true" class="center-text h-100">
+                  CONNECTING...
+                  <p-progressSpinner [style]="{width: '30px', height: '30px'}"
+                                strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
+                </div>
+                <ng-container *ngSwitchCase="false">
+                  <div *ngIf="!connectivityOk" class="center-text h-100">
+                    {{ errorMsg }}
+                  </div>
+                  <ng-container *ngIf="connectivityOk && selectedDatasource">
+                    <ng-container [ngSwitch]="selectedDatasource.tag_browsing">                        
+                        <app-opc-tag-tree-automatic *ngSwitchCase="'automatic'"
+                                        [treeNodes]="treeNodes"
+                                        [datasourceId]="selectedDatasource.id"
+                                        [withExpandAll]="false"
+                                        [withCollapseAll]="false"
+                                        (modifiedTag)="onModifiedTag($event)"></app-opc-tag-tree-automatic>
+                        <app-opc-tag-tree-manual *ngSwitchCase="'manual'"
+                                        [datasourceId]="selectedDatasource.id"
+                                        [treeNodes]="treeNodes"
+                                        [withExpandAll]="false"
+                                        [withCollapseAll]="false"
+                                        (modifiedTag)="onModifiedTag($event)"></app-opc-tag-tree-manual>
+                    </ng-container>
+                  </ng-container>       
+                </ng-container>
+              </ng-container>           
             </div>
           </div>
         </div>

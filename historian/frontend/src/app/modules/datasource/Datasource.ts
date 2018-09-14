@@ -4,8 +4,7 @@ export enum TagBrowsingMode {
 }
 export enum DatasourceType {
     OPC_DA = 'OPC-DA',
-    OPC_UA = 'OPC-UA',
-    UNKNOWN = '',
+    OPC_UA = 'OPC-UA'
 }
 export namespace DatasourceTypeUtil {
     export const keys: (keyof typeof DatasourceType)[] = <(keyof typeof DatasourceType)[]>Object.keys(DatasourceType);

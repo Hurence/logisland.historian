@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
@@ -24,6 +24,8 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
   loading = false;
   @Input() treeNodes: TreeNode[];
   selectedNodes: TreeNode[];
+  @Output() selectTag: EventEmitter<HistorianTag> = new EventEmitter<HistorianTag>();
+  @Output() unselectTag: EventEmitter<HistorianTag> = new EventEmitter<HistorianTag>();
 
   constructor(private tagService: TagHistorianService,
               private arrayUtil: ArrayUtil) {
@@ -39,7 +41,7 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
       this.treeNodes = this.treeNodes;
       this.expandAll(false);
     }
-    if (changes.selectedTags && this.selectedTags && this.treeNodes.length !== 0) {
+    if (changes.selectedTags && changes.selectedTags.currentValue && this.treeNodes.length !== 0) {
       this.loadNodeOfTags(this.selectedTags);
       this.selectedNodes.forEach(node => {
         this.restoreNodeTree(node);
@@ -114,9 +116,11 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
         if (isSelected) {
           if (!this.arrayUtil.exist(this.selectedTags, tag => tag.id === node.data.id)) {
             this.selectedTags.push(node.data);
+            this.selectTag.emit(node.data);
           }
         } else {
           this.arrayUtil.remove(this.selectedTags, tag => tag.id === node.data.id);
+          this.unselectTag.emit(node.data);
         }
       }
     }

@@ -57,8 +57,8 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.datasource  && changes.datasource.previousValue !== changes.datasource.currentValue) {
-      this.rebuildForm(); // TODO could be factorized
+    if (changes.datasource && changes.datasource.currentValue) {
+      this.rebuildForm(changes.datasource.currentValue);
     }
     if (changes.isCreation && changes.isCreation.previousValue !== changes.isCreation.currentValue) {
       if (this.isCreation) {
@@ -84,7 +84,7 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       acceptLabel: 'Ok',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.rebuildForm();
+        this.rebuildForm(this.datasource);
       },
       reject: () => { }
     });
@@ -138,10 +138,10 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
   }
 
   /* Fill in form with current datasource properties */
-  private rebuildForm(): void {
+  rebuildForm(datasource: Datasource): void {
     /*TODO could be factorized but form structure is different from model object...
     Have to find an intelligent way to deal with that*/
-    this.dsForm.reset(this.createFormObject(this.datasource));
+    this.dsForm.reset(this.createFormObject(datasource));
   }
 
   /* Create form object from given datasource */
@@ -253,8 +253,12 @@ export class DatasourceFormComponent implements OnInit, OnChanges {
       (typ: string) => {
         if (typ === DatasourceType.OPC_DA) {
           this.domain.enable();
-          this.clsId.enable();
-          this.progId.enable();
+          if (!this.clsId.value || this.clsId.value.length === 0) {
+            this.progId.enable();
+          }
+          if (!this.progId.value || this.progId.value.length === 0) {
+            this.clsId.enable();
+          }
           this.dsForm.patchValue({
             auth: {
               cred: this.CREADENTIAL_NORMAL,
