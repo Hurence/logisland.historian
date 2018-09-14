@@ -48,7 +48,7 @@ export class VisualizationMenuComponent implements OnInit {
     this.viewChange.emit(newVal);
   }
 
-  constructor(private profilService: ProfilService) {}
+  constructor(public profilService: ProfilService) {}
 
   ngOnInit() {}
 

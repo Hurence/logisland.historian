@@ -33,7 +33,7 @@ export class SelectionDashboardComponent implements OnInit {
 
   constructor(private confirmationService: ConfirmationService,
               private selectionService: SelectionService,
-              private profilService: ProfilService) {}
+              public profilService: ProfilService) {}
 
   ngOnInit() {
     this.selectionQuestions = this.getMyQuestions();
