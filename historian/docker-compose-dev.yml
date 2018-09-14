@@ -51,7 +51,7 @@ services:
           - keycloak
   logisland:
     container_name: logisland
-    image: 'hurence/logisland:0.14.1.2-develop'
+    image: 'hurence/historian-logisland:1.0.0-RC'
     command: "bin/logisland.sh --conf /conf/historian-remote.yaml"
     ports:
       - '4050:4050'
