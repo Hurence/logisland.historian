@@ -32,7 +32,8 @@ export class SelectionDashboardComponent implements OnInit {
   @ViewChild(SelectionFormComponent) private tagSelectionFormComp: SelectionFormComponent;
 
   constructor(private confirmationService: ConfirmationService,
-              private selectionService: SelectionService) {}
+              private selectionService: SelectionService,
+              private profilService: ProfilService) {}
 
   ngOnInit() {
     this.selectionQuestions = this.getMyQuestions();

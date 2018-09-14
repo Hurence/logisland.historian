@@ -3,7 +3,7 @@
       class="visualization-menu-element hurence-tooltip hurence-tooltip-bottom" (click)="menuItemActive='selection'">
       <i class="fa fa-tags" aria-hidden="true"></i>{{ tagSelection ? tagSelection.name: 'None' }}
       <span class="hurence-tooltiptext" 
-      [ngStyle]="{'visibility': tagSelection || menuItemActive === 'selection' ? 'hidden': 'visible'}">
+      [ngStyle]="{'visibility': this.profilService.helpHidden || tagSelection || menuItemActive === 'selection' ? 'hidden': 'visible'}">
         Click here to configure your set of tag
       </span>
   </li>

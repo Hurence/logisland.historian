@@ -8,7 +8,7 @@
       (onChange)="onSelectionChange($event)">          
       </p-dropdown>    
       <span class="hurence-tooltiptext" 
-      [ngStyle]="{'visibility': tagSelection ? 'hidden': 'visible'}">
+      [ngStyle]="{'visibility': this.profilService.helpHidden || tagSelection ? 'hidden': 'visible'}">
         Click here to select an already existing set of tag
       </span>
     </span>
@@ -19,7 +19,7 @@
     <button type="button" (click)="showDialog()" class="btn btn-info ml-2 hurence-tooltip hurence-tooltip-bottom">
       <i class="fa fa-plus" aria-hidden="true"></i>Add new selection
       <span class="hurence-tooltiptext" 
-      [ngStyle]="{'visibility': tagSelection ? 'hidden': 'visible'}">
+      [ngStyle]="{'visibility': this.profilService.helpHidden || tagSelection ? 'hidden': 'visible'}">
         Or click here to create a new one
       </span>
     </button>
