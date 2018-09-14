@@ -22,12 +22,15 @@ export class VisualizationComponent implements OnInit, OnDestroy {
   @ViewChild(HistorianTagTreeComponent)
   private treeTag: HistorianTagTreeComponent;
 
-  paramSubscription$: Subscription;
+  paramSubscription: Subscription;
+  treeNodesSubscription: Subscription;
 
   tagsSelection$: Observable<TagsSelection>;
   currentTagsSelection: TagsSelection;
   tags: HistorianTag[] = [];
-  treeNodes$: Observable<TreeNode[]>;
+  treeNodes: TreeNode[];
+  loading: boolean = false;
+  loadingTree: boolean = false;
 
   private _tagSelectionId: string;
   get tagSelectionId(): string {
@@ -76,7 +79,6 @@ export class VisualizationComponent implements OnInit, OnDestroy {
     this._view = newView;
     this.cookieService.set('view', this._view);
   }
-  treeNodesSubscription: Subscription;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -85,8 +87,23 @@ export class VisualizationComponent implements OnInit, OnDestroy {
               private cookieService: CookieService) {}
 
   ngOnInit() {
-    this.treeNodes$ = this.ngTreenodeService.getHistTagTree();
-    this.tagsSelection$ = this.route.paramMap.pipe(
+    if (!this.treeNodes && !this.loadingTree) {
+      this.loadingTree = true;
+      this.treeNodesSubscription = this.ngTreenodeService.getHistTagTree().subscribe(
+        treeNodes => {
+          this.treeNodes = treeNodes;
+          this.loadingTree = false;
+        },
+        e => {
+          console.error('error loading historian tag tree', e);
+          this.loadingTree = false;
+        },
+      );
+    }
+    if (this.paramSubscription && !this.paramSubscription.closed) {
+      this.paramSubscription.unsubscribe();
+    }
+    this.paramSubscription = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
         if (params.has('view')) {
           this.view = params.get('view');
@@ -107,8 +124,9 @@ export class VisualizationComponent implements OnInit, OnDestroy {
           }
           console.log('loading selection', this.tagSelectionId);
           return this.selectionService.get(this.tagSelectionId).pipe(
-            map(t => {
-              this.currentTagsSelection = new TagsSelection(t);
+            map(s => {
+              this.currentTagsSelection = new TagsSelection(s);
+              return this.currentTagsSelection;
             })
           );
         } else {
@@ -117,20 +135,32 @@ export class VisualizationComponent implements OnInit, OnDestroy {
       }),
       map(selection => {
         console.log('loading tags of ', selection);
-        this.selectionService.getAllTagsFromSelection(this.currentTagsSelection.name).subscribe(tags => {
-          if (this.treeTag) {
-            this.treeTag.loading = false;
-          }
-          this.tags = tags;
-        });
+        if (selection) {
+          this.loading = true;
+          this.selectionService.getAllTagsFromSelection(selection.name).subscribe(tags => {
+            if (this.treeTag) {
+              this.treeTag.loading = false;
+            }
+            this.tags = tags;
+          });
+        }
         return selection;
       })
+    ).subscribe(
+      s => { this.loading = false; },
+      e => {
+        console.error('error while navigating', e);
+        this.loading = false;
+      },
     );
   }
 
   ngOnDestroy() {
     if (this.treeNodesSubscription && !this.treeNodesSubscription.closed) {
       this.treeNodesSubscription.unsubscribe();
+    }
+    if (this.paramSubscription && !this.paramSubscription.closed) {
+      this.paramSubscription.unsubscribe();
     }
   }
 
