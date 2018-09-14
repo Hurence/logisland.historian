@@ -111,7 +111,7 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
   */
   private selectRecursive(node: TreeNode, isSelected: boolean, modifySelection: boolean) {
     if (node.type === 'tag') {
-      node.icon = this.findIcon(isSelected);      
+      node.icon = this.findIcon(isSelected);
       if (modifySelection) {
         if (isSelected) {
           if (!this.arrayUtil.exist(this.selectedTags, tag => tag.id === node.data.id)) {

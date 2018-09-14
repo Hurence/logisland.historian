@@ -105,23 +105,26 @@ export class VisualizationComponent implements OnInit, OnDestroy {
           if (this.treeTag) {
             this.treeTag.loading = true;
           }
+          console.log('loading selection', this.tagSelectionId);
           return this.selectionService.get(this.tagSelectionId).pipe(
             map(t => {
               this.currentTagsSelection = new TagsSelection(t);
-              console.log('loading selection', this.currentTagsSelection);
-              this.selectionService.getAllTagsFromSelection(this.currentTagsSelection.name).subscribe(tags => {
-                if (this.treeTag) {
-                  this.treeTag.loading = false;
-                }
-                this.tags = tags;
-              });
-              return this.currentTagsSelection;
             })
           );
         } else {
           return Observable.of(this.currentTagsSelection);
         }
       }),
+      map(selection => {
+        console.log('loading tags of ', selection);
+        this.selectionService.getAllTagsFromSelection(this.currentTagsSelection.name).subscribe(tags => {
+          if (this.treeTag) {
+            this.treeTag.loading = false;
+          }
+          this.tags = tags;
+        });
+        return selection;
+      })
     );
   }
 
@@ -165,7 +168,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
   }
 
   onAddTag(tag: HistorianTag) {
-    this.currentTagsSelection.addTag(tag.id);    
+    this.currentTagsSelection.addTag(tag.id);
   }
 
   private navigateLocal(): void {
