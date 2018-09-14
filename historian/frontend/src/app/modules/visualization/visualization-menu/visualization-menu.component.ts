@@ -51,5 +51,5 @@ export class VisualizationMenuComponent implements OnInit {
   constructor(private profilService: ProfilService) {}
 
   ngOnInit() {}
-  
+
 }

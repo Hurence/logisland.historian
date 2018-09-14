@@ -29,7 +29,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
   currentTagsSelection: TagsSelection;
   tags: HistorianTag[] = [];
   treeNodes: TreeNode[];
-  loading: boolean = false;
+  loadingTags: boolean = false;
   loadingTree: boolean = false;
 
   private _tagSelectionId: string;
@@ -105,6 +105,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
     }
     this.paramSubscription = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
+        this.loadingTags = true;
         if (params.has('view')) {
           this.view = params.get('view');
         }
@@ -136,7 +137,6 @@ export class VisualizationComponent implements OnInit, OnDestroy {
       map(selection => {
         console.log('loading tags of ', selection);
         if (selection) {
-          this.loading = true;
           this.selectionService.getAllTagsFromSelection(selection.name).subscribe(tags => {
             if (this.treeTag) {
               this.treeTag.loading = false;
@@ -147,10 +147,10 @@ export class VisualizationComponent implements OnInit, OnDestroy {
         return selection;
       })
     ).subscribe(
-      s => { this.loading = false; },
+      s => { this.loadingTags = false; },
       e => {
         console.error('error while navigating', e);
-        this.loading = false;
+        this.loadingTags = false;
       },
     );
   }

@@ -13,13 +13,13 @@
     [timeRangeSelector]="view !== 'tabular'"></app-visualization-menu>
   </div>  
   <!-- LOADING -->
-  <div *ngIf="loading" class="center-text h-100 ui-g-12">
+  <div *ngIf="loadingTags" class="center-text h-100 ui-g-12">
       LOADING TAGS OF SELECTION...
       <p-progressSpinner [style]="{width: '30px', height: '30px'}"
                     strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
   </div>
-  <!-- MAIN CONTENT --> 
-  <div [hidden]="loading" class="ui-g-12">
+  <!-- MAIN CONTENT -->
+  <div [hidden]="loadingTags || !currentTagsSelection" class="ui-g-12">
     <div class="ui-g">        
       <div *ngIf="loadingTree" class="center-text h-100 ui-g-3 ui-sm-12">
           LOADING TREE...
