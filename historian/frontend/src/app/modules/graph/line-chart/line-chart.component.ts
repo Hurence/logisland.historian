@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, OnDestroy, ViewChild } from '@angular/core';
 
 import { AbsSubscriberToSelectionOfTagWithRefresh } from '../../../core/AbsSubscriberToSelectionOfTag';
 import { Measures } from '../../../measure/Measures';
@@ -10,17 +10,18 @@ import { TimeRangeFilter, TimeRangeFilterUtils } from '../../../shared/time-rang
 import { IHistorianTag } from '../../tag/modele/HistorianTag';
 import { CartesianAxeType, ILineChartData, ILineChartDataset, ILineChartOption, TimeDistribution } from './LineChartModele';
 import { RefreshRateComponent } from '../../../shared/refresh-rate-selection/RefreshRateComponent';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import { from } from 'rxjs';
 import {merge} from 'rxjs';
+import { UIChart } from 'primeng/components/chart/chart';
 
 @Component({
   selector: 'app-line-chart',
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css']
 })
-export class LineChartComponent extends RefreshRateComponent implements OnInit, OnChanges {
+export class LineChartComponent extends RefreshRateComponent implements OnInit, OnChanges, OnDestroy {
 
   data: ILineChartData;
   options: ILineChartOption;
@@ -30,6 +31,10 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
   private colorsForMetrics: Map<string, string> = new Map();
   private colors: string[] = ['#d9080d', '#6aba15', '#241692', '#e23eba',
   '#7e461f', '#7d30b2', '#f5cb82', '#fd3e6f', '#d7e206', '#b6cdce', '#4bc0c0'];
+
+
+  @ViewChild(UIChart)
+  private chartComp: UIChart;
 
 
   constructor(private measuresService: MeasuresService,
@@ -97,34 +102,46 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
     }
   }
 
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+    // if (this.chart) this.chart.destroy();
+  }
+
   updateGraphData() {
     console.log('UPDATE GRAPH DATA');
     this.data.datasets = [];
-    const measures: Observable<Measures>[] = this.tags.map(tag => {
+    const newDatasets: ILineChartDataset[] = [];
+    const measures: Observable<ILineChartDataset>[] = this.tags.map(tag => {
       const request = this.buildTagMeasureRequest(tag);
       return this.measuresService.get(request).pipe(
-          tap(m => {
-            this.data.datasets.push(this.convertMeasureToDataset(m));
+          map(m => {
+            return this.convertMeasureToDataset(m);
           })
       );
     });
-    measures.reduce(
-      (r, v) => {
-        return merge(r, v);
-      },
-      Observable.of(new Measures())
-    ).subscribe(
-      done => {},
-      error => {},
-      () => {
-        this.redrawGraph();
-      }
-    );
+    const firstMeasures: Observable<ILineChartDataset> = measures.shift();
+    if (firstMeasures) {
+      measures.reduce(
+        (r, v) => {
+          return merge(r, v);
+        },
+        firstMeasures
+      ).subscribe(
+        dataset => {
+          if (dataset) newDatasets.push(dataset);
+        },
+        error => {},
+        () => {
+          console.log('complete updateGraphData', newDatasets);
+          this.redrawGraph(newDatasets);
+        }
+      );
+    }
   }
 
-  redrawGraph() {
-    console.log('REDRAW GRAPH');
-    this.data = Object.assign({}, this.data);
+  redrawGraph(newDatasets: ILineChartDataset[]) {
+    this.data.datasets = newDatasets;
+    this.chartComp.chart.update();
   }
 
   selectData(event) {
@@ -177,7 +194,6 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
       start: this.timeRange.start,
       end: this.timeRange.end,
       functions: 'savgbckt:300'
-
     });
   }
 }
