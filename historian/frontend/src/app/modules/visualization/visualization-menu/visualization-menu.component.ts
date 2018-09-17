@@ -52,4 +52,11 @@ export class VisualizationMenuComponent implements OnInit {
 
   ngOnInit() {}
 
+  toggleItemMenu(item: string): void {
+    if (this.menuItemActive === item) {
+      this.menuItemActive = '';
+    } else {
+      this.menuItemActive = item;
+    }
+  }
 }

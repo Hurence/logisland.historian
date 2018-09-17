@@ -1,16 +1,19 @@
 <ul class="visualization-menu-list">
   <li *ngIf="tagSelector" [ngClass]="{'active' : menuItemActive === 'selection'}" 
-      class="visualization-menu-element hurence-tooltip hurence-tooltip-bottom" (click)="menuItemActive='selection'">
+      class="visualization-menu-element hurence-tooltip hurence-tooltip-bottom" (click)="toggleItemMenu('selection')">
       <i class="fa fa-tags" aria-hidden="true"></i>{{ tagSelection ? tagSelection.name: 'None' }}
       <span class="hurence-tooltiptext" 
       [ngStyle]="{'visibility': this.profilService.helpHidden || tagSelection || menuItemActive === 'selection' ? 'hidden': 'visible'}">
         Click here to configure your set of tag
       </span>
   </li>
-  <li *ngIf="autoRefreshIntervalSelector" [ngClass]="{'active' : menuItemActive === 'autoRefreshInterval'}" class="visualization-menu-element" (click)="menuItemActive='autoRefreshInterval'">      
+  <li *ngIf="autoRefreshIntervalSelector" [ngClass]="{'active' : menuItemActive === 'autoRefreshInterval'}" 
+  class="visualization-menu-element" (click)="toggleItemMenu('autoRefreshInterval')">      
     <i class="fa fa-repeat" aria-hidden="true"></i>{{ autoRefreshInterval.label }}
   </li>
-  <li *ngIf="timeRangeSelector" [ngClass]="{'active' : menuItemActive === 'timeRange'}" class="visualization-menu-element" (click)="menuItemActive='timeRange'">    <i class="fa fa-clock-o" aria-hidden="true"></i>{{ timeRange.label }}
+  <li *ngIf="timeRangeSelector" [ngClass]="{'active' : menuItemActive === 'timeRange'}" class="visualization-menu-element" 
+  (click)="toggleItemMenu('timeRange')">    
+    <i class="fa fa-clock-o" aria-hidden="true"></i>{{ timeRange.label }}
   </li>
 
   <li><i [ngClass]="{
