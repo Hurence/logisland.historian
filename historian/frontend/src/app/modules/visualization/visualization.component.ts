@@ -3,11 +3,11 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { TreeNode } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from '../../shared/refresh-rate-selection/auto-refresh-interval';
 import { timeRangeBuiltIn, TimeRangeFilter, TimeRangeFilterUtils } from '../../shared/time-range-selection/time-range-filter';
-import { TagsSelection } from '../selection/Selection';
+import { TagsSelection, ITagsSelection } from '../selection/Selection';
 import { SelectionService } from '../selection/selection.service';
 import { HistorianTag } from '../tag/modele/HistorianTag';
 import { NgTreenodeService } from '../tag/service/ng-treenode.service';
@@ -115,36 +115,16 @@ export class VisualizationComponent implements OnInit, OnDestroy {
         if (params.has('autoRefreshInterval')) {
           this.autoRefreshInterval = JSON.parse(params.get('autoRefreshInterval'));
         }
-        if (params.has('selectionId')) {
-          this.tagSelectionId = params.get('selectionId');
-        }
-        if (this.tagSelectionId && this.tagSelectionId !== 'null' &&
-            (!this.currentTagsSelection || this.currentTagsSelection.name !== this.tagSelectionId)) {
-          if (this.treeTag) {
-            this.treeTag.loading = true;
-          }
-          console.log('loading selection', this.tagSelectionId);
-          return this.selectionService.get(this.tagSelectionId).pipe(
-            map(s => {
-              this.currentTagsSelection = new TagsSelection(s);
-              return this.currentTagsSelection;
-            })
-          );
-        } else {
-          return Observable.of(this.currentTagsSelection);
-        }
-      }),
-      map(selection => {
-        console.log('loading tags of ', selection);
-        if (selection) {
-          this.selectionService.getAllTagsFromSelection(selection.name).subscribe(tags => {
-            if (this.treeTag) {
-              this.treeTag.loading = false;
+        return this.handleNewSelectionId(params).pipe(
+          tap(s => {
+            this.currentTagsSelection = s;
+            if (this.currentTagsSelection) {
+              this.tagSelectionId = this.currentTagsSelection.name;
+            } else {
+              this.tagSelectionId = null;
             }
-            this.tags = tags;
-          });
-        }
-        return selection;
+          })
+        );
       })
     ).subscribe(
       s => { this.loadingTags = false; },
@@ -152,6 +132,69 @@ export class VisualizationComponent implements OnInit, OnDestroy {
         console.error('error while navigating', e);
         this.loadingTags = false;
       },
+    );
+  }
+
+  private handleNewSelectionId(params: ParamMap): Observable<TagsSelection> {
+    if (params.has('selectionId') && params.get('selectionId') !== 'null') {
+      const newSelectionId = params.get('selectionId');
+      if (!this.currentTagsSelection || newSelectionId !== this.tagSelectionId) {
+        // happen when user modify url
+        console.log('selection not initialized or selection asked not same than current');
+        return this.updateTagsForSelection(this.getSelection(newSelectionId));
+      } else {
+        // happen when user change selection
+        console.log('same selection selected change nothing');
+        return Observable.of(this.currentTagsSelection);
+      }
+    } else {
+      if (this.tagSelectionId && this.tagSelectionId !== 'null') { // if not specified in url but in cache
+        // this.navigateLocal({ tagSelectionId : this.tagSelectionId });
+        if (this.currentTagsSelection) {
+          // should not happen because we doe not cache selection
+          console.log('initialize selection with cookie but already got selection (should not happen)');
+          return this.updateTagsForSelection(Observable.of(this.currentTagsSelection));
+        } else {
+          // happen when user navigate to this page from another one (without specifying tagSelectionId)
+          console.log('initialize selection with cookie');
+          return this.updateTagsForSelection(this.getSelection(this.tagSelectionId));
+        }
+      } else {
+        // happen when there is no caches tagSelectionId
+        console.log('no selection selected');
+        return Observable.of(this.currentTagsSelection); // NO SELECTION SELECTED
+      }
+    }
+  }
+
+  private getSelection(selectionId: string): Observable<TagsSelection> {
+    return this.selectionService.get(selectionId).pipe(
+      map(s => {
+        if (s) {
+          return new TagsSelection(s);
+        }
+        return null;
+      })
+    );
+  }
+
+  private updateTagsForSelection(selection$: Observable<TagsSelection>): Observable<TagsSelection> {
+    return selection$.pipe(
+      map(s => {
+        if (s) {
+          const selection = new TagsSelection(s);
+          console.log('loading tags of ', selection);
+          this.selectionService.getAllTagsFromSelection(selection.name).subscribe(tags => {
+            // unsubscribe when not executed but changed
+            this.tags = tags;
+            if (this.treeTag) {
+              this.treeTag.loading = false;
+            }
+          });
+          return selection;
+        }
+        return null;
+      })
     );
   }
 
@@ -173,9 +216,10 @@ export class VisualizationComponent implements OnInit, OnDestroy {
 
   onSelectionChanged(selection: TagsSelection): void {
     if (selection && selection.name !== this.tagSelectionId) {
-      this.tagSelectionId = selection.name;
       this.currentTagsSelection = selection;
-      this.navigateLocal();
+      this.navigateLocal({
+        tagSelectionId: selection.name
+      });
     }
   }
 
@@ -201,18 +245,26 @@ export class VisualizationComponent implements OnInit, OnDestroy {
     this.currentTagsSelection.addTag(tag.id);
   }
 
-  private navigateLocal(): void {
-    console.log('navigate', {
-      view: this.view,
-      selectionId: this.tagSelectionId,
-      timeRange: JSON.stringify(this.timeRange),
-      autoRefreshInterval: JSON.stringify(this.autoRefreshInterval)
-    });
-    this.router.navigate(['./', {
-      view: this.view,
-      selectionId: this.tagSelectionId,
-      timeRange: JSON.stringify(this.timeRange),
-      autoRefreshInterval: JSON.stringify(this.autoRefreshInterval)
-    }]);
+  private navigateLocal(param ?: {
+    view ?: string,
+    tagSelectionId ?: string,
+    timeRange ?: TimeRangeFilter,
+    autoRefreshInterval ?: AutoRefreshInterval
+  }): void {
+    if (param) {
+      this.router.navigate(['./', {
+        view: param.view || this.view,
+        selectionId: param.tagSelectionId || this.tagSelectionId,
+        timeRange: JSON.stringify(param.timeRange || this.timeRange),
+        autoRefreshInterval: JSON.stringify(param.autoRefreshInterval || this.autoRefreshInterval)
+      }]);
+    } else {
+      this.router.navigate(['./', {
+        view: this.view,
+        selectionId: this.tagSelectionId,
+        timeRange: JSON.stringify(this.timeRange),
+        autoRefreshInterval: JSON.stringify(this.autoRefreshInterval)
+      }]);
+    }
   }
 }
