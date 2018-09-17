@@ -28,11 +28,12 @@
       </div>
       <div class="ui-g-3 ui-sm-12" *ngIf="treeNodes && !loadingTree">              
         <app-historian-tag-tree [selectedTags]="tags" [treeNodes]="treeNodes"
-                (selectTag)="onAddTag($event)" (unselectTag)="onRemoveTag($event)"></app-historian-tag-tree>          
+                (selectTag)="onAddTag($event);" 
+                (unselectTag)="onRemoveTag($event);"></app-historian-tag-tree>          
       </div>
       <ng-container *ngIf="currentTagsSelection">
         <div class='ui-g-9' *ngIf="view === 'lineChart'">
-          <app-line-chart [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval" [timeRange]="timeRange"></app-line-chart>
+          <app-line-chart [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval" [timeRange]="timeRange" #chart></app-line-chart>
         </div>
         <div class='ui-g-9' *ngIf="view === 'tabular'">      
           <app-tag-dataview [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval"></app-tag-dataview>

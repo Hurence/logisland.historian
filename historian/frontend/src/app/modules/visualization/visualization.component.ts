@@ -12,6 +12,7 @@ import { SelectionService } from '../selection/selection.service';
 import { HistorianTag } from '../tag/modele/HistorianTag';
 import { NgTreenodeService } from '../tag/service/ng-treenode.service';
 import { HistorianTagTreeComponent } from '../tag/tag-tree/historian-tag-tree/historian-tag-tree.component';
+import { LineChartComponent } from '../graph/line-chart/line-chart.component';
 
 @Component({
   templateUrl: './visualization.component.html',
@@ -21,6 +22,9 @@ export class VisualizationComponent implements OnInit, OnDestroy {
 
   @ViewChild(HistorianTagTreeComponent)
   private treeTag: HistorianTagTreeComponent;
+
+  @ViewChild(LineChartComponent)
+  private lineChart: LineChartComponent;
 
   paramSubscription: Subscription;
   treeNodesSubscription: Subscription;
@@ -239,10 +243,16 @@ export class VisualizationComponent implements OnInit, OnDestroy {
 
   onRemoveTag(tag: HistorianTag) {
     this.currentTagsSelection.removeTag(tag.id);
+    if (this.lineChart) {
+      this.lineChart.dynamicallyRemoveTag(tag);
+    }
   }
 
   onAddTag(tag: HistorianTag) {
     this.currentTagsSelection.addTag(tag.id);
+    if (this.lineChart) {
+      this.lineChart.dynamicallyAddTag(tag);
+    }
   }
 
   private navigateLocal(param ?: {

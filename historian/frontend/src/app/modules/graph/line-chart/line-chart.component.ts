@@ -7,7 +7,7 @@ import { MeasuresRequest } from '../../../measure/MeasuresRequest';
 import { ProfilService } from '../../../profil/profil.service';
 import { ArrayUtil } from '../../../shared/array-util';
 import { TimeRangeFilter, TimeRangeFilterUtils } from '../../../shared/time-range-selection/time-range-filter';
-import { IHistorianTag } from '../../tag/modele/HistorianTag';
+import { IHistorianTag, HistorianTag } from '../../tag/modele/HistorianTag';
 import { CartesianAxeType, ILineChartData, ILineChartDataset, ILineChartOption, TimeDistribution } from './LineChartModele';
 import { RefreshRateComponent } from '../../../shared/refresh-rate-selection/RefreshRateComponent';
 import { tap, map } from 'rxjs/operators';
@@ -38,7 +38,8 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
 
 
   constructor(private measuresService: MeasuresService,
-              protected profilService: ProfilService) {
+              protected profilService: ProfilService,
+              private arrayUtil: ArrayUtil) {
     super();
     this.data = {
       // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -151,6 +152,33 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
 
   subscribeToRefreshChanges(t: number): void {
     this.updateGraphData();
+  }
+
+  // Add tag to graph until next refresh
+  dynamicallyAddTag(tag: HistorianTag): void {
+    const request = this.buildTagMeasureRequest(tag);
+    this.measuresService.get(request).pipe(
+        map(m => {
+          return this.convertMeasureToDataset(m);
+        })
+    ).subscribe(
+      dataset => {
+        if (dataset) {
+          this.data.datasets.push(dataset);
+          this.chartComp.chart.update();
+        }
+      },
+      error => {},
+      () => {
+        console.log('dynamically added tag', tag);
+      }
+    );
+  }
+
+  // Remove tag from graph until next refresh
+  dynamicallyRemoveTag(tag: HistorianTag): void {
+    this.arrayUtil.remove(this.data.datasets, (ds: ILineChartDataset) => ds.label === tag.node_id);
+    this.chartComp.chart.update();
   }
 
   private convertMeasureToDataset(m: Measures): ILineChartDataset {
