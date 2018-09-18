@@ -297,3 +297,7 @@ mark, .mark {
 .p-2 {
  padding: 2px;
 }
+
+.pointer {
+  cursor: pointer;
+}

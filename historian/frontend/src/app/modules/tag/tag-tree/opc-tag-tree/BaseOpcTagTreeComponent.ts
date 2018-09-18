@@ -80,6 +80,10 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
     this.loadANodeIfNeeded(node);
   }
 
+  toggleExpandNode(node: TreeNode): void {    
+    node.expanded = !node.expanded;
+    this.loadANodeIfNeeded(node);    
+  }
   /**
    *
    * @param node should be a leaf containing a tag

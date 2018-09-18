@@ -2,8 +2,9 @@
     <ng-template let-node pTemplate="folder">
     <div class="">
         <div class='row no-gutters'>
-            <div class='col-auto mr-auto text-truncate p-2'
-            pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
+            <div class='col-auto mr-auto text-truncate p-2 pointer'
+            pTooltip="{{node.label}}" tooltipPosition="right"
+            (click)="toggleExpandNode(node);">{{node.label}}</div>
         </div>
     </div>
     </ng-template>
@@ -35,7 +36,7 @@
                     <button pButton type="button" (click)="showEditDialog(node); $event.stopPropagation();"
                     class="mx-1 my-1"
                     icon="fa fa-edit"></button>
-                    <p-button (click)="showDetailDialog(node.data)"
+                    <p-button (click)="deleteTag(node); $event.stopPropagation();"
                     styleClass="mx-1 my-1"
                     icon="fa fa-trash"
                     disabled="true"></p-button>
