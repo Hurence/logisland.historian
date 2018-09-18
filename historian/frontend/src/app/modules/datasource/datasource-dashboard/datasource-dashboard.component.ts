@@ -260,7 +260,7 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
     this.selectDatasource(ds);
     this.displayAddDatasource = false;
   }
-  
+
   onModifiedTag(tagModification: IModification<HistorianTag>) {
     this.tagConfigurationToApply.addTagModification(tagModification);
     if (this.tagConfigurationToApply.isClean()) {
