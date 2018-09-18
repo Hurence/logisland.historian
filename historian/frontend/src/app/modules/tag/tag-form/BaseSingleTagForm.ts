@@ -55,6 +55,11 @@ export abstract class BaseSingleTagForm extends BaseDynamicFormComponentEmitter<
     // Questions.modifyQuestions(this.questions, AddTagFormComponent.QUESTION_BEFORE_FETCHING_DATA);
   }
 
+  protected rebuildForm(): void {
+    super.rebuildForm();
+    this.resetDisplay();
+  }
+
   private copyNodeIdToTagName(): void {
     this.form.get('node_id').valueChanges.forEach(
       (nodeId: string) => {

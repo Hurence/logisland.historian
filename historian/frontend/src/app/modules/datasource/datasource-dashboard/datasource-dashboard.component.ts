@@ -59,8 +59,6 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
   private tagTreeAutomatic: OpcTagTreeAutomaticComponent;
   @ViewChild(OpcTagTreeManualComponent)
   private tagTreeManual: OpcTagTreeManualComponent;
-  @ViewChild(AddTagFormComponent)
-  private addTagForm: AddTagFormComponent;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -262,11 +260,7 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
     this.selectDatasource(ds);
     this.displayAddDatasource = false;
   }
-
-  onCloseAddTag() {
-    this.addTagForm.resetDisplay();
-  }
-
+  
   onModifiedTag(tagModification: IModification<HistorianTag>) {
     this.tagConfigurationToApply.addTagModification(tagModification);
     if (this.tagConfigurationToApply.isClean()) {
