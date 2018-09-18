@@ -50,7 +50,7 @@
     </ng-template>
 </p-tree>
 <!-- tag form edit -->
-<p-dialog [(visible)]="displayEdit" [modal]="true">
+<p-dialog [(visible)]="displayEdit" [modal]="true" (onShow)="centerEditTagDialog()">
     <p-header>
         Edit tag from datasource : '{{datasourceId}}'
     </p-header>

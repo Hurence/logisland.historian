@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { TreeNode } from 'primeng/components/common/api';
 
 import { QuestionBase } from '../../../../shared/dynamic-form/question-base';
@@ -10,6 +10,7 @@ import { ITag } from '../../modele/tag';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
+import { Dialog } from 'primeng/dialog';
 
 export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent implements OnInit {
 
@@ -24,6 +25,9 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
   // memory to update tree
   nodeTargeted: TreeNode;
   tagEditQuestions: QuestionBase<any>[];
+
+  @ViewChild(Dialog)
+  private editTagDialComp: Dialog;
 
   constructor(
     protected ngTreenodeService: NgTreenodeService,
@@ -50,6 +54,11 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
     this.nodeTargeted = node;
     this.selectedTag = node.data;
     this.displayEdit = true;
+  }
+
+  centerEditTagDialog(): void {
+    // bug this popup does not get centered without this... Seems that the reason is of the presence of an *ngIf in parents
+    setTimeout(() => { this.editTagDialComp.center(); });
   }
 
 
