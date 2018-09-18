@@ -8,13 +8,17 @@ import { Utilities } from '../../shared/utilities.service';
 import { HistorianTag } from '../tag/modele/HistorianTag';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Injectable()
 export class SelectionService extends AbstractModelService<TagsSelectionArray> {
 
+  protected objNameForMsg: string = 'selection';
+
     constructor(protected http: HttpClient,
-        protected help: Utilities) {
-        super(http, help, `${environment.HISTORIAN_API_BASE_URL}selections`);
+        protected help: Utilities,
+        protected messageService: MessageService) {
+        super(http, help, messageService, `${environment.HISTORIAN_API_BASE_URL}selections`);
     }
 
     getAllTagsFromSelection(selectionId: string): Observable<HistorianTag[]> {
