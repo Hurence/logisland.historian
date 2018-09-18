@@ -46,7 +46,12 @@
     </div>
     </ng-template>
     <ng-template let-node pTemplate="none">
-        No tag found
+      <div class="">
+          <div class='row'>
+              <div class='col-auto mr-auto text-truncate p-2'
+              pTooltip="No tag found" tooltipPosition="right">No tag found</div>
+          </div>
+      </div>        
     </ng-template>
 </p-tree>
 <!-- tag form edit -->
