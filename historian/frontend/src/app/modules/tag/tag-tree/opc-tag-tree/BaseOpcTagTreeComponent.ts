@@ -80,9 +80,9 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
     this.loadANodeIfNeeded(node);
   }
 
-  toggleExpandNode(node: TreeNode): void {    
+  toggleExpandNode(node: TreeNode): void {
     node.expanded = !node.expanded;
-    this.loadANodeIfNeeded(node);    
+    this.loadANodeIfNeeded(node);
   }
   /**
    *
@@ -92,7 +92,8 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
 
   toggleEnabled(node: TreeNode): void {
     if (node.type === TypesName.TAG_OPC) {
-      node.data = new HistorianTag(node.data);
+      const tag = new HistorianTag(node.data);
+      node.data = tag;
       node.type = TypesName.TAG_HISTORIAN;
       node.icon = node.type;
       this.modifiedTag.emit({

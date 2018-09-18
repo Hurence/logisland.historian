@@ -11,8 +11,9 @@
     <ng-template let-node pTemplate="historian-tag" class="h-100">
     <div class="">
         <div class='row no-gutters'>
-            <div class='col-auto mr-auto text-truncate p-2'
-            pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
+            <div class='col-auto mr-auto text-truncate p-2 pointer'
+            pTooltip="{{node.label}}" tooltipPosition="right"
+            (dblclick)="node.data.enabled=!node.data.enabled;toggleEnabled(node)">{{node.label}}</div>
             <div class='col-auto'>
                     <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Sampling rate {{node.data.update_rate}}" tooltipPosition="right"><span class="update-rate"> {{node.data.update_rate}}</span></i>
                     <button pButton type="button" (click)="showEditDialog(node); $event.stopPropagation();"
@@ -29,8 +30,9 @@
     <ng-template let-node pTemplate="opc-tag">
     <div class="">
         <div class='row no-gutters'>
-            <div class='col-auto mr-auto label-container text-truncate p-2'
-            pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
+            <div class='col-auto mr-auto label-container text-truncate p-2 pointer'
+            pTooltip="{{node.label}}" tooltipPosition="right"
+            (dblclick)="node.data.enabled=true;toggleEnabled(node)">{{node.label}}</div>
             <div class='col-auto'>
                     <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="top"><span class="update-rate"> {{node.data.update_rate}}</span></i>
                     <button pButton type="button" (click)="showEditDialog(node); $event.stopPropagation();"
