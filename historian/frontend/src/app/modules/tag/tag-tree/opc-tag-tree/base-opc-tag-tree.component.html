@@ -2,7 +2,7 @@
     <ng-template let-node pTemplate="folder">
     <div class="">
         <div class='row'>
-            <div class='col-auto mr-auto text-truncate'
+            <div class='col-auto mr-auto text-truncate p-2'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
         </div>
     </div>
@@ -10,7 +10,7 @@
     <ng-template let-node pTemplate="historian-tag" class="h-100">
     <div class="">
         <div class='row'>
-            <div class='col-auto mr-auto  text-truncate'
+            <div class='col-auto mr-auto text-truncate p-2'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
                     <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Sampling rate {{node.data.update_rate}}" tooltipPosition="right"><span class="update-rate"> {{node.data.update_rate}}</span></i>
@@ -28,7 +28,7 @@
     <ng-template let-node pTemplate="opc-tag">
     <div class="">
         <div class='row'>
-            <div class='col-auto mr-auto label-container text-truncate'
+            <div class='col-auto mr-auto label-container text-truncate p-2'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
                     <i class="fa fa-clock-o" aria-hidden="true" pTooltip="Update rate  {{node.data.update_rate}}" tooltipPosition="top"><span class="update-rate"> {{node.data.update_rate}}</span></i>

@@ -289,3 +289,11 @@ mark, .mark {
   align-items: center;
   justify-content: center;
 }
+
+.bd-1 {
+  border: 1px solid;
+}
+
+.p-2 {
+ padding: 2px;
+}

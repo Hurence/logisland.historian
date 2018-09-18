@@ -1180,6 +1180,10 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   max-height: 10%;
 }
 
+.ui-treenode-content {
+  border-bottom: 1px solid;
+}
+
 .ui-treenode-label {
   width: 100%;
 }
