@@ -1,7 +1,7 @@
 <p-tree [value]="treeNodes" [loading]="loading" id="historian-opc-tag-tree" (onNodeExpand)="loadNode($event)">
     <ng-template let-node pTemplate="folder">
     <div class="">
-        <div class='row'>
+        <div class='row no-gutters'>
             <div class='col-auto mr-auto text-truncate p-2'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
         </div>
@@ -9,7 +9,7 @@
     </ng-template>
     <ng-template let-node pTemplate="historian-tag" class="h-100">
     <div class="">
-        <div class='row'>
+        <div class='row no-gutters'>
             <div class='col-auto mr-auto text-truncate p-2'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
@@ -27,7 +27,7 @@
     </ng-template>
     <ng-template let-node pTemplate="opc-tag">
     <div class="">
-        <div class='row'>
+        <div class='row no-gutters'>
             <div class='col-auto mr-auto label-container text-truncate p-2'
             pTooltip="{{node.label}}" tooltipPosition="right">{{node.label}}</div>
             <div class='col-auto'>
@@ -47,7 +47,7 @@
     </ng-template>
     <ng-template let-node pTemplate="none">
       <div class="">
-          <div class='row'>
+          <div class='row no-gutters'>
               <div class='col-auto mr-auto text-truncate p-2'
               pTooltip="No tag found" tooltipPosition="right">No tag found</div>
           </div>
