@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { Utilities } from '../shared/utilities.service';
@@ -17,7 +17,14 @@ export class MeasuresService {
     private help: Utilities) { }
 
   get(request: MeasuresRequest): Observable<Measures> {
-    return this.http.get<Measures>(request.buildQuery(this.measuresUrl));
+    return this.http.get<Measures>(request.buildQuery(this.measuresUrl)).pipe(
+      catchError(err => {
+        // return an empty measure using label as name
+        return Observable.of(new Measures({
+          name: request.label
+        }));
+      })
+    );
   }
 
   getStat(itemId: string): Observable<Measures> {

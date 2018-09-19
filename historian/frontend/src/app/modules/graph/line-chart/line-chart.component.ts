@@ -200,7 +200,6 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
     return  {
       label: m.name,
       data: timeSerie,
-      // cubicInterpolationMode: 'monotone',
       cubicInterpolationMode: 'monotone',
       lineTension: 0,
       fill: false,
@@ -225,6 +224,7 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
   private buildTagMeasureRequest(tag: IHistorianTag): MeasuresRequest {
     return new MeasuresRequest({
       itemId: tag.id,
+      label: tag.node_id,
       start: this.timeRange.start,
       end: this.timeRange.end,
       functions: 'savgbckt:300'
