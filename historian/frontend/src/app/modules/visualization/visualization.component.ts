@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { TreeNode, ConfirmationService } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
@@ -48,7 +48,6 @@ export class VisualizationComponent implements OnInit, OnDestroy {
 
   set currentTagsSelection(selection: TagsSelection) {
     this._currentTagsSelection = selection;
-    this.tagSlectionIsClean = true;
   }
 
   private _tagSelectionId: string;
@@ -264,6 +263,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
 
   private changeSelection(newSelection: TagsSelection): void {
     this.currentTagsSelection = newSelection;
+    this.tagSlectionIsClean = true;
     this.navigateLocal({
       tagSelectionId: newSelection.name
     });
@@ -299,8 +299,20 @@ export class VisualizationComponent implements OnInit, OnDestroy {
     }
   }
 
-  canDeactivate(): boolean {
-    return this.tagSlectionIsClean;
+  canDeactivate(currentRoute?: ActivatedRouteSnapshot,
+    currentState?: RouterStateSnapshot,
+    nextState?: RouterStateSnapshot): boolean {
+    if (currentRoute && currentState && nextState) {
+      if (nextState.url.startsWith('/visualization')) {
+        const currentId = this.tagSelectionId;
+        const newId = nextState.root.children[0].params.selectionId;
+        return this.tagSlectionIsClean || currentId === newId;
+      } else {
+        return this.tagSlectionIsClean;
+      }
+    } else {
+      return this.tagSlectionIsClean;
+    }
   }
 
   private navigateLocal(param ?: {
