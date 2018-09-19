@@ -12,7 +12,7 @@ import { CartesianAxeType, ILineChartData, ILineChartDataset, ILineChartOption, 
 import { RefreshRateComponent } from '../../../shared/refresh-rate-selection/RefreshRateComponent';
 import { tap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
-import { from } from 'rxjs';
+import { from, Subscription } from 'rxjs';
 import {merge} from 'rxjs';
 import { UIChart } from 'primeng/components/chart/chart';
 
@@ -31,6 +31,7 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
   private colorsForMetrics: Map<string, string> = new Map();
   private colors: string[] = ['#d9080d', '#6aba15', '#241692', '#e23eba',
   '#7e461f', '#7d30b2', '#f5cb82', '#fd3e6f', '#d7e206', '#b6cdce', '#4bc0c0'];
+  private measuresRefreshSubscription: Subscription;
 
 
   @ViewChild(UIChart)
@@ -105,7 +106,9 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
-    // if (this.chart) this.chart.destroy();
+    if (this.measuresRefreshSubscription && !this.measuresRefreshSubscription.closed) {
+      this.measuresRefreshSubscription.unsubscribe();
+    }
   }
 
   updateGraphData() {
@@ -122,7 +125,10 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
     });
     const firstMeasures: Observable<ILineChartDataset> = measures.shift();
     if (firstMeasures) {
-      measures.reduce(
+      if (this.measuresRefreshSubscription && !this.measuresRefreshSubscription.closed) {
+        this.measuresRefreshSubscription.unsubscribe();
+      }
+      this.measuresRefreshSubscription = measures.reduce(
         (r, v) => {
           return merge(r, v);
         },
