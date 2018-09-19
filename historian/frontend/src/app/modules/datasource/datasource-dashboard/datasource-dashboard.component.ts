@@ -112,8 +112,8 @@ export class DatasourceDashboardComponent extends ComponentCanDeactivate impleme
       this.selectDatasource(datasource);
     } else {
       this.confirmationService.confirm({
-        message: `Vous n'avez pas validé vos modifications pour la datasource actuelle.
-                  Voulez-vous les annulez ? Sinon merci d'anuller et d'appuyer sur le bouton apply.`,
+        message: `You did not save your modification on current datasource (which tags to inject). Click Ok if you do not care,
+                    otherwise click cancel then click on 'apply changes' on the top right of the tag tree.`,
         header: 'Confirmation',
         rejectLabel: 'Cancel',
         acceptLabel: 'Ok',
