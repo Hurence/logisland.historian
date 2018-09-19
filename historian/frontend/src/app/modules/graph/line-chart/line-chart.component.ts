@@ -32,6 +32,7 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
   private colors: string[] = ['#d9080d', '#6aba15', '#241692', '#e23eba',
   '#7e461f', '#7d30b2', '#f5cb82', '#fd3e6f', '#d7e206', '#b6cdce', '#4bc0c0'];
   private measuresRefreshSubscription: Subscription;
+  private dynamicallyAddTagSubscription: Subscription;
 
 
   @ViewChild(UIChart)
@@ -109,6 +110,9 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
     if (this.measuresRefreshSubscription && !this.measuresRefreshSubscription.closed) {
       this.measuresRefreshSubscription.unsubscribe();
     }
+    if (this.dynamicallyAddTagSubscription && !this.dynamicallyAddTagSubscription.closed) {
+      this.dynamicallyAddTagSubscription.unsubscribe();
+    }
   }
 
   updateGraphData() {
@@ -163,7 +167,7 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
   // Add tag to graph until next refresh
   dynamicallyAddTag(tag: HistorianTag): void {
     const request = this.buildTagMeasureRequest(tag);
-    this.measuresService.get(request).pipe(
+    this.dynamicallyAddTagSubscription = this.measuresService.get(request).pipe(
         map(m => {
           return this.convertMeasureToDataset(m);
         })
@@ -184,7 +188,7 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
   // Remove tag from graph until next refresh
   dynamicallyRemoveTag(tag: HistorianTag): void {
     this.arrayUtil.remove(this.data.datasets, (ds: ILineChartDataset) => ds.label === tag.node_id);
-    this.chartComp.chart.update();
+    if (this.chartComp.chart) this.chartComp.chart.update();
   }
 
   private convertMeasureToDataset(m: Measures): ILineChartDataset {
