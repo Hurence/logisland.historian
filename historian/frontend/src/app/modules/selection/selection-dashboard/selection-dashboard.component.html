@@ -1,9 +1,10 @@
 <h4>Set of tags saved</h4>
 <div class="ui-g-12"><span>Choose your set of tag(s): </span>
-    <!-- Select selection -->
+    <!-- Select selection -->    
     <span class="hurence-tooltip hurence-tooltip-bottom">
       <p-dropdown [options]="selectionOptions"  placeholder="please choose or create a selection"
       [ngModel]="tagSelection"
+      dataKey="name"
       [autoWidth]="false" [style]="{'min-width':'15em'}"
       (onChange)="onSelectionChange($event)">          
       </p-dropdown>    

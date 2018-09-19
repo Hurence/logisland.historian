@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { TreeNode } from 'primeng/api';
+import { TreeNode, ConfirmationService } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
@@ -13,6 +13,7 @@ import { HistorianTag } from '../tag/modele/HistorianTag';
 import { NgTreenodeService } from '../tag/service/ng-treenode.service';
 import { HistorianTagTreeComponent } from '../tag/tag-tree/historian-tag-tree/historian-tag-tree.component';
 import { LineChartComponent } from '../graph/line-chart/line-chart.component';
+import { VisualizationMenuComponent } from './visualization-menu/visualization-menu.component';
 
 @Component({
   templateUrl: './visualization.component.html',
@@ -26,15 +27,29 @@ export class VisualizationComponent implements OnInit, OnDestroy {
   @ViewChild(LineChartComponent)
   private lineChart: LineChartComponent;
 
+  @ViewChild(VisualizationMenuComponent)
+  private menu: VisualizationMenuComponent;
+
   paramSubscription: Subscription;
   treeNodesSubscription: Subscription;
 
   tagsSelection$: Observable<TagsSelection>;
-  currentTagsSelection: TagsSelection;
   tags: HistorianTag[] = [];
   treeNodes: TreeNode[];
   loadingTags: boolean = false;
   loadingTree: boolean = false;
+
+  private tagSlectionIsClean: boolean = true;
+
+  private _currentTagsSelection: TagsSelection;
+  get currentTagsSelection(): TagsSelection {
+    return this._currentTagsSelection;
+  }
+
+  set currentTagsSelection(selection: TagsSelection) {
+    this._currentTagsSelection = selection;
+    this.tagSlectionIsClean = true;
+  }
 
   private _tagSelectionId: string;
   get tagSelectionId(): string {
@@ -88,7 +103,8 @@ export class VisualizationComponent implements OnInit, OnDestroy {
               private router: Router,
               private selectionService: SelectionService,
               private ngTreenodeService: NgTreenodeService,
-              private cookieService: CookieService) {}
+              private cookieService: CookieService,
+              protected confirmationService: ConfirmationService) {}
 
   ngOnInit() {
     if (!this.treeNodes && !this.loadingTree) {
@@ -220,11 +236,37 @@ export class VisualizationComponent implements OnInit, OnDestroy {
 
   onSelectionChanged(selection: TagsSelection): void {
     if (selection && selection.name !== this.tagSelectionId) {
-      this.currentTagsSelection = selection;
-      this.navigateLocal({
-        tagSelectionId: selection.name
-      });
+      if (this.tagSlectionIsClean) {
+        this.changeSelection(selection);
+      } else {
+        this.confirmationService.confirm({
+          message: `You did not save your modification on current tag selection. Click Ok if you do not care,
+                    otherwise click cancel then click on update in selection menu.`,
+          header: 'Confirmation',
+          rejectLabel: 'Cancel',
+          acceptLabel: 'Ok',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            this.changeSelection(selection);
+          },
+          reject: () => {
+            // workaround as p-dropdown seems bugged see : https://github.com/primefaces/primeng/issues/877
+            this.menu.setDashboardDropDownValue(this.currentTagsSelection);
+          }
+        });
+      }
     }
+  }
+
+  onSelectionUpdated(selection: TagsSelection): void {
+    this.tagSlectionIsClean = true;
+  }
+
+  private changeSelection(newSelection: TagsSelection): void {
+    this.currentTagsSelection = newSelection;
+    this.navigateLocal({
+      tagSelectionId: newSelection.name
+    });
   }
 
   onTimeRangeChanged(timeRange: TimeRangeFilter): void {
@@ -243,6 +285,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
 
   onRemoveTag(tag: HistorianTag) {
     this.currentTagsSelection.removeTag(tag.id);
+    this.tagSlectionIsClean = false;
     if (this.lineChart) {
       this.lineChart.dynamicallyRemoveTag(tag);
     }
@@ -250,6 +293,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
 
   onAddTag(tag: HistorianTag) {
     this.currentTagsSelection.addTag(tag.id);
+    this.tagSlectionIsClean = false;
     if (this.lineChart) {
       this.lineChart.dynamicallyAddTag(tag);
     }

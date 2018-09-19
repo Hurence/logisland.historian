@@ -1,5 +1,5 @@
 <div class="ui-g">
-  <!-- MENU FOR VIEW -->
+  <!-- MENU FOR VIEW -->  
   <div class='ui-g-12'>
     <app-visualization-menu 
     [timeRange]="timeRange" 
@@ -8,6 +8,7 @@
     (autoRefreshIntervalChange)="onAutoRefreshIntervalChanged($event)"
     [tagSelection]="currentTagsSelection"
     (tagSelectionChange)="onSelectionChanged($event)"
+    (tagSelectionUpdated)="onSelectionUpdated($event)"
     [view]="view"
     (viewChange)="onViewChanged($event)"
     [timeRangeSelector]="view !== 'tabular'"></app-visualization-menu>

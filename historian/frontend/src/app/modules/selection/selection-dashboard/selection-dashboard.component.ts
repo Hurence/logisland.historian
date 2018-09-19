@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, EventEmitter, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { SelectItem } from 'primeng/components/common/selectitem';
 
 import { ProfilService } from '../../../profil/profil.service';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
 import { TagsSelection, TagsSelectionArray } from '../Selection';
-import { SelectionFormComponent } from '../selection-form/selection-form.component';
 import { SelectionService } from '../selection.service';
 import { ConfirmationService } from 'primeng/components/common/api';
 import { IModification } from '../../datasource/ConfigurationToApply';
 import { tap } from 'rxjs/operators';
+import { Dropdown } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-selection-dashboard',
@@ -22,6 +22,7 @@ export class SelectionDashboardComponent implements OnInit {
 
   @Input() tagSelection: TagsSelection;
   @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
+  @Output() tagSelectionUpdated = new EventEmitter<TagsSelection>();
   // Form to add new selection of tags
   display = false;
   selectionQuestions: QuestionBase<any>[];
@@ -29,7 +30,8 @@ export class SelectionDashboardComponent implements OnInit {
   private CANCEL_MSG = 'Cancel';
   private REMOVE_SELECTION_MSG = 'Remove selection of tags';
 
-  @ViewChild(SelectionFormComponent) private tagSelectionFormComp: SelectionFormComponent;
+  @ViewChild(Dropdown)
+  dropDown: Dropdown;
 
   constructor(private confirmationService: ConfirmationService,
               private selectionService: SelectionService,
@@ -91,6 +93,7 @@ export class SelectionDashboardComponent implements OnInit {
     this.selectionService.update(new TagsSelectionArray(selection), selection.getId())
       .subscribe(updated => {
         this.actualizeListOfTagsSelection(updated.name);
+        this.tagSelectionUpdated.emit(selection);
     });
   }
 

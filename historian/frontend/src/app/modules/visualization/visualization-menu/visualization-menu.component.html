@@ -28,7 +28,8 @@
   </li>
 </ul>
 <div *ngIf="tagSelector" [hidden]="menuItemActive !== 'selection'">    
-  <app-selection-dashboard [tagSelection]="tagSelection" (tagSelectionChange)="ontagSelectionChanged($event)"></app-selection-dashboard>
+  <app-selection-dashboard [tagSelection]="tagSelection" (tagSelectionChange)="ontagSelectionChanged($event)"
+    (tagSelectionUpdated)="onTagSelectionUpdated($event)"></app-selection-dashboard>
 </div>
 <div *ngIf="autoRefreshIntervalSelector" [hidden]="menuItemActive !== 'autoRefreshInterval'">
   <app-refresh-rate-selection [autoRefreshInterval]="autoRefreshInterval" (autoRefreshIntervalChange)="onAutoRefreshIntervalChanged($event)"></app-refresh-rate-selection>
