@@ -299,6 +299,10 @@ export class VisualizationComponent implements OnInit, OnDestroy {
     }
   }
 
+  canDeactivate(): boolean {
+    return this.tagSlectionIsClean;
+  }
+
   private navigateLocal(param ?: {
     view ?: string,
     tagSelectionId ?: string,

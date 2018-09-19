@@ -7,8 +7,15 @@ import { SourcesAndTagsComponent } from './modules/sources-and-tags/sources-and-
 import { VisualizationComponent } from './modules/visualization/visualization.component';
 
 const routes: Routes = [
-  { path: 'visualization', component: VisualizationComponent },
-  { path: 'sources-and-tags', component: SourcesAndTagsComponent },
+  {
+    path: 'visualization',
+    component: VisualizationComponent,
+    canDeactivate: [CanDeactivateGuard]
+  },
+  {
+    path: 'sources-and-tags',
+    component: SourcesAndTagsComponent
+  },
   { path: '', redirectTo: 'sources-and-tags', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
