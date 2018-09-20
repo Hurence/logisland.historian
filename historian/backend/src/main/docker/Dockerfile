@@ -31,7 +31,7 @@ ENV JAVA_TOOL_OPTIONS "-Xms1G -Xmx1G -Djava.awt.headless=true -Djava.security.eg
 
 #USER $USER_NAME
 WORKDIR $APP_HOME
-ENTRYPOINT ["java", "-jar", "${APP_JAR}"]
+ENTRYPOINT ["java", "-jar", "historian-backend-1.0.0.jar"]
 
 # Run as:
 # docker run -idt -p 8701:8701 -e appPort=8701 asimio/springboot-jersey-swagger-docker:latest

@@ -1,5 +1,5 @@
 <!-- MENU FOR VIEW -->
-<div class="ui-g h-10">
+<div class="ui-g h-100">
   <div class='ui-g-12 no-padding-side'>
     <app-visualization-menu 
     [timeRange]="timeRange" 
@@ -13,10 +13,9 @@
     (viewChange)="onViewChanged($event)"
     [timeRangeSelector]="view !== 'tabular'"></app-visualization-menu>
   </div> 
-</div>
 
-<!-- MAIN CONTENT -->
-<div class="ui-g h-90">
+
+  <!-- MAIN CONTENT -->
   <!-- LOADING -->
   <div *ngIf="loadingTags" class="center-text h-100 ui-g-12">
       LOADING TAGS OF SELECTION...
@@ -47,4 +46,3 @@
     </div>
   </div>
 </div>
-
