@@ -5,7 +5,7 @@ ul.auto-refresh-grid {
 .auto-refresh-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20px, auto));
+  grid-template-columns: repeat(auto-fit, minmax(50px, auto));
   grid-template-rows: repeat(auto-fit, minmax(20px, auto));
   grid-auto-flow: row;
 }

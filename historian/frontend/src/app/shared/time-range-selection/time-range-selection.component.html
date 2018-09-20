@@ -12,7 +12,7 @@
           <ul class="quick-grid">
               <ng-container *ngFor="let timeRangeOption of timeRangeOptions">
                   <li (click)='onTimeRangeChange(timeRangeOption.value)'>                
-                    <span class="label">{{timeRangeOption.label}}</span>
+                    <div class="label">{{timeRangeOption.label}}</div>
                   </li>
               </ng-container>          
           </ul>

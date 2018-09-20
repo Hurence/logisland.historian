@@ -3,7 +3,7 @@
   <ul class="auto-refresh-grid">
       <ng-container *ngFor="let refreshOption of refreshOptions">
           <li (click)='onAutoRefreshIntervalChange(refreshOption.value)'>
-            <span class="label">{{refreshOption.label}}</span>
+            <div class="label">{{refreshOption.label}}</div>
           </li>
       </ng-container>          
   </ul>
