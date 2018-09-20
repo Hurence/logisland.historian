@@ -8,7 +8,7 @@ services:
     environment:
       - JAVA_MEMORY=4g
     hostname: chronix
-    image: 'hurence/historian-chronix:1.0.0'
+    image: 'hurence/historian-chronix:1.0.1-SNAPSHOT'
     networks:
       historian-be:
         aliases:
@@ -16,7 +16,7 @@ services:
 
   frontend:
     container_name: historian-frontend
-    image: 'hurence/historian-frontend:1.0.0'
+    image: 'hurence/historian-frontend:1.0.1-SNAPSHOT'
     ports:
       - 4200:80
     networks:
@@ -26,7 +26,7 @@ services:
 
   backend:
     container_name: historian-backend
-    image: 'hurence/historian-backend:1.0.0'
+    image: 'hurence/historian-backend:1.0.1-SNAPSHOT'
     environment:
       - sorl_base_url=${ENTRY_POINT_URL:-http://historian.hurence.com:10080}/solr
       - keycloak_base_url=${ENTRY_POINT_URL:-http://historian.hurence.com:10080}/auth
@@ -37,7 +37,7 @@ services:
 
   keycloak:
     container_name: keycloak
-    image: 'hurence/historian-keycloak:1.0.0'
+    image: 'hurence/historian-keycloak:1.0.1-SNAPSHOT'
     environment:
       - PROXY_ADDRESS_FORWARDING=true
     networks:
@@ -46,7 +46,7 @@ services:
           - keycloak
   logisland:
     container_name: logisland
-    image: 'hurence/historian-logisland:1.0.0'
+    image: 'hurence/historian-logisland:1.0.1-SNAPSHOT'
     command: "bin/logisland.sh --conf /conf/historian-remote.yaml"
     ports:
       - '4050:4050'
