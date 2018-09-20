@@ -13,3 +13,8 @@
 .graph-choice-menu-element.active {
   border-bottom: 2px solid blue;  
 }
+
+.horizontal-scroll {
+  overflow: auto;
+  white-space: nowrap;
+}

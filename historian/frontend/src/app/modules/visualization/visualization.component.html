@@ -1,6 +1,6 @@
-<div class="ui-g">
-  <!-- MENU FOR VIEW -->  
-  <div class='ui-g-12'>
+<!-- MENU FOR VIEW -->
+<div class="ui-g h-10">
+  <div class='ui-g-12 no-padding-side'>
     <app-visualization-menu 
     [timeRange]="timeRange" 
     (timeRangeChange)="onTimeRangeChanged($event)"
@@ -12,7 +12,11 @@
     [view]="view"
     (viewChange)="onViewChanged($event)"
     [timeRangeSelector]="view !== 'tabular'"></app-visualization-menu>
-  </div>  
+  </div> 
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="ui-g h-90">
   <!-- LOADING -->
   <div *ngIf="loadingTags" class="center-text h-100 ui-g-12">
       LOADING TAGS OF SELECTION...
@@ -20,26 +24,27 @@
                     strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
   </div>
   <!-- MAIN CONTENT -->
-  <div [hidden]="loadingTags || !currentTagsSelection" class="ui-g-12">
-    <div class="ui-g">        
+  <div [hidden]="loadingTags || !currentTagsSelection" class="ui-g-12 no-padding-side">
+    <div class="ui-g h-100">        
       <div *ngIf="loadingTree" class="center-text h-100 ui-g-3 ui-sm-12">
           LOADING TREE...
           <p-progressSpinner [style]="{width: '30px', height: '30px'}"
                         strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
       </div>
-      <div class="ui-g-3 ui-sm-12" *ngIf="treeNodes && !loadingTree">              
+      <div class="ui-g-3 ui-sm-12 horizontal-scroll" *ngIf="treeNodes && !loadingTree">              
         <app-historian-tag-tree [selectedTags]="tags" [treeNodes]="treeNodes"
                 (selectTag)="onAddTag($event);" 
                 (unselectTag)="onRemoveTag($event);"></app-historian-tag-tree>          
       </div>
       <ng-container *ngIf="currentTagsSelection">
-        <div class='ui-g-9' *ngIf="view === 'lineChart'">
+        <div class='ui-g-9 ui-sm-12 horizontal-scroll' *ngIf="view === 'lineChart'">
           <app-line-chart [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval" [timeRange]="timeRange" #chart></app-line-chart>
         </div>
-        <div class='ui-g-9' *ngIf="view === 'tabular'">      
+        <div class='ui-g-9 ui-sm-12' *ngIf="view === 'tabular'">      
           <app-tag-dataview [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval"></app-tag-dataview>
         </div>    
       </ng-container>
     </div>
   </div>
 </div>
+

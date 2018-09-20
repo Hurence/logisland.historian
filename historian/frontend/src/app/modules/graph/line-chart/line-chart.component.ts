@@ -83,6 +83,8 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
       animation: {
           duration: 0
       },
+      responsive: false,
+      maintainAspectRatio: false
       // IF YOU GOT error transition null this may help
       // hover: {
       //     animationDuration: 0

@@ -178,9 +178,12 @@ export interface ILineChartOption {
     showLines?: boolean;
     spanGaps?: boolean;
     scales?: ILineChartScale;
+    responsive?: boolean; // Resizes the chart canvas when its container does
     animation?: any;
     hover?: any;
-    responsiveAnimationDuration?: any;
+    responsiveAnimationDuration?: any; // Duration in milliseconds it takes to animate to new size after a resize event.
+    maintainAspectRatio?: boolean; // Maintain the original canvas aspect ratio (width / height) when resizing.
+    onResize?: Function; // Called when a resize occurs. Gets passed two arguments: the chart instance and the new size.
 }
 
 export interface ILineChartConfig {
