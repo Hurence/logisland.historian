@@ -34,8 +34,8 @@
 </header>
 
 
-<div class="row content ui-g">
-    <div class="col-md-2 col-xs-1 p-l-0 p-r-0 collapse in show h-100" id="sidebar">
+<div class="row content">
+    <div class="col-md-2 col-xs-12 p-l-0 p-r-0 collapse in show h-100" id="sidebar">
         <div class="list-group panel">
             <!-- START menu-settings -->
             <a href="#menu-settings" class="list-group-item" data-toggle="collapse" data-parent="#sidebar" aria-expanded="true">
@@ -43,7 +43,7 @@
             <span class="hidden-sm-down">Settings</span>
             </a>
             <div class="collapse show sub-menu" id="menu-settings">
-              <a routerLinkActive="active" routerLink="/sources-and-tags/datasources" class="list-group-item" data-parent="#menu-settings"><i class="fa fa-plug" aria-hidden="true"></i>Datasources</a>
+              <a routerLinkActive="active" routerLink="/sources-and-tags" class="list-group-item" data-parent="#menu-settings"><i class="fa fa-plug" aria-hidden="true"></i>Datasources</a>
             <!-- <a routerLinkActive="active" routerLink="/sources-and-tags/tags" class="list-group-item" data-parent="#menu-settings"><i class="fa fa-tags" aria-hidden="true"></i>Tags</a> -->
             </div>
             <!-- START menu selection -->
@@ -65,7 +65,8 @@
             <!-- END menu-visualization -->
         </div>
     </div>
-    <main class="ui-g-10 col-md col-xs-11 p-l-2 p-t-2 no-padding">
+    <!-- class="col-md-2 col-xs-12 p-l-0 p-r-0 collapse in show h-100" -->
+    <main class="col-md-10 col-xs-12 no-padding">
         <p-growl></p-growl>
         <p-confirmDialog rejectLabel="Cancel" acceptLabel="Ok"></p-confirmDialog>
         <router-outlet></router-outlet>

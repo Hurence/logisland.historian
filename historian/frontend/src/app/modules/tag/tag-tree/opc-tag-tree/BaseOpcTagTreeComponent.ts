@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { TreeNode } from 'primeng/components/common/api';
 
 import { QuestionBase } from '../../../../shared/dynamic-form/question-base';
@@ -10,6 +10,7 @@ import { ITag } from '../../modele/tag';
 import { NgTreenodeService } from '../../service/ng-treenode.service';
 import { BaseTagTreeComponent } from '../BaseTagTreeComponent';
 import { TypesName } from '../TypesName';
+import { Dialog } from 'primeng/dialog';
 
 export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent implements OnInit {
 
@@ -24,6 +25,9 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
   // memory to update tree
   nodeTargeted: TreeNode;
   tagEditQuestions: QuestionBase<any>[];
+
+  @ViewChild(Dialog)
+  private editTagDialComp: Dialog;
 
   constructor(
     protected ngTreenodeService: NgTreenodeService,
@@ -52,6 +56,11 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
     this.displayEdit = true;
   }
 
+  centerEditTagDialog(): void {
+    // bug this popup does not get centered without this... Seems that the reason is of the presence of an *ngIf in parents
+    setTimeout(() => { this.editTagDialComp.center(); });
+  }
+
 
   /**
    * send a delete modificaton
@@ -71,6 +80,10 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
     this.loadANodeIfNeeded(node);
   }
 
+  toggleExpandNode(node: TreeNode): void {
+    node.expanded = !node.expanded;
+    this.loadANodeIfNeeded(node);
+  }
   /**
    *
    * @param node should be a leaf containing a tag
@@ -79,7 +92,8 @@ export abstract class BaseOpcTagTreeComponent extends BaseTagTreeComponent imple
 
   toggleEnabled(node: TreeNode): void {
     if (node.type === TypesName.TAG_OPC) {
-      node.data = new HistorianTag(node.data);
+      const tag = new HistorianTag(node.data);
+      node.data = tag;
       node.type = TypesName.TAG_HISTORIAN;
       node.icon = node.type;
       this.modifiedTag.emit({

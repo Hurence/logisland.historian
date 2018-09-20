@@ -66,6 +66,19 @@
         <label for="progId" i18n="progId of the datasource|label for progId datasource input">progid</label>
         <input type="text" class="form-control" formControlName="progId" name="progId">
       </div>
+      <!-- Tag Browsing -->  
+      <div class="form-group label-small text-capitalize">
+        <div><label>Tag browsing mode</label></div>  
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" value="automatic" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}automaticBrowsing" class="custom-control-input">
+          <label class="custom-control-label" for="{{prefixId}}automaticBrowsing">Automatic</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" value="manual" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}manualBrowsing" class="custom-control-input">
+          <label class="custom-control-label" for="{{prefixId}}manualBrowsing">Manual</label>
+        </div>         
+      </div>
+       
       <!-- Authentification -->
       <div formGroupName="auth" class="mt-3">
           <h6 _ngcontent-c2=""
@@ -91,19 +104,6 @@
               Password is required
           </div>
         </div>
-      </div>
-
-      <!-- Tag Browsing -->
-      <h6 _ngcontent-c2="" class="text-uppercase">
-        Tag browsing mode
-      </h6>
-      <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" value="automatic" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}automaticBrowsing" class="custom-control-input">
-        <label class="custom-control-label" for="{{prefixId}}automaticBrowsing">Automatic</label>
-      </div>
-      <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" value="manual" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}manualBrowsing" class="custom-control-input">
-        <label class="custom-control-label" for="{{prefixId}}manualBrowsing">Manual</label>
       </div>
     </div>
 
@@ -138,7 +138,18 @@
             Host is required
         </div>
       </div>
-
+      <!-- Tag Browsing -->
+      <div class="form-group label-small text-capitalize">
+        <div><label>Tag browsing mode</label></div>  
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" value="automatic" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}automaticBrowsing" class="custom-control-input">
+          <label class="custom-control-label" for="{{prefixId}}automaticBrowsing">Automatic</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" value="manual" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}manualBrowsing" class="custom-control-input">
+          <label class="custom-control-label" for="{{prefixId}}manualBrowsing">Manual</label>
+        </div>         
+      </div>
       <!-- Authentification -->
       <div formGroupName="auth" class="mt-3">
           <h6 _ngcontent-c2=""
@@ -177,19 +188,7 @@
           </div>
         </div>
       </div>
-
-      <!-- Tag Browsing -->
-      <h6 _ngcontent-c2="">
-        Tag browsing mode
-      </h6>
-      <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" value="automatic" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}automaticBrowsing" class="custom-control-input">
-        <label class="custom-control-label" for="{{prefixId}}automaticBrowsing">Automatic</label>
-      </div>
-      <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" value="manual" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}manualBrowsing" class="custom-control-input">
-        <label class="custom-control-label" for="{{prefixId}}manualBrowsing">Manual</label>
-      </div>
+      
     </div>
 
     <div *ngSwitchDefault i18n="ask user to select a type for datasource|">Please choose a type</div>

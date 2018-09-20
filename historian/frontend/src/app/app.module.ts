@@ -16,7 +16,6 @@ import { MeasuresService } from './measure/measures.service';
 import { DatasourceService } from './modules/datasource/datasource.service';
 import { SelectionModule } from './modules/selection/selection.module';
 import { SelectionService } from './modules/selection/selection.service';
-import { SourcesAndTagsModule } from './modules/sources-and-tags/sources-and-tags.module';
 import { NgTreenodeService } from './modules/tag/service/ng-treenode.service';
 import { TagHistorianService } from './modules/tag/service/tag-historian.service';
 import { TagOpcService } from './modules/tag/service/tag-opc.service';
@@ -32,6 +31,7 @@ import { SharedModule } from './shared/shared.module';
 import { Utilities } from './shared/utilities.service';
 import { TodoComponent } from './todo/todo.component';
 import { CookieService } from 'ngx-cookie-service';
+import { DatasourceModule } from './modules/datasource/datasource.module';
 
 /**
  * This function is used internal to get a string instance of the `<base href="" />` value from `index.html`.
@@ -58,7 +58,7 @@ export function getBaseHref(platformLocation: PlatformLocation): string {
     BrowserModule,
     KeycloakAngularModule,
     HttpClientModule,
-    SourcesAndTagsModule,
+    DatasourceModule,
     VisualizationModule,
     SelectionModule,
     BrowserAnimationsModule,

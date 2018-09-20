@@ -40,7 +40,7 @@
           <div class="row h-100">
             <div class="col-lg-12 col-md-12 small-column">
               <div class="d-flex float-right">
-                <button *ngIf="isAddTagDisabled(selectedDatasource)" type="button" class="ui-button-text ui-button ui-widget ui-state-default ui-corner-all"
+                <button *ngIf="!isAddTagDisabled(selectedDatasource)" type="button" class="ui-button-text ui-button ui-widget ui-state-default ui-corner-all"
                     (click)="onClickAddTag()" [disabled]="isAddTagDisabled(selectedDatasource)">
                   <i class="fa fa-plus" aria-hidden="true"></i>Add new tag
                 </button>
@@ -90,7 +90,7 @@
 </div>
 <!-- tag form add new tag -->
 <!-- <div *ngIf="datasource !== null"> -->
-<p-dialog [(visible)]="disaplyAddTagForm" [modal]="true" (onHide)="onCloseAddTag()">
+<p-dialog [(visible)]="disaplyAddTagForm" [modal]="true">
   <p-header>
       Add tag to datasource : '{{selectedDatasource?.id}}'
   </p-header>
@@ -98,7 +98,7 @@
   <p-footer>
   </p-footer>
 </p-dialog>
-<p-dialog [(visible)]="displayAddDatasource" [modal]="true"  [dismissableMask]="true">    
+<p-dialog [(visible)]="displayAddDatasource" [modal]="true">    
   <p-header>
       Add a new datasource
   </p-header>

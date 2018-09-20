@@ -8,7 +8,7 @@ services:
     environment:
       - JAVA_MEMORY=1g
     hostname: chronix
-    image: 'hurence/historian-chronix:0.4.3-SNAPSHOT'
+    image: 'hurence/historian-chronix:1.0.0'
     networks:
       historian-be:
         aliases:
@@ -42,7 +42,7 @@ services:
 
   keycloak:
     container_name: keycloak
-    image: 'hurence/keycloak:0.4.3-SNAPSHOT'
+    image: 'hurence/historian-keycloak:1.0.0'
     environment:
       - PROXY_ADDRESS_FORWARDING=true
     networks:
@@ -51,7 +51,7 @@ services:
           - keycloak
   logisland:
     container_name: logisland
-    image: 'hurence/logisland:0.14.1.2-develop'
+    image: 'hurence/historian-logisland:1.0.0'
     command: "bin/logisland.sh --conf /conf/historian-remote.yaml"
     ports:
       - '4050:4050'

@@ -11,7 +11,9 @@
         <ng-container *ngSwitchCase="'Quick'">
           <ul class="quick-grid">
               <ng-container *ngFor="let timeRangeOption of timeRangeOptions">
-                  <li (click)='onTimeRangeChange(timeRangeOption.value)'>{{timeRangeOption.label}}</li>
+                  <li (click)='onTimeRangeChange(timeRangeOption.value)'>                
+                    <div class="label">{{timeRangeOption.label}}</div>
+                  </li>
               </ng-container>          
           </ul>
           <!-- <p-dropdown [options]="timeRangeOptions"  placeholder="Time range" [(ngModel)]="timeRange"
