@@ -1,14 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { CanDeactivateGuard } from './shared/can-deactivate-guard.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { SourcesAndTagsComponent } from './sources-and-tags/sources-and-tags.component';
-import { TodoComponent } from './todo/todo.component';
-import { CanDeactivateGuard } from './can-deactivate-guard.service';
+import { VisualizationComponent } from './modules/visualization/visualization.component';
+import { DatasourceDashboardComponent } from './modules/datasource/datasource-dashboard/datasource-dashboard.component';
 
 const routes: Routes = [
-  { path: 'sources-and-tags', component: SourcesAndTagsComponent },
-  { path: 'todo', component: TodoComponent },
+  {
+    path: 'visualization',
+    component: VisualizationComponent,
+    canDeactivate: [CanDeactivateGuard]
+  },
+  {
+    path: 'sources-and-tags',
+    component: DatasourceDashboardComponent,
+    canDeactivate: [CanDeactivateGuard]
+  },
   { path: '', redirectTo: 'sources-and-tags', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
@@ -19,7 +27,7 @@ const routes: Routes = [
     RouterModule.forRoot(
       routes,
       {
-        useHash: true,
+        // useHash: true,
         // enableTracing: true // <-- debugging purposes only
       }
     )

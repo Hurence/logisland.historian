@@ -28,13 +28,7 @@ public class IdUtils {
 
 
     public static Tag setId(Tag tag)  {
-
-        String id = ID_SEPARATOR + tag.getDomain() + ID_SEPARATOR + tag.getServer() + ID_SEPARATOR + tag.getGroup() + ID_SEPARATOR + tag.getTagName();
-
-
-            return tag.id(tag.getTagName() + String.valueOf(id.hashCode()));
-
-
+        return tag.id(tag.getTagName());
     }
 
     public static Datasource setId(Datasource ds)  {
@@ -46,4 +40,5 @@ public class IdUtils {
 
 
     }
+
 }

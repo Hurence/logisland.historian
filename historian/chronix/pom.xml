@@ -4,7 +4,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>historian-chronix</artifactId>
-    <version>0.3.0</version>
     <packaging>jar</packaging>
     <name>data-historian-chronix</name>
     <description>A logisland version of Chronix Timesereis DB</description>
@@ -12,7 +11,7 @@
     <parent>
         <groupId>com.hurence.logisland</groupId>
         <artifactId>historian</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.3-SNAPSHOT</version>
     </parent>
 
     <build>

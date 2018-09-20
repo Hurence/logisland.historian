@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
-import { ProfilService } from './profil/profil.service';
+
 import { environment } from '../environments/environment';
+import { ProfilService } from './profil/profil.service';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { Subscription, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -10,17 +14,18 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
 
-  private profil: Keycloak.KeycloakProfile;
+  username: string;
   logoutUrl: string;
 
   constructor(private keycloakService: KeycloakService,
-              private profilService: ProfilService) {
-
-                this.logoutUrl = environment.KEYCLOAK_LOGOUT_URL;
+              public profilService: ProfilService) {
+                this.logoutUrl = `${environment.AUTHENTICATION_BASE_URL}${environment.KEYCLOAK_LOGOUT_URL_REDIRECT}${document.baseURI}`;
               }
 
   public ngOnInit(): void {
-    this.keycloakService.loadUserProfile().then(profil => this.profil = profil);
+    this.keycloakService.loadUserProfile().then(profil => {
+      this.username = profil.username;
+    });
   }
 
   toggleHelp(): void {

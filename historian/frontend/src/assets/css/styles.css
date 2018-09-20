@@ -1,0 +1,307 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+html, body {
+  height: 100%;
+}
+
+body {
+  background: #ecf0f5;
+}
+
+.form-group {
+    margin-bottom: 0.3rem;
+}
+.text-muted {
+    color: #2E99FB!important;
+}
+mark, .mark {
+    background-color: yellow;
+}
+.logo {
+  background-color: #BBDFFC;
+}
+
+.label-small label {
+  font-size: .8rem;
+  margin-bottom: 0.1rem;
+}
+.nav.nav-pills{
+  background-color: #fff;
+}
+.navbar {
+  padding: 0rem 1rem;
+  line-height: 2.5;
+}
+
+.navbar-dark .navbar-nav .show>.nav-link, .navbar-dark .navbar-nav .active>.nav-link, .navbar-dark .navbar-nav .nav-link.show, .navbar-dark .navbar-nav .nav-link.active {
+  background-color: #fff;
+  color: #2699FB;
+}
+
+.navbar-brand img {
+  width: 230px;
+}
+.logo-hurence{
+  width: 200px;
+}
+.logo-hurence span{
+  position: fixed;
+  bottom: .5rem;
+  left:.5rem;
+  z-index: 1030;
+}
+.logo-hurence img{
+  width:100px;
+}
+.navbar {
+    line-height: 3.4;
+    color: white;
+}
+.navbar a{
+  font-size: 0.7rem;
+}
+.navbar-nav .fa-question-circle:before{
+  font-size: 1rem;
+}
+.navbar-dark .navbar-nav .nav-link.logout:hover {
+  color: red;
+}
+.nav.nav-pills a{
+  font-size: 0.7rem;
+}
+#main-nav .nav-link {
+  cursor: pointer;
+}
+
+.nav-item.avatar img {
+  height: 35px;
+}
+.nav-item {
+  margin-left: 2px;
+  margin-right: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding: auto;
+}
+
+
+/*.ng-valid.required  */
+.ng-valid[required] {
+  border-left: 5px solid #42A948;
+}
+
+/* .form-group.ng-invalid:not(form) {
+  border-left: 5px solid #a94442;
+} */
+
+.form-control.ng-invalid:not(form) {
+  border-left: 5px solid #a94442;
+}
+
+.input-group .bg-primary {
+    color: white;
+    font-weight: inherit;
+    font-size: 0.5rem !important;
+}
+
+
+.badge-center-label {
+  top: -8px;
+  right: -5px;
+  font-size: 8px !important;
+}
+.badge-top-right-label{
+  top: -8px !important;
+  right: 0px;
+  font-size: 7px !important;
+}
+
+.badge-botttom-right-label{
+  top: 8px !important;
+  right: 42px;
+  font-size: 7px !important;
+}
+
+
+.servername {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+  width: 70%;
+  top: 2px !important;
+}
+.datasources-list{
+  overflow-y: scroll;
+}
+.filter {
+  margin-bottom: 0;
+}
+
+.filter .input-group-text {
+  font-size: 0.2rem;
+  color: #ffffff;
+}
+
+.no-padding-child-div div {
+  padding: 0;
+}
+.filter input {
+  font-size: 0.8rem;
+}
+
+.filter i.fa.fa-filter {
+  font-size: 0.8rem;
+}
+.footer .row {
+  margin-bottom: 0;
+}
+.footer  {
+  background-color: #ffffff;
+}
+.footer [class*="col-"]  {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+.historian-tag:before {
+  content: "\f02b";
+  color: green;
+  font-family: FontAwesome;
+}
+.opc-tag:before {
+  content: "\f02b";
+  color: black;
+  font-family: FontAwesome;
+}
+.icon-trash:before {
+  content: "\f02b";
+  color: green;
+  font-family: FontAwesome;
+}
+.in-dataset:before {
+  content: "\f02b";
+  color: blue;
+  font-family: FontAwesome;
+}
+.input-group-container{
+  display: block;
+  width: 100%;
+}
+.input-group-prepend .input-group-text{
+  font-size: 0.8rem !important;
+}
+.form-control, .input-group-text {
+
+    border-radius: 0rem;
+}
+
+.alert {
+  position: relative;
+  padding: .25rem .25rem;
+}
+.no-padding {
+  padding: 0!important;
+}
+.no-padding-side {
+  padding-left: 0!important;
+  padding-right: 0!important;
+}
+.no-margin {
+  margin: 0!important;
+}
+
+.w-5 {
+  width: 5%!important;
+}
+.w-10 {
+  width: 10%!important;
+}
+.w-20 {
+  width: 20%!important;
+}
+.w-30 {
+  width: 30%!important;
+}
+.w-40 {
+  width: 40%!important;
+}
+.w-50 {
+  width: 50%!important;
+}
+.w-60 {
+  width: 60%!important;
+}
+.w-70 {
+  width: 70%!important;
+}
+.w-80 {
+  width: 80%!important;
+}
+.w-90 {
+  width: 90%!important;
+}
+.h-5 {
+  height: 5%!important;
+}
+.h-10 {
+  height: 10%!important;
+}
+.h-20 {
+  height: 20%!important;
+}
+.h-30 {
+  height: 30%!important;
+}
+.h-40 {
+  height: 40%!important;
+}
+.h-50 {
+  height: 50%!important;
+}
+.h-60 {
+  height: 60%!important;
+}
+.h-70 {
+  height: 70%!important;
+}
+.h-80 {
+  height: 80%!important;
+}
+.h-90 {
+  height: 90%!important;
+}
+.ml-2 {
+  margin-left: 2px;
+}
+.m-auto {
+  margin: auto;
+}
+
+.color-red {
+  color: red;
+}
+.color-green {
+  color: green;
+}
+.blue-on-hover:hover {
+  background-color:#2399e5!important;
+}
+
+.center-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bd-1 {
+  border: 1px solid;
+}
+
+.p-2 {
+ padding: 2px;
+}
+
+.pointer {
+  cursor: pointer;
+}

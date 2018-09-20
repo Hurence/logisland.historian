@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<schema name="dataflow" version="1.6">
+
+    <types>
+        <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="date" class="solr.TrieDateField"/>
+
+        <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
+        <fieldType name="binary" class="solr.BinaryField"/>
+    </types>
+
+    <fields>
+
+        <!-- Solr -->
+        <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
+        <field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
+        <field name="lastModified" type="long" indexed="true" stored="true" multiValued="false"/>
+        <field name="modificationReason" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="services" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="streams" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="lastPingDateTime" type="date" indexed="true" stored="true" multiValued="false"/>
+
+
+    </fields>
+
+    <uniqueKey>id</uniqueKey>
+    <solrQueryParser defaultOperator="OR"/>
+
+</schema>

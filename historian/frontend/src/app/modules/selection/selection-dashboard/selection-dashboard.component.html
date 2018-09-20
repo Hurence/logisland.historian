@@ -1,0 +1,37 @@
+<h4>Set of tags saved</h4>
+<div class="ui-g-12"><span>Choose your set of tag(s): </span>
+    <!-- Select selection -->    
+    <span class="hurence-tooltip hurence-tooltip-bottom">
+      <p-dropdown [options]="selectionOptions"  placeholder="please choose or create a selection"
+      [ngModel]="tagSelection"
+      dataKey="name"
+      [autoWidth]="false" [style]="{'min-width':'15em'}"
+      (onChange)="onSelectionChange($event)">          
+      </p-dropdown>    
+      <span class="hurence-tooltiptext" 
+      [ngStyle]="{'visibility': this.profilService.helpHidden || tagSelection ? 'hidden': 'visible'}">
+        Click here to select an already existing set of tag
+      </span>
+    </span>
+    <!--!gSeltaection ? 'hidden': -->
+
+    <button type="button" (click)="delete(tagSelection)" class="btn btn-danger ml-2">Delete</button>
+    <button type="button" (click)="update(tagSelection)" class="btn btn-success ml-2">Update</button>
+    <button type="button" (click)="showDialog()" class="btn btn-info ml-2 hurence-tooltip hurence-tooltip-bottom">
+      <i class="fa fa-plus" aria-hidden="true"></i>Add new selection
+      <span class="hurence-tooltiptext" 
+      [ngStyle]="{'visibility': this.profilService.helpHidden || tagSelection ? 'hidden': 'visible'}">
+        Or click here to create a new one
+      </span>
+    </button>
+</div>
+
+<p-dialog [(visible)]="display" [modal]="true">
+    <p-header>
+        Create a new selection of tags
+    </p-header>
+    <app-selection-form [questions]="selectionQuestions" (submitted)="onSelectionSubmitted($event)"></app-selection-form>
+    <p-footer>
+    </p-footer>
+</p-dialog>
+  

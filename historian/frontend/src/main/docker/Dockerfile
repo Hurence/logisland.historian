@@ -3,7 +3,7 @@
 #########################
 
 # base image
-FROM node:9.6.1 as builder
+FROM node:8.12.0 as builder
 
 # set working directory
 RUN mkdir /usr/src/app
@@ -14,8 +14,8 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 # install and cache app dependencies
 COPY package.json /usr/src/app/package.json
-RUN npm install
-RUN npm install -g @angular/cli@6.0.3 --unsafe
+RUN yarn install
+RUN yarn global add @angular/cli@6.2.1
 
 # add app
 COPY . /usr/src/app
@@ -24,7 +24,7 @@ COPY . /usr/src/app
 #RUN ng test --watch=false
 
 # generate build
-RUN npm run build
+RUN ng build --prod
 
 ##################
 ### production ###
@@ -35,9 +35,10 @@ FROM nginx:1.13.9-alpine
 
 # copy artifact build from the 'build environment'
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+COPY src/main/docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 # expose port 80
-EXPOSE 80
+EXPOSE 4200
 
 # run nginx
 CMD ["nginx", "-g", "daemon off;"]

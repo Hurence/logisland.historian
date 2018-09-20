@@ -1,0 +1,22 @@
+ul.auto-refresh-grid {
+  list-style-type: none;
+}
+
+.auto-refresh-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, auto));
+  grid-template-rows: repeat(auto-fit, minmax(20px, auto));
+  grid-auto-flow: row;
+}
+.auto-refresh-grid li {
+  padding: 2px;  
+}
+
+.label {
+  padding: 2px;
+  border: 1px solid #2399e5;
+  background-color: #2399e5;
+  color: white;
+  border-radius: 10%;
+}

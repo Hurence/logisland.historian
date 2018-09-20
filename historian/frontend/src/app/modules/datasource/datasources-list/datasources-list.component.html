@@ -1,0 +1,38 @@
+<div class="h-100 list-container sticky-top">
+  <div class="row no-gutters">
+    <div *ngFor="let datasource of datasources"
+          class="col-lg-12 col-md-12 datasource-element">
+      <div class="row no-gutters">
+        <div class="col" (click)="onSelect(datasource)">
+          <app-button-labelled class="h-100"
+            [centerLabel]="datasource.id" [topRightLabel]="datasource.datasource_type"
+            [isActive]="isActive(datasource)"
+            [styleClass]="'blue-on-hover'">
+          </app-button-labelled>
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn"
+          (click)="onEditDatasource(datasource)">
+            <i class="fa fa-edit" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn"
+          (click)="onDeleteDatasource(datasource)">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog [(visible)]="displayEditDatasource" [modal]="true" [dismissableMask]="false" appendTo="body" 
+    [closeOnEscape]="false">
+  <p-header>
+      Edit datasource : '{{datasourceToEdit?.id}}'
+  </p-header>
+  <app-datasource-form [datasource]="datasourceToEdit" [isCreation]="false"
+                      [prefixId]="'edit-datasource-'" (submitted)="onSubmitted($event)"></app-datasource-form>
+  <p-footer>
+  </p-footer>
+</p-dialog>

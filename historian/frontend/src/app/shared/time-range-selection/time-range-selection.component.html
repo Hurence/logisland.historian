@@ -1,0 +1,45 @@
+<div class="timerange-menu">
+  <div class="w-100">
+    <div class="timerange">
+      <h4>Time Range</h4>
+      <ul class="timerange-menu-list">
+        <li [ngClass]="{'active' : view === 'Quick'}" class="timerange-menu-element" (click)="view='Quick'">Quick</li>
+        <li [ngClass]="{'active' : view === 'Custom'}" class="timerange-menu-element" (click)="view='Custom'">Custom</li>      
+      </ul>
+    </div>
+    <div [ngSwitch]="view"  class="what to show">
+        <ng-container *ngSwitchCase="'Quick'">
+          <ul class="quick-grid">
+              <ng-container *ngFor="let timeRangeOption of timeRangeOptions">
+                  <li (click)='onTimeRangeChange(timeRangeOption.value)'>                
+                    <div class="label">{{timeRangeOption.label}}</div>
+                  </li>
+              </ng-container>          
+          </ul>
+          <!-- <p-dropdown [options]="timeRangeOptions"  placeholder="Time range" [(ngModel)]="timeRange"
+          [autoWidth]="false" [style]="{'min-width':'15em'}"></p-dropdown> -->
+        </ng-container>
+        <ng-container *ngSwitchCase="'Custom'">
+          <div class="custom-grid">
+            <div class="date-from">
+                <label><b>From</b></label>
+                <p-calendar [(ngModel)]="from" showButtonBar="true" view="date" 
+                [monthNavigator]="true" [yearNavigator]="true" yearRange="1990:2030"
+                dateFormat="dd/mm/yy" [showTime]="true"> 
+                </p-calendar>
+            </div>
+            <div class="date-to">
+                <label><b>To</b></label>          
+                <p-calendar [(ngModel)]="to" showButtonBar="true" view="date" 
+                [monthNavigator]="true" [yearNavigator]="true" yearRange="1990:2030"
+                dateFormat="dd/mm/yy" [showTime]="true">
+                </p-calendar>                
+            </div>
+            <div>
+              <button pbutton class="ui-button valid-timerange-button" type="button" (click)='setCustomTimeRange();'>Ok</button>
+            </div>                           
+          </div>                       
+        </ng-container>
+    </div>  
+  </div>
+</div>

@@ -1,29 +1,53 @@
 // angular modules
+import { PlatformLocation } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 import { initializer } from './app-init';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DatasetService } from './dataset/dataset.service.';
-import { DatasourceService } from './datasource/datasource.service';
-import { DialogService } from './dialog/dialog.service';
+import { DataFlowService } from './dataflow.service';
+import { MeasuresService } from './measure/measures.service';
+import { DatasourceService } from './modules/datasource/datasource.service';
+import { SelectionModule } from './modules/selection/selection.module';
+import { SelectionService } from './modules/selection/selection.service';
+import { NgTreenodeService } from './modules/tag/service/ng-treenode.service';
+import { TagHistorianService } from './modules/tag/service/tag-historian.service';
+import { TagOpcService } from './modules/tag/service/tag-opc.service';
+import { TagService } from './modules/tag/service/tag.service';
+import { VisualizationModule } from './modules/visualization/visualization.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfilService } from './profil/profil.service';
 import { CustomHttpInterceptor } from './security-http-interceptor';
-import { SharedModule } from './shared/shared.module';
-import { SourcesAndTagsModule } from './sources-and-tags/sources-and-tags.module';
-import { TagService } from './tag/tag.service';
-import { TodoComponent } from './todo/todo.component';
-import { QuestionService } from './shared/dynamic-form/question.service';
+import { ArrayUtil } from './shared/array-util';
 import { QuestionControlService } from './shared/dynamic-form/question-control.service';
+import { QuestionService } from './shared/dynamic-form/question.service';
+import { SharedModule } from './shared/shared.module';
+import { Utilities } from './shared/utilities.service';
+import { TodoComponent } from './todo/todo.component';
+import { CookieService } from 'ngx-cookie-service';
+import { DatasourceModule } from './modules/datasource/datasource.module';
 
-// components
-// router
-// keycloak-angular
+/**
+ * This function is used internal to get a string instance of the `<base href="" />` value from `index.html`.
+ * This is an exported function, instead of a private function or inline lambda, to prevent this error:
+ *
+ * `Error encountered resolving symbol values statically.`
+ * `Function calls are not supported.`
+ * `Consider replacing the function or lambda with a reference to an exported function.`
+ *
+ * @param platformLocation an Angular service used to interact with a browser's URL
+ * @return a string instance of the `<base href="" />` value from `index.html`
+ */
+export function getBaseHref(platformLocation: PlatformLocation): string {
+  return platformLocation.getBaseHrefFromDOM();
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,10 +58,12 @@ import { QuestionControlService } from './shared/dynamic-form/question-control.s
     BrowserModule,
     KeycloakAngularModule,
     HttpClientModule,
-    SourcesAndTagsModule,
+    DatasourceModule,
+    VisualizationModule,
+    SelectionModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     SharedModule,
+    AppRoutingModule,
   ],
   providers: [
     {
@@ -52,13 +78,21 @@ import { QuestionControlService } from './shared/dynamic-form/question-control.s
       multi: true
     },
     ProfilService,
-    DatasetService,
     TagService,
+    TagOpcService,
+    TagHistorianService,
     DatasourceService,
-    DialogService,
-    ProfilService,
     QuestionService,
-    QuestionControlService
+    QuestionControlService,
+    Utilities,
+    MeasuresService,
+    SelectionService,
+    NgTreenodeService,
+    ArrayUtil,
+    MessageService,
+    ConfirmationService,
+    DataFlowService,
+    CookieService,
   ],
   bootstrap: [AppComponent],
 })

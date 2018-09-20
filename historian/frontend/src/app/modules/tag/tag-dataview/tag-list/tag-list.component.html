@@ -1,0 +1,31 @@
+<div class="cell-container grid-container--fit" style="padding: 2em;border-bottom: 1px solid #d9d9d9">
+    <ng-container *ngIf="notFound">
+      <!-- <div class="ui-g-12 ui-md-12" style="text-align:center"> -->
+          No stat found for this tag !
+      <!-- </div> -->
+    </ng-container>
+    <ng-container *ngIf="!notFound">
+      <div class="cell-element text-truncate">
+          Name:<b>{{tag.node_id}}</b>
+      </div>
+      <div class="cell-element text-truncate">
+          Description:<b>{{tag?.description}}</b>
+      </div>
+      <div class="cell-element text-truncate">
+          Type:<b>{{tag.data_type}}</b>
+      </div>
+      <div class="cell-element text-truncate">
+          <span *ngIf="lastRefreshed">(tag last refreshed at {{lastRefreshed | date:'mediumTime'}})</span>
+      </div>
+      <ng-container *ngIf="stats">
+        <ng-container *ngFor="let agg of stats.functions">
+          <div *ngIf="agg.name !== 'last'" class="cell-element text-truncate"  pTooltip="{{agg.name}} : {{agg.value}}">
+            {{agg.name}} : {{agg.value}}
+          </div>
+          <div class='cell-element-important text-truncate' *ngIf="agg.name === 'last'">
+            <b>{{agg.name}} : {{agg.value}}</b>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+</div>

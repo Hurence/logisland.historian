@@ -21,14 +21,22 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "src/bootstrap-flatly.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
-              "src/styles.css"
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "src/assets/css/theme.css",
+              "src/assets/css/styles.css",
+              "src/assets/css/button.css",
+              "src/assets/css/progress-bar.css",
+              "src/assets/css/tooltip.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/moment/min/moment.min.js",
+              "node_modules/chart.js/dist/Chart.js",
               "src/scripts.js"
             ]
           },
@@ -50,7 +58,7 @@
                 }
               ]
             },
-            "production-fr": {              
+            "production-fr": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -118,7 +126,11 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/font-awesome/css/font-awesome.css",
-              "src/styles.css"
+              "src/assets/css/theme.css",
+              "src/assets/css/styles.css",
+              "src/assets/css/button.css",
+              "src/assets/css/progress-bar.css",
+              "src/assets/css/tooltip.css"
             ],
             "assets": [
               "src/assets",

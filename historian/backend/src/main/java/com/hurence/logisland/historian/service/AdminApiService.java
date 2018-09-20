@@ -16,18 +16,37 @@
  */
 package com.hurence.logisland.historian.service;
 
+import com.hurence.logisland.chronix.importer.csv.Attributes;
+import com.hurence.logisland.chronix.importer.csv.ChronixImporter;
+import com.hurence.logisland.chronix.importer.csv.FileImporter;
+import com.hurence.logisland.chronix.importer.csv.Pair;
+import com.hurence.logisland.historian.generator.TSimulusWrapper;
 import com.hurence.logisland.historian.repository.SolrDatasourceRepository;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
+import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Datasource;
 import com.hurence.logisland.historian.rest.v1.model.IdUtils;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.ListOperations;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.Instant;
 import java.util.*;
+import java.util.function.Consumer;
+
+import scala.collection.JavaConverters;
+import scala.collection.JavaConverters.*;
 
 @Service
 public class AdminApiService {
@@ -37,6 +56,7 @@ public class AdminApiService {
 
     private static final String TAGS_LIST = "tags";
 
+
     @Resource
     private SolrTagRepository solrTagRepository;
 
@@ -44,41 +64,61 @@ public class AdminApiService {
     private SolrDatasourceRepository solrDatasourceRepository;
 
 
+    @Value("${spring.data.solr.host}")
+    private String solrHost;
+
+    private SolrClient solrClient;
+
+    @PostConstruct
+    public void init() {
+        solrClient = new HttpSolrClient.Builder().withBaseSolrUrl(solrHost + "/chronix").build();
+    }
+
+
     // inject the template as ListOperations
    // private ListOperations<String, Object> listOps;
 
 
-    private List<String> domains = Arrays.asList("hurence", "pear", "gizmo");
-    private List<String> servers = Arrays.asList("opc-server1", "opc-server2", "opc-server3");
-    private List<String> groups = Arrays.asList("temp.group1", "temp.group2", "freq.group1", "freq.group2");
+    private List<String> domains = Arrays.asList("hurence");
+    private List<String> servers = Arrays.asList("usine 1", "usine 2", "usine 3");
+    private List<String> groups = Arrays.asList(
+            "Temperature", "Pression", "Force", "Rayonnement optique",
+            "Accélération", "Vitesse", "Position", "Courant");
 
+
+    public void deleteAllTag() {
+        solrTagRepository.deleteAll();
+    }
+
+    public void deleteAllMeasures() {
+        new ChronixImporter((HttpSolrClient) solrClient, new String[]{"source"}).deleteIndex();
+    }
+
+    public List<String> getAllTagIds() {
+        List<String> names = new ArrayList<>();
+        solrTagRepository.findByText("*:*").forEach(
+              tag -> names.add(tag.getId())
+        );
+        return names;
+    }
 
     public List<Tag> generateSampleTags(boolean doFlush) {
 
         List<Tag> tags = new ArrayList<>();
 
-        long tagsCount = 10; /*listOps.size(TAGS_LIST);
-        if (doFlush) {
-            while (tagsCount > 0) {
-                listOps.leftPop(TAGS_LIST);
-                tagsCount--;
-            }
-        }*/
-
         Random random = new Random();
-        tagsCount = random.nextInt(20);
+        int tagsCount = random.nextInt(30);
 
         while (tagsCount > 0) {
 
             String domain = domains.get(random.nextInt(domains.size()));
             String server = servers.get(random.nextInt(servers.size()));
             String group = groups.get(random.nextInt(groups.size()));
-            String tag = UUID.randomUUID().toString().substring(0, 5);
-            Tag t = IdUtils.setId(new Tag()
-                    .domain(domain)
-                    .server(server)
+            String tagName = group.toLowerCase().replaceAll("[^\\x00-\\x7F]", "") + '-' + UUID.randomUUID().toString().substring(0, 5);
+            Tag t = new Tag()
+                    .setId(UUID.randomUUID().toString())
                     .group(group)
-                    .tagName(tag));
+                    .tagName(tagName);
 
             tags.add(t);
             solrTagRepository.save(t);
@@ -135,6 +175,79 @@ public class AdminApiService {
 
 
         return ds;
+    }
+
+
+    public BulkLoad launchTagMeasuresGenerator(MultipartFile config, List<String> metricNames) {
+
+        BulkLoad bl = new BulkLoad();
+        try {
+            String contentStr = new String(config.getBytes());
+            TSimulusWrapper simulator = new TSimulusWrapper();
+
+            long startGeneration = System.currentTimeMillis();
+
+            List<String> generatedFiles = simulator.generate(contentStr,
+                    JavaConverters.asScalaBufferConverter(metricNames).asScala().toList());
+
+            bl.setGenerationDuration((int) (System.currentTimeMillis() - startGeneration));
+
+            generatedFiles.forEach(file -> {
+                String[] attributes = new String[]{"source"};
+
+                Map<Attributes, Pair<Instant, Instant>> importStatistics = new HashMap<>();
+                ChronixImporter chronixImporter = new ChronixImporter((HttpSolrClient) solrClient, attributes);
+                FileImporter importer = new FileImporter("dd.MM.yyyy HH:mm:ss.SSS", "ENGLISH", ";");
+                Pair<Integer, Integer> result;
+
+                logger.info("Start importing files to the Chronix.");
+                long start = System.currentTimeMillis();
+
+                String[] fileNameMetaData = config.getOriginalFilename().split("_");
+
+
+                InputStream is;
+
+                try {
+                    logger.info("Start importing " + file);
+                    is = new FileInputStream(file);
+
+                    result = importer.importPoints(importStatistics, is, fileNameMetaData, chronixImporter.importToChronix(false, false, 10000));
+
+
+                    logger.info("Done importing. Trigger commit.");
+                    chronixImporter.commit();
+                    long end = System.currentTimeMillis();
+
+
+                    logger.info("Import done (Took: {} sec). Imported {} time series with {} points", (end - start) / 1000, result.getFirst(), result.getSecond());
+
+
+                    bl.importDuration((int) (end - start))
+                            .numMetricsImported(result.getFirst())
+                            .numPointsImported(Long.valueOf(result.getSecond()));
+
+
+                    //((HashMap) importStatistics).entrySet().toArray()[0].key.metric
+
+                    ((HashMap) importStatistics).entrySet().forEach(k -> {
+                        bl.addMetricsItem(k.toString());
+
+                    });
+                    is.close();
+                } catch (IOException e) {
+                    logger.error(e.getMessage(), e);
+                }
+
+
+            });
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bl;
     }
 
 }

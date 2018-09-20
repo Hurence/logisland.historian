@@ -1,0 +1,204 @@
+<div i18n="test connnectivity|tells if server can connect to datasource or not">
+        Server connection Status: <i class="fa fa-circle" [ngClass]="statusClass"></i>
+</div>
+
+<form [formGroup]="dsForm" (ngSubmit)="onSubmit()">
+  <div class="form-group label-small text-capitalize">
+    <label for="type" i18n="type of the datasource|label for type datasource input">type</label>
+    <select class="form-control" formControlName="type" name="type" required>
+      <option *ngFor="let type of datasourceTypes" [value]="type">{{type}}</option>
+    </select>
+    <div [hidden]="dsForm.get('type').valid || dsForm.get('type').pristine" class="alert alert-danger"
+          i18n="type of the datasource is required|appears when user input is not valid">
+        Type is required
+    </div>
+  </div>
+
+  <div [ngSwitch]="dsForm.get('type').value">
+
+    <div *ngSwitchCase="'OPC-DA'">
+      <div class="form-group label-small text-capitalize">
+        <label for="name" i18n="name of the datasource|label for name datasource input">name</label>
+        <input type="text" class="form-control" formControlName="name" name="name" required>
+        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+          <div *ngIf="dsForm.get('name').hasError('required')" class="error">
+            Name is required
+          </div>
+          <div *ngIf="dsForm.get('name').hasError('datasourceIdExists')" class="error">
+            Name aleady exist.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group label-small text-capitalize">
+        <label for="name" i18n="decription of the datasource|label for decription datasource input">description</label>
+        <input type="text" class="form-control" formControlName="description" name="description" required>
+        <div [hidden]="dsForm.get('description').valid || dsForm.get('description').pristine" class="alert alert-danger"
+              i18n="decription of the datasource is required|appears when user input is not valid">
+            Description is required
+        </div>
+      </div>
+
+      <div class="form-group label-small text-capitalize">
+        <label for="hostAndPort" i18n="host with port of the datasource|label for host with port datasource input">host &amp; port</label>
+        <input type="text" class="form-control" formControlName="host" name="hostAndPort" required>
+        <div [hidden]="dsForm.get('host').valid || dsForm.get('host').pristine" class="alert alert-danger"
+              i18n="host with port of the datasource is required|appears when user input is not valid">
+            Host is required
+        </div>
+      </div>
+
+      <div class="form-group label-small text-capitalize">
+        <label for="domain" i18n="domain of the datasource|label for domain with port datasource input">domain</label>
+        <input type="text" class="form-control" formControlName="domain" name="domain" required>
+        <div [hidden]="dsForm.get('domain').valid || dsForm.get('domain').pristine" class="alert alert-danger"
+              i18n="domain of the datasource is required|appears when user input is not valid">
+            Domain is required
+        </div>
+      </div>
+
+      <div class="form-group label-small text-capitalize">
+        <label for="clsid" i18n="clsid of the datasource|label for clsid datasource input">clsid</label>
+        <input type="text" class="form-control" formControlName="clsid" name="clsid">
+      </div>
+
+      <div class="form-group label-small text-capitalize">
+        <label for="progId" i18n="progId of the datasource|label for progId datasource input">progid</label>
+        <input type="text" class="form-control" formControlName="progId" name="progId">
+      </div>
+      <!-- Tag Browsing -->  
+      <div class="form-group label-small text-capitalize">
+        <div><label>Tag browsing mode</label></div>  
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" value="automatic" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}automaticBrowsing" class="custom-control-input">
+          <label class="custom-control-label" for="{{prefixId}}automaticBrowsing">Automatic</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" value="manual" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}manualBrowsing" class="custom-control-input">
+          <label class="custom-control-label" for="{{prefixId}}manualBrowsing">Manual</label>
+        </div>         
+      </div>
+       
+      <!-- Authentification -->
+      <div formGroupName="auth" class="mt-3">
+          <h6 _ngcontent-c2=""
+              i18n="authentification section of the form for datasource|label for section of the form">
+              Authentication
+          </h6>
+        <div *ngIf="dsForm.get('auth.cred').value !== 'none'">
+          <div class="form-group label-small text-capitalize">
+            <label for="user" i18n="user of the datasource for connection|label for user datasource input">user</label>
+            <input type="text" class="form-control" formControlName="user" name="user" required>
+          </div>
+          <div [hidden]="dsForm.get('auth.user').valid || dsForm.get('auth.user').pristine" class="alert alert-danger"
+                i18n="user of the datasource is required|appears when user input is not valid">
+              User is required
+          </div>
+
+          <div class="form-group label-small text-capitalize">
+            <label for="pwd" i18n="password of the datasource for connection|label for password datasource input">password</label>
+            <input type="password" class="form-control" formControlName="password" name="password" required>
+          </div>
+          <div [hidden]="dsForm.get('auth.password').valid || dsForm.get('auth.password').pristine" class="alert alert-danger"
+                i18n="password of the datasource is required|appears when user input is not valid">
+              Password is required
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'OPC-UA'">
+      <div class="form-group label-small text-capitalize">
+        <label for="name" i18n="name of the datasource|label for name datasource input">name</label>
+        <input type="text" class="form-control" formControlName="name" name="name" required>
+        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+          <div *ngIf="dsForm.get('name').hasError('required')" class="error">
+            Name is required
+          </div>
+          <div *ngIf="dsForm.get('name').hasError('datasourceIdExists')" class="error">
+            Name aleady exist.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group label-small text-capitalize">
+        <label for="name" i18n="decription of the datasource|label for decription datasource input">description</label>
+        <input type="text" class="form-control" formControlName="description" name="description" required>
+        <div [hidden]="dsForm.get('description').valid || dsForm.get('description').pristine" class="alert alert-danger"
+              i18n="decription of the datasource is required|appears when user input is not valid">
+            Description is required
+        </div>
+      </div>
+
+      <div class="form-group label-small text-capitalize">
+        <label for="hostAndPort" i18n="host with port of the datasource|label for host with port datasource input">host &amp; port</label>
+        <input type="text" class="form-control" formControlName="host" name="hostAndPort" required>
+        <div [hidden]="dsForm.get('host').valid || dsForm.get('host').pristine" class="alert alert-danger"
+              i18n="host with port of the datasource is required|appears when user input is not valid">
+            Host is required
+        </div>
+      </div>
+      <!-- Tag Browsing -->
+      <div class="form-group label-small text-capitalize">
+        <div><label>Tag browsing mode</label></div>  
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" value="automatic" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}automaticBrowsing" class="custom-control-input">
+          <label class="custom-control-label" for="{{prefixId}}automaticBrowsing">Automatic</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" value="manual" name="tagBrowsing" formControlName="tagBrowsing" id="{{prefixId}}manualBrowsing" class="custom-control-input">
+          <label class="custom-control-label" for="{{prefixId}}manualBrowsing">Manual</label>
+        </div>         
+      </div>
+      <!-- Authentification -->
+      <div formGroupName="auth" class="mt-3">
+          <h6 _ngcontent-c2=""
+              i18n="authentification section of the form for datasource|label for section of the form">
+              Authentication
+          </h6>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="none" name="cred" formControlName="cred" id="{{prefixId}}withoutCred" class="custom-control-input">
+            <label class="custom-control-label" for="{{prefixId}}withoutCred"
+                    i18n="no authentification needed|if the data source does not need any authentification information">None</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="normal" name="cred" formControlName="cred" id="{{prefixId}}withCred" class="custom-control-input">
+            <label class="custom-control-label" for="{{prefixId}}withCred"
+                    i18n="need credential information|if the data source does need authentification information">User/Password</label>
+          </div>
+
+
+        <div *ngIf="dsForm.get('auth.cred').value !== 'none'">
+          <div class="form-group label-small text-capitalize">
+            <label for="user" i18n="user of the datasource for connection|label for user datasource input">user</label>
+            <input type="text" class="form-control" formControlName="user" name="user" required>
+          </div>
+          <div [hidden]="dsForm.get('auth.user').valid || dsForm.get('auth.user').pristine" class="alert alert-danger"
+                i18n="user of the datasource is required|appears when user input is not valid">
+              User is required
+          </div>
+
+          <div class="form-group label-small text-capitalize">
+            <label for="pwd" i18n="password of the datasource for connection|label for password datasource input">password</label>
+            <input type="password" class="form-control" formControlName="password" name="password" required>
+          </div>
+          <div [hidden]="dsForm.get('auth.password').valid || dsForm.get('auth.password').pristine" class="alert alert-danger"
+                i18n="password of the datasource is required|appears when user input is not valid">
+              Password is required
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <div *ngSwitchDefault i18n="ask user to select a type for datasource|">Please choose a type</div>
+
+  </div>
+  <div class="mx-auto" style="width: 20rem;">
+    <button type="button" (click)="revert()" class="btn btn-danger" [disabled]="dsForm.pristine"
+            i18n="cancel button|revert all changes not saved for datasource">Reset Form</button>
+
+    <button type="submit" class="btn btn-success ml-2" [disabled]="!dsForm.valid"
+            i18n="submit button|save all change to datasource or save new datasource">{{submitBtnMsg}}</button>
+  </div>
+</form>

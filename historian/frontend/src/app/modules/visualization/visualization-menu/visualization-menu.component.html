@@ -1,0 +1,39 @@
+<ul class="visualization-menu-list">
+  <li *ngIf="tagSelector" [ngClass]="{'active' : menuItemActive === 'selection'}" 
+      class="visualization-menu-element hurence-tooltip hurence-tooltip-bottom" (click)="toggleItemMenu('selection')">
+      <i class="fa fa-tags" aria-hidden="true"></i>{{ tagSelection ? tagSelection.name: 'None' }}
+      <span class="hurence-tooltiptext" 
+      [ngStyle]="{'visibility': this.profilService.helpHidden || tagSelection || menuItemActive === 'selection' ? 'hidden': 'visible'}">
+        Click here to configure your set of tag
+      </span>
+  </li>
+  <li *ngIf="autoRefreshIntervalSelector" [ngClass]="{'active' : menuItemActive === 'autoRefreshInterval'}" 
+  class="visualization-menu-element" (click)="toggleItemMenu('autoRefreshInterval')">      
+    <i class="fa fa-repeat" aria-hidden="true"></i>{{ autoRefreshInterval.label }}
+  </li>
+  <li *ngIf="timeRangeSelector" [ngClass]="{'active' : menuItemActive === 'timeRange'}" class="visualization-menu-element" 
+  (click)="toggleItemMenu('timeRange')">    
+    <i class="fa fa-clock-o" aria-hidden="true"></i>{{ timeRange.label }}
+  </li>
+
+  <li><i [ngClass]="{
+    'fa-eye' : !view, 
+    'fa-table' : view === 'tabular',
+    'fa-line-chart' : view === 'lineChart'
+  }" class="fa" aria-hidden="true"></i>{{ view ? view: 'View' }}      
+    <ul>    
+     <li (click)="onViewChanged('tabular')"><i class="fa fa-table" aria-hidden="true"></i>Tabular</li>
+     <li (click)="onViewChanged('lineChart')"><i class="fa fa-line-chart" aria-hidden="true"></i>Line chart</li>     
+    </ul>  
+  </li>
+</ul>
+<div *ngIf="tagSelector" [hidden]="menuItemActive !== 'selection'">    
+  <app-selection-dashboard [tagSelection]="tagSelection" (tagSelectionChange)="ontagSelectionChanged($event)"
+    (tagSelectionUpdated)="onTagSelectionUpdated($event)"></app-selection-dashboard>
+</div>
+<div *ngIf="autoRefreshIntervalSelector" [hidden]="menuItemActive !== 'autoRefreshInterval'">
+  <app-refresh-rate-selection [autoRefreshInterval]="autoRefreshInterval" (autoRefreshIntervalChange)="onAutoRefreshIntervalChanged($event)"></app-refresh-rate-selection>
+</div>
+<div *ngIf="timeRangeSelector" [hidden]="menuItemActive !== 'timeRange'">
+  <app-time-range-selection [timeRange]="timeRange" (timeRangeChange)="onTimeRangeChanged($event)"></app-time-range-selection>  
+</div>

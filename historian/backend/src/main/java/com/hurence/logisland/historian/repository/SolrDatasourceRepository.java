@@ -29,7 +29,7 @@ public interface SolrDatasourceRepository extends SolrCrudRepository<Datasource,
 
 
     // catch all query
-    @Query(value = "*:*", filters = { "text:?0", "record_type:datasource" })
+    @Query(value = "*:*", filters = { "text:?0"})
     List<Datasource> findByText(String text);
 
 }

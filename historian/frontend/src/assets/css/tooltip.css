@@ -1,0 +1,57 @@
+.hurence-tooltip {
+  position: relative;
+  display: inline-block;  
+}
+
+/* Tooltip text */
+.hurence-tooltip .hurence-tooltiptext {
+  visibility: hidden;
+  /* width: 120px; */
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+.hurence-tooltip.hurence-tooltip-bottom .hurence-tooltiptext {
+  width: 230px;
+  top: calc(100% + 5px);
+  left: calc(50%); 
+  margin-left: -105px;
+}
+
+.hurence-tooltip.hurence-tooltip-right .hurence-tooltiptext {  
+  top: -5px;
+  left: 105%;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.hurence-tooltip:hover .hurence-tooltiptext {
+  visibility: visible;
+}
+/*ARROW FOR TOOLTIP*/
+.hurence-tooltip-bottom .hurence-tooltiptext::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;  /* At the top of the tooltip */
+  left: 50%;
+  /* margin-left: -5px; */
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+.hurence-tooltip-right .hurence-tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%; /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}

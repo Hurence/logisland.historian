@@ -1,0 +1,22 @@
+<p-panel [style]="{'text-align':'center'}">
+  <p-header>
+    <b>{{tag.node_id}}</b> - {{tag.data_type}} <span *ngIf="lastRefreshed">(last refresh: {{lastRefreshed | date:'mediumTime'}})</span>
+  </p-header>
+  <div *ngIf="tag.description">{{tag.description}}</div>
+  <div class="cell-container grid-container--fit">
+    <ng-container *ngIf="stats">
+      <ng-container *ngFor="let agg of stats.functions">
+        <div *ngIf="agg.name !== 'last'" class="cell-element text-truncate"  pTooltip="{{agg.name}} : {{agg.value}}">
+          {{agg.name}} : {{agg.value}}
+        </div>
+        <div class='cell-element-important text-truncate' *ngIf="agg.name === 'last'">
+          <b>{{agg.name}} : {{agg.value}}</b>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="notFound">
+      No stat found for this tag !
+    </ng-container>
+    <hr class="ui-widget-content" style="border-top:0">
+  </div>
+</p-panel>

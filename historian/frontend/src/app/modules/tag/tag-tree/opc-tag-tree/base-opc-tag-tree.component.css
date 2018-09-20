@@ -1,0 +1,22 @@
+/* #historian-tree .ui-widget-content .ui-button, #historian-tree .ui-widget.ui-button, #historian-tree .ui-button {
+    border: 0px solid #2399e5;
+    color: #000000;
+    background: transparent;
+    transition: background-color .2s;
+}
+
+#historian-tree .ui-widget-header .ui-button:enabled:hover, #historian-tree .ui-widget-header .ui-button:focus, #historian-tree .ui-widget-content .ui-button:enabled:hover, #historian-tree .ui-widget-content .ui-button:focus, #historian-tree .ui-widget.ui-button:enabled:hover, #historian-tree .ui-widget.ui-button:focus, #historian-tree .ui-button:enabled:hover, #historian-tree .ui-button:focus {
+    border: 0px solid #1f89ce;
+    background: transparent;
+    outline: 0 none;
+    color: #1f89ce;
+}
+.ui-tree .ui-treenode-label{
+    vertical-align:initial !important;
+} */
+.update-rate{
+    font-family: Lato,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+} 

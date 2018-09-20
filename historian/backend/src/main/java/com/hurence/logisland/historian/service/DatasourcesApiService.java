@@ -18,8 +18,11 @@ package com.hurence.logisland.historian.service;
 
 import com.hurence.logisland.historian.repository.SolrDatasourceRepository;
 import com.hurence.logisland.historian.rest.v1.model.Datasource;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.DatasourceReplaceReport;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,6 +35,18 @@ public class DatasourcesApiService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    private DataflowsApiService dataflowsApiService;
+    private TagsApiService tagsApiService;
+
+    @Autowired
+    public void setDataflowsApiService(DataflowsApiService dataflowsApiService) {
+        this.dataflowsApiService = dataflowsApiService;
+    }
+
+    @Autowired
+    public void setTagsApiService(TagsApiService tagsApiService) {
+        this.tagsApiService = tagsApiService;
+    }
 
     @Resource
     private SolrDatasourceRepository repository;
@@ -43,6 +58,7 @@ public class DatasourcesApiService {
         Optional<Datasource> datasourceToRemove = repository.findById(itemId);
         if (datasourceToRemove.isPresent()) {
             repository.delete(datasourceToRemove.get());
+            long numberOfTagDeleted = tagsApiService.deleteTagsOfDatasource(datasourceToRemove.get().getId());
         }
         return datasourceToRemove;
     }
@@ -52,27 +68,6 @@ public class DatasourcesApiService {
         logger.debug("getting Datasource {}", itemId);
         return repository.findById(itemId);
     }
-
-
-    public Optional<Datasource> updateDatasource(Datasource datasource) {
-        logger.debug("updating Datasource {}", datasource.getId());
-        Optional<Datasource> datasourceToUpdate = getDatasource(datasource.getId());
-        if (datasourceToUpdate.isPresent()) {
-            return Optional.of(repository.save(datasource));
-        } else {
-            logger.error("Datasource {} not found, unable to update", datasource.getId());
-            return Optional.empty();
-        }
-    }
-
-    public Optional<Datasource> updateDatasource(Datasource datasource, String itemId) {
-        if (!itemId.equals(datasource.getId())) {
-            return updateDatasource(datasource.id(itemId));
-        } else {
-            return updateDatasource(datasource);
-        }
-    }
-
 
     public List<Datasource> getAllDatasources(String fq) {
 
@@ -88,16 +83,22 @@ public class DatasourcesApiService {
 
     }
 
-    public Optional<Datasource> addDatasourceWithId(Datasource body, String itemId) {
-
-        Optional<Datasource> datasourceToRemove = getDatasource(itemId);
-        if (datasourceToRemove.isPresent()) {
-            logger.info("Datasource already {} exists, delete it first", itemId);
-            return Optional.empty();
+    private ReplaceReport<Datasource> createOrReplaceADatasource(Datasource datasource) {
+        logger.debug("create or replace Datasource {}", datasource.getId());
+        if (repository.existsById(datasource.getId())) {
+            Datasource savedDatasource = repository.save(datasource);
+            return new DatasourceReplaceReport(savedDatasource, false);
         } else {
-            body.setId(itemId);
-            return Optional.of(repository.save(body));
+            Datasource savedDatasource = repository.save(datasource);
+            return new DatasourceReplaceReport(savedDatasource, true);
         }
+    }
 
+    public ReplaceReport<Datasource> createOrReplaceADatasource(Datasource datasource, String itemId) {
+        if (!datasource.getId().equals(itemId)) {
+            return createOrReplaceADatasource(datasource.id(itemId));
+        } else {
+            return createOrReplaceADatasource(datasource);
+        }
     }
 }

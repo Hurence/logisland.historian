@@ -1,0 +1,19 @@
+@keyframes ui-progress-spinner-color {
+    100%,
+    0% {
+        stroke: black;
+    }
+    40% {
+        stroke: gray;
+    }
+    66% {
+        stroke:lightgray;
+    }
+    80%,
+    90% {
+        stroke: blue;
+    }
+}
+.ui-progress-spinner {
+    vertical-align: middle!important;
+}

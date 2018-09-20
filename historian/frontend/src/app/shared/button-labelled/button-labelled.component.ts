@@ -10,7 +10,8 @@ export class ButtonLabelledComponent implements OnInit {
   @Input() centerLabel: string;
   @Input() topRightLabel?: string;
   @Input() bottomRightLabel?: string;
-  @Input() isActive: boolean
+  @Input() isActive: boolean;
+  @Input() styleClass: string;
 
   constructor() { }
 

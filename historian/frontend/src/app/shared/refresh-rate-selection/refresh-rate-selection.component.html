@@ -1,0 +1,10 @@
+<div>
+  <h4>Refresh Interval</h4>
+  <ul class="auto-refresh-grid">
+      <ng-container *ngFor="let refreshOption of refreshOptions">
+          <li (click)='onAutoRefreshIntervalChange(refreshOption.value)'>
+            <div class="label">{{refreshOption.label}}</div>
+          </li>
+      </ng-container>          
+  </ul>
+</div>

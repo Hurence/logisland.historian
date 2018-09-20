@@ -3,6 +3,7 @@ package com.hurence.logisland.historian.rest.v1.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -10,22 +11,19 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
 
 /**
 * Datasource
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-14T17:06:05.558+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-29T22:27:12.655+02:00")
 
-@SolrDocument(solrCoreName = "historian")
+
+@SolrDocument(solrCoreName = "datasource")
 public class Datasource  implements Serializable {
-        @JsonProperty("record_type")
-        @Indexed(name = "record_type")
-        private String recordType = "datasource";
-
         @JsonProperty("id")
         @Indexed(name = "id")
         private String id = null;
@@ -38,9 +36,42 @@ public class Datasource  implements Serializable {
         @Indexed(name = "clsid")
         private String clsid = null;
 
+              /**
+   * Gets or Sets datasourceType
+   */
+  public enum DatasourceTypeEnum {
+    OPC_DA("OPC-DA"),
+    
+    OPC_UA("OPC-UA"),
+    
+    UNKNOWN("UNKNOWN");
+
+    private String value;
+
+    DatasourceTypeEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static DatasourceTypeEnum fromValue(String text) {
+      for (DatasourceTypeEnum b : DatasourceTypeEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
         @JsonProperty("datasource_type")
         @Indexed(name = "datasource_type")
-        private String datasourceType = null;
+        private DatasourceTypeEnum datasourceType = DatasourceTypeEnum.OPC_UA;
 
         @JsonProperty("prog_id")
         @Indexed(name = "prog_id")
@@ -62,26 +93,40 @@ public class Datasource  implements Serializable {
         @Indexed(name = "password")
         private String password = null;
 
-        public Datasource recordType(String recordType) {
-        this.recordType = recordType;
-        return this;
-        }
-
-    /**
-        * Get recordType
-    * @return recordType
-    **/
-        @JsonProperty("record_type")
-    @ApiModelProperty(value = "")
+              /**
+   * Gets or Sets tagBrowsing
+   */
+  public enum TagBrowsingEnum {
+    AUTOMATIC("automatic"),
     
+    MANUAL("manual");
 
-  public String getRecordType() {
-    return recordType;
+    private String value;
+
+    TagBrowsingEnum(String value) {
+      this.value = value;
     }
 
-        public void setRecordType(String recordType) {
-        this.recordType = recordType;
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static TagBrowsingEnum fromValue(String text) {
+      for (TagBrowsingEnum b : TagBrowsingEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
         }
+      }
+      return null;
+    }
+  }
+
+        @JsonProperty("tag_browsing")
+        @Indexed(name = "tag_browsing")
+        private TagBrowsingEnum tagBrowsing = TagBrowsingEnum.AUTOMATIC;
 
         public Datasource id(String id) {
         this.id = id;
@@ -101,8 +146,9 @@ public class Datasource  implements Serializable {
     return id;
     }
 
-        public void setId(String id) {
+        public Datasource setId(String id) {
         this.id = id;
+        return this;
         }
 
         public Datasource description(String description) {
@@ -122,8 +168,9 @@ public class Datasource  implements Serializable {
     return description;
     }
 
-        public void setDescription(String description) {
+        public Datasource setDescription(String description) {
         this.description = description;
+        return this;
         }
 
         public Datasource clsid(String clsid) {
@@ -143,11 +190,12 @@ public class Datasource  implements Serializable {
     return clsid;
     }
 
-        public void setClsid(String clsid) {
+        public Datasource setClsid(String clsid) {
         this.clsid = clsid;
+        return this;
         }
 
-        public Datasource datasourceType(String datasourceType) {
+        public Datasource datasourceType(DatasourceTypeEnum datasourceType) {
         this.datasourceType = datasourceType;
         return this;
         }
@@ -160,12 +208,13 @@ public class Datasource  implements Serializable {
     @ApiModelProperty(value = "")
     
 
-  public String getDatasourceType() {
+  public DatasourceTypeEnum getDatasourceType() {
     return datasourceType;
     }
 
-        public void setDatasourceType(String datasourceType) {
+        public Datasource setDatasourceType(DatasourceTypeEnum datasourceType) {
         this.datasourceType = datasourceType;
+        return this;
         }
 
         public Datasource progId(String progId) {
@@ -185,8 +234,9 @@ public class Datasource  implements Serializable {
     return progId;
     }
 
-        public void setProgId(String progId) {
+        public Datasource setProgId(String progId) {
         this.progId = progId;
+        return this;
         }
 
         public Datasource host(String host) {
@@ -207,8 +257,9 @@ public class Datasource  implements Serializable {
     return host;
     }
 
-        public void setHost(String host) {
+        public Datasource setHost(String host) {
         this.host = host;
+        return this;
         }
 
         public Datasource domain(String domain) {
@@ -228,8 +279,9 @@ public class Datasource  implements Serializable {
     return domain;
     }
 
-        public void setDomain(String domain) {
+        public Datasource setDomain(String domain) {
         this.domain = domain;
+        return this;
         }
 
         public Datasource user(String user) {
@@ -249,8 +301,9 @@ public class Datasource  implements Serializable {
     return user;
     }
 
-        public void setUser(String user) {
+        public Datasource setUser(String user) {
         this.user = user;
+        return this;
         }
 
         public Datasource password(String password) {
@@ -270,8 +323,31 @@ public class Datasource  implements Serializable {
     return password;
     }
 
-        public void setPassword(String password) {
+        public Datasource setPassword(String password) {
         this.password = password;
+        return this;
+        }
+
+        public Datasource tagBrowsing(TagBrowsingEnum tagBrowsing) {
+        this.tagBrowsing = tagBrowsing;
+        return this;
+        }
+
+    /**
+        * Get tagBrowsing
+    * @return tagBrowsing
+    **/
+        @JsonProperty("tag_browsing")
+    @ApiModelProperty(value = "")
+    
+
+  public TagBrowsingEnum getTagBrowsing() {
+    return tagBrowsing;
+    }
+
+        public Datasource setTagBrowsing(TagBrowsingEnum tagBrowsing) {
+        this.tagBrowsing = tagBrowsing;
+        return this;
         }
 
 
@@ -284,8 +360,7 @@ public class Datasource  implements Serializable {
     return false;
     }
         Datasource datasource = (Datasource) o;
-        return Objects.equals(this.recordType, datasource.recordType) &&
-        Objects.equals(this.id, datasource.id) &&
+        return Objects.equals(this.id, datasource.id) &&
         Objects.equals(this.description, datasource.description) &&
         Objects.equals(this.clsid, datasource.clsid) &&
         Objects.equals(this.datasourceType, datasource.datasourceType) &&
@@ -293,21 +368,21 @@ public class Datasource  implements Serializable {
         Objects.equals(this.host, datasource.host) &&
         Objects.equals(this.domain, datasource.domain) &&
         Objects.equals(this.user, datasource.user) &&
-        Objects.equals(this.password, datasource.password);
+        Objects.equals(this.password, datasource.password) &&
+        Objects.equals(this.tagBrowsing, datasource.tagBrowsing);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id, description, clsid, datasourceType, progId, host, domain, user, password);
+    return Objects.hash(id, description, clsid, datasourceType, progId, host, domain, user, password, tagBrowsing);
     }
 
 
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Datasource {\n");
+sb.append("{\n");
 
-sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
 sb.append("    description: ").append(toIndentedString(description)).append("\n");
 sb.append("    clsid: ").append(toIndentedString(clsid)).append("\n");
@@ -317,18 +392,22 @@ sb.append("    host: ").append(toIndentedString(host)).append("\n");
 sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
 sb.append("    user: ").append(toIndentedString(user)).append("\n");
 sb.append("    password: ").append(toIndentedString(password)).append("\n");
+sb.append("    tagBrowsing: ").append(toIndentedString(tagBrowsing)).append("\n");
 sb.append("}");
 return sb.toString();
 }
 
-/**
-* Convert the given object to string with each line indented by 4 spaces
-* (except the first line).
-*/
-private String toIndentedString(java.lang.Object o) {
-if (o == null) {
-return "null";
-}
-return o.toString().replace("\n", "\n    ");
-}
+    /**
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
+    private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

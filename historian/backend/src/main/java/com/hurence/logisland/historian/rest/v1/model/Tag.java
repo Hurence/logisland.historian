@@ -14,18 +14,19 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
 
 /**
 * a Tag is an identifier to an OPC value
 */
     @ApiModel(description = "a Tag is an identifier to an OPC value")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-14T17:06:05.558+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-29T22:27:12.655+02:00")
 
-@SolrDocument(solrCoreName = "historian")
+
+@SolrDocument(solrCoreName = "tag")
 public class Tag  implements Serializable {
         @JsonProperty("record_type")
         @Indexed(name = "record_type")
@@ -33,15 +34,15 @@ public class Tag  implements Serializable {
 
         @JsonProperty("id")
         @Indexed(name = "id")
-        private String id = "mySweetUniqueId";
+        private String id = null;
 
-        @JsonProperty("domain")
-        @Indexed(name = "domain")
-        private String domain = null;
+        @JsonProperty("node_id")
+        @Indexed(name = "node_id")
+        private String nodeId = null;
 
-        @JsonProperty("server")
-        @Indexed(name = "server")
-        private String server = null;
+        @JsonProperty("datasource_id")
+        @Indexed(name = "datasource_id")
+        private String datasourceId = null;
 
         @JsonProperty("group")
         @Indexed(name = "group")
@@ -126,6 +127,10 @@ public class Tag  implements Serializable {
         @Indexed(name = "update_rate")
         private Integer updateRate = null;
 
+        @JsonProperty("server_scan_rate")
+        @Indexed(name = "server_scan_rate")
+        private Integer serverScanRate = null;
+
         @JsonProperty("min_numeric_value")
         @Indexed(name = "min_numeric_value")
         private BigDecimal minNumericValue = null;
@@ -141,6 +146,45 @@ public class Tag  implements Serializable {
         @JsonProperty("last_quality")
         @Indexed(name = "last_quality")
         private Integer lastQuality = null;
+
+        @JsonProperty("enabled")
+        @Indexed(name = "enabled")
+        private Boolean enabled = null;
+
+              /**
+   * Gets or Sets pollingMode
+   */
+  public enum PollingModeEnum {
+    POLLING("polling"),
+    
+    SUBSCRIBE("subscribe");
+
+    private String value;
+
+    PollingModeEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static PollingModeEnum fromValue(String text) {
+      for (PollingModeEnum b : PollingModeEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
+        @JsonProperty("polling_mode")
+        @Indexed(name = "polling_mode")
+        private PollingModeEnum pollingMode = PollingModeEnum.POLLING;
 
         public Tag recordType(String recordType) {
         this.recordType = recordType;
@@ -159,8 +203,9 @@ public class Tag  implements Serializable {
     return recordType;
     }
 
-        public void setRecordType(String recordType) {
+        public Tag setRecordType(String recordType) {
         this.recordType = recordType;
+        return this;
         }
 
         public Tag id(String id) {
@@ -180,50 +225,55 @@ public class Tag  implements Serializable {
     return id;
     }
 
-        public void setId(String id) {
+        public Tag setId(String id) {
         this.id = id;
+        return this;
         }
 
-        public Tag domain(String domain) {
-        this.domain = domain;
+        public Tag nodeId(String nodeId) {
+        this.nodeId = nodeId;
         return this;
         }
 
     /**
-        * Get domain
-    * @return domain
+        * Get nodeId
+    * @return nodeId
     **/
-        @JsonProperty("domain")
-    @ApiModelProperty(value = "")
-    
+        @JsonProperty("node_id")
+    @ApiModelProperty(required = true, value = "")
+      @NotNull
 
-  public String getDomain() {
-    return domain;
+
+  public String getNodeId() {
+    return nodeId;
     }
 
-        public void setDomain(String domain) {
-        this.domain = domain;
+        public Tag setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+        return this;
         }
 
-        public Tag server(String server) {
-        this.server = server;
+        public Tag datasourceId(String datasourceId) {
+        this.datasourceId = datasourceId;
         return this;
         }
 
     /**
-        * Get server
-    * @return server
+        * Get datasourceId
+    * @return datasourceId
     **/
-        @JsonProperty("server")
-    @ApiModelProperty(value = "")
-    
+        @JsonProperty("datasource_id")
+    @ApiModelProperty(required = true, value = "")
+      @NotNull
 
-  public String getServer() {
-    return server;
+
+  public String getDatasourceId() {
+    return datasourceId;
     }
 
-        public void setServer(String server) {
-        this.server = server;
+        public Tag setDatasourceId(String datasourceId) {
+        this.datasourceId = datasourceId;
+        return this;
         }
 
         public Tag group(String group) {
@@ -243,8 +293,9 @@ public class Tag  implements Serializable {
     return group;
     }
 
-        public void setGroup(String group) {
+        public Tag setGroup(String group) {
         this.group = group;
+        return this;
         }
 
         public Tag tagName(String tagName) {
@@ -264,8 +315,9 @@ public class Tag  implements Serializable {
     return tagName;
     }
 
-        public void setTagName(String tagName) {
+        public Tag setTagName(String tagName) {
         this.tagName = tagName;
+        return this;
         }
 
         public Tag labels(List<String> labels) {
@@ -293,8 +345,9 @@ public class Tag  implements Serializable {
     return labels;
     }
 
-        public void setLabels(List<String> labels) {
+        public Tag setLabels(List<String> labels) {
         this.labels = labels;
+        return this;
         }
 
         public Tag dataType(DataTypeEnum dataType) {
@@ -315,8 +368,9 @@ public class Tag  implements Serializable {
     return dataType;
     }
 
-        public void setDataType(DataTypeEnum dataType) {
+        public Tag setDataType(DataTypeEnum dataType) {
         this.dataType = dataType;
+        return this;
         }
 
         public Tag description(String description) {
@@ -336,8 +390,9 @@ public class Tag  implements Serializable {
     return description;
     }
 
-        public void setDescription(String description) {
+        public Tag setDescription(String description) {
         this.description = description;
+        return this;
         }
 
         public Tag text(List<String> text) {
@@ -365,8 +420,9 @@ public class Tag  implements Serializable {
     return text;
     }
 
-        public void setText(List<String> text) {
+        public Tag setText(List<String> text) {
         this.text = text;
+        return this;
         }
 
         public Tag creationDate(Long creationDate) {
@@ -386,8 +442,9 @@ public class Tag  implements Serializable {
     return creationDate;
     }
 
-        public void setCreationDate(Long creationDate) {
+        public Tag setCreationDate(Long creationDate) {
         this.creationDate = creationDate;
+        return this;
         }
 
         public Tag lastModificationDate(Long lastModificationDate) {
@@ -407,8 +464,9 @@ public class Tag  implements Serializable {
     return lastModificationDate;
     }
 
-        public void setLastModificationDate(Long lastModificationDate) {
+        public Tag setLastModificationDate(Long lastModificationDate) {
         this.lastModificationDate = lastModificationDate;
+        return this;
         }
 
         public Tag lastPollingDate(Long lastPollingDate) {
@@ -428,8 +486,9 @@ public class Tag  implements Serializable {
     return lastPollingDate;
     }
 
-        public void setLastPollingDate(Long lastPollingDate) {
+        public Tag setLastPollingDate(Long lastPollingDate) {
         this.lastPollingDate = lastPollingDate;
+        return this;
         }
 
         public Tag updateRate(Integer updateRate) {
@@ -442,15 +501,39 @@ public class Tag  implements Serializable {
     * @return updateRate
     **/
         @JsonProperty("update_rate")
-    @ApiModelProperty(value = "polling delay in ms")
-    
+    @ApiModelProperty(required = true, value = "polling delay in ms")
+      @NotNull
+
 
   public Integer getUpdateRate() {
     return updateRate;
     }
 
-        public void setUpdateRate(Integer updateRate) {
+        public Tag setUpdateRate(Integer updateRate) {
         this.updateRate = updateRate;
+        return this;
+        }
+
+        public Tag serverScanRate(Integer serverScanRate) {
+        this.serverScanRate = serverScanRate;
+        return this;
+        }
+
+    /**
+        * scan rate of server in ms
+    * @return serverScanRate
+    **/
+        @JsonProperty("server_scan_rate")
+    @ApiModelProperty(value = "scan rate of server in ms")
+    
+
+  public Integer getServerScanRate() {
+    return serverScanRate;
+    }
+
+        public Tag setServerScanRate(Integer serverScanRate) {
+        this.serverScanRate = serverScanRate;
+        return this;
         }
 
         public Tag minNumericValue(BigDecimal minNumericValue) {
@@ -471,8 +554,9 @@ public class Tag  implements Serializable {
     return minNumericValue;
     }
 
-        public void setMinNumericValue(BigDecimal minNumericValue) {
+        public Tag setMinNumericValue(BigDecimal minNumericValue) {
         this.minNumericValue = minNumericValue;
+        return this;
         }
 
         public Tag maxNumericValue(Double maxNumericValue) {
@@ -492,8 +576,9 @@ public class Tag  implements Serializable {
     return maxNumericValue;
     }
 
-        public void setMaxNumericValue(Double maxNumericValue) {
+        public Tag setMaxNumericValue(Double maxNumericValue) {
         this.maxNumericValue = maxNumericValue;
+        return this;
         }
 
         public Tag lastNumericValue(Double lastNumericValue) {
@@ -513,8 +598,9 @@ public class Tag  implements Serializable {
     return lastNumericValue;
     }
 
-        public void setLastNumericValue(Double lastNumericValue) {
+        public Tag setLastNumericValue(Double lastNumericValue) {
         this.lastNumericValue = lastNumericValue;
+        return this;
         }
 
         public Tag lastQuality(Integer lastQuality) {
@@ -534,8 +620,54 @@ public class Tag  implements Serializable {
     return lastQuality;
     }
 
-        public void setLastQuality(Integer lastQuality) {
+        public Tag setLastQuality(Integer lastQuality) {
         this.lastQuality = lastQuality;
+        return this;
+        }
+
+        public Tag enabled(Boolean enabled) {
+        this.enabled = enabled;
+        return this;
+        }
+
+    /**
+        * polling delay in ms
+    * @return enabled
+    **/
+        @JsonProperty("enabled")
+    @ApiModelProperty(required = true, value = "polling delay in ms")
+      @NotNull
+
+
+  public Boolean isEnabled() {
+    return enabled;
+    }
+
+        public Tag setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+        return this;
+        }
+
+        public Tag pollingMode(PollingModeEnum pollingMode) {
+        this.pollingMode = pollingMode;
+        return this;
+        }
+
+    /**
+        * Get pollingMode
+    * @return pollingMode
+    **/
+        @JsonProperty("polling_mode")
+    @ApiModelProperty(value = "")
+    
+
+  public PollingModeEnum getPollingMode() {
+    return pollingMode;
+    }
+
+        public Tag setPollingMode(PollingModeEnum pollingMode) {
+        this.pollingMode = pollingMode;
+        return this;
         }
 
 
@@ -550,8 +682,8 @@ public class Tag  implements Serializable {
         Tag tag = (Tag) o;
         return Objects.equals(this.recordType, tag.recordType) &&
         Objects.equals(this.id, tag.id) &&
-        Objects.equals(this.domain, tag.domain) &&
-        Objects.equals(this.server, tag.server) &&
+        Objects.equals(this.nodeId, tag.nodeId) &&
+        Objects.equals(this.datasourceId, tag.datasourceId) &&
         Objects.equals(this.group, tag.group) &&
         Objects.equals(this.tagName, tag.tagName) &&
         Objects.equals(this.labels, tag.labels) &&
@@ -562,27 +694,30 @@ public class Tag  implements Serializable {
         Objects.equals(this.lastModificationDate, tag.lastModificationDate) &&
         Objects.equals(this.lastPollingDate, tag.lastPollingDate) &&
         Objects.equals(this.updateRate, tag.updateRate) &&
+        Objects.equals(this.serverScanRate, tag.serverScanRate) &&
         Objects.equals(this.minNumericValue, tag.minNumericValue) &&
         Objects.equals(this.maxNumericValue, tag.maxNumericValue) &&
         Objects.equals(this.lastNumericValue, tag.lastNumericValue) &&
-        Objects.equals(this.lastQuality, tag.lastQuality);
+        Objects.equals(this.lastQuality, tag.lastQuality) &&
+        Objects.equals(this.enabled, tag.enabled) &&
+        Objects.equals(this.pollingMode, tag.pollingMode);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, id, domain, server, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality);
+    return Objects.hash(recordType, id, nodeId, datasourceId, group, tagName, labels, dataType, description, text, creationDate, lastModificationDate, lastPollingDate, updateRate, serverScanRate, minNumericValue, maxNumericValue, lastNumericValue, lastQuality, enabled, pollingMode);
     }
 
 
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Tag {\n");
+sb.append("{\n");
 
 sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
 sb.append("    id: ").append(toIndentedString(id)).append("\n");
-sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
-sb.append("    server: ").append(toIndentedString(server)).append("\n");
+sb.append("    nodeId: ").append(toIndentedString(nodeId)).append("\n");
+sb.append("    datasourceId: ").append(toIndentedString(datasourceId)).append("\n");
 sb.append("    group: ").append(toIndentedString(group)).append("\n");
 sb.append("    tagName: ").append(toIndentedString(tagName)).append("\n");
 sb.append("    labels: ").append(toIndentedString(labels)).append("\n");
@@ -593,22 +728,28 @@ sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\
 sb.append("    lastModificationDate: ").append(toIndentedString(lastModificationDate)).append("\n");
 sb.append("    lastPollingDate: ").append(toIndentedString(lastPollingDate)).append("\n");
 sb.append("    updateRate: ").append(toIndentedString(updateRate)).append("\n");
+sb.append("    serverScanRate: ").append(toIndentedString(serverScanRate)).append("\n");
 sb.append("    minNumericValue: ").append(toIndentedString(minNumericValue)).append("\n");
 sb.append("    maxNumericValue: ").append(toIndentedString(maxNumericValue)).append("\n");
 sb.append("    lastNumericValue: ").append(toIndentedString(lastNumericValue)).append("\n");
 sb.append("    lastQuality: ").append(toIndentedString(lastQuality)).append("\n");
+sb.append("    enabled: ").append(toIndentedString(enabled)).append("\n");
+sb.append("    pollingMode: ").append(toIndentedString(pollingMode)).append("\n");
 sb.append("}");
 return sb.toString();
 }
 
-/**
-* Convert the given object to string with each line indented by 4 spaces
-* (except the first line).
-*/
-private String toIndentedString(java.lang.Object o) {
-if (o == null) {
-return "null";
-}
-return o.toString().replace("\n", "\n    ");
-}
+    /**
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
+    private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

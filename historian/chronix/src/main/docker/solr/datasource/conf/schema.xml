@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<schema name="historian" version="1.5">
+
+    <types>
+        <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="boolean" class="solr.BoolField" omitNorms="true" sortMissingLast="true"/>
+        <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
+        <fieldType name="binary" class="solr.BinaryField"/>
+        <fieldType name="date" class="solr.TrieDateField"  sortMissingLast="true" omitNorms="true"/>
+    </types>
+
+    <fields>
+
+        <field name="_version_" type="long" indexed="true" stored="true"/>
+
+        <!-- Datasource API -->
+        <field name="id" type="string" indexed="true" stored="true" required="true"/>
+        <field name="description" type="string" indexed="true" stored="true" required="false"/>
+        <field name="datasource_type" type="string" indexed="true" stored="true" required="false"/>
+        <field name="prog_id" type="string" indexed="true" stored="true" required="false"/>
+        <field name="domain" type="string" indexed="true" stored="true" required="false"/>
+        <field name="clsid" type="string" indexed="true" stored="true" required="false"/>
+        <field name="host" type="string" indexed="true" stored="true" required="false"/>
+        <field name="user" type="string" indexed="true" stored="true" required="false"/>
+        <field name="password" type="string" indexed="true" stored="true" required="false"/>
+        <field name="tag_browsing" type="string" indexed="true" stored="true" required="false"/>
+
+        <!-- Alert API -->
+        <!--<field name="timestamp" type="long" indexed="true" stored="true" required="false"/>-->
+        <!--<field name="message" type="string" indexed="true" stored="true" required="false"/>-->
+        <!--<field name="severity" type="int" indexed="true" stored="true" required="false"/>-->
+        <!--<field name="tag_id" type="string" indexed="true" stored="true" required="false"/>-->
+
+        <field name="text" type="string" indexed="true" multiValued="true"/>
+
+        <!-- Dynamic field -->
+        <dynamicField name="*_s" type="string" indexed="true" stored="true"/>
+
+
+    </fields>
+
+    <copyField source="domain" dest="text"/>
+    <copyField source="description" dest="text"/>
+    <copyField source="user" dest="text"/>
+    <copyField source="clsid" dest="text"/>
+    <copyField source="host" dest="text"/>
+    <copyField source="prog_id" dest="text"/>
+
+    <uniqueKey>id</uniqueKey>
+    <solrQueryParser defaultOperator="OR"/>
+
+</schema>

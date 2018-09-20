@@ -4,7 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.hurence.logisland.historian.rest.v1.model.Processor;
-import com.hurence.logisland.historian.rest.v1.model.Property;
+import com.hurence.logisland.historian.rest.v1.model.Versioned;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -14,157 +14,75 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
 
 /**
-* a Pipeline is a sequence of Processor wich apply specifi business logic on current tag value (matching query for alerting for example)
+* Tracks stream processing pipeline configuration
 */
-    @ApiModel(description = "a Pipeline is a sequence of Processor wich apply specifi business logic on current tag value (matching query for alerting for example)")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-05-14T17:06:05.558+02:00")
+    @ApiModel(description = "Tracks stream processing pipeline configuration")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-29T22:27:12.655+02:00")
+
 
 @SolrDocument(solrCoreName = "historian")
 public class Pipeline  implements Serializable {
-        @JsonProperty("record_type")
-        @Indexed(name = "record_type")
-        private String recordType = "pipeline";
+        @JsonProperty("lastModified")
+        @Indexed(name = "lastModified")
+        private String lastModified = null;
 
-        @JsonProperty("name")
-        @Indexed(name = "name")
-        private String name = null;
-
-        @JsonProperty("component")
-        @Indexed(name = "component")
-        private String component = null;
-
-        @JsonProperty("documentation")
-        @Indexed(name = "documentation")
-        private String documentation = null;
-
-        @JsonProperty("config")
-        @Indexed(name = "config")
-        private List<Property> config = null;
+        @JsonProperty("modificationReason")
+        @Indexed(name = "modificationReason")
+        private String modificationReason = null;
 
         @JsonProperty("processors")
         @Indexed(name = "processors")
         private List<Processor> processors = null;
 
-        public Pipeline recordType(String recordType) {
-        this.recordType = recordType;
+        public Pipeline lastModified(String lastModified) {
+        this.lastModified = lastModified;
         return this;
         }
 
     /**
-        * Get recordType
-    * @return recordType
+        * the last modified timestamp of this pipeline (used to trigger changes).
+    * @return lastModified
     **/
-        @JsonProperty("record_type")
-    @ApiModelProperty(value = "")
-    
-
-  public String getRecordType() {
-    return recordType;
-    }
-
-        public void setRecordType(String recordType) {
-        this.recordType = recordType;
-        }
-
-        public Pipeline name(String name) {
-        this.name = name;
-        return this;
-        }
-
-    /**
-        * Get name
-    * @return name
-    **/
-        @JsonProperty("name")
-    @ApiModelProperty(required = true, value = "")
+        @JsonProperty("lastModified")
+    @ApiModelProperty(required = true, value = "the last modified timestamp of this pipeline (used to trigger changes).")
       @NotNull
 
 
-  public String getName() {
-    return name;
+  public String getLastModified() {
+    return lastModified;
     }
 
-        public void setName(String name) {
-        this.name = name;
+        public Pipeline setLastModified(String lastModified) {
+        this.lastModified = lastModified;
+        return this;
         }
 
-        public Pipeline component(String component) {
-        this.component = component;
+        public Pipeline modificationReason(String modificationReason) {
+        this.modificationReason = modificationReason;
         return this;
         }
 
     /**
-        * Get component
-    * @return component
+        * Can be used to document latest changeset.
+    * @return modificationReason
     **/
-        @JsonProperty("component")
-    @ApiModelProperty(required = true, value = "")
-      @NotNull
-
-
-  public String getComponent() {
-    return component;
-    }
-
-        public void setComponent(String component) {
-        this.component = component;
-        }
-
-        public Pipeline documentation(String documentation) {
-        this.documentation = documentation;
-        return this;
-        }
-
-    /**
-        * Get documentation
-    * @return documentation
-    **/
-        @JsonProperty("documentation")
-    @ApiModelProperty(value = "")
+        @JsonProperty("modificationReason")
+    @ApiModelProperty(value = "Can be used to document latest changeset.")
     
 
-  public String getDocumentation() {
-    return documentation;
+  public String getModificationReason() {
+    return modificationReason;
     }
 
-        public void setDocumentation(String documentation) {
-        this.documentation = documentation;
-        }
-
-        public Pipeline config(List<Property> config) {
-        this.config = config;
+        public Pipeline setModificationReason(String modificationReason) {
+        this.modificationReason = modificationReason;
         return this;
-        }
-
-            public Pipeline addConfigItem(Property configItem) {
-                if (this.config == null) {
-                this.config = new ArrayList<Property>();
-                }
-            this.config.add(configItem);
-            return this;
-            }
-
-    /**
-        * Get config
-    * @return config
-    **/
-        @JsonProperty("config")
-    @ApiModelProperty(value = "")
-    
-  @Valid
-
-  public List<Property> getConfig() {
-    return config;
-    }
-
-        public void setConfig(List<Property> config) {
-        this.config = config;
         }
 
         public Pipeline processors(List<Processor> processors) {
@@ -193,8 +111,9 @@ public class Pipeline  implements Serializable {
     return processors;
     }
 
-        public void setProcessors(List<Processor> processors) {
+        public Pipeline setProcessors(List<Processor> processors) {
         this.processors = processors;
+        return this;
         }
 
 
@@ -207,43 +126,40 @@ public class Pipeline  implements Serializable {
     return false;
     }
         Pipeline pipeline = (Pipeline) o;
-        return Objects.equals(this.recordType, pipeline.recordType) &&
-        Objects.equals(this.name, pipeline.name) &&
-        Objects.equals(this.component, pipeline.component) &&
-        Objects.equals(this.documentation, pipeline.documentation) &&
-        Objects.equals(this.config, pipeline.config) &&
+        return Objects.equals(this.lastModified, pipeline.lastModified) &&
+        Objects.equals(this.modificationReason, pipeline.modificationReason) &&
         Objects.equals(this.processors, pipeline.processors);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(recordType, name, component, documentation, config, processors);
+    return Objects.hash(lastModified, modificationReason, processors);
     }
 
 
 @Override
 public String toString() {
 StringBuilder sb = new StringBuilder();
-sb.append("class Pipeline {\n");
+sb.append("{\n");
 
-sb.append("    recordType: ").append(toIndentedString(recordType)).append("\n");
-sb.append("    name: ").append(toIndentedString(name)).append("\n");
-sb.append("    component: ").append(toIndentedString(component)).append("\n");
-sb.append("    documentation: ").append(toIndentedString(documentation)).append("\n");
-sb.append("    config: ").append(toIndentedString(config)).append("\n");
+sb.append("    lastModified: ").append(toIndentedString(lastModified)).append("\n");
+sb.append("    modificationReason: ").append(toIndentedString(modificationReason)).append("\n");
 sb.append("    processors: ").append(toIndentedString(processors)).append("\n");
 sb.append("}");
 return sb.toString();
 }
 
-/**
-* Convert the given object to string with each line indented by 4 spaces
-* (except the first line).
-*/
-private String toIndentedString(java.lang.Object o) {
-if (o == null) {
-return "null";
-}
-return o.toString().replace("\n", "\n    ");
-}
+    /**
+    * Convert the given object to string with each line indented by 4 spaces
+    * (except the first line).
+    */
+    private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+        return "null";
+    }
+    if (o instanceof OffsetDateTime) {
+        return ((OffsetDateTime) o).format(DateTimeFormatter.ISO_INSTANT);
+    }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

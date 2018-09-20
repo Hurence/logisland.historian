@@ -16,15 +16,35 @@
  */
 package com.hurence.logisland.historian.service;
 
+import com.hurence.logisland.historian.parsing.QueryParsing;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.rest.v1.model.TreeNode;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
+import com.hurence.logisland.historian.rest.v1.model.operation_report.TagReplaceReport;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.solr.core.query.result.FacetPage;
+import org.springframework.data.solr.core.query.result.FacetPivotFieldEntry;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.swing.text.html.Option;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class TagsApiService {
@@ -34,59 +54,153 @@ public class TagsApiService {
     @Resource
     private SolrTagRepository repository;
 
+    private DataflowsApiService dataflowsApiService;
 
-    public Optional<Tag> deleteTag(String itemId) {
-        logger.info("deleting Tag {}", itemId);
-        Optional<Tag> tagToRemove = repository.findById(itemId);
+    @Autowired
+    public void setDataflowsApiService(DataflowsApiService dataflowsApiService) {
+        this.dataflowsApiService = dataflowsApiService;
+    }
+
+
+    public Optional<Tag> deleteTag(String id) {
+        return this.deleteTagWithoutGeneratingConf(id);
+    }
+
+    /**
+     * delete tags of datasource. Return number of tag deleted.
+     */
+    public long deleteTagsOfDatasource(String datasourceId) {
+        long numberOfTagDeleted = repository.deleteByDatasourceId(datasourceId);
+        logger.info("deleted all {} tags of Datasource {}", numberOfTagDeleted, datasourceId);
+        return numberOfTagDeleted;
+    }
+
+    private Optional<Tag> deleteTagWithoutGeneratingConf(String id) {
+        logger.info("deleting Tag {}", id);
+        Optional<Tag> tagToRemove = repository.findById(id);
         if (tagToRemove.isPresent()) {
             repository.delete(tagToRemove.get());
+//            repository.deleteById(tagToRemove.get().getId_());
         }
         return tagToRemove;
     }
 
-
-    public Optional<Tag> getTag(String itemId) {
-        logger.debug("getting Tag {}", itemId);
-        return repository.findById(itemId);
+    public Optional<Tag> getTag(String id) {
+        logger.debug("getting Tag {}", id);
+        return repository.findById(id);
     }
 
-
-    public Optional<Tag> updateTag(Tag tag) {
-        logger.debug("updating Tag {}", tag.getId());
-        if (repository.existsById(tag.getId())) {
-            return Optional.of(repository.save(tag));
+    private ReplaceReport<Tag> createOrReplaceATag(Tag tag) {
+        logger.debug("create or replace Tag {}", tag.getId());
+        Optional<Tag> tagToReplace = repository.findByNodeIdAndDatasourceId(tag.getNodeId(), tag.getDatasourceId());
+        if (tagToReplace.isPresent()) {
+            Tag savedTag = updateTag(tag, tagToReplace.get().getId());
+            return new TagReplaceReport(savedTag, false);
         } else {
-            logger.error("Tag {} not found, unable to update", tag.getId());
-            return Optional.empty();
+            Tag savedTag = saveTag(tag);
+            return new TagReplaceReport(savedTag, true);
         }
     }
 
-    public Optional<Tag> updateTag(Tag tag, String itemId) {
-        if (!tag.getId().equals(itemId)) {
-            return updateTag(tag.id(itemId));
+    public ReplaceReport<Tag> createOrReplaceATag(Tag tag, String id) {
+        ReplaceReport<Tag> report;
+        if (!tag.getId().equals(id)) {
+            report = createOrReplaceATag(tag.id(id));
         } else {
-            return updateTag(tag);
+            report = createOrReplaceATag(tag);
         }
+        return report;
     }
 
-    public List<Tag> getAllTags(String fq) {
+    public List<Tag> getAllTags(String fq, Optional<Integer> limit,
+                                Optional<String> sortParam) {
         String query = fq;
         if (fq == null || fq.isEmpty())
             query = "*";
-        List<Tag> tags = repository.findByText(query);
-        return tags;
+        Sort sort = Sort.unsorted();
+        if (sortParam.isPresent()) {
+            sort = QueryParsing.parseSortParam(sortParam.get());
+        }
+        Pageable myPage = null;
+        if (limit.isPresent()) {
+            myPage = PageRequest.of(0, limit.get(), sort);
+        }
+        if (myPage == null) {
+            return repository.findByText(query, sort);
+        } else {
+            return repository.findByText(query, myPage);
+        }
     }
 
-    public Optional<Tag> addTagWithId(Tag body, String itemId) {
+    public List<Tag> getAllTagsFromDatasource(String datasourceId) {
+        return repository.findByDatasource(datasourceId);
+    }
 
-        logger.info("Tag already {} exists, delete it first", itemId);
+    public List<Tag> getAllEnabledTagsFromDatasource(String datasourceId) {
+        return repository.findByAllEnabledFromDatasource(datasourceId);
+    }
 
-        if (repository.existsById(itemId)) {
-            body.setId(itemId);
-            return Optional.of(repository.save(body));
-        }
-        return Optional.empty();
+    public List<TreeNode> getTreeTag(int page, int limit) {
+        FacetPage<Tag> facet = repository.findTreeFacetOnDatasourceIdThenGroup(PageRequest.of(page, limit));
+        List<FacetPivotFieldEntry> domainPiv = facet.getPivot("datasource_id,group");
+        return buildTreeNodes(domainPiv);
+    }
 
+    public List<TreeNode> buildTreeNodes(List<FacetPivotFieldEntry> facetPivotFields) {
+        return facetPivotFields.stream()
+                .map(this::buildTreeNode)
+                .collect(Collectors.toList());
+    }
+
+    public TreeNode buildTreeNode(FacetPivotFieldEntry facetPivot) {
+        TreeNode node = new TreeNode();
+        node.setValue(facetPivot.getValue());
+        node.setTotalChildNumber(facetPivot.getValueCount());
+        List<TreeNode> children = buildTreeNodes(facetPivot.getPivot());
+        node.setChildren(children);
+        return node;
+    }
+
+    /**
+     *
+     * @param tags
+     * @return true if all items were created. If at least one tag was updated (existed before), it returns false.
+     */
+    public List<Tag> SaveOrUpdateMany(List<Tag> tags) {
+        List<Tag> updatedTags = tags.stream().map(tag -> createOrReplaceATag(tag).getItem())
+                .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty())
+                .collect(Collectors.toList());
+        return updatedTags;
+    }
+
+    public List<Tag> deleteManyTag(List<String> tagIds) {
+        List<Tag> supressedTags = tagIds.stream().map(id -> this.deleteTagWithoutGeneratingConf(id))
+                .flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty())
+                .collect(Collectors.toList());
+        return supressedTags;
+    }
+
+    /**
+     *
+     * @param tag
+     * @return save tag generating a random id and setting LastModificationDate
+     */
+    public Tag saveTag(Tag tag) {
+        tag.setId(UUID.randomUUID().toString());
+        tag.setLastModificationDate(new Date().getTime());
+        return repository.save(tag);
+    }
+
+    /**
+     *
+     * @param tag
+     * @param id
+     * @return update tag with specified id with tag object setting LastModificationDate
+     */
+    public Tag updateTag(Tag tag, String id) {
+        tag.setId(id);
+        tag.setLastModificationDate(new Date().getTime());
+        return repository.save(tag);
     }
 
 }

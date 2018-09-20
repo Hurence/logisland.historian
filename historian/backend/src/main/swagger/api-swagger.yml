@@ -14,7 +14,7 @@ schemes:
 paths:
 
 
-  /admin:
+  /admin/generate/tags:
      post:
        tags:
         - tag
@@ -32,6 +32,12 @@ paths:
            required: false
            type: boolean
            default: false
+         - name: clean
+           in: query
+           description: do we delete previous entries ?
+           required: false
+           type: boolean
+           default: false
        responses:
          '200':
            description: Sample tag list
@@ -39,6 +45,38 @@ paths:
              type: array
              items:
                $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+  /admin/generate/measures:
+     post:
+       tags:
+        - tag
+        - measures
+        - admin
+       summary: create new measures for all tags
+       description: create new measures for all tags
+       operationId: generateMeasuresForTags
+       produces:
+          - application/json
+       parameters:
+         - name: clean
+           in: query
+           description: do we delete previous entries ?
+           required: false
+           type: boolean
+           default: false
+         - name: generator
+           in: formData
+           description: json config file for genereting data (export will not be used instead it will generate data for all tags)
+           required: true
+           type: file
+       responses:
+         '200':
+           description: BulkLoad result
+           schema:
+             $ref: '#/definitions/BulkLoad'
          default:
            description: unexpected error
            schema:
@@ -74,7 +112,6 @@ paths:
   /datasources/tags:
      get:
        tags:
-        - tag
         - datasource
        operationId: getAllDatasourcesTags
        summary:  get all tags from datasources
@@ -97,9 +134,9 @@ paths:
        tags:
         - tag
         - datasource
-       operationId: getAllTagsFromDatasource
-       summary:  get all tags from a given datasource
-       description: retrieve all tags through this datasource
+       operationId: browseTagsFromDatasource
+       summary:  Browse tags from a given datasource
+       description: Browsetags through this datasource
        produces:
           - application/json
        parameters:
@@ -108,9 +145,20 @@ paths:
            description: id of the Datasource to return
            required: true
            type: string
+         - name: root
+           in: query
+           description: The root tag to start browsing from
+           required: false
+           type: string
+         - name: depth
+           in: query
+           description: The depth of the visit
+           required: false
+           type: integer
+           default: 1
        responses:
          '200':
-           description: Tag list
+           description: The list of browsed tags
            schema:
              type: array
              items:
@@ -120,117 +168,117 @@ paths:
            schema:
              $ref: '#/definitions/Error'
 
-  /datasources/{datasourceId}:
-     get:
+  /datasources/{datasourceId}/tags/{tagId}:
+    get:
        tags:
-         - datasource
-       summary: get Datasource
-       description: get the corresponding Datasource
-       operationId: getDatasource
-       produces:
-         - application/json
-       parameters:
-         - name: datasourceId
-           in: path
-           description: id of the Datasource to return
-           required: true
-           type: string
-       responses:
-         '200':
-           description: Datasource found
-           schema:
-             $ref: '#/definitions/Datasource'
-         '404':
-            description: Datasource resource not found
-         default:
-           description: unexpected error
-           schema:
-             $ref: '#/definitions/Error'
-     delete:
-       tags:
-         - datasource
-       summary: delete Datasource
-       description: remove the corresponding Datasource
-       operationId: deleteDatasource
-       parameters:
-         - name: datasourceId
-           in: path
-           description: id of the Datasource to be deleted
-           required: true
-           type: string
-       responses:
-         '404':
-           description: Datasource resource not found
-         '400':
-           description: Invalid ID supplied
-         '200':
-           description: Datasource successfully removed
-           schema:
-             $ref: '#/definitions/Datasource'
-         default:
-           description: unexpected error
-           schema:
-             $ref: '#/definitions/Error'
-     put:
-       tags:
+        - tag
         - datasource
-       summary:  update Datasource
-       description: update an existing Datasource
-       operationId: updateDatasource
+       operationId: fetchTagMetadataFromDatasource
+       summary:  fetch tag properties from a datasource
+       description: fetch tag properties from a datasource
+       produces:
+          - application/json
        parameters:
          - name: datasourceId
            in: path
-           description: datasourceId to be updated
+           description: id of the Datasource to connect to
            required: true
            type: string
-         - name: datasource
-           in: body
-           description: new Datasource definition
+         - name: tagId
+           in: path
+           description: id of the tag to inspect
            required: true
-           schema:
-             $ref: '#/definitions/Datasource'
+           type: string
        responses:
-        '404':
-          description: Datasource resource not found
-        '400':
-          description: Invalid ID supplied
-        '200':
-         description: Datasource successfuly updated
+         '200':
+           description: Tag information
+           schema:
+            $ref: '#/definitions/Tag'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+  /datasources/{datasourceId}:
+    get:
+     tags:
+       - datasource
+     summary: get Datasource
+     description: get the corresponding Datasource
+     operationId: getDatasource
+     produces:
+       - application/json
+     parameters:
+       - name: datasourceId
+         in: path
+         description: id of the Datasource to return
+         required: true
+         type: string
+     responses:
+       '200':
+         description: Datasource found
          schema:
            $ref: '#/definitions/Datasource'
-     post:
-       tags:
-        - datasource
-       summary:  create new Datasource
-       description:  store a new Datasource
-       operationId: addDatasourceWithId
-       parameters:
-         - name: body
-           in: body
-           description: Datasource resource to add
-           required: true
-           schema:
-             $ref: '#/definitions/Datasource'
-         - name: datasourceId
-           in: path
-           description: datasourceId to
-           required: true
-           type: string
-       responses:
-         '400':
-           description: Invalid ID supplied
-         '200':
-           description: Datasource successfuly created
-           schema:
-             $ref: '#/definitions/Datasource'
-         default:
-           description: unexpected error
-           schema:
-             $ref: '#/definitions/Error'
-
-
-
-
+       '404':
+          description: Datasource resource not found
+       default:
+         description: unexpected error
+         schema:
+           $ref: '#/definitions/Error'
+    delete:
+     tags:
+       - datasource
+     summary: delete Datasource
+     description: remove the corresponding Datasource
+     operationId: deleteDatasource
+     parameters:
+       - name: datasourceId
+         in: path
+         description: id of the Datasource to be deleted
+         required: true
+         type: string
+     responses:
+       '404':
+         description: Datasource resource not found
+       '400':
+         description: Invalid ID supplied
+       '200':
+         description: Datasource successfully removed
+         schema:
+           $ref: '#/definitions/Datasource'
+       default:
+         description: unexpected error
+         schema:
+           $ref: '#/definitions/Error'
+    put:
+     tags:
+      - datasource
+     summary:  create or replace a Datasource
+     description: create or replace a Datasource
+     operationId: createOrReplaceADatasource
+     parameters:
+       - name: datasourceId
+         in: path
+         description: datasourceId to be added/replaced
+         required: true
+         type: string
+       - name: datasource
+         in: body
+         description: Datasource definition
+         required: true
+         schema:
+           $ref: '#/definitions/Datasource'
+     responses:
+      '400':
+        description: Invalid ID supplied
+      '201':
+        description: Datasource successfuly created
+        schema:
+          $ref: '#/definitions/Datasource'
+      '200':
+       description: Datasource successfuly replaced
+       schema:
+         $ref: '#/definitions/Datasource'
 
    # Tags API
   /tags:
@@ -242,6 +290,17 @@ paths:
         - name: fq
           in: query
           description: filter query (lucene syntax like fq="labels:opc AND datasources:win32")
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: max number of elements to return
+          required: false
+          type: integer
+          format: int32
+        - name: sort
+          in: query
+          description: sort query <field name>+<direction>[,<field name>+<direction>] (syntax like sort=last_modification_date desc )
           required: false
           type: string
       summary:  get all saved tags
@@ -259,7 +318,7 @@ paths:
          description: unexpected error
          schema:
            $ref: '#/definitions/Error'
-  /tags/{itemId}:
+  /tags/{tagId}:
      get:
        tags:
          - tag
@@ -269,7 +328,7 @@ paths:
        produces:
          - application/json
        parameters:
-         - name: itemId
+         - name: tagId
            in: path
            description: id of the tag to return
            required: true
@@ -292,7 +351,7 @@ paths:
        description: remove the corresponding Tag
        operationId: deleteTag
        parameters:
-         - name: itemId
+         - name: tagId
            in: path
            description: id of the tag to be deleted
            required: true
@@ -313,60 +372,34 @@ paths:
      put:
        tags:
         - tag
-       summary:  update tag
-       description: update an existing tag
-       operationId: updateTag
+       summary: create or replace a tag
+       description: create or replace a tag
+       operationId: createOrReplaceATag
        parameters:
-         - name: itemId
+         - name: tagId
            in: path
-           description: itemId to be updated
+           description: tagId to be created/replaced
            required: true
            type: string
          - name: tag
            in: body
-           description: new Tag definition
+           description: Tag definition
            required: true
            schema:
              $ref: '#/definitions/Tag'
        responses:
-        '404':
-          description: Tag resource not found
         '400':
           description: Invalid ID supplied
+        '201':
+          description: Tag successfuly created
+          schema:
+            $ref: '#/definitions/Tag'
         '200':
-         description: Tag successfuly updated
-         schema:
-           $ref: '#/definitions/Tag'
-     post:
-       tags:
-        - tag
-       summary:  create new tag
-       description:  store a new tag
-       operationId: addTagWithId
-       parameters:
-         - name: body
-           in: body
-           description: Tag resource to add
-           required: true
-           schema:
-             $ref: '#/definitions/Tag'
-         - name: itemId
-           in: path
-           description: itemId to
-           required: true
-           type: string
-       responses:
-         '400':
-           description: Invalid ID supplied
-         '200':
-           description: Tag successfuly created
-           schema:
-             $ref: '#/definitions/Tag'
-         default:
-           description: unexpected error
-           schema:
-             $ref: '#/definitions/Error'
-  /tags/{itemId}/measures:
+          description: Tag successfuly replaced
+          schema:
+            $ref: '#/definitions/Tag'
+
+  /tags/{tagId}/measures:
      get:
        tags:
          - tag
@@ -377,7 +410,7 @@ paths:
        produces:
          - application/json
        parameters:
-         - name: itemId
+         - name: tagId
            in: path
            description: id of the tag
            required: true
@@ -435,7 +468,7 @@ paths:
            schema:
              $ref: '#/definitions/Error'
 
-  /tags/{itemId}/stats:
+  /tags/{tagId}/stats:
      get:
        tags:
          - tag
@@ -446,7 +479,7 @@ paths:
        produces:
          - application/json
        parameters:
-         - name: itemId
+         - name: tagId
            in: path
            description: id of the tag
            required: true
@@ -462,6 +495,100 @@ paths:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
+  /tags/batch:
+    post:
+      tags:
+       - tag
+      summary: create or update many tags
+      description: create or update the given tags
+      operationId: addManyTags
+      produces:
+        - application/json
+      parameters:
+        - name: tags
+          in: body
+          schema:
+            type: array
+            items:
+             $ref: '#/definitions/Tag'
+          description: tags to create or update.
+          required: true
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+       - tag
+      summary: delete tags
+      description: delete the corresponding tags
+      operationId: deleteManyTags
+      produces:
+        - application/json
+      parameters:
+        - name: tagIds
+          in: body
+          schema:
+            type: array
+            items:
+             type: string
+          description: id of the tags to be deleted.
+          required: true
+      responses:
+        '200':
+          description: Tags successfully removed or not found.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /tags/tree:
+       get:
+         tags:
+           - tag
+         summary: get tag tree by fields
+         description: get tag tree by fields for each value of chosen fields
+         operationId: getTreeTag
+         produces:
+           - application/json
+         parameters:
+#           - name: fields
+#             in: query
+#             description: the chosen fields of Tag to built the tre with
+#             required: false
+#             type: array
+#             items:
+#              type: string
+           - name: limit
+             in: query
+             description: maximum number of element to retrieve in a treenode.
+             required: false
+             type: integer
+             format: int32
+             default: 100
+         responses:
+           '200':
+             description: Tree of tag fields
+             schema:
+              type: array
+              items:
+                $ref: '#/definitions/TreeNode'
+           '404':
+              description: Tree of tag could not be build
+           default:
+             description: unexpected error
+             schema:
+               $ref: '#/definitions/Error'
   /tags/measures:
      post:
        tags:
@@ -564,6 +691,164 @@ paths:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
+
+  # Selection API
+  /selections:
+      get:
+        tags:
+          - selection
+        operationId: getAllUserSelection
+        summary:  get all slections that this user has access to
+        description: retrieve all slections that user has access to
+        produces:
+          - application/json
+        responses:
+          '200':
+             description: Selection list
+             schema:
+               type: array
+               items:
+                 $ref: '#/definitions/Selection'
+          default:
+             description: unexpected error
+             schema:
+               $ref: '#/definitions/Error'
+  /selections/{selectionName}:
+      get:
+       tags:
+         - selection
+       summary: get Selection
+       description: get the corresponding Selection
+       operationId: getSelection
+       produces:
+         - application/json
+       parameters:
+         - name: selectionName
+           in: path
+           description: id of the Selection to return
+           required: true
+           type: string
+       responses:
+         '200':
+           description: Selection found
+           schema:
+             $ref: '#/definitions/Selection'
+         '404':
+            description: Selection resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+      delete:
+       tags:
+         - selection
+       summary: delete Selection
+       description: remove the corresponding Selection
+       operationId: deleteSelection
+       parameters:
+         - name: selectionName
+           in: path
+           description: id of the Selection to be deleted
+           required: true
+           type: string
+       responses:
+         '404':
+           description: Selection resource not found
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Selection successfully removed
+           schema:
+             $ref: '#/definitions/Selection'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+      put:
+       tags:
+        - selection
+       summary:  update Selection
+       description: update an existing Selection
+       operationId: updateSelection
+       parameters:
+         - name: selectionName
+           in: path
+           description: selectionName to be updated
+           required: true
+           type: string
+         - name: body
+           in: body
+           description: new Selection definition
+           required: true
+           schema:
+             $ref: '#/definitions/Selection'
+       responses:
+        '404':
+          description: Selection resource not found
+        '400':
+          description: Invalid ID supplied
+        '200':
+         description: Selection successfuly updated
+         schema:
+           $ref: '#/definitions/Selection'
+      post:
+       tags:
+        - selection
+       summary:  create new Selection
+       description:  store a new Selection
+       operationId: addSelectionWithId
+       parameters:
+         - name: body
+           in: body
+           description: Selection resource to add
+           required: true
+           schema:
+             $ref: '#/definitions/Selection'
+         - name: selectionName
+           in: path
+           description: selectionName to create
+           required: true
+           type: string
+       responses:
+         '400':
+           description: Invalid ID supplied
+         '200':
+           description: Selection successfuly created
+           schema:
+             $ref: '#/definitions/Selection'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
+
+
+  /selections/{selectionName}/tags:
+       get:
+         tags:
+          - selection
+          - tag
+         operationId: getAllTagsFromSelection
+         summary:  get all tags from a selection
+         description: retrieve all tags through this selection
+         produces:
+            - application/json
+         parameters:
+           - name: selectionName
+             in: path
+             description: id of the selection
+             required: true
+             type: string
+         responses:
+           '200':
+             description: Tag list
+             schema:
+               type: array
+               items:
+                 $ref: '#/definitions/Tag'
+           default:
+             description: unexpected error
+             schema:
+               $ref: '#/definitions/Error'
 
   /metrics:
     get:
@@ -797,7 +1082,174 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /dataflows/{dataflowName}:
+    parameters:
+      - name: dataflowName
+        in: path
+        type: string
+        required: true
+        description: the dataflow name (aka the logisland job name)
+    get:
+      tags:
+       - dataflow
+      operationId: pollDataflowConfiguration
+      summary:  Retrieves the configuration for a specified dataflow
+      description: >-
+        A dataflow is a set of services and streams allowing a data flowing from one or more sources, being transformed and reach one or more destinations (sinks).
+        Logisland will call this endpoint to know which configuration should be run.
+         This endpoint also supports HTTP caching (Last-Updated, If-Modified-Since) as per RFC 7232, section 3.3
+      parameters:
+        - name: If-Modified-Since
+          in: header
+          type: string
+          description: Timestamp of last response
+          required: false
 
+      responses:
+        "200":
+          description: >-
+            Return the dataflow configuration.
+            On logisland side, the following will happen:
+            - At dataflow level:
+              - Fully reconfigure a dataflow (stop and then start) if nothing is running (initial state) or if lastUpdated is fresher than the one of the already running dataflow.
+                In this case be aware that old stream and services will be destroyed and
+                new ones will be created.
+              - Do nothing otherwise (keep running the active dataflow)
+            - At pipeline level:
+              - The processor chain will be fully reconfigured if and only if the pipeline lastUpdated is fresher than the lastUpdated known by the system.
+              In any case the stream is never stopped.
+          headers:
+            Last-Updated:
+              type: string
+              description: Should be used for subsequent requests as If-Modified-Since request header.
+          schema:
+            $ref: '#/definitions/DataFlow'
+          examples:
+            A single stream dataflow:
+              lastModified: '1983-06-04T10:00.000Z'
+              modificationReason: Index Apache Logs again
+              services:
+              - component: com.hurence.logisland.service.elasticsearch.Elasticsearch_5_4_0_ClientService
+                documentation: elasticsearch service to sink records
+                name: elasticsearch_service
+                config:
+                - key: hosts
+                  value: eshost:9300
+                - key: cluster.name
+                  value: escluster
+              streams:
+              - name: kafka_in
+                component: com.hurence.logisland.stream.spark.KafkaRecordStreamParallelProcessing
+                config:
+                - key: kafka.input.topics
+                  value: logisland_raw
+                - key: kafka.output.topics
+                  value: logisland_events
+                - key: kafka.error.topics
+                  value: logisland_errors
+                - key: kafka.input.topics.serializer
+                  value: none
+                - key: kafka.output.topics.serializer
+                  value: com.hurence.logisland.serializer.KryoSerializer
+                - key: kafka.error.topics.serializer
+                  value: com.hurence.logisland.serializer.JsonSerializer
+                - key: kafka.metadata.broker.list
+                  value: sandbox:9092
+                - key: kafka.zookeeper.quorum
+                  value: sandbox:2181
+                - key: kafka.topic.autoCreate
+                  value: 'true'
+                - key: kafka.topic.default.partitions
+                  value: '4'
+                - key: kafka.topic.default.replicationFactor
+                  value: '1'
+                  pipeline:
+                    lastModified: '1983-06-04T10:00.000Z'
+                    modificationReason: Initial configuration
+                    processors:
+                    - component: com.hurence.logisland.processor.SplitText
+                      name: apache_parser
+                      documentation: parse apache logs with a regexp
+                      config:
+                      - key: record.type
+                        value: apache_log
+                      - key: value.regex
+                        value: (\S+)\s+(\S+)\s+(\S+)\s+\[([\w:\/]+\s[+\-]\d{4})\]\s+"(\S+)\s+(\S+)\s*(\S*)"\s+(\S+)\s+(\S+)
+                      - key: value.fields
+                        value: src_ip,identd,user,record_time,http_method,http_query,http_version,http_status,bytes_out
+                    - component: com.hurence.logisland.processor.elasticsearch.BulkAddElasticsearch
+                      documentation: a processor that indexes processed events in elasticsearch
+                      name: es_publisher
+                      config:
+                      - key: elasticsearch.client.service
+                        value: elasticsearch_service
+                      - key: default.index
+                        value: logisland
+                      - key: default.type
+                        value: event
+                      - key: timebased.index
+                        value: yesterday
+                      - key: es.index.field
+                        value: search_index
+                      - key: es.type.field
+                        value: record_type
+
+        "304":
+          description: |
+            Nothing has been modified since the last call.
+            In this case the body content will be completely ignored
+            (hence the server can answer with an empty body to save network and resources).
+        "404":
+          description: Not found (the server probably does not handle this dataflow)
+        default :
+          description: Unexpected error
+    post:
+      tags:
+       - dataflow
+      operationId: notifyDataflowConfiguration
+      summary: Push the configuration of running dataflows.
+      description: >-
+        In order to ensure business continuity, Logisland will contact the third party application in order to push a snapshot of the current configuration.
+        The endpoint will be called:
+        - On a regular basis (according to logisland configuration).
+        - Each time the a dataflow or a pipeline configuration change has been applied.
+        This service can be seen as well as a liveness ping.
+      parameters:
+        - in: body
+          name: dataflow
+          required: true
+          schema:
+            $ref: '#/definitions/DataFlow'
+      responses:
+        default :
+          description: |
+            The server should return HTTP 200 OK.
+            By the way, the response is ignored by Logisland since the operation
+            has a *fire and forget* nature.
+  /dataflows/{dataflowName}/auto-update:
+    parameters:
+      - name: dataflowName
+        in: path
+        type: string
+        required: true
+        description: the dataflow name (aka the logisland job name)
+    post:
+      tags:
+       - dataflow
+      summary:  generate a new config for dataflow if handled
+      description: generate a new config for dataflow if handled
+      operationId: updateDataflowConfiguration
+      responses:
+        "404":
+          description: Dataflow not found
+        "200":
+          description: Dataflow successfuly updated
+          schema:
+            $ref: '#/definitions/DataFlow'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
 
 definitions:
 
@@ -847,9 +1299,6 @@ definitions:
       - id
       - host
     properties:
-      record_type:
-        type: string
-        default: 'datasource'
       id:
         type: string
       description:
@@ -858,6 +1307,11 @@ definitions:
         type: string
       datasource_type:
         type: string
+        enum:
+          - 'OPC-DA'
+          - 'OPC-UA'
+          - 'UNKNOWN' # Needed so that bin/codegen.sh generate enum as OPC_DA/OPC_UA instead of DA/UA....
+        default: 'OPC-UA'
       prog_id:
         type: string
       host:
@@ -868,25 +1322,81 @@ definitions:
         type: string
       password:
         type: string
+      tag_browsing:
+        type: string
+        enum:
+          - 'automatic'
+          - 'manual'
+        default: 'automatic'
 
+  Selection:
+    type: object
+    description: a Selection is a selection of tags.
+    required:
+      - name
+      - tagIds
+    properties:
+      name:
+        type: string
+      description:
+        description: description for this selection of tags
+        type: string
+      owner:
+        type: string
+      permissions:
+        $ref: '#/definitions/Permissions'
+      tagIds:
+        description: list of tags id in selection
+        type: array
+        items:
+          type: string
+
+  PrivateSelection:
+    allOf: # Combines the Selection and the inline model
+      - $ref: '#/definitions/Selection'
+      - type: object
+        description: a Selection is a selection of tags.
+        required:
+          - id
+          - owner
+        properties:
+          id:
+            description: concatenation of owner with name for example
+            type: string
+
+  Permissions:
+    type: object
+    description: a Permissions can allow to share something with others. It describes permission for one item.
+    properties:
+      ownerSharing:
+        description: list of users name whose allowed.
+        type: array
+        items:
+          type: string
+      roleSharing:
+        description: list of roles whose allowed.
+        type: array
+        items:
+          type: string
 
   Tag:
     type: object
     description: a Tag is an identifier to an OPC value
     required:
-      - item_name
+      - node_id
       - datasource_id
       - data_type
+      - enabled
+      - update_rate
     properties:
       record_type:
         type: string
         default: 'tag'
       id:
         type: string
-        default: 'mySweetUniqueId'
-      domain:
+      node_id:
         type: string
-      server:
+      datasource_id:
         type: string
       group:
         type: string
@@ -931,7 +1441,9 @@ definitions:
         format: int64
       update_rate:
         description: polling delay in ms
-        default: 1000
+        type: integer
+      server_scan_rate:
+        description: scan rate of server in ms
         type: integer
       min_numeric_value:
         type: number
@@ -944,6 +1456,15 @@ definitions:
         format: double
       last_quality:
         type: integer
+      enabled:
+        description: polling delay in ms
+        type: boolean
+      polling_mode:
+        type: string
+        enum:
+          - 'polling'
+          - 'subscribe'
+        default: 'polling'
 
   Measures:
     type: object
@@ -993,50 +1514,6 @@ definitions:
         type: number
         format: double
 
-
-  Pipeline:
-    type: object
-    description: a Pipeline is a sequence of Processor wich apply specifi business logic on current tag value (matching query for alerting for example)
-    required:
-      - component
-      - name
-    properties:
-      record_type:
-        type: string
-        default: 'pipeline'
-      name:
-        type: string
-      component:
-        type: string
-      documentation:
-        type: string
-      config:
-        type: array
-        items:
-          $ref: '#/definitions/Property'
-      processors:
-        type: array
-        items:
-          $ref: '#/definitions/Processor'
-
-  Processor:
-    type: object
-    required:
-      - component
-      - config
-      - name
-    properties:
-      name:
-        type: string
-      component:
-        type: string
-      documentation:
-        type: string
-      config:
-        type: array
-        items:
-          $ref: '#/definitions/Property'
-
   Property:
     type: object
     required:
@@ -1051,6 +1528,90 @@ definitions:
       value:
         type: string
 
+  Component:
+    type: object
+    required:
+      - component
+      - name
+    properties:
+      name:
+        type: string
+      component:
+        type: string
+      documentation:
+        type: string
+      config:
+        type: array
+        items:
+          $ref: '#/definitions/Property'
+
+  Service:
+    type: object
+    description: A logisland 'controller service'.
+    allOf:
+      - $ref: '#/definitions/Component'
+
+  Processor:
+      type: object
+      description: A logisland 'processor'.
+      allOf:
+        - $ref: '#/definitions/Component'
+
+  Versioned:
+      type: object
+      description: a versioned component
+      properties:
+        lastModified:
+          type: string
+          description: the last modified timestamp of this pipeline (used to trigger changes).
+        modificationReason:
+          type: string
+          description: Can be used to document latest changeset.
+      required:
+        - lastModified
+
+  Pipeline:
+    type: object
+    description: Tracks stream processing pipeline configuration
+    allOf:
+      - $ref: '#/definitions/Versioned'
+      - properties:
+          processors:
+            type: array
+            items:
+              $ref: '#/definitions/Processor'
+
+  Stream:
+    type: object
+    allOf:
+      - $ref: '#/definitions/Component'
+      - properties:
+          pipeline:
+            $ref: '#/definitions/Pipeline'
+    required:
+      - pipeline
+
+  DataFlow:
+    type: object
+    description: A streaming pipeline.
+    allOf:
+      - $ref: "#/definitions/Versioned"
+      - properties:
+          id:
+            type: string
+            description: The id of the dataflow.
+            writeOnly: true
+          services:
+            type: array
+            description: The service controllers.
+            items:
+              $ref: '#/definitions/Service'
+          streams:
+            type: array
+            description: The engine properties.
+            items:
+              $ref: '#/definitions/Stream'
+
   Error:
     required:
       - code
@@ -1061,3 +1622,21 @@ definitions:
         format: int32
       message:
         type: string
+
+  TreeNode:
+      type: object
+      required:
+        - value
+        - totalChildNumber
+        - children
+      properties:
+        value:
+          type: string
+        totalChildNumber:
+          type: integer
+          format: int64
+        children:
+          type: array
+          items:
+            $ref: '#/definitions/TreeNode'
+
