@@ -157,7 +157,9 @@ export interface IAxes {
     scaleLabel?: any; // Scale title configuration
     ticks?: ITicks | ICategoryScaleTicks | ILinearScaleTicks | ILogarithmicScaleTicks; // Tick configuration
     labels?: string[] | number[];
-    // stacked: boolean, Seems to not be in axes doc.... strange as it works
+    stacked?: boolean; // TODO verify if not particular to y axes for example !!!!!!!
+    // Seems to not be in axes doc.... strange as it works
+    display?: boolean;
 }
 
 export interface ITimeAxes extends IAxes {
