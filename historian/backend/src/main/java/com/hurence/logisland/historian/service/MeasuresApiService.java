@@ -23,6 +23,7 @@ import com.hurence.logisland.chronix.importer.csv.Pair;
 import com.hurence.logisland.historian.generator.TSimulusWrapper;
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Measures;
+import com.hurence.logisland.historian.rest.v1.model.Tag;
 import de.qaware.chronix.ChronixClient;
 import de.qaware.chronix.converter.MetricTimeSeriesConverter;
 import de.qaware.chronix.solr.client.ChronixSolrStorage;
