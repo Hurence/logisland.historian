@@ -170,8 +170,8 @@ export interface ITimeAxes extends IAxes {
 }
 
 export interface ILineChartScale {
-    xAxes?: IAxes[] | ITimeAxes[];
-    yAxes?: IAxes[] | ITimeAxes[];
+    xAxes?: IAxes[];
+    yAxes?: IAxes[];
 }
 
 export interface ILineChartOption {

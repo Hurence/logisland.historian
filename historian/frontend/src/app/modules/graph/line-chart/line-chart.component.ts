@@ -166,41 +166,32 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
    */
   updateGraphData() {
     console.log('UPDATE GRAPH DATA');
-    this.data.datasets = [];
-    const newDatasets: ILineChartDataset[] = [];
-    const measures: Observable<ILineChartDataset>[] = this.tags.map(tag => {
-      const request = this.buildTagMeasureRequest(tag);
-      return this.measuresService.get(request).pipe(
-          map(m => {
-            return this.convertMeasureToDataset(m);
-          })
-      );
-    });
-    const firstMeasures: Observable<ILineChartDataset> = measures.shift();
-    if (firstMeasures) {
-      if (this.measuresRefreshSubscription && !this.measuresRefreshSubscription.closed) {
-        this.measuresRefreshSubscription.unsubscribe();
-      }
-      this.measuresRefreshSubscription = measures.reduce(
-        (r, v) => {
-          return merge(r, v);
-        },
-        firstMeasures
-      ).subscribe(
-        dataset => {
-          if (dataset) newDatasets.push(dataset);
-        },
-        error => {},
-        () => {
-          console.log('complete updateGraphData', newDatasets);
-          this.redrawGraph(newDatasets);
-        }
-      );
+    if (this.measuresRefreshSubscription && !this.measuresRefreshSubscription.closed) {
+      this.measuresRefreshSubscription.unsubscribe();
     }
+    const requestss = this.tags.map(tag => {
+      return this.buildTagMeasureRequest(tag);
+    });
+    this.measuresRefreshSubscription = this.measuresService.getMany(requestss).subscribe(
+      measures => {
+        console.log('found measures', measures.length);
+        const datasets: ILineChartDataset[] = measures.map(m => {
+          return this.convertMeasureToDataset(m);
+        });
+        this.redrawGraph(datasets);
+      },
+      error => {
+        console.log('error requesting data', error);
+        this.redrawGraph([]);
+      }
+    );
   }
 
   redrawGraph(newDatasets: ILineChartDataset[]) {
     this.data.datasets = newDatasets;
+    this.options.scales.yAxes.forEach(axe => {
+      axe.display = false;
+    });
     newDatasets.forEach((dataset, index) => {
       const axe: IAxes = this.findAxeToAssign(index, this.options.scales.yAxes);
       axe.display = true;
