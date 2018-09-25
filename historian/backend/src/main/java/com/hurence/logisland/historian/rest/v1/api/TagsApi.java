@@ -9,6 +9,7 @@ import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Error;
 import java.util.List;
 import com.hurence.logisland.historian.rest.v1.model.Measures;
+import com.hurence.logisland.historian.rest.v1.model.MeasuresRequest;
 import org.springframework.core.io.Resource;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.rest.v1.model.TreeNode;
@@ -28,7 +29,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-08-29T22:27:12.655+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-25T12:56:06.238+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -104,6 +105,17 @@ import java.util.List;
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
         ResponseEntity<Measures> getTagMeasures(@ApiParam(value = "id of the tag",required=true) @PathVariable("tagId") String tagId,@ApiParam(value = "date de début (borne inf) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "start", required = false) String start,@ApiParam(value = "date de fin (borne sup) peut-être exprimée sous les formats suivants :   timestamp : 4578965   date-time : 2015-11-25T12:06:57.330Z   relatif   : NOW-30DAYS ") @Valid @RequestParam(value = "end", required = false) String end,@ApiParam(value = "Multiple analyses, aggregations, and transformations are allowed per query. If so, Chronix will first execute the transformations in the order they occur. Then it executes the analyses and aggregations on the result of the chained transformations. For example the query:    max;min;trend;movavg:10,minutes;scale:4  is executed as follows:    Calculate the moving average   Scale the result of the moving average by 4   Calculate the max, min, and the trend based on the prior result. ") @Valid @RequestParam(value = "functions", required = false) String functions,@ApiParam(value = "will retrieve only function values, no data points", defaultValue = "false") @Valid @RequestParam(value = "no_values", required = false, defaultValue="false") Boolean noValues);
+
+
+            @ApiOperation(value = "get specified tag measures", nickname = "getTagMeasures", notes = "get specified tag measures", response = Measures.class, responseContainer = "List", tags={ "tag","measure", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "Measures", response = Measures.class, responseContainer = "List"),
+                @ApiResponse(code = 404, message = "Tag resource not found"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/tags/measures/getmany",
+                produces = { "application/json" }, 
+            method = RequestMethod.POST)
+        ResponseEntity<List<Measures>> getTagMeasures(@ApiParam(value = "requests for measures to retrieve" ,required=true )  @Valid @RequestBody List<MeasuresRequest> requests);
 
 
             @ApiOperation(value = "get tag measures stats", nickname = "getTagStats", notes = "get the corresponding Tag mesures for last chunk", response = Measures.class, tags={ "tag","measure", })

@@ -1,9 +1,6 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
-import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
-import com.hurence.logisland.historian.rest.v1.model.Measures;
-import com.hurence.logisland.historian.rest.v1.model.Tag;
-import com.hurence.logisland.historian.rest.v1.model.TreeNode;
+import com.hurence.logisland.historian.rest.v1.model.*;
 import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
 import com.hurence.logisland.historian.service.MeasuresApiService;
 import com.hurence.logisland.historian.service.TagsApiService;
@@ -22,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-04-18T14:55:12.030+02:00")
 
@@ -120,7 +119,6 @@ public class TagsApiController implements TagsApi {
                     start, end, functions, noValues);
             if (measures.isPresent()) {
                 return new ResponseEntity<Measures>(measures.get(), HttpStatus.OK);
-
             } else {
                 return new ResponseEntity<Measures>(HttpStatus.NOT_FOUND);
 
@@ -129,6 +127,31 @@ public class TagsApiController implements TagsApi {
             return new ResponseEntity<Measures>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @Override
+    public ResponseEntity<List<Measures>> getTagMeasures(@Valid @RequestBody List<MeasuresRequest> requests) {
+        List<Measures> measures = requests.stream()
+                .map(req -> this.getTagMeasuresIfExist(req.getTagId(), req.getStart(),
+                    req.getEnd(), req.getFunction(), req.isNoValues()))
+                .flatMap(o -> o.isPresent() ? java.util.stream.Stream.of(o.get()) : Stream.empty())
+                .collect(Collectors.toList());
+        if (measures.isEmpty()) return new ResponseEntity<List<Measures>>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<List<Measures>>(measures, HttpStatus.OK);
+    }
+
+    private Optional<Measures> getTagMeasuresIfExist(String tagId, String start,
+                                              String end, String functions, Boolean noValues) {
+        Optional<Tag> tagO = service.getTag(tagId);
+        if (tagO.isPresent()) {
+            Tag tag = tagO.get();
+            return measuresApiService.getTagMeasures(tag.getNodeId(), tag.getDatasourceId(),
+                    start, end, functions, noValues);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+
 
 
     @Override

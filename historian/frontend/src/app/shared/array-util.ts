@@ -9,10 +9,14 @@ export class ArrayUtil {
     return (index !== -1);
   }
 
-  remove<T>(array: T[], find: (T) => boolean) {
+  remove<T>(array: T[], find: (T) => boolean): T {
       const index = array.findIndex(find);
       if (index !== -1) {
+          const deleted = array[index];
           array.splice(index, 1);
+          return deleted;
+      } else {
+        return undefined;
       }
   }
 
