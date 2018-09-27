@@ -16,12 +16,18 @@
  */
 package com.hurence.logisland.historian.service;
 
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.hurence.logisland.historian.parsing.QueryParsing;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
+import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.rest.v1.model.TreeNode;
 import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
 import com.hurence.logisland.historian.rest.v1.model.operation_report.TagReplaceReport;
+import com.hurence.logisland.historian.service.tag.TagImportCsv;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -35,14 +41,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.FacetPivotFieldEntry;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.swing.text.html.Option;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.nio.Buffer;
+import java.nio.charset.Charset;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -180,6 +186,7 @@ public class TagsApiService {
         return supressedTags;
     }
 
+
     /**
      *
      * @param tag
@@ -203,4 +210,9 @@ public class TagsApiService {
         return repository.save(tag);
     }
 
+    public BulkLoad importCsvAsTags(MultipartFile multiPartCsv,
+                                    char separator, Charset charset,
+                                    int bulkSize) {
+        return TagImportCsv.importCsvAsTag(multiPartCsv, separator, charset, repository, bulkSize);
+    }
 }

@@ -20,14 +20,14 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * BulkLoad
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-25T12:56:06.238+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-27T15:16:49.275+02:00")
 
 
 @SolrDocument(solrCoreName = "historian")
 public class BulkLoad  implements Serializable {
         @JsonProperty("start_time")
         @Indexed(name = "start_time")
-        private String startTime = null;
+        private Long startTime = null;
 
         @JsonProperty("generation_duration")
         @Indexed(name = "generation_duration")
@@ -49,24 +49,24 @@ public class BulkLoad  implements Serializable {
         @Indexed(name = "metrics")
         private List<String> metrics = null;
 
-        public BulkLoad startTime(String startTime) {
+        public BulkLoad startTime(Long startTime) {
         this.startTime = startTime;
         return this;
         }
 
     /**
-        * Get startTime
+        * timestamp
     * @return startTime
     **/
         @JsonProperty("start_time")
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "timestamp")
     
 
-  public String getStartTime() {
+  public Long getStartTime() {
     return startTime;
     }
 
-        public BulkLoad setStartTime(String startTime) {
+        public BulkLoad setStartTime(Long startTime) {
         this.startTime = startTime;
         return this;
         }

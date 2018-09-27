@@ -589,6 +589,50 @@ paths:
              description: unexpected error
              schema:
                $ref: '#/definitions/Error'
+  /tags/importcsv:
+    post:
+      tags:
+       - tag
+       - import
+      summary: import definition of tags in csv format
+      description: import definition of tags in csv format
+      operationId: importTagsFromCsv
+      produces:
+       - application/json
+      parameters:
+       - name: content
+         in: formData
+         description: the csv file content
+         required: true
+         type: file
+       - name: separator
+         in: query
+         description: the csv file separator
+         required: false
+         type: string
+         default: ';'
+       - name: charset
+         in: query
+         description: the csv file charset encoding
+         required: false
+         type: string
+         default: 'UTF-8'
+       - name: bulkSize
+         in: query
+         description: the number of line to inject at the same time
+         required: false
+         type: integer
+         format: int32
+         default: 10000
+      responses:
+       '200':
+         description: import succeeded
+         schema:
+           $ref: '#/definitions/BulkLoad'
+       default:
+         description: unexpected error
+         schema:
+           $ref: '#/definitions/Error'
   /tags/measures:
      post:
        tags:
@@ -1289,7 +1333,9 @@ definitions:
     type: object
     properties:
       start_time:
-        type: string
+        description: timestamp
+        type: integer
+        format: int64
       generation_duration:
         type: integer
         format: int32

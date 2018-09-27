@@ -1,5 +1,8 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
+
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.hurence.logisland.historian.rest.v1.model.*;
 import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
 import com.hurence.logisland.historian.service.MeasuresApiService;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.lang.Error;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -177,6 +182,18 @@ public class TagsApiController implements TagsApi {
     public ResponseEntity<List<TreeNode>> getTreeTag(@Valid @RequestParam(value = "limit", required = false, defaultValue="100") Integer limit) {
         List<TreeNode> treeTag = service.getTreeTag(0, limit);
         return new ResponseEntity<List<TreeNode>>(treeTag, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<BulkLoad> importTagsFromCsv(
+            @Valid @RequestPart("file") MultipartFile content,
+            @Valid @RequestParam(value = "separator", required = false, defaultValue=";") String separator,
+            @Valid @RequestParam(value = "charset", required = false, defaultValue="UTF-8") String charset,
+            @Valid @RequestParam(value = "bulkSize", required = false, defaultValue="10000") Integer bulkSize
+    ) {
+        Charset encoding = Charset.forName(charset);
+        BulkLoad bl = this.service.importCsvAsTags(content, separator.charAt(0), encoding, bulkSize);
+        return new ResponseEntity<BulkLoad>(bl, HttpStatus.OK);
     }
 
 

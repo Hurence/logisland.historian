@@ -29,7 +29,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-25T12:56:06.238+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-27T15:16:49.275+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -138,6 +138,16 @@ import java.util.List;
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
         ResponseEntity<List<TreeNode>> getTreeTag(@ApiParam(value = "maximum number of element to retrieve in a treenode.", defaultValue = "100") @Valid @RequestParam(value = "limit", required = false, defaultValue="100") Integer limit);
+
+
+            @ApiOperation(value = "import definition of tags in csv format", nickname = "importTagsFromCsv", notes = "import definition of tags in csv format", response = BulkLoad.class, tags={ "tag","import", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "import succeeded", response = BulkLoad.class),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/tags/importcsv",
+                produces = { "application/json" }, 
+            method = RequestMethod.POST)
+        ResponseEntity<BulkLoad> importTagsFromCsv(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile content,@ApiParam(value = "the csv file separator", defaultValue = ";") @Valid @RequestParam(value = "separator", required = false, defaultValue=";") String separator,@ApiParam(value = "the csv file charset encoding", defaultValue = "UTF-8") @Valid @RequestParam(value = "charset", required = false, defaultValue="UTF-8") String charset,@ApiParam(value = "the number of line to inject at the same time", defaultValue = "10000") @Valid @RequestParam(value = "bulkSize", required = false, defaultValue="10000") Integer bulkSize);
 
 
             @ApiOperation(value = "post tag measures", nickname = "postTagMeasures", notes = "post some new values", response = BulkLoad.class, tags={ "tag","measure", })
