@@ -3,7 +3,6 @@ package com.hurence.logisland.historian.service.tag;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
@@ -14,127 +13,77 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public final class TagImportCsv {
 
-    private interface tagFieldMapping {
-        public Tag updateTag(Map<String, String> map, Tag tag);
+    private static CsvMapper mapper = new CsvMapper();
+
+    private interface TagFieldMapping<T> {
+        public String csvField();
+        public Boolean required();
+        public Tag updateTag(Map<String, T> map, Tag tag);
     }
 
-    private static List<tagFieldMapping> fieldMappers = new ArrayList<tagFieldMapping>() {{
-        add(new tagFieldMapping() {//node_id
-            @Override
-            public Tag updateTag(Map<String, String> map, Tag tag) {
-                if (map.containsKey("node_id")) {
-                    tag.setNodeId(map.get("node_id"));
-                } else {
-                    throw new IllegalArgumentException("csv line was not containing node_id information");
-                }
+    private static class TagFieldMappingImpl<T> implements TagFieldMapping<T> {
+
+        final String csvField;
+        final boolean required;
+        final BiFunction<T, Tag, Tag> updateMethod;
+
+        public TagFieldMappingImpl(String csvField,
+                                   Boolean required,
+                                   BiFunction<T, Tag, Tag> updateMethod) {
+            this.csvField = csvField;
+            this.required = required;
+            this.updateMethod = updateMethod;
+        }
+        public String csvField() {
+            return this.csvField;
+        }
+        public Boolean required() {
+            return this.required;
+        }
+        public Tag updateTag(Map<String, T> map, Tag tag) {
+            if (map.containsKey(csvField)) {
+                return this.updateMethod.apply(map.get(csvField), tag);
+            } else {
+                if (required) throw new IllegalArgumentException(String.format("csv file was not containing %s information", csvField));
                 return tag;
             }
-        });
-        add(new tagFieldMapping() {//sampling_rate
-            @Override
-            public Tag updateTag(Map<String, String> map, Tag tag) {
-                if (map.containsKey("sampling_rate")) {
-                    tag.setUpdateRate(Integer.valueOf(map.get("sampling_rate")));
-                } else {
-                    //using default
-                }
-                return tag;
-            }
-        });
-        add(new tagFieldMapping() {//read_mode
-            @Override
-            public Tag updateTag(Map<String, String> map, Tag tag) {
-                if (map.containsKey("read_mode")) {
-                    tag.setPollingMode(Tag.PollingModeEnum.valueOf(map.get("read_mode")));
-                } else {
-                    //using default
-                }
-                return tag;
-            }
-        });
-        add(new tagFieldMapping() {//tag_monitored
-            @Override
-            public Tag updateTag(Map<String, String> map, Tag tag) {
-                if (map.containsKey("tag_monitored")) {
-                    tag.setEnabled(Boolean.valueOf(map.get("tag_monitored")));
-                } else {
-                    //using default
-                }
-                return tag;
-            }
-        });
-        add(new tagFieldMapping() {//description
-            @Override
-            public Tag updateTag(Map<String, String> map, Tag tag) {
-                if (map.containsKey("description")) {
-                    tag.setDescription(map.get("description"));
-                } else {
-                   //using default
-                }
-                return tag;
-            }
-        });
-        add(new tagFieldMapping() {//type
-            @Override
-            public Tag updateTag(Map<String, String> map, Tag tag) {
-                if (map.containsKey("type")) {
-                    tag.setDataType(Tag.DataTypeEnum.valueOf(map.get("type")));
-                } else {
-                    //using default
-                }
-                return tag;
-            }
-        });
-        add(new tagFieldMapping() {//server_scan_rate
-            @Override
-            public Tag updateTag(Map<String, String> map, Tag tag) {
-                if (map.containsKey("server_scan_rate")) {
-                    tag.setServerScanRate(Integer.valueOf(map.get("server_scan_rate")));
-                } else {
-                    //using default
-                }
-                return tag;
-            }
-        });
-        add(new tagFieldMapping() {//server_scan_rate
-            @Override
-            public Tag updateTag(Map<String, String> map, Tag tag) {
-                if (map.containsKey("group")) {
-                    tag.setGroup(map.get("group"));
-                } else {
-                    //using default
-                }
-                return tag;
-            }
-        });
-        add(new tagFieldMapping() {//datasource_id
-            @Override
-            public Tag updateTag(Map<String, String> map, Tag tag) {
-                if (map.containsKey("datasource_id")) {
-                    tag.setDatasourceId(map.get("datasource_id"));
-                } else {
-                    throw new IllegalArgumentException("csv line was not containing datasource_id information");
-                }
-                return tag;
-            }
-        });
-        add(new tagFieldMapping() {//tag_name
-            @Override
-            public Tag updateTag(Map<String, String> map, Tag tag) {
-                if (map.containsKey("tag_name")) {
-                    tag.setTagName(map.get("tag_name"));
-                } else {
-                    tag.setTagName(tag.getNodeId());
-                }
-                return tag;
-            }
-        });
+        }
+    }
+
+    private static class TagFieldStringMappingImpl extends TagFieldMappingImpl<String> {
+        public TagFieldStringMappingImpl(String csvField, Boolean required, BiFunction<String, Tag, Tag> updateMethod) {
+            super(csvField, required, updateMethod);
+        }
+    }
+
+    private static List<TagFieldMapping> fieldMappers = new ArrayList<TagFieldMapping>() {{
+        add(new TagFieldStringMappingImpl("node_id", true,
+                (value, tag) -> tag.setNodeId(value)));
+        add(new TagFieldStringMappingImpl("sampling_rate", true,
+                (value, tag) -> tag.setUpdateRate(Integer.valueOf(value))));
+        add(new TagFieldStringMappingImpl("read_mode", false,
+                (value, tag) -> tag.setPollingMode(Tag.PollingModeEnum.fromValue(value))));
+        add(new TagFieldStringMappingImpl("tag_monitored", true,
+                (value, tag) -> tag.setEnabled(Boolean.valueOf(value))));
+        add(new TagFieldStringMappingImpl("description", false,
+                (value, tag) -> tag.setDescription(value)));
+        add(new TagFieldStringMappingImpl("type", true,
+                (value, tag) -> tag.setDataType(Tag.DataTypeEnum.fromValue(value))));
+        add(new TagFieldStringMappingImpl("server_scan_rate", false,
+                (value, tag) -> tag.setServerScanRate(Integer.valueOf(value))));
+        add(new TagFieldStringMappingImpl("group", false,
+                (value, tag) -> tag.setGroup(value)));
+        add(new TagFieldStringMappingImpl("datasource_id", true,
+                (value, tag) -> tag.setDatasourceId(value)));
+        add(new TagFieldStringMappingImpl("tag_name", false,
+                (value, tag) -> tag.setTagName(value)));
     }};
 
     private TagImportCsv() {
@@ -149,17 +98,33 @@ public final class TagImportCsv {
     }
 
     /**
+     * Do not use for production code (used for tests)
+     * @param multiPartCsv
+     * @param separator
+     * @param charset
+     * @return
+     */
+    @Deprecated
+    public static Stream<Tag> CsvToTags(MultipartFile multiPartCsv,
+                                        char separator, Charset charset) {
+        MappingIterator<Map<String,String>> it = csvToIteratorOfMap(multiPartCsv, separator, charset);
+        return StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(it, Spliterator.ORDERED), false)
+                .map(TagImportCsv::mapToTag);
+    }
+
+    /**
      *
      * @param multiPartCsv csv file
      * @param separator of csv file
      * @param charset of file
      * @return
-     * @throws Exception
+     * @throws IOCsvException if a an IOException occured while reading file
+     * @throws IllegalArgumentException if schema has not the required fields
      */
     private static MappingIterator<Map<String,String>> csvToIteratorOfMap(MultipartFile multiPartCsv,
                                                                    char separator, Charset charset) {
-        CsvMapper mapper = new CsvMapper();
-        mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
+
         CsvSchema bootstrapSchema = CsvSchema
                 .emptySchema()
                 .withHeader()
@@ -229,6 +194,7 @@ public final class TagImportCsv {
      *
      * @param map containing fields for tag
      * @return Tag
+     * @throws IllegalArgumentException if map does not contain required fields
      */
     private static Tag mapToTag(Map<String,String> map) {
         Tag tag = new Tag();

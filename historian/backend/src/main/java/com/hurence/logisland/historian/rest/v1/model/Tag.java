@@ -22,7 +22,7 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * a Tag is an identifier to an OPC value
 */
-    @ApiModel(description = "a Tag is an identifier to an OPC value")
+@ApiModel(description = "a Tag is an identifier to an OPC value")
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-27T15:16:49.275+02:00")
 
 
