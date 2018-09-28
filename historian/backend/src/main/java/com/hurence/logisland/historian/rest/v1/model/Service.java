@@ -23,8 +23,6 @@ import org.threeten.bp.OffsetDateTime;
 * A logisland &#39;controller service&#39;.
 */
     @ApiModel(description = "A logisland 'controller service'.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-27T15:16:49.275+02:00")
-
 
 @SolrDocument(solrCoreName = "historian")
 public class Service  implements Serializable {

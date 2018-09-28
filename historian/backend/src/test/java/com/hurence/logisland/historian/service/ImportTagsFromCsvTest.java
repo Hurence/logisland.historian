@@ -1,5 +1,6 @@
 package com.hurence.logisland.historian.service;
 
+import com.hurence.logisland.historian.rest.v1.model.Header;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.service.tag.TagImportCsv;
 import org.springframework.mock.web.MockMultipartFile;
@@ -58,12 +59,6 @@ public class ImportTagsFromCsvTest {
                 sb.toString().getBytes(StandardCharsets.UTF_8));
         sb.setLength(0);
 
-//        InputStream inputStream = this.getClass().getResourceAsStream("/worldcitiespop.txt");
-//        MockMultipartFile csv3 = new MockMultipartFile(
-//                "worldcitiespop",
-//                "worldcitiespop.txt",
-//                "text/plain",
-//                inputStream);
         return new Object[][] {
                 { csv1, ';', StandardCharsets.UTF_8, tagExpected },
                 { csvNotSameOrder, ';', StandardCharsets.UTF_8, tagExpected },
@@ -71,12 +66,21 @@ public class ImportTagsFromCsvTest {
         };
     }
 
-    @Test(groups = { "fast" }, dataProvider = "tagcsvmultipart")
-    public void aFastTest(MultipartFile multiPartCsv,
+    @Test(groups = { "parsing csv" }, dataProvider = "tagcsvmultipart")
+    public void tagCsvParsingTest(MultipartFile multiPartCsv,
                           char separator, Charset charset,
                           List<Tag> expected) throws Exception {
         Stream<Tag> tags = TagImportCsv.CsvToTags(multiPartCsv, separator, charset);
         List<Tag> result = tags.collect(Collectors.toList());
         Assert.assertEquals(result, expected);
+    }
+
+    @Test(groups = { "getting accepted/required headers" })
+    public void tagCsvheaderTest() throws Exception {
+        List<Header> actual = TagImportCsv.getTagsCsvHeaders();
+        Assert.assertTrue(actual.size() == 10);
+        Header expectedFirstHeader = new Header().setName("node_id")
+                .setRequired(true).setType("string");
+        Assert.assertEquals(actual.get(0), expectedFirstHeader);
     }
 }

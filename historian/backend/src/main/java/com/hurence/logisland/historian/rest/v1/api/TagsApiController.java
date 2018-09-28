@@ -7,6 +7,7 @@ import com.hurence.logisland.historian.rest.v1.model.*;
 import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
 import com.hurence.logisland.historian.service.MeasuresApiService;
 import com.hurence.logisland.historian.service.TagsApiService;
+import com.hurence.logisland.historian.service.tag.TagImportCsv;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,10 +179,17 @@ public class TagsApiController implements TagsApi {
         }
     }
 
+
     @Override
     public ResponseEntity<List<TreeNode>> getTreeTag(@Valid @RequestParam(value = "limit", required = false, defaultValue="100") Integer limit) {
         List<TreeNode> treeTag = service.getTreeTag(0, limit);
         return new ResponseEntity<List<TreeNode>>(treeTag, HttpStatus.OK);
+    }
+
+
+    @Override
+    public ResponseEntity<List<Header>> getTagsCsvHeaders() {
+        return new ResponseEntity<List<Header>>(TagImportCsv.getTagsCsvHeaders(), HttpStatus.OK);
     }
 
     @Override

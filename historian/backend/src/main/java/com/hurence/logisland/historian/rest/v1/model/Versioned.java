@@ -19,8 +19,6 @@ import org.threeten.bp.OffsetDateTime;
 * a versioned component
 */
     @ApiModel(description = "a versioned component")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-27T15:16:49.275+02:00")
-
 
 @SolrDocument(solrCoreName = "historian")
 public class Versioned  implements Serializable {

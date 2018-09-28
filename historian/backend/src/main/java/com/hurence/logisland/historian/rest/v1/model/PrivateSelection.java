@@ -22,8 +22,6 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * PrivateSelection
 */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-27T15:16:49.275+02:00")
-
 
 @SolrDocument(solrCoreName = "selection")
 public class PrivateSelection  implements Serializable {

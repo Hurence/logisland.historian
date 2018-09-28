@@ -629,10 +629,36 @@ paths:
          description: import succeeded
          schema:
            $ref: '#/definitions/BulkLoad'
+       '422':
+         description: csv file not containing required headers.
+         schema:
+           type: array
+           items:
+             $ref: '#/definitions/Header'
        default:
          description: unexpected error
          schema:
            $ref: '#/definitions/Error'
+    get:
+      tags:
+        - tag
+        - import
+      summary: return expected headers in csv file for POST request
+      description: return expected headers in csv file for POST request
+      operationId: getTagsCsvHeaders
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: list of expected headers (required or not)
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Header'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
   /tags/measures:
      post:
        tags:
@@ -1758,4 +1784,16 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/TreeNode'
+
+  Header:
+    required:
+      - name
+      - required
+    properties:
+      name:
+        type: string
+      required:
+        type: boolean
+      type:
+        type: string
 

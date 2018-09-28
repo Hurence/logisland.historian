@@ -6,8 +6,10 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
+import com.hurence.logisland.historian.rest.v1.model.Header;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.rest.v1.model.error.IOCsvException;
+import com.hurence.logisland.historian.rest.v1.model.error.RequiredHeaderMissingCsvException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -25,20 +28,24 @@ public final class TagImportCsv {
     private interface TagFieldMapping<T> {
         public String csvField();
         public Boolean required();
+        public String type();
         public Tag updateTag(Map<String, T> map, Tag tag);
     }
 
     private static class TagFieldMappingImpl<T> implements TagFieldMapping<T> {
 
         final String csvField;
+        final String type;
         final boolean required;
         final BiFunction<T, Tag, Tag> updateMethod;
 
         public TagFieldMappingImpl(String csvField,
                                    Boolean required,
+                                   String type,
                                    BiFunction<T, Tag, Tag> updateMethod) {
             this.csvField = csvField;
             this.required = required;
+            this.type = type;
             this.updateMethod = updateMethod;
         }
         public String csvField() {
@@ -47,46 +54,53 @@ public final class TagImportCsv {
         public Boolean required() {
             return this.required;
         }
+        public String type() {
+            return this.type;
+        }
         public Tag updateTag(Map<String, T> map, Tag tag) {
             if (map.containsKey(csvField)) {
                 return this.updateMethod.apply(map.get(csvField), tag);
             } else {
-                if (required) throw new IllegalArgumentException(String.format("csv file was not containing %s information", csvField));
+                if (required) throw new RequiredHeaderMissingCsvException(String.format("csv file was not containing %s information", csvField));
                 return tag;
             }
         }
     }
 
     private static class TagFieldStringMappingImpl extends TagFieldMappingImpl<String> {
-        public TagFieldStringMappingImpl(String csvField, Boolean required, BiFunction<String, Tag, Tag> updateMethod) {
-            super(csvField, required, updateMethod);
+        public TagFieldStringMappingImpl(String csvField, Boolean required, String type, BiFunction<String, Tag, Tag> updateMethod) {
+            super(csvField, required, type, updateMethod);
         }
     }
 
     private static List<TagFieldMapping> fieldMappers = new ArrayList<TagFieldMapping>() {{
-        add(new TagFieldStringMappingImpl("node_id", true,
+        add(new TagFieldStringMappingImpl("node_id", true, "string",
                 (value, tag) -> tag.setNodeId(value)));
-        add(new TagFieldStringMappingImpl("sampling_rate", true,
+        add(new TagFieldStringMappingImpl("sampling_rate", true, "integer",
                 (value, tag) -> tag.setUpdateRate(Integer.valueOf(value))));
-        add(new TagFieldStringMappingImpl("read_mode", false,
+        add(new TagFieldStringMappingImpl("read_mode", false, "enum:" + Tag.PollingModeEnum.values(),
                 (value, tag) -> tag.setPollingMode(Tag.PollingModeEnum.fromValue(value))));
-        add(new TagFieldStringMappingImpl("tag_monitored", true,
+        add(new TagFieldStringMappingImpl("tag_monitored", true, "boolean",
                 (value, tag) -> tag.setEnabled(Boolean.valueOf(value))));
-        add(new TagFieldStringMappingImpl("description", false,
+        add(new TagFieldStringMappingImpl("description", false, "string",
                 (value, tag) -> tag.setDescription(value)));
-        add(new TagFieldStringMappingImpl("type", true,
+        add(new TagFieldStringMappingImpl("type", true, "enum:" + Tag.DataTypeEnum.values(),
                 (value, tag) -> tag.setDataType(Tag.DataTypeEnum.fromValue(value))));
-        add(new TagFieldStringMappingImpl("server_scan_rate", false,
+        add(new TagFieldStringMappingImpl("server_scan_rate", false, "integer",
                 (value, tag) -> tag.setServerScanRate(Integer.valueOf(value))));
-        add(new TagFieldStringMappingImpl("group", false,
+        add(new TagFieldStringMappingImpl("group", false, "string",
                 (value, tag) -> tag.setGroup(value)));
-        add(new TagFieldStringMappingImpl("datasource_id", true,
+        add(new TagFieldStringMappingImpl("datasource_id", true, "string",
                 (value, tag) -> tag.setDatasourceId(value)));
-        add(new TagFieldStringMappingImpl("tag_name", false,
+        add(new TagFieldStringMappingImpl("tag_name", false, "string",
                 (value, tag) -> tag.setTagName(value)));
     }};
 
     private TagImportCsv() {
+    }
+
+    public static List<Header> getTagsCsvHeaders() {
+        return fieldMappers.stream().map(TagImportCsv::fieldMapperToHeader).collect(Collectors.toList());
     }
 
     public static BulkLoad importCsvAsTag(MultipartFile multiPartCsv,
@@ -204,5 +218,16 @@ public final class TagImportCsv {
         return tag;
     }
 
+    /**
+     *
+     * @param mapper
+     * @return a Header
+     */
+    private static Header fieldMapperToHeader(TagFieldMapping mapper) {
+        return new Header()
+                .setName(mapper.csvField())
+                .setRequired(mapper.required())
+                .setType(mapper.type());
+    }
 
 }

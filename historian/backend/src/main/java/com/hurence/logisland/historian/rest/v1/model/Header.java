@@ -16,62 +16,88 @@ import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.OffsetDateTime;
 
 /**
-* Error
+* Header
 */
 
 @SolrDocument(solrCoreName = "historian")
-public class Error  implements Serializable {
-        @JsonProperty("code")
-        @Indexed(name = "code")
-        private Integer code = null;
+public class Header  implements Serializable {
+        @JsonProperty("name")
+        @Indexed(name = "name")
+        private String name = null;
 
-        @JsonProperty("message")
-        @Indexed(name = "message")
-        private String message = null;
+        @JsonProperty("required")
+        @Indexed(name = "required")
+        private Boolean required = null;
 
-        public Error code(Integer code) {
-        this.code = code;
+        @JsonProperty("type")
+        @Indexed(name = "type")
+        private String type = null;
+
+        public Header name(String name) {
+        this.name = name;
         return this;
         }
 
     /**
-        * Get code
-    * @return code
+        * Get name
+    * @return name
     **/
-        @JsonProperty("code")
+        @JsonProperty("name")
     @ApiModelProperty(required = true, value = "")
       @NotNull
 
 
-  public Integer getCode() {
-    return code;
+  public String getName() {
+    return name;
     }
 
-        public Error setCode(Integer code) {
-        this.code = code;
+        public Header setName(String name) {
+        this.name = name;
         return this;
         }
 
-        public Error message(String message) {
-        this.message = message;
+        public Header required(Boolean required) {
+        this.required = required;
         return this;
         }
 
     /**
-        * Get message
-    * @return message
+        * Get required
+    * @return required
     **/
-        @JsonProperty("message")
+        @JsonProperty("required")
     @ApiModelProperty(required = true, value = "")
       @NotNull
 
 
-  public String getMessage() {
-    return message;
+  public Boolean isRequired() {
+    return required;
     }
 
-        public Error setMessage(String message) {
-        this.message = message;
+        public Header setRequired(Boolean required) {
+        this.required = required;
+        return this;
+        }
+
+        public Header type(String type) {
+        this.type = type;
+        return this;
+        }
+
+    /**
+        * Get type
+    * @return type
+    **/
+        @JsonProperty("type")
+    @ApiModelProperty(value = "")
+    
+
+  public String getType() {
+    return type;
+    }
+
+        public Header setType(String type) {
+        this.type = type;
         return this;
         }
 
@@ -84,14 +110,15 @@ public class Error  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
     return false;
     }
-        Error error = (Error) o;
-        return Objects.equals(this.code, error.code) &&
-        Objects.equals(this.message, error.message);
+        Header header = (Header) o;
+        return Objects.equals(this.name, header.name) &&
+        Objects.equals(this.required, header.required) &&
+        Objects.equals(this.type, header.type);
     }
 
     @Override
     public int hashCode() {
-    return Objects.hash(code, message);
+    return Objects.hash(name, required, type);
     }
 
 
@@ -100,8 +127,9 @@ public String toString() {
 StringBuilder sb = new StringBuilder();
 sb.append("{\n");
 
-sb.append("    code: ").append(toIndentedString(code)).append("\n");
-sb.append("    message: ").append(toIndentedString(message)).append("\n");
+sb.append("    name: ").append(toIndentedString(name)).append("\n");
+sb.append("    required: ").append(toIndentedString(required)).append("\n");
+sb.append("    type: ").append(toIndentedString(type)).append("\n");
 sb.append("}");
 return sb.toString();
 }

@@ -22,8 +22,6 @@ import org.threeten.bp.OffsetDateTime;
 * holds a double array of values for a Tag between start &amp; stop
 */
     @ApiModel(description = "holds a double array of values for a Tag between start & stop")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-27T15:16:49.275+02:00")
-
 
 @SolrDocument(solrCoreName = "historian")
 public class Measures  implements Serializable {
