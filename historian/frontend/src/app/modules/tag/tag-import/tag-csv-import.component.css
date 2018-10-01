@@ -19,3 +19,19 @@
   text-align: justify;
   border: 1px solid #2399e5;
 }
+
+.csv-missing-headers {
+  width: auto;
+  display: grid;
+  grid-template-columns: repeat(auto, minmax(120px, 300px));
+  grid-template-rows: repeat(auto, minmax(20px, auto));
+  border: 1px solid #2399e5;
+  grid-auto-flow: row;  
+  overflow-x: auto;
+}
+
+.csv-missing-headers div {
+  padding: 2px;
+  text-align: justify;
+  border: 1px solid #2399e5;
+}

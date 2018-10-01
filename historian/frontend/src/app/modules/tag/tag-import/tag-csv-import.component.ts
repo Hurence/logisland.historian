@@ -4,6 +4,7 @@ import { IHeader } from '../../../core/modele/rest/Header';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
+import { parse, ParseConfig, ParseResult } from 'papaparse';
 
 @Component({
   selector: 'app-tag-csv-import',
@@ -14,13 +15,19 @@ export class TagCsvImportComponent implements OnInit {
 
   form: FormGroup;
   private separatorCtrl: AbstractControl;
+  private encodingCtrl: AbstractControl;
 
   questions: QuestionBase<any>[];
-  headers: IHeader[];
+  headers: Set<IHeader>;
   validating: boolean = false;
+  displayErrMsg: boolean = false;
+  displaySuccessMsg: boolean = false;
   fileSizeString: string;
 
   currentFile: File;
+  headerCurrentFile: string[];
+  missingHeaders: string[];
+  errMsg = 'this csv file does not contain some required column (using specified delimiter and encoding)';
   progress: {
     percentage: number
   } = {
@@ -35,6 +42,7 @@ export class TagCsvImportComponent implements OnInit {
       encoding: ['UTF-8', Validators.required],
     });
     this.separatorCtrl = this.form.get('separator');
+    this.encodingCtrl = this.form.get('encoding');
     this.questions = [
       new TextboxQuestion({
         key: 'separator',
@@ -53,7 +61,7 @@ export class TagCsvImportComponent implements OnInit {
 
   ngOnInit() {
     this.tagHistorianService.getTagCsvHeaders().subscribe(hs => {
-      this.headers = hs;
+      this.headers = new Set(hs);
     });
   }
 
@@ -70,25 +78,52 @@ export class TagCsvImportComponent implements OnInit {
     this.fileSizeString = this.calculStringSize(file);
   }
 
-
-  onValidateCsv() {
-
-    this.readSomeLines(this.currentFile, 1,
-      line => this.validateCsvHeader(line, this.separatorCtrl.value),
-      () => console.log('Completed'));
-    // var reader = new FileReader();
-
-    // reader.onload = function(e) {
-    //     var text = reader.result;                 // the entire file
-    //     var firstLine = text.split('\n').shift(); // first line
-    //     console.log(firstLine);                   // use the console for debugging
-    // }
-
-    // reader.readAsText(this.currentFile, 'UTF-8');
+  private resetMsgs(): void {
+    this.displayErrMsg = false;
+    this.displaySuccessMsg = false;
   }
 
-  private validateCsvHeader(header: string, separator: string): void {
+  onValidateCsv() {
+    this.resetMsgs();
+    this.validating = true;
+    const parseConfig: ParseConfig = {
+      encoding: this.encodingCtrl.value,
+      delimiter: this.separatorCtrl.value
+    };
+    this.readSomeLines(this.currentFile, 1,
+      line => this.validateCsvHeader(line, parseConfig),
+      () => console.log('Completed'),
+      this.encodingCtrl.value,
+      {
+        fatal: false,
+        ignoreBOM: false
+      }
+    );
+  }
 
+  private validateCsvHeader(header: string, parseconfig: ParseConfig): void {
+    const parseResult: ParseResult = parse(header, parseconfig);
+    if (parseResult.errors.length !== 0) {
+      console.error('error parsing csv', parseResult.errors);
+    }
+    // check that required headers are presents
+    const missingHeaders: string[] = [];
+    const headers: string[] = parseResult.data[0];
+    const headersAsSet: Set<string> = new Set(headers);
+    this.headers.forEach((h) => {
+      if (h.required && !headersAsSet.has(h.name)) {
+        missingHeaders.push(h.name);
+      }
+    });
+    if (missingHeaders.length === 0) {
+      this.displaySuccessMsg = true;
+      this.missingHeaders = missingHeaders;
+    } else {
+      this.displayErrMsg = true;
+      this.missingHeaders = missingHeaders;
+    }
+    this.headerCurrentFile = headers;
+    this.validating = false;
   }
 
   /**
