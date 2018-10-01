@@ -245,9 +245,19 @@
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.2.tgz#8700226bdde24b6f98e3a60126dbaab3b2a3ab41"
 
+"@types/node@*":
+  version "10.11.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.11.3.tgz#c055536ac8a5e871701aa01914be5731539d01ee"
+
 "@types/node@^6.0.46", "@types/node@~6.0.60":
   version "6.0.109"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.109.tgz#addc070c5b0a528c286ff4188d7dcafdafbfdcce"
+
+"@types/papaparse@^4.5.4":
+  version "4.5.4"
+  resolved "https://registry.yarnpkg.com/@types/papaparse/-/papaparse-4.5.4.tgz#3c52c95fe31688ffe3c21c892791f981223cc821"
+  dependencies:
+    "@types/node" "*"
 
 "@types/q@^0.0.32":
   version "0.0.32"
@@ -4731,6 +4741,10 @@ pac-resolver@~2.0.0:
 pako@~1.0.5:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.6.tgz#0101211baa70c4bca4a0f63f2206e97b7dfaf258"
+
+papaparse@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-4.6.0.tgz#4e3b8d6bf9f7900da437912794ec292207526867"
 
 parallel-transform@^1.1.0:
   version "1.1.0"
