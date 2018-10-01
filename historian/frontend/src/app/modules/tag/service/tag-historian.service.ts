@@ -195,13 +195,13 @@ export class TagHistorianService implements IModelService<HistorianTag> {
   }
   // (`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj, { observe: 'response' })
   // Observable<HttpEvent<{}>>
-  importTagCsv(csvFile: File, options?: { 
+  importTagCsv(csvFile: File, options?: {
                                 separator?: string,
-                                charset?: string, 
+                                charset?: string,
                                 bulkSize?: number
                               }): Observable<HttpEvent<{}>> {
     const formdata: FormData = new FormData();
- 
+
     formdata.append('content', csvFile);
     let params = new HttpParams();
     if (options) {
@@ -220,7 +220,7 @@ export class TagHistorianService implements IModelService<HistorianTag> {
       responseType: 'text',
       params: params
     });
- 
+
     return this.http.request(req);
   }
 

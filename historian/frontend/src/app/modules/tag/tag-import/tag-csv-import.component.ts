@@ -17,14 +17,14 @@ export class TagCsvImportComponent implements OnInit {
 
   questions: QuestionBase<any>[];
   headers: IHeader[];
-  validating: boolean = false;  
+  validating: boolean = false;
   fileSizeString: string;
 
   currentFile: File;
-  progress: { 
-    percentage: number 
-  } = { 
-    percentage: 0 
+  progress: {
+    percentage: number
+  } = {
+    percentage: 0
   };
 
   constructor(private tagHistorianService: TagHistorianService,
@@ -32,7 +32,7 @@ export class TagCsvImportComponent implements OnInit {
     this.form = this.fb.group({
       content: [null, Validators.required],
       separator: [';', Validators.required],
-      encoding: ['UTF-8', Validators.required],      
+      encoding: ['UTF-8', Validators.required],
     });
     this.separatorCtrl = this.form.get('separator');
     this.questions = [
@@ -40,15 +40,15 @@ export class TagCsvImportComponent implements OnInit {
         key: 'separator',
         label: 'Csv delimiter',
         order: 1,
-        required: true,        
+        required: true,
       }),
       new TextboxQuestion({
         key: 'encoding',
         label: 'Csv encoding',
         order: 2,
-        required: true,        
+        required: true,
       }),
-    ]
+    ];
    }
 
   ngOnInit() {
@@ -58,10 +58,10 @@ export class TagCsvImportComponent implements OnInit {
   }
 
   onFileChange(event) {
-    if(event.target.files && event.target.files.length) {
+    if (event.target.files && event.target.files.length) {
       this.selectFile(event.target.files.item(0));
     } else {
-      this.currentFile = null; 
+      this.currentFile = null;
     }
   }
 
@@ -69,26 +69,26 @@ export class TagCsvImportComponent implements OnInit {
     this.currentFile = file;
     this.fileSizeString = this.calculStringSize(file);
   }
- 
+
 
   onValidateCsv() {
 
-    this.readSomeLines(this.currentFile, 1, 
-      line => this.validateCsvHeader(line, this.separatorCtrl.value), 
+    this.readSomeLines(this.currentFile, 1,
+      line => this.validateCsvHeader(line, this.separatorCtrl.value),
       () => console.log('Completed'));
     // var reader = new FileReader();
 
     // reader.onload = function(e) {
     //     var text = reader.result;                 // the entire file
-    //     var firstLine = text.split('\n').shift(); // first line 
+    //     var firstLine = text.split('\n').shift(); // first line
     //     console.log(firstLine);                   // use the console for debugging
     // }
 
-    // reader.readAsText(this.currentFile, 'UTF-8');  
+    // reader.readAsText(this.currentFile, 'UTF-8');
   }
 
   private validateCsvHeader(header: string, separator: string): void {
-    
+
   }
 
   /**
@@ -100,13 +100,13 @@ export class TagCsvImportComponent implements OnInit {
    * @param {function(error)} onComplete - Called when the end of the file
    *     is reached or when |maxlines| lines have been read.
    */
-  private readSomeLines(file: File, maxlines: number,forEachLine, onComplete, 
+  private readSomeLines(file: File, maxlines: number, forEachLine, onComplete,
                         encoding?: string, decoderOptions?: TextDecoderOptions) {
     const CHUNK_SIZE = 50000; // 50kb, arbitrarily chosen.
     const textDecoder: TextDecoderOptions = {
       fatal: false,
       ignoreBOM: false
-    }
+    };
     if (decoderOptions) {
       Object.assign(textDecoder, decoderOptions);
     }
@@ -119,17 +119,17 @@ export class TagCsvImportComponent implements OnInit {
         // Use stream:true in case we cut the file
         // in the middle of a multi-byte character
         results += decoder.decode(fr.result, {stream: true});
-        var lines = results.split('\n');
+        const lines = results.split('\n');
         results = lines.pop(); // In case the line did not end yet.
         linecount += lines.length;
-    
+
         if (linecount > maxlines) {
             // Read too many lines? Truncate the results.
             lines.length -= linecount - maxlines;
             linecount = maxlines;
         }
-    
-        for (var i = 0; i < lines.length; ++i) {
+
+        for (let i = 0; i < lines.length; ++i) {
             forEachLine(lines[i] + '\n');
         }
         offset += CHUNK_SIZE;
@@ -139,7 +139,7 @@ export class TagCsvImportComponent implements OnInit {
         onComplete(fr.error);
     };
     seek();
-    
+
     function seek() {
       if (linecount === maxlines) {
           // We found enough lines.
@@ -152,15 +152,15 @@ export class TagCsvImportComponent implements OnInit {
           onComplete(); // Done
           return;
       }
-      var slice = file.slice(offset, offset + CHUNK_SIZE);
+      const slice = file.slice(offset, offset + CHUNK_SIZE);
       fr.readAsArrayBuffer(slice);
     }
   }
 
   importCsv() {
-  
+
     this.progress.percentage = 0;
- 
+
     // this.currentFile = this.selectedFiles.item(0);
     // this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(event => {
     //   if (event.type === HttpEventType.UploadProgress) {
@@ -169,16 +169,16 @@ export class TagCsvImportComponent implements OnInit {
     //     console.log('File is completely uploaded!');
     //   }
     // });
- 
+
     // this.selectedFiles = undefined;
   }
 
-  private calculStringSize(file: File): string {    
-    let nBytes = file.size;    
-    let sOutput = nBytes + " bytes";
-    let aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"]
+  private calculStringSize(file: File): string {
+    const nBytes = file.size;
+    let sOutput = nBytes + ' bytes';
+    const aMultiples = ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
     for (let nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
-      sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
+      sOutput = nApprox.toFixed(3) + ' ' + aMultiples[nMultiple] + ' (' + nBytes + ' bytes)';
     }
     return sOutput;
   }
