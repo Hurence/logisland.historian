@@ -78,13 +78,13 @@ public final class TagImportCsv {
                 (value, tag) -> tag.setNodeId(value)));
         add(new TagFieldStringMappingImpl("sampling_rate", true, "integer",
                 (value, tag) -> tag.setUpdateRate(Integer.valueOf(value))));
-        add(new TagFieldStringMappingImpl("read_mode", false, "enum:" + Tag.PollingModeEnum.values(),
+        add(new TagFieldStringMappingImpl("read_mode", false, "enum:" + Arrays.asList(Tag.PollingModeEnum.values()),
                 (value, tag) -> tag.setPollingMode(Tag.PollingModeEnum.fromValue(value))));
         add(new TagFieldStringMappingImpl("tag_monitored", true, "boolean",
                 (value, tag) -> tag.setEnabled(Boolean.valueOf(value))));
         add(new TagFieldStringMappingImpl("description", false, "string",
                 (value, tag) -> tag.setDescription(value)));
-        add(new TagFieldStringMappingImpl("type", true, "enum:" + Tag.DataTypeEnum.values(),
+        add(new TagFieldStringMappingImpl("type", true, "enum:" + Arrays.asList(Tag.DataTypeEnum.values()),
                 (value, tag) -> tag.setDataType(Tag.DataTypeEnum.fromValue(value))));
         add(new TagFieldStringMappingImpl("server_scan_rate", false, "integer",
                 (value, tag) -> tag.setServerScanRate(Integer.valueOf(value))));
