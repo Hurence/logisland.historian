@@ -1,9 +1,10 @@
-import 'rxjs/add/observable/of';
+
+import {of,  Observable } from 'rxjs';
+
 
 import { HttpClient, HttpResponse, HttpRequest, HttpParams, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
@@ -44,7 +45,7 @@ export class TagHistorianService implements IModelService<HistorianTag> {
 
   getAllWithIds(tagIds: string[]): Observable<HistorianTag[]> {
     if (tagIds.length === 0) {
-      return Observable.of([]);
+      return of([]);
     } else {
       const query = tagIds.map(id => `id:"${id}"`).join(' OR ');
       return this.getQuery(query);

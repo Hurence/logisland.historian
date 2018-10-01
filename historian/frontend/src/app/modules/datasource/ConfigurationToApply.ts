@@ -1,5 +1,4 @@
-import { Observable } from 'rxjs';
-import { zip } from 'rxjs';
+import { Observable ,  zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { HistorianTag } from '../tag/modele/HistorianTag';

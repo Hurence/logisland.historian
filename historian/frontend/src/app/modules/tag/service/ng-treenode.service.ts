@@ -1,7 +1,7 @@
 import { debug } from 'util';
 import { Injectable } from '@angular/core';
 import { TreeNode } from 'primeng/api';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { TagHistorianService } from './tag-historian.service';
 import { map } from 'rxjs/operators';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';

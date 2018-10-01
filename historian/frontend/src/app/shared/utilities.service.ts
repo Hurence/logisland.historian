@@ -1,10 +1,10 @@
+
+import { concat, merge, zip,  from, Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { from, Observable, of } from 'rxjs';
-import { concat, zip, merge, map } from 'rxjs/operators';
-import { andObservables } from '@angular/router/src/utils/collection';
-import 'rxjs/add/observable/zip';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/observable/concat';
+import { map } from 'rxjs/operators';
+
+
+
 
 @Injectable()
 export class Utilities {
@@ -75,7 +75,7 @@ export class Utilities {
   }
 
   zipObs<T>(ob1: Observable<T[]>, ob2: Observable<T[]>): Observable<T[]> {
-    return Observable.zip(ob1, ob2).pipe(
+    return zip(ob1, ob2).pipe(
       map(([a, b]) => {
         return a.concat(b);
       })
@@ -83,11 +83,11 @@ export class Utilities {
   }
 
   mergeObs<T>(ob1: Observable<T[]>, ob2: Observable<T[]>): Observable<T[]> {
-    return Observable.merge(ob1, ob2);
+    return merge(ob1, ob2);
   }
 
   concatObs<T>(ob1: Observable<T[]>, ob2: Observable<T[]>): Observable<T[]> {
-    return Observable.concat(ob1, ob2);
+    return concat(ob1, ob2);
   }
 
     /**
