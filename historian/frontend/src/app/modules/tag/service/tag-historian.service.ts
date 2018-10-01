@@ -1,6 +1,6 @@
 import 'rxjs/add/observable/of';
 
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpRequest, HttpParams, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Observable } from 'rxjs';
@@ -8,6 +8,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
+import { IHeader } from '../../../core/modele/rest/Header';
 import { IModelService } from '../../../shared/base-model-service';
 import { Utilities } from '../../../shared/utilities.service';
 import { HistorianTag, IHistorianTag } from '../modele/HistorianTag';
@@ -191,5 +192,39 @@ export class TagHistorianService implements IModelService<HistorianTag> {
 
   getTreeTag(): Observable<RestTreeNode[]> {
     return this.http.get<RestTreeNode[]>(`${this.tagsUrl}tags/tree?limit=1`); // limit = 0 => solr facet only, return no tags
+  }
+  // (`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj, { observe: 'response' })
+  // Observable<HttpEvent<{}>>
+  importTagCsv(csvFile: File, options?: { 
+                                separator?: string,
+                                charset?: string, 
+                                bulkSize?: number
+                              }): Observable<HttpEvent<{}>> {
+    const formdata: FormData = new FormData();
+ 
+    formdata.append('content', csvFile);
+    let params = new HttpParams();
+    if (options) {
+      if (options.separator !== null && options.separator !== undefined) {
+        params = params.set('separator', options.separator);
+      }
+      if (options.charset !== null && options.charset !== undefined) {
+        params = params.set('charset', options.charset);
+      }
+      if (options.bulkSize !== null && options.bulkSize !== undefined) {
+        params = params.set('bulkSize', options.bulkSize.toString());
+      }
+    }
+    const req = new HttpRequest('POST', `${this.tagsUrl}tags/importcsv`, formdata, {
+      reportProgress: true,
+      responseType: 'text',
+      params: params
+    });
+ 
+    return this.http.request(req);
+  }
+
+  getTagCsvHeaders(): Observable<IHeader[]> {
+    return this.http.get<IHeader[]>(`${this.tagsUrl}tags/importcsv`);
   }
 }

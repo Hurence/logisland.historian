@@ -1,0 +1,39 @@
+<div>
+  <h4>csv headers accepted/required</h4>
+  <div class="csv-headers-table">    
+    <div class="label">csv header</div>
+    <div *ngFor="let header of headers" >{{ header.name }}</div>
+    <div class="label">required</div>
+    <div *ngFor="let header of headers" >{{ header.required }}</div>
+    <div class="label">type</div>
+    <div *ngFor="let header of headers" >{{ header.type }}</div>   
+  </div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="importCsv()">
+  <div class="form-group label-small text-capitalize">
+    <label class="btn btn-default">
+      Csv file
+      <input type="file" formControlName="content" (change)="onFileChange($event)" class="form-control" required>
+      <span *ngIf="currentFile">size: {{ fileSizeString }}</span>
+    </label>        
+    <div [hidden]="form.get('content').valid || form.get('content').pristine" class="alert alert-danger">
+      <div *ngIf="form.get('content').hasError('required')" class="error">
+        File is required
+      </div>
+    </div>
+  </div>
+  <div *ngFor="let question of questions" class="">
+      <app-question [question]="question" [form]="form"></app-question>
+  </div>
+  <div class="d-flex align-items-center mb-2">
+      <button class="btn btn-warning align-middle" type="button" [disabled]="!currentFile" (click)="onValidateCsv()">Check validity</button>
+      <p-progressSpinner *ngIf="validating" [style]="{width: '30px', height: '30px'}"
+                          strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
+      <!-- <p-message *ngIf="displayNotFoundMsg" severity="info" text="{{nodeFoundMsd}}"></p-message>
+      <p-message *ngIf="displayFoundMsg" severity="success" text="found node with id '{{this.form.value.node_id}}''"></p-message> -->
+  </div>
+  <div class="d-flex align-items-center">
+      <button  type="submit" class="btn btn-success" [disabled]="!currentFile">Import tags from csv</button>
+  </div>
+</form>
