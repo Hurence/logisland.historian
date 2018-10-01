@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
@@ -29,7 +29,7 @@ export class MeasuresService {
     return this.http.get<Measures>(request.buildQuery(this.baseUrl)).pipe(
       catchError(err => {
         // return an empty measure using label as name
-        return Observable.of(new Measures({
+        return of(new Measures({
           name: request.label
         }));
       })
