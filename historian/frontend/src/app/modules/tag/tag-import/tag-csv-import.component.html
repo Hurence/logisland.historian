@@ -11,19 +11,18 @@
 </div>
 
 <form [formGroup]="form" (ngSubmit)="importCsv()">
-  <div class="form-group label-small text-capitalize">
-    <label class="btn btn-default">
-      Csv file
-      <input type="file" formControlName="content" (change)="onFileChange($event)" class="form-control" required>
+  <div class="form-group mb-3 form-input-max-width">
+    <label for="tagCsvFile">Csv file</label>
+      <input type="file" formControlName="content" (change)="onFileChange($event)" class="form-control"
+      id="tagCsvFile" required>
       <span *ngIf="currentFile">size: {{ fileSizeString }}</span>
-    </label>        
     <div [hidden]="form.get('content').valid || form.get('content').pristine" class="alert alert-danger">
       <div *ngIf="form.get('content').hasError('required')" class="error">
         File is required
       </div>
     </div>
   </div>  
-  <div *ngFor="let question of questions" class="">
+  <div *ngFor="let question of questions" class="form-input-max-width">
     <app-question [question]="question" [form]="form"></app-question>
   </div>    
   <div class="d-flex align-items-center mb-2">
@@ -33,15 +32,15 @@
       <p-message *ngIf="displayValidatingErrMsg" severity="error" [text]="errValidatingMsg"></p-message>
       <p-message *ngIf="displayValidatingSuccessMsg" severity="success" text="this csv file got a compatible header"></p-message>      
   </div>
-  <div class="d-flex align-items-center mb-2 csv-missing-headers" *ngIf="displayValidatingErrMsg">
+  <div class="mb-2 csv-missing-headers" *ngIf="displayValidatingErrMsg">
     <div class="label">Missing required columns</div>    
     <div *ngFor="let header of missingHeaders" >{{ header }}</div>    
   </div>
-  <div class="d-flex align-items-center mb-2">
-    current file headers are {{ headerCurrentFile | json }}
+  <div class="d-flex align-items-center mb-2" *ngIf="displayValidatingErrMsg">
+      current file headers are {{ headerCurrentFile | json }}
   </div>
   <div class="d-flex align-items-center">
-      <button  type="submit" class="btn btn-success" [disabled]="!currentFile && !form.valid && displaySucessMsg">Import tags from csv</button>      
+      <button  type="submit" class="btn btn-success" [disabled]="!currentFile || !form.valid || !displayValidatingSuccessMsg">Import tags from csv</button>      
       <p-progressBar *ngIf="importing" class="w-100" [value]="progress.percentage"></p-progressBar>
   </div>
   <div class="d-flex align-items-center">
