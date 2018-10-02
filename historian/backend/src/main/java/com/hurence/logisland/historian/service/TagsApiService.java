@@ -213,6 +213,6 @@ public class TagsApiService {
     public BulkLoad importCsvAsTags(MultipartFile multiPartCsv,
                                     char separator, Charset charset,
                                     int bulkSize) {
-        return TagImportCsv.importCsvAsTag(multiPartCsv, separator, charset, repository, bulkSize);
+        return TagImportCsv.importCsvAsTag(multiPartCsv, separator, charset, this, bulkSize);
     }
 }

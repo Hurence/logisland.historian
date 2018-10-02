@@ -600,7 +600,7 @@ paths:
       produces:
        - application/json
       parameters:
-       - name: content
+       - name: file
          in: formData
          description: the csv file content
          required: true

@@ -3,7 +3,7 @@ import { QuestionBase, IQuestionBase } from './question-base';
 export class Questions {
 
   /**
-   * 
+   *
    * @param questions to modify
    * @param mododifications modifications for each question (property key is used)
    */

@@ -2,7 +2,7 @@
 import {of,  Observable } from 'rxjs';
 
 
-import { HttpClient, HttpResponse, HttpRequest, HttpParams, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpRequest, HttpParams, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -202,8 +202,7 @@ export class TagHistorianService implements IModelService<HistorianTag> {
                                 bulkSize?: number
                               }): Observable<HttpEvent<{}>> {
     const formdata: FormData = new FormData();
-
-    formdata.append('content', csvFile);
+    formdata.append('file', csvFile);
     let params = new HttpParams();
     if (options) {
       if (options.separator !== null && options.separator !== undefined) {
@@ -216,12 +215,14 @@ export class TagHistorianService implements IModelService<HistorianTag> {
         params = params.set('bulkSize', options.bulkSize.toString());
       }
     }
-    const req = new HttpRequest('POST', `${this.tagsUrl}tags/importcsv`, formdata, {
-      reportProgress: true,
-      responseType: 'text',
-      params: params
-    });
 
+    const httpOptions = {
+      // headers: new HttpHeaders().set('Content-Type', 'multipart/form-data'),
+      reportProgress: true,
+      responseType: 'json' as 'json',
+      params: params
+    };
+    const req = new HttpRequest('POST', `${this.tagsUrl}tags/importcsv`, formdata, httpOptions);
     return this.http.request(req);
   }
 

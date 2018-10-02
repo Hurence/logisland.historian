@@ -6,6 +6,7 @@ import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
 import { parse, ParseConfig, ParseResult } from 'papaparse';
 import { FileUtil } from '../../../shared/file/file.service';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-tag-csv-import',
@@ -24,6 +25,7 @@ export class TagCsvImportComponent implements OnInit {
   questions: QuestionBase<any>[];
   headers: Set<IHeader>;
   validating: boolean = false;
+  importing: boolean = false;
   displayErrMsg: boolean = false;
   displaySuccessMsg: boolean = false;
   fileSizeString: string;
@@ -62,7 +64,7 @@ export class TagCsvImportComponent implements OnInit {
     });
     this.questions = [
       this.separatorQuestion,
-      this.encodingQuestion    
+      this.encodingQuestion
     ];
    }
 
@@ -98,25 +100,35 @@ export class TagCsvImportComponent implements OnInit {
     );
   }
 
-  importCsv(file: File) {
-
+  importCsv() {
+    this.importing = true;
     this.progress.percentage = 0;
-    
-    this.tagHistorianService.importTagCsv(file, {
+    this.tagHistorianService.importTagCsv(this.currentFile, {
       separator: this.separatorCtrl.value,
       charset: this.encodingCtrl.value,
       bulkSize: 10000
-    })
-
-    // this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(event => {
-    //   if (event.type === HttpEventType.UploadProgress) {
-    //     this.progress.percentage = Math.round(100 * event.loaded / event.total);
-    //   } else if (event instanceof HttpResponse) {
-    //     console.log('File is completely uploaded!');
-    //   }
-    // });
-
-    // this.selectedFiles = undefined;
+    }).subscribe(
+      event => {
+        switch (event.type) {
+          case HttpEventType.Sent:
+            console.log(`Uploading file "${this.currentFile.name}" of size ${this.currentFile.size}.`);
+            break;
+          case HttpEventType.UploadProgress:
+            this.progress.percentage = Math.round(100 * event.loaded / event.total);
+            console.log(`File "${this.currentFile.name}" is ${this.progress.percentage}% uploaded.`);
+            break;
+          case HttpEventType.Response:
+            console.log('File is completely uploaded!');
+            break;
+          default:
+            console.log(`File "${this.currentFile.name}" surprising upload event: ${event.type}.`);
+            break;
+        }
+      },
+      error => { this.importing = false; },
+      () => { this.importing = false; }
+    );
+    this.currentFile = undefined;
   }
 
   private validateCsvHeader(header: string, parseconfig: ParseConfig): void {
@@ -133,13 +145,13 @@ export class TagCsvImportComponent implements OnInit {
         missingHeaders.push(h.name);
       }
     });
-    if (missingHeaders.length === 0) {//VALID      
+    if (missingHeaders.length === 0) {// VALID
       this.displaySuccessMsg = true;
       this.missingHeaders = missingHeaders;
       this.encodingQuestion.readonly = true;
-      this.separatorQuestion.readonly = true;      
-    } else {//NOT VALID
-      this.displayErrMsg = true;      
+      this.separatorQuestion.readonly = true;
+    } else {// NOT VALID
+      this.displayErrMsg = true;
       this.missingHeaders = missingHeaders;
     }
     this.headerCurrentFile = headers;

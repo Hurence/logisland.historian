@@ -10,6 +10,7 @@ import com.hurence.logisland.historian.rest.v1.model.Header;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.rest.v1.model.error.IOCsvException;
 import com.hurence.logisland.historian.rest.v1.model.error.RequiredHeaderMissingCsvException;
+import com.hurence.logisland.historian.service.TagsApiService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -105,10 +106,10 @@ public final class TagImportCsv {
 
     public static BulkLoad importCsvAsTag(MultipartFile multiPartCsv,
                                           char separator, Charset charset,
-                                          SolrTagRepository repository,
+                                          TagsApiService tagService,
                                           int bulkSize) {
         MappingIterator<Map<String,String>> it = csvToIteratorOfMap(multiPartCsv, separator, charset);
-        return injectIteratorOfMapAsTag(it, repository, bulkSize);
+        return injectIteratorOfMapAsTag(it, tagService, bulkSize);
     }
 
     /**
@@ -164,13 +165,13 @@ public final class TagImportCsv {
     /**
      *
      * @param it iterator of map to convert into tags
-     * @param repository solr tag repository
+     * @param tagService tag service for interacting with database
      * @param bulkSize number of tag to bulkLoad into solr
      * @return number of tag injected
      * @throws Exception
      */
     private static BulkLoad injectIteratorOfMapAsTag(MappingIterator<Map<String,String>> it,
-                                          SolrTagRepository repository,
+                                                     TagsApiService tagService,
                                           int bulkSize) {
         final BulkLoad bl = new BulkLoad();
         long startImport = System.currentTimeMillis();
@@ -182,7 +183,7 @@ public final class TagImportCsv {
                 Tag tag = mapToTag(it.nextValue());
                 buffer.add(tag);
                 if (buffer.size() == bulkSize) {
-                    repository.saveAll(buffer);
+                    tagService.SaveOrUpdateMany(buffer);
                     counter += bulkSize;
                     buffer.clear();
                 }
@@ -193,7 +194,7 @@ public final class TagImportCsv {
             throw new IOCsvException(sb.toString());
         }
         if (!buffer.isEmpty()) {
-            repository.saveAll(buffer);
+            tagService.SaveOrUpdateMany(buffer);
             counter += buffer.size();
             buffer.clear();
         }
