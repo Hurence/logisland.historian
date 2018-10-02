@@ -80,23 +80,6 @@ export class TagCsvImportComponent implements OnInit {
     }
   }
 
-  private selectFile(file: File): void {
-    this.currentFile = file;
-    this.resetMsgs();
-    this.setQuestionEditable();
-    this.fileSizeString = this.calculStringSize(file);
-  }
-
-  private setQuestionEditable(): void {
-    this.encodingQuestion.readonly = false;
-    this.separatorQuestion.readonly = false;
-  }
-
-  private resetMsgs(): void {
-    this.displayErrMsg = false;
-    this.displaySuccessMsg = false;
-  }
-
   onValidateCsv() {
     this.resetMsgs();
     this.validating = true;
@@ -113,6 +96,27 @@ export class TagCsvImportComponent implements OnInit {
         ignoreBOM: false
       }
     );
+  }
+
+  importCsv(file: File) {
+
+    this.progress.percentage = 0;
+    
+    this.tagHistorianService.importTagCsv(file, {
+      separator: this.separatorCtrl.value,
+      charset: this.encodingCtrl.value,
+      bulkSize: 10000
+    })
+
+    // this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(event => {
+    //   if (event.type === HttpEventType.UploadProgress) {
+    //     this.progress.percentage = Math.round(100 * event.loaded / event.total);
+    //   } else if (event instanceof HttpResponse) {
+    //     console.log('File is completely uploaded!');
+    //   }
+    // });
+
+    // this.selectedFiles = undefined;
   }
 
   private validateCsvHeader(header: string, parseconfig: ParseConfig): void {
@@ -142,29 +146,6 @@ export class TagCsvImportComponent implements OnInit {
     this.validating = false;
   }
 
-  
-
-  importCsv(file: File) {
-
-    this.progress.percentage = 0;
-    
-    this.tagHistorianService.importTagCsv(file, {
-      separator: this.separatorCtrl.value,
-      charset: this.encodingCtrl.value,
-      bulkSize: 10000
-    })
-
-    // this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(event => {
-    //   if (event.type === HttpEventType.UploadProgress) {
-    //     this.progress.percentage = Math.round(100 * event.loaded / event.total);
-    //   } else if (event instanceof HttpResponse) {
-    //     console.log('File is completely uploaded!');
-    //   }
-    // });
-
-    // this.selectedFiles = undefined;
-  }
-
   private calculStringSize(file: File): string {
     const nBytes = file.size;
     let sOutput = nBytes + ' bytes';
@@ -173,5 +154,22 @@ export class TagCsvImportComponent implements OnInit {
       sOutput = nApprox.toFixed(3) + ' ' + aMultiples[nMultiple] + ' (' + nBytes + ' bytes)';
     }
     return sOutput;
+  }
+
+  private selectFile(file: File): void {
+    this.currentFile = file;
+    this.resetMsgs();
+    this.setQuestionEditable();
+    this.fileSizeString = this.calculStringSize(file);
+  }
+
+  private setQuestionEditable(): void {
+    this.encodingQuestion.readonly = false;
+    this.separatorQuestion.readonly = false;
+  }
+
+  private resetMsgs(): void {
+    this.displayErrMsg = false;
+    this.displaySuccessMsg = false;
   }
 }
