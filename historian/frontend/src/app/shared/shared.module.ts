@@ -37,6 +37,7 @@ import { SearchComponent } from './search/search.component';
 import { TimeRangeSelectionComponent } from './time-range-selection/time-range-selection.component';
 import { CalendarModule } from 'primeng/calendar';
 import {MenubarModule} from 'primeng/menubar';
+import {ProgressBarModule} from 'primeng/progressbar';
 
 @NgModule({
   imports: [
@@ -65,6 +66,7 @@ import {MenubarModule} from 'primeng/menubar';
     RadioButtonModule,
     CalendarModule,
     MenubarModule,
+    ProgressBarModule
   ],
   exports: [
     CommonModule,
@@ -98,6 +100,7 @@ import {MenubarModule} from 'primeng/menubar';
     TimeRangeSelectionComponent,
     CalendarModule,
     MenubarModule,
+    ProgressBarModule
   ],
   providers: [
     TreeDragDropService,

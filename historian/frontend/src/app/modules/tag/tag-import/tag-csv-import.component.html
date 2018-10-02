@@ -30,20 +30,22 @@
       <button class="btn btn-warning align-middle" type="button" [disabled]="!currentFile" (click)="onValidateCsv()">Check validity</button>
       <p-progressSpinner *ngIf="validating" [style]="{width: '30px', height: '30px'}"
                           strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>                       
-      <p-message *ngIf="displayErrMsg" severity="error" [text]="errMsg"></p-message>
-      <p-message *ngIf="displaySuccessMsg" severity="success" text="this csv file got a compatible header"></p-message>      
+      <p-message *ngIf="displayValidatingErrMsg" severity="error" [text]="errValidatingMsg"></p-message>
+      <p-message *ngIf="displayValidatingSuccessMsg" severity="success" text="this csv file got a compatible header"></p-message>      
   </div>
-  <div class="d-flex align-items-center mb-2 csv-missing-headers" *ngIf="displayErrMsg">
+  <div class="d-flex align-items-center mb-2 csv-missing-headers" *ngIf="displayValidatingErrMsg">
     <div class="label">Missing required columns</div>    
     <div *ngFor="let header of missingHeaders" >{{ header }}</div>    
   </div>
   <div class="d-flex align-items-center mb-2">
     current file headers are {{ headerCurrentFile | json }}
   </div>
-  <div class="d-flex align-items-center">      
+  <div class="d-flex align-items-center">
       <button  type="submit" class="btn btn-success" [disabled]="!currentFile && !form.valid && displaySucessMsg">Import tags from csv</button>      
-      <div class="progress">
-        {{progress.percentage}}%
-      </div>
+      <p-progressBar *ngIf="importing" class="w-100" [value]="progress.percentage"></p-progressBar>
   </div>
+  <div class="d-flex align-items-center">
+      <p-message *ngIf="displayImportErrMsg" severity="error" [text]="errImportMsg"></p-message>
+      <p-message *ngIf="displayImportSuccessMsg" severity="success" text="Successfully imported tags"></p-message> 
+  </div>  
 </form>

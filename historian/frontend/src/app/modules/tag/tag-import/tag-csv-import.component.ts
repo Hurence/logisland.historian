@@ -24,16 +24,22 @@ export class TagCsvImportComponent implements OnInit {
 
   questions: QuestionBase<any>[];
   headers: Set<IHeader>;
-  validating: boolean = false;
-  importing: boolean = false;
-  displayErrMsg: boolean = false;
-  displaySuccessMsg: boolean = false;
   fileSizeString: string;
+  // Validation property
+  validating: boolean = false;
+  displayValidatingErrMsg: boolean = false;
+  displayValidatingSuccessMsg: boolean = false;
+  errValidatingMsg = 'this csv file does not contain some required column (using specified delimiter and encoding)';
+  // Importation property
+  importing: boolean = false;
+  displayImportErrMsg: boolean = false;
+  displayImportSuccessMsg: boolean = false;
+  errImportMsg: string;
 
   currentFile: File;
   headerCurrentFile: string[];
   missingHeaders: string[];
-  errMsg = 'this csv file does not contain some required column (using specified delimiter and encoding)';
+
   progress: {
     percentage: number
   } = {
@@ -83,7 +89,7 @@ export class TagCsvImportComponent implements OnInit {
   }
 
   onValidateCsv() {
-    this.resetMsgs();
+    this.resetValidationMsgs();
     this.validating = true;
     const parseConfig: ParseConfig = {
       encoding: this.encodingCtrl.value,
@@ -101,6 +107,7 @@ export class TagCsvImportComponent implements OnInit {
   }
 
   importCsv() {
+    this.resetImportMsgs();
     this.importing = true;
     this.progress.percentage = 0;
     this.tagHistorianService.importTagCsv(this.currentFile, {
@@ -118,6 +125,7 @@ export class TagCsvImportComponent implements OnInit {
             console.log(`File "${this.currentFile.name}" is ${this.progress.percentage}% uploaded.`);
             break;
           case HttpEventType.Response:
+            this.progress.percentage = 100;
             console.log('File is completely uploaded!');
             break;
           default:
@@ -125,10 +133,15 @@ export class TagCsvImportComponent implements OnInit {
             break;
         }
       },
-      error => { this.importing = false; },
-      () => { this.importing = false; }
+      error => {
+        this.errImportMsg = `an error occured during import`;
+        this.displayImportErrMsg = true;
+      },
+      () => {
+        this.displayImportSuccessMsg = true;
+      }
     );
-    this.currentFile = undefined;
+    // this.currentFile = undefined;
   }
 
   private validateCsvHeader(header: string, parseconfig: ParseConfig): void {
@@ -146,12 +159,12 @@ export class TagCsvImportComponent implements OnInit {
       }
     });
     if (missingHeaders.length === 0) {// VALID
-      this.displaySuccessMsg = true;
+      this.displayValidatingSuccessMsg = true;
       this.missingHeaders = missingHeaders;
       this.encodingQuestion.readonly = true;
       this.separatorQuestion.readonly = true;
     } else {// NOT VALID
-      this.displayErrMsg = true;
+      this.displayValidatingErrMsg = true;
       this.missingHeaders = missingHeaders;
     }
     this.headerCurrentFile = headers;
@@ -170,6 +183,7 @@ export class TagCsvImportComponent implements OnInit {
 
   private selectFile(file: File): void {
     this.currentFile = file;
+    this.importing = false;
     this.resetMsgs();
     this.setQuestionEditable();
     this.fileSizeString = this.calculStringSize(file);
@@ -180,8 +194,18 @@ export class TagCsvImportComponent implements OnInit {
     this.separatorQuestion.readonly = false;
   }
 
+  private resetValidationMsgs(): void {
+    this.displayValidatingErrMsg = false;
+    this.displayValidatingSuccessMsg = false;
+  }
+
+  private resetImportMsgs(): void {
+    this.displayImportErrMsg = false;
+    this.displayImportSuccessMsg = false;
+  }
+
   private resetMsgs(): void {
-    this.displayErrMsg = false;
-    this.displaySuccessMsg = false;
+    this.resetValidationMsgs();
+    this.resetImportMsgs();
   }
 }
