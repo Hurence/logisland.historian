@@ -22,16 +22,16 @@
         File is required
       </div>
     </div>
-  </div>
+  </div>  
   <div *ngFor="let question of questions" class="">
-      <app-question [question]="question" [form]="form"></app-question>
-  </div>
+    <app-question [question]="question" [form]="form"></app-question>
+  </div>    
   <div class="d-flex align-items-center mb-2">
       <button class="btn btn-warning align-middle" type="button" [disabled]="!currentFile" (click)="onValidateCsv()">Check validity</button>
       <p-progressSpinner *ngIf="validating" [style]="{width: '30px', height: '30px'}"
                           strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>                       
       <p-message *ngIf="displayErrMsg" severity="error" [text]="errMsg"></p-message>
-      <p-message *ngIf="displaySucessMsg" severity="success" text="this csv file got a compatible header"></p-message>      
+      <p-message *ngIf="displaySuccessMsg" severity="success" text="this csv file got a compatible header"></p-message>      
   </div>
   <div class="d-flex align-items-center mb-2 csv-missing-headers" *ngIf="displayErrMsg">
     <div class="label">Missing required columns</div>    
