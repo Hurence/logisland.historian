@@ -7,6 +7,7 @@ import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
 import { parse, ParseConfig, ParseResult } from 'papaparse';
 import { FileUtil } from '../../../shared/file/file.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-tag-csv-import',
@@ -40,15 +41,21 @@ export class TagCsvImportComponent implements OnInit {
   headerCurrentFile: string[];
   missingHeaders: string[];
 
+  private REIMPORT_SAME_FILE_CONFIRMATION = 'Are you sure you want to reimport the same file ?';
+
+  // Progress
   progress: {
     percentage: number
   } = {
     percentage: 0
   };
+  progressBarMode: string = 'determinate';
 
   constructor(private tagHistorianService: TagHistorianService,
               private fb: FormBuilder,
-              private fileUtil: FileUtil) {
+              private fileUtil: FileUtil,
+              private confirmationService: ConfirmationService) {
+
     this.form = this.fb.group({
       content: [null, Validators.required],
       separator: [',', Validators.required],
@@ -106,9 +113,28 @@ export class TagCsvImportComponent implements OnInit {
     );
   }
 
-  importCsv() {
-    this.resetImportMsgs();
+  onClickImportCsv() {
+    if (this.displayImportSuccessMsg) {
+      this.confirmationService.confirm({
+        message: this.REIMPORT_SAME_FILE_CONFIRMATION,
+        header: 'Confirmation',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Ok',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.importCsv();
+        },
+        reject: () => { }
+      });
+    } else {
+      this.importCsv();
+    }
+  }
+
+  private importCsv(): void {
     this.importing = true;
+    this.resetImportMsgs();
+    this.progressBarMode = 'indeterminate';
     this.progress.percentage = 0;
     this.tagHistorianService.importTagCsv(this.currentFile, {
       separator: this.separatorCtrl.value,
@@ -121,6 +147,7 @@ export class TagCsvImportComponent implements OnInit {
             console.log(`Uploading file "${this.currentFile.name}" of size ${this.currentFile.size}.`);
             break;
           case HttpEventType.UploadProgress:
+            this.progressBarMode = 'determinate';
             this.progress.percentage = Math.round(100 * event.loaded / event.total);
             console.log(`File "${this.currentFile.name}" is ${this.progress.percentage}% uploaded.`);
             break;
@@ -136,9 +163,11 @@ export class TagCsvImportComponent implements OnInit {
       error => {
         this.errImportMsg = `an error occured during import`;
         this.displayImportErrMsg = true;
+        this.importing = false;
       },
       () => {
         this.displayImportSuccessMsg = true;
+        this.importing = false;
       }
     );
     // this.currentFile = undefined;

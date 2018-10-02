@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<form [formGroup]="form" (ngSubmit)="importCsv()">
+<form [formGroup]="form" (ngSubmit)="onClickImportCsv()">
   <div class="form-group mb-3 form-input-max-width">
     <label for="tagCsvFile">Csv file</label>
       <input type="file" formControlName="content" (change)="onFileChange($event)" class="form-control"
@@ -39,12 +39,10 @@
   <div class="d-flex align-items-center mb-2" *ngIf="displayValidatingErrMsg">
       current file headers are {{ headerCurrentFile | json }}
   </div>
-  <div class="d-flex align-items-center">
-      <button  type="submit" class="btn btn-success" [disabled]="!currentFile || !form.valid || !displayValidatingSuccessMsg">Import tags from csv</button>      
-      <p-progressBar *ngIf="importing" class="w-100" [value]="progress.percentage"></p-progressBar>
-  </div>
-  <div class="d-flex align-items-center">
+  <div class="d-flex align-items-center form-input-max-width">
+      <button  type="submit" class="btn btn-success" [disabled]="!currentFile || !form.valid || !displayValidatingSuccessMsg || importing">Import tags from csv</button>      
+      <p-progressBar *ngIf="importing" class="w-100" [value]="progress.percentage" [mode]="progressBarMode"></p-progressBar>
       <p-message *ngIf="displayImportErrMsg" severity="error" [text]="errImportMsg"></p-message>
       <p-message *ngIf="displayImportSuccessMsg" severity="success" text="Successfully imported tags"></p-message> 
-  </div>  
+  </div>
 </form>
