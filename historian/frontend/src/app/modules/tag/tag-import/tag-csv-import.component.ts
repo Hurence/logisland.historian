@@ -2,7 +2,7 @@ import { IDefaultHeader } from './../../../core/modele/rest/Header';
 import { Component, OnInit } from '@angular/core';
 import { TagHistorianService } from '../service/tag-historian.service';
 import { IHeader } from '../../../core/modele/rest/Header';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
 import { parse, ParseConfig, ParseResult } from 'papaparse';
@@ -10,6 +10,7 @@ import { FileUtil } from '../../../shared/file/file.service';
 import { HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ConfirmationService } from 'primeng/api';
 import { IImportTagReport } from '../../../core/modele/rest/ImportTagReport';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tag-csv-import',
@@ -91,7 +92,7 @@ export class TagCsvImportComponent implements OnInit {
       this.form = this.fb.group( {
         content: [null, Validators.required],
         separator: [',', Validators.required],
-        encoding: ['UTF-8', Validators.required],
+        encoding: ['UTF-8', [Validators.required, this.doesEncodingExist.bind(this)]],
         defaults: this.fb.group(defaultsController)
       });
       this.separatorCtrl = this.form.get('separator');
@@ -141,6 +142,19 @@ export class TagCsvImportComponent implements OnInit {
       });
     } else {
       this.importCsv();
+    }
+  }
+
+  private doesEncodingExist(control: AbstractControl): ValidationErrors | ValidationErrors | null {
+    const textDecoder: TextDecoderOptions = {
+      fatal: false,
+      ignoreBOM: false
+    };
+    try {
+      const test = new TextDecoder(control.value, textDecoder);
+      return null;
+    } catch (e) {
+      return { 'isNotSupported': true };
     }
   }
 

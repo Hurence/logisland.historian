@@ -53,4 +53,7 @@
     <div *ngIf="control.hasError('max')" class="error">
       {{question.label}} is to high
     </div>
+    <div *ngIf="control.hasError('isNotSupported')" class="error">
+      {{question.label}} '{{control.value}}' is not supported
+    </div>
   </div>
