@@ -202,6 +202,7 @@ public final class TagImportCsv {
         final ImportTagReport report = new ImportTagReport();
         long startImport = System.currentTimeMillis();
         report.setStartTime(startImport);
+        report.setNumTagsNotImported(0L);
         long counter = 0L;
         ArrayList<Tag> buffer = new ArrayList<>(bulkSize);
         Set<String> datasourcesThatExist = new HashSet<String>(10);
@@ -246,12 +247,12 @@ public final class TagImportCsv {
                     buffer.add(tag);
                 } else {
                     datasourcesThatDoesNotExist.add(tag.getDatasourceId());
-                    long oldCounter = report.getNumTagsNotImported() == null ? 0 : report.getNumTagsNotImported();
+                    long oldCounter = report.getNumTagsNotImported();
                     report.setNumTagsNotImported(oldCounter + 1);
                     report.addErrorsItem(String.format("datasource_id '%s' does not exist (corresponding tags were not injected)", tag.getDatasourceId()));
                 }
             } else {
-                long oldCounter = report.getNumTagsNotImported() == null ? 0 : report.getNumTagsNotImported();
+                long oldCounter = report.getNumTagsNotImported();
                 report.setNumTagsNotImported(oldCounter + 1);
             }
         }

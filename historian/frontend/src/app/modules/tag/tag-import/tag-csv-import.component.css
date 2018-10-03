@@ -42,7 +42,7 @@
 .csv-import-report {
   width: auto;
   display: grid;
-  grid-template-columns: repeat(2, minmax(auto, auto));
+  grid-template-columns: repeat(2, minmax(auto, 200px));
   grid-template-rows: repeat(auto, minmax(20px, auto));  
   grid-auto-flow: row;  
   overflow-x: auto;
