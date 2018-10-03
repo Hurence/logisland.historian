@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.*;
+import com.hurence.logisland.historian.rest.v1.model.error.ConvertionFieldCsvException;
 import com.hurence.logisland.historian.rest.v1.model.error.IOCsvException;
 import com.hurence.logisland.historian.rest.v1.model.error.RequiredHeaderMissingCsvException;
 import com.hurence.logisland.historian.service.DatasourcesApiService;
@@ -67,10 +68,18 @@ public final class TagImportCsv {
         }
         public Tag updateTag(Map<String, T> map, Tag tag) {
             if (map.containsKey(csvField)) {
-                return this.updateMethod.apply(map.get(csvField), tag);
+                try {
+                    return this.updateMethod.apply(map.get(csvField), tag);
+                } catch (Exception ex) {
+                    throw new ConvertionFieldCsvException(String.format("value '%s' of column '%s' seems to not be convertible into type '%s'", map.get(csvField), csvField, type));
+                }
             } else {
                 if (defaut().isPresent()) {
-                    return this.updateMethod.apply(defaut().get(), tag);
+                    try {
+                        return this.updateMethod.apply(defaut().get(), tag);
+                    } catch (Exception ex) {
+                        throw new ConvertionFieldCsvException(String.format("value '%s' of column '%s' seems to not be convertible into type '%s'", map.get(csvField), csvField, type));
+                    }
                 } else {
                     if (required) throw new RequiredHeaderMissingCsvException(String.format("csv file was not containing %s information", csvField));
                     return tag;

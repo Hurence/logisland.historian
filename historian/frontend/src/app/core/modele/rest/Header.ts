@@ -3,3 +3,9 @@ export interface IHeader {
   required: boolean;
   type: string;
 }
+
+export interface IDefaultHeader {
+  name: string;  
+  value: string;
+}
+

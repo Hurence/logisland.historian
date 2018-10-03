@@ -1,3 +1,4 @@
+import { IDefaultHeader } from './../../../core/modele/rest/Header';
 import { Component, OnInit } from '@angular/core';
 import { TagHistorianService } from '../service/tag-historian.service';
 import { IHeader } from '../../../core/modele/rest/Header';
@@ -6,7 +7,7 @@ import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
 import { parse, ParseConfig, ParseResult } from 'papaparse';
 import { FileUtil } from '../../../shared/file/file.service';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ConfirmationService } from 'primeng/api';
 
 @Component({
@@ -19,18 +20,22 @@ export class TagCsvImportComponent implements OnInit {
   form: FormGroup;
   private separatorCtrl: AbstractControl;
   private encodingCtrl: AbstractControl;
+  private defaultsCtrl: AbstractControl;  
   private separatorQuestion: TextboxQuestion;
   private encodingQuestion: TextboxQuestion;
 
 
   questions: QuestionBase<any>[];
   headers: Set<IHeader>;
+  headersQuestions: QuestionBase<any>[];
   fileSizeString: string;
   // Validation property
   validating: boolean = false;
   displayValidatingErrMsg: boolean = false;
   displayValidatingSuccessMsg: boolean = false;
-  errValidatingMsg = 'this csv file does not contain some required column (using specified delimiter and encoding)';
+  errValidatingMsg = `this csv file does not contain some required column.\n
+  This may occur because you did not choose the correct delimiter and/or encoding for the file.\n
+  If the file really did not contain any of below listed columns, you can specify a default value.`;
   // Importation property
   importing: boolean = false;
   displayImportErrMsg: boolean = false;
@@ -56,13 +61,6 @@ export class TagCsvImportComponent implements OnInit {
               private fileUtil: FileUtil,
               private confirmationService: ConfirmationService) {
 
-    this.form = this.fb.group({
-      content: [null, Validators.required],
-      separator: [',', Validators.required],
-      encoding: ['UTF-8', Validators.required],
-    });
-    this.separatorCtrl = this.form.get('separator');
-    this.encodingCtrl = this.form.get('encoding');
     this.separatorQuestion = new TextboxQuestion({
       key: 'separator',
       label: 'Csv delimiter',
@@ -83,7 +81,20 @@ export class TagCsvImportComponent implements OnInit {
 
   ngOnInit() {
     this.tagHistorianService.getTagCsvHeaders().subscribe(hs => {
-      this.headers = new Set(hs);
+      this.headers = new Set(hs);      
+      const defaultsController = {}
+      hs.forEach(h => {
+        defaultsController[h.name] = null;        
+      });      
+      this.form = this.fb.group( {
+        content: [null, Validators.required],
+        separator: [',', Validators.required],
+        encoding: ['UTF-8', Validators.required],
+        defaults: this.fb.group(defaultsController)
+      });
+      this.separatorCtrl = this.form.get('separator');
+      this.encodingCtrl = this.form.get('encoding');
+      this.defaultsCtrl = this.form.get('defaults');
     });
   }
 
@@ -104,7 +115,7 @@ export class TagCsvImportComponent implements OnInit {
     };
     this.fileUtil.readSomeLines(this.currentFile, 1,
       line => this.validateCsvHeader(line, parseConfig),
-      () => console.log('Completed'),
+      () => null,
       this.encodingCtrl.value,
       {
         fatal: false,
@@ -130,16 +141,30 @@ export class TagCsvImportComponent implements OnInit {
       this.importCsv();
     }
   }
+  
+  private parseDefaultValues(): IDefaultHeader[] {    
+    const defaults: {[s: string]: string;} = this.defaultsCtrl.value;
+    return Object.keys(defaults)
+      .filter(k => defaults[k] !== null && defaults[k] !== undefined && defaults[k] !== '')
+      .map(k => {
+        return {
+          name: k,
+          value: defaults[k]
+        }
+      });
+  }
 
   private importCsv(): void {
     this.importing = true;
     this.resetImportMsgs();
     this.progressBarMode = 'indeterminate';
     this.progress.percentage = 0;
+    const defaultValues = this.parseDefaultValues();
     this.tagHistorianService.importTagCsv(this.currentFile, {
       separator: this.separatorCtrl.value,
       charset: this.encodingCtrl.value,
-      bulkSize: 10000
+      bulkSize: 10000,
+      defaultValues: defaultValues
     }).subscribe(
       event => {
         switch (event.type) {
@@ -161,16 +186,16 @@ export class TagCsvImportComponent implements OnInit {
         }
       },
       error => {
-        this.errImportMsg = `an error occured during import`;
+        const err: HttpErrorResponse = error;
+        this.errImportMsg = `${err.error}: ${err.message}`;        
         this.displayImportErrMsg = true;
         this.importing = false;
       },
       () => {
-        this.displayImportSuccessMsg = true;
+        this.displayImportSuccessMsg = true;        
         this.importing = false;
       }
-    );
-    // this.currentFile = undefined;
+    );    
   }
 
   private validateCsvHeader(header: string, parseconfig: ParseConfig): void {
@@ -181,12 +206,15 @@ export class TagCsvImportComponent implements OnInit {
     // check that required headers are presents
     const missingHeaders: string[] = [];
     const headers: string[] = parseResult.data[0];
-    const headersAsSet: Set<string> = new Set(headers);
+    const headersAsSet: Set<string> = new Set(headers);    
     this.headers.forEach((h) => {
       if (h.required && !headersAsSet.has(h.name)) {
-        missingHeaders.push(h.name);
+        const defaultValue = this.defaultsCtrl.get(h.name).value;
+        if (defaultValue === null || defaultValue === undefined || defaultValue === '') {
+          missingHeaders.push(h.name);
+        }
       }
-    });
+    });    
     if (missingHeaders.length === 0) {// VALID
       this.displayValidatingSuccessMsg = true;
       this.missingHeaders = missingHeaders;

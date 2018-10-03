@@ -6,11 +6,19 @@
     <div class="label">required</div>
     <div *ngFor="let header of headers" >{{ header.required }}</div>
     <div class="label">type</div>
-    <div *ngFor="let header of headers" >{{ header.type }}</div>   
+    <div *ngFor="let header of headers" >{{ header.type }}</div>
+    <div class="label">default</div>
+    <ng-container *ngIf=form [formGroup]="form">
+      <ng-container formGroupName="defaults">
+        <div *ngFor="let header of headers" >
+            <input type="text" [formControlName]="header.name" class="form-control">      
+        </div>   
+      </ng-container>
+    </ng-container>
   </div>
 </div>
 
-<form [formGroup]="form" (ngSubmit)="onClickImportCsv()">
+<form *ngIf=form [formGroup]="form" (ngSubmit)="onClickImportCsv()">
   <div class="form-group mb-3 form-input-max-width">
     <label for="tagCsvFile">Csv file</label>
       <input type="file" formControlName="content" (change)="onFileChange($event)" class="form-control"

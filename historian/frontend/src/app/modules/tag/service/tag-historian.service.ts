@@ -9,7 +9,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
-import { IHeader } from '../../../core/modele/rest/Header';
+import { IHeader, IDefaultHeader } from '../../../core/modele/rest/Header';
 import { IModelService } from '../../../shared/base-model-service';
 import { Utilities } from '../../../shared/utilities.service';
 import { HistorianTag, IHistorianTag } from '../modele/HistorianTag';
@@ -200,9 +200,10 @@ export class TagHistorianService implements IModelService<HistorianTag> {
                                 separator?: string,
                                 charset?: string,
                                 bulkSize?: number
+                                defaultValues?: IDefaultHeader[] 
                               }): Observable<HttpEvent<{}>> {
     const formdata: FormData = new FormData();
-    formdata.append('file', csvFile);
+    formdata.append('file', csvFile, csvFile.name);    
     let params = new HttpParams();
     if (options) {
       if (options.separator !== null && options.separator !== undefined) {
@@ -213,6 +214,9 @@ export class TagHistorianService implements IModelService<HistorianTag> {
       }
       if (options.bulkSize !== null && options.bulkSize !== undefined) {
         params = params.set('bulkSize', options.bulkSize.toString());
+      }
+      if (options.defaultValues !== null && options.defaultValues !== undefined) {
+        formdata.append('default_headers', this.parseDefautValues(options.defaultValues));
       }
     }
 
@@ -228,5 +232,9 @@ export class TagHistorianService implements IModelService<HistorianTag> {
 
   getTagCsvHeaders(): Observable<IHeader[]> {
     return this.http.get<IHeader[]>(`${this.tagsUrl}tags/importcsv`);
+  }
+
+  private parseDefautValues(defaultsValues: IDefaultHeader[]): string {
+    return defaultsValues.map(h => `${h.name}:${h.value}`).join(',');
   }
 }
