@@ -9,6 +9,7 @@ import { parse, ParseConfig, ParseResult } from 'papaparse';
 import { FileUtil } from '../../../shared/file/file.service';
 import { HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ConfirmationService } from 'primeng/api';
+import { IImportTagReport } from '../../../core/modele/rest/ImportTagReport';
 
 @Component({
   selector: 'app-tag-csv-import',
@@ -39,8 +40,9 @@ export class TagCsvImportComponent implements OnInit {
   // Importation property
   importing: boolean = false;
   displayImportErrMsg: boolean = false;
-  displayImportSuccessMsg: boolean = false;
   errImportMsg: string;
+  displayImportSuccessMsg: boolean = false;  
+  importReport: IImportTagReport;
 
   currentFile: File;
   headerCurrentFile: string[];
@@ -178,6 +180,8 @@ export class TagCsvImportComponent implements OnInit {
             break;
           case HttpEventType.Response:
             this.progress.percentage = 100;
+            const report: IImportTagReport = event.body;
+            this.importReport = report;
             console.log('File is completely uploaded!');
             break;
           default:

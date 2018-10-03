@@ -48,14 +48,30 @@
     <div class="d-flex align-items-center mb-2" *ngIf="displayValidatingErrMsg">
         current file headers are {{ headerCurrentFile | json }}
     </div>
-    <div class="d-flex align-items-center form-input-max-width">
+    <div class="d-flex align-items-center form-input-max-width mb-2">
         <button  type="submit" class="btn btn-success" [disabled]="!currentFile || !form.valid || !displayValidatingSuccessMsg || importing">Import tags from csv</button>      
         <p-progressBar *ngIf="importing" class="w-100" [value]="progress.percentage" [mode]="progressBarMode"></p-progressBar>
         <p-message *ngIf="displayImportErrMsg" severity="error" [text]="errImportMsg"></p-message>
-        <p-message *ngIf="displayImportSuccessMsg" severity="success" text="Successfully imported tags"></p-message> 
+        <p-message *ngIf="displayImportSuccessMsg" severity="success" text="Successfully imported tags">
+          fezfze
+          rfzergerg
+          rfgergr
+        </p-message> 
+    </div>
+    <div class="csv-import-report" *ngIf="displayImportSuccessMsg">
+        <div class="label">Import duration</div>
+        <div>{{ importReport.import_duration }} milliseconds</div>
+        <div class="label">Number of tag imported</div>
+        <div>{{ importReport.num_tags_imported }}</div>
+        <div class="label">Number of tag rejected</div>
+        <div>{{ importReport.num_tags_not_imported }}</div>
+        <ng-container *ngFor="let error of importReport.errors; let i = index">
+          <div class="label">Error {{i + 1}}</div>          
+          <div >{{ error }}</div>              
+        </ng-container>          
     </div>
   </form>
 </div>
-<div *ngIf=!form>
+<div *ngIf=!form class="d-flex align-items-center">
   Loading...
 </div>
