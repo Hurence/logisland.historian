@@ -206,7 +206,7 @@ public class TagsApiController implements TagsApi {
     }
 
     private List<HeaderDefault> parseDefaultHeaders(String defaultHeaders) {
-        if (defaultHeaders == null) return Collections.emptyList();
+        if (defaultHeaders == null || defaultHeaders.isEmpty()) return Collections.emptyList();
         List<HeaderDefault> toReturn = Arrays.stream(defaultHeaders.split(","))
                 .map(column -> {
                     String[] kv = column.split(":");
