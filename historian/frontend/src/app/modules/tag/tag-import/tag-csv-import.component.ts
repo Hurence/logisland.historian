@@ -21,7 +21,7 @@ export class TagCsvImportComponent implements OnInit {
   form: FormGroup;
   private separatorCtrl: AbstractControl;
   private encodingCtrl: AbstractControl;
-  private defaultsCtrl: AbstractControl;  
+  private defaultsCtrl: AbstractControl;
   private separatorQuestion: TextboxQuestion;
   private encodingQuestion: TextboxQuestion;
 
@@ -41,7 +41,7 @@ export class TagCsvImportComponent implements OnInit {
   importing: boolean = false;
   displayImportErrMsg: boolean = false;
   errImportMsg: string;
-  displayImportSuccessMsg: boolean = false;  
+  displayImportSuccessMsg: boolean = false;
   importReport: IImportTagReport;
 
   currentFile: File;
@@ -83,11 +83,11 @@ export class TagCsvImportComponent implements OnInit {
 
   ngOnInit() {
     this.tagHistorianService.getTagCsvHeaders().subscribe(hs => {
-      this.headers = new Set(hs);      
-      const defaultsController = {}
+      this.headers = new Set(hs);
+      const defaultsController = {};
       hs.forEach(h => {
-        defaultsController[h.name] = null;        
-      });      
+        defaultsController[h.name] = null;
+      });
       this.form = this.fb.group( {
         content: [null, Validators.required],
         separator: [',', Validators.required],
@@ -143,16 +143,16 @@ export class TagCsvImportComponent implements OnInit {
       this.importCsv();
     }
   }
-  
-  private parseDefaultValues(): IDefaultHeader[] {    
-    const defaults: {[s: string]: string;} = this.defaultsCtrl.value;
+
+  private parseDefaultValues(): IDefaultHeader[] {
+    const defaults: {[s: string]: string; } = this.defaultsCtrl.value;
     return Object.keys(defaults)
       .filter(k => defaults[k] !== null && defaults[k] !== undefined && defaults[k] !== '')
       .map(k => {
         return {
           name: k,
           value: defaults[k]
-        }
+        };
       });
   }
 
@@ -190,16 +190,16 @@ export class TagCsvImportComponent implements OnInit {
         }
       },
       error => {
-        const err: HttpErrorResponse = error;        
-        this.errImportMsg = `${err.error.error}: ${err.error.message}`;        
+        const err: HttpErrorResponse = error;
+        this.errImportMsg = `${err.error.error}: ${err.error.message}`;
         this.displayImportErrMsg = true;
         this.importing = false;
       },
       () => {
-        this.displayImportSuccessMsg = true;        
+        this.displayImportSuccessMsg = true;
         this.importing = false;
       }
-    );    
+    );
   }
 
   private validateCsvHeader(header: string, parseconfig: ParseConfig): void {
@@ -210,7 +210,7 @@ export class TagCsvImportComponent implements OnInit {
     // check that required headers are presents
     const missingHeaders: string[] = [];
     const headers: string[] = parseResult.data[0];
-    const headersAsSet: Set<string> = new Set(headers);    
+    const headersAsSet: Set<string> = new Set(headers);
     this.headers.forEach((h) => {
       if (h.required && !headersAsSet.has(h.name)) {
         const defaultValue = this.defaultsCtrl.get(h.name).value;
@@ -218,7 +218,7 @@ export class TagCsvImportComponent implements OnInit {
           missingHeaders.push(h.name);
         }
       }
-    });    
+    });
     if (missingHeaders.length === 0) {// VALID
       this.displayValidatingSuccessMsg = true;
       this.missingHeaders = missingHeaders;

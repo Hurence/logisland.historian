@@ -5,7 +5,7 @@ export interface IHeader {
 }
 
 export interface IDefaultHeader {
-  name: string;  
+  name: string;
   value: string;
 }
 

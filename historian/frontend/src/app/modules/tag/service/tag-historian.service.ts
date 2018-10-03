@@ -200,10 +200,10 @@ export class TagHistorianService implements IModelService<HistorianTag> {
                                 separator?: string,
                                 charset?: string,
                                 bulkSize?: number
-                                defaultValues?: IDefaultHeader[] 
+                                defaultValues?: IDefaultHeader[]
                               }): Observable<HttpEvent<{}>> {
     const formdata: FormData = new FormData();
-    formdata.append('file', csvFile, csvFile.name);    
+    formdata.append('file', csvFile, csvFile.name);
     let params = new HttpParams();
     if (options) {
       if (options.separator !== null && options.separator !== undefined) {
