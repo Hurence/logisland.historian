@@ -23,6 +23,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.hurence.logisland.historian.parsing.QueryParsing;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
+import com.hurence.logisland.historian.rest.v1.model.ImportTagReport;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.rest.v1.model.TreeNode;
 import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
@@ -65,6 +66,13 @@ public class TagsApiService {
     @Autowired
     public void setDataflowsApiService(DataflowsApiService dataflowsApiService) {
         this.dataflowsApiService = dataflowsApiService;
+    }
+
+    private DatasourcesApiService datasourcesApiService;
+
+    @Autowired
+    public void setDataflowsApiService(DatasourcesApiService datasourcesApiService) {
+        this.datasourcesApiService = datasourcesApiService;
     }
 
 
@@ -210,9 +218,9 @@ public class TagsApiService {
         return repository.save(tag);
     }
 
-    public BulkLoad importCsvAsTags(MultipartFile multiPartCsv,
-                                    char separator, Charset charset,
-                                    int bulkSize) {
-        return TagImportCsv.importCsvAsTag(multiPartCsv, separator, charset, this, bulkSize);
+    public ImportTagReport importCsvAsTags(MultipartFile multiPartCsv,
+                                           char separator, Charset charset,
+                                           int bulkSize) {
+        return TagImportCsv.importCsvAsTag(multiPartCsv, separator, charset, this, datasourcesApiService, bulkSize);
     }
 }

@@ -628,7 +628,7 @@ paths:
        '200':
          description: import succeeded
          schema:
-           $ref: '#/definitions/BulkLoad'
+           $ref: '#/definitions/ImportTagReport'
        '422':
          description: csv file not containing required headers.
          schema:
@@ -1376,6 +1376,27 @@ definitions:
         type: integer
         format: int64
       metrics:
+         type: array
+         items:
+          type: string
+
+  ImportTagReport:
+    type: object
+    properties:
+      start_time:
+        description: timestamp
+        type: integer
+        format: int64
+      import_duration:
+        type: integer
+        format: int32
+      num_tags_imported:
+        type: integer
+        format: int64
+      num_tags_not_imported:
+        type: integer
+        format: int64
+      errors:
          type: array
          items:
           type: string

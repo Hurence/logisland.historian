@@ -193,15 +193,15 @@ public class TagsApiController implements TagsApi {
     }
 
     @Override
-    public ResponseEntity<BulkLoad> importTagsFromCsv(
+    public ResponseEntity<ImportTagReport> importTagsFromCsv(
             @Valid @RequestPart("file") MultipartFile content,
             @Valid @RequestParam(value = "separator", required = false, defaultValue=";") String separator,
             @Valid @RequestParam(value = "charset", required = false, defaultValue="UTF-8") String charset,
             @Valid @RequestParam(value = "bulkSize", required = false, defaultValue="10000") Integer bulkSize
     ) {
         Charset encoding = Charset.forName(charset);
-        BulkLoad bl = this.service.importCsvAsTags(content, separator.charAt(0), encoding, bulkSize);
-        return new ResponseEntity<BulkLoad>(bl, HttpStatus.OK);
+        ImportTagReport report = this.service.importCsvAsTags(content, separator.charAt(0), encoding, bulkSize);
+        return new ResponseEntity<ImportTagReport>(report, HttpStatus.OK);
     }
 
 

@@ -8,6 +8,7 @@ package com.hurence.logisland.historian.rest.v1.api;
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Error;
 import com.hurence.logisland.historian.rest.v1.model.Header;
+import com.hurence.logisland.historian.rest.v1.model.ImportTagReport;
 import java.util.List;
 import com.hurence.logisland.historian.rest.v1.model.Measures;
 import com.hurence.logisland.historian.rest.v1.model.MeasuresRequest;
@@ -149,15 +150,15 @@ import java.util.List;
         ResponseEntity<List<TreeNode>> getTreeTag(@ApiParam(value = "maximum number of element to retrieve in a treenode.", defaultValue = "100") @Valid @RequestParam(value = "limit", required = false, defaultValue="100") Integer limit);
 
 
-            @ApiOperation(value = "import definition of tags in csv format", nickname = "importTagsFromCsv", notes = "import definition of tags in csv format", response = BulkLoad.class, tags={ "tag","import", })
+            @ApiOperation(value = "import definition of tags in csv format", nickname = "importTagsFromCsv", notes = "import definition of tags in csv format", response = ImportTagReport.class, tags={ "tag","import", })
             @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "import succeeded", response = BulkLoad.class),
+                @ApiResponse(code = 200, message = "import succeeded", response = ImportTagReport.class),
                 @ApiResponse(code = 422, message = "csv file not containing required headers.", response = Header.class, responseContainer = "List"),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
             @RequestMapping(value = "/api/v1/tags/importcsv",
                 produces = { "application/json" }, 
             method = RequestMethod.POST)
-        ResponseEntity<BulkLoad> importTagsFromCsv(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile content,@ApiParam(value = "the csv file separator", defaultValue = ";") @Valid @RequestParam(value = "separator", required = false, defaultValue=";") String separator,@ApiParam(value = "the csv file charset encoding", defaultValue = "UTF-8") @Valid @RequestParam(value = "charset", required = false, defaultValue="UTF-8") String charset,@ApiParam(value = "the number of line to inject at the same time", defaultValue = "10000") @Valid @RequestParam(value = "bulkSize", required = false, defaultValue="10000") Integer bulkSize);
+        ResponseEntity<ImportTagReport> importTagsFromCsv(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile file,@ApiParam(value = "the csv file separator", defaultValue = ";") @Valid @RequestParam(value = "separator", required = false, defaultValue=";") String separator,@ApiParam(value = "the csv file charset encoding", defaultValue = "UTF-8") @Valid @RequestParam(value = "charset", required = false, defaultValue="UTF-8") String charset,@ApiParam(value = "the number of line to inject at the same time", defaultValue = "10000") @Valid @RequestParam(value = "bulkSize", required = false, defaultValue="10000") Integer bulkSize);
 
 
             @ApiOperation(value = "post tag measures", nickname = "postTagMeasures", notes = "post some new values", response = BulkLoad.class, tags={ "tag","measure", })

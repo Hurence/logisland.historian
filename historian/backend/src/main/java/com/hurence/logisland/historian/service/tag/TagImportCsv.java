@@ -7,9 +7,11 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Header;
+import com.hurence.logisland.historian.rest.v1.model.ImportTagReport;
 import com.hurence.logisland.historian.rest.v1.model.Tag;
 import com.hurence.logisland.historian.rest.v1.model.error.IOCsvException;
 import com.hurence.logisland.historian.rest.v1.model.error.RequiredHeaderMissingCsvException;
+import com.hurence.logisland.historian.service.DatasourcesApiService;
 import com.hurence.logisland.historian.service.TagsApiService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -104,12 +106,13 @@ public final class TagImportCsv {
         return fieldMappers.stream().map(TagImportCsv::fieldMapperToHeader).collect(Collectors.toList());
     }
 
-    public static BulkLoad importCsvAsTag(MultipartFile multiPartCsv,
-                                          char separator, Charset charset,
-                                          TagsApiService tagService,
-                                          int bulkSize) {
+    public static ImportTagReport importCsvAsTag(MultipartFile multiPartCsv,
+                                                 char separator, Charset charset,
+                                                 TagsApiService tagService,
+                                                 DatasourcesApiService datasourceService,
+                                                 int bulkSize) {
         MappingIterator<Map<String,String>> it = csvToIteratorOfMap(multiPartCsv, separator, charset);
-        return injectIteratorOfMapAsTag(it, tagService, bulkSize);
+        return injectIteratorOfMapAsTag(it, tagService, datasourceService, bulkSize);
     }
 
     /**
@@ -170,18 +173,21 @@ public final class TagImportCsv {
      * @return number of tag injected
      * @throws Exception
      */
-    private static BulkLoad injectIteratorOfMapAsTag(MappingIterator<Map<String,String>> it,
+    private static ImportTagReport injectIteratorOfMapAsTag(MappingIterator<Map<String,String>> it,
                                                      TagsApiService tagService,
-                                          int bulkSize) {
-        final BulkLoad bl = new BulkLoad();
+                                                     DatasourcesApiService datasourceService,
+                                                     int bulkSize) {
+        final ImportTagReport report = new ImportTagReport();
         long startImport = System.currentTimeMillis();
-        bl.setStartTime(startImport);
+        report.setStartTime(startImport);
         long counter = 0L;
         ArrayList<Tag> buffer = new ArrayList<>(bulkSize);
+        Set<String> datasourcesThatExist = new HashSet<String>(10);
+        Set<String> datasourcesThatDoesNotExist = new HashSet<String>(10);
         try {
             while (it.hasNextValue()) {
                 Tag tag = mapToTag(it.nextValue());
-                buffer.add(tag);
+                handleBuffer(tag, buffer, datasourcesThatExist, datasourcesThatDoesNotExist, datasourceService, report);
                 if (buffer.size() == bulkSize) {
                     tagService.SaveOrUpdateMany(buffer);
                     counter += bulkSize;
@@ -198,11 +204,32 @@ public final class TagImportCsv {
             counter += buffer.size();
             buffer.clear();
         }
-        bl.setNumPointsImported(counter);
-        bl.setImportDuration((int) (System.currentTimeMillis() - startImport));
-        bl.setMetrics(new ArrayList<String>() {{ add("tags"); }});
-        bl.setNumMetricsImported(1);
-        return bl;
+        report.setNumTagsImported(counter);
+        report.setImportDuration((int) (System.currentTimeMillis() - startImport));
+        return report;
+    }
+
+    private static void handleBuffer(Tag tag,
+                                     ArrayList<Tag> buffer,
+                                     Set<String> datasourcesThatExist,
+                                     Set<String> datasourcesThatDoesNotExist,
+                                     DatasourcesApiService datasourceService,
+                                     ImportTagReport report) {
+        if (datasourcesThatExist.contains(tag.getDatasourceId())) {
+            buffer.add(tag);
+        } else {
+            if (!datasourcesThatDoesNotExist.contains(tag.getDatasourceId())) {
+                if (datasourceService.exist(tag.getDatasourceId())) {
+                    datasourcesThatExist.add(tag.getDatasourceId());
+                    buffer.add(tag);
+                } else {
+                    datasourcesThatDoesNotExist.add(tag.getDatasourceId());
+                    report.setNumTagsNotImported(report.getNumTagsNotImported() + 1);
+                    report.addErrorsItem(String.format("datasource_id '%s' does not exist (corresponding tags were not injected)", tag.getDatasourceId()));
+                }
+            }
+            report.setNumTagsNotImported(report.getNumTagsNotImported() + 1);
+        }
     }
 
     /**
