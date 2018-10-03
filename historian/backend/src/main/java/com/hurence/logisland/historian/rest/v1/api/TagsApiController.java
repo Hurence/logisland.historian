@@ -1,8 +1,6 @@
 package com.hurence.logisland.historian.rest.v1.api;
 
 
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.hurence.logisland.historian.rest.v1.model.*;
 import com.hurence.logisland.historian.rest.v1.model.operation_report.ReplaceReport;
 import com.hurence.logisland.historian.service.MeasuresApiService;
@@ -21,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.lang.Error;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -197,13 +196,29 @@ public class TagsApiController implements TagsApi {
             @Valid @RequestPart("file") MultipartFile content,
             @Valid @RequestParam(value = "separator", required = false, defaultValue=";") String separator,
             @Valid @RequestParam(value = "charset", required = false, defaultValue="UTF-8") String charset,
-            @Valid @RequestParam(value = "bulkSize", required = false, defaultValue="10000") Integer bulkSize
+            @Valid @RequestParam(value = "bulkSize", required = false, defaultValue="10000") Integer bulkSize,
+            @RequestParam(value="default_headers", required=false)  String defaultHeaders
     ) {
         Charset encoding = Charset.forName(charset);
-        ImportTagReport report = this.service.importCsvAsTags(content, separator.charAt(0), encoding, bulkSize);
+        List<HeaderDefault> defaults = parseDefaultHeaders(defaultHeaders);
+        ImportTagReport report = this.service.importCsvAsTags(content, separator.charAt(0), encoding, bulkSize, defaults);
         return new ResponseEntity<ImportTagReport>(report, HttpStatus.OK);
     }
 
+    private List<HeaderDefault> parseDefaultHeaders(String defaultHeaders) {
+        if (defaultHeaders == null) return Collections.emptyList();
+        List<HeaderDefault> toReturn = Arrays.stream(defaultHeaders.split(","))
+                .map(column -> {
+                    String[] kv = column.split(":");
+                    if (kv.length != 2) throw new IllegalArgumentException(String.format(
+                            "default_headers parameters is wrong, got '%s' expected '[key:value,...]'",
+                            defaultHeaders
+                    ));
+                    return new HeaderDefault().setName(kv[0]).setValue(kv[1]);
+                })
+                .collect(Collectors.toList());
+        return toReturn;
+    }
 
     @Override
     public ResponseEntity<BulkLoad> postTagMeasures(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile content, @ApiParam(value = "the csv file content", defaultValue = ";") @Valid @RequestParam(value = "csv_delimiter", required = false, defaultValue = ";") String csvDelimiter, @ApiParam(value = "valid values LONG (ms since 1970),   INSTANT (default java 8 instant),   'SDF-FORMAT' e.g dd.MM.yyyy HH:mm:ss.SSS ", defaultValue = "dd.MM.yyyy HH:mm:ss.SSS") @Valid @RequestParam(value = "date_format", required = false, defaultValue = "dd.MM.yyyy HH:mm:ss.SSS") String dateFormat, @ApiParam(value = "valid values ENGLISH, GERMAN", defaultValue = "ENGLISH") @Valid @RequestParam(value = "number_format", required = false, defaultValue = "ENGLISH") String numberFormat, @ApiParam(value = "") @Valid @RequestParam(value = "attribute_fields", required = false) String attributeFields, @ApiParam(value = "will discard all previously loaded data (use it with great care)", defaultValue = "false") @Valid @RequestParam(value = "clean_import", required = false, defaultValue = "false") Boolean cleanImport, @ApiParam(value = "the number of points by chunk") @Valid @RequestParam(value = "points_by_chunk", required = false) Integer pointsByChunk) {

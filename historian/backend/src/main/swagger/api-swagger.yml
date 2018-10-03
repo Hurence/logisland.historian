@@ -605,6 +605,15 @@ paths:
          description: the csv file content
          required: true
          type: file
+       - name: default_headers
+         in: formData
+         description: |
+          default value for missing headers. For example :
+            datasource_id:ma datasource id,type:double
+          would use "ma datasource id" as default value for datasource_id if not present in csv
+          and use "double" as default value for type if not present in csv
+         required: false
+         type: string
        - name: separator
          in: query
          description: the csv file separator
@@ -624,6 +633,7 @@ paths:
          type: integer
          format: int32
          default: 10000
+
       responses:
        '200':
          description: import succeeded
@@ -1816,5 +1826,15 @@ definitions:
       required:
         type: boolean
       type:
+        type: string
+
+  HeaderDefault:
+    required:
+      - name
+      - value
+    properties:
+      name:
+        type: string
+      value:
         type: string
 

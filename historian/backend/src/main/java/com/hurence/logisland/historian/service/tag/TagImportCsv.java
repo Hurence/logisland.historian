@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.hurence.logisland.historian.repository.SolrTagRepository;
-import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
-import com.hurence.logisland.historian.rest.v1.model.Header;
-import com.hurence.logisland.historian.rest.v1.model.ImportTagReport;
-import com.hurence.logisland.historian.rest.v1.model.Tag;
+import com.hurence.logisland.historian.rest.v1.model.*;
 import com.hurence.logisland.historian.rest.v1.model.error.IOCsvException;
 import com.hurence.logisland.historian.rest.v1.model.error.RequiredHeaderMissingCsvException;
 import com.hurence.logisland.historian.service.DatasourcesApiService;
@@ -30,8 +27,9 @@ public final class TagImportCsv {
 
     private interface TagFieldMapping<T> {
         public String csvField();
-        public Boolean required();
+        public boolean required();
         public String type();
+        public Optional<T> defaut();
         public Tag updateTag(Map<String, T> map, Tag tag);
     }
 
@@ -40,62 +38,75 @@ public final class TagImportCsv {
         final String csvField;
         final String type;
         final boolean required;
+        final T defaut;
         final BiFunction<T, Tag, Tag> updateMethod;
 
         public TagFieldMappingImpl(String csvField,
                                    Boolean required,
                                    String type,
+                                   T defaut,
                                    BiFunction<T, Tag, Tag> updateMethod) {
             this.csvField = csvField;
             this.required = required;
             this.type = type;
+            this.defaut = defaut;
             this.updateMethod = updateMethod;
         }
         public String csvField() {
             return this.csvField;
         }
-        public Boolean required() {
+        public boolean required() {
             return this.required;
         }
         public String type() {
             return this.type;
         }
+        public Optional<T> defaut() {
+            if (this.defaut == null) return Optional.empty();
+            return Optional.of(this.defaut);
+        }
         public Tag updateTag(Map<String, T> map, Tag tag) {
             if (map.containsKey(csvField)) {
                 return this.updateMethod.apply(map.get(csvField), tag);
             } else {
-                if (required) throw new RequiredHeaderMissingCsvException(String.format("csv file was not containing %s information", csvField));
-                return tag;
+                if (defaut().isPresent()) {
+                    return this.updateMethod.apply(defaut().get(), tag);
+                } else {
+                    if (required) throw new RequiredHeaderMissingCsvException(String.format("csv file was not containing %s information", csvField));
+                    return tag;
+                }
             }
         }
     }
 
     private static class TagFieldStringMappingImpl extends TagFieldMappingImpl<String> {
-        public TagFieldStringMappingImpl(String csvField, Boolean required, String type, BiFunction<String, Tag, Tag> updateMethod) {
-            super(csvField, required, type, updateMethod);
+        public TagFieldStringMappingImpl(String csvField, Boolean required, String type, String defaut, BiFunction<String, Tag, Tag> updateMethod) {
+            super(csvField, required, type, defaut, updateMethod);
         }
     }
 
     private static List<TagFieldMapping> fieldMappers = new ArrayList<TagFieldMapping>() {{
-        add(new TagFieldStringMappingImpl("node_id", true, "string",
+        add(new TagFieldStringMappingImpl("node_id", true, "string", null,
                 (value, tag) -> tag.setNodeId(value)));
-        add(new TagFieldStringMappingImpl("sampling_rate", true, "integer",
+        add(new TagFieldStringMappingImpl("sampling_rate", true, "integer", null,
                 (value, tag) -> tag.setUpdateRate(Integer.valueOf(value))));
-        add(new TagFieldStringMappingImpl("read_mode", false, "enum:" + Arrays.asList(Tag.PollingModeEnum.values()),
+        add(new TagFieldStringMappingImpl("read_mode", false,
+                "enum:" + Arrays.asList(Tag.PollingModeEnum.values()),  null,
                 (value, tag) -> tag.setPollingMode(Tag.PollingModeEnum.fromValue(value))));
-        add(new TagFieldStringMappingImpl("tag_monitored", true, "boolean",
+        add(new TagFieldStringMappingImpl("tag_monitored", true, "boolean", null,
                 (value, tag) -> tag.setEnabled(Boolean.valueOf(value))));
-        add(new TagFieldStringMappingImpl("description", false, "string",
+        add(new TagFieldStringMappingImpl("description", false, "string", null,
                 (value, tag) -> tag.setDescription(value)));
-        add(new TagFieldStringMappingImpl("type", true, "enum:" + Arrays.asList(Tag.DataTypeEnum.values()),
+        add(new TagFieldStringMappingImpl("type", true,
+                "enum:" + Arrays.asList(Tag.DataTypeEnum.values()), null,
                 (value, tag) -> tag.setDataType(Tag.DataTypeEnum.fromValue(value))));
-        add(new TagFieldStringMappingImpl("server_scan_rate", false, "integer",
+        add(new TagFieldStringMappingImpl("server_scan_rate", false, "integer", null,
                 (value, tag) -> tag.setServerScanRate(Integer.valueOf(value))));
-        add(new TagFieldStringMappingImpl("group", false, "string",
+        add(new TagFieldStringMappingImpl("group", false, "string", null,
                 (value, tag) -> tag.setGroup(value)));
-        add(new TagFieldStringMappingImpl("datasource_id", true, "string",
+        add(new TagFieldStringMappingImpl("datasource_id", true, "string", null,
                 (value, tag) -> tag.setDatasourceId(value)));
-        add(new TagFieldStringMappingImpl("tag_name", false, "string",
+        add(new TagFieldStringMappingImpl("tag_name", false, "string", null,
                 (value, tag) -> tag.setTagName(value)));
     }};
 
@@ -110,9 +121,10 @@ public final class TagImportCsv {
                                                  char separator, Charset charset,
                                                  TagsApiService tagService,
                                                  DatasourcesApiService datasourceService,
-                                                 int bulkSize) {
+                                                 int bulkSize,
+                                                 List<HeaderDefault> defaultHeaders) {
         MappingIterator<Map<String,String>> it = csvToIteratorOfMap(multiPartCsv, separator, charset);
-        return injectIteratorOfMapAsTag(it, tagService, datasourceService, bulkSize);
+        return injectIteratorOfMapAsTag(it, tagService, datasourceService, bulkSize, defaultHeaders);
     }
 
     /**
@@ -128,7 +140,7 @@ public final class TagImportCsv {
         MappingIterator<Map<String,String>> it = csvToIteratorOfMap(multiPartCsv, separator, charset);
         return StreamSupport
                 .stream(Spliterators.spliteratorUnknownSize(it, Spliterator.ORDERED), false)
-                .map(TagImportCsv::mapToTag);
+                .map(map -> TagImportCsv.mapToTag(map, Collections.emptyList()));
     }
 
     /**
@@ -176,7 +188,8 @@ public final class TagImportCsv {
     private static ImportTagReport injectIteratorOfMapAsTag(MappingIterator<Map<String,String>> it,
                                                      TagsApiService tagService,
                                                      DatasourcesApiService datasourceService,
-                                                     int bulkSize) {
+                                                     int bulkSize,
+                                                     List<HeaderDefault> defaultHeaders) {
         final ImportTagReport report = new ImportTagReport();
         long startImport = System.currentTimeMillis();
         report.setStartTime(startImport);
@@ -186,7 +199,7 @@ public final class TagImportCsv {
         Set<String> datasourcesThatDoesNotExist = new HashSet<String>(10);
         try {
             while (it.hasNextValue()) {
-                Tag tag = mapToTag(it.nextValue());
+                Tag tag = mapToTag(it.nextValue(), defaultHeaders);
                 handleBuffer(tag, buffer, datasourcesThatExist, datasourcesThatDoesNotExist, datasourceService, report);
                 if (buffer.size() == bulkSize) {
                     tagService.SaveOrUpdateMany(buffer);
@@ -224,11 +237,14 @@ public final class TagImportCsv {
                     buffer.add(tag);
                 } else {
                     datasourcesThatDoesNotExist.add(tag.getDatasourceId());
-                    report.setNumTagsNotImported(report.getNumTagsNotImported() + 1);
+                    long oldCounter = report.getNumTagsNotImported() == null ? 0 : report.getNumTagsNotImported();
+                    report.setNumTagsNotImported(oldCounter + 1);
                     report.addErrorsItem(String.format("datasource_id '%s' does not exist (corresponding tags were not injected)", tag.getDatasourceId()));
                 }
+            } else {
+                long oldCounter = report.getNumTagsNotImported() == null ? 0 : report.getNumTagsNotImported();
+                report.setNumTagsNotImported(oldCounter + 1);
             }
-            report.setNumTagsNotImported(report.getNumTagsNotImported() + 1);
         }
     }
 
@@ -238,8 +254,13 @@ public final class TagImportCsv {
      * @return Tag
      * @throws IllegalArgumentException if map does not contain required fields
      */
-    private static Tag mapToTag(Map<String,String> map) {
+    private static Tag mapToTag(Map<String,String> map, List<HeaderDefault> defaultHeaders) {
         Tag tag = new Tag();
+        defaultHeaders.forEach(defaut -> {
+            if (!map.containsKey(defaut.getName())) {
+                map.put(defaut.getName(), defaut.getValue());
+            }
+        });
         fieldMappers.forEach(mapper -> {
             mapper.updateTag(map, tag);
         });
