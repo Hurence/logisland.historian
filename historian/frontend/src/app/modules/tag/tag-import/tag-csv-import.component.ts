@@ -186,8 +186,8 @@ export class TagCsvImportComponent implements OnInit {
         }
       },
       error => {
-        const err: HttpErrorResponse = error;
-        this.errImportMsg = `${err.error}: ${err.message}`;        
+        const err: HttpErrorResponse = error;        
+        this.errImportMsg = `${err.error.error}: ${err.error.message}`;        
         this.displayImportErrMsg = true;
         this.importing = false;
       },

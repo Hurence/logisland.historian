@@ -1,56 +1,61 @@
-<div>
-  <h4>csv headers accepted/required</h4>
-  <div class="csv-headers-table">    
-    <div class="label">csv header</div>
-    <div *ngFor="let header of headers" >{{ header.name }}</div>
-    <div class="label">required</div>
-    <div *ngFor="let header of headers" >{{ header.required }}</div>
-    <div class="label">type</div>
-    <div *ngFor="let header of headers" >{{ header.type }}</div>
-    <div class="label">default</div>
-    <ng-container *ngIf=form [formGroup]="form">
-      <ng-container formGroupName="defaults">
-        <div *ngFor="let header of headers" >
-            <input type="text" [formControlName]="header.name" class="form-control">      
-        </div>   
+<div *ngIf=form>
+  <div>
+    <h4>csv headers accepted/required</h4>
+    <div class="csv-headers-table">    
+      <div class="label">csv header</div>
+      <div *ngFor="let header of headers" >{{ header.name }}</div>
+      <div class="label">required</div>
+      <div *ngFor="let header of headers" >{{ header.required }}</div>
+      <div class="label">type</div>
+      <div *ngFor="let header of headers" >{{ header.type }}</div>
+      <div class="label">default</div>
+      <ng-container *ngIf=form [formGroup]="form">
+        <ng-container formGroupName="defaults">
+          <div *ngFor="let header of headers" >
+              <input type="text" [formControlName]="header.name" class="form-control">      
+          </div>   
+        </ng-container>
       </ng-container>
-    </ng-container>
-  </div>
-</div>
-
-<form *ngIf=form [formGroup]="form" (ngSubmit)="onClickImportCsv()">
-  <div class="form-group mb-3 form-input-max-width">
-    <label for="tagCsvFile">Csv file</label>
-      <input type="file" formControlName="content" (change)="onFileChange($event)" class="form-control"
-      id="tagCsvFile" required>
-      <span *ngIf="currentFile">size: {{ fileSizeString }}</span>
-    <div [hidden]="form.get('content').valid || form.get('content').pristine" class="alert alert-danger">
-      <div *ngIf="form.get('content').hasError('required')" class="error">
-        File is required
-      </div>
     </div>
-  </div>  
-  <div *ngFor="let question of questions" class="form-input-max-width">
-    <app-question [question]="question" [form]="form"></app-question>
-  </div>    
-  <div class="d-flex align-items-center mb-2">
-      <button class="btn btn-warning align-middle" type="button" [disabled]="!currentFile" (click)="onValidateCsv()">Check validity</button>
-      <p-progressSpinner *ngIf="validating" [style]="{width: '30px', height: '30px'}"
-                          strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>                       
-      <p-message *ngIf="displayValidatingErrMsg" severity="error" [text]="errValidatingMsg"></p-message>
-      <p-message *ngIf="displayValidatingSuccessMsg" severity="success" text="this csv file got a compatible header"></p-message>      
   </div>
-  <div class="mb-2 csv-missing-headers" *ngIf="displayValidatingErrMsg">
-    <div class="label">Missing required columns</div>    
-    <div *ngFor="let header of missingHeaders" >{{ header }}</div>    
-  </div>
-  <div class="d-flex align-items-center mb-2" *ngIf="displayValidatingErrMsg">
-      current file headers are {{ headerCurrentFile | json }}
-  </div>
-  <div class="d-flex align-items-center form-input-max-width">
-      <button  type="submit" class="btn btn-success" [disabled]="!currentFile || !form.valid || !displayValidatingSuccessMsg || importing">Import tags from csv</button>      
-      <p-progressBar *ngIf="importing" class="w-100" [value]="progress.percentage" [mode]="progressBarMode"></p-progressBar>
-      <p-message *ngIf="displayImportErrMsg" severity="error" [text]="errImportMsg"></p-message>
-      <p-message *ngIf="displayImportSuccessMsg" severity="success" text="Successfully imported tags"></p-message> 
-  </div>
-</form>
+
+  <form [formGroup]="form" (ngSubmit)="onClickImportCsv()">
+    <div class="form-group mb-3 form-input-max-width">
+      <label for="tagCsvFile">Csv file</label>
+        <input type="file" formControlName="content" (change)="onFileChange($event)" class="form-control"
+        id="tagCsvFile" required>
+        <span *ngIf="currentFile">size: {{ fileSizeString }}</span>
+      <div [hidden]="form.get('content').valid || form.get('content').pristine" class="alert alert-danger">
+        <div *ngIf="form.get('content').hasError('required')" class="error">
+          File is required
+        </div>
+      </div>
+    </div>  
+    <div *ngFor="let question of questions" class="form-input-max-width">
+      <app-question [question]="question" [form]="form"></app-question>
+    </div>    
+    <div class="d-flex align-items-center mb-2">
+        <button class="btn btn-warning align-middle" type="button" [disabled]="!currentFile" (click)="onValidateCsv()">Check validity</button>
+        <p-progressSpinner *ngIf="validating" [style]="{width: '30px', height: '30px'}"
+                            strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>                       
+        <p-message *ngIf="displayValidatingErrMsg" severity="error" [text]="errValidatingMsg"></p-message>
+        <p-message *ngIf="displayValidatingSuccessMsg" severity="success" text="this csv file got a compatible header"></p-message>      
+    </div>
+    <div class="mb-2 csv-missing-headers" *ngIf="displayValidatingErrMsg">
+      <div class="label">Missing required columns</div>    
+      <div *ngFor="let header of missingHeaders" >{{ header }}</div>    
+    </div>
+    <div class="d-flex align-items-center mb-2" *ngIf="displayValidatingErrMsg">
+        current file headers are {{ headerCurrentFile | json }}
+    </div>
+    <div class="d-flex align-items-center form-input-max-width">
+        <button  type="submit" class="btn btn-success" [disabled]="!currentFile || !form.valid || !displayValidatingSuccessMsg || importing">Import tags from csv</button>      
+        <p-progressBar *ngIf="importing" class="w-100" [value]="progress.percentage" [mode]="progressBarMode"></p-progressBar>
+        <p-message *ngIf="displayImportErrMsg" severity="error" [text]="errImportMsg"></p-message>
+        <p-message *ngIf="displayImportSuccessMsg" severity="success" text="Successfully imported tags"></p-message> 
+    </div>
+  </form>
+</div>
+<div *ngIf=!form>
+  Loading...
+</div>
