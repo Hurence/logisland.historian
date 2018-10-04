@@ -317,3 +317,9 @@ mark, .mark {
 .orange {
   background-color: orange;
 }
+
+h1 {
+  font-size: 1rem;
+  height: 100%;
+  padding: 15px 15px 0 15px;
+}

@@ -56,11 +56,12 @@
 
 .title {
   grid-area: header;
-  margin: auto;
+  margin: auto;  
 }
 
 .main {
   grid-area: main;
+  margin-left: 20px;
 }
 
 .tag-import-container {
