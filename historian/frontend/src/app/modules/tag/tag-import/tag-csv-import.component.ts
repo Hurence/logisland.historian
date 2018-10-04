@@ -1,3 +1,4 @@
+import { IHeader } from './../../../../../../.history/frontend/src/app/core/modele/rest/Header_20181001120019';
 import { IDefaultHeader } from './../../../core/modele/rest/Header';
 import { Component, OnInit } from '@angular/core';
 import { TagHistorianService } from '../service/tag-historian.service';
@@ -11,6 +12,7 @@ import { HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/
 import { ConfirmationService } from 'primeng/api';
 import { IImportTagReport } from '../../../core/modele/rest/ImportTagReport';
 import { Observable } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-tag-csv-import',
@@ -62,7 +64,8 @@ export class TagCsvImportComponent implements OnInit {
   constructor(private tagHistorianService: TagHistorianService,
               private fb: FormBuilder,
               private fileUtil: FileUtil,
-              private confirmationService: ConfirmationService) {
+              private confirmationService: ConfirmationService,
+              private cookieService: CookieService) {
 
     this.separatorQuestion = new TextboxQuestion({
       key: 'separator',
@@ -83,22 +86,32 @@ export class TagCsvImportComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.tagHistorianService.getTagCsvHeaders().subscribe(hs => {
-      this.headers = new Set(hs);
-      const defaultsController = {};
-      hs.forEach(h => {
-        defaultsController[h.name] = null;
+    if (this.cookieService.check('tag-csv-headers')) {
+      const hs: IHeader[] = JSON.parse(this.cookieService.get('tag-csv-headers'));
+      this.initialize(hs);
+    } else {      
+      this.tagHistorianService.getTagCsvHeaders().subscribe(hs => {
+        this.cookieService.set('tag-csv-headers', JSON.stringify(hs));
+        this.initialize(hs);
       });
-      this.form = this.fb.group( {
-        content: [null, Validators.required],
-        separator: [',', Validators.required],
-        encoding: ['UTF-8', [Validators.required, this.doesEncodingExist.bind(this)]],
-        defaults: this.fb.group(defaultsController)
-      });
-      this.separatorCtrl = this.form.get('separator');
-      this.encodingCtrl = this.form.get('encoding');
-      this.defaultsCtrl = this.form.get('defaults');
+    }    
+  }
+
+  private initialize(headers: IHeader[]): void {
+    this.headers = new Set(headers);
+    const defaultsController = {};
+    headers.forEach(h => {
+      defaultsController[h.name] = null;
     });
+    this.form = this.fb.group( {
+      content: [null, Validators.required],
+      separator: [',', Validators.required],
+      encoding: ['UTF-8', [Validators.required, this.doesEncodingExist.bind(this)]],
+      defaults: this.fb.group(defaultsController)
+    });
+    this.separatorCtrl = this.form.get('separator');
+    this.encodingCtrl = this.form.get('encoding');
+    this.defaultsCtrl = this.form.get('defaults');
   }
 
   onFileChange(event) {
