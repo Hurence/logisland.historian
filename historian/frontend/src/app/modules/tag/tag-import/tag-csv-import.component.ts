@@ -35,9 +35,9 @@ export class TagCsvImportComponent implements OnInit {
   validating: boolean = false;
   displayValidatingErrMsg: boolean = false;
   displayValidatingSuccessMsg: boolean = false;
-  errValidatingMsg = `this csv file does not contain some required column.\n
-  This may occur because you did not choose the correct delimiter and/or encoding for the file.\n
-  If the file really did not contain any of below listed columns, you can specify a default value.`;
+  errValidatingMsg = `This csv file does not contain the required column(s).\n
+  Please edit the table below to give your column labels default values.\n
+  Alternatively check the encoding or delimiter value.`;
   // Importation property
   importing: boolean = false;
   displayImportErrMsg: boolean = false;
