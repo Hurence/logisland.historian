@@ -53,3 +53,21 @@
   text-align: justify;
   border: 1px solid #2399e5;
 }
+
+.title {
+  grid-area: header;
+  margin: auto;
+}
+
+.main {
+  grid-area: main;
+}
+
+.tag-import-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(auto, 1fr));
+  grid-template-rows: 2;
+  grid-template-areas: "header header header header"
+                       "main main main main";
+}
+
