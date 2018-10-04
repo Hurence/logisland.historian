@@ -1,24 +1,4 @@
 <div *ngIf=form>
-  <div>
-    <h4>csv headers accepted/required</h4>
-    <div class="csv-headers-table">    
-      <div class="label">csv header</div>
-      <div *ngFor="let header of headers" >{{ header.name }}</div>
-      <div class="label">required</div>
-      <div *ngFor="let header of headers" >{{ header.required }}</div>
-      <div class="label">type</div>
-      <div *ngFor="let header of headers" >{{ header.type }}</div>
-      <div class="label">default</div>
-      <ng-container *ngIf=form [formGroup]="form">
-        <ng-container formGroupName="defaults">
-          <div *ngFor="let header of headers" >
-              <input type="text" [formControlName]="header.name" class="form-control">      
-          </div>   
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
-
   <form [formGroup]="form" (ngSubmit)="onClickImportCsv()">
     <div class="form-group mb-3 form-input-max-width">
       <label for="tagCsvFile">Csv file</label>
@@ -41,12 +21,19 @@
         <p-message *ngIf="displayValidatingErrMsg" severity="error" [text]="errValidatingMsg"></p-message>
         <p-message *ngIf="displayValidatingSuccessMsg" severity="success" text="this csv file got a compatible header"></p-message>      
     </div>
-    <div class="mb-2 csv-missing-headers" *ngIf="displayValidatingErrMsg">
-      <div class="label">Missing required columns</div>    
-      <div *ngFor="let header of missingHeaders" >{{ header }}</div>    
-    </div>
-    <div class="d-flex align-items-center mb-2" *ngIf="displayValidatingErrMsg">
-        current file headers are {{ headerCurrentFile | json }}
+    <div class="mb-2" *ngIf="displayValidatingErrMsg">
+      <div class="label">Missing some required columns</div>    
+      <!-- <div *ngFor="let header of missingHeaders" >{{ header }}</div> -->
+      <div>        
+        <div class="csv-headers-table">
+          <div class="label">csv header</div>
+          <div *ngFor="let header of headers" [ngClass]="findClass(header)">{{ header.name }}</div>
+          <div class="label">required</div>
+          <div *ngFor="let header of headers" [ngClass]="findClass(header)">{{ header.required }}</div>
+          <div class="label">type</div>
+          <div *ngFor="let header of headers" [ngClass]="findClass(header)">{{ header.type }}</div>      
+        </div>
+      </div>
     </div>
     <div class="d-flex align-items-center form-input-max-width mb-2">
         <button  type="submit" class="btn btn-success" [disabled]="!currentFile || !form.valid || !displayValidatingSuccessMsg || importing">Import tags from csv</button>      

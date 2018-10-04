@@ -1,4 +1,3 @@
-import { IHeader } from './../../../../../../.history/frontend/src/app/core/modele/rest/Header_20181001120019';
 import { IDefaultHeader } from './../../../core/modele/rest/Header';
 import { Component, OnInit } from '@angular/core';
 import { TagHistorianService } from '../service/tag-historian.service';
@@ -38,7 +37,7 @@ export class TagCsvImportComponent implements OnInit {
   displayValidatingErrMsg: boolean = false;
   displayValidatingSuccessMsg: boolean = false;
   errValidatingMsg = `This csv file does not contain the required column(s).\n
-  Please edit the table below to give your column labels default values.\n
+  Please see the table below to see which column is missing and add it.\n
   Alternatively check the encoding or delimiter value.`;
   // Importation property
   importing: boolean = false;
@@ -49,7 +48,7 @@ export class TagCsvImportComponent implements OnInit {
 
   currentFile: File;
   headerCurrentFile: string[];
-  missingHeaders: string[];
+  missingHeaders: Set<IHeader>;
 
   private REIMPORT_SAME_FILE_CONFIRMATION = 'Are you sure you want to reimport the same file ?';
 
@@ -89,12 +88,12 @@ export class TagCsvImportComponent implements OnInit {
     if (this.cookieService.check('tag-csv-headers')) {
       const hs: IHeader[] = JSON.parse(this.cookieService.get('tag-csv-headers'));
       this.initialize(hs);
-    } else {      
+    } else {
       this.tagHistorianService.getTagCsvHeaders().subscribe(hs => {
         this.cookieService.set('tag-csv-headers', JSON.stringify(hs));
         this.initialize(hs);
       });
-    }    
+    }
   }
 
   private initialize(headers: IHeader[]): void {
@@ -235,28 +234,40 @@ export class TagCsvImportComponent implements OnInit {
       console.error('error parsing csv', parseResult.errors);
     }
     // check that required headers are presents
-    const missingHeaders: string[] = [];
-    const headers: string[] = parseResult.data[0];
-    const headersAsSet: Set<string> = new Set(headers);
+    const missingHeaders: Set<IHeader> = new Set();
+    const headersFromCsv: string[] = parseResult.data[0];
+    const headersFromCsvAsSet: Set<string> = new Set(headersFromCsv);
+    let valid: boolean = true;
     this.headers.forEach((h) => {
-      if (h.required && !headersAsSet.has(h.name)) {
-        const defaultValue = this.defaultsCtrl.get(h.name).value;
-        if (defaultValue === null || defaultValue === undefined || defaultValue === '') {
-          missingHeaders.push(h.name);
+      if (!headersFromCsvAsSet.has(h.name)) {
+        missingHeaders.add(h);
+        if (h.required) {
+          valid = false;
         }
       }
     });
-    if (missingHeaders.length === 0) {// VALID
+    if (valid) {
       this.displayValidatingSuccessMsg = true;
-      this.missingHeaders = missingHeaders;
       this.encodingQuestion.readonly = true;
       this.separatorQuestion.readonly = true;
-    } else {// NOT VALID
+    } else {
       this.displayValidatingErrMsg = true;
-      this.missingHeaders = missingHeaders;
     }
-    this.headerCurrentFile = headers;
+    this.missingHeaders = missingHeaders;
+    this.headerCurrentFile = headersFromCsv;
     this.validating = false;
+  }
+
+  private findClass(h: IHeader): string {
+    if (this.missingHeaders.has(h)) {
+      if (h.required) {
+        return 'red';
+      } else {
+        return 'orange';
+      }
+    } else {
+      return 'green';
+    }
   }
 
   private calculStringSize(file: File): string {
