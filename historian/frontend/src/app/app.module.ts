@@ -32,6 +32,7 @@ import { Utilities } from './shared/utilities.service';
 import { TodoComponent } from './todo/todo.component';
 import { CookieService } from 'ngx-cookie-service';
 import { DatasourceModule } from './modules/datasource/datasource.module';
+import { FileUtil } from './shared/file/file.service';
 
 /**
  * This function is used internal to get a string instance of the `<base href="" />` value from `index.html`.
@@ -93,6 +94,7 @@ export function getBaseHref(platformLocation: PlatformLocation): string {
     ConfirmationService,
     DataFlowService,
     CookieService,
+    FileUtil
   ],
   bootstrap: [AppComponent],
 })

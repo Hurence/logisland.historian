@@ -589,6 +589,86 @@ paths:
              description: unexpected error
              schema:
                $ref: '#/definitions/Error'
+  /tags/importcsv:
+    post:
+      tags:
+       - tag
+       - import
+      summary: import definition of tags in csv format
+      description: import definition of tags in csv format
+      operationId: importTagsFromCsv
+      produces:
+       - application/json
+      parameters:
+       - name: file
+         in: formData
+         description: the csv file content
+         required: true
+         type: file
+       - name: default_headers
+         in: formData
+         description: |
+          default value for missing headers. For example :
+            datasource_id:ma datasource id,type:double
+          would use "ma datasource id" as default value for datasource_id if not present in csv
+          and use "double" as default value for type if not present in csv
+         required: false
+         type: string
+       - name: separator
+         in: query
+         description: the csv file separator
+         required: false
+         type: string
+         default: ';'
+       - name: charset
+         in: query
+         description: the csv file charset encoding
+         required: false
+         type: string
+         default: 'UTF-8'
+       - name: bulkSize
+         in: query
+         description: the number of line to inject at the same time
+         required: false
+         type: integer
+         format: int32
+         default: 10000
+
+      responses:
+       '200':
+         description: import succeeded
+         schema:
+           $ref: '#/definitions/ImportTagReport'
+       '422':
+         description: csv file not containing required headers.
+         schema:
+           type: array
+           items:
+             $ref: '#/definitions/Header'
+       default:
+         description: unexpected error
+         schema:
+           $ref: '#/definitions/Error'
+    get:
+      tags:
+        - tag
+        - import
+      summary: return expected headers in csv file for POST request
+      description: return expected headers in csv file for POST request
+      operationId: getTagsCsvHeaders
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: list of expected headers (required or not)
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Header'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
   /tags/measures:
      post:
        tags:
@@ -1289,7 +1369,9 @@ definitions:
     type: object
     properties:
       start_time:
-        type: string
+        description: timestamp
+        type: integer
+        format: int64
       generation_duration:
         type: integer
         format: int32
@@ -1304,6 +1386,27 @@ definitions:
         type: integer
         format: int64
       metrics:
+         type: array
+         items:
+          type: string
+
+  ImportTagReport:
+    type: object
+    properties:
+      start_time:
+        description: timestamp
+        type: integer
+        format: int64
+      import_duration:
+        type: integer
+        format: int32
+      num_tags_imported:
+        type: integer
+        format: int64
+      num_tags_not_imported:
+        type: integer
+        format: int64
+      errors:
          type: array
          items:
           type: string
@@ -1712,4 +1815,26 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/TreeNode'
+
+  Header:
+    required:
+      - name
+      - required
+    properties:
+      name:
+        type: string
+      required:
+        type: boolean
+      type:
+        type: string
+
+  HeaderDefault:
+    required:
+      - name
+      - value
+    properties:
+      name:
+        type: string
+      value:
+        type: string
 

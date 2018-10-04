@@ -23,8 +23,6 @@ import org.threeten.bp.OffsetDateTime;
 * A logisland &#39;processor&#39;.
 */
     @ApiModel(description = "A logisland 'processor'.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-25T12:56:06.238+02:00")
-
 
 @SolrDocument(solrCoreName = "historian")
 public class Processor  implements Serializable {

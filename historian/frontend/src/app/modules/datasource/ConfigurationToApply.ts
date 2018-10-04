@@ -1,5 +1,4 @@
-import { Observable } from 'rxjs';
-import { zip } from 'rxjs';
+import { Observable , zip, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { HistorianTag } from '../tag/modele/HistorianTag';
@@ -53,11 +52,11 @@ export class TagConfigurationToApply {
           break;
       }
     });
-    let deleteObs = Observable.of([]);
+    let deleteObs = of([]);
     if (tagsToDelete.length !== 0) {
       deleteObs = service.deleteMany(tagsToDelete);
     }
-    let createOrUpdateObs = Observable.of([]);
+    let createOrUpdateObs = of([]);
     if (tagsToCreateOrUpdate.length !== 0) {
       createOrUpdateObs = service.saveMany(tagsToCreateOrUpdate);
     }

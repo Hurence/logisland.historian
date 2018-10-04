@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { TreeNode, ConfirmationService } from 'primeng/api';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from '../../shared/refresh-rate-selection/auto-refresh-interval';
@@ -164,7 +164,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
       } else {
         // happen when user change selection
         console.log('same selection selected change nothing');
-        return Observable.of(this.currentTagsSelection);
+        return of(this.currentTagsSelection);
       }
     } else {
       if (this.tagSelectionId && this.tagSelectionId !== 'null') { // if not specified in url but in cache
@@ -172,7 +172,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
         if (this.currentTagsSelection) {
           // should not happen because we doe not cache selection
           console.log('initialize selection with cookie but already got selection (should not happen)');
-          return this.updateTagsForSelection(Observable.of(this.currentTagsSelection));
+          return this.updateTagsForSelection(of(this.currentTagsSelection));
         } else {
           // happen when user navigate to this page from another one (without specifying tagSelectionId)
           console.log('initialize selection with cookie');
@@ -181,7 +181,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
       } else {
         // happen when there is no caches tagSelectionId
         console.log('no selection selected');
-        return Observable.of(this.currentTagsSelection); // NO SELECTION SELECTED
+        return of(this.currentTagsSelection); // NO SELECTION SELECTED
       }
     }
   }

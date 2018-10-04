@@ -9,9 +9,7 @@ import { IHistorianTag, HistorianTag } from '../../tag/modele/HistorianTag';
 import { CartesianAxeType, ILineChartData, ILineChartDataset, ILineChartOption, TimeDistribution, Point, IAxes } from './LineChartModele';
 import { RefreshRateComponent } from '../../../shared/refresh-rate-selection/RefreshRateComponent';
 import { tap, map } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
-import { from, Subscription } from 'rxjs';
-import {merge} from 'rxjs';
+import { Observable ,  from, Subscription , merge} from 'rxjs';
 import { UIChart } from 'primeng/components/chart/chart';
 
 export interface DatasetMeta {

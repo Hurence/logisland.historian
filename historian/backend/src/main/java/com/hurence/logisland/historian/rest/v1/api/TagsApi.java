@@ -7,6 +7,8 @@ package com.hurence.logisland.historian.rest.v1.api;
 
 import com.hurence.logisland.historian.rest.v1.model.BulkLoad;
 import com.hurence.logisland.historian.rest.v1.model.Error;
+import com.hurence.logisland.historian.rest.v1.model.Header;
+import com.hurence.logisland.historian.rest.v1.model.ImportTagReport;
 import java.util.List;
 import com.hurence.logisland.historian.rest.v1.model.Measures;
 import com.hurence.logisland.historian.rest.v1.model.MeasuresRequest;
@@ -28,8 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
-
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-09-25T12:56:06.238+02:00")
 
 @Api(value = "tags", description = "the tags API")
     public interface TagsApi {
@@ -129,6 +129,16 @@ import java.util.List;
         ResponseEntity<Measures> getTagStats(@ApiParam(value = "id of the tag",required=true) @PathVariable("tagId") String tagId);
 
 
+            @ApiOperation(value = "return expected headers in csv file for POST request", nickname = "getTagsCsvHeaders", notes = "return expected headers in csv file for POST request", response = Header.class, responseContainer = "List", tags={ "tag","import", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "list of expected headers (required or not)", response = Header.class, responseContainer = "List"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/tags/importcsv",
+                produces = { "application/json" }, 
+            method = RequestMethod.GET)
+        ResponseEntity<List<Header>> getTagsCsvHeaders();
+
+
             @ApiOperation(value = "get tag tree by fields", nickname = "getTreeTag", notes = "get tag tree by fields for each value of chosen fields", response = TreeNode.class, responseContainer = "List", tags={ "tag", })
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "Tree of tag fields", response = TreeNode.class, responseContainer = "List"),
@@ -138,6 +148,17 @@ import java.util.List;
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
         ResponseEntity<List<TreeNode>> getTreeTag(@ApiParam(value = "maximum number of element to retrieve in a treenode.", defaultValue = "100") @Valid @RequestParam(value = "limit", required = false, defaultValue="100") Integer limit);
+
+
+            @ApiOperation(value = "import definition of tags in csv format", nickname = "importTagsFromCsv", notes = "import definition of tags in csv format", response = ImportTagReport.class, tags={ "tag","import", })
+            @ApiResponses(value = { 
+                @ApiResponse(code = 200, message = "import succeeded", response = ImportTagReport.class),
+                @ApiResponse(code = 422, message = "csv file not containing required headers.", response = Header.class, responseContainer = "List"),
+                @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+            @RequestMapping(value = "/api/v1/tags/importcsv",
+                produces = { "application/json" }, 
+            method = RequestMethod.POST)
+        ResponseEntity<ImportTagReport> importTagsFromCsv(@ApiParam(value = "file detail") @Valid @RequestPart("file") MultipartFile file,@ApiParam(value = "the csv file separator", defaultValue = ";") @Valid @RequestParam(value = "separator", required = false, defaultValue=";") String separator,@ApiParam(value = "the csv file charset encoding", defaultValue = "UTF-8") @Valid @RequestParam(value = "charset", required = false, defaultValue="UTF-8") String charset,@ApiParam(value = "the number of line to inject at the same time", defaultValue = "10000") @Valid @RequestParam(value = "bulkSize", required = false, defaultValue="10000") Integer bulkSize,@ApiParam(value = "default value for missing headers. For example :   datasource_id:ma datasource id,type:double would use \"ma datasource id\" as default value for datasource_id if not present in csv and use \"double\" as default value for type if not present in csv ") @RequestParam(value="default_headers", required=false)  String defaultHeaders);
 
 
             @ApiOperation(value = "post tag measures", nickname = "postTagMeasures", notes = "post some new values", response = BulkLoad.class, tags={ "tag","measure", })
