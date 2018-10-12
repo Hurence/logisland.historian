@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as d3 from 'd3';
-import { Gauge } from './gauge';
+import { Gauge, GaugeConfigOptions } from './gauge';
 
 @Component({
   selector: 'app-gauge-chart',
@@ -50,8 +50,8 @@ export class GaugeChartComponent implements OnInit, AfterViewInit {
     gauge.redraw(value, 1000);
   }
 
-  private createConfig(label, min, max): void {
-    const config: any = {
+  private createConfig(label, min, max): GaugeConfigOptions {
+    const config: GaugeConfigOptions = {
       size: 600,
       label: label,
       min: undefined !== min ? min : 0,
