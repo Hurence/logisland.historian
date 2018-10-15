@@ -15,8 +15,8 @@
   (click)="toggleItemMenu('timeRange')">    
     <i class="fa fa-clock-o" aria-hidden="true"></i>{{ timeRange.label }}
   </li>
-
-  <li><i [ngClass]="{
+  <li *ngIf="viewSelector">
+    <i [ngClass]="{
     'fa-eye' : !view, 
     'fa-table' : view === 'tabular',
     'fa-line-chart' : view === 'lineChart'

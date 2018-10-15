@@ -15,9 +15,10 @@ export class VisualizationMenuComponent implements OnInit {
 
   menuItemActive: string = '';
 
-  @Input() tagSelector?: boolean = true;
-  @Input() autoRefreshIntervalSelector?: boolean = true;
-  @Input() timeRangeSelector?: boolean = true;
+  @Input() tagSelector?: boolean = false;
+  @Input() autoRefreshIntervalSelector?: boolean = false;
+  @Input() timeRangeSelector?: boolean = false;
+  @Input() viewSelector?: boolean = false;
 
   @Input() autoRefreshInterval: AutoRefreshInterval;
   @Output() autoRefreshIntervalChange = new EventEmitter<AutoRefreshInterval>();

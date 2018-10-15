@@ -1,43 +1,51 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import * as d3 from 'd3';
-import { Gauge, GaugeConfigOptions } from './gauge';
+import { Component, OnInit, AfterViewInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Gauge, GaugeConfigOptions, ZoneRange } from './gauge';
 
 @Component({
   selector: 'app-gauge-chart',
   templateUrl: './gauge-chart.component.html',
   styleUrls: ['./gauge-chart.component.css']
 })
-export class GaugeChartComponent implements OnInit, AfterViewInit {
+export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
 
-  // @Input() fff: GaugeConfig
-  // private arcsToDraw: ArcMeta[];
+
+  @Input() size?: number = 600;
+  @Input() label?: string;
+  @Input() min?: number;
+  @Input() max?: number;
+  @Input() minorTicks?: number = 10;
+  @Input() majorTicks?: number = 8;
+  @Input() trackMin ?: boolean = true;
+  @Input() trackMax ?: boolean = true;
+  @Input() trackAvg ?: boolean = true;
+  @Input() greenZones ?: ZoneRange[] = [];
+  @Input() yellowZones ?: ZoneRange[] = [];
+  @Input() redZones ?: ZoneRange[] = [];
+  @Input() transitionDuration?: number = 1000;
   private gauge: Gauge;
 
-  constructor() {
-    // this.arcsToDraw = [
-    //   {
-    //     d: this.describeArc(150, 150, 100, 0, 270),
-    //     fill: "none",
-    //     stroke: "#446688",
-    //     strokeWidth: "20"
-    //   },
-    //   {
-    //     d: this.describeArc(150, 150, 70, 180, 10),
-    //     fill: "none",
-    //     stroke: "#446688",
-    //     strokeWidth: "20"
-    //   }
-    // ]
-  }
+  constructor() {}
 
   ngOnInit() {}
 
-  ngAfterViewInit() {
-    const gaugeRefreshFrequency = 5000;
-    const config = this.createConfig('Memory', 0, 100);
-    this.gauge = new Gauge('memoryGaugeContainer', config);
+  ngAfterViewInit() {    
+    const config = this.createConfig();
+    this.gauge = new Gauge('gaugeContainer', config);
     this.gauge.render();
-    setInterval(() => this.updateGauges(this.gauge), gaugeRefreshFrequency);
+    // setInterval(() => this.updateGauges(this.gauge), 5000);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.gauge) {
+      const gaugeUpdate: any = {}
+      if (changes.min) {
+        gaugeUpdate.min = this.min;      
+      }
+      if (changes.max) {
+        gaugeUpdate.max = this.max;      
+      }
+      this.gauge.updateGauge(gaugeUpdate);
+    }
   }
 
   private getRandomValue(gauge) {
@@ -50,38 +58,22 @@ export class GaugeChartComponent implements OnInit, AfterViewInit {
     gauge.redraw(value, 1000);
   }
 
-  private createConfig(label, min, max): GaugeConfigOptions {
+  private createConfig(): GaugeConfigOptions {
     const config: GaugeConfigOptions = {
-      size: 600,
-      label: label,
-      min: undefined !== min ? min : 0,
-      max: undefined !== max ? max : 100,
-      minorTicks: 5,
-      trackMin : true,
-      trackMax : true,
-      trackAvg : true
+      size: this.size,
+      label: this.label,
+      min: this.min,
+      max: this.max,
+      minorTicks: this.minorTicks,
+      majorTicks: this.majorTicks,
+      trackMin : this.trackMin,
+      trackMax : this.trackMax,
+      trackAvg : this.trackAvg,
+      greenZones : this.greenZones,
+      yellowZones : this.yellowZones,
+      redZones : this.redZones,
+      transitionDuration: this.transitionDuration
     };
-
-    const range = config.max - config.min;
-    config.greenZones = [ {
-      from : config.min + range * 0.40,
-      to : config.min + range * 0.60
-    } ];
-    config.yellowZones = [ {
-      from : config.min + range * 0.20,
-      to : config.min + range * 0.40
-    }, {
-      from : config.min + range * 0.60,
-      to : config.min + range * 0.80
-    } ];
-    config.redZones = [ {
-      from : config.min,
-      to : config.min + range * 0.20
-    }, {
-      from : config.min + range * 0.80,
-      to : config.max
-    } ];
-
     return config;
   }
 }
