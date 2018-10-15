@@ -1,4 +1,3 @@
-
 /* This code is inpired by https://gist.github.com/paulinm/10556397
 
 This is free and unencumbered software released into the public domain.
@@ -28,7 +27,7 @@ For more information, please refer to <http://unlicense.org> */
 
 import * as d3 from 'd3';
 
-export interface Range {
+export interface ZoneRange {
   from: number;
   to: number;
 }
@@ -43,13 +42,9 @@ export interface GaugeConfigOptions {
   trackMin ?: boolean;
   trackMax ?: boolean;
   trackAvg ?: boolean;
-  greenZones ?: Range[];
-  yellowZones ?: Range[];
-  redZones ?: Range[];
-  radius ?: number;
-  cx ?: number;
-  cy ?: number;
-  range ?: number;
+  greenZones ?: ZoneRange[];
+  yellowZones ?: ZoneRange[];
+  redZones ?: ZoneRange[];
   transitionDuration?: number;
 }
 
@@ -63,9 +58,9 @@ export interface GaugeConfig {
   trackMin: boolean;
   trackMax: boolean;
   trackAvg: boolean;
-  greenZones: Range[];
-  yellowZones: Range[];
-  redZones: Range[];
+  greenZones: ZoneRange[];
+  yellowZones: ZoneRange[];
+  redZones: ZoneRange[];
   radius: number;
   cx: number;
   cy: number;
@@ -148,72 +143,16 @@ export class Gauge {
       .attr('cy', this.config.cy)
       .attr('r', 0.9 * this.config.radius);
 
-    for (const range of this.config.greenZones) {
-      this.drawBand(range.from, range.to, 'greenZone');
-    }
+    this.drawZones();
+    this.drawLabel();
 
-    for (const range of this.config.yellowZones) {
-      this.drawBand(range.from, range.to, 'yellowZone');
-    }
-
-    for (const range of this.config.redZones) {
-      this.drawBand(range.from, range.to, 'redZone');
-    }
-
-    if (undefined !== this.config.label) {
-      const fontSizeGaugeLabel = Math.round(this.config.size / 9);
-      this.body.append('svg:text')
-        .attr('class', 'gaugeLabel')
-        .attr('x', this.config.cx)
-        .attr('y', this.config.cy / 2 + fontSizeGaugeLabel / 2)
-        .attr('dy', fontSizeGaugeLabel / 2)
-        .attr('text-anchor', 'middle')
-        .text(this.config.label)
-        .style('font-size', fontSizeGaugeLabel + 'px');
-    }
-
-    let fontSize = Math.round(this.config.size / 16);
+    const fontSize = Math.round(this.config.size / 16);
     const labelFontSize = fontSize * 0.40;
     const strokeWidth = fontSize * 0.10;
 
-    const majorDelta = this.config.range / (this.config.majorTicks - 1);
-    for (let major = this.config.min; major <= this.config.max; major += majorDelta) {
-      const minorDelta = majorDelta / this.config.minorTicks;
-      for (let minor = major + minorDelta; minor < Math.min(major + majorDelta, this.config.max); minor += minorDelta) {
-        const point1MinorTick = this.valueToPoint(minor, 0.75);
-        const point2MinorTick = this.valueToPoint(minor, 0.85);
-
-        this.body.append('svg:line')
-          .attr('class', 'ticks minorTick')
-          .attr('x1', point1MinorTick.x)
-          .attr('y1', point1MinorTick.y)
-          .attr('x2', point2MinorTick.x)
-          .attr('y2', point2MinorTick.y);
-      }
-
-      const point1 = this.valueToPoint(major, 0.7);
-      const point2 = this.valueToPoint(major, 0.85);
-
-      this.body.append('svg:line')
-        .attr('class', 'ticks majorTick')
-        .attr('x1', point1.x)
-        .attr('y1', point1.y)
-        .attr('x2', point2.x)
-        .attr('y2', point2.y);
-
-      if (major === this.config.min || major === this.config.max) {
-        const point = this.valueToPoint(major, 0.63);
-
-        this.body.append('svg:text')
-          .attr('class', 'labels ' + (major === this.config.min ? 'lowerBoundLabel' : 'upperBoundLabel'))
-          .attr('x', point.x)
-          .attr('y', point.y)
-          .attr('dy', fontSize / 3)
-          .attr('text-anchor', major === this.config.min ? 'start' : 'end')
-          .text(major)
-          .style('font-size', fontSize + 'px');
-      }
-    }
+    this.drawLowerBoundLabel(fontSize);
+    this.drawUpperBoundLabel(fontSize);
+    this.drawTicks();
 
     this.body.append('svg:text')
       .attr('class', 'labels currentValueLabel')
@@ -225,208 +164,28 @@ export class Gauge {
 
     const tip = this.valueToPoint(0, 0.85);
     const text = this.valueToPoint(0, 0.93);
-    const minLblPos = this.valueToPoint(-1, 0.40);
-    const avgLblPos = this.valueToPoint(0, 0.40);
-    const maxLblPos = this.valueToPoint(1, 0.40);
+    // const minLblPos = this.valueToPoint(-1, 0.40);
+    // const avgLblPos = this.valueToPoint(0, 0.40);
+    // const maxLblPos = this.valueToPoint(1, 0.40);
     const baseLeft = this.valueToPoint(-1, 0.90);
     const baseRight = this.valueToPoint(1, 0.90);
     const triStr = 'M ' + tip.x + ' ' + tip.y + ' L ' + baseLeft.x + ' ' + baseLeft.y + ' L ' + baseRight.x + ' ' + baseRight.y + ' z';
     const _this = this;
 
     if (this.config.trackMin) {
-      const targetRotation = (this.valueToDegrees(0) - 90);
-      const rotStr = 'translate(' + text.x + ',' + text.y + ') rotate(' + targetRotation + ')';
-      this.body.append('svg:text')
-        .attr('class', 'minMarkerText')
-        .attr('transform', rotStr)
-        .style('stroke-width', (strokeWidth / 2) + 'px')
-        .style('font-size', (fontSize / 2) + 'px')
-        .style('text-anchor', 'middle')
-        .text(0);
-
-      this.body.append('svg:text')
-        .attr('class', 'labels minValueLabel')
-        .attr('x', (this.config.cx * 0.68))
-        .attr('y', (this.config.size - this.config.cy / 2 + fontSize) + 'px')
-        .style('font-size', labelFontSize + 'px')
-        .style('text-anchor', 'middle')
-        .text('Min');
-
-      this.body.append('svg:text')
-        .attr('class', 'minValueText')
-        .attr('x', (this.config.cx * 0.68))
-        .attr('y', (this.config.size - this.config.cy / 2.5 + fontSize) + 'px')
-        .style('stroke-width', strokeWidth + 'px')
-        .style('font-size', (fontSize * 0.80) + 'px')
-        .style('text-anchor', 'middle')
-        .on('mouseover', function (d) {
-          _this.body.select('.minMarkerText').style('opacity', 0.90);
-          _this.body.select('.minMarker').style('opacity', 0.90);
-          _this.body.select('.minValueText').style('opacity', 0.90);
-        })
-        .on('mouseout', function (d) {
-          _this.body.select('.minMarkerText').style('opacity', 0.50);
-          _this.body.select('.minMarker').style('opacity', 0.50);
-          _this.body.select('.minValueText').style('opacity', 0.50);
-        })
-        .text(0);
-
-      this.body.append('svg:path')
-        .attr('class', 'minMarker')
-        .attr('d', triStr)
-        .style('stroke-width', strokeWidth + 'px')
-        .on('mouseover', function (d) {
-          _this.body.select('.minMarkerText').style('opacity', 0.90);
-          _this.body.select('.minValueText').style('opacity', 0.90);
-        })
-        .on('mouseout', function (d) {
-          _this.body.select('.minMarkerText').style('opacity', 0.50);
-          _this.body.select('.minValueText').style('opacity', 0.50);
-        })
-        .append('svg:title')
-        .text(0);
+      this.trackMin(fontSize, strokeWidth, labelFontSize, triStr, text);
     }
     if (this.config.trackAvg) {
       const targetRotation = (this.valueToDegrees(0) - 90);
       const rotStr = 'translate(' + text.x + ',' + text.y + ') rotate(' + targetRotation + ')';
-      this.body.append('svg:text')
-        .attr('class', 'avgMarkerText')
-        .attr('transform', rotStr)
-        .style('stroke-width', (strokeWidth / 2) + 'px')
-        .style('font-size', (fontSize / 2) + 'px')
-        .style('text-anchor', 'middle')
-        .text(0);
-
-      this.body.append('svg:text')
-        .attr('class', 'labels avgValueLabel')
-        .attr('x', this.config.cx)
-        .attr('y', (this.config.size - this.config.cy / 2.60 + fontSize) + 'px')
-        .style('font-size', labelFontSize + 'px')
-        .style('text-anchor', 'middle')
-        .text('Avg');
-
-      this.body.append('svg:text')
-        .attr('class', 'avgValueText')
-        .attr('x', this.config.cx)
-        .attr('y', (this.config.size - this.config.cy / 3.60 + fontSize) + 'px')
-        .style('stroke-width', strokeWidth + 'px')
-        .style('font-size', (fontSize * 0.80) + 'px')
-        .style('text-anchor', 'middle')
-        .on('mouseover', function (d) {
-          _this.body.select('.avgMarkerText').style('opacity', 0.90);
-          _this.body.select('.avgMarker').style('opacity', 0.90);
-          _this.body.select('.avgValueText').style('opacity', 0.90);
-        })
-        .on('mouseout', function (d) {
-          _this.body.select('.avgMarkerText').style('opacity', 0.50);
-          _this.body.select('.avgMarker').style('opacity', 0.50);
-          _this.body.select('.avgValueText').style('opacity', 0.50);
-        })
-        .text(0);
-
-      this.body.append('svg:path')
-        .attr('class', 'avgMarker')
-        .attr('d', triStr)
-        .style('stroke-width', strokeWidth + 'px')
-        .on('mouseover', function (d) {
-          _this.body.select('.avgMarkerText').style('opacity', 0.90);
-          _this.body.select('.avgValueText').style('opacity', 0.90);
-        })
-        .on('mouseout', function (d) {
-          _this.body.select('.avgMarkerText').style('opacity', 0.50);
-          _this.body.select('.avgValueText').style('opacity', 0.50);
-        })
-        .append('svg:title')
-        .text(0);
+      this.trackAvg(rotStr, strokeWidth, fontSize, labelFontSize, triStr);
     }
     if (this.config.trackMax) {
       const targetRotation = (this.valueToDegrees(0) - 90);
       const rotStr = 'translate(' + text.x + ',' + text.y + ') rotate(' + targetRotation + ')';
-      this.body.append('svg:text')
-        .attr('class', 'maxMarkerText')
-        .attr('transform', rotStr)
-        .style('stroke-width', (strokeWidth / 2) + 'px')
-        .style('font-size', (fontSize / 2) + 'px')
-        .style('text-anchor', 'middle')
-        .text(0);
-
-      this.body.append('svg:text')
-        .attr('class', 'labels maxValueLabel')
-        .attr('x', (this.config.cx * 1.3))
-        .attr('y', (this.config.size - this.config.cy / 2 + fontSize) + 'px')
-        .style('font-size', labelFontSize + 'px')
-        .style('text-anchor', 'middle')
-        .text('Max');
-
-      this.body.append('svg:text')
-        .attr('class', 'maxValueText')
-        .attr('x', (this.config.cx * 1.3))
-        .attr('y', (this.config.size - this.config.cy / 2.5 + fontSize) + 'px')
-        .style('stroke-width', strokeWidth + 'px')
-        .style('font-size', (fontSize * 0.80) + 'px')
-        .style('text-anchor', 'middle')
-        .on('mouseover', function (d) {
-          _this.body.select('.maxMarkerText').style('opacity', 0.90);
-          _this.body.select('.maxMarker').style('opacity', 0.90);
-          _this.body.select('.maxValueText').style('opacity', 0.90);
-        })
-        .on('mouseout', function (d) {
-          _this.body.select('.maxMarkerText').style('opacity', 0.50);
-          _this.body.select('.maxMarker').style('opacity', 0.50);
-          _this.body.select('.maxValueText').style('opacity', 0.50);
-        })
-        .text(0);
-
-      this.body.append('svg:path')
-        .attr('class', 'maxMarker')
-        .attr('d', triStr)
-        .style('stroke-width', strokeWidth + 'px')
-        .on('mouseover', function (d) {
-          _this.body.select('.maxMarkerText').style('opacity', 0.90);
-          _this.body.select('.maxValueText').style('opacity', 0.90);
-        })
-        .on('mouseout', function (d) {
-          _this.body.select('.maxMarkerText').style('opacity', 0.50);
-          _this.body.select('.maxValueText').style('opacity', 0.50);
-        })
-        .append('svg:title')
-        .text(0);
+      this.trackMax(rotStr, strokeWidth, fontSize, labelFontSize, triStr);      
     }
-    const pointerContainer = this.body.append('svg:g').attr('class', 'pointerContainer');
-
-    const midValue = (this.config.min + this.config.max) / 2;
-
-    const pointerPath = this.buildPointerPath(midValue);
-
-    const pointerLine = d3.line()
-      .x(function (d) { return d.x; })
-      .y(function (d) { return d.y; })
-      .curve(d3.curveBasis);
-
-    pointerContainer.selectAll('path')
-      .data([pointerPath])
-      .enter()
-      .append('svg:path')
-      .attr('class', 'dialPointer')
-      .attr('d', pointerLine);
-
-    pointerContainer.append('svg:circle')
-      .attr('class', 'dialButton')
-      .attr('cx', this.config.cx)
-      .attr('cy', this.config.cy)
-      .attr('r', 0.12 * this.config.radius);
-
-    fontSize = Math.round(this.config.size / 10);
-    pointerContainer.selectAll('text')
-      .data([midValue])
-      .enter()
-      .append('svg:text')
-      .attr('class', 'currentValue')
-      .attr('x', this.config.cx)
-      .attr('y', this.config.size - this.config.cy / 4 - fontSize)
-      .attr('dy', fontSize / 2)
-      .attr('text-anchor', 'middle')
-      .style('font-size', fontSize + 'px');
+    this.buildPointer();    
 
     this.redraw(this.config.min, 0);
   }
@@ -591,10 +350,327 @@ export class Gauge {
     return this.valueToDegrees(value) * Math.PI / 180;
   }
 
+  /**
+   * return point on the circle of gauge, radius being mofied by factor and value representing where on the circle the point is
+   * @param value value to know where on the circle you are (depending on min and max, range...).
+   * @param factor factor to multiply radius by, it modifies radius on the circle.
+   */
   valueToPoint(value, factor): any {
     return {
       x: this.config.cx - this.config.radius * factor * Math.cos(this.valueToRadians(value)),
       y: this.config.cy - this.config.radius * factor * Math.sin(this.valueToRadians(value))
     };
+  }
+
+  drawTicks(): void {
+    const majorDelta = this.config.range / (this.config.majorTicks - 1);
+    for (let major = this.config.min; major <= this.config.max; major += majorDelta) {
+      const minorDelta = majorDelta / this.config.minorTicks;
+      for (let minor = major + minorDelta; minor < Math.min(major + majorDelta, this.config.max); minor += minorDelta) {
+        const point1MinorTick = this.valueToPoint(minor, 0.75);
+        const point2MinorTick = this.valueToPoint(minor, 0.85);
+
+        this.body.append('svg:line')
+          .attr('class', 'ticks minorTick')
+          .attr('x1', point1MinorTick.x)
+          .attr('y1', point1MinorTick.y)
+          .attr('x2', point2MinorTick.x)
+          .attr('y2', point2MinorTick.y);
+      }
+
+      const point1 = this.valueToPoint(major, 0.7);
+      const point2 = this.valueToPoint(major, 0.85);
+
+      this.body.append('svg:line')
+        .attr('class', 'ticks majorTick')
+        .attr('x1', point1.x)
+        .attr('y1', point1.y)
+        .attr('x2', point2.x)
+        .attr('y2', point2.y);                     
+    }
+  }
+  private drawLowerBoundLabel(fontSize: number): void {
+    const point = this.valueToPoint(this.config.min, 0.63);
+    this.body.append('svg:text')
+      .attr('class', 'labels ' + 'lowerBoundLabel')
+      .attr('x', point.x)
+      .attr('y', point.y)
+      .attr('dy', fontSize / 3)
+      .attr('text-anchor', 'start')
+      .text(this.config.min)
+      .style('font-size', fontSize + 'px');
+  }
+
+  private drawUpperBoundLabel(fontSize: number): void {
+    const point = this.valueToPoint(this.config.max, 0.63);
+
+    this.body.append('svg:text')
+      .attr('class', 'labels ' + 'upperBoundLabel')
+      .attr('x', point.x)
+      .attr('y', point.y)
+      .attr('dy', fontSize / 3)
+      .attr('text-anchor', 'end')
+      .text(this.config.max)
+      .style('font-size', fontSize + 'px');
+  }
+
+  drawLabel(): void {
+    if (undefined !== this.config.label) {
+      const fontSizeGaugeLabel = Math.round(this.config.size / 9);
+      this.body.append('svg:text')
+        .attr('class', 'gaugeLabel')
+        .attr('x', this.config.cx)
+        .attr('y', this.config.cy / 2 + fontSizeGaugeLabel / 2)
+        .attr('dy', fontSizeGaugeLabel / 2)
+        .attr('text-anchor', 'middle')
+        .text(this.config.label)
+        .style('font-size', fontSizeGaugeLabel + 'px');
+    }
+  }
+
+  drawZones(): void {
+    this.myDrawZones(this.config.greenZones, 'greenZone');
+    this.myDrawZones(this.config.yellowZones, 'yellowZone');
+    this.myDrawZones(this.config.redZones, 'redZone');
+  }
+
+  updateGauge(updates: {
+    min ?: number,
+    max ?: number
+  }): void {
+    this.configure(updates);
+    const fontSize = Math.round(this.config.size / 16);
+    if (updates.min) {      
+      // this.drawLowerBoundLabel(fontSize);
+      const point = this.valueToPoint(updates.min, 0.63);
+      this.body
+        .select('.lowerBoundLabel')
+        .attr('x', point.x)
+        .attr('y', point.y)
+        .attr('dy', fontSize / 3)
+        .attr('text-anchor', 'start')
+        .text(updates.min)
+        .style('font-size', fontSize + 'px');
+    }
+    if (updates.max) {      
+      // this.drawUpperBoundLabel(fontSize);
+      const point = this.valueToPoint(updates.max, 0.63);
+      this.body
+        .select('.upperBoundLabel')        
+        .attr('x', point.x)
+        .attr('y', point.y)
+        .attr('dy', fontSize / 3)
+        .attr('text-anchor', 'end')
+        .text(updates.max)
+        .style('font-size', fontSize + 'px');
+    }    
+    // this.drawTicks(fontSize);
+  }
+
+  private myDrawZones(zones: ZoneRange[], zonetype: string): void {
+    for (const range of zones) {
+      this.drawBand(range.from, range.to, zonetype);
+    }
+  }
+
+  private trackMin(fontSize: number, strokeWidth: number, labelFontSize: number,
+    triStr: string, text: any): void {
+    const _this = this;
+    const targetRotation = (this.valueToDegrees(0) - 90);
+      const rotStr = 'translate(' + text.x + ',' + text.y + ') rotate(' + targetRotation + ')';
+      this.body.append('svg:text')
+        .attr('class', 'minMarkerText')
+        .attr('transform', rotStr)
+        .style('stroke-width', (strokeWidth / 2) + 'px')
+        .style('font-size', (fontSize / 2) + 'px')
+        .style('text-anchor', 'middle')
+        .text(0);
+
+      this.body.append('svg:text')
+        .attr('class', 'labels minValueLabel')
+        .attr('x', (this.config.cx * 0.68))
+        .attr('y', (this.config.size - this.config.cy / 2 + fontSize) + 'px')
+        .style('font-size', labelFontSize + 'px')
+        .style('text-anchor', 'middle')
+        .text('Min');
+
+      this.body.append('svg:text')
+        .attr('class', 'minValueText')
+        .attr('x', (this.config.cx * 0.68))
+        .attr('y', (this.config.size - this.config.cy / 2.5 + fontSize) + 'px')
+        .style('stroke-width', strokeWidth + 'px')
+        .style('font-size', (fontSize * 0.80) + 'px')
+        .style('text-anchor', 'middle')
+        .on('mouseover', function (d) {
+          _this.body.select('.minMarkerText').style('opacity', 0.90);
+          _this.body.select('.minMarker').style('opacity', 0.90);
+          _this.body.select('.minValueText').style('opacity', 0.90);
+        })
+        .on('mouseout', function (d) {
+          _this.body.select('.minMarkerText').style('opacity', 0.50);
+          _this.body.select('.minMarker').style('opacity', 0.50);
+          _this.body.select('.minValueText').style('opacity', 0.50);
+        })
+        .text(0);
+
+      this.body.append('svg:path')
+        .attr('class', 'minMarker')
+        .attr('d', triStr)
+        .style('stroke-width', strokeWidth + 'px')
+        .on('mouseover', function (d) {
+          _this.body.select('.minMarkerText').style('opacity', 0.90);
+          _this.body.select('.minValueText').style('opacity', 0.90);
+        })
+        .on('mouseout', function (d) {
+          _this.body.select('.minMarkerText').style('opacity', 0.50);
+          _this.body.select('.minValueText').style('opacity', 0.50);
+        })
+        .append('svg:title')
+        .text(0);
+  }
+
+  private trackAvg(rotStr: string, strokeWidth: number, fontSize: number, 
+                  labelFontSize: number, triStr: string): void {
+    const _this = this;
+    this.body.append('svg:text')
+        .attr('class', 'avgMarkerText')
+        .attr('transform', rotStr)
+        .style('stroke-width', (strokeWidth / 2) + 'px')
+        .style('font-size', (fontSize / 2) + 'px')
+        .style('text-anchor', 'middle')
+        .text(0);
+
+      this.body.append('svg:text')
+        .attr('class', 'labels avgValueLabel')
+        .attr('x', this.config.cx)
+        .attr('y', (this.config.size - this.config.cy / 2.60 + fontSize) + 'px')
+        .style('font-size', labelFontSize + 'px')
+        .style('text-anchor', 'middle')
+        .text('Avg');
+
+      this.body.append('svg:text')
+        .attr('class', 'avgValueText')
+        .attr('x', this.config.cx)
+        .attr('y', (this.config.size - this.config.cy / 3.60 + fontSize) + 'px')
+        .style('stroke-width', strokeWidth + 'px')
+        .style('font-size', (fontSize * 0.80) + 'px')
+        .style('text-anchor', 'middle')
+        .on('mouseover', function (d) {
+          _this.body.select('.avgMarkerText').style('opacity', 0.90);
+          _this.body.select('.avgMarker').style('opacity', 0.90);
+          _this.body.select('.avgValueText').style('opacity', 0.90);
+        })
+        .on('mouseout', function (d) {
+          _this.body.select('.avgMarkerText').style('opacity', 0.50);
+          _this.body.select('.avgMarker').style('opacity', 0.50);
+          _this.body.select('.avgValueText').style('opacity', 0.50);
+        })
+        .text(0);
+
+      this.body.append('svg:path')
+        .attr('class', 'avgMarker')
+        .attr('d', triStr)
+        .style('stroke-width', strokeWidth + 'px')
+        .on('mouseover', function (d) {
+          _this.body.select('.avgMarkerText').style('opacity', 0.90);
+          _this.body.select('.avgValueText').style('opacity', 0.90);
+        })
+        .on('mouseout', function (d) {
+          _this.body.select('.avgMarkerText').style('opacity', 0.50);
+          _this.body.select('.avgValueText').style('opacity', 0.50);
+        })
+        .append('svg:title')
+        .text(0);
+  }
+
+  private trackMax(rotStr: string, strokeWidth: number, fontSize: number, 
+                  labelFontSize: number, triStr: string): void {
+    const _this = this;
+    this.body.append('svg:text')
+    .attr('class', 'maxMarkerText')
+    .attr('transform', rotStr)
+    .style('stroke-width', (strokeWidth / 2) + 'px')
+    .style('font-size', (fontSize / 2) + 'px')
+    .style('text-anchor', 'middle')
+    .text(0);
+
+    this.body.append('svg:text')
+      .attr('class', 'labels maxValueLabel')
+      .attr('x', (this.config.cx * 1.3))
+      .attr('y', (this.config.size - this.config.cy / 2 + fontSize) + 'px')
+      .style('font-size', labelFontSize + 'px')
+      .style('text-anchor', 'middle')
+      .text('Max');
+
+    this.body.append('svg:text')
+      .attr('class', 'maxValueText')
+      .attr('x', (this.config.cx * 1.3))
+      .attr('y', (this.config.size - this.config.cy / 2.5 + fontSize) + 'px')
+      .style('stroke-width', strokeWidth + 'px')
+      .style('font-size', (fontSize * 0.80) + 'px')
+      .style('text-anchor', 'middle')
+      .on('mouseover', function (d) {
+        _this.body.select('.maxMarkerText').style('opacity', 0.90);
+        _this.body.select('.maxMarker').style('opacity', 0.90);
+        _this.body.select('.maxValueText').style('opacity', 0.90);
+      })
+      .on('mouseout', function (d) {
+        _this.body.select('.maxMarkerText').style('opacity', 0.50);
+        _this.body.select('.maxMarker').style('opacity', 0.50);
+        _this.body.select('.maxValueText').style('opacity', 0.50);
+      })
+      .text(0);
+
+    this.body.append('svg:path')
+      .attr('class', 'maxMarker')
+      .attr('d', triStr)
+      .style('stroke-width', strokeWidth + 'px')
+      .on('mouseover', function (d) {
+        _this.body.select('.maxMarkerText').style('opacity', 0.90);
+        _this.body.select('.maxValueText').style('opacity', 0.90);
+      })
+      .on('mouseout', function (d) {
+        _this.body.select('.maxMarkerText').style('opacity', 0.50);
+        _this.body.select('.maxValueText').style('opacity', 0.50);
+      })
+      .append('svg:title')
+      .text(0);
+  }
+
+  private buildPointer(): void {
+    const pointerContainer = this.body.append('svg:g').attr('class', 'pointerContainer');
+    const midValue = (this.config.min + this.config.max) / 2;
+
+    const pointerPath = this.buildPointerPath(midValue);
+
+    const pointerLine = d3.line()
+      .x(function (d) { return d.x; })
+      .y(function (d) { return d.y; })
+      .curve(d3.curveBasis);
+
+    pointerContainer.selectAll('path')
+      .data([pointerPath])
+      .enter()
+      .append('svg:path')
+      .attr('class', 'dialPointer')
+      .attr('d', pointerLine);
+
+    pointerContainer.append('svg:circle')
+      .attr('class', 'dialButton')
+      .attr('cx', this.config.cx)
+      .attr('cy', this.config.cy)
+      .attr('r', 0.12 * this.config.radius);
+
+    const fontSize = Math.round(this.config.size / 10);
+    pointerContainer.selectAll('text')
+      .data([midValue])
+      .enter()
+      .append('svg:text')
+      .attr('class', 'currentValue')
+      .attr('x', this.config.cx)
+      .attr('y', this.config.size - this.config.cy / 4 - fontSize)
+      .attr('dy', fontSize / 2)
+      .attr('text-anchor', 'middle')
+      .style('font-size', fontSize + 'px');
   }
 }
