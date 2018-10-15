@@ -123,6 +123,10 @@ public class TagsApiService {
         return report;
     }
 
+    public List<Tag> getAllTagsWithNodeIdLike(String search, Optional<Integer> maxResults) {
+        return repository.findByNodeIdLike(search, PageRequest.of(0, maxResults.orElse(Integer.MAX_VALUE)));
+    }
+
     public List<Tag> getAllTags(String fq, Optional<Integer> limit,
                                 Optional<String> sortParam) {
         String query = fq;

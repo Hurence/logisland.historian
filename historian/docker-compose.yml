@@ -6,7 +6,7 @@ services:
   chronix:
     container_name: chronix
     environment:
-      - JAVA_MEMORY=4g
+      - JAVA_MEMORY=1g
     hostname: chronix
     image: 'hurence/historian-chronix:1.0.1-SNAPSHOT'
     networks:
@@ -34,6 +34,21 @@ services:
       historian-be:
         aliases:
           - backend
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    env_file:
+      - 'env.grafana'
+    networks:
+      historian-be:
+        aliases:
+          - grafana
+    volumes:
+      # Data persistency
+      # sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
+      - ~/data/grafana:/var/lib/grafana
 
   keycloak:
     container_name: keycloak
