@@ -85,15 +85,10 @@ mark, .mark {
   padding: auto;
 }
 
-
 /*.ng-valid.required  */
 .ng-valid[required] {
   border-left: 5px solid #42A948;
 }
-
-/* .form-group.ng-invalid:not(form) {
-  border-left: 5px solid #a94442;
-} */
 
 .form-control.ng-invalid:not(form) {
   border-left: 5px solid #a94442;
