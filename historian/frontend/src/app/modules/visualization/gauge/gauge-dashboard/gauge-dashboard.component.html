@@ -1,0 +1,16 @@
+<!-- MENU FOR VIEW -->
+<div class="ui-g h-100">
+  <div class='ui-g-12 no-padding-side'>
+    <app-visualization-menu 
+    [autoRefreshIntervalSelector] = "true"
+    [autoRefreshInterval]="autoRefreshInterval" 
+    (autoRefreshIntervalChange)="onAutoRefreshIntervalChanged($event)"></app-visualization-menu>
+  </div> 
+  <div class='ui-g-12'>
+    <app-gauge-chart [min]="gaugeConfig.min" [max]="gaugeConfig.max" [greenZones]="gaugeConfig.greenZones" [label]="label"
+    [yellowZones]="gaugeConfig.yellowZones" [redZones]="gaugeConfig.redZones"></app-gauge-chart>
+  </div>  
+  <div class='ui-g-12'>
+    <app-gauge-form [questions]="gaugeEditQuestions" [item]="gaugeConfig" (submitted)="onGaugeConfigChange($event)"></app-gauge-form>
+  </div>
+</div>

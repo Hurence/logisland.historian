@@ -28,7 +28,7 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnInit() {}
 
-  ngAfterViewInit() {    
+  ngAfterViewInit() {
     const config = this.createConfig();
     this.gauge = new Gauge('gaugeContainer', config);
     this.gauge.render();
@@ -37,12 +37,21 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.gauge) {
-      const gaugeUpdate: any = {}
+      const gaugeUpdate: GaugeConfigOptions = {};
       if (changes.min) {
-        gaugeUpdate.min = this.min;      
+        gaugeUpdate.min = this.min;
       }
       if (changes.max) {
-        gaugeUpdate.max = this.max;      
+        gaugeUpdate.max = this.max;
+      }
+      if (changes.greenZones) {
+        gaugeUpdate.greenZones = this.greenZones;
+      }
+      if (changes.yellowZones) {
+        gaugeUpdate.yellowZones = this.yellowZones;
+      }
+      if (changes.redZones) {
+        gaugeUpdate.redZones = this.redZones;
       }
       this.gauge.updateGauge(gaugeUpdate);
     }

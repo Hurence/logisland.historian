@@ -56,13 +56,11 @@ export abstract class BaseDynamicFormComponentEmitter<T> implements OnInit, OnCh
     });
   }
 
-  /* Fill in form with current datasource properties */
-  protected rebuildForm(): void { // TODO FACTORIZE SAME IN BOTH
+  protected rebuildForm(): void {
     const objForForm = Object.assign({}, this.item);
     this.form.reset(objForForm);
   }
 
-  /* Return a datasource based on formulaire inputs */
   protected prepareSaveItem(): T {
     const item: T = this.create();
     Object.assign(item, this.item);

@@ -15,7 +15,7 @@ import { GaugeFormComponent } from './gauge/gauge-form/gauge-form.component';
     SharedModule,
     SelectionModule,
     GraphModule,
-    TagModule,    
+    TagModule,
   ],
   declarations: [VisualizationMenuComponent, VisualizationComponent, GaugeDashboardComponent, GaugeFormComponent]
 })

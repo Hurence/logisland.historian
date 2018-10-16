@@ -1,0 +1,11 @@
+<div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <div *ngFor="let question of questions" class="">
+      <app-question [question]="question" [form]="form"></app-question>
+    </div>
+    <div class="d-flex align-items-center">
+      <button type="button" (click)="reset()" class="btn btn-danger" [disabled]="form.pristine">Reset Form</button>
+      <button class="btn btn-success ml-2" type="submit" [disabled]="!form.valid">Save</button>
+    </div>
+  </form>
+</div>

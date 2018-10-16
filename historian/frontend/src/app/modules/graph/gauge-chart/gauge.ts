@@ -27,6 +27,12 @@ For more information, please refer to <http://unlicense.org> */
 
 import * as d3 from 'd3';
 
+export enum ZoneRangeColors {
+  RED = 'red',
+  YELLOW = 'yellow',
+  GREEN = 'green',
+}
+
 export interface ZoneRange {
   from: number;
   to: number;
@@ -90,6 +96,10 @@ export class Gauge {
     transitionDuration: 1000
   };
 
+  public greenZone = 'greenZone';
+  public yellowZone = 'yellowZone';
+  public redZone = 'redZone';
+
   body: any;
   minValue = null;
   maxValue = null;
@@ -103,7 +113,8 @@ export class Gauge {
 
   configure(init?: Partial<GaugeConfig>): void {
     Object.assign(this.config, init);
-    this.config.size = this.config.size * 0.9;
+    // this.config.size = this.config.size * 0.9;
+    this.config.size = this.config.size;
 
     this.config.radius = this.config.size * 0.97 / 2;
     this.config.cx = this.config.size / 2;
@@ -183,9 +194,9 @@ export class Gauge {
     if (this.config.trackMax) {
       const targetRotation = (this.valueToDegrees(0) - 90);
       const rotStr = 'translate(' + text.x + ',' + text.y + ') rotate(' + targetRotation + ')';
-      this.trackMax(rotStr, strokeWidth, fontSize, labelFontSize, triStr);      
+      this.trackMax(rotStr, strokeWidth, fontSize, labelFontSize, triStr);
     }
-    this.buildPointer();    
+    this.buildPointer();
 
     this.redraw(this.config.min, 0);
   }
@@ -212,17 +223,34 @@ export class Gauge {
     return point;
   }
 
-  drawBand(start, end, zoneType) {
-    if (0 >= end - start) return;
-
+  redrawZones(zones: ZoneRange[], zoneType: string): void {
+    const goodZones: ZoneRange[] = zones.filter(z => (z.to - z.from) >= 0);
     const _this = this;
-    this.body.append('svg:path')
+    const selectionWithData = this.body
+      .selectAll(`.zones.${zoneType}`)
+      .data(goodZones);
+    selectionWithData.exit().remove();
+    selectionWithData
+      .text(d => { console.log('replacing zone', d); return 'HI'; })
+      .attr('d', (z: ZoneRange) => {
+        return d3.arc()
+          .startAngle(this.valueToRadians(z.from))
+          .endAngle(this.valueToRadians(z.to))
+          .innerRadius(0.65 * this.config.radius)
+          .outerRadius(0.85 * this.config.radius).apply();
+      })
+      .attr('transform', function () { return 'translate(' + _this.config.cx + ', ' + _this.config.cy + ') rotate(270)'; })
+    .enter()
+      .append('svg:path')
       .attr('class', 'zones ' + zoneType)
-      .attr('d', d3.arc()
-        .startAngle(this.valueToRadians(start))
-        .endAngle(this.valueToRadians(end))
-        .innerRadius(0.65 * this.config.radius)
-        .outerRadius(0.85 * this.config.radius))
+      .text(d => { console.log('adding zone', d); return 'HI'; })
+      .attr('d', (z: ZoneRange) => {
+        return d3.arc()
+          .startAngle(this.valueToRadians(z.from))
+          .endAngle(this.valueToRadians(z.to))
+          .innerRadius(0.65 * this.config.radius)
+          .outerRadius(0.85 * this.config.radius).apply();
+      })
       .attr('transform', function () { return 'translate(' + _this.config.cx + ', ' + _this.config.cy + ') rotate(270)'; });
   }
 
@@ -386,7 +414,7 @@ export class Gauge {
         .attr('x1', point1.x)
         .attr('y1', point1.y)
         .attr('x2', point2.x)
-        .attr('y2', point2.y);                     
+        .attr('y2', point2.y);
     }
   }
   private drawLowerBoundLabel(fontSize: number): void {
@@ -428,19 +456,16 @@ export class Gauge {
     }
   }
 
-  drawZones(): void {
-    this.myDrawZones(this.config.greenZones, 'greenZone');
-    this.myDrawZones(this.config.yellowZones, 'yellowZone');
-    this.myDrawZones(this.config.redZones, 'redZone');
+  private drawZones(): void {
+    this.redrawZones(this.config.greenZones, this.greenZone);
+    this.redrawZones(this.config.yellowZones, this.yellowZone);
+    this.redrawZones(this.config.redZones, this.redZone);
   }
 
-  updateGauge(updates: {
-    min ?: number,
-    max ?: number
-  }): void {
+  updateGauge(updates: GaugeConfigOptions): void {
     this.configure(updates);
     const fontSize = Math.round(this.config.size / 16);
-    if (updates.min) {      
+    if (updates.min) {
       // this.drawLowerBoundLabel(fontSize);
       const point = this.valueToPoint(updates.min, 0.63);
       this.body
@@ -452,25 +477,28 @@ export class Gauge {
         .text(updates.min)
         .style('font-size', fontSize + 'px');
     }
-    if (updates.max) {      
+    if (updates.max) {
       // this.drawUpperBoundLabel(fontSize);
       const point = this.valueToPoint(updates.max, 0.63);
       this.body
-        .select('.upperBoundLabel')        
+        .select('.upperBoundLabel')
         .attr('x', point.x)
         .attr('y', point.y)
         .attr('dy', fontSize / 3)
         .attr('text-anchor', 'end')
         .text(updates.max)
         .style('font-size', fontSize + 'px');
-    }    
-    // this.drawTicks(fontSize);
-  }
-
-  private myDrawZones(zones: ZoneRange[], zonetype: string): void {
-    for (const range of zones) {
-      this.drawBand(range.from, range.to, zonetype);
     }
+    if (updates.greenZones) {
+      this.redrawZones(updates.greenZones, this.greenZone);
+    }
+    if (updates.yellowZones) {
+      this.redrawZones(updates.yellowZones, this.yellowZone);
+    }
+    if (updates.redZones) {
+      this.redrawZones(updates.redZones, this.redZone);
+    }
+    // this.drawTicks(fontSize);
   }
 
   private trackMin(fontSize: number, strokeWidth: number, labelFontSize: number,
@@ -529,7 +557,7 @@ export class Gauge {
         .text(0);
   }
 
-  private trackAvg(rotStr: string, strokeWidth: number, fontSize: number, 
+  private trackAvg(rotStr: string, strokeWidth: number, fontSize: number,
                   labelFontSize: number, triStr: string): void {
     const _this = this;
     this.body.append('svg:text')
@@ -583,7 +611,7 @@ export class Gauge {
         .text(0);
   }
 
-  private trackMax(rotStr: string, strokeWidth: number, fontSize: number, 
+  private trackMax(rotStr: string, strokeWidth: number, fontSize: number,
                   labelFontSize: number, triStr: string): void {
     const _this = this;
     this.body.append('svg:text')
