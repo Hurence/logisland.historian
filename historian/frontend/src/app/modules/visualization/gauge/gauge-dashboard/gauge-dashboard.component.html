@@ -8,7 +8,8 @@
   </div> 
   <div class='ui-g-12'>
     <app-gauge-chart [min]="gaugeConfig.min" [max]="gaugeConfig.max" [greenZones]="gaugeConfig.greenZones" [label]="label"
-    [yellowZones]="gaugeConfig.yellowZones" [redZones]="gaugeConfig.redZones"></app-gauge-chart>
+    [yellowZones]="gaugeConfig.yellowZones" [redZones]="gaugeConfig.redZones"
+    [value]="gaugeConfig.value"></app-gauge-chart>
   </div>  
   <div class='ui-g-12'>
     <app-gauge-form [questions]="gaugeEditQuestions" [item]="gaugeConfig" (submitted)="onGaugeConfigChange($event)"></app-gauge-form>

@@ -8,6 +8,7 @@ import { FormBuilder } from '@angular/forms';
 
 
 export interface BackendGaugeConfig {
+  value: number | string;
   min: number | string;
   max: number | string;
   greenZones: ZoneRange[];
@@ -33,11 +34,20 @@ export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendG
 
   protected create(): BackendGaugeConfig {
     return {
+      value: 500,
       min: 0,
-      max: 100,
-      greenZones: [],
-      yellowZones: [],
-      redZones: []
+      max: 1000,
+      greenZones : [
+         { from: 250, to : 750 }
+      ],
+      yellowZones : [
+         { from: 175, to : 250 },
+         { from: 750, to : 825 }
+      ],
+      redZones : [
+         { from: 0, to : 175 },
+         { from: 825, to : 1000 }
+      ]
     };
   }
 
@@ -48,7 +58,7 @@ export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendG
     delete (item as any).zoneranges;
     item.greenZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.GREEN);
     item.yellowZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.YELLOW);
-    item.redZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.RED);
+    item.redZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.RED);    
     return item;
   }
 

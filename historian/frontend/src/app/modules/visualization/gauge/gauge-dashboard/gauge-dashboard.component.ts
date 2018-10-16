@@ -18,6 +18,7 @@ import { ZoneRange } from '../../../graph/gauge-chart/gauge';
 export class GaugeDashboardComponent implements OnInit {
 
   gaugeConfig: BackendGaugeConfig = {
+    value: 500,
     min : 150,
     max : 1000,
     greenZones : [
@@ -59,6 +60,7 @@ export class GaugeDashboardComponent implements OnInit {
     const gaugeConf = gaugeConfModif.item;
     const min: number = +gaugeConf.min;
     const max: number = +gaugeConf.max;
+    const value: number = +gaugeConf.value;    
     // TODO handle if value are tag instead of number
     if (min === NaN) {
       console.log('min is a string');
@@ -69,6 +71,11 @@ export class GaugeDashboardComponent implements OnInit {
       console.log('max is a string');
     } else {
       this.gaugeConfig.max = max;
+    }
+    if (value === NaN) {
+      console.log('value is a string');
+    } else {
+      this.gaugeConfig.value = value;
     }
     if (gaugeConf.greenZones) {
       this.gaugeConfig.greenZones = gaugeConf.greenZones;
@@ -108,6 +115,12 @@ export class GaugeDashboardComponent implements OnInit {
     };
 
     return [
+      new TextboxQuestion({
+        key: 'value',
+        label: 'Monitored tag',
+        order: 1,
+        required: true
+      }),
       new TextboxQuestion({
         key: 'min',
         label: 'Min',

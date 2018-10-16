@@ -8,7 +8,7 @@ import { Gauge, GaugeConfigOptions, ZoneRange } from './gauge';
 })
 export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
 
-
+  @Input() value?: number;
   @Input() size?: number = 600;
   @Input() label?: string;
   @Input() min?: number;
@@ -36,7 +36,7 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.gauge) {
+    if (this.gauge) {      
       const gaugeUpdate: GaugeConfigOptions = {};
       if (changes.min) {
         gaugeUpdate.min = this.min;
@@ -52,8 +52,11 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
       }
       if (changes.redZones) {
         gaugeUpdate.redZones = this.redZones;
-      }
-      this.gauge.updateGauge(gaugeUpdate);
+      }    
+      this.gauge.updateGauge(gaugeUpdate);      
+      if (changes.value) {
+        this.gauge.redraw(this.value, 1000);
+      }      
     }
   }
 
