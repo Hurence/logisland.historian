@@ -78,7 +78,7 @@ public class MeasuresApiService {
                     new ChronixSolrStorage<>(100, groupBy, reduce));
 
 
-    private Measures convertToMeasures(MetricTimeSeries mts, boolean noValues) {
+    private Measures convertToMeasures(MetricTimeSeries mts, boolean noValues, String datasourceId, String nodeId) {
         final Double[] values = ArrayUtils.toObject(mts.getValues().toArray());
         final Long[] timestamps = ArrayUtils.toObject(mts.getTimestamps().toArray());
         final Map<String, Object> attributes = mts.getAttributesReference();
@@ -89,6 +89,8 @@ public class MeasuresApiService {
         chunk.setName(mts.getName());
         chunk.setStart(mts.getStart());
         chunk.setEnd(mts.getEnd());
+        chunk.setDatasourceId(datasourceId);
+        chunk.setTagId(nodeId);
         if (!noValues) {
             chunk.setQuality((Double) attributes.get("quality"));
             chunk.setValues(Arrays.asList(values));
@@ -162,7 +164,7 @@ public class MeasuresApiService {
         logger.info(query.toString());
 
         List<Measures> chunks = chronix.stream(solrClient, query)
-                .map((MetricTimeSeries mts) -> convertToMeasures(mts, noValues))
+                .map((MetricTimeSeries mts) -> convertToMeasures(mts, noValues, datasourceId, nodeId))
                 .collect(Collectors.toList());
 
 
@@ -219,7 +221,7 @@ public class MeasuresApiService {
 
 
             List<Measures> chunks = chronix.stream(solrClient, query)
-                    .map((MetricTimeSeries mts) -> convertToMeasures(mts, true))
+                    .map((MetricTimeSeries mts) -> convertToMeasures(mts, true, datasourceId, nodeId))
                     .collect(Collectors.toList());
 
 

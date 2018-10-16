@@ -606,7 +606,7 @@ paths:
          required: true
          type: file
        - name: default_headers
-         in: formData
+         in: query
          description: |
           default value for missing headers. For example :
             datasource_id:ma datasource id,type:double
@@ -1605,6 +1605,10 @@ definitions:
     description: holds a double array of values for a Tag between start & stop
     properties:
       name:
+        type: string
+      datasource_id:
+        type: string
+      tag_id:
         type: string
       start:
         type: integer

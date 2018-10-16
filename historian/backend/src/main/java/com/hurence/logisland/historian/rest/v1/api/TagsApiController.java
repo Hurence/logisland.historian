@@ -185,7 +185,6 @@ public class TagsApiController implements TagsApi {
         return new ResponseEntity<List<TreeNode>>(treeTag, HttpStatus.OK);
     }
 
-
     @Override
     public ResponseEntity<List<Header>> getTagsCsvHeaders() {
         return new ResponseEntity<List<Header>>(TagImportCsv.getTagsCsvHeaders(), HttpStatus.OK);
@@ -194,10 +193,10 @@ public class TagsApiController implements TagsApi {
     @Override
     public ResponseEntity<ImportTagReport> importTagsFromCsv(
             @Valid @RequestPart("file") MultipartFile content,
+            @Valid @RequestParam(value="default_headers", required=false)  String defaultHeaders,
             @Valid @RequestParam(value = "separator", required = false, defaultValue=";") String separator,
             @Valid @RequestParam(value = "charset", required = false, defaultValue="UTF-8") String charset,
-            @Valid @RequestParam(value = "bulkSize", required = false, defaultValue="10000") Integer bulkSize,
-            @RequestParam(value="default_headers", required=false)  String defaultHeaders
+            @Valid @RequestParam(value = "bulkSize", required = false, defaultValue="10000") Integer bulkSize
     ) {
         Charset encoding = Charset.forName(charset);
         List<HeaderDefault> defaults = parseDefaultHeaders(defaultHeaders);

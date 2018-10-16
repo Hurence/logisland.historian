@@ -10,6 +10,8 @@ export interface IMeasures {
     start: number;	// integer($int64)
     timestamps: number[]; // [integer($int64)]
     values: number[];	// [number($double)]
+    datasource_id: string;
+    tag_id: string;
 }
 
 export interface IAgregation {
@@ -28,6 +30,8 @@ export interface IMeasuresOptions {
   start?: number;	// integer($int64)
   timestamps?: number[]; // [integer($int64)]
   values?: number[];	// [number($double)]
+  datasource_id?: string;
+  tag_id?: string;
 }
 
 export class Measures implements IMeasures {
@@ -41,6 +45,8 @@ export class Measures implements IMeasures {
     start: number = null;
     timestamps: number[] = [];
     values: number[] = [];
+    datasource_id: string;
+    tag_id: string;
 
     constructor(options: IMeasuresOptions = {
         end: null,
