@@ -45,7 +45,7 @@ export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendG
     const item: BackendGaugeConfig = this.create();
     Object.assign(item, this.item);
     Object.assign(item, this.form.value);
-    delete item.zoneranges;
+    delete (item as any).zoneranges;
     item.greenZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.GREEN);
     item.yellowZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.YELLOW);
     item.redZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.RED);
