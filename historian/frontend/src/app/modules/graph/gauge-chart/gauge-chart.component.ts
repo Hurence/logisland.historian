@@ -32,11 +32,11 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
     const config = this.createConfig();
     this.gauge = new Gauge('gaugeContainer', config);
     this.gauge.render();
-    // setInterval(() => this.updateGauges(this.gauge), 5000);
+    this.gauge.redraw(this.value, 1000);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.gauge) {      
+    if (this.gauge) {
       const gaugeUpdate: GaugeConfigOptions = {};
       if (changes.min) {
         gaugeUpdate.min = this.min;
@@ -52,22 +52,12 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
       }
       if (changes.redZones) {
         gaugeUpdate.redZones = this.redZones;
-      }    
-      this.gauge.updateGauge(gaugeUpdate);      
+      }
+      this.gauge.updateGauge(gaugeUpdate);
       if (changes.value) {
         this.gauge.redraw(this.value, 1000);
-      }      
+      }
     }
-  }
-
-  private getRandomValue(gauge) {
-    const overflow = 0; // 10;
-    return gauge.config.min - overflow + (gauge.config.max - gauge.config.min + overflow * 2) *  Math.random();
-  }
-
-  private updateGauges(gauge: Gauge) {
-    const value = this.getRandomValue(gauge);
-    gauge.redraw(value, 1000);
   }
 
   private createConfig(): GaugeConfigOptions {

@@ -5,12 +5,13 @@ import { QuestionControlService } from '../../../../shared/dynamic-form/question
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { ZoneRange, ZoneRangeColors } from '../../../graph/gauge-chart/gauge';
 import { FormBuilder } from '@angular/forms';
+import { HistorianTag } from '../../../tag/modele/HistorianTag';
 
 
 export interface BackendGaugeConfig {
-  value: number | string;
-  min: number | string;
-  max: number | string;
+  value: number | HistorianTag;
+  min: number | HistorianTag;
+  max: number | HistorianTag;
   greenZones: ZoneRange[];
   yellowZones: ZoneRange[];
   redZones: ZoneRange[];
@@ -58,7 +59,7 @@ export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendG
     delete (item as any).zoneranges;
     item.greenZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.GREEN);
     item.yellowZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.YELLOW);
-    item.redZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.RED);    
+    item.redZones = this.form.value.zoneranges.filter(z => z.color === ZoneRangeColors.RED);
     return item;
   }
 

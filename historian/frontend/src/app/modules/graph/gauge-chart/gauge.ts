@@ -230,7 +230,7 @@ export class Gauge {
       .selectAll(`.zones.${zoneType}`)
       .data(goodZones);
     selectionWithData.exit().remove();
-    selectionWithData      
+    selectionWithData
       .attr('d', (z: ZoneRange) => {
         return d3.arc()
           .startAngle(this.valueToRadians(z.from))
@@ -241,7 +241,7 @@ export class Gauge {
       .attr('transform', function () { return 'translate(' + _this.config.cx + ', ' + _this.config.cy + ') rotate(270)'; })
     .enter()
       .append('svg:path')
-      .attr('class', 'zones ' + zoneType)      
+      .attr('class', 'zones ' + zoneType)
       .attr('d', (z: ZoneRange) => {
         return d3.arc()
           .startAngle(this.valueToRadians(z.from))
