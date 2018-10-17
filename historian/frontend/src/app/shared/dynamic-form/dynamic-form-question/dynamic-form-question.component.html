@@ -4,7 +4,7 @@
 
     <!-- TEXTBOX -->
     <ng-container *ngSwitchCase="'textbox'">
-        <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
+        <label *ngIf="!question.labelHidden" [for]="question.elementId">{{question.label}}</label>
         <input [formControlName]="question.key" class="form-control"
           [placeholder]="question.placeholder" [id]="question.elementId" [type]="question.type"
           [required]="question.required" [readonly]="question.readonly">
@@ -12,7 +12,7 @@
 
     <!-- NUMBER -->
     <ng-container *ngSwitchCase="'number'">
-      <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
+      <label *ngIf="!question.labelHidden" [for]="question.elementId">{{question.label}}</label>
       <input [formControlName]="question.key" class="form-control"
         [placeholder]="question.placeholder" [id]="question.elementId" [type]="'number'"
         [required]="question.required" [readonly]="question.readonly">
@@ -24,33 +24,45 @@
     </ng-container>
 
     <!-- RADIO -->
-    <ng-container *ngSwitchCase="'radio'">
-      <h6>{{question.label}}</h6>
+    <ng-container *ngSwitchCase="'radio'">      
       <app-dynamic-form-question-radio [question]="question" [form]="form"></app-dynamic-form-question-radio>
     </ng-container>
+
     <!-- SELECT (DROPDOWN)-->
     <ng-container *ngSwitchCase="'dropdown'">
-        <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
-        <select [id]="question.elementId" [formControlName]="question.key" [class]="form-control" [required]="question.required">
-          <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
-        </select>
+      <label *ngIf="!question.labelHidden" [for]="question.elementId">{{question.label}}</label>
+      <p-dropdown [formControlName]="question.key" 
+        [options]="question.possibleValues"
+        [placeholder]="question.placeholder"                     
+        [autoWidth]="false" [style]="{'min-width':'15em'}">
+      </p-dropdown>
+      <!-- TO USE IF USING OTHER THAN primitive type see primeng doc        
+        optionLabel="node_id"
+      dataKey="id" -->
     </ng-container>
 
     <!-- historian-tag-dropdown -->
     <ng-container *ngSwitchCase="'historian-tag-dropdown'">
-      <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
+      <label *ngIf="!question.labelHidden" [for]="question.elementId">{{question.label}}</label>
       <app-dynamic-form-question-historian-tag-dropdown [question]="question" [form]="form">        
       </app-dynamic-form-question-historian-tag-dropdown>
     </ng-container>
 
+    <!-- CONDITIONAL -->
+    <ng-container *ngSwitchCase="'conditional'">
+      <label *ngIf="!question.labelHidden" [for]="question.elementId">{{question.label}}</label>
+      <app-conditional-question [question]="question" [form]="form">        
+      </app-conditional-question>
+    </ng-container>
+
     <!-- ARRAY -->
     <ng-container *ngSwitchCase="'array'">
-      <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
+      <label *ngIf="!question.labelHidden" [for]="question.elementId">{{question.label}}</label>
       <app-dynamic-form-question-array [question]="question" [form]="form"></app-dynamic-form-question-array>
     </ng-container>
   </div>
 
-  <div class="errorMessage alert alert-danger" *ngIf="!isValid">
+  <div class="errorMessage alert alert-danger" *ngIf="!isValid && !question.errorHidden">
     <div *ngIf="control.hasError('required')" class="error">
       {{question.label}} is required
     </div>

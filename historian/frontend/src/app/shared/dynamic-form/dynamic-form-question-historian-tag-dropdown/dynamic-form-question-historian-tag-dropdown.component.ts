@@ -14,7 +14,6 @@ export class DynamicFormQuestionHistorianTagDropdownComponent implements OnInit 
 
   @Input() question: HistorianTagDropdownQuestion;
   @Input() form: FormGroup;
-  loadedOptions: {key: string, value: HistorianTag}[] = [];
   tags: HistorianTag[];
 
   constructor(private tagHistorianService: TagHistorianService) { }

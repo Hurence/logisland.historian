@@ -1,8 +1,7 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup, AbstractControl } from '@angular/forms';
 
 import { QuestionBase } from '../question-base';
-import { QuestionControlService } from '../question-control.service';
 
 @Component({
   selector: 'app-question',
@@ -13,10 +12,9 @@ export class DynamicFormQuestionComponent implements OnInit {
   @Input() question: QuestionBase<any>;
   @Input() form: FormGroup;
 
-  constructor(private fb: FormBuilder,
-    private qcs: QuestionControlService) { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   get isValid(): boolean {
     return this.control.disabled || this.control.valid;

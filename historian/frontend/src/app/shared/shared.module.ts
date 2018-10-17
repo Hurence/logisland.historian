@@ -40,6 +40,7 @@ import {MenubarModule} from 'primeng/menubar';
 import {ProgressBarModule} from 'primeng/progressbar';
 import { DynamicFormQuestionHistorianTagDropdownComponent } from
   './dynamic-form/dynamic-form-question-historian-tag-dropdown/dynamic-form-question-historian-tag-dropdown.component';
+import { ConditionalQuestionComponent } from './dynamic-form/conditional-question/conditional-question.component';
 
 @NgModule({
   imports: [
@@ -117,6 +118,7 @@ import { DynamicFormQuestionHistorianTagDropdownComponent } from
     DynamicFormQuestionRadioComponent,
     TimeRangeSelectionComponent,
     DynamicFormQuestionHistorianTagDropdownComponent,
+    ConditionalQuestionComponent,
   ],
 })
 export class SharedModule { }

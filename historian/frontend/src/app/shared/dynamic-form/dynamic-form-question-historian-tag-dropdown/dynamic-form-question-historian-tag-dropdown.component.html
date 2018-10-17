@@ -1,7 +1,4 @@
 <div [formGroup]="form">
-  <!-- <select [id]="question.elementId" [formControlName]="question.key" [class]="form-control" [required]="question.required">
-    <option *ngFor="let opt of LoadedOptions" [value]="opt.key">{{opt.value}}</option>
-  </select> -->
   <p-dropdown [formControlName]="question.key" 
       [options]="tags"        
       placeholder="please choose a tag"      
@@ -9,7 +6,5 @@
       dataKey="id"
       [autoWidth]="false" [style]="{'min-width':'15em'}">
   </p-dropdown>
-
-  <!-- (onChange)="onSelectionChange($event)" -->
 </div>
   

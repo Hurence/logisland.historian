@@ -32,6 +32,10 @@ export enum ZoneRangeColors {
   YELLOW = 'yellow',
   GREEN = 'green',
 }
+export namespace ZoneRangeColorsUtil {
+  export const keys: (keyof typeof ZoneRangeColors)[] = <(keyof typeof ZoneRangeColors)[]>Object.keys(ZoneRangeColors);
+  export const values: string[] = keys.map(k => ZoneRangeColors[k]);
+}
 
 export interface ZoneRange {
   from: number;

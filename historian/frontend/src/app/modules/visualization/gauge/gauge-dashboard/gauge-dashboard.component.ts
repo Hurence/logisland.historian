@@ -1,3 +1,5 @@
+import { DropdownQuestion } from './../../../../shared/dynamic-form/question-dropdown';
+import { HistorianTag } from './../../../tag/modele/HistorianTag';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from '../../../../shared/refresh-rate-selection/auto-refresh-interval';
 import { CookieService } from 'ngx-cookie-service';
@@ -7,17 +9,17 @@ import { IModification } from '../../../datasource/ConfigurationToApply';
 import { ArrayQuestion, IArrayQuestion } from '../../../../shared/dynamic-form/question-array';
 import { QuestionBase } from '../../../../shared/dynamic-form/question-base';
 import { NumberQuestion } from '../../../../shared/dynamic-form/question-number';
-import { ZoneRange } from '../../../graph/gauge-chart/gauge';
+import { ZoneRange, ZoneRangeColorsUtil, ZoneRangeColors } from '../../../graph/gauge-chart/gauge';
 import { TimeRangeFilter, timeRangeBuiltIn } from '../../../../shared/time-range-selection/time-range-filter';
 import { MeasuresRequest } from '../../../../measure/MeasuresRequest';
-import { IHistorianTag, HistorianTag } from '../../../tag/modele/HistorianTag';
-import { RefreshRateComponent } from '../../../../shared/refresh-rate-selection/RefreshRateComponent';
 import { Subscription } from 'rxjs';
 import { MeasuresService } from '../../../../measure/measures.service';
 import { IAgregation } from '../../../../measure/Measures';
 import { HistorianTagDropdownQuestion } from '../../../../shared/dynamic-form/question-historian-tag-dropdown';
 import { TagUtils } from '../../../tag/modele/TagUtils';
 import { RefreshRateComponentAsInnerVariable } from '../../../../shared/refresh-rate-selection/RefreshRateComponentAsInnerVariable';
+import { ConditionalQuestion, IConditionalQuestion } from '../../../../shared/dynamic-form/question-conditional';
+import { RadioQuestion } from '../../../../shared/dynamic-form/question-radio';
 
 export interface GaugeRawParams {
   value: number;
@@ -154,7 +156,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   private getRawOrTagVariable(gaugeConf: BackendGaugeConfig, field: string, lastTagsValue: Map<string, number>): number {
     if (TagUtils.isHistorianTag(gaugeConf[field])) {
       console.log('value is a tag');
-      const tag = gaugeConf.value as HistorianTag;
+      const tag = gaugeConf[field] as HistorianTag;
       return lastTagsValue.get(`${tag.datasource_id}|${tag.node_id}`);
     } else {
       return gaugeConf[field];
@@ -240,6 +242,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   private getQuestions(): QuestionBase<any>[] {
     const zoneQuestions: IArrayQuestion<ZoneRange> = {
       key: 'zoneranges',
+      label: 'Zone ranges',
       questions: [
         new NumberQuestion({
           key: 'from',
@@ -253,15 +256,16 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
           order: 2,
           required: true,
         }),
-        new TextboxQuestion({
+        new DropdownQuestion({
           key: 'color',
           label: 'Color',
           order: 3,
           required: true,
+          placeholder: 'choose a color',
+          possibleValues: ZoneRangeColorsUtil.values.map(c => { return { label: c, value: c }; }),
         })
       ]
     };
-
     return [
       new HistorianTagDropdownQuestion({
         key: 'value',
@@ -269,19 +273,45 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
         order: 1,
         required: true
       }),
-      new TextboxQuestion({
-        key: 'min',
-        label: 'Min',
-        order: 1,
-        required: true
-      }),
-      new TextboxQuestion({
-        key: 'max',
-        label: 'max',
-        order: 2,
-        required: true,
-      }),
+      new ConditionalQuestion<number | HistorianTag>(this.buildNumberTagConditional('min', 'Min')),
+      new ConditionalQuestion<number | HistorianTag>(this.buildNumberTagConditional('max', 'Max')),
       new ArrayQuestion<ZoneRange>(zoneQuestions)
     ];
+  }
+
+  private buildNumberTagConditional(key: string, label: string): IConditionalQuestion<number | HistorianTag> {
+    return {
+      key: key,
+      label: label,
+      order: 1,
+      required: true,
+      labelHidden: true,
+      errorHidden: true,
+      conditionsQuestion: new RadioQuestion<string>({
+        key: `${key}_static_or_dynamic`,
+        label: `type of ${key}`,
+        required: false,
+        value: 'static',
+        possibleValues: ['static', 'dynamic'],
+      }),
+      conditionsResult: [
+        {
+          ifKey: 'static',
+          thenQuestion: new NumberQuestion({
+            key: key,
+            label: label,
+            required: false,
+          })
+        },
+        {
+          ifKey: 'dynamic',
+          thenQuestion: new HistorianTagDropdownQuestion({
+            key: key,
+            label: label,
+            required: false
+          })
+        }
+      ]
+    };
   }
 }
