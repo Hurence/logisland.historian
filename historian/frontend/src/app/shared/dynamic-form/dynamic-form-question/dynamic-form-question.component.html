@@ -24,8 +24,8 @@
     </ng-container>
 
     <!-- RADIO -->
-    <ng-container *ngSwitchCase="'radio'">      
-      <app-dynamic-form-question-radio [question]="question" [form]="form"></app-dynamic-form-question-radio>
+    <ng-container *ngSwitchCase="'radio'">        
+      <app-dynamic-form-question-radio [question]="question" [form]="form" [name]="name"></app-dynamic-form-question-radio>
     </ng-container>
 
     <!-- SELECT (DROPDOWN)-->
@@ -51,7 +51,8 @@
     <!-- CONDITIONAL -->
     <ng-container *ngSwitchCase="'conditional'">
       <label *ngIf="!question.labelHidden" [for]="question.elementId">{{question.label}}</label>
-      <app-conditional-question [question]="question" [form]="form">        
+      <app-conditional-question [question]="question" [form]="form"
+        [nameForConditional]="name">        
       </app-conditional-question>
     </ng-container>
 

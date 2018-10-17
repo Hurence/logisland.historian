@@ -244,18 +244,8 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
       key: 'zoneranges',
       label: 'Zone ranges',
       questions: [
-        new NumberQuestion({
-          key: 'from',
-          label: 'From',
-          order: 1,
-          required: true
-        }),
-        new NumberQuestion({
-          key: 'to',
-          label: 'To',
-          order: 2,
-          required: true,
-        }),
+        new ConditionalQuestion<number | HistorianTag>(this.buildNumberTagConditional('from', 'From')),
+        new ConditionalQuestion<number | HistorianTag>(this.buildNumberTagConditional('to', 'To')),
         new DropdownQuestion({
           key: 'color',
           label: 'Color',

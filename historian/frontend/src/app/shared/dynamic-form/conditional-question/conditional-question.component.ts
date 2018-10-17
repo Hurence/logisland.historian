@@ -13,6 +13,7 @@ export class ConditionalQuestionComponent implements OnInit {
 
   @Input() question: ConditionalQuestion<any>;
   @Input() form: FormGroup;
+  @Input() nameForConditional: string;
 
   internalForm: FormGroup;
 

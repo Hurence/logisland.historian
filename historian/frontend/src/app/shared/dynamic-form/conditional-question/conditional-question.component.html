@@ -1,5 +1,5 @@
 <div [formGroup]="form">  
-  <app-dynamic-form-question-radio [question]="this.question.conditionsQuestion" [form]="internalForm"></app-dynamic-form-question-radio>
+  <app-dynamic-form-question-radio [question]="this.question.conditionsQuestion" [form]="internalForm" [name]="nameForConditional"></app-dynamic-form-question-radio>
   <div *ngIf="internalForm">
     <app-question [question]="findResultQuestion(internalForm)" [form]="form"></app-question>
   </div>

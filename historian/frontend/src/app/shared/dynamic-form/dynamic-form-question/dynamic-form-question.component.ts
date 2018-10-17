@@ -11,10 +11,15 @@ export class DynamicFormQuestionComponent implements OnInit {
 
   @Input() question: QuestionBase<any>;
   @Input() form: FormGroup;
+  @Input() name?: string;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (!this.name) {
+      this.name = this.question.elementId;
+    }
+  }
 
   get isValid(): boolean {
     return this.control.disabled || this.control.valid;

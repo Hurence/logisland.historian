@@ -12,6 +12,7 @@ export class DynamicFormQuestionRadioComponent implements OnInit {
 
   @Input() question: RadioQuestion<any>;
   @Input() form: FormGroup;
+  @Input() name: string;
 
   constructor(private qcs: QuestionControlService) { }
 

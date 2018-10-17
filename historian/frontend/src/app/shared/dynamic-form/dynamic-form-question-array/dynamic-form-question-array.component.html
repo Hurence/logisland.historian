@@ -2,8 +2,8 @@
   <div [formArrayName]="question.key" class="" [id]="question.elementId">
     <div *ngFor="let control of formArray.controls; let i=index" [formGroupName]="i">
       <div style="margin-left: 1em;" class="sub-questions">
-        <div *ngFor="let subQuestion of question.questions">
-          <app-question [question]="subQuestion" [form]="control"></app-question>
+        <div *ngFor="let subQuestion of question.questions">          
+          <app-question [question]="subQuestion" [form]="control" [name]='calculName(subQuestion, i)'></app-question>
         </div>        
         <button (click)="removeItem(i)" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
         <button (click)="addItem()" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
