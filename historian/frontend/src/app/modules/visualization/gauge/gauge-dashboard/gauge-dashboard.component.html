@@ -8,21 +8,13 @@
     [(autoRefreshInterval)]="autoRefreshInterval"></app-visualization-menu>
   </div> 
   <div class='ui-g-12'>
-    <!-- <app-gauge-chart *ngFor="let gaugeRawParam of gaugeRawParams"
-    [min]="gaugeRawParam.min" [max]="gaugeRawParam.max" [greenZones]="gaugeRawParam.greenZones" [label]="gaugeRawParam.label"
-    [yellowZones]="gaugeRawParam.yellowZones" [redZones]="gaugeRawParam.redZones"
-    [value]="gaugeRawParam.value"></app-gauge-chart> -->
     <div *ngFor="let dummy of ' '.repeat(1).split(''), let i = index">
       <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
       [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
       [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
       [value]="gaugeRawParams[i].value"></app-gauge-chart>
     </div>
-    <!-- <app-gauge-chart [min]="gaugeRawParams[0].min" [max]="gaugeRawParams[0].max" [greenZones]="gaugeRawParams[0].greenZones" [label]="gaugeRawParams[0].label"
-    [yellowZones]="gaugeRawParams[0].yellowZones" [redZones]="gaugeRawParams[0].redZones"
-    [value]="gaugeRawParams[0].value"></app-gauge-chart> -->
   </div>
-  <!-- {{ gaugeRawParams | json }}   -->
   <div class='ui-g-12'>
     <app-gauge-form [questions]="gaugeEditQuestions" [item]="gaugeConfigs[0]" (submitted)="onGaugeConfigChange($event)"></app-gauge-form>
   </div>

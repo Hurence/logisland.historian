@@ -15,6 +15,9 @@ import { RefreshRateComponent } from '../../../../shared/refresh-rate-selection/
 import { Subscription } from 'rxjs';
 import { MeasuresService } from '../../../../measure/measures.service';
 import { IAgregation } from '../../../../measure/Measures';
+import { HistorianTagDropdownQuestion } from '../../../../shared/dynamic-form/question-historian-tag-dropdown';
+import { TagUtils } from '../../../tag/modele/TagUtils';
+import { RefreshRateComponentAsInnerVariable } from '../../../../shared/refresh-rate-selection/RefreshRateComponentAsInnerVariable';
 
 export interface GaugeRawParams {
   value: number;
@@ -31,7 +34,7 @@ export interface GaugeRawParams {
   templateUrl: './gauge-dashboard.component.html',
   styleUrls: ['./gauge-dashboard.component.css']
 })
-export class GaugeDashboardComponent extends RefreshRateComponent implements OnInit, OnDestroy {
+export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable implements OnInit, OnDestroy {
 
   gaugeConfigs: BackendGaugeConfig[] = [
     {
@@ -88,6 +91,7 @@ export class GaugeDashboardComponent extends RefreshRateComponent implements OnI
   set autoRefreshInterval(newAutoRefreshInterval: AutoRefreshInterval) {
     this._autoRefreshInterval = newAutoRefreshInterval;
     this.cookieService.set('autoRefreshInterval', JSON.stringify(this._autoRefreshInterval));
+    this.changeRefreshRate(+newAutoRefreshInterval.refrashInterval);
   }
 
   private _timeRange: TimeRangeFilter;
@@ -109,6 +113,8 @@ export class GaugeDashboardComponent extends RefreshRateComponent implements OnI
   }
 
   ngOnInit() {
+    super.ngOnInit();
+    this.changeRefreshRate(+this.autoRefreshInterval.refrashInterval);
     this.gaugeEditQuestions = this.getQuestions();
   }
 
@@ -146,13 +152,12 @@ export class GaugeDashboardComponent extends RefreshRateComponent implements OnI
   }
 
   private getRawOrTagVariable(gaugeConf: BackendGaugeConfig, field: string, lastTagsValue: Map<string, number>): number {
-    const value: number = +gaugeConf[field];
-    if (value === NaN) {
+    if (TagUtils.isHistorianTag(gaugeConf[field])) {
       console.log('value is a tag');
       const tag = gaugeConf.value as HistorianTag;
       return lastTagsValue.get(`${tag.datasource_id}|${tag.node_id}`);
     } else {
-      return value;
+      return gaugeConf[field];
     }
   }
 
@@ -215,8 +220,8 @@ export class GaugeDashboardComponent extends RefreshRateComponent implements OnI
   private lookForTag(gaugeConf: BackendGaugeConfig, fields: string[]): Set<string> {
     const neededTags: Set<string> = new Set();
     fields.forEach(f => {
-      if (+gaugeConf[f] === NaN) {
-        neededTags.add(gaugeConf[f]);
+      if (TagUtils.isHistorianTag(gaugeConf[f])) {
+        neededTags.add(gaugeConf[f].id);
       }
     });
     return neededTags;
@@ -258,7 +263,7 @@ export class GaugeDashboardComponent extends RefreshRateComponent implements OnI
     };
 
     return [
-      new TextboxQuestion({
+      new HistorianTagDropdownQuestion({
         key: 'value',
         label: 'Monitored tag',
         order: 1,
