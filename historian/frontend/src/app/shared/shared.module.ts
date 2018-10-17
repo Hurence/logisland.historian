@@ -38,6 +38,8 @@ import { TimeRangeSelectionComponent } from './time-range-selection/time-range-s
 import { CalendarModule } from 'primeng/calendar';
 import {MenubarModule} from 'primeng/menubar';
 import {ProgressBarModule} from 'primeng/progressbar';
+import { DynamicFormQuestionHistorianTagDropdownComponent } from 
+  './dynamic-form/dynamic-form-question-historian-tag-dropdown/dynamic-form-question-historian-tag-dropdown.component';
 
 @NgModule({
   imports: [
@@ -114,6 +116,7 @@ import {ProgressBarModule} from 'primeng/progressbar';
     RefreshRateSelectionComponent,
     DynamicFormQuestionRadioComponent,
     TimeRangeSelectionComponent,
+    DynamicFormQuestionHistorianTagDropdownComponent,
   ],
 })
 export class SharedModule { }

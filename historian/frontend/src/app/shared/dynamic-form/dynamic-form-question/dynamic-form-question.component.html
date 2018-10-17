@@ -31,9 +31,16 @@
     <!-- SELECT (DROPDOWN)-->
     <ng-container *ngSwitchCase="'dropdown'">
         <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
-        <select [id]="question.elementId" [formControlName]="question.key" class]="form-control" [required]="question.required">
+        <select [id]="question.elementId" [formControlName]="question.key" [class]="form-control" [required]="question.required">
           <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
         </select>
+    </ng-container>
+
+    <!-- historian-tag-dropdown -->
+    <ng-container *ngSwitchCase="'historian-tag-dropdown'">
+      <label *ngIf="!question.hidden" [for]="question.elementId">{{question.label}}</label>
+      <app-dynamic-form-question-historian-tag-dropdown [question]="question" [form]="form">        
+      </app-dynamic-form-question-historian-tag-dropdown>
     </ng-container>
 
     <!-- ARRAY -->
