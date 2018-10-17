@@ -53,6 +53,8 @@ public interface SolrTagRepository extends SolrCrudRepository<Tag, String> {
     @Query(value = "*:*", filters = { "?0", "record_type:tag" })
     List<Tag> findByText(String text, Pageable page);
 
+    List<Tag> findByNodeIdLike(String nodeId, Pageable pageable);
+
     @Query(value = "record_type:tag", filters = { "record_type:tag", "domain:?0"})
     List<Tag> findByDomain(String domain);
 

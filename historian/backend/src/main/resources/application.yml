@@ -32,7 +32,6 @@ info:
     name: @project.artifactId@
   build:
     version: @project.version@
-
 keycloak:
   realm: logisland
   auth-server-url: ${keycloak_base_url:http://historian.hurence.com:10080/auth}
@@ -47,7 +46,7 @@ keycloak:
   cors-allowed-headers: "*"
   cors-allowed-methods: "*"
   cors-exposed-headers: "*"
-  proxy-url:
+  enable-basic-auth: true
 
 
 
