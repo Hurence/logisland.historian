@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 
@@ -11,7 +11,7 @@ export interface CanGetId {
   getId(): string;
 }
 
-export abstract class BaseDynamicFormComponentEmitter<T> implements OnInit, OnChanges {
+export abstract class BaseDynamicFormComponentEmitter<T> implements OnInit, OnChanges, AfterViewInit {
 
   @Input() questions: QuestionBase<any>[] = [];
   @Input() item?: T;
@@ -26,7 +26,11 @@ export abstract class BaseDynamicFormComponentEmitter<T> implements OnInit, OnCh
 
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
-    this.rebuildForm();
+  }
+
+  ngAfterViewInit() {
+    //workaround to not have ExpressionChangedAfterItHasBeenCheckedError
+    setTimeout(() => this.rebuildForm(), 1000);
   }
 
   ngOnChanges(changes: SimpleChanges) {

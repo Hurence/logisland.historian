@@ -19,6 +19,7 @@ import { TagUtils } from '../../../tag/modele/TagUtils';
 import { RefreshRateComponentAsInnerVariable } from '../../../../shared/refresh-rate-selection/RefreshRateComponentAsInnerVariable';
 import { ConditionalQuestion, IConditionalQuestion } from '../../../../shared/dynamic-form/question-conditional';
 import { RadioQuestion } from '../../../../shared/dynamic-form/question-radio';
+import { PollingMode, TagRecordType, TagDataType } from '../../../tag/modele/tag';
 
 export interface GaugeRawParams {
   value: number;
@@ -36,14 +37,34 @@ export interface GaugeRawParams {
   styleUrls: ['./gauge-dashboard.component.css']
 })
 export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable implements OnInit, OnDestroy {
-
+  maxTag: HistorianTag = new HistorianTag({
+    record_type: TagRecordType.TAG,
+    data_type: TagDataType.DOUBLE,
+    creation_date: null,    
+    datasource_id: "VBOX OPC DA",
+    description: null,
+    enabled: true,
+    group: "Triangle Waves",
+    id: "b1033404-9ac2-4732-9eda-dcca9ab4225b",
+    labels: null,
+    last_modification_date: 1539688216247,
+    last_numeric_value: null,
+    last_polling_date: null,
+    last_quality: null,
+    max_numeric_value: null,
+    min_numeric_value: null,
+    node_id: "Triangle Waves.UInt1",
+    polling_mode: PollingMode.POLLING,
+    update_rate: 10000,
+    tag_name: "UInt1",
+  })
   gaugeConfigs: BackendGaugeConfig[] = [
     {
       value: 500,
       min: 0,
-      max: 1000,
+      max: this.maxTag,
       zoneranges : [
-        { from: 0, to : 175, color: ZoneRangeColors.RED },
+        { from: 0, to : this.maxTag, color: ZoneRangeColors.RED },
         { from: 175, to : 250, color: ZoneRangeColors.YELLOW },
         { from: 250, to : 750, color: ZoneRangeColors.GREEN },
         { from: 750, to : 825, color: ZoneRangeColors.YELLOW },
@@ -300,8 +321,6 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
       label: label,
       order: 1,
       required: true,
-      labelHidden: true,
-      errorHidden: true,
       conditionsQuestion: new RadioQuestion<string>({
         key: `${key}_static_or_dynamic`,
         label: `type of ${key}`,
@@ -312,17 +331,21 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
       conditionsResult: [
         {
           ifKey: 'static',
-          thenQuestion: new NumberQuestion({
+          thenQuestion: new NumberQuestion({          
             key: key,
             label: label,
+            labelHidden: true,
+            errorHidden: true,
             required: false,
           })
         },
         {
           ifKey: 'dynamic',
-          thenQuestion: new HistorianTagDropdownQuestion({
+          thenQuestion: new HistorianTagDropdownQuestion({            
             key: key,
             label: label,
+            labelHidden: true,
+            errorHidden: true,
             required: false
           })
         }

@@ -6,6 +6,7 @@ import { ConfirmationService } from 'primeng/components/common/confirmationservi
 import { ZoneRange, ZoneRangeColors } from '../../../graph/gauge-chart/gauge';
 import { FormBuilder } from '@angular/forms';
 import { HistorianTag } from '../../../tag/modele/HistorianTag';
+import { TagUtils } from '../../../tag/modele/TagUtils';
 
 
 export interface ZoneRangeConfig {
@@ -61,9 +62,19 @@ export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendG
 
   protected rebuildForm(): void {
     const objForForm: any = Object.assign({}, this.item);
-    const zoneRangesFGs = objForForm.zoneranges.map(z => this.fb.group(z));
+    //manage zonerange array
+    const zoneRangesFGs = objForForm.zoneranges.map(z => {
+      z.from_static_or_dynamic = TagUtils.isHistorianTag(z.from) ? 'dynamic' : 'static';
+      z.to_static_or_dynamic = TagUtils.isHistorianTag(z.to) ? 'dynamic' : 'static';
+      return this.fb.group(z);
+    });    
     const zoneRangeFormArray = this.fb.array(zoneRangesFGs);
-    this.form.setControl('zoneranges', zoneRangeFormArray);
+    this.form.setControl('zoneranges', zoneRangeFormArray);    
+    //manage min and max static or not
+    objForForm.max_static_or_dynamic = TagUtils.isHistorianTag(this.item.max) ? 'dynamic' : 'static';
+    objForForm.min_static_or_dynamic = TagUtils.isHistorianTag(this.item.min) ? 'dynamic' : 'static';
+    // debugger
+    // this.form.get('min_static_or_dynamic').setValue(TagUtils.isHistorianTag(this.item.min) ? 'dynamic' : 'static');
     this.form.reset(objForForm);
   }
 

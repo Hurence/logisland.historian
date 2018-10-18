@@ -12,12 +12,16 @@ export class QuestionControlService {
     const group: any = {};
 
     questions.forEach(question => {
-      const keyControl: AbstractControl = this.getControl(question.controlType, question.value);
-      if (question.disabled) keyControl.disable();
-      keyControl.setValidators(this.getValidators(question));
-      group[question.key] = keyControl;
+      group[question.key] = this.toControl(question);
     });
     return new FormGroup(group);
+  }
+
+  toControl(question: QuestionBase<any>): AbstractControl {
+    const keyControl: AbstractControl = this.getControl(question.controlType, question.value);
+    if (question.disabled) keyControl.disable();
+    keyControl.setValidators(this.getValidators(question));      
+    return keyControl;
   }
 
   private getValidators(question: QuestionBase<any>): ValidatorFn[] {
