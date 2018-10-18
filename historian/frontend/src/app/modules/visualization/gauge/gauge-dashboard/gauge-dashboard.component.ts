@@ -3,8 +3,7 @@ import { HistorianTag } from './../../../tag/modele/HistorianTag';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from '../../../../shared/refresh-rate-selection/auto-refresh-interval';
 import { CookieService } from 'ngx-cookie-service';
-import { TextboxQuestion } from '../../../../shared/dynamic-form/question-textbox';
-import { BackendGaugeConfig } from '../gauge-form/gauge-form.component';
+import { BackendGaugeConfig, ZoneRangeConfig } from '../gauge-form/gauge-form.component';
 import { IModification } from '../../../datasource/ConfigurationToApply';
 import { ArrayQuestion, IArrayQuestion } from '../../../../shared/dynamic-form/question-array';
 import { QuestionBase } from '../../../../shared/dynamic-form/question-base';
@@ -43,16 +42,12 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
       value: 500,
       min: 0,
       max: 1000,
-      greenZones : [
-         { from: 250, to : 750 }
-      ],
-      yellowZones : [
-         { from: 175, to : 250 },
-         { from: 750, to : 825 }
-      ],
-      redZones : [
-         { from: 0, to : 175 },
-         { from: 825, to : 1000 }
+      zoneranges : [
+        { from: 0, to : 175, color: ZoneRangeColors.RED },
+        { from: 175, to : 250, color: ZoneRangeColors.YELLOW },
+        { from: 250, to : 750, color: ZoneRangeColors.GREEN },
+        { from: 750, to : 825, color: ZoneRangeColors.YELLOW },
+        { from: 825, to : 1000, color: ZoneRangeColors.RED }
       ]
     }
   ];
@@ -141,19 +136,28 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     rawParam.min = this.getRawOrTagVariable(gaugeConf, 'min', lastTagsValue);
     rawParam.max = this.getRawOrTagVariable(gaugeConf, 'max', lastTagsValue);
     rawParam.value = this.getRawOrTagVariable(gaugeConf, 'value', lastTagsValue);
-    if (gaugeConf.greenZones) {
-      rawParam.greenZones = gaugeConf.greenZones;
-    }
-    if (gaugeConf.yellowZones) {
-      rawParam.yellowZones = gaugeConf.yellowZones;
-    }
-    if (gaugeConf.redZones) {
-      rawParam.redZones = gaugeConf.redZones;
+    if (gaugeConf.zoneranges && gaugeConf.zoneranges.length !== 0) {
+      rawParam.greenZones = gaugeConf.zoneranges
+        .filter(z => z.color === ZoneRangeColors.GREEN)
+        .map(z => this.getRawZone(z, lastTagsValue));
+      rawParam.yellowZones = gaugeConf.zoneranges
+        .filter(z => z.color === ZoneRangeColors.YELLOW)
+        .map(z => this.getRawZone(z, lastTagsValue));
+      rawParam.redZones = gaugeConf.zoneranges
+        .filter(z => z.color === ZoneRangeColors.RED)
+        .map(z => this.getRawZone(z, lastTagsValue));
     }
     return rawParam;
   }
 
-  private getRawOrTagVariable(gaugeConf: BackendGaugeConfig, field: string, lastTagsValue: Map<string, number>): number {
+  private getRawZone(z: ZoneRangeConfig, lastTagsValue: Map<string, number>): ZoneRange {
+    const zoneRange: any = {};
+    zoneRange.from = this.getRawOrTagVariable(z, 'from', lastTagsValue);
+    zoneRange.to = this.getRawOrTagVariable(z, 'to', lastTagsValue);
+    return zoneRange as ZoneRange;
+  }
+
+  private getRawOrTagVariable(gaugeConf: any, field: string, lastTagsValue: Map<string, number>): number {
     if (TagUtils.isHistorianTag(gaugeConf[field])) {
       console.log('value is a tag');
       const tag = gaugeConf[field] as HistorianTag;
@@ -167,7 +171,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
    * SECTION Gauges updates
    * iterate all BackendGaugeConfig and update all GaugeParams accordingly
    */
-  private updateGaugesData(gaugesConf: BackendGaugeConfig[]) {
+  private updateGaugesData(gaugesConf: BackendGaugeConfig[]): void {
     console.log('UPDATE GRAPH DATA');
     if (this.measuresRefreshSubscription && !this.measuresRefreshSubscription.closed) {
       this.measuresRefreshSubscription.unsubscribe();
@@ -216,14 +220,35 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   }
 
   private getNeededTagsId(gaugesConf: BackendGaugeConfig): Set<string> {
-    return this.lookForTag(gaugesConf, ['min', 'max', 'value']);
+    return this.lookForTagInBackendGaugeConfig(gaugesConf, ['min', 'max', 'value', 'zoneranges']);
   }
 
-  private lookForTag(gaugeConf: BackendGaugeConfig, fields: string[]): Set<string> {
+  /**
+   * Look for tag in fields
+   * @param gaugeConf
+   * @param fields
+   */
+  private lookForTagInBackendGaugeConfig(gaugeConf: BackendGaugeConfig, fields: (keyof typeof gaugeConf)[]): Set<string> {
     const neededTags: Set<string> = new Set();
     fields.forEach(f => {
-      if (TagUtils.isHistorianTag(gaugeConf[f])) {
-        neededTags.add(gaugeConf[f].id);
+      const value = gaugeConf[f];
+      if (TagUtils.isHistorianTag(value)) {
+        neededTags.add(value.id);
+      } else if (f === 'zoneranges') { // ZoneRangeConfig[]
+        (value as ZoneRangeConfig[]).forEach(z => {
+          this.lookForTagInZoneRangeConfig(z, ['from', 'to']).forEach(tagId => neededTags.add(tagId));
+        });
+      }
+    });
+    return neededTags;
+  }
+
+  private lookForTagInZoneRangeConfig(gaugeConf: ZoneRangeConfig, fields: (keyof typeof gaugeConf)[]): Set<string> {
+    const neededTags: Set<string> = new Set();
+    fields.forEach(f => {
+      const value = gaugeConf[f];
+      if (TagUtils.isHistorianTag(value)) {
+        neededTags.add(value.id);
       }
     });
     return neededTags;

@@ -3,7 +3,7 @@ import { ITag } from './tag';
 
 export class TagUtils {
 
-    public static isHistorianTag(tag: ITag): tag is HistorianTag {
+    public static isHistorianTag(tag: any): tag is HistorianTag {
         return tag instanceof HistorianTag;
     }
 }
