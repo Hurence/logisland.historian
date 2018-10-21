@@ -1,10 +1,6 @@
 <div [formGroup]="form">  
   <app-dynamic-form-question-radio [question]="this.question.conditionsQuestion" [form]="form" [name]="nameForConditional"></app-dynamic-form-question-radio>
-  <!-- <div *ngIf="internalForm">
-    <app-question [question]="findResultQuestion(internalForm)" [form]="form"></app-question>
-  </div> -->
-  <div *ngFor="let kv of this.question.conditionsResult">
-    <app-question [question]="kv.thenQuestion" [form]="form"></app-question>
+  <div *ngFor="let kv of this.question.conditionsResult">    
+    <app-question [question]="kv.thenQuestion" [form]="form" *ngIf="kv.ifKey === conditionControl.value"></app-question>
   </div> 
-  <!-- <app-question [question]="findResultQuestion()" [form]="form"></app-question> -->
 </div>

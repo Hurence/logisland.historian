@@ -40,12 +40,12 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   maxTag: HistorianTag = new HistorianTag({
     record_type: TagRecordType.TAG,
     data_type: TagDataType.DOUBLE,
-    creation_date: null,    
-    datasource_id: "VBOX OPC DA",
+    creation_date: null,
+    datasource_id: 'VBOX OPC DA',
     description: null,
     enabled: true,
-    group: "Triangle Waves",
-    id: "b1033404-9ac2-4732-9eda-dcca9ab4225b",
+    group: 'Triangle Waves',
+    id: 'b1033404-9ac2-4732-9eda-dcca9ab4225b',
     labels: null,
     last_modification_date: 1539688216247,
     last_numeric_value: null,
@@ -53,11 +53,12 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     last_quality: null,
     max_numeric_value: null,
     min_numeric_value: null,
-    node_id: "Triangle Waves.UInt1",
+    node_id: 'Triangle Waves.UInt1',
     polling_mode: PollingMode.POLLING,
     update_rate: 10000,
-    tag_name: "UInt1",
-  })
+    tag_name: 'UInt1',
+  });
+
   gaugeConfigs: BackendGaugeConfig[] = [
     {
       value: 500,
@@ -331,7 +332,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
       conditionsResult: [
         {
           ifKey: 'static',
-          thenQuestion: new NumberQuestion({          
+          thenQuestion: new NumberQuestion({
             key: key,
             label: label,
             labelHidden: true,
@@ -341,7 +342,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
         },
         {
           ifKey: 'dynamic',
-          thenQuestion: new HistorianTagDropdownQuestion({            
+          thenQuestion: new HistorianTagDropdownQuestion({
             key: key,
             label: label,
             labelHidden: true,

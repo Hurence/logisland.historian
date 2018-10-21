@@ -29,7 +29,7 @@ export abstract class BaseDynamicFormComponentEmitter<T> implements OnInit, OnCh
   }
 
   ngAfterViewInit() {
-    //workaround to not have ExpressionChangedAfterItHasBeenCheckedError
+    // workaround to not have ExpressionChangedAfterItHasBeenCheckedError
     setTimeout(() => this.rebuildForm(), 1000);
   }
 
