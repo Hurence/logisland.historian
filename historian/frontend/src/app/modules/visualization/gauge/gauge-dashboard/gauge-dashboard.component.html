@@ -7,13 +7,18 @@
     [autoRefreshIntervalSelector] = "true"
     [(autoRefreshInterval)]="autoRefreshInterval"></app-visualization-menu>
   </div>   
-  <div class='ui-g-12'>
-    <div *ngFor="let dummy of ' '.repeat(1).split(''), let i = index">
-      <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
-      [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
-      [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
-      [value]="gaugeRawParams[i].value"></app-gauge-chart>
-    </div>
+  <div class='ui-g-12'>    
+    <ng-container *ngIf="!error">
+      <div *ngFor="let dummy of ' '.repeat(1).split(''), let i = index">
+        <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
+        [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
+        [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
+        [value]="gaugeRawParams[i].value"></app-gauge-chart>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="error">
+      Some value of tag could not be found.
+    </ng-container>
   </div>
   <div class='ui-g-12'>
     <app-gauge-form [questions]="gaugeEditQuestions" [item]="gaugeConfigs[0]" (submitted)="onGaugeConfigChange($event)"></app-gauge-form>

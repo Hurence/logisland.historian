@@ -15,9 +15,9 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() max?: number;
   @Input() minorTicks?: number = 10;
   @Input() majorTicks?: number = 8;
-  @Input() trackMin ?: boolean = true;
-  @Input() trackMax ?: boolean = true;
-  @Input() trackAvg ?: boolean = true;
+  @Input() trackMin ?: boolean = false;
+  @Input() trackMax ?: boolean = false;
+  @Input() trackAvg ?: boolean = false;
   @Input() greenZones ?: ZoneRange[] = [];
   @Input() yellowZones ?: ZoneRange[] = [];
   @Input() redZones ?: ZoneRange[] = [];
@@ -52,6 +52,9 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
       }
       if (changes.redZones) {
         gaugeUpdate.redZones = this.redZones;
+      }      
+      if (changes.label) {
+        gaugeUpdate.label = this.label;
       }
       this.gauge.updateGauge(gaugeUpdate);
       if (changes.value) {

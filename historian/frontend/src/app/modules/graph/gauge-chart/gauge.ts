@@ -458,6 +458,18 @@ export class Gauge {
     }
   }
 
+  redrawLabel(): void {    
+    if (undefined !== this.config.label) {
+      const fontSizeGaugeLabel = Math.round(this.config.size / 9);
+      this.body.select('.gaugeLabel')        
+        .attr('x', this.config.cx)
+        .attr('y', this.config.cy / 2 + fontSizeGaugeLabel / 2)
+        .attr('dy', fontSizeGaugeLabel / 2)        
+        .text(this.config.label)
+        .style('font-size', fontSizeGaugeLabel + 'px');
+    }
+  }
+
   private drawZones(): void {
     this.redrawZones(this.config.greenZones, this.greenZone);
     this.redrawZones(this.config.yellowZones, this.yellowZone);
@@ -467,6 +479,9 @@ export class Gauge {
   updateGauge(updates: GaugeConfigOptions): void {
     this.configure(updates);
     const fontSize = Math.round(this.config.size / 16);
+    if (updates.label) {
+      this.redrawLabel();
+    }
     if (updates.min) {
       // this.drawLowerBoundLabel(fontSize);
       const point = this.valueToPoint(updates.min, 0.63);

@@ -20,6 +20,7 @@ import { RefreshRateComponentAsInnerVariable } from '../../../../shared/refresh-
 import { ConditionalQuestion, IConditionalQuestion } from '../../../../shared/dynamic-form/question-conditional';
 import { RadioQuestion } from '../../../../shared/dynamic-form/question-radio';
 import { PollingMode, TagRecordType, TagDataType } from '../../../tag/modele/tag';
+import { TextboxQuestion } from '../../../../shared/dynamic-form/question-textbox';
 
 export interface GaugeRawParams {
   value: number;
@@ -63,6 +64,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     {
       value: 500,
       min: 0,
+      label: 'gauge',
       max: this.maxTag,
       zoneranges : [
         { from: 0, to : this.maxTag, color: ZoneRangeColors.RED },
@@ -79,7 +81,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
       value: 500,
       min: 0,
       max: 1000,
-      label: 'defaut gauge',
+      label: 'gauge',
       greenZones : [
          { from: 250, to : 750 }
       ],
@@ -94,7 +96,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     }
   ];
 
-  label = 'ma jauge';
+  error: boolean = false;
 
   gaugeEditQuestions: QuestionBase<any>[];
 
@@ -146,7 +148,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   onGaugeConfigChange(gaugeConfModif: IModification<BackendGaugeConfig>): void {
     this.gaugeConfigs[0] = gaugeConfModif.item;
-    this.updateGaugesData(this.gaugeConfigs);
+    this.updateGaugesData(this.gaugeConfigs);    
   }
 
   subscribeToRefreshChanges(t: number): void {
@@ -154,7 +156,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   }
 
   private getGaugeRawParams(gaugeConf: BackendGaugeConfig, lastTagsValue: Map<string, number>): GaugeRawParams {
-    const rawParam: any = {};
+    const rawParam: any = Object.assign({}, gaugeConf);    
     rawParam.min = this.getRawOrTagVariable(gaugeConf, 'min', lastTagsValue);
     rawParam.max = this.getRawOrTagVariable(gaugeConf, 'max', lastTagsValue);
     rawParam.value = this.getRawOrTagVariable(gaugeConf, 'value', lastTagsValue);
@@ -214,21 +216,24 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
             } else {
               lastTagsValue.set(`${m.datasource_id}|${m.tag_id}` , aggLast.value);
             }
-          });
+          });          
           this.redrawGauges(gaugesConf, lastTagsValue);
+          this.error = false;
         },
         error => {
+          this.error = true;
           console.log('error requesting data', error);
           // this.redrawGauges(gaugesConf, new Map());
         }
       );
     } else {
       this.redrawGauges(gaugesConf, new Map());
+      this.error = false;
     }
   }
 
   private redrawGauges(gaugesConf: BackendGaugeConfig[], lastTagsValue: Map<string, number>): void {
-    this.gaugeRawParams = gaugesConf.map(conf => this.getGaugeRawParams(conf, lastTagsValue));
+    this.gaugeRawParams = gaugesConf.map(conf => this.getGaugeRawParams(conf, lastTagsValue));    
   }
 
   private getNeededTagsIdForArray(gaugesConf: BackendGaugeConfig[]): Set<string> {
@@ -309,6 +314,13 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
         label: 'Monitored tag',
         order: 1,
         required: true
+      }),
+      new TextboxQuestion({
+        key: 'label',
+        label: 'Label of gauge',
+        order: 2,
+        required: true,
+        placeholder: 'center label for gauge',
       }),
       new ConditionalQuestion<number | HistorianTag>(this.buildNumberTagConditional('min', 'Min')),
       new ConditionalQuestion<number | HistorianTag>(this.buildNumberTagConditional('max', 'Max')),
