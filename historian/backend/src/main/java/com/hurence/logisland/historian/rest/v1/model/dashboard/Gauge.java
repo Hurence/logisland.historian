@@ -1,15 +1,14 @@
-package com.hurence.logisland.historian.rest.v1.model;
+package com.hurence.logisland.historian.rest.v1.model.dashboard;
 
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.hurence.logisland.historian.rest.v1.model.ZoneRange;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
-import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -21,9 +20,8 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * A gauge is representing the measure of last value, you can specify other tags to be delimiter for anormal range of values. 
 */
-    @ApiModel(description = "A gauge is representing the measure of last value, you can specify other tags to be delimiter for anormal range of values. ")
-
-@SolrDocument(solrCoreName = "historian")
+@ApiModel(description = "A gauge is representing the measure of last value, you can specify other tags to be delimiter for anormal range of values. ")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Gauge  implements Serializable {
         @JsonProperty("type")
         @Indexed(name = "type")

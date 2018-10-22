@@ -1,16 +1,13 @@
-package com.hurence.logisland.historian.rest.v1.model;
+package com.hurence.logisland.historian.rest.v1.model.dashboard;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.hurence.logisland.historian.rest.v1.model.Gauge;
 import com.hurence.logisland.historian.rest.v1.model.Permissions;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
-import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -22,7 +19,7 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * A dashboard is representing different panels (as of today only gauges) with thei configuration. Those enable data visualization. 
 */
-    @ApiModel(description = "A dashboard is representing different panels (as of today only gauges) with thei configuration. Those enable data visualization. ")
+@ApiModel(description = "A dashboard is representing different panels (as of today only gauges) with thei configuration. Those enable data visualization. ")
 
 @SolrDocument(solrCoreName = "dashboard")
 public class Dashboard  implements Serializable {
@@ -70,6 +67,10 @@ public class Dashboard  implements Serializable {
     @ApiModelProperty(required = true, value = "UUID of the dashboard.")
       @NotNull
 
+    public Dashboard uid(String uid) {
+        this.uid = uid;
+        return this;
+    }
 
   public String getUid() {
     return uid;

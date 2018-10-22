@@ -1,13 +1,12 @@
-package com.hurence.logisland.historian.rest.v1.model;
+package com.hurence.logisland.historian.rest.v1.model.dashboard;
 
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 import org.springframework.data.solr.core.mapping.Indexed;
@@ -18,9 +17,8 @@ import org.threeten.bp.OffsetDateTime;
 /**
 * A ZoneRange is a range between two value with an associated color. 
 */
-    @ApiModel(description = "A ZoneRange is a range between two value with an associated color. ")
-
-@SolrDocument(solrCoreName = "historian")
+@ApiModel(description = "A ZoneRange is a range between two value with an associated color. ")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ZoneRange  implements Serializable {
         @JsonProperty("color")
         @Indexed(name = "color")
