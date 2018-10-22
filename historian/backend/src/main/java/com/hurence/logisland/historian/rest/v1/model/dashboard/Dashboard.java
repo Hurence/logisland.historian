@@ -23,9 +23,9 @@ import org.threeten.bp.OffsetDateTime;
 
 @SolrDocument(solrCoreName = "dashboard")
 public class Dashboard  implements Serializable {
-        @JsonProperty("uid")
-        @Indexed(name = "uid")
-        private String uid = null;
+        @JsonProperty("id")
+        @Indexed(name = "id")
+        private String id = null;
 
         @JsonProperty("name")
         @Indexed(name = "name")
@@ -61,19 +61,19 @@ public class Dashboard  implements Serializable {
 
     /**
         * UUID of the dashboard.
-    * @return uid
+    * @return id
     **/
-        @JsonProperty("uid")
+        @JsonProperty("id")
     @ApiModelProperty(required = true, value = "UUID of the dashboard.")
       @NotNull
 
     public Dashboard uid(String uid) {
-        this.uid = uid;
+        this.id = uid;
         return this;
     }
 
-  public String getUid() {
-    return uid;
+  public String getId() {
+    return id;
     }
 
         public Dashboard name(String name) {
@@ -274,7 +274,7 @@ public class Dashboard  implements Serializable {
     return false;
     }
         Dashboard dashboard = (Dashboard) o;
-        return Objects.equals(this.uid, dashboard.uid) &&
+        return Objects.equals(this.id, dashboard.id) &&
         Objects.equals(this.name, dashboard.name) &&
         Objects.equals(this.owner, dashboard.owner) &&
         Objects.equals(this.description, dashboard.description) &&
@@ -287,7 +287,7 @@ public class Dashboard  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(uid, name, owner, description, permissions, from, to, autorefresh, panels);
+    return Objects.hash(id, name, owner, description, permissions, from, to, autorefresh, panels);
     }
 
 
@@ -296,7 +296,7 @@ public String toString() {
 StringBuilder sb = new StringBuilder();
 sb.append("{\n");
 
-sb.append("    uid: ").append(toIndentedString(uid)).append("\n");
+sb.append("    id: ").append(toIndentedString(id)).append("\n");
 sb.append("    name: ").append(toIndentedString(name)).append("\n");
 sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
 sb.append("    description: ").append(toIndentedString(description)).append("\n");

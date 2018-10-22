@@ -16,22 +16,15 @@
  */
 package com.hurence.logisland.historian.service;
 
-import com.hurence.logisland.historian.config.bean.LogislandConfigurationBean;
 import com.hurence.logisland.historian.repository.SolrDashboardRepository;
-import com.hurence.logisland.historian.repository.SolrDataflowRepository;
-import com.hurence.logisland.historian.repository.SolrSelectionRepository;
-import com.hurence.logisland.historian.rest.v1.model.*;
 import com.hurence.logisland.historian.rest.v1.model.dashboard.Dashboard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.threeten.bp.OffsetDateTime;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,17 +81,17 @@ public class DashboardApiService {
 
 
     private Optional<Dashboard> updateDashboard(Dashboard dashboard) {
-        logger.debug("updating Dashboard {}", dashboard.getUid());
-        if (repository.existsById(dashboard.getUid())) {
+        logger.debug("updating Dashboard {}", dashboard.getId());
+        if (repository.existsById(dashboard.getId())) {
             return Optional.of(repository.save(dashboard));
         } else {
-            logger.error("Dashboard {} not found, unable to update", dashboard.getUid());
+            logger.error("Dashboard {} not found, unable to update", dashboard.getId());
             return Optional.empty();
         }
     }
 
     private Dashboard updateDashboardWithoutChecking(Dashboard dashboard) {
-        logger.debug("updating Dashboard {}", dashboard.getUid());
+        logger.debug("updating Dashboard {}", dashboard.getId());
         return repository.save(dashboard);
     }
 
@@ -109,7 +102,7 @@ public class DashboardApiService {
      * @return
      */
     public Optional<Dashboard> updateDashboard(Dashboard dashboard, String uid) {
-        if (!dashboard.getUid().equals(uid)) {
+        if (!dashboard.getId().equals(uid)) {
             return updateDashboard(dashboard.uid(uid));
         } else {
             return updateDashboard(dashboard);
@@ -117,7 +110,7 @@ public class DashboardApiService {
     }
 
     public Dashboard updateDashboardWithoutChecking(Dashboard dashboard, String uid) {
-        if (!dashboard.getUid().equals(uid)) {
+        if (!dashboard.getId().equals(uid)) {
             return updateDashboardWithoutChecking(dashboard.uid(uid));
         } else {
             return updateDashboardWithoutChecking(dashboard);
