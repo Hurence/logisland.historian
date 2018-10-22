@@ -1485,19 +1485,6 @@ definitions:
         items:
           type: string
 
-  PrivateSelection:
-    allOf: # Combines the Selection and the inline model
-      - $ref: '#/definitions/Selection'
-      - type: object
-        description: a Selection is a selection of tags.
-        required:
-          - id
-          - owner
-        properties:
-          id:
-            description: concatenation of owner with name for example
-            type: string
-
   Permissions:
     type: object
     description: a Permissions can allow to share something with others. It describes permission for one item.
@@ -1842,3 +1829,103 @@ definitions:
       value:
         type: string
 
+  Gauge:
+    type: object
+    description: |
+      A gauge is representing the measure of last value, you can specify other tags to be delimiter for anormal range of values.
+    required:
+      - name
+      - min
+      - max
+      - zoneranges
+    properties:
+      type:
+        type: string
+        description: Type of panel.
+        default: 'gauge'
+        readOnly: true
+      name:
+        type: string
+        description: Name of the gauge.
+      from:
+        type: string
+        description: The start time for searching data.
+      to:
+        type: string
+        description: The end time from searching data.
+      autorefresh:
+        type: integer
+        format: int64
+        description: The number of milliseconds between each refresh of data.
+      min:
+        type: string
+        description: Minimum of the gauge. Can be a number or a string representing id of a tag.
+      max:
+        type: string
+        description: Maximum of the gauge. Can be a number or a string representing id of a tag.
+      zoneranges:
+        description: List of colored zones in gauge.
+        type: array
+        items:
+          $ref: '#/definitions/ZoneRange'
+
+  ZoneRange:
+    type: object
+    description: |
+      A ZoneRange is a range between two value with an associated color.
+    required:
+      - color
+      - from
+      - to
+    properties:
+      color:
+        type: string
+        description: The color of the zone.
+      from:
+        type: string
+        description: The start value for the zone to delimit.
+      to:
+        type: string
+        description: The end value for the zone to delimit.
+
+  Dashboard:
+    type: object
+    description: |
+      A dashboard is representing different panels (as of today only gauges) with thei configuration.
+      Those enable data visualization.
+    required:
+      - uid
+      - name
+      - owner
+      - gauges
+    properties:
+      uid:
+        type: string
+        description: UUID of the dashboard.
+        readOnly: true
+      name:
+        type: string
+        description: Name of the dashboard.
+      owner:
+        type: string
+        description: creator of the dashboard.
+      description:
+        type: string
+        description: description for this dashboard.
+      permissions:
+        $ref: '#/definitions/Permissions'
+      from:
+        type: string
+        description: The start time for searching data.
+      to:
+        type: string
+        description: The end time from searching data.
+      autorefresh:
+        type: integer
+        format: int64
+        description: The number of milliseconds between each refresh of data.
+      panels:
+        description: list of panels in dashboard.
+        type: array
+        items:
+          $ref: '#/definitions/Gauge'
