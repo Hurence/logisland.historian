@@ -28,5 +28,7 @@ engine:
     spark.streaming.receiver.writeAheadLog.enable: false
     spark.ui.port: 4050
     remote.api.baseUrl: http://historian.hurence.com:10080/api/v1/
+    remote.api.auth.user: logisland
+    remote.api.auth.password: logisland
     remote.api.polling.rate: 5000
     remote.api.push.rate: 10000
