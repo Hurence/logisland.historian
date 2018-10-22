@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<schema name="dashboard" version="1.5">
+
+    <types>
+        <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+        <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+
+        <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
+        <fieldType name="binary" class="solr.BinaryField"/>
+        <fieldType name="date" class="solr.TrieDateField"  sortMissingLast="true" omitNorms="true"/>
+    </types>
+
+    <fields>
+
+        <field name="_version_" type="long" indexed="true" stored="true"/>
+
+        <!-- Dashboard API -->
+        <field name="uid" type="string" indexed="true" stored="true" required="true"/>
+        <field name="owner" type="string" indexed="true" stored="true" required="true"/>
+        <field name="name" type="string" indexed="true" stored="true" required="true"/>
+        <field name="description" type="string" indexed="true" stored="true" required="false"/>
+        <!-- Permissions TODO -->
+        <field name="from" type="string" indexed="true" stored="true" required="true"/>
+        <field name="to" type="string" indexed="true" stored="true" required="true"/>
+        <field name="autorefresh" type="long" indexed="true" stored="true" required="true"/>
+        <!-- string Json fields -->
+        <field name="panels" type="string" indexed="true" stored="true" required="false" multiValued="false"/>
+    </fields>
+
+    <uniqueKey>uid</uniqueKey>
+    <solrQueryParser defaultOperator="OR"/>
+
+</schema>
