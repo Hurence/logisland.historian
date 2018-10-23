@@ -51,10 +51,34 @@ public class Gauge  implements Serializable {
         @Indexed(name = "max")
         private String max = null;
 
+        @JsonProperty("value")
+        @Indexed(name = "value")
+        private String value = null;
+
         @JsonProperty("zoneranges")
         @Indexed(name = "zoneranges")
         private List<ZoneRange> zoneranges = new ArrayList<ZoneRange>();
 
+
+
+
+    /**
+     * Name of the gauge.
+     * @return name
+     **/
+    @JsonProperty("value")
+    @ApiModelProperty(required = true, value = "Value of the gauge.")
+    @NotNull
+
+
+    public String getValue() {
+        return value;
+    }
+
+    public Gauge setValue(String value) {
+        this.value = value;
+        return this;
+    }
     /**
         * Type of panel.
     * @return type
