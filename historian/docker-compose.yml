@@ -60,6 +60,7 @@ services:
     volumes:
       # Data persistency
       # sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
+      # in my case needed to : sudo chown 472:472 ~/data/grafana;sudo chown 472:472/conf/grafana/provisioning;
       - ~/data/grafana:/var/lib/grafana
       - ./conf/grafana/provisioning/:/etc/grafana/provisioning/
 
