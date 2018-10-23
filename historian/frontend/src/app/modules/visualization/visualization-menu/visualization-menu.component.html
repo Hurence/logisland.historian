@@ -34,6 +34,14 @@
      <li (click)="onViewChanged('lineChart')"><i class="fa fa-line-chart" aria-hidden="true"></i>Line chart</li>     
     </ul>  
   </li>
+  <li *ngIf="dashboardSaving && dashboard" class="visualization-menu-element" 
+  (click)="updateDashboard(dashboard)">    
+    <i class="fa fa-save" aria-hidden="true"></i>
+  </li>
+  <li *ngIf="dashboardSaving && dashboard" class="visualization-menu-element" 
+  (click)="addNewGauge(dashboard)">    
+    <i class="fa fa-tachometer" aria-hidden="true"></i>Add a gauge
+  </li>
 </ul>
 <div *ngIf="tagSelector" [hidden]="menuItemActive !== 'selection'">    
   <app-selection-dashboard [tagSelection]="tagSelection" (tagSelectionChange)="onTagSelectionChanged($event)"

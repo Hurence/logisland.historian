@@ -2,8 +2,10 @@
 <div class="ui-g h-100">
   <div class='ui-g-12 no-padding-side'>
     <app-visualization-menu 
+    [dashboardSaving]="true"
     [dashboardSelector]="true"
     [dashboard]="dashboard"
+    (gaugeAdded)="onGaugeAdded($event)"
     (dashboardChange)="onDashboardChanged($event)"
     (dashboardUpdated)="onDashboardUpdated($event)"
     [timeRangeSelector]="true"
@@ -11,20 +13,34 @@
     [autoRefreshIntervalSelector] = "true"
     [(autoRefreshInterval)]="autoRefreshInterval"></app-visualization-menu>
   </div>   
-  <div class='ui-g-12'>    
-    <ng-container *ngIf="!error">
-      <div *ngFor="let dummy of ' '.repeat(1).split(''), let i = index">
-        <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
-        [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
-        [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
-        [value]="gaugeRawParams[i].value"></app-gauge-chart>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="error">
-      Some value of tag could not be found.
-    </ng-container>
+  <div class='ui-g-12' *ngIf="dashboard && gaugeConfigs.length !== 0">
+      gaugeConfigs : {{ gaugeConfigs | json }}
+    gaugeRawParams : {{ gaugeRawParams | json }}
+    <div class='ui-g h-100'>
+      <div class='ui-g-12'>    
+          <ng-container *ngIf="!error">            
+            <div *ngFor="let dummy of ' '.repeat(gaugeRawParams.length).split(''), let i = index">
+              <button class="btn btn-success" (click)="showEditGaugeForm(i)">Edit</button>
+              <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
+              [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
+              [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
+              [value]="gaugeRawParams[i].value"></app-gauge-chart>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="error">
+            Some value of tag could not be found.
+          </ng-container>
+        </div>
+        <div class='ui-g-12' *ngIf="displayGaugeForm">
+          <app-gauge-form [questions]="gaugeEditQuestions" 
+          [item]="gaugeForForm" (submitted)="onGaugeConfigChange($event)"></app-gauge-form>
+        </div>
+    </div>
+  </div>  
+  <div class='ui-g-12' *ngIf="!dashboard">
+    No dashboard selected (TODO button to open menu)
   </div>
-  <div class='ui-g-12'>
-    <app-gauge-form [questions]="gaugeEditQuestions" [item]="gaugeConfigs[0]" (submitted)="onGaugeConfigChange($event)"></app-gauge-form>
+  <div class='ui-g-12' *ngIf="dashboard && gaugeConfigs.length === 0">
+    Empty dashboard (you can add a new gauge in top rigth menu)
   </div>
 </div>

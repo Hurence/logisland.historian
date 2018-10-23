@@ -32,7 +32,7 @@ export interface BackendGaugeConfig {
 })
 export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendGaugeConfig> {
 
-  protected formOperation: Operation = Operation.UPDATE;
+  formOperation: Operation = Operation.UPDATE;
 
   constructor(protected qcs: QuestionControlService,
               protected confirmationService: ConfirmationService,

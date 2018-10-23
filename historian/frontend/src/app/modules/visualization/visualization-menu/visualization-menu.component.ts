@@ -5,7 +5,9 @@ import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range
 import { TagsSelection } from '../../selection/Selection';
 import { ProfilService } from '../../../profil/profil.service';
 import { SelectionDashboardComponent } from '../../selection/selection-dashboard/selection-dashboard.component';
-import { Dashboard } from '../../dashboard/modele/Dashboard';
+import { Dashboard, BackGauge } from '../../dashboard/modele/Dashboard';
+import { DashboardService } from '../../dashboard/dashboard.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-visualization-menu',
@@ -38,6 +40,10 @@ export class VisualizationMenuComponent implements OnInit {
 
   @Input() view: string;
   @Output() viewChange = new EventEmitter<string>();
+
+  @Input() dashboardSaving: boolean = false;
+  @Output() gaugeAdded = new EventEmitter<BackGauge>();
+
 
   @ViewChild(SelectionDashboardComponent)
   private selectionDashboardComp: SelectionDashboardComponent;
@@ -72,7 +78,7 @@ export class VisualizationMenuComponent implements OnInit {
     this.viewChange.emit(newVal);
   }
 
-  constructor(public profilService: ProfilService) {}
+  constructor(public profilService: ProfilService, private dashboardService: DashboardService) {}
 
   ngOnInit() {}
 
@@ -87,5 +93,26 @@ export class VisualizationMenuComponent implements OnInit {
   // work around bug p-dropdown
   setDashboardDropDownValue(selection: TagsSelection) {
     this.selectionDashboardComp.dropDown.updateSelectedOption(selection);
+  }
+
+  updateDashboard(dashboard: Dashboard) {
+    this.dashboardService.update(dashboard, dashboard.id).pipe(
+      tap(d => {
+        this.dashboard = d;
+      })
+    ).subscribe();
+  }
+
+  addNewGauge(dashboard: Dashboard) {
+    const newGauge: BackGauge = {
+      type: 'gauge',
+      name: 'new gauge',
+      value: '',
+      min: 0,
+      max: 100,
+      zoneranges: []
+    };
+    this.gaugeAdded.emit(newGauge);
+    // dashboard.panels.push(newGauge)
   }
 }

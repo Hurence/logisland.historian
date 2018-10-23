@@ -12,7 +12,7 @@ import { TagsSelection } from '../Selection';
   styleUrls: ['./selection-form.component.css']
 })
 export class SelectionFormComponent extends BaseDynamicFormComponentEmitter<TagsSelection> {
-  protected formOperation: Operation = Operation.CREATE;
+  formOperation: Operation = Operation.CREATE;
 
   constructor(protected qcs: QuestionControlService,
               protected confirmationService: ConfirmationService) {

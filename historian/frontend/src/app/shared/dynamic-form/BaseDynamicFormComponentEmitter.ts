@@ -18,7 +18,7 @@ export abstract class BaseDynamicFormComponentEmitter<T> implements OnInit, OnCh
   @Output() submitted = new EventEmitter<IModification<T>>();
   form: FormGroup;
 
-  protected abstract formOperation: Operation;
+  abstract formOperation: Operation;
   private DISCARD_CHANGE_MSG = 'Are you sure you want to reset form ?';
 
   constructor(protected qcs: QuestionControlService,

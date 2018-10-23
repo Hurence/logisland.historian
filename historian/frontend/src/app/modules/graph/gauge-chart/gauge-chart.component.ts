@@ -52,7 +52,7 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
       }
       if (changes.redZones) {
         gaugeUpdate.redZones = this.redZones;
-      }      
+      }
       if (changes.label) {
         gaugeUpdate.label = this.label;
       }

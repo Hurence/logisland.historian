@@ -458,13 +458,13 @@ export class Gauge {
     }
   }
 
-  redrawLabel(): void {    
+  redrawLabel(): void {
     if (undefined !== this.config.label) {
       const fontSizeGaugeLabel = Math.round(this.config.size / 9);
-      this.body.select('.gaugeLabel')        
+      this.body.select('.gaugeLabel')
         .attr('x', this.config.cx)
         .attr('y', this.config.cy / 2 + fontSizeGaugeLabel / 2)
-        .attr('dy', fontSizeGaugeLabel / 2)        
+        .attr('dy', fontSizeGaugeLabel / 2)
         .text(this.config.label)
         .style('font-size', fontSizeGaugeLabel + 'px');
     }

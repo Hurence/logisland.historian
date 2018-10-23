@@ -1,9 +1,9 @@
+import { BackendGaugeConfig, ZoneRangeConfig } from './../gauge-form/gauge-form.component';
 import { DropdownQuestion } from './../../../../shared/dynamic-form/question-dropdown';
 import { HistorianTag } from './../../../tag/modele/HistorianTag';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from '../../../../shared/refresh-rate-selection/auto-refresh-interval';
 import { CookieService } from 'ngx-cookie-service';
-import { BackendGaugeConfig, ZoneRangeConfig } from '../gauge-form/gauge-form.component';
 import { IModification } from '../../../datasource/ConfigurationToApply';
 import { ArrayQuestion, IArrayQuestion } from '../../../../shared/dynamic-form/question-array';
 import { QuestionBase } from '../../../../shared/dynamic-form/question-base';
@@ -11,7 +11,7 @@ import { NumberQuestion } from '../../../../shared/dynamic-form/question-number'
 import { ZoneRange, ZoneRangeColorsUtil, ZoneRangeColors } from '../../../graph/gauge-chart/gauge';
 import { TimeRangeFilter, timeRangeBuiltIn } from '../../../../shared/time-range-selection/time-range-filter';
 import { MeasuresRequest } from '../../../../measure/MeasuresRequest';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable, empty, of } from 'rxjs';
 import { MeasuresService } from '../../../../measure/measures.service';
 import { IAgregation } from '../../../../measure/Measures';
 import { HistorianTagDropdownQuestion } from '../../../../shared/dynamic-form/question-historian-tag-dropdown';
@@ -21,6 +21,9 @@ import { ConditionalQuestion, IConditionalQuestion } from '../../../../shared/dy
 import { RadioQuestion } from '../../../../shared/dynamic-form/question-radio';
 import { PollingMode, TagRecordType, TagDataType } from '../../../tag/modele/tag';
 import { TextboxQuestion } from '../../../../shared/dynamic-form/question-textbox';
+import { Dashboard, BackGauge, BackZoneRange } from '../../../dashboard/modele/Dashboard';
+import { TagHistorianService } from '../../../tag/service/tag-historian.service';
+import { map } from 'rxjs/operators';
 
 export interface GaugeRawParams {
   value: number;
@@ -38,62 +41,68 @@ export interface GaugeRawParams {
   styleUrls: ['./gauge-dashboard.component.css']
 })
 export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable implements OnInit, OnDestroy {
-  maxTag: HistorianTag = new HistorianTag({
-    record_type: TagRecordType.TAG,
-    data_type: TagDataType.DOUBLE,
-    creation_date: null,
-    datasource_id: 'VBOX OPC DA',
-    description: null,
-    enabled: true,
-    group: 'Triangle Waves',
-    id: 'b1033404-9ac2-4732-9eda-dcca9ab4225b',
-    labels: null,
-    last_modification_date: 1539688216247,
-    last_numeric_value: null,
-    last_polling_date: null,
-    last_quality: null,
-    max_numeric_value: null,
-    min_numeric_value: null,
-    node_id: 'Triangle Waves.UInt1',
-    polling_mode: PollingMode.POLLING,
-    update_rate: 10000,
-    tag_name: 'UInt1',
-  });
+
+  dashboard: Dashboard;
+
+  gaugeForForm: BackendGaugeConfig;
+  displayGaugeForm: boolean = false;
+
+  // maxTag: HistorianTag = new HistorianTag({
+  //   record_type: TagRecordType.TAG,
+  //   data_type: TagDataType.DOUBLE,
+  //   creation_date: null,
+  //   datasource_id: 'VBOX OPC DA',
+  //   description: null,
+  //   enabled: true,
+  //   group: 'Triangle Waves',
+  //   id: 'b1033404-9ac2-4732-9eda-dcca9ab4225b',
+  //   labels: null,
+  //   last_modification_date: 1539688216247,
+  //   last_numeric_value: null,
+  //   last_polling_date: null,
+  //   last_quality: null,
+  //   max_numeric_value: null,
+  //   min_numeric_value: null,
+  //   node_id: 'Triangle Waves.UInt1',
+  //   polling_mode: PollingMode.POLLING,
+  //   update_rate: 10000,
+  //   tag_name: 'UInt1',
+  // });
 
   gaugeConfigs: BackendGaugeConfig[] = [
-    {
-      value: 500,
-      min: 0,
-      label: 'gauge',
-      max: this.maxTag,
-      zoneranges : [
-        { from: 0, to : this.maxTag, color: ZoneRangeColors.RED },
-        { from: 175, to : 250, color: ZoneRangeColors.YELLOW },
-        { from: 250, to : 750, color: ZoneRangeColors.GREEN },
-        { from: 750, to : 825, color: ZoneRangeColors.YELLOW },
-        { from: 825, to : 1000, color: ZoneRangeColors.RED }
-      ]
-    }
+    // {
+    //   value: 500,
+    //   min: 0,
+    //   label: 'gauge',
+    //   max: this.maxTag,
+    //   zoneranges : [
+    //     { from: 0, to : this.maxTag, color: ZoneRangeColors.RED },
+    //     { from: 175, to : 250, color: ZoneRangeColors.YELLOW },
+    //     { from: 250, to : 750, color: ZoneRangeColors.GREEN },
+    //     { from: 750, to : 825, color: ZoneRangeColors.YELLOW },
+    //     { from: 825, to : 1000, color: ZoneRangeColors.RED }
+    //   ]
+    // }
   ];
   numberOfGauges: number = 0;
   gaugeRawParams: GaugeRawParams[] = [
-    {
-      value: 500,
-      min: 0,
-      max: 1000,
-      label: 'gauge',
-      greenZones : [
-         { from: 250, to : 750 }
-      ],
-      yellowZones : [
-         { from: 175, to : 250 },
-         { from: 750, to : 825 }
-      ],
-      redZones : [
-         { from: 0, to : 175 },
-         { from: 825, to : 1000 }
-      ]
-    }
+    // {
+    //   value: 500,
+    //   min: 0,
+    //   max: 1000,
+    //   label: 'gauge',
+    //   greenZones : [
+    //      { from: 250, to : 750 }
+    //   ],
+    //   yellowZones : [
+    //      { from: 175, to : 250 },
+    //      { from: 750, to : 825 }
+    //   ],
+    //   redZones : [
+    //      { from: 0, to : 175 },
+    //      { from: 825, to : 1000 }
+    //   ]
+    // }
   ];
 
   error: boolean = false;
@@ -128,7 +137,8 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   }
 
   constructor(private measuresService: MeasuresService,
-              private cookieService: CookieService) {
+              private cookieService: CookieService,
+              private tagHistorianService: TagHistorianService) {
                 // TODO remove cookie and include timerange/autorefresh to dashboard config (including gauges)
     super();
   }
@@ -146,9 +156,121 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     }
   }
 
+  onGaugeAdded(gauge: BackGauge): void {
+    this.convertBackGaugeToBackendGaugeQueryingTags(gauge).subscribe(gaugeConf => {
+      this.gaugeConfigs.push(gaugeConf);
+    });
+  }
+
+  private convertBackGaugeToBackendGaugeQueryingTags(g: BackGauge): Observable<BackendGaugeConfig> {
+    const neededTagIds: string[] = Array.from(this.lookForTagInBackGaugeConfig(g, ['min', 'max', 'value', 'zoneranges']));
+    if (neededTagIds.length === 0) return of(this.convertBackGaugeToBackendGaugeKnowingTags(g, new Map()));
+    return this.tagHistorianService.getAllWithIds(neededTagIds).pipe(
+      map(tags => {
+        const tagMap = new Map<string, HistorianTag>();
+        tags.forEach(t => { tagMap.set(t.id, t); });
+        return this.convertBackGaugeToBackendGaugeKnowingTags(g, tagMap);
+      })
+    );
+  }
+
+  /**
+   * Look for tag in fields
+   * @param gaugeConf
+   * @param fields
+   */
+  private lookForTagInBackGaugeConfig(gaugeConf: BackGauge, fields: (keyof typeof gaugeConf)[]): Set<string> {
+    const neededTags: Set<string> = new Set();
+    fields.forEach(f => {
+      const value = gaugeConf[f];
+      if (TagUtils.isHistorianTag(value)) {
+        neededTags.add(value.id);
+      } else if (f === 'zoneranges') { // ZoneRangeConfig[]
+        (value as ZoneRangeConfig[]).forEach(z => {
+          this.lookForTagInZoneRangeConfig(z, ['from', 'to']).forEach(tagId => neededTags.add(tagId));
+        });
+      }
+    });
+    return neededTags;
+  }
+
+  private convertBackGaugeToBackendGaugeKnowingTags(g: BackGauge, tagMap: Map<string, HistorianTag>): BackendGaugeConfig {
+    const rawParam: any = Object.assign({}, g);
+    rawParam.min = this.getNumberOrTag(g, 'min', tagMap);
+    rawParam.max = this.getNumberOrTag(g, 'max', tagMap);
+    rawParam.value = this.getNumberOrTag(g, 'value', tagMap);
+    if (g.zoneranges && g.zoneranges.length !== 0) {
+      rawParam.greenZones = g.zoneranges
+        .map(z => this.getZoneRangeConfig(z, tagMap));
+    }
+    return rawParam;
+  }
+
+  private getZoneRangeConfig(z: BackZoneRange, tagMap: Map<string, HistorianTag>): ZoneRangeConfig {
+    const zoneRange: any = {};
+    zoneRange.from = this.getNumberOrTag(z, 'from', tagMap);
+    zoneRange.to = this.getNumberOrTag(z, 'to', tagMap);
+    zoneRange.color = z.color;
+    return zoneRange as ZoneRangeConfig;
+  }
+
+  private getNumberOrTag(gaugeConf: any, field: string, tagMap: Map<string, HistorianTag>): number | HistorianTag {
+    const tryNumber = +gaugeConf[field];
+    if (tryNumber === NaN) {
+      console.log('value is a string');
+      return tagMap.get(gaugeConf[field]);
+    } else {
+      return tryNumber;
+    }
+  }
+
+  onDashboardChanged(dashboard: Dashboard): void {
+    this.changeDashboard(dashboard);
+    // if (dashboard && dashboard.name !== this.tagSelectionId) {
+    //   if (this.tagSlectionIsClean) {
+    //     this.changeSelection(selection);
+    //   } else {
+    //     this.confirmationService.confirm({
+    //       message: `You did not save your modification on current tag selection. Click Ok if you do not care,
+    //                 otherwise click cancel then click on update in selection menu.`,
+    //       header: 'Confirmation',
+    //       rejectLabel: 'Cancel',
+    //       acceptLabel: 'Ok',
+    //       icon: 'pi pi-exclamation-triangle',
+    //       accept: () => {
+    //         this.changeSelection(selection);
+    //       },
+    //       reject: () => {
+    //         // workaround as p-dropdown seems bugged see : https://github.com/primefaces/primeng/issues/877
+    //         this.menu.setDashboardDropDownValue(this.currentTagsSelection);
+    //       }
+    //     });
+    //   }
+    // }
+  }
+
+  onDashboardUpdated(dashboard: Dashboard): void {
+    // this.tagSlectionIsClean = true; TODO ?????
+  }
+
+  showEditGaugeForm(i: number): void {
+    this.gaugeForForm = this.gaugeConfigs[i];
+    this.displayGaugeForm = true;
+  }
+
+  private changeDashboard(newDashboard: Dashboard): void {
+    this.dashboard = newDashboard;
+
+    // this.gaugeConfigs = newDashboard.panels;
+    // this.tagSlectionIsClean = true;
+    // this.navigateLocal({
+    //   tagSelectionId: newSelection.name
+    // });
+  }
+
   onGaugeConfigChange(gaugeConfModif: IModification<BackendGaugeConfig>): void {
     this.gaugeConfigs[0] = gaugeConfModif.item;
-    this.updateGaugesData(this.gaugeConfigs);    
+    this.updateGaugesData(this.gaugeConfigs);
   }
 
   subscribeToRefreshChanges(t: number): void {
@@ -156,7 +278,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   }
 
   private getGaugeRawParams(gaugeConf: BackendGaugeConfig, lastTagsValue: Map<string, number>): GaugeRawParams {
-    const rawParam: any = Object.assign({}, gaugeConf);    
+    const rawParam: any = Object.assign({}, gaugeConf);
     rawParam.min = this.getRawOrTagVariable(gaugeConf, 'min', lastTagsValue);
     rawParam.max = this.getRawOrTagVariable(gaugeConf, 'max', lastTagsValue);
     rawParam.value = this.getRawOrTagVariable(gaugeConf, 'value', lastTagsValue);
@@ -216,7 +338,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
             } else {
               lastTagsValue.set(`${m.datasource_id}|${m.tag_id}` , aggLast.value);
             }
-          });          
+          });
           this.redrawGauges(gaugesConf, lastTagsValue);
           this.error = false;
         },
@@ -233,7 +355,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   }
 
   private redrawGauges(gaugesConf: BackendGaugeConfig[], lastTagsValue: Map<string, number>): void {
-    this.gaugeRawParams = gaugesConf.map(conf => this.getGaugeRawParams(conf, lastTagsValue));    
+    this.gaugeRawParams = gaugesConf.map(conf => this.getGaugeRawParams(conf, lastTagsValue));
   }
 
   private getNeededTagsIdForArray(gaugesConf: BackendGaugeConfig[]): Set<string> {

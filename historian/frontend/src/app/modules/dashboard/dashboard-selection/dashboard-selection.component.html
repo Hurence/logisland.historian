@@ -1,0 +1,42 @@
+<h4>Manage dashboards</h4>
+<div class="ui-g-12"><span>Choose your dashboard: </span>
+    <!-- Select selection -->    
+    <span class="hurence-tooltip hurence-tooltip-bottom">
+      <p-dropdown [options]="dashboards"        
+      placeholder="please choose or create a dashboard"
+      optionLabel="name"
+      dataKey="id"
+      [ngModel]="selectedDashboard"
+      [autoWidth]="false" [style]="{'min-width':'15em'}"
+      (onChange)="onSelectionChange($event)">       
+      </p-dropdown>    
+      <span class="hurence-tooltiptext" 
+      [ngStyle]="{'visibility': this.profilService.helpHidden || selectedDashboard ? 'hidden': 'visible'}">
+        Click here to select an already existing dashboard
+      </span>
+    </span>
+    <!--!gSeltaection ? 'hidden': -->
+
+    <button type="button" (click)="delete(selectedDashboard)" class="btn btn-danger ml-2">Delete</button>    
+    <button type="button" (click)="showDialog()" class="btn btn-info ml-2 hurence-tooltip hurence-tooltip-bottom">
+      <i class="fa fa-plus" aria-hidden="true"></i>Add new dashboard
+      <span class="hurence-tooltiptext" 
+      [ngStyle]="{'visibility': this.profilService.helpHidden || selectedDashboard ? 'hidden': 'visible'}">
+        Or click here to create a new one
+      </span>
+    </button>
+</div>
+<div class="ui-g-12">
+    <app-dashboard-form [item]="selectedDashboard" [formOperation]="editOperation" 
+                      [questions]="addDashboardQuestions" (submitted)="onDashboardUpdated($event)"></app-dashboard-form>
+</div>
+selectedDashboard: {{ selectedDashboard | json }}
+
+<p-dialog [(visible)]="display" [modal]="true">
+    <p-header>
+        Create a new Dashboard
+    </p-header>
+    <app-dashboard-form [formOperation]="addOperation" [questions]="addDashboardQuestions" (submitted)="onDashboardSaved($event)"></app-dashboard-form>
+    <p-footer>
+    </p-footer>
+</p-dialog>
