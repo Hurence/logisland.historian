@@ -5,6 +5,7 @@ import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range
 import { TagsSelection } from '../../selection/Selection';
 import { ProfilService } from '../../../profil/profil.service';
 import { SelectionDashboardComponent } from '../../selection/selection-dashboard/selection-dashboard.component';
+import { Dashboard } from '../../dashboard/modele/Dashboard';
 
 @Component({
   selector: 'app-visualization-menu',
@@ -16,6 +17,7 @@ export class VisualizationMenuComponent implements OnInit {
   menuItemActive: string = '';
 
   @Input() tagSelector?: boolean = false;
+  @Input() dashboardSelector?: boolean = false;
   @Input() autoRefreshIntervalSelector?: boolean = false;
   @Input() timeRangeSelector?: boolean = false;
   @Input() viewSelector?: boolean = false;
@@ -28,8 +30,11 @@ export class VisualizationMenuComponent implements OnInit {
 
   @Input() tagSelection: TagsSelection;
   @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
-
   @Output() tagSelectionUpdated = new EventEmitter<TagsSelection>();
+
+  @Input() dashboard: Dashboard;
+  @Output() dashboardChange = new EventEmitter<Dashboard>();
+  @Output() dashboardUpdated = new EventEmitter<Dashboard>();
 
   @Input() view: string;
   @Output() viewChange = new EventEmitter<string>();
@@ -47,12 +52,20 @@ export class VisualizationMenuComponent implements OnInit {
     this.menuItemActive = '';
   }
 
-  ontagSelectionChanged(newVal: TagsSelection) {
+  onTagSelectionChanged(newVal: TagsSelection) {
     this.tagSelectionChange.emit(newVal);
   }
 
   onTagSelectionUpdated(updatedVal: TagsSelection) {
     this.tagSelectionUpdated.emit(updatedVal);
+  }
+
+  onDashboardChanged(newVal: Dashboard) {
+    this.dashboardChange.emit(newVal);
+  }
+
+  onDashboardUpdated(updatedVal: Dashboard) {
+    this.dashboardUpdated.emit(updatedVal);
   }
 
   onViewChanged(newVal: string) {

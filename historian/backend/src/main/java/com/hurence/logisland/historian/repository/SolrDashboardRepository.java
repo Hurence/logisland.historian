@@ -16,9 +16,7 @@
  */
 package com.hurence.logisland.historian.repository;
 
-import com.hurence.logisland.historian.rest.v1.model.DataFlowSimple;
-import com.hurence.logisland.historian.rest.v1.model.PrivateSelection;
-import com.hurence.logisland.historian.rest.v1.model.dashboard.Dashboard;
+import com.hurence.logisland.historian.rest.v1.model.dashboard.DashboardJson;
 import org.springframework.data.solr.repository.Query;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
@@ -27,11 +25,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SolrDashboardRepository extends SolrCrudRepository<Dashboard, String> {
+public interface SolrDashboardRepository extends SolrCrudRepository<DashboardJson, String> {
 
-    @Query(value = "*:*", filters = { "owner:?0" })
-    List<Dashboard> findByOwner(String owner);
+    @Query(value = "*:*", filters = { "owner:\"?0\"" })
+    List<DashboardJson> findByOwner(String owner);
 
-    @Query(value = "*:*", filters = { "name:?0 AND owner:?1" })
-    Optional<Dashboard> findByNameAndOwner(String name, String owner);
+    @Query(value = "*:*", filters = { "name:\"?0\" AND owner:\"?1\"" })
+    Optional<DashboardJson> findByNameAndOwner(String name, String owner);
 }

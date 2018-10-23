@@ -21,7 +21,6 @@ import org.threeten.bp.OffsetDateTime;
 */
 @ApiModel(description = "A dashboard is representing different panels (as of today only gauges) with thei configuration. Those enable data visualization. ")
 
-@SolrDocument(solrCoreName = "dashboard")
 public class Dashboard  implements Serializable {
         @JsonProperty("id")
         @Indexed(name = "id")
@@ -67,7 +66,7 @@ public class Dashboard  implements Serializable {
     @ApiModelProperty(required = true, value = "UUID of the dashboard.")
       @NotNull
 
-    public Dashboard uid(String uid) {
+    public Dashboard id(String uid) {
         this.id = uid;
         return this;
     }

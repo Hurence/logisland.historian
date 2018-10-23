@@ -8,6 +8,7 @@ import { VisualizationMenuComponent } from './visualization-menu/visualization-m
 import { VisualizationComponent } from './visualization.component';
 import { GaugeDashboardComponent } from './gauge/gauge-dashboard/gauge-dashboard.component';
 import { GaugeFormComponent } from './gauge/gauge-form/gauge-form.component';
+import { DashboardModule } from '../dashboard/dashboard.module';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { GaugeFormComponent } from './gauge/gauge-form/gauge-form.component';
     SelectionModule,
     GraphModule,
     TagModule,
+    DashboardModule,
   ],
   declarations: [VisualizationMenuComponent, VisualizationComponent, GaugeDashboardComponent, GaugeFormComponent]
 })

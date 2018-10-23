@@ -73,9 +73,9 @@ public class DashboardApiController {
         }
     }
 
-    @RequestMapping(value = "/{uid}",
+    @RequestMapping(value = "/{id}",
             method = RequestMethod.GET)
-    public ResponseEntity<Dashboard> getDashboard(@PathVariable("uid") String uid) {
+    public ResponseEntity<Dashboard> getDashboard(@PathVariable("id") String uid) {
         Optional<Dashboard> dashboardExisted = service.getDashboardByUid(uid);
         if (dashboardExisted.isPresent()) {
             Dashboard dashboard = dashboardExisted.get();
@@ -91,9 +91,9 @@ public class DashboardApiController {
         }
     }
 
-    @RequestMapping(value = "/{uid}",
+    @RequestMapping(value = "/{id}",
             method = RequestMethod.DELETE)
-    public ResponseEntity<Dashboard> deleteDashboard(@PathVariable("uid") String uid) {
+    public ResponseEntity<Dashboard> deleteDashboard(@PathVariable("id") String uid) {
         Optional<Dashboard> dashboardExisted = service.getDashboardByUid(uid);
         if (dashboardExisted.isPresent()) {
             Dashboard dashboard = dashboardExisted.get();
@@ -110,9 +110,9 @@ public class DashboardApiController {
         }
     }
 
-    @RequestMapping(value = "/{uid}",
+    @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT)
-    public ResponseEntity<Dashboard> replaceDashboard(@PathVariable("uid") String uid,
+    public ResponseEntity<Dashboard> replaceDashboard(@PathVariable("id") String uid,
                                                       @RequestBody Dashboard dashboard) {
         Optional<Dashboard> dashboardExisted = service.getDashboardByUid(uid);
         if (dashboardExisted.isPresent()) {

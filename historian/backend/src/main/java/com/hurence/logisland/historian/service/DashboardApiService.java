@@ -18,6 +18,8 @@ package com.hurence.logisland.historian.service;
 
 import com.hurence.logisland.historian.repository.SolrDashboardRepository;
 import com.hurence.logisland.historian.rest.v1.model.dashboard.Dashboard;
+import com.hurence.logisland.historian.rest.v1.model.dashboard.DashboardJson;
+import com.hurence.logisland.historian.rest.v1.model.dashboard.DashboardUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DashboardApiService {
@@ -57,11 +60,11 @@ public class DashboardApiService {
 
     public Optional<Dashboard> deleteDashboardByUid(String uid) {
         logger.info("deleting Dashboard {}", uid);
-        Optional<Dashboard> dashboardToRemove = repository.findById(uid);
+        Optional<DashboardJson> dashboardToRemove = repository.findById(uid);
         if (dashboardToRemove.isPresent()) {
             repository.delete(dashboardToRemove.get());
         }
-        return dashboardToRemove;
+        return dashboardToRemove.map(DashboardUtil::convertDfstoDf);
     }
 
     public void deleteDashboardByUidWithoutChecking(String uid) {
@@ -71,19 +74,22 @@ public class DashboardApiService {
 
     public Optional<Dashboard> getDashboardByUid(String uid) {
         logger.debug("getting Dashboard {}", uid);
-        return repository.findById(uid);
+        return repository.findById(uid).map(DashboardUtil::convertDfstoDf);
     }
 
     public Optional<Dashboard> getDashboardByNameAndOwner(String name, String owner) {
         logger.debug("getting Dashboard with name '{}' and owner '{}'", name, owner);
-        return repository.findByNameAndOwner(name, owner);
+        return repository.findByNameAndOwner(name, owner).map(DashboardUtil::convertDfstoDf);
     }
 
 
     private Optional<Dashboard> updateDashboard(Dashboard dashboard) {
         logger.debug("updating Dashboard {}", dashboard.getId());
         if (repository.existsById(dashboard.getId())) {
-            return Optional.of(repository.save(dashboard));
+            DashboardJson dfs = DashboardUtil.convertDftoDfs(dashboard);
+            return Optional
+                    .of(repository.save(dfs))
+                    .map(DashboardUtil::convertDfstoDf);
         } else {
             logger.error("Dashboard {} not found, unable to update", dashboard.getId());
             return Optional.empty();
@@ -92,7 +98,8 @@ public class DashboardApiService {
 
     private Dashboard updateDashboardWithoutChecking(Dashboard dashboard) {
         logger.debug("updating Dashboard {}", dashboard.getId());
-        return repository.save(dashboard);
+        DashboardJson dfs = DashboardUtil.convertDftoDfs(dashboard);
+        return DashboardUtil.convertDfstoDf(repository.save(dfs));
     }
 
     /**
@@ -103,7 +110,7 @@ public class DashboardApiService {
      */
     public Optional<Dashboard> updateDashboard(Dashboard dashboard, String uid) {
         if (!dashboard.getId().equals(uid)) {
-            return updateDashboard(dashboard.uid(uid));
+            return updateDashboard(dashboard.id(uid));
         } else {
             return updateDashboard(dashboard);
         }
@@ -111,7 +118,7 @@ public class DashboardApiService {
 
     public Dashboard updateDashboardWithoutChecking(Dashboard dashboard, String uid) {
         if (!dashboard.getId().equals(uid)) {
-            return updateDashboardWithoutChecking(dashboard.uid(uid));
+            return updateDashboardWithoutChecking(dashboard.id(uid));
         } else {
             return updateDashboardWithoutChecking(dashboard);
         }
@@ -123,12 +130,16 @@ public class DashboardApiService {
             logger.info("Dashboard already {} exists, delete it first", uid);
             return Optional.empty();
         } else {
-            dashboard.uid(uid);
-            return Optional.of(repository.save(dashboard));
+            dashboard.id(uid);
+            DashboardJson dfs = DashboardUtil.convertDftoDfs(dashboard);
+            return Optional.of(repository.save(dfs))
+                    .map(DashboardUtil::convertDfstoDf);
         }
     }
 
     public List<Dashboard> getAllUserDashboard() {
-        return repository.findByOwner(this.securityService.getUserName());
+        return repository.findByOwner(this.securityService.getUserName()).stream()
+                .map(DashboardUtil::convertDfstoDf)
+                .collect(Collectors.toList());
     }
 }

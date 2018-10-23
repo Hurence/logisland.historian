@@ -2,6 +2,10 @@
 <div class="ui-g h-100">
   <div class='ui-g-12 no-padding-side'>
     <app-visualization-menu 
+    [dashboardSelector]="true"
+    [dashboard]="dashboard"
+    (dashboardChange)="onDashboardChanged($event)"
+    (dashboardUpdated)="onDashboardUpdated($event)"
     [timeRangeSelector]="true"
     [(timeRange)]="timeRange"     
     [autoRefreshIntervalSelector] = "true"
