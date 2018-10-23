@@ -64,6 +64,10 @@ RUN mkdir -p /opt/solr/server/solr/tag/data/snapshot_metadata
 RUN mkdir -p /opt/solr/server/solr/tag/data/index
 COPY solr/tag /opt/solr/server/solr/tag
 
+RUN mkdir -p /opt/solr/server/solr/dashboard/data/snapshot_metadata
+RUN mkdir -p /opt/solr/server/solr/dashboard/data/index
+COPY solr/dashboard /opt/solr/server/solr/dashboard
+
 COPY scripts /opt/docker-solr/scripts
 RUN chown -R $SOLR_USER:$SOLR_GROUP /opt/solr/server
 
