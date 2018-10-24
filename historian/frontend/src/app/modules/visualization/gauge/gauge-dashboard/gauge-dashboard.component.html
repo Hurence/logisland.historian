@@ -1,6 +1,6 @@
 <!-- MENU FOR VIEW -->
 <div class="ui-g h-100">
-    <!-- gaugeRawParams : {{ gaugeRawParams | json }} -->
+  <!-- gaugeRawParams : {{ gaugeRawParams | json }} -->
   <div class='ui-g-12 no-padding-side'>
     <app-visualization-menu 
     [dashboardSaving]="true"
@@ -15,7 +15,7 @@
     [autoRefreshIntervalSelector] = "true"
     [(autoRefreshInterval)]="autoRefreshInterval"></app-visualization-menu>
   </div>   
-  <!-- gaugeConfigs : {{ gaugeConfigs | json }}     -->
+  <!-- gaugeConfigs : {{ gaugeConfigs | json }} -->
   <div class='ui-g-12' *ngIf="dashboard && gaugeConfigs.length !== 0">      
     <div class='ui-g h-100'>
       <div class='ui-g-12'>    
@@ -26,7 +26,7 @@
               <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
               [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
               [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
-              [value]="gaugeRawParams[i].value"></app-gauge-chart>
+              [value]="gaugeRawParams[i].value" [idContainer]="'gaugeContainer' + i"></app-gauge-chart>
             </div>
           </ng-container>
           <ng-container *ngIf="error">

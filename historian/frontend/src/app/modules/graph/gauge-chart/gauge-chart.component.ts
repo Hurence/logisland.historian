@@ -22,6 +22,7 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() yellowZones ?: ZoneRange[] = [];
   @Input() redZones ?: ZoneRange[] = [];
   @Input() transitionDuration?: number = 1000;
+  @Input() idContainer: string;
   private gauge: Gauge;
 
   constructor() {}
@@ -30,7 +31,7 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     const config = this.createConfig();
-    this.gauge = new Gauge('gaugeContainer', config);
+    this.gauge = new Gauge(this.idContainer, config);
     this.gauge.render();
     this.gauge.redraw(this.value, 1000);
   }
