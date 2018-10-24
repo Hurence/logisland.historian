@@ -45,8 +45,6 @@ export interface GaugeRawParams {
 })
 export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable implements OnInit, OnDestroy {
 
-  dashboard: Dashboard;
-
   gaugeFormOperation: Operation = Operation.UPDATE;
   gaugeForForm: BackendGaugeConfig;
   displayGaugeForm: boolean = false;
@@ -61,6 +59,20 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   gaugeEditQuestions: QuestionBase<any>[];
 
   private measuresRefreshSubscription: Subscription;
+
+  dashboard: Dashboard;
+
+  private _dashboardId: string;
+  get dashboardId(): string {
+    if (this._dashboardId) return this._dashboardId;
+    if (this.cookieService.check('dashboardId')) return this.cookieService.get('dashboardId');
+    return null;
+  }
+
+  set dashboardId(newDashboard: string) {
+    this._dashboardId = newDashboard;
+    this.cookieService.set('dashboardId', this.dashboardId);
+  }
 
   private _autoRefreshInterval: AutoRefreshInterval;
   get autoRefreshInterval(): AutoRefreshInterval {
@@ -87,6 +99,9 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     this.cookieService.set('timeRange', JSON.stringify(this._timeRange));
   }
 
+  dashboardInitialization: Subscription;
+  redrawDashBoardSubscription: Subscription;
+
   constructor(private measuresService: MeasuresService,
               private cookieService: CookieService,
               private tagHistorianService: TagHistorianService,
@@ -101,6 +116,12 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     super.ngOnInit();
     this.changeRefreshRate(+this.autoRefreshInterval.refrashInterval);
     this.gaugeEditQuestions = this.getQuestions();
+    if (!this.dashboard && this.dashboardId) {
+      if (this.dashboardInitialization && !this.dashboardInitialization.closed) {
+        this.dashboardInitialization.unsubscribe();
+      }
+      this.dashboardInitialization = this.dashboardService.get(this.dashboardId).subscribe(ds => this.changeDashboard(ds));
+    }
   }
 
   ngOnDestroy(): void {
@@ -213,7 +234,6 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   private getNumberOrTag(gaugeConf: any, field: string, tagMap: Map<string, HistorianTag>): number | HistorianTag {
     const tryNumber = +gaugeConf[field];
     if (Number.isNaN(tryNumber)) {
-      console.log('value is a string');
       return tagMap.get(gaugeConf[field]);
     } else {
       return tryNumber;
@@ -257,7 +277,11 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   private changeDashboard(newDashboard: Dashboard): void {
     this.dashboard = newDashboard;
-    this.convertBackGaugeToBackendGaugeQueryingTags(newDashboard.panels).subscribe(gaugeConfs => {
+    this.dashboardId = newDashboard.id;
+    if (this.redrawDashBoardSubscription && !this.redrawDashBoardSubscription.closed) {
+      this.redrawDashBoardSubscription.unsubscribe();
+    }
+    this.redrawDashBoardSubscription = this.convertBackGaugeToBackendGaugeQueryingTags(newDashboard.panels).subscribe(gaugeConfs => {
       this.gaugeConfigs = gaugeConfs;
       this.updateGaugesData(gaugeConfs);
     });
@@ -373,7 +397,6 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   private getRawOrTagVariable(gaugeConf: any, field: string, lastTagsValue: Map<string, number>): number {
     if (TagUtils.isHistorianTag(gaugeConf[field])) {
-      console.log('value is a tag');
       const tag = gaugeConf[field] as HistorianTag;
       return lastTagsValue.get(`${tag.datasource_id}|${tag.node_id}`);
     } else {
