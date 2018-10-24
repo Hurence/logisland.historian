@@ -354,15 +354,20 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     switch (operation) {
       case Operation.CREATE:
         this.gaugeConfigs.push(gaugeConfModif.item);
+        this.getGaugeRawParamsObs(gaugeConfModif.item).subscribe(rawParam => {
+          this.gaugeRawParams.push(rawParam);
+          // TODO set gauge to loading ?
+        });
         break;
       case Operation.UPDATE:
         this.gaugeConfigs[index] = gaugeConfModif.item;
-        break;
-      case Operation.DELETE:
-        this.arrayUtil.removeIndex(this.gaugeConfigs, index);
+        this.getGaugeRawParamsObs(gaugeConfModif.item).subscribe(rawParam => {
+          this.gaugeRawParams[index] = rawParam;
+          // TODO set gauge to loading ?
+        });
         break;
     }
-    this.updateGaugesData(this.gaugeConfigs);
+    this.displayGaugeForm = false;
   }
 
   subscribeToRefreshChanges(t: number): void {
@@ -430,23 +435,52 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
               lastTagsValue.set(`${m.datasource_id}|${m.tag_id}` , aggLast.value);
             }
           });
-          this.redrawGauges(gaugesConf, lastTagsValue);
+          this.gaugeRawParams = this.getGaugesRawParams(gaugesConf, lastTagsValue);
           this.error = false;
         },
         error => {
           this.error = true;
           console.log('error requesting data', error);
-          // this.redrawGauges(gaugesConf, new Map());
+          // this.getGaugesRawParams(gaugesConf, new Map());
         }
       );
     } else {
-      this.redrawGauges(gaugesConf, new Map());
+      this.gaugeRawParams = this.getGaugesRawParams(gaugesConf, new Map());
       this.error = false;
     }
   }
 
-  private redrawGauges(gaugesConf: BackendGaugeConfig[], lastTagsValue: Map<string, number>): void {
-    this.gaugeRawParams = gaugesConf.map(conf => this.getGaugeRawParams(conf, lastTagsValue));
+/**
+   * update specified BackendGaugeConfig and update all GaugeParams accordingly
+   */
+  private getGaugeRawParamsObs(gaugeConf: BackendGaugeConfig): Observable<GaugeRawParams> {
+    const neededTagIds: string[] = Array.from(this.getNeededTagsIdForArray([gaugeConf]));
+    const requests: MeasuresRequest[] = neededTagIds.map(tagId => {
+      return this.buildTagMeasureRequest(tagId);
+    });
+    if (requests && requests.length !== 0) {
+      return this.measuresService.getMany(requests).pipe(
+        map(measures => {
+          console.log('found measures', measures.length);
+          const lastTagsValue: Map<string, number> = new Map<string, number>();
+          measures.forEach(m => {
+            const aggLast: IAgregation = m.functions.find(f => f.name === 'last');
+            if (!aggLast) {
+              console.error('no last found !');
+            } else {
+              lastTagsValue.set(`${m.datasource_id}|${m.tag_id}` , aggLast.value);
+            }
+          });
+          return this.getGaugeRawParams(gaugeConf, lastTagsValue);
+        })
+      );
+    } else {
+      return of(this.getGaugeRawParams(gaugeConf,  new Map()));
+    }
+  }
+
+  private getGaugesRawParams(gaugesConf: BackendGaugeConfig[], lastTagsValue: Map<string, number>): GaugeRawParams[] {
+    return gaugesConf.map(conf => this.getGaugeRawParams(conf, lastTagsValue));
   }
 
   private getNeededTagsIdForArray(gaugesConf: BackendGaugeConfig[]): Set<string> {
