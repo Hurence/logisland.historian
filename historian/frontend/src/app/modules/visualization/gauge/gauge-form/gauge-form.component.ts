@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, Input } from '@angular/core';
 import { BaseDynamicFormComponentEmitter } from '../../../../shared/dynamic-form/BaseDynamicFormComponentEmitter';
 import { Operation } from '../../../datasource/ConfigurationToApply';
 import { QuestionControlService } from '../../../../shared/dynamic-form/question-control.service';
@@ -32,7 +32,7 @@ export interface BackendGaugeConfig {
 })
 export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendGaugeConfig> {
 
-  formOperation: Operation = Operation.UPDATE;
+  @Input() formOperation: Operation = Operation.CREATE;
 
   constructor(protected qcs: QuestionControlService,
               protected confirmationService: ConfirmationService,
@@ -64,22 +64,24 @@ export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendG
   }
 
   protected rebuildForm(): void {
-    const objForForm: any = Object.assign({}, this.item);
-    // manage zonerange array
-    const zoneRangeQuestion: ArrayQuestion<any> = this.questions.find(q => q.key === 'zoneranges') as  ArrayQuestion<any>;
-    const zoneRangesFGs: FormGroup[] = objForForm.zoneranges.map(z => {
-      const itemFormGroup: FormGroup = this.qcs.toFormGroup(zoneRangeQuestion.questions);
-      z.from_static_or_dynamic = TagUtils.isHistorianTag(z.from) ? 'dynamic' : 'static';
-      z.to_static_or_dynamic = TagUtils.isHistorianTag(z.to) ? 'dynamic' : 'static';
-      itemFormGroup.setValue(z);
-      return itemFormGroup;
-    });
-    const zoneRangeFormArray = this.fb.array(zoneRangesFGs);
-    this.form.setControl('zoneranges', zoneRangeFormArray);
-    // manage min and max static or not
-    objForForm.max_static_or_dynamic = TagUtils.isHistorianTag(this.item.max) ? 'dynamic' : 'static';
-    objForForm.min_static_or_dynamic = TagUtils.isHistorianTag(this.item.min) ? 'dynamic' : 'static';
-    this.form.reset(objForForm);
+    if (this.item) {
+      const objForForm: any = Object.assign({}, this.item);
+      // manage zonerange array
+      const zoneRangeQuestion: ArrayQuestion<any> = this.questions.find(q => q.key === 'zoneranges') as  ArrayQuestion<any>;
+      const zoneRangesFGs: FormGroup[] = objForForm.zoneranges.map(z => {
+        const itemFormGroup: FormGroup = this.qcs.toFormGroup(zoneRangeQuestion.questions);
+        z.from_static_or_dynamic = TagUtils.isHistorianTag(z.from) ? 'dynamic' : 'static';
+        z.to_static_or_dynamic = TagUtils.isHistorianTag(z.to) ? 'dynamic' : 'static';
+        itemFormGroup.setValue(z);
+        return itemFormGroup;
+      });
+      const zoneRangeFormArray = this.fb.array(zoneRangesFGs);
+      this.form.setControl('zoneranges', zoneRangeFormArray);
+      // manage min and max static or not
+      objForForm.max_static_or_dynamic = TagUtils.isHistorianTag(this.item.max) ? 'dynamic' : 'static';
+      objForForm.min_static_or_dynamic = TagUtils.isHistorianTag(this.item.min) ? 'dynamic' : 'static';
+      this.form.reset(objForForm);
+    }
   }
 
 }

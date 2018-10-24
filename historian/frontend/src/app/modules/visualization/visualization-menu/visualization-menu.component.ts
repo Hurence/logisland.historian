@@ -42,7 +42,8 @@ export class VisualizationMenuComponent implements OnInit {
   @Output() viewChange = new EventEmitter<string>();
 
   @Input() dashboardSaving: boolean = false;
-  @Output() gaugeAdded = new EventEmitter<BackGauge>();
+  @Output() gaugeAdded = new EventEmitter();
+  @Output() dashboardSaved = new EventEmitter<Dashboard>();
 
 
   @ViewChild(SelectionDashboardComponent)
@@ -78,7 +79,7 @@ export class VisualizationMenuComponent implements OnInit {
     this.viewChange.emit(newVal);
   }
 
-  constructor(public profilService: ProfilService, private dashboardService: DashboardService) {}
+  constructor(public profilService: ProfilService) {}
 
   ngOnInit() {}
 
@@ -96,23 +97,10 @@ export class VisualizationMenuComponent implements OnInit {
   }
 
   updateDashboard(dashboard: Dashboard) {
-    this.dashboardService.update(dashboard, dashboard.id).pipe(
-      tap(d => {
-        this.dashboard = d;
-      })
-    ).subscribe();
+    this.dashboardSaved.emit(dashboard);
   }
 
   addNewGauge(dashboard: Dashboard) {
-    const newGauge: BackGauge = {
-      type: 'gauge',
-      name: 'new gauge',
-      value: '',
-      min: 0,
-      max: 100,
-      zoneranges: []
-    };
-    this.gaugeAdded.emit(newGauge);
-    // dashboard.panels.push(newGauge)
+    this.gaugeAdded.emit();
   }
 }

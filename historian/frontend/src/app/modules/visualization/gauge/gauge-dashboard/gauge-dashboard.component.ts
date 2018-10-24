@@ -4,7 +4,7 @@ import { HistorianTag } from './../../../tag/modele/HistorianTag';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from '../../../../shared/refresh-rate-selection/auto-refresh-interval';
 import { CookieService } from 'ngx-cookie-service';
-import { IModification } from '../../../datasource/ConfigurationToApply';
+import { IModification, Operation } from '../../../datasource/ConfigurationToApply';
 import { ArrayQuestion, IArrayQuestion } from '../../../../shared/dynamic-form/question-array';
 import { QuestionBase } from '../../../../shared/dynamic-form/question-base';
 import { NumberQuestion } from '../../../../shared/dynamic-form/question-number';
@@ -19,11 +19,13 @@ import { TagUtils } from '../../../tag/modele/TagUtils';
 import { RefreshRateComponentAsInnerVariable } from '../../../../shared/refresh-rate-selection/RefreshRateComponentAsInnerVariable';
 import { ConditionalQuestion, IConditionalQuestion } from '../../../../shared/dynamic-form/question-conditional';
 import { RadioQuestion } from '../../../../shared/dynamic-form/question-radio';
-import { PollingMode, TagRecordType, TagDataType } from '../../../tag/modele/tag';
 import { TextboxQuestion } from '../../../../shared/dynamic-form/question-textbox';
 import { Dashboard, BackGauge, BackZoneRange } from '../../../dashboard/modele/Dashboard';
 import { TagHistorianService } from '../../../tag/service/tag-historian.service';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { ArrayUtil } from '../../../../shared/array-util';
+import { DashboardService } from '../../../dashboard/dashboard.service';
+import { stringify } from 'querystring';
 
 export interface GaugeRawParams {
   value: number;
@@ -44,66 +46,14 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   dashboard: Dashboard;
 
+  gaugeFormOperation: Operation = Operation.UPDATE;
   gaugeForForm: BackendGaugeConfig;
   displayGaugeForm: boolean = false;
+  selectedGaugeIndex: number;
 
-  // maxTag: HistorianTag = new HistorianTag({
-  //   record_type: TagRecordType.TAG,
-  //   data_type: TagDataType.DOUBLE,
-  //   creation_date: null,
-  //   datasource_id: 'VBOX OPC DA',
-  //   description: null,
-  //   enabled: true,
-  //   group: 'Triangle Waves',
-  //   id: 'b1033404-9ac2-4732-9eda-dcca9ab4225b',
-  //   labels: null,
-  //   last_modification_date: 1539688216247,
-  //   last_numeric_value: null,
-  //   last_polling_date: null,
-  //   last_quality: null,
-  //   max_numeric_value: null,
-  //   min_numeric_value: null,
-  //   node_id: 'Triangle Waves.UInt1',
-  //   polling_mode: PollingMode.POLLING,
-  //   update_rate: 10000,
-  //   tag_name: 'UInt1',
-  // });
-
-  gaugeConfigs: BackendGaugeConfig[] = [
-    // {
-    //   value: 500,
-    //   min: 0,
-    //   label: 'gauge',
-    //   max: this.maxTag,
-    //   zoneranges : [
-    //     { from: 0, to : this.maxTag, color: ZoneRangeColors.RED },
-    //     { from: 175, to : 250, color: ZoneRangeColors.YELLOW },
-    //     { from: 250, to : 750, color: ZoneRangeColors.GREEN },
-    //     { from: 750, to : 825, color: ZoneRangeColors.YELLOW },
-    //     { from: 825, to : 1000, color: ZoneRangeColors.RED }
-    //   ]
-    // }
-  ];
+  gaugeConfigs: BackendGaugeConfig[] = [];
   numberOfGauges: number = 0;
-  gaugeRawParams: GaugeRawParams[] = [
-    // {
-    //   value: 500,
-    //   min: 0,
-    //   max: 1000,
-    //   label: 'gauge',
-    //   greenZones : [
-    //      { from: 250, to : 750 }
-    //   ],
-    //   yellowZones : [
-    //      { from: 175, to : 250 },
-    //      { from: 750, to : 825 }
-    //   ],
-    //   redZones : [
-    //      { from: 0, to : 175 },
-    //      { from: 825, to : 1000 }
-    //   ]
-    // }
-  ];
+  gaugeRawParams: GaugeRawParams[] = [];
 
   error: boolean = false;
 
@@ -138,7 +88,9 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   constructor(private measuresService: MeasuresService,
               private cookieService: CookieService,
-              private tagHistorianService: TagHistorianService) {
+              private tagHistorianService: TagHistorianService,
+              private arrayUtil: ArrayUtil,
+              private dashboardService: DashboardService) {
                 // TODO remove cookie and include timerange/autorefresh to dashboard config (including gauges)
     super();
   }
@@ -156,24 +108,49 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     }
   }
 
-  onGaugeAdded(gauge: BackGauge): void {
-    this.convertBackGaugeToBackendGaugeQueryingTags(gauge).subscribe(gaugeConf => {
-      this.gaugeConfigs.push(gaugeConf);
-    });
+  onGaugeAdded(): void {
+    this.gaugeForForm = {
+      value: 50,
+      label: 'new gauge',
+      min: 0,
+      max: 1000,
+      zoneranges: [
+        { from: 0, to : 175, color: ZoneRangeColors.RED },
+        { from: 175, to : 250, color: ZoneRangeColors.YELLOW },
+        { from: 250, to : 750, color: ZoneRangeColors.GREEN },
+        { from: 750, to : 825, color: ZoneRangeColors.YELLOW },
+        { from: 825, to : 1000, color: ZoneRangeColors.RED }
+      ],
+    };
+    this.gaugeFormOperation = Operation.CREATE;
+    this.displayGaugeForm = true;
   }
 
-  private convertBackGaugeToBackendGaugeQueryingTags(g: BackGauge): Observable<BackendGaugeConfig> {
-    const neededTagIds: string[] = Array.from(this.lookForTagInBackGaugeConfig(g, ['min', 'max', 'value', 'zoneranges']));
-    if (neededTagIds.length === 0) return of(this.convertBackGaugeToBackendGaugeKnowingTags(g, new Map()));
+  private convertBackGaugeToBackendGaugeQueryingTags(gauges: BackGauge[]): Observable<BackendGaugeConfig[]> {
+    const neededTagIds: string[] = Array.from(this.getNeededTagsIdForArrayForBackGauge(gauges));
+    if (neededTagIds.length === 0) return of(gauges.map(g => this.convertBackGaugeToBackendGaugeKnowingTags(g, new Map())));
     return this.tagHistorianService.getAllWithIds(neededTagIds).pipe(
       map(tags => {
         const tagMap = new Map<string, HistorianTag>();
         tags.forEach(t => { tagMap.set(t.id, t); });
-        return this.convertBackGaugeToBackendGaugeKnowingTags(g, tagMap);
+        return gauges.map(g => this.convertBackGaugeToBackendGaugeKnowingTags(g, tagMap));
       })
     );
   }
 
+  private getNeededTagsIdForArrayForBackGauge(gaugesConf: BackGauge[]): Set<string> {
+    return gaugesConf
+      .map(conf => this.getNeededTagsIdForBackGauge(conf))
+      .reduce(
+        (x: Set<string>, y: Set<string>) => {
+          y.forEach(s => x.add(s));
+          return x;
+        }, new Set<string>());
+  }
+
+  private getNeededTagsIdForBackGauge(gaugesConf: BackGauge): Set<string> {
+    return this.lookForTagInBackGaugeConfig(gaugesConf, ['min', 'max', 'value', 'zoneranges']);
+  }
   /**
    * Look for tag in fields
    * @param gaugeConf
@@ -183,12 +160,25 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     const neededTags: Set<string> = new Set();
     fields.forEach(f => {
       const value = gaugeConf[f];
-      if (TagUtils.isHistorianTag(value)) {
-        neededTags.add(value.id);
+      const tryNumber = +value;
+      if (Number.isNaN(tryNumber) && typeof value === 'string') {
+        neededTags.add(value);
       } else if (f === 'zoneranges') { // ZoneRangeConfig[]
-        (value as ZoneRangeConfig[]).forEach(z => {
-          this.lookForTagInZoneRangeConfig(z, ['from', 'to']).forEach(tagId => neededTags.add(tagId));
+        (value as BackZoneRange[]).forEach(z => {
+          this.lookForTagInBackZoneRange(z, ['from', 'to']).forEach(tagId => neededTags.add(tagId));
         });
+      }
+    });
+    return neededTags;
+  }
+
+  private lookForTagInBackZoneRange(gaugeConf: BackZoneRange, fields: (keyof typeof gaugeConf)[]): Set<string> {
+    const neededTags: Set<string> = new Set();
+    fields.forEach(f => {
+      const value = gaugeConf[f];
+      const tryNumber = +value;
+      if (Number.isNaN(tryNumber) && typeof value === 'string') {
+        neededTags.add(value);
       }
     });
     return neededTags;
@@ -216,7 +206,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   private getNumberOrTag(gaugeConf: any, field: string, tagMap: Map<string, HistorianTag>): number | HistorianTag {
     const tryNumber = +gaugeConf[field];
-    if (tryNumber === NaN) {
+    if (Number.isNaN(tryNumber)) {
       console.log('value is a string');
       return tagMap.get(gaugeConf[field]);
     } else {
@@ -254,13 +244,16 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   }
 
   showEditGaugeForm(i: number): void {
+    this.selectedGaugeIndex = i;
     this.gaugeForForm = this.gaugeConfigs[i];
     this.displayGaugeForm = true;
   }
 
   private changeDashboard(newDashboard: Dashboard): void {
     this.dashboard = newDashboard;
-
+    this.convertBackGaugeToBackendGaugeQueryingTags(newDashboard.panels).subscribe(gaugeConfs => {
+      this.gaugeConfigs = gaugeConfs;
+    });
     // this.gaugeConfigs = newDashboard.panels;
     // this.tagSlectionIsClean = true;
     // this.navigateLocal({
@@ -268,8 +261,65 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     // });
   }
 
-  onGaugeConfigChange(gaugeConfModif: IModification<BackendGaugeConfig>): void {
-    this.gaugeConfigs[0] = gaugeConfModif.item;
+  onDashboardSave(dashboard: Dashboard): void {
+    const panels: BackGauge[] = this.gaugeConfigs.map(bg => this.convertBackendGaugeToBackGauge(bg));
+    dashboard.panels = panels;
+    this.dashboardService.update(dashboard, dashboard.id).subscribe();
+  }
+
+  private convertBackendGaugeToBackGauge(bgc: BackendGaugeConfig): BackGauge {
+    let zr = [];
+    if (bgc.zoneranges && bgc.zoneranges.length !== 0) {
+      zr = bgc.zoneranges
+        .map(z => this.getBackZoneRange(z));
+    }
+    const tagValue: string = this.getNumberOrIdTag(bgc.value) as string;
+    const bg: BackGauge = {
+      type: 'gauge',
+      name: bgc.label,
+      // from: string,
+      // to: string,
+      // autorefresh: this.numberOfGauges,
+      value: tagValue,
+      min: this.getNumberOrIdTag(bgc.min),
+      max: this.getNumberOrIdTag(bgc.max),
+      zoneranges: zr
+    };
+    return bg;
+  }
+
+  private getBackZoneRange(z: ZoneRangeConfig): BackZoneRange {
+    const zr: any = {};
+    zr.from = this.getNumberOrIdTag(z.from);
+    zr.to = this.getNumberOrIdTag(z.to);
+    zr.color = z.color;
+    return zr as BackZoneRange;
+  }
+
+  private getNumberOrIdTag(numberOrTag: number | HistorianTag): number | string {
+    if (TagUtils.isHistorianTag(numberOrTag)) {
+      return numberOrTag.id;
+    } else {
+      return numberOrTag;
+    }
+  }
+  deleteGauge(index: number): void {
+    this.arrayUtil.removeIndex(this.gaugeConfigs, index);
+  }
+
+  onGaugeConfigChange(gaugeConfModif: IModification<BackendGaugeConfig>, index?: number): void {
+    const operation = gaugeConfModif.operation;
+    switch (operation) {
+      case Operation.CREATE:
+        this.gaugeConfigs.push(gaugeConfModif.item);
+        break;
+      case Operation.UPDATE:
+        this.gaugeConfigs[index] = gaugeConfModif.item;
+        break;
+      case Operation.DELETE:
+        this.arrayUtil.removeIndex(this.gaugeConfigs, index);
+        break;
+    }
     this.updateGaugesData(this.gaugeConfigs);
   }
 

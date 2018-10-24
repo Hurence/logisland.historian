@@ -20,6 +20,17 @@ export class ArrayUtil {
       }
   }
 
+
+  removeIndex<T>(array: T[], index: number): T {
+    if (index >= 0 && index < array.length) {
+        const deleted = array[index];
+        array.splice(index, 1);
+        return deleted;
+    } else {
+      return undefined;
+    }
+}
+
        /** group the array by a key
    *
    * Example:
