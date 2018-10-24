@@ -241,7 +241,10 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   }
 
   onDashboardChanged(dashboard: Dashboard): void {
-    this.changeDashboard(dashboard);
+    if (this.dashboardInitialization && !this.dashboardInitialization.closed) {
+      this.dashboardInitialization.unsubscribe();
+    }
+    this.dashboardInitialization = this.dashboardService.get(dashboard.id).subscribe(ds => this.changeDashboard(ds));
     // if (dashboard && dashboard.name !== this.tagSelectionId) {
     //   if (this.tagSlectionIsClean) {
     //     this.changeSelection(selection);
