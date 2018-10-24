@@ -26,6 +26,7 @@ import { map, tap } from 'rxjs/operators';
 import { ArrayUtil } from '../../../../shared/array-util';
 import { DashboardService } from '../../../dashboard/dashboard.service';
 import { stringify } from 'querystring';
+import { ConfirmationService } from 'primeng/api';
 
 export interface GaugeRawParams {
   value: number;
@@ -90,7 +91,8 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
               private cookieService: CookieService,
               private tagHistorianService: TagHistorianService,
               private arrayUtil: ArrayUtil,
-              private dashboardService: DashboardService) {
+              private dashboardService: DashboardService,
+              protected confirmationService: ConfirmationService) {
                 // TODO remove cookie and include timerange/autorefresh to dashboard config (including gauges)
     super();
   }
@@ -309,8 +311,18 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     }
   }
   deleteGauge(index: number): void {
-    this.arrayUtil.removeIndex(this.gaugeRawParams, index);
-    this.arrayUtil.removeIndex(this.gaugeConfigs, index);
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete this gauge ? (${this.gaugeRawParams[index].label})`,
+      header: 'Confirmation',
+      rejectLabel: 'Cancel',
+      acceptLabel: 'Ok',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.arrayUtil.removeIndex(this.gaugeRawParams, index);
+        this.arrayUtil.removeIndex(this.gaugeConfigs, index);
+      },
+      reject: () => { }
+    });
   }
 
   onGaugeConfigChange(gaugeConfModif: IModification<BackendGaugeConfig>, index?: number): void {
