@@ -69,6 +69,7 @@ export class VisualizationMenuComponent implements OnInit {
 
   onDashboardChanged(newVal: Dashboard) {
     this.dashboardChange.emit(newVal);
+    this.menuItemActive = '';
   }
 
   onDashboardUpdated(updatedVal: Dashboard) {

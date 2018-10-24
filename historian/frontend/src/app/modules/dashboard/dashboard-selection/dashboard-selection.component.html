@@ -30,7 +30,6 @@
     <app-dashboard-form [item]="selectedDashboard" [formOperation]="editOperation" 
                       [questions]="addDashboardQuestions" (submitted)="onDashboardUpdated($event)"></app-dashboard-form>
 </div>
-selectedDashboard: {{ selectedDashboard | json }}
 
 <p-dialog [(visible)]="display" [modal]="true">
     <p-header>

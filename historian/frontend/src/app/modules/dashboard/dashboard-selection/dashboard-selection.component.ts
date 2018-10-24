@@ -1,4 +1,3 @@
-
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { QuestionBase } from '../../../shared/dynamic-form/question-base';
 import { Dropdown } from 'primeng/dropdown';
@@ -9,6 +8,7 @@ import { Dashboard } from '../modele/Dashboard';
 import { IModification, Operation } from '../../datasource/ConfigurationToApply';
 import { tap } from 'rxjs/operators';
 import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-selection',
@@ -55,33 +55,15 @@ export class DashboardSelectionComponent implements OnInit {
     this.display = false;
   }
 
-  actualizeListOfTagsSelection() {
-    this.dashboardService.getAll().subscribe(dashboards => {
-      this.dashboards = dashboards;
-      if (this.dashboards.length !== 0) {
-        if (this.selectedDashboard) {
-          // const optionSelected = this.dashboards.find(s => s.value.name === selectionIdSelected);
-          // if (optionSelected) {
-          //   dashboardSelected = optionSelected.value;
-          // } else {
-          //   dashboardSelected = this.dashboards[0].value;
-          // }
-        } else {
-          this.selectedDashboard = this.dashboards[0];
-        }
-      } else {
-        this.selectedDashboard = null;
-      }
-      this.dashboardChange.emit(this.selectedDashboard);
-    });
-  }
-
   onDashboardSaved(selectionModif: IModification<Dashboard>) {
     this.dashboardService.save(selectionModif.item).pipe(
       tap(dashboard => {
-        this.actualizeListOfTagsSelection();
-        this.selectedDashboard = dashboard;
-        this.closeDialog();
+        this.dashboardService.getAll().subscribe(dashboards => {
+          this.dashboards = dashboards;
+          this.selectedDashboard = dashboard;
+          this.dashboardChange.emit(this.selectedDashboard);
+          this.closeDialog();
+        });
       })
     ).subscribe();
   }
@@ -89,15 +71,18 @@ export class DashboardSelectionComponent implements OnInit {
   onDashboardUpdated(selectionModif: IModification<Dashboard>) {
     this.dashboardService.update(selectionModif.item, selectionModif.item.id).pipe(
       tap(dashboard => {
-        this.actualizeListOfTagsSelection();
-        this.selectedDashboard = dashboard;
-        this.closeDialog();
+        this.dashboardService.getAll().subscribe(dashboards => {
+          this.dashboards = dashboards;
+          this.selectedDashboard = dashboard;
+          this.closeDialog();
+        });
       })
     ).subscribe();
   }
 
   delete(dashboard: Dashboard) {
-    const msg = `Delete selection of tags ${dashboard.name} (${dashboard.description}) ?`;
+    const desc = dashboard.description ? ` (${dashboard.description})` : '';
+    const msg = `Delete dashboard '${dashboard.name}'${desc} ?`;
     this.confirmationService.confirm({
       message: msg,
       header: 'Confirmation',
@@ -107,7 +92,16 @@ export class DashboardSelectionComponent implements OnInit {
       accept: () => {
         this.dashboardService.delete(dashboard.id)
           .subscribe(deletedDashboard => {
-            this.actualizeListOfTagsSelection();
+            this.dashboardService.getAll().subscribe(dashboards => {
+              this.dashboards = dashboards;
+              this.selectedDashboard = dashboard;
+              if (dashboards.length === 0) {
+                this.dashboardChange.emit(null);
+              } else {
+                this.dashboardChange.emit(dashboards[0]);
+              }
+              this.closeDialog();
+            });
           });
       },
       reject: () => { }
