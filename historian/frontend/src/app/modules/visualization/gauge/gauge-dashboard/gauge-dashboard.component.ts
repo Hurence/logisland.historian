@@ -185,15 +185,19 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   }
 
   private convertBackGaugeToBackendGaugeKnowingTags(g: BackGauge, tagMap: Map<string, HistorianTag>): BackendGaugeConfig {
-    const rawParam: any = Object.assign({}, g);
-    rawParam.min = this.getNumberOrTag(g, 'min', tagMap);
-    rawParam.max = this.getNumberOrTag(g, 'max', tagMap);
-    rawParam.value = this.getNumberOrTag(g, 'value', tagMap);
+    let zrs: ZoneRangeConfig[] = [];
     if (g.zoneranges && g.zoneranges.length !== 0) {
-      rawParam.greenZones = g.zoneranges
+      zrs = g.zoneranges
         .map(z => this.getZoneRangeConfig(z, tagMap));
     }
-    return rawParam;
+    const bgc: BackendGaugeConfig = {
+      value: this.getNumberOrTag(g, 'value', tagMap),      
+      label: g.name,
+      min: this.getNumberOrTag(g, 'min', tagMap),
+      max: this.getNumberOrTag(g, 'max', tagMap),
+      zoneranges: zrs,
+    };      
+    return bgc;
   }
 
   private getZoneRangeConfig(z: BackZoneRange, tagMap: Map<string, HistorianTag>): ZoneRangeConfig {
