@@ -6,11 +6,6 @@ import { QuestionBase } from './question-base';
 import { QuestionControlService } from './question-control.service';
 import { IModification, Operation } from '../../modules/datasource/ConfigurationToApply';
 
-
-export interface CanGetId {
-  getId(): string;
-}
-
 export abstract class BaseDynamicFormComponentEmitter<T> implements OnInit, OnChanges, AfterViewInit {
 
   @Input() questions: QuestionBase<any>[] = [];
