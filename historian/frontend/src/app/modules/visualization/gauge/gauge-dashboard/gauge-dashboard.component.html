@@ -19,14 +19,23 @@
   <div class='ui-g-12' *ngIf="dashboard && gaugeConfigs.length !== 0">      
     <div class='ui-g h-100'>
       <div class='ui-g-12'>    
-          <ng-container *ngIf="!error">            
+          <ng-container *ngIf="!error">               
             <div *ngFor="let dummy of ' '.repeat(gaugeRawParams.length).split(''), let i = index">
-              <button class="btn btn-success" (click)="showEditGaugeForm(i)">Edit</button>
-              <button class="btn btn-danger" (click)="deleteGauge(i)">Delete</button>
-              <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
+              <p-header class="panel-header-container">
+                <button class="btn btn-success" (click)="showEditGaugeForm(i)">Edit</button>
+                <button class="btn btn-danger" (click)="deleteGauge(i)">Delete</button>                
+              </p-header>
+              <div class="panel-main-container">
+                <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
+                [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
+                [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
+                [value]="gaugeRawParams[i].value" [idContainer]="'gaugeContainer' + i"></app-gauge-chart>
+              </div>      
+              
+              <!-- <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
               [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
               [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
-              [value]="gaugeRawParams[i].value" [idContainer]="'gaugeContainer' + i"></app-gauge-chart>
+              [value]="gaugeRawParams[i].value" [idContainer]="'gaugeContainer' + i"></app-gauge-chart> -->
             </div>
           </ng-container>
           <ng-container *ngIf="error">
