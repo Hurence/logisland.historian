@@ -191,12 +191,12 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
         .map(z => this.getZoneRangeConfig(z, tagMap));
     }
     const bgc: BackendGaugeConfig = {
-      value: this.getNumberOrTag(g, 'value', tagMap),      
+      value: this.getNumberOrTag(g, 'value', tagMap),
       label: g.name,
       min: this.getNumberOrTag(g, 'min', tagMap),
       max: this.getNumberOrTag(g, 'max', tagMap),
       zoneranges: zrs,
-    };      
+    };
     return bgc;
   }
 
@@ -255,7 +255,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   private changeDashboard(newDashboard: Dashboard): void {
     this.dashboard = newDashboard;
-    this.convertBackGaugeToBackendGaugeQueryingTags(newDashboard.panels).subscribe(gaugeConfs => {            
+    this.convertBackGaugeToBackendGaugeQueryingTags(newDashboard.panels).subscribe(gaugeConfs => {
       this.gaugeConfigs = gaugeConfs;
       this.updateGaugesData(gaugeConfs);
     });
@@ -309,6 +309,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     }
   }
   deleteGauge(index: number): void {
+    this.arrayUtil.removeIndex(this.gaugeRawParams, index);
     this.arrayUtil.removeIndex(this.gaugeConfigs, index);
   }
 
