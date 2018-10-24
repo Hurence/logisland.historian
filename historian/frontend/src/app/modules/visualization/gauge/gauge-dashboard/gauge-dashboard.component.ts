@@ -255,8 +255,9 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   private changeDashboard(newDashboard: Dashboard): void {
     this.dashboard = newDashboard;
-    this.convertBackGaugeToBackendGaugeQueryingTags(newDashboard.panels).subscribe(gaugeConfs => {
+    this.convertBackGaugeToBackendGaugeQueryingTags(newDashboard.panels).subscribe(gaugeConfs => {            
       this.gaugeConfigs = gaugeConfs;
+      this.updateGaugesData(gaugeConfs);
     });
     // this.gaugeConfigs = newDashboard.panels;
     // this.tagSlectionIsClean = true;
