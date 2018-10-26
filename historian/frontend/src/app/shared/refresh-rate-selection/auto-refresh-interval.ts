@@ -20,3 +20,16 @@ export const autoRefreshIntervalBuiltIn: {[key: string]: AutoRefreshInterval} = 
   TWELVE_HOURS: {label: '12 hours', refrashInterval: '43200000'},
   ONE_DAY: {label: '1 day', refrashInterval: '86400000'}
 };
+
+export class AutoRefreshIntervalUtils {
+  public static getAutoRefreshInterval(refrashInterval: string): AutoRefreshInterval {
+    // if BUILT IN REFRESH INTERVAL RETURN IT
+    for (const key of Object.keys(autoRefreshIntervalBuiltIn)) {
+      const autoRefreshInterval = autoRefreshIntervalBuiltIn[key];
+      if (autoRefreshInterval.refrashInterval === refrashInterval) {
+        return autoRefreshInterval;
+      }
+    }
+    return autoRefreshIntervalBuiltIn.NONE;
+  }
+}

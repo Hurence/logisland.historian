@@ -1,20 +1,20 @@
 import { DropdownQuestion } from './../../../../shared/dynamic-form/question-dropdown';
 import { HistorianTag } from './../../../tag/modele/HistorianTag';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { AutoRefreshInterval, autoRefreshIntervalBuiltIn } from '../../../../shared/refresh-rate-selection/auto-refresh-interval';
+import { AutoRefreshInterval, autoRefreshIntervalBuiltIn, AutoRefreshIntervalUtils }
+  from '../../../../shared/refresh-rate-selection/auto-refresh-interval';
 import { CookieService } from 'ngx-cookie-service';
 import { IModification, Operation } from '../../../datasource/ConfigurationToApply';
 import { ArrayQuestion, IArrayQuestion } from '../../../../shared/dynamic-form/question-array';
 import { QuestionBase } from '../../../../shared/dynamic-form/question-base';
 import { NumberQuestion } from '../../../../shared/dynamic-form/question-number';
 import { ZoneRange, ZoneRangeColorsUtil, ZoneRangeColors } from '../../../graph/gauge-chart/gauge';
-import { TimeRangeFilter, timeRangeBuiltIn } from '../../../../shared/time-range-selection/time-range-filter';
+import { TimeRangeFilter, timeRangeBuiltIn, TimeRangeFilterUtils } from '../../../../shared/time-range-selection/time-range-filter';
 import { MeasuresRequest } from '../../../../measure/MeasuresRequest';
-import { Subscription, Observable, empty, of } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { MeasuresService } from '../../../../measure/measures.service';
 import { IAgregation } from '../../../../measure/Measures';
 import { HistorianTagDropdownQuestion } from '../../../../shared/dynamic-form/question-historian-tag-dropdown';
-import { TagUtils } from '../../../tag/modele/TagUtils';
 import { RefreshRateComponentAsInnerVariable } from '../../../../shared/refresh-rate-selection/RefreshRateComponentAsInnerVariable';
 import { ConditionalQuestion, IConditionalQuestion } from '../../../../shared/dynamic-form/question-conditional';
 import { RadioQuestion } from '../../../../shared/dynamic-form/question-radio';
@@ -26,7 +26,7 @@ import { DashboardService } from '../../../dashboard/dashboard.service';
 import { ConfirmationService } from 'primeng/api';
 import { VisualizationMenuComponent } from '../../visualization-menu/visualization-menu.component';
 import { GaugeConverter } from '../../../../core/modele/gauge/GaugeConverter';
-import { BackGauge, BackendGaugeConfig, ZoneRangeConfig, GaugeRawParams } from '../../../../core/modele/gauge/Gauge';
+import { BackGauge, BackendGaugeConfig, GaugeRawParams } from '../../../../core/modele/gauge/Gauge';
 
 @Component({
   selector: 'app-gauge-dashboard',
@@ -209,6 +209,8 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
           this.dashboardId = newDashboard.id;
           this.gaugeConfigs = gaugeConfs;
           this.updateGaugesData(gaugeConfs);
+          this.timeRange = TimeRangeFilterUtils.createOrGetTimeRangeFilter(newDashboard.from, newDashboard.to);
+          this.autoRefreshInterval = AutoRefreshIntervalUtils.getAutoRefreshInterval(newDashboard.autorefresh.toString());
           this.dashboardIsClean = true;
         }),
         map(gaugeConfs => newDashboard)
@@ -222,6 +224,9 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   onDashboardSave(dashboard: Dashboard): void {
     const panels: BackGauge[] = this.gaugeConfigs.map(bg => this.gaugeConverter.convertBackendGaugeToBackGauge(bg));
     dashboard.panels = panels;
+    dashboard.from = this.timeRange.start;
+    dashboard.to = this.timeRange.end;
+    dashboard.autorefresh = +this.autoRefreshInterval.refrashInterval;
     this.dashboardService.update(dashboard, dashboard.id).subscribe(ds => {
       this.dashboardIsClean = true;
     });

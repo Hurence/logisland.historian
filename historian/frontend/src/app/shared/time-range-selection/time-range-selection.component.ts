@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SelectItem } from 'primeng/api';
-import { TimeRangeFilter, timeRangeBuiltIn } from './time-range-filter';
-import * as moment from 'moment';
+import { TimeRangeFilter, timeRangeBuiltIn, TimeRangeFilterUtils } from './time-range-filter';
 
 @Component({
   selector: 'app-time-range-selection',
@@ -60,21 +59,7 @@ export class TimeRangeSelectionComponent implements OnInit {
   }
 
   setCustomTimeRange(): void {
-    let startMoment: moment.Moment;
-    let endMoment: moment.Moment;
-    let label = '';
-    if (this.from) {
-      startMoment = moment(this.from);
-      label = startMoment.utc().format(`YYYY-MM-DDThh:mm:ssZ`);
-    }
-    if (this.to) {
-      endMoment = moment(this.to);
-      label += ' to ' + endMoment.utc().format(`YYYY-MM-DDThh:mm:ssZ`);
-    }
-    this.onTimeRangeChange({
-      label: label,
-      start: startMoment.valueOf().toString(),
-      end: endMoment.valueOf().toString(),
-    });
+    const newTimeRange = TimeRangeFilterUtils.createCustomTimeRangeFilter(this.from, this.to);
+    this.onTimeRangeChange(newTimeRange);
   }
 }

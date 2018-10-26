@@ -37,9 +37,41 @@ export const timeRangeBuiltIn: {[key: string]: TimeRangeFilter} = {
   LAST_5_YEARS: {label: 'Last 5 year', start: 'NOW-5YEARS', end: 'NOW'}
 };
 
+import * as moment from 'moment';
 export class TimeRangeFilterUtils {
 
   public static equals(timeRangeA: TimeRangeFilter, timeRangeB: TimeRangeFilter): boolean {
     return timeRangeA && timeRangeB && timeRangeA.start === timeRangeB.start && timeRangeA.end === timeRangeB.end;
+  }
+
+  public static createOrGetTimeRangeFilter(start: string, end: string): TimeRangeFilter {
+    // if BUILT IN TIME RANGE RETURN IT
+    for (const key of Object.keys(timeRangeBuiltIn)) {
+      const timeRangeFilter = timeRangeBuiltIn[key];
+      if (timeRangeFilter.start === start && timeRangeFilter.end === end) {
+        return timeRangeFilter;
+      }
+    }
+    // ELSE build custom timerange
+    return this.createCustomTimeRangeFilter(new Date(+start), new Date(+end));
+  }
+
+  public static createCustomTimeRangeFilter(start: Date, end: Date): TimeRangeFilter {
+    let startMoment: moment.Moment;
+    let endMoment: moment.Moment;
+    let label = '';
+    if (start) {
+      startMoment = moment(start);
+      label = startMoment.utc().format(`YYYY-MM-DDThh:mm:ssZ`);
+    }
+    if (end) {
+      endMoment = moment(end);
+      label += ' to ' + endMoment.utc().format(`YYYY-MM-DDThh:mm:ssZ`);
+    }
+    return {
+      label: label,
+      start: startMoment.valueOf().toString(),
+      end: endMoment.valueOf().toString(),
+    };
   }
 }
