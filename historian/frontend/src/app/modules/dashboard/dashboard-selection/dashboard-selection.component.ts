@@ -23,8 +23,9 @@ export class DashboardSelectionComponent implements OnInit {
   @Output() dashboardChange = new EventEmitter<Dashboard>();
   @Output() dashboardUpdated = new EventEmitter<Dashboard>();
   // Form to add new selection of tags
-  display = false;
+  displayAdd = false;
   addDashboardQuestions: QuestionBase<any>[];
+  displayEdit = false;
   editDashboardQuestions: QuestionBase<any>[];
 
   private CANCEL_MSG = 'Cancel';
@@ -47,12 +48,20 @@ export class DashboardSelectionComponent implements OnInit {
     });
   }
 
-  showDialog() {
-    this.display = true;
+  showAddDialog() {
+    this.displayAdd = true;
   }
 
-  closeDialog() {
-    this.display = false;
+  closeAddDialog() {
+    this.displayAdd = false;
+  }
+
+  showEditDialog() {
+    this.displayEdit = true;
+  }
+
+  closeEditDialog() {
+    this.displayEdit = false;
   }
 
   onDashboardSaved(selectionModif: IModification<Dashboard>) {
@@ -62,7 +71,7 @@ export class DashboardSelectionComponent implements OnInit {
           this.dashboards = dashboards;
           this.selectedDashboard = dashboard;
           this.dashboardChange.emit(this.selectedDashboard);
-          this.closeDialog();
+          this.closeAddDialog();
         });
       })
     ).subscribe();
@@ -74,7 +83,8 @@ export class DashboardSelectionComponent implements OnInit {
         this.dashboardService.getAll().subscribe(dashboards => {
           this.dashboards = dashboards;
           this.selectedDashboard = dashboard;
-          this.closeDialog();
+          this.dashboardChange.emit(this.selectedDashboard);
+          this.closeEditDialog();    
         });
       })
     ).subscribe();
@@ -99,8 +109,7 @@ export class DashboardSelectionComponent implements OnInit {
                 this.dashboardChange.emit(null);
               } else {
                 this.dashboardChange.emit(dashboards[0]);
-              }
-              this.closeDialog();
+              }              
             });
           });
       },

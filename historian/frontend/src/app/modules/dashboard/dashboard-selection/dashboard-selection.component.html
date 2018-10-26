@@ -18,7 +18,8 @@
     <!--!gSeltaection ? 'hidden': -->
 
     <button type="button" (click)="delete(selectedDashboard)" class="btn btn-danger ml-2">Delete</button>    
-    <button type="button" (click)="showDialog()" class="btn btn-info ml-2 hurence-tooltip hurence-tooltip-bottom">
+    <button type="button" (click)="showEditDialog()" class="btn btn-success ml-2">Modify</button>    
+    <button type="button" (click)="showAddDialog()" class="btn btn-info ml-2 hurence-tooltip hurence-tooltip-bottom">
       <i class="fa fa-plus" aria-hidden="true"></i>Add new dashboard
       <span class="hurence-tooltiptext" 
       [ngStyle]="{'visibility': this.profilService.helpHidden || selectedDashboard ? 'hidden': 'visible'}">
@@ -27,11 +28,19 @@
     </button>
 </div>
 <div class="ui-g-12">
-    <app-dashboard-form [item]="selectedDashboard" [formOperation]="editOperation" 
-                      [questions]="addDashboardQuestions" (submitted)="onDashboardUpdated($event)"></app-dashboard-form>
+    
 </div>
 
-<p-dialog [(visible)]="display" [modal]="true">
+<p-dialog [(visible)]="displayEdit" [modal]="true">
+    <p-header>
+        Modify dashboard
+    </p-header>
+    <app-dashboard-form [item]="selectedDashboard" [formOperation]="editOperation" 
+                      [questions]="addDashboardQuestions" (submitted)="onDashboardUpdated($event)"></app-dashboard-form>
+    <p-footer>
+    </p-footer>
+</p-dialog>
+<p-dialog [(visible)]="displayAdd" [modal]="true">
     <p-header>
         Create a new Dashboard
     </p-header>
