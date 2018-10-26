@@ -17,7 +17,7 @@ export interface ZoneRangeConfig {
 }
 
 export interface BackendGaugeConfig {
-  value: number | HistorianTag;
+  value: HistorianTag;
   label: string;
   min: number | HistorianTag;
   max: number | HistorianTag;
@@ -42,7 +42,7 @@ export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendG
 
   protected create(): BackendGaugeConfig {
     return {
-      value: 500,
+      value: undefined,
       min: 0,
       label: 'new gauge',
       max: 1000,

@@ -133,7 +133,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   onGaugeAdded(): void {
     this.gaugeForForm = {
-      value: 50,
+      value: undefined,
       label: 'new gauge',
       min: 0,
       max: 1000,
@@ -214,7 +214,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
         .map(z => this.getZoneRangeConfig(z, tagMap));
     }
     const bgc: BackendGaugeConfig = {
-      value: this.getNumberOrTag(g, 'value', tagMap),
+      value: tagMap.get(g['value']),
       label: g.name,
       min: this.getNumberOrTag(g, 'min', tagMap),
       max: this.getNumberOrTag(g, 'max', tagMap),

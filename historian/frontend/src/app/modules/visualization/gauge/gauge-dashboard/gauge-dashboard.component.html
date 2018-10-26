@@ -29,7 +29,8 @@
                 <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
                 [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
                 [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
-                [value]="gaugeRawParams[i].value" [idContainer]="'gaugeContainer' + i"></app-gauge-chart>
+                [value]="gaugeRawParams[i].value" [idContainer]="'gaugeContainer' + i"
+                [size]="600"></app-gauge-chart>
               </div>      
             </div>
           </ng-container>
