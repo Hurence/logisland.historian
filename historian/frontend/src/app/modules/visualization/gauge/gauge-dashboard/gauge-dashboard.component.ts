@@ -20,7 +20,7 @@ import { ConditionalQuestion, IConditionalQuestion } from '../../../../shared/dy
 import { RadioQuestion } from '../../../../shared/dynamic-form/question-radio';
 import { TextboxQuestion } from '../../../../shared/dynamic-form/question-textbox';
 import { Dashboard } from '../../../../core/modele/dashboard/Dashboard';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { ArrayUtil } from '../../../../shared/array-util';
 import { DashboardService } from '../../../dashboard/dashboard.service';
 import { ConfirmationService } from 'primeng/api';
@@ -54,6 +54,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   private menu: VisualizationMenuComponent;
 
   dashboard: Dashboard;
+  dashboardIsClean: boolean = true;
 
   private _dashboardId: string;
   get dashboardId(): string {
@@ -94,6 +95,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   dashboardInitialization: Subscription;
   redrawDashBoardSubscription: Subscription;
+  loadingDashboard: boolean = false;
 
   constructor(private measuresService: MeasuresService,
               private cookieService: CookieService,
@@ -110,17 +112,35 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     this.changeRefreshRate(+this.autoRefreshInterval.refrashInterval);
     this.gaugeEditQuestions = this.getQuestions();
     if (!this.dashboard && this.dashboardId) {
-      if (this.dashboardInitialization && !this.dashboardInitialization.closed) {
-        this.dashboardInitialization.unsubscribe();
-      }
-      this.dashboardInitialization = this.dashboardService.get(this.dashboardId).subscribe(ds => this.changeDashboard(ds));
+      this.updateDashBoardScreen(this.dashboardId);
     }
+  }
+
+  private updateDashBoardScreen(dashboardId: string): void {
+    this.loadingDashboard = true;
+    if (this.dashboardInitialization && !this.dashboardInitialization.closed) {
+      this.dashboardInitialization.unsubscribe();
+    }
+    this.dashboardInitialization = this.dashboardService.get(dashboardId).subscribe(ds => {
+      if (this.redrawDashBoardSubscription && !this.redrawDashBoardSubscription.closed) {
+        this.redrawDashBoardSubscription.unsubscribe();
+      }
+      this.redrawDashBoardSubscription = this.changeDashboard(ds).subscribe(datasource => {
+        this.loadingDashboard = false;
+      });
+    });
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
     if (this.measuresRefreshSubscription && !this.measuresRefreshSubscription.closed) {
       this.measuresRefreshSubscription.unsubscribe();
+    }
+    if (this.redrawDashBoardSubscription && !this.redrawDashBoardSubscription.closed) {
+      this.redrawDashBoardSubscription.unsubscribe();
+    }
+    if (this.dashboardInitialization && !this.dashboardInitialization.closed) {
+      this.dashboardInitialization.unsubscribe();
     }
   }
 
@@ -144,24 +164,18 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
 
   onDashboardChanged(dashboard: Dashboard): void {
     if (dashboard && dashboard.id !== this.dashboardId) {
-      if (false) { // TODO this.dashboardIsClean
-        if (this.dashboardInitialization && !this.dashboardInitialization.closed) {
-          this.dashboardInitialization.unsubscribe();
-        }
-        this.dashboardInitialization = this.dashboardService.get(dashboard.id).subscribe(ds => this.changeDashboard(ds));
+      if (this.dashboardIsClean) {
+        this.updateDashBoardScreen(dashboard.id);
       } else {
         this.confirmationService.confirm({
-          message: `You did not save your modification on current tag selection. Click Ok if you do not care,
-                    otherwise click cancel then click on update in selection menu.`,
+          message: `You did not save your modification on current dashboard '${this.dashboard.name}'. Click Ok if you do not care,
+                    otherwise click cancel then click on save in top bar menu.`,
           header: 'Confirmation',
           rejectLabel: 'Cancel',
           acceptLabel: 'Ok',
           icon: 'pi pi-exclamation-triangle',
           accept: () => {
-            if (this.dashboardInitialization && !this.dashboardInitialization.closed) {
-              this.dashboardInitialization.unsubscribe();
-            }
-            this.dashboardInitialization = this.dashboardService.get(dashboard.id).subscribe(ds => this.changeDashboard(ds));
+            this.updateDashBoardScreen(dashboard.id);
           },
           reject: () => {
             // workaround as p-dropdown seems bugged see : https://github.com/primefaces/primeng/issues/877
@@ -172,8 +186,13 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     }
   }
 
+  /**
+   * Called on dashboard name or description has been modified.
+   * @param dashboard dashboard updated
+   */
   onDashboardUpdated(dashboard: Dashboard): void {
-    // this.tagSlectionIsClean = true; TODO ?????
+    this.dashboard.name = dashboard.name;
+    this.dashboard.description = dashboard.description;
   }
 
   showEditGaugeForm(i: number): void {
@@ -182,30 +201,36 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     this.displayGaugeForm = true;
   }
 
-  private changeDashboard(newDashboard: Dashboard): void {
-    this.dashboard = newDashboard;
-    this.dashboardId = newDashboard.id;
-    if (this.redrawDashBoardSubscription && !this.redrawDashBoardSubscription.closed) {
-      this.redrawDashBoardSubscription.unsubscribe();
-    }
-    this.redrawDashBoardSubscription = this.gaugeConverter.convertBackGaugeToBackendGaugeQueryingTags(newDashboard.panels)
-      .subscribe(gaugeConfs => {
-        this.gaugeConfigs = gaugeConfs;
-        this.updateGaugesData(gaugeConfs);
-      });
-    // this.gaugeConfigs = newDashboard.panels;
-    // this.tagSlectionIsClean = true;
-    // this.navigateLocal({
-    //   tagSelectionId: newSelection.name
-    // });
+  private changeDashboard(newDashboard: Dashboard): Observable<Dashboard> {
+    return this.gaugeConverter.convertBackGaugeToBackendGaugeQueryingTags(newDashboard.panels)
+      .pipe(
+        tap(gaugeConfs => {
+          this.dashboard = newDashboard;
+          this.dashboardId = newDashboard.id;
+          this.gaugeConfigs = gaugeConfs;
+          this.updateGaugesData(gaugeConfs);
+          this.dashboardIsClean = true;
+        }),
+        map(gaugeConfs => newDashboard)
+      );
   }
 
+  /**
+   * Save dashboard because user has clicked on saving dashboard
+   * @param dashboard
+   */
   onDashboardSave(dashboard: Dashboard): void {
     const panels: BackGauge[] = this.gaugeConfigs.map(bg => this.gaugeConverter.convertBackendGaugeToBackGauge(bg));
     dashboard.panels = panels;
-    this.dashboardService.update(dashboard, dashboard.id).subscribe();
+    this.dashboardService.update(dashboard, dashboard.id).subscribe(ds => {
+      this.dashboardIsClean = true;
+    });
   }
 
+  /**
+   * Delete selected gauge because user has clicked on delete (ask confirmation before)
+   * @param dashboard
+   */
   deleteGauge(index: number): void {
     this.confirmationService.confirm({
       message: `Are you sure you want to delete this gauge ? (${this.gaugeRawParams[index].label})`,
@@ -216,11 +241,16 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
       accept: () => {
         this.arrayUtil.removeIndex(this.gaugeRawParams, index);
         this.arrayUtil.removeIndex(this.gaugeConfigs, index);
+        this.dashboardIsClean = false;
       },
       reject: () => { }
     });
   }
-
+  /**
+   * Save or update selected gauge.
+   * @param gaugeConfModif
+   * @param index
+   */
   onGaugeConfigChange(gaugeConfModif: IModification<BackendGaugeConfig>, index?: number): void {
     const operation = gaugeConfModif.operation;
     switch (operation) {
@@ -240,6 +270,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
         break;
     }
     this.displayGaugeForm = false;
+    this.dashboardIsClean = false;
   }
 
   subscribeToRefreshChanges(t: number): void {
