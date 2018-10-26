@@ -11,7 +11,7 @@ VOLUME /tmp
 
 RUN apk add --update unzip wget curl docker jq coreutils procps vim tar
 
-ENV APP_JAR historian-backend-1.0.1-SNAPSHOT.jar
+ENV APP_JAR historian-backend-1.0.1-RC1.jar
 ENV USER_NAME logisland
 ENV APP_HOME /opt/$USER_NAME
 
@@ -31,7 +31,7 @@ ENV JAVA_TOOL_OPTIONS "-Xms1G -Xmx1G -Djava.awt.headless=true -Djava.security.eg
 
 #USER $USER_NAME
 WORKDIR $APP_HOME
-ENTRYPOINT ["java", "-jar", "historian-backend-1.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "historian-backend-1.0.1-RC1.jar"]
 
 # Run as:
 # docker run -idt -p 8701:8701 -e appPort=8701 asimio/springboot-jersey-swagger-docker:latest
