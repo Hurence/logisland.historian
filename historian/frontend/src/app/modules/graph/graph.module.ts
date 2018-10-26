@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { LineChartComponent } from './line-chart/line-chart.component';
+import { GaugeChartComponent } from './gauge-chart/gauge-chart.component';
 
 @NgModule({
   imports: [
@@ -8,9 +9,11 @@ import { LineChartComponent } from './line-chart/line-chart.component';
   ],
   exports: [
     LineChartComponent,
+    GaugeChartComponent
   ],
   declarations: [
-    LineChartComponent
+    LineChartComponent,
+    GaugeChartComponent
   ]
 })
 export class GraphModule { }

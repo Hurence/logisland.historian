@@ -29,7 +29,8 @@
               "src/assets/css/styles.css",
               "src/assets/css/button.css",
               "src/assets/css/progress-bar.css",
-              "src/assets/css/tooltip.css"
+              "src/assets/css/tooltip.css",
+              "src/assets/css/gauge/current_gauge.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -130,7 +131,8 @@
               "src/assets/css/styles.css",
               "src/assets/css/button.css",
               "src/assets/css/progress-bar.css",
-              "src/assets/css/tooltip.css"
+              "src/assets/css/tooltip.css",
+              "src/assets/css/gauge/current_gauge.css"
             ],
             "assets": [
               "src/assets",

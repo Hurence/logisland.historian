@@ -1,0 +1,8 @@
+.panel-header-container {
+  display: flex;
+  justify-content: center;  
+}
+.panel-main-container {
+  display: flex;
+  justify-content: center;  
+}

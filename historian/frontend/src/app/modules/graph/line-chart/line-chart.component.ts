@@ -167,10 +167,10 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
     if (this.measuresRefreshSubscription && !this.measuresRefreshSubscription.closed) {
       this.measuresRefreshSubscription.unsubscribe();
     }
-    const requestss = this.tags.map(tag => {
+    const requests = this.tags.map(tag => {
       return this.buildTagMeasureRequest(tag);
     });
-    this.measuresRefreshSubscription = this.measuresService.getMany(requestss).subscribe(
+    this.measuresRefreshSubscription = this.measuresService.getMany(requests).subscribe(
       measures => {
         console.log('found measures', measures.length);
         const datasets: ILineChartDataset[] = measures.map(m => {
@@ -240,7 +240,6 @@ export class LineChartComponent extends RefreshRateComponent implements OnInit, 
   /**
    * MEASURE SECTION
    */
-
   private convertMeasureToDataset(m: Measures): ILineChartDataset {
     const timeSerie = m.timestamps.map((time, index) => {
       const value = m.values[index];

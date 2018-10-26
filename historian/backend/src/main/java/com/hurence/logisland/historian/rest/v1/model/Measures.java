@@ -29,6 +29,14 @@ public class Measures  implements Serializable {
         @Indexed(name = "name")
         private String name = null;
 
+        @JsonProperty("datasource_id")
+        @Indexed(name = "datasource_id")
+        private String datasourceId = null;
+
+        @JsonProperty("tag_id")
+        @Indexed(name = "tag_id")
+        private String tagId = null;
+
         @JsonProperty("start")
         @Indexed(name = "start")
         private Long start = null;
@@ -84,6 +92,50 @@ public class Measures  implements Serializable {
 
         public Measures setName(String name) {
         this.name = name;
+        return this;
+        }
+
+        public Measures datasourceId(String datasourceId) {
+        this.datasourceId = datasourceId;
+        return this;
+        }
+
+    /**
+        * Get datasourceId
+    * @return datasourceId
+    **/
+        @JsonProperty("datasource_id")
+    @ApiModelProperty(value = "")
+    
+
+  public String getDatasourceId() {
+    return datasourceId;
+    }
+
+        public Measures setDatasourceId(String datasourceId) {
+        this.datasourceId = datasourceId;
+        return this;
+        }
+
+        public Measures tagId(String tagId) {
+        this.tagId = tagId;
+        return this;
+        }
+
+    /**
+        * Get tagId
+    * @return tagId
+    **/
+        @JsonProperty("tag_id")
+    @ApiModelProperty(value = "")
+    
+
+  public String getTagId() {
+    return tagId;
+    }
+
+        public Measures setTagId(String tagId) {
+        this.tagId = tagId;
         return this;
         }
 
@@ -321,6 +373,8 @@ public class Measures  implements Serializable {
     }
         Measures measures = (Measures) o;
         return Objects.equals(this.name, measures.name) &&
+        Objects.equals(this.datasourceId, measures.datasourceId) &&
+        Objects.equals(this.tagId, measures.tagId) &&
         Objects.equals(this.start, measures.start) &&
         Objects.equals(this.end, measures.end) &&
         Objects.equals(this.queryDuration, measures.queryDuration) &&
@@ -334,7 +388,7 @@ public class Measures  implements Serializable {
 
     @Override
     public int hashCode() {
-    return Objects.hash(name, start, end, queryDuration, quality, numChunks, numPoints, timestamps, values, functions);
+    return Objects.hash(name, datasourceId, tagId, start, end, queryDuration, quality, numChunks, numPoints, timestamps, values, functions);
     }
 
 
@@ -344,6 +398,8 @@ StringBuilder sb = new StringBuilder();
 sb.append("{\n");
 
 sb.append("    name: ").append(toIndentedString(name)).append("\n");
+sb.append("    datasourceId: ").append(toIndentedString(datasourceId)).append("\n");
+sb.append("    tagId: ").append(toIndentedString(tagId)).append("\n");
 sb.append("    start: ").append(toIndentedString(start)).append("\n");
 sb.append("    end: ").append(toIndentedString(end)).append("\n");
 sb.append("    queryDuration: ").append(toIndentedString(queryDuration)).append("\n");

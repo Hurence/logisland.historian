@@ -12,31 +12,9 @@ export class DynamicFormQuestionRadioComponent implements OnInit {
 
   @Input() question: RadioQuestion<any>;
   @Input() form: FormGroup;
+  @Input() name: string;
 
   constructor(private qcs: QuestionControlService) { }
 
   ngOnInit() {}
-
-  // addItem(): void {
-  //   this.formArray.push(this.createAnArrayFormGroup());
-  //   this.formArray.markAsDirty();
-  // }
-
-  // removeItem(index: number): void {
-  //   this.formArray.removeAt(index);
-  //   this.formArray.markAsDirty();
-  // }
-
-  // at(index: number): FormGroup {
-  //   return this.formArray.at(index) as FormGroup;
-  // }
-
-  // get formArray(): FormArray {
-  //   return this.form.get(this.question.key) as FormArray;
-  // }
-
-  // private createAnArrayFormGroup(): FormGroup {
-  //   return this.qcs.toFormGroup(this.question.questions);
-  // }
 }
-

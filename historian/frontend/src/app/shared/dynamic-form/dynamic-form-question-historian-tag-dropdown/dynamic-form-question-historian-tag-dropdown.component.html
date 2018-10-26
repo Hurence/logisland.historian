@@ -1,0 +1,10 @@
+<div [formGroup]="form">
+  <p-dropdown [formControlName]="question.key" 
+      [options]="tags"        
+      placeholder="please choose a tag"      
+      optionLabel="node_id"
+      dataKey="id"
+      [autoWidth]="false" [style]="{'min-width':'15em'}">
+  </p-dropdown>
+</div>
+  

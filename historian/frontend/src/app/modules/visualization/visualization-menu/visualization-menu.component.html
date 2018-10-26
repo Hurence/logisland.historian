@@ -6,6 +6,14 @@
       [ngStyle]="{'visibility': this.profilService.helpHidden || tagSelection || menuItemActive === 'selection' ? 'hidden': 'visible'}">
         Click here to configure your set of tag
       </span>
+  </li>  
+  <li *ngIf="dashboardSelector" [ngClass]="{'active' : menuItemActive === 'dashboard'}" 
+      class="visualization-menu-element hurence-tooltip hurence-tooltip-bottom" (click)="toggleItemMenu('dashboard')">
+      <i class="fa fa-tags" aria-hidden="true"></i>{{ dashboard ? dashboard.name: 'None' }}
+      <span class="hurence-tooltiptext" 
+      [ngStyle]="{'visibility': this.profilService.helpHidden || dashboard || menuItemActive === 'dashboard' ? 'hidden': 'visible'}">
+        Click here to configure your dashboard
+      </span>
   </li>
   <li *ngIf="autoRefreshIntervalSelector" [ngClass]="{'active' : menuItemActive === 'autoRefreshInterval'}" 
   class="visualization-menu-element" (click)="toggleItemMenu('autoRefreshInterval')">      
@@ -15,8 +23,8 @@
   (click)="toggleItemMenu('timeRange')">    
     <i class="fa fa-clock-o" aria-hidden="true"></i>{{ timeRange.label }}
   </li>
-
-  <li><i [ngClass]="{
+  <li *ngIf="viewSelector">
+    <i [ngClass]="{
     'fa-eye' : !view, 
     'fa-table' : view === 'tabular',
     'fa-line-chart' : view === 'lineChart'
@@ -26,10 +34,22 @@
      <li (click)="onViewChanged('lineChart')"><i class="fa fa-line-chart" aria-hidden="true"></i>Line chart</li>     
     </ul>  
   </li>
+  <li *ngIf="dashboardSaving && dashboard" class="visualization-menu-element" 
+  (click)="updateDashboard(dashboard)">    
+    <i class="fa fa-save" aria-hidden="true"></i>
+  </li>
+  <li *ngIf="dashboardSaving && dashboard" class="visualization-menu-element" 
+  (click)="addNewGauge(dashboard)">    
+    <i class="fa fa-tachometer" aria-hidden="true"></i>Add a gauge
+  </li>
 </ul>
 <div *ngIf="tagSelector" [hidden]="menuItemActive !== 'selection'">    
-  <app-selection-dashboard [tagSelection]="tagSelection" (tagSelectionChange)="ontagSelectionChanged($event)"
+  <app-selection-dashboard [tagSelection]="tagSelection" (tagSelectionChange)="onTagSelectionChanged($event)"
     (tagSelectionUpdated)="onTagSelectionUpdated($event)"></app-selection-dashboard>
+</div>
+<div [hidden]="menuItemActive !== 'dashboard'">    
+  <app-dashboard-selection [selectedDashboard]="dashboard" (dashboardChange)="onDashboardChanged($event)"
+    (dashboardUpdated)="onDashboardUpdated($event)"></app-dashboard-selection>
 </div>
 <div *ngIf="autoRefreshIntervalSelector" [hidden]="menuItemActive !== 'autoRefreshInterval'">
   <app-refresh-rate-selection [autoRefreshInterval]="autoRefreshInterval" (autoRefreshIntervalChange)="onAutoRefreshIntervalChanged($event)"></app-refresh-rate-selection>

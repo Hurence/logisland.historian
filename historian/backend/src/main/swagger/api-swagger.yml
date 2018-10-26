@@ -606,7 +606,7 @@ paths:
          required: true
          type: file
        - name: default_headers
-         in: formData
+         in: query
          description: |
           default value for missing headers. For example :
             datasource_id:ma datasource id,type:double
@@ -1485,19 +1485,6 @@ definitions:
         items:
           type: string
 
-  PrivateSelection:
-    allOf: # Combines the Selection and the inline model
-      - $ref: '#/definitions/Selection'
-      - type: object
-        description: a Selection is a selection of tags.
-        required:
-          - id
-          - owner
-        properties:
-          id:
-            description: concatenation of owner with name for example
-            type: string
-
   Permissions:
     type: object
     description: a Permissions can allow to share something with others. It describes permission for one item.
@@ -1605,6 +1592,10 @@ definitions:
     description: holds a double array of values for a Tag between start & stop
     properties:
       name:
+        type: string
+      datasource_id:
+        type: string
+      tag_id:
         type: string
       start:
         type: integer
@@ -1837,4 +1828,3 @@ definitions:
         type: string
       value:
         type: string
-

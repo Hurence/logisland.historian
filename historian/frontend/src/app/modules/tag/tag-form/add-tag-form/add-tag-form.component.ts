@@ -13,7 +13,7 @@ import { Operation } from '../../../datasource/ConfigurationToApply';
   styleUrls: ['./add-tag-form.component.css']
 })
 export class AddTagFormComponent extends BaseSingleTagForm implements OnInit {
-  protected formOperation: Operation = Operation.CREATE;
+  formOperation: Operation = Operation.CREATE;
 
   constructor(protected qcs: QuestionControlService,
               protected confirmationService: ConfirmationService,

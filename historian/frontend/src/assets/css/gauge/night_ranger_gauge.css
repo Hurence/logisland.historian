@@ -1,0 +1,107 @@
+text.minMarkerText,text.minValueText,path.minMarker{
+	stroke: #00FFF8;
+	fill:  #00FFF8;
+	opacity: 0.50;
+}
+
+text.avgMarkerText,text.avgValueText,path.avgMarker{
+	stroke: #E82DFF;
+	fill:  #E82DFF;
+	opacity: 0.50;
+}
+
+text.maxMarkerText,text.maxValueText,path.maxMarker{
+	stroke: #FF5B00;
+	fill:  #FF5B00;
+	opacity: 0.50;
+}
+
+path.zones{
+	opacity: 0.4;
+}
+path.greenZone{
+	fill: #5CFF19;
+}
+path.yellowZone{
+	fill: #FFF74A;
+}
+path.redZone{
+	fill: #FF3F00;
+}
+line.ticks{
+	
+}
+line.minorTick{
+	stroke: #666;
+	stroke-width: 1px;
+}
+line.majorTick{
+	stroke: #333;
+	stroke-width: 2px;
+}
+text.labels{
+
+}
+text.lowerBoundLabel{
+	fill: #C7C0BF;
+	stroke-width: 0px;
+}
+text.upperBoundLabel{
+	fill: #C7C0BF;
+	stroke-width: 0px;
+}
+text.currentValueLabel{
+	stroke: #FFFFFF;
+	fill: #C7C0BF;
+	stroke-width: 0px;
+	opacity: 1.0;
+}
+text.minValueLabel{
+	stroke: #FFFFFF;
+	fill: #C7C0BF;
+	stroke-width: 0px;
+	opacity: 1.0;
+}
+text.avgValueLabel{
+	stroke: #FFFFFF;
+	fill: #C7C0BF;
+	stroke-width: 0px;
+	opacity: 1.0;
+}
+text.maxValueLabel{
+	stroke: #FFFFFF;
+	fill: #C7C0BF;
+	stroke-width: 0px;
+	opacity: 1.0;
+}
+text.gaugeLabel{
+	fill: #C7C0BF;
+	stroke-width: 0px;
+}
+circle.outerRing{
+	fill: #ccc;
+	stroke-width: 0.5px;
+	stroke: #000;
+	opacity: 0.0;
+}
+circle.innerCircle{
+	fill: #fff;
+	stroke-width: 2px;
+	stroke: #e0e0e0;
+	opacity: 0.0;
+}
+text.currentValue{
+	fill: #C7C0BF;
+	stroke-width: 0px;
+	opacity: 1;
+}
+path.dialPointer{
+	fill: #dc3912;
+	stroke: #c63310;
+	fill-opacity: 0.6;
+}
+circle.dialButton{
+	fill: #00035C;
+	stroke: #00035C;
+	opacity: 0.9;
+}
