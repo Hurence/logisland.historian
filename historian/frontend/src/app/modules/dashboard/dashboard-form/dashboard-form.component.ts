@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Dashboard } from '../modele/Dashboard';
+import { Dashboard } from '../../../core/modele/dashboard/Dashboard';
 import { BaseDynamicFormComponentEmitter } from '../../../shared/dynamic-form/BaseDynamicFormComponentEmitter';
 import { Operation } from '../../datasource/ConfigurationToApply';
 import { QuestionControlService } from '../../../shared/dynamic-form/question-control.service';

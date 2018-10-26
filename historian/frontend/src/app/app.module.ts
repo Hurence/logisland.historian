@@ -34,6 +34,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { DatasourceModule } from './modules/datasource/datasource.module';
 import { FileUtil } from './shared/file/file.service';
 import { DashboardService } from './modules/dashboard/dashboard.service';
+import { GaugeConverter } from './core/modele/gauge/GaugeConverter';
 
 /**
  * This function is used internal to get a string instance of the `<base href="" />` value from `index.html`.
@@ -97,6 +98,7 @@ export function getBaseHref(platformLocation: PlatformLocation): string {
     CookieService,
     FileUtil,
     DashboardService,
+    GaugeConverter,
   ],
   bootstrap: [AppComponent],
 })

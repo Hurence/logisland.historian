@@ -250,7 +250,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
           },
           reject: () => {
             // workaround as p-dropdown seems bugged see : https://github.com/primefaces/primeng/issues/877
-            this.menu.setDashboardDropDownValue(this.currentTagsSelection);
+            this.menu.setTagsSelectionDropDownValue(this.currentTagsSelection);
           }
         });
       }

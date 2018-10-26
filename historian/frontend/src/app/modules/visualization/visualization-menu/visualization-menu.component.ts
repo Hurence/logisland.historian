@@ -5,9 +5,8 @@ import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range
 import { TagsSelection } from '../../selection/Selection';
 import { ProfilService } from '../../../profil/profil.service';
 import { SelectionDashboardComponent } from '../../selection/selection-dashboard/selection-dashboard.component';
-import { Dashboard, BackGauge } from '../../dashboard/modele/Dashboard';
-import { DashboardService } from '../../dashboard/dashboard.service';
-import { tap } from 'rxjs/operators';
+import { Dashboard } from '../../../core/modele/dashboard/Dashboard';
+import { DashboardSelectionComponent } from '../../dashboard/dashboard-selection/dashboard-selection.component';
 
 @Component({
   selector: 'app-visualization-menu',
@@ -48,6 +47,9 @@ export class VisualizationMenuComponent implements OnInit {
 
   @ViewChild(SelectionDashboardComponent)
   private selectionDashboardComp: SelectionDashboardComponent;
+
+  @ViewChild(DashboardSelectionComponent)
+  private dashboardSelectionComponent: DashboardSelectionComponent;
 
   onAutoRefreshIntervalChanged(newVal: AutoRefreshInterval) {
     this.autoRefreshIntervalChange.emit(newVal);
@@ -93,8 +95,13 @@ export class VisualizationMenuComponent implements OnInit {
   }
 
   // work around bug p-dropdown
-  setDashboardDropDownValue(selection: TagsSelection) {
+  setTagsSelectionDropDownValue(selection: TagsSelection) {
     this.selectionDashboardComp.dropDown.updateSelectedOption(selection);
+  }
+
+  // work around bug p-dropdown
+  setDashboardDropDownValue(dashboard: Dashboard) {
+    this.dashboardSelectionComponent.dropDown.updateSelectedOption(dashboard);
   }
 
   updateDashboard(dashboard: Dashboard) {

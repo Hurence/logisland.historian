@@ -4,7 +4,7 @@ import { Dropdown } from 'primeng/dropdown';
 import { ConfirmationService } from 'primeng/api';
 import { ProfilService } from '../../../profil/profil.service';
 import { DashboardService } from '../dashboard.service';
-import { Dashboard } from '../modele/Dashboard';
+import { Dashboard } from '../../../core/modele/dashboard/Dashboard';
 import { IModification, Operation } from '../../datasource/ConfigurationToApply';
 import { tap } from 'rxjs/operators';
 import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
@@ -84,7 +84,7 @@ export class DashboardSelectionComponent implements OnInit {
           this.dashboards = dashboards;
           this.selectedDashboard = dashboard;
           this.dashboardChange.emit(this.selectedDashboard);
-          this.closeEditDialog();    
+          this.closeEditDialog();
         });
       })
     ).subscribe();
@@ -109,7 +109,7 @@ export class DashboardSelectionComponent implements OnInit {
                 this.dashboardChange.emit(null);
               } else {
                 this.dashboardChange.emit(dashboards[0]);
-              }              
+              }
             });
           });
       },

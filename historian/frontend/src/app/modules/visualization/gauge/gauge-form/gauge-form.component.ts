@@ -1,28 +1,13 @@
-import { Component, ViewEncapsulation, Input } from '@angular/core';
+import { Component, ViewEncapsulation, Input, OnInit } from '@angular/core';
 import { BaseDynamicFormComponentEmitter } from '../../../../shared/dynamic-form/BaseDynamicFormComponentEmitter';
 import { Operation } from '../../../datasource/ConfigurationToApply';
 import { QuestionControlService } from '../../../../shared/dynamic-form/question-control.service';
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { ZoneRangeColors } from '../../../graph/gauge-chart/gauge';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { HistorianTag } from '../../../tag/modele/HistorianTag';
 import { TagUtils } from '../../../tag/modele/TagUtils';
 import { ArrayQuestion } from '../../../../shared/dynamic-form/question-array';
-
-
-export interface ZoneRangeConfig {
-  from: number | HistorianTag;
-  to: number | HistorianTag;
-  color: ZoneRangeColors;
-}
-
-export interface BackendGaugeConfig {
-  value: HistorianTag;
-  label: string;
-  min: number | HistorianTag;
-  max: number | HistorianTag;
-  zoneranges: ZoneRangeConfig[];
-}
+import { BackendGaugeConfig } from '../../../../core/modele/gauge/Gauge';
 
 @Component({
   selector: 'app-gauge-form',
@@ -30,7 +15,7 @@ export interface BackendGaugeConfig {
   styleUrls: ['./gauge-form.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendGaugeConfig> {
+export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendGaugeConfig> implements OnInit {
 
   @Input() formOperation: Operation = Operation.CREATE;
 
@@ -38,6 +23,10 @@ export class GaugeFormComponent extends BaseDynamicFormComponentEmitter<BackendG
               protected confirmationService: ConfirmationService,
               private fb: FormBuilder) {
     super(qcs, confirmationService);
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
   }
 
   protected create(): BackendGaugeConfig {

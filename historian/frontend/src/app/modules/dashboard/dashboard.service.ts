@@ -4,7 +4,7 @@ import { IModelService } from '../../shared/base-model-service';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Utilities } from '../../shared/utilities.service';
 import { HttpClient } from '@angular/common/http';
-import { Dashboard } from './modele/Dashboard';
+import { Dashboard } from '../../core/modele/dashboard/Dashboard';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
