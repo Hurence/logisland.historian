@@ -1,6 +1,6 @@
 import { DropdownQuestion } from './../../../../shared/dynamic-form/question-dropdown';
 import { HistorianTag } from './../../../tag/modele/HistorianTag';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
 import { AutoRefreshInterval, autoRefreshIntervalBuiltIn, AutoRefreshIntervalUtils }
   from '../../../../shared/refresh-rate-selection/auto-refresh-interval';
 import { CookieService } from 'ngx-cookie-service';
@@ -28,13 +28,15 @@ import { VisualizationMenuComponent } from '../../visualization-menu/visualizati
 import { GaugeConverter } from '../../../../core/modele/gauge/GaugeConverter';
 import { BackGauge, BackendGaugeConfig, GaugeRawParams } from '../../../../core/modele/gauge/Gauge';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ComponentCanDeactivate } from '../../../../shared/BaseCompoenentCanDeactivate';
+import { applyMixins } from '../../../../core/mixin/MixinBase';
 
 @Component({
   selector: 'app-gauge-dashboard',
   templateUrl: './gauge-dashboard.component.html',
   styleUrls: ['./gauge-dashboard.component.css']
 })
-export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable implements OnInit, OnDestroy {
+export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable implements OnInit, OnDestroy, ComponentCanDeactivate {
 
   gaugeFormOperation: Operation = Operation.UPDATE;
   gaugeForForm: BackendGaugeConfig;
@@ -293,6 +295,11 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     this.updateGaugesData(this.gaugeConfigs);
   }
 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any): void {
+    console.error('should be overriden by mixins');
+  }
+
   /**
    * SECTION Gauges updates
    * iterate all BackendGaugeConfig and update all GaugeParams accordingly
@@ -412,3 +419,5 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     };
   }
 }
+// Add properties from ComponentCanDeactivate into GaugeDashboardComponent. It is a workaround for multiple inheritance or Trait scalalike.
+applyMixins(GaugeDashboardComponent, [ComponentCanDeactivate]);

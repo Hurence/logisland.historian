@@ -14,12 +14,13 @@ import { NgTreenodeService } from '../tag/service/ng-treenode.service';
 import { HistorianTagTreeComponent } from '../tag/tag-tree/historian-tag-tree/historian-tag-tree.component';
 import { LineChartComponent } from '../graph/line-chart/line-chart.component';
 import { VisualizationMenuComponent } from './visualization-menu/visualization-menu.component';
+import { ComponentCanDeactivate } from '../../shared/BaseCompoenentCanDeactivate';
 
 @Component({
   templateUrl: './visualization.component.html',
   styleUrls: ['./visualization.component.css']
 })
-export class VisualizationComponent implements OnInit, OnDestroy {
+export class VisualizationComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
 
   @ViewChild(HistorianTagTreeComponent)
   private treeTag: HistorianTagTreeComponent;
@@ -103,7 +104,9 @@ export class VisualizationComponent implements OnInit, OnDestroy {
               private selectionService: SelectionService,
               private ngTreenodeService: NgTreenodeService,
               private cookieService: CookieService,
-              protected confirmationService: ConfirmationService) {}
+              protected confirmationService: ConfirmationService) {
+                super();
+              }
 
   ngOnInit() {
     if (!this.treeNodes && !this.loadingTree) {
