@@ -27,6 +27,7 @@ import { ConfirmationService } from 'primeng/api';
 import { VisualizationMenuComponent } from '../../visualization-menu/visualization-menu.component';
 import { GaugeConverter } from '../../../../core/modele/gauge/GaugeConverter';
 import { BackGauge, BackendGaugeConfig, GaugeRawParams } from '../../../../core/modele/gauge/Gauge';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 @Component({
   selector: 'app-gauge-dashboard',
@@ -78,6 +79,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   set autoRefreshInterval(newAutoRefreshInterval: AutoRefreshInterval) {
     this._autoRefreshInterval = newAutoRefreshInterval;
     this.cookieService.set('autoRefreshInterval', JSON.stringify(this._autoRefreshInterval));
+    this.dashboardIsClean = false;
     this.changeRefreshRate(+newAutoRefreshInterval.refrashInterval);
   }
 
@@ -91,6 +93,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   set timeRange(newTimeRange: TimeRangeFilter) {
     this._timeRange = newTimeRange;
     this.cookieService.set('timeRange', JSON.stringify(this._timeRange));
+    this.dashboardIsClean = false;
     this.updateGaugesData(this.gaugeConfigs);
   }
 
@@ -186,6 +189,12 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
         });
       }
     }
+  }
+
+  canDeactivate(currentRoute?: ActivatedRouteSnapshot,
+    currentState?: RouterStateSnapshot,
+    nextState?: RouterStateSnapshot): boolean {
+      return this.dashboardIsClean;
   }
 
   /**
