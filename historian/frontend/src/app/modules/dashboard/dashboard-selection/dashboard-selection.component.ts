@@ -84,7 +84,7 @@ export class DashboardSelectionComponent implements OnInit {
         this.dashboardService.getAll().subscribe(dashboards => {
           this.dashboards = dashboards;
           this.selectedDashboard = dashboard;
-          this.dashboardChange.emit(this.selectedDashboard);
+          this.dashboardUpdated.emit(this.selectedDashboard);
           this.closeEditDialog();
         });
       })
