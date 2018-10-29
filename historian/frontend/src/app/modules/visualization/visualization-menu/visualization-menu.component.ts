@@ -44,6 +44,8 @@ export class VisualizationMenuComponent implements OnInit {
   @Output() gaugeAdded = new EventEmitter();
   @Output() dashboardSaved = new EventEmitter<Dashboard>();
 
+  @Output() dashboardChangeAfterDelete = new EventEmitter<Dashboard>();
+
 
   @ViewChild(SelectionDashboardComponent)
   private selectionDashboardComp: SelectionDashboardComponent;
@@ -72,6 +74,10 @@ export class VisualizationMenuComponent implements OnInit {
   onDashboardChanged(newVal: Dashboard) {
     this.dashboardChange.emit(newVal);
     this.menuItemActive = '';
+  }
+
+  onDashboardChangedAfterDelete(dashboard: Dashboard): void {
+    this.dashboardChangeAfterDelete.emit(dashboard);
   }
 
   onDashboardUpdated(updatedVal: Dashboard) {

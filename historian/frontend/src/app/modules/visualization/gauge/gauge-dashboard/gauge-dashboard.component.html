@@ -9,6 +9,7 @@
     (gaugeAdded)="onGaugeAdded()"
     (dashboardChange)="onDashboardChanged($event)"
     (dashboardUpdated)="onDashboardUpdated($event)"
+    (dashboardChangeAfterDelete)="onDashboardChangedAfterDelete($event)"    
     [timeRangeSelector]="true"
     [(timeRange)]="timeRange"     
     [autoRefreshIntervalSelector] = "true"

@@ -193,6 +193,10 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     }
   }
 
+  onDashboardChangedAfterDelete(dashboard: Dashboard): void {
+    this.updateDashBoardScreen(dashboard.id);
+  }
+
   canDeactivate(currentRoute?: ActivatedRouteSnapshot,
     currentState?: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): boolean {

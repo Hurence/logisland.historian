@@ -22,6 +22,7 @@ export class DashboardSelectionComponent implements OnInit {
   @Input() selectedDashboard: Dashboard;
   @Output() dashboardChange = new EventEmitter<Dashboard>();
   @Output() dashboardUpdated = new EventEmitter<Dashboard>();
+  @Output() dashboardChangeAfterDelete = new EventEmitter<Dashboard>();
   // Form to add new selection of tags
   displayAdd = false;
   addDashboardQuestions: QuestionBase<any>[];
@@ -106,9 +107,9 @@ export class DashboardSelectionComponent implements OnInit {
               this.dashboards = dashboards;
               this.selectedDashboard = dashboard;
               if (dashboards.length === 0) {
-                this.dashboardChange.emit(null);
+                this.dashboardChangeAfterDelete.emit(null);
               } else {
-                this.dashboardChange.emit(dashboards[0]);
+                this.dashboardChangeAfterDelete.emit(dashboards[0]);
               }
             });
           });

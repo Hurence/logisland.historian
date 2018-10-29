@@ -49,7 +49,7 @@
 </div>
 <div [hidden]="menuItemActive !== 'dashboard'">    
   <app-dashboard-selection [selectedDashboard]="dashboard" (dashboardChange)="onDashboardChanged($event)"
-    (dashboardUpdated)="onDashboardUpdated($event)"></app-dashboard-selection>
+    (dashboardUpdated)="onDashboardUpdated($event)" (dashboardChangeAfterDelete)="onDashboardChangedAfterDelete($event)"></app-dashboard-selection>
 </div>
 <div *ngIf="autoRefreshIntervalSelector" [hidden]="menuItemActive !== 'autoRefreshInterval'">
   <app-refresh-rate-selection [autoRefreshInterval]="autoRefreshInterval" (autoRefreshIntervalChange)="onAutoRefreshIntervalChanged($event)"></app-refresh-rate-selection>
