@@ -243,7 +243,11 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     dashboard.panels = panels;
     dashboard.from = this.timeRange.start;
     dashboard.to = this.timeRange.end;
-    dashboard.autorefresh = +this.autoRefreshInterval.refrashInterval;
+    if (this.autoRefreshInterval === autoRefreshIntervalBuiltIn.NONE) {
+      dashboard.autorefresh = 0;
+    } else {
+      dashboard.autorefresh = +this.autoRefreshInterval.refrashInterval;
+    }
     this.dashboardService.update(dashboard, dashboard.id).subscribe(ds => {
       this.dashboardIsClean = true;
     });
