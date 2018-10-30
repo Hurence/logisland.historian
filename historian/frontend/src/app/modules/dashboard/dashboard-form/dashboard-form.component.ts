@@ -5,6 +5,7 @@ import { Operation } from '../../datasource/ConfigurationToApply';
 import { QuestionControlService } from '../../../shared/dynamic-form/question-control.service';
 import { ConfirmationService } from 'primeng/api';
 import { KeycloakService } from 'keycloak-angular';
+import { timeRangeBuiltIn } from '../../../shared/time-range-selection/time-range-filter';
 
 @Component({
   selector: 'app-dashboard-form',
@@ -14,6 +15,9 @@ import { KeycloakService } from 'keycloak-angular';
 export class DashboardFormComponent extends BaseDynamicFormComponentEmitter<Dashboard> {
 
   @Input() formOperation: Operation = Operation.CREATE;
+  @Input() defaultAutorefresh: number = 10000;
+  @Input() defaultFrom: string = timeRangeBuiltIn.LAST_15_MINUTES.start;
+  @Input() defaultTo: string = timeRangeBuiltIn.LAST_15_MINUTES.end;
 
   constructor(protected qcs: QuestionControlService,
     protected confirmationService: ConfirmationService,
@@ -27,9 +31,9 @@ export class DashboardFormComponent extends BaseDynamicFormComponentEmitter<Dash
       name: '',
       owner: this.keycloakService.getUsername(),
       description: '',
-      from: '',
-      to: '',
-      autorefresh: 0, // long
+      from: this.defaultFrom,
+      to: this.defaultTo,
+      autorefresh: this.defaultAutorefresh, // long
       panels: []
     };
   }
