@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { IModelService } from '../../shared/base-model-service';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Utilities } from '../../shared/utilities.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Dashboard } from '../../core/modele/dashboard/Dashboard';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -54,6 +54,11 @@ export class DashboardService implements IModelService<Dashboard> {
             break;
           }
           default: {
+            this.messageService.add({
+              severity: 'error',
+              summary: `Could not add ${this.objNameForMsg}`,
+              detail: `error code '${resp.status}'`,
+            });
             console.error(`createOrReplace(${obj}) failed`, resp);
             break;
           }
@@ -78,7 +83,7 @@ export class DashboardService implements IModelService<Dashboard> {
           case 400: {
             this.messageService.add({
               severity: 'error',
-              summary: `Could not add ${this.objNameForMsg}`,
+              summary: `Could not update ${this.objNameForMsg}`,
               detail: `Invalid id ${id}`,
             });
             break;
@@ -86,12 +91,17 @@ export class DashboardService implements IModelService<Dashboard> {
           case 404: {
             this.messageService.add({
               severity: 'error',
-              summary: `Could not add ${this.objNameForMsg}`,
+              summary: `Could not update ${this.objNameForMsg}`,
               detail: `Id not found ${id}`,
             });
             break;
           }
           default: {
+            this.messageService.add({
+              severity: 'error',
+              summary: `Could not update ${this.objNameForMsg}`,
+              detail: `error code '${resp.status}'`,
+            });
             console.error(`createOrReplace(${obj}) failed`, resp);
             break;
           }
@@ -117,5 +127,49 @@ export class DashboardService implements IModelService<Dashboard> {
 
   protected create(item: Dashboard): Dashboard {
     return item;
+  }
+
+  handleSaveError(error: any, messageService: MessageService): void {
+    const err: HttpErrorResponse = error;
+    switch (err.status) {
+      case 400: {
+        messageService.add({
+          severity: 'error',
+          summary: `Could not add dashboard`,
+          detail: `Bad request`,
+        });
+        break;
+      }
+      default: {
+        messageService.add({
+          severity: 'error',
+          summary: `Could not add dashboard`,
+          detail: `error code '${err.status}'`,
+        });
+        break;
+      }
+    }
+  }
+
+  handleUpdateError(error: any, messageService: MessageService): void {
+    const err: HttpErrorResponse = error;
+        switch (err.status) {
+          case 400: {
+            messageService.add({
+              severity: 'error',
+              summary: `Could not update dashboard`,
+              detail: `Bad request`,
+            });
+            break;
+          }
+          default: {
+            messageService.add({
+              severity: 'error',
+              summary: `Could not update dashboard`,
+              detail: `error code '${err.status}'`,
+            });
+            break;
+          }
+        }
   }
 }

@@ -8,7 +8,7 @@ import { Dashboard } from '../../../core/modele/dashboard/Dashboard';
 import { IModification, Operation } from '../../datasource/ConfigurationToApply';
 import { tap } from 'rxjs/operators';
 import { TextboxQuestion } from '../../../shared/dynamic-form/question-textbox';
-import { Observable } from 'rxjs';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'app-dashboard-selection',
@@ -39,7 +39,8 @@ export class DashboardSelectionComponent implements OnInit {
 
   constructor(private confirmationService: ConfirmationService,
               private dashboardService: DashboardService,
-              public profilService: ProfilService) {}
+              public profilService: ProfilService,
+              protected messageService: MessageService) {}
 
   ngOnInit() {
     this.addDashboardQuestions = this.getAddQuestions();
@@ -74,8 +75,12 @@ export class DashboardSelectionComponent implements OnInit {
           this.dashboardChange.emit(this.selectedDashboard);
           this.closeAddDialog();
         });
-      })
-    ).subscribe();
+      }),
+    ).subscribe(
+      success => {},
+      err => this.dashboardService.handleSaveError(err, this.messageService),
+      () => { }
+    );
   }
 
   onDashboardUpdated(selectionModif: IModification<Dashboard>) {
@@ -88,7 +93,11 @@ export class DashboardSelectionComponent implements OnInit {
           this.closeEditDialog();
         });
       })
-    ).subscribe();
+    ).subscribe(
+      success => {},
+      err => this.dashboardService.handleUpdateError(err, this.messageService),
+      () => { }
+    );
   }
 
   delete(dashboard: Dashboard) {
