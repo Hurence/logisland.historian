@@ -128,14 +128,23 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
     if (this.dashboardInitialization && !this.dashboardInitialization.closed) {
       this.dashboardInitialization.unsubscribe();
     }
-    this.dashboardInitialization = this.dashboardService.get(dashboardId).subscribe(ds => {
-      if (this.redrawDashBoardSubscription && !this.redrawDashBoardSubscription.closed) {
-        this.redrawDashBoardSubscription.unsubscribe();
-      }
-      this.redrawDashBoardSubscription = this.changeDashboard(ds).subscribe(datasource => {
+    this.dashboardInitialization = this.dashboardService.get(dashboardId).subscribe(
+      ds => {
+        if (this.redrawDashBoardSubscription && !this.redrawDashBoardSubscription.closed) {
+          this.redrawDashBoardSubscription.unsubscribe();
+        }
+        this.redrawDashBoardSubscription = this.changeDashboard(ds).subscribe(
+          datasource => {
+            this.loadingDashboard = false;
+          },
+          err => {
+            this.loadingDashboard = false;
+          }
+        );
+      },
+      err => {
         this.loadingDashboard = false;
       });
-    });
   }
 
   ngOnDestroy(): void {
