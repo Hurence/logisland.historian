@@ -20,7 +20,8 @@
 
     <!-- BOOLEAN -->
     <ng-container *ngSwitchCase="'boolean'">
-      <p-checkbox [id]="question.elementId" [formControlName]="question.key" binary="true" [label]="question.label"></p-checkbox>
+      <p-checkbox [id]="question.elementId" [formControlName]="question.key" binary="true" [label]="question.label"
+      class="form-control"></p-checkbox>
     </ng-container>
 
     <!-- RADIO -->
@@ -32,9 +33,10 @@
     <ng-container *ngSwitchCase="'dropdown'">
       <label *ngIf="!question.labelHidden" [for]="question.elementId">{{question.label}}</label>
       <p-dropdown [formControlName]="question.key" 
+        class="form-control"
         [options]="question.possibleValues"
         [placeholder]="question.placeholder"                     
-        [autoWidth]="false" [style]="{'min-width':'15em'}">
+        [autoWidth]="false" [style]="{'min-width':'10em'}">
       </p-dropdown>
       <!-- TO USE IF USING OTHER THAN primitive type see primeng doc        
         optionLabel="node_id"

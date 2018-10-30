@@ -66,13 +66,17 @@
     </div>
   </ng-container>
 
-  <p-dialog [(visible)]="displayGaugeForm" [modal]="true">      
-    <p-header>
-        Configure your new gauge
-    </p-header>
-      <app-gauge-form [questions]="gaugeEditQuestions"  [formOperation]='gaugeFormOperation'
-      [item]="gaugeForForm" (submitted)="onGaugeConfigChange($event, selectedGaugeIndex)"></app-gauge-form>
-    <p-footer>
-    </p-footer>
+  <p-dialog [(visible)]="displayGaugeForm" [modal]="true" [responsive]="true" [resizable]="true" styleClass="gauge-form-dialog">    
+        <p-header>
+            Configure your new gauge
+        </p-header>
+        <!-- calc(100vh - 250px) class="ui-grid ui-grid-responsive ui-fluid"-->
+        <!-- <div style="overflow-y: auto; max-width: 900px;"> -->
+            <app-gauge-form [questions]="gaugeEditQuestions"  [formOperation]='gaugeFormOperation'
+            [item]="gaugeForForm" (submitted)="onGaugeConfigChange($event, selectedGaugeIndex)"></app-gauge-form>   
+        <!-- </div>            -->
+        <p-footer>
+        </p-footer>
+    
   </p-dialog>
 </div>

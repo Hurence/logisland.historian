@@ -6,3 +6,7 @@
   display: flex;
   justify-content: center;  
 }
+::ng-deep .ui-dialog.gauge-form-dialog {
+  width: 100%;
+  max-width: 1000px;
+}

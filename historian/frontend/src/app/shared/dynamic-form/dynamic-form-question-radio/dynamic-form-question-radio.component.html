@@ -1,4 +1,4 @@
-<h6>{{question.label}}</h6>
+<h6 *ngIf="showLabel">{{question.label}}</h6>
 <div [formGroup]="form">      
     <span *ngFor="let value of question.possibleValues" style="margin-right: 40px;">
         <p-radioButton [name]="name" [value]="value"
