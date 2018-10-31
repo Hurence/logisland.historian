@@ -425,3 +425,20 @@ circle.dialButton{
 	stroke: #666;
 	opacity: 1.0;
 }
+.draggable {
+  background-color: purple;
+  cursor: move;
+  user-select: none;
+}
+.draggable.dragging {
+  background-color: coral;
+}
+.draggable.sortable.dragging {
+  background: none;
+  border: 1px dashed black;
+  color: transparent;
+}
+.movable:not(.dragging) {
+  background-color: green;
+  transition: transform 300ms ease-in-out;
+}

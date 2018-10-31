@@ -41,6 +41,7 @@ import {ProgressBarModule} from 'primeng/progressbar';
 import { DynamicFormQuestionHistorianTagDropdownComponent } from
   './dynamic-form/dynamic-form-question-historian-tag-dropdown/dynamic-form-question-historian-tag-dropdown.component';
 import { ConditionalQuestionComponent } from './dynamic-form/conditional-question/conditional-question.component';
+import { DraggableModule } from '../modules/draggable/draggable.module';
 
 @NgModule({
   imports: [
@@ -69,7 +70,8 @@ import { ConditionalQuestionComponent } from './dynamic-form/conditional-questio
     RadioButtonModule,
     CalendarModule,
     MenubarModule,
-    ProgressBarModule
+    ProgressBarModule,
+    DraggableModule
   ],
   exports: [
     CommonModule,
@@ -103,7 +105,8 @@ import { ConditionalQuestionComponent } from './dynamic-form/conditional-questio
     TimeRangeSelectionComponent,
     CalendarModule,
     MenubarModule,
-    ProgressBarModule
+    ProgressBarModule,
+    DraggableModule
   ],
   providers: [
     TreeDragDropService,
@@ -118,7 +121,7 @@ import { ConditionalQuestionComponent } from './dynamic-form/conditional-questio
     DynamicFormQuestionRadioComponent,
     TimeRangeSelectionComponent,
     DynamicFormQuestionHistorianTagDropdownComponent,
-    ConditionalQuestionComponent,
+    ConditionalQuestionComponent,    
   ],
 })
 export class SharedModule { }
