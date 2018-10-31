@@ -30,7 +30,8 @@
               "src/assets/css/button.css",
               "src/assets/css/progress-bar.css",
               "src/assets/css/tooltip.css",
-              "src/assets/css/gauge/current_gauge.css"
+              "src/assets/css/gauge/current_gauge.css",
+              "src/assets/scss/draggable.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -132,7 +133,8 @@
               "src/assets/css/button.css",
               "src/assets/css/progress-bar.css",
               "src/assets/css/tooltip.css",
-              "src/assets/css/gauge/current_gauge.css"
+              "src/assets/css/gauge/current_gauge.css",
+              "src/assets/scss/draggable.scss"
             ],
             "assets": [
               "src/assets",
@@ -184,7 +186,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "css"
+      "styleext": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "app"
