@@ -223,7 +223,9 @@ public class TagsApiService {
                                            char separator, Charset charset,
                                            int bulkSize,
                                            List<HeaderDefault> defaultHeaders) {
-        return TagImportCsv.importCsvAsTag(multiPartCsv, separator, charset, this,
+        ImportTagReport ret = TagImportCsv.importCsvAsTag(multiPartCsv, separator, charset, this,
                 datasourcesApiService, bulkSize, defaultHeaders);
+        dataflowsApiService.updateOpcDataflow();
+        return ret;
     }
 }

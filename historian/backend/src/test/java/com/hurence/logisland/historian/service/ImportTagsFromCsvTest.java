@@ -41,11 +41,13 @@ public class ImportTagsFromCsvTest {
                     .pollingMode(Tag.PollingModeEnum.POLLING).enabled(true)
                     .description("hihihihi").datasourceId("fake datasource")
                     .dataType(Tag.DataTypeEnum.DOUBLE)
+                    .setTagName("Random.Int1")
             );
             add(new Tag().nodeId("Triangle.wave.Int1").updateRate(15000)
                     .pollingMode(Tag.PollingModeEnum.SUBSCRIBE).enabled(false)
                     .description("triangle wave").datasourceId("fake datasource")
                     .dataType(Tag.DataTypeEnum.DOUBLE)
+                    .setTagName("Triangle.wave.Int1")
             );
         }};
         sb.setLength(0);
