@@ -69,6 +69,10 @@ public class DatasourcesApiService {
         return repository.findById(itemId);
     }
 
+    public boolean exist(String itemId) {
+        return repository.existsById(itemId);
+    }
+
     public List<Datasource> getAllDatasources(String fq) {
 
         String query = fq;

@@ -1,5 +1,3 @@
-import { CanGetId } from '../../shared/dynamic-form/BaseDynamicFormComponentEmitter';
-
 export interface ITagsSelection {
     name: string;
     owner?: string;
@@ -15,7 +13,7 @@ export interface ITagsSelectionArray extends ITagsSelection {
     tagIds: string[];
 }
 
-export class TagsSelection implements ITagsSelectionSet, CanGetId  {
+export class TagsSelection implements ITagsSelectionSet  {
 
     name: string;
     tagIds: Set<string>;
@@ -68,7 +66,7 @@ export class TagsSelection implements ITagsSelectionSet, CanGetId  {
     }
 }
 
-export class TagsSelectionArray implements ITagsSelectionArray, CanGetId  {
+export class TagsSelectionArray implements ITagsSelectionArray  {
 
     name: string;
     tagIds: string[];

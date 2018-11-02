@@ -8,7 +8,7 @@ services:
     environment:
       - JAVA_MEMORY=1g
     hostname: chronix
-    image: 'hurence/historian-chronix:1.0.0'
+    image: 'hurence/historian-chronix:1.0.1-RC1'
     networks:
       historian-be:
         aliases:
@@ -40,18 +40,9 @@ services:
         aliases:
           - backend
 
-  keycloak:
-    container_name: keycloak
-    image: 'hurence/historian-keycloak:1.0.0'
-    environment:
-      - PROXY_ADDRESS_FORWARDING=true
-    networks:
-      historian-be:
-        aliases:
-          - keycloak
   logisland:
     container_name: logisland
-    image: 'hurence/historian-logisland:1.0.0'
+    image: 'hurence/historian-logisland:1.0.0-RC1-MIN'
     command: "bin/logisland.sh --conf /conf/historian-remote.yaml"
     ports:
       - '4050:4050'
@@ -61,6 +52,31 @@ services:
       historian-be:
         aliases:
           - logisland
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    env_file:
+      - 'conf/grafana/env.grafana'
+    networks:
+      historian-be:
+        aliases:
+          - grafana
+    volumes:
+      # Data persistency
+      # sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
+      - ~/data/grafana:/var/lib/grafana
+      - ./conf/grafana/provisioning/:/etc/grafana/provisioning/
+  keycloak:
+    container_name: keycloak
+    image: 'hurence/historian-keycloak:1.0.1'
+    environment:
+      - PROXY_ADDRESS_FORWARDING=true
+    networks:
+      historian-be:
+        aliases:
+          - keycloak
+  
   nginx:
    container_name: nginx
    image: nginx:1.13

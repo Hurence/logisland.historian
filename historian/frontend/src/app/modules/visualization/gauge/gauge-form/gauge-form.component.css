@@ -1,0 +1,48 @@
+.gauge-form {
+  overflow-x: 'auto';
+  max-height: '1000px';
+}
+
+.gauge-form * .form-control {
+  height: 45px;
+  width: 200px;
+}
+
+div.form-group {
+  margin-left: 5px;
+  margin-right: 5px;  
+}
+/* @media (min-width: 768px) {
+ 
+} */
+#zoneranges .sub-questions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(275px, auto)) 40px 40px;
+  /* grid-template-columns: repeat(5, minmax(100px, auto)); */
+  grid-template-rows: repeat(auto-fit, minmax(20px, auto));
+}
+
+#zoneranges .sub-questions .form-control {
+  display: inline-block;
+  width: auto;    
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#zoneranges .sub-questions .errorMessage {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.conditional-question {
+  margin-left: 5px;
+  margin-right: 5px;
+  display: inline-block;
+}
+
+.array-question-remove-button, .array-question-add-button {
+  height: 30px;
+  width: 30px;  
+  margin-bottom: 30px;
+  margin-top: 30px;
+}

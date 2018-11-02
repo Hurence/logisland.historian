@@ -1,17 +1,14 @@
 <div [formGroup]="form">
   <div [formArrayName]="question.key" class="" [id]="question.elementId">
     <div *ngFor="let control of formArray.controls; let i=index" [formGroupName]="i">
-
-      <div style="margin-left: 1em;">
-        <div *ngFor="let subQuestion of question.questions" class="">
-          <app-question [question]="subQuestion" [form]="control"></app-question>
-        </div>
-
-        <button (click)="removeItem(i)" type="button">Remove this from {{question.label}}</button>
+      <div style="margin-left: 1em;" class="sub-questions">
+        <div *ngFor="let subQuestion of question.questions">          
+          <app-question [question]="subQuestion" [form]="control" [name]='calculName(subQuestion, i)'></app-question>
+        </div>        
+        <button (click)="removeItem(i)" type="button" class="array-question-remove-button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+        <button (click)="addItem()" type="button" class="array-question-add-button"><i class="fa fa-plus" aria-hidden="true"></i></button>
       </div>
-      <br>
     </div>
-
-    <button (click)="addItem()" type="button">Add one more in {{question.label}}</button>
+    <button *ngIf="formArray.controls.length === 0" (click)="addItem()" type="button">Add one more in {{question.label}}</button>
   </div>
 </div>

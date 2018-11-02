@@ -5,6 +5,8 @@ import { TimeRangeFilter } from '../../../shared/time-range-selection/time-range
 import { TagsSelection } from '../../selection/Selection';
 import { ProfilService } from '../../../profil/profil.service';
 import { SelectionDashboardComponent } from '../../selection/selection-dashboard/selection-dashboard.component';
+import { Dashboard } from '../../../core/modele/dashboard/Dashboard';
+import { DashboardSelectionComponent } from '../../dashboard/dashboard-selection/dashboard-selection.component';
 
 @Component({
   selector: 'app-visualization-menu',
@@ -15,9 +17,11 @@ export class VisualizationMenuComponent implements OnInit {
 
   menuItemActive: string = '';
 
-  @Input() tagSelector?: boolean = true;
-  @Input() autoRefreshIntervalSelector?: boolean = true;
-  @Input() timeRangeSelector?: boolean = true;
+  @Input() tagSelector?: boolean = false;
+  @Input() dashboardSelector?: boolean = false;
+  @Input() autoRefreshIntervalSelector?: boolean = false;
+  @Input() timeRangeSelector?: boolean = false;
+  @Input() viewSelector?: boolean = false;
 
   @Input() autoRefreshInterval: AutoRefreshInterval;
   @Output() autoRefreshIntervalChange = new EventEmitter<AutoRefreshInterval>();
@@ -27,14 +31,27 @@ export class VisualizationMenuComponent implements OnInit {
 
   @Input() tagSelection: TagsSelection;
   @Output() tagSelectionChange = new EventEmitter<TagsSelection>();
-
   @Output() tagSelectionUpdated = new EventEmitter<TagsSelection>();
+
+  @Input() dashboard: Dashboard;
+  @Output() dashboardChange = new EventEmitter<Dashboard>();
+  @Output() dashboardUpdated = new EventEmitter<Dashboard>();
 
   @Input() view: string;
   @Output() viewChange = new EventEmitter<string>();
 
+  @Input() dashboardSaving: boolean = false;
+  @Output() gaugeAdded = new EventEmitter();
+  @Output() dashboardSaved = new EventEmitter<Dashboard>();
+
+  @Output() dashboardChangeAfterDelete = new EventEmitter<Dashboard>();
+
+
   @ViewChild(SelectionDashboardComponent)
   private selectionDashboardComp: SelectionDashboardComponent;
+
+  @ViewChild(DashboardSelectionComponent)
+  private dashboardSelectionComponent: DashboardSelectionComponent;
 
   onAutoRefreshIntervalChanged(newVal: AutoRefreshInterval) {
     this.autoRefreshIntervalChange.emit(newVal);
@@ -46,12 +63,25 @@ export class VisualizationMenuComponent implements OnInit {
     this.menuItemActive = '';
   }
 
-  ontagSelectionChanged(newVal: TagsSelection) {
+  onTagSelectionChanged(newVal: TagsSelection) {
     this.tagSelectionChange.emit(newVal);
   }
 
   onTagSelectionUpdated(updatedVal: TagsSelection) {
     this.tagSelectionUpdated.emit(updatedVal);
+  }
+
+  onDashboardChanged(newVal: Dashboard) {
+    this.dashboardChange.emit(newVal);
+    this.menuItemActive = '';
+  }
+
+  onDashboardChangedAfterDelete(dashboard: Dashboard): void {
+    this.dashboardChangeAfterDelete.emit(dashboard);
+  }
+
+  onDashboardUpdated(updatedVal: Dashboard) {
+    this.dashboardUpdated.emit(updatedVal);
   }
 
   onViewChanged(newVal: string) {
@@ -71,7 +101,20 @@ export class VisualizationMenuComponent implements OnInit {
   }
 
   // work around bug p-dropdown
-  setDashboardDropDownValue(selection: TagsSelection) {
+  setTagsSelectionDropDownValue(selection: TagsSelection) {
     this.selectionDashboardComp.dropDown.updateSelectedOption(selection);
+  }
+
+  // work around bug p-dropdown
+  setDashboardDropDownValue(dashboard: Dashboard) {
+    this.dashboardSelectionComponent.dropDown.updateSelectedOption(dashboard);
+  }
+
+  updateDashboard(dashboard: Dashboard) {
+    this.dashboardSaved.emit(dashboard);
+  }
+
+  addNewGauge(dashboard: Dashboard) {
+    this.gaugeAdded.emit();
   }
 }

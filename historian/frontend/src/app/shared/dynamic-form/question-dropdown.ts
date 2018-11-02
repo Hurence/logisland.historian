@@ -1,15 +1,15 @@
 import { QuestionBase, IQuestionBase } from './question-base';
 
-export interface IDropdownQuestion extends IQuestionBase<string> {
-  options: {key: string, value: string}[];
+export interface IDropdownQuestion<T> extends IQuestionBase<T> {
+  possibleValues: T[];
 }
 
-export class DropdownQuestion extends QuestionBase<string> implements IDropdownQuestion {
+export class DropdownQuestion<T> extends QuestionBase<T> implements IDropdownQuestion<T> {
   controlType = 'dropdown';
-  options: {key: string, value: string}[];
+  possibleValues: T[];
 
-  constructor(options: IDropdownQuestion) {
+  constructor(options: IDropdownQuestion<T>) {
     super(options);
-    this.options = options['options'] || [];
+    this.possibleValues = options.possibleValues || [];
   }
 }

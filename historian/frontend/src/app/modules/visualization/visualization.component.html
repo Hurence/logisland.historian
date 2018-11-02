@@ -2,16 +2,19 @@
 <div class="ui-g h-100">
   <div class='ui-g-12 no-padding-side'>
     <app-visualization-menu 
+    [timeRangeSelector]="view !== 'tabular'"
     [timeRange]="timeRange" 
     (timeRangeChange)="onTimeRangeChanged($event)"
+    [autoRefreshIntervalSelector] = "true"
     [autoRefreshInterval]="autoRefreshInterval" 
     (autoRefreshIntervalChange)="onAutoRefreshIntervalChanged($event)"
+    [tagSelector]="true"
     [tagSelection]="currentTagsSelection"
     (tagSelectionChange)="onSelectionChanged($event)"
     (tagSelectionUpdated)="onSelectionUpdated($event)"
+    [viewSelector]="true"
     [view]="view"
-    (viewChange)="onViewChanged($event)"
-    [timeRangeSelector]="view !== 'tabular'"></app-visualization-menu>
+    (viewChange)="onViewChanged($event)"></app-visualization-menu>
   </div> 
 
 
@@ -41,8 +44,8 @@
         </div>
         <div class='ui-g-9 ui-sm-12' *ngIf="view === 'tabular'">      
           <app-tag-dataview [tags]="tags" [refreshRate]="autoRefreshInterval.refrashInterval"></app-tag-dataview>
-        </div>    
+        </div> 
       </ng-container>
-    </div>
+    </div>        
   </div>
 </div>

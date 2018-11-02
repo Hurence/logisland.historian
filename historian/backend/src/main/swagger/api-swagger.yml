@@ -589,6 +589,86 @@ paths:
              description: unexpected error
              schema:
                $ref: '#/definitions/Error'
+  /tags/importcsv:
+    post:
+      tags:
+       - tag
+       - import
+      summary: import definition of tags in csv format
+      description: import definition of tags in csv format
+      operationId: importTagsFromCsv
+      produces:
+       - application/json
+      parameters:
+       - name: file
+         in: formData
+         description: the csv file content
+         required: true
+         type: file
+       - name: default_headers
+         in: query
+         description: |
+          default value for missing headers. For example :
+            datasource_id:ma datasource id,type:double
+          would use "ma datasource id" as default value for datasource_id if not present in csv
+          and use "double" as default value for type if not present in csv
+         required: false
+         type: string
+       - name: separator
+         in: query
+         description: the csv file separator
+         required: false
+         type: string
+         default: ';'
+       - name: charset
+         in: query
+         description: the csv file charset encoding
+         required: false
+         type: string
+         default: 'UTF-8'
+       - name: bulkSize
+         in: query
+         description: the number of line to inject at the same time
+         required: false
+         type: integer
+         format: int32
+         default: 10000
+
+      responses:
+       '200':
+         description: import succeeded
+         schema:
+           $ref: '#/definitions/ImportTagReport'
+       '422':
+         description: csv file not containing required headers.
+         schema:
+           type: array
+           items:
+             $ref: '#/definitions/Header'
+       default:
+         description: unexpected error
+         schema:
+           $ref: '#/definitions/Error'
+    get:
+      tags:
+        - tag
+        - import
+      summary: return expected headers in csv file for POST request
+      description: return expected headers in csv file for POST request
+      operationId: getTagsCsvHeaders
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: list of expected headers (required or not)
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Header'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
   /tags/measures:
      post:
        tags:
@@ -653,7 +733,38 @@ paths:
            description: unexpected error
            schema:
              $ref: '#/definitions/Error'
-
+  /tags/measures/getmany:
+     post:
+       tags:
+         - tag
+         - measure
+       summary: get specified tag measures
+       description: get specified tag measures
+       operationId: getTagMeasures
+       produces:
+         - application/json
+       parameters:
+        - name: requests
+          in: body
+          description: requests for measures to retrieve
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MeasuresRequest'
+       responses:
+         '200':
+           description: Measures
+           schema:
+             type: array
+             items:
+               $ref: '#/definitions/Measures'
+         '404':
+            description: Tag resource not found
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/Error'
   /tags/measures/generator:
      post:
        tags:
@@ -1258,7 +1369,9 @@ definitions:
     type: object
     properties:
       start_time:
-        type: string
+        description: timestamp
+        type: integer
+        format: int64
       generation_duration:
         type: integer
         format: int32
@@ -1273,6 +1386,27 @@ definitions:
         type: integer
         format: int64
       metrics:
+         type: array
+         items:
+          type: string
+
+  ImportTagReport:
+    type: object
+    properties:
+      start_time:
+        description: timestamp
+        type: integer
+        format: int64
+      import_duration:
+        type: integer
+        format: int32
+      num_tags_imported:
+        type: integer
+        format: int64
+      num_tags_not_imported:
+        type: integer
+        format: int64
+      errors:
          type: array
          items:
           type: string
@@ -1350,19 +1484,6 @@ definitions:
         type: array
         items:
           type: string
-
-  PrivateSelection:
-    allOf: # Combines the Selection and the inline model
-      - $ref: '#/definitions/Selection'
-      - type: object
-        description: a Selection is a selection of tags.
-        required:
-          - id
-          - owner
-        properties:
-          id:
-            description: concatenation of owner with name for example
-            type: string
 
   Permissions:
     type: object
@@ -1472,6 +1593,10 @@ definitions:
     properties:
       name:
         type: string
+      datasource_id:
+        type: string
+      tag_id:
+        type: string
       start:
         type: integer
         format: int64
@@ -1504,6 +1629,48 @@ definitions:
         type: array
         items:
           $ref : "#/definitions/Function"
+
+  MeasuresRequest:
+    type: object
+    description: contain request option for data of tag
+    required:
+      - tagId
+    properties:
+      tagId:
+        type: string
+      start:
+        type: string
+        description: |
+          date de début (borne inf) peut-être exprimée sous les formats suivants :
+            timestamp : 4578965
+            date-time : 2015-11-25T12:06:57.330Z
+            relatif   : NOW-30DAYS
+      end:
+        type: string
+        description: |
+           date de fin (borne sup) peut-être exprimée sous les formats suivants :
+             timestamp : 4578965
+             date-time : 2015-11-25T12:06:57.330Z
+             relatif   : NOW-30DAYS
+      function:
+        type: string
+        description: |
+          Multiple analyses, aggregations, and transformations are allowed per query.
+          If so, Chronix will first execute the transformations in the order they occur.
+          Then it executes the analyses and aggregations on the result of the chained transformations.
+          For example the query:
+
+            max;min;trend;movavg:10,minutes;scale:4
+
+          is executed as follows:
+
+            Calculate the moving average
+            Scale the result of the moving average by 4
+            Calculate the max, min, and the trend based on the prior result.
+      no_values:
+        type: boolean
+        description: will retrieve only function values, no data points
+        default: false
 
   Function:
     type: object
@@ -1640,3 +1807,24 @@ definitions:
           items:
             $ref: '#/definitions/TreeNode'
 
+  Header:
+    required:
+      - name
+      - required
+    properties:
+      name:
+        type: string
+      required:
+        type: boolean
+      type:
+        type: string
+
+  HeaderDefault:
+    required:
+      - name
+      - value
+    properties:
+      name:
+        type: string
+      value:
+        type: string

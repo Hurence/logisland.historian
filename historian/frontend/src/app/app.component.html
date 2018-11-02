@@ -44,7 +44,7 @@
             </a>
             <div class="collapse show sub-menu" id="menu-settings">
               <a routerLinkActive="active" routerLink="/sources-and-tags" class="list-group-item" data-parent="#menu-settings"><i class="fa fa-plug" aria-hidden="true"></i>Datasources</a>
-            <!-- <a routerLinkActive="active" routerLink="/sources-and-tags/tags" class="list-group-item" data-parent="#menu-settings"><i class="fa fa-tags" aria-hidden="true"></i>Tags</a> -->
+              <a routerLinkActive="active" routerLink="/tag-import" class="list-group-item" data-parent="#menu-settings"><i class="fa fa-tags" aria-hidden="true"></i>Csv Tag Import</a>
             </div>
             <!-- START menu selection -->
             <!-- <a routerLinkActive="active" routerLink="/selections" class="list-group-item"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i>Selection</a> -->
@@ -54,7 +54,9 @@
             <span class="hidden-sm-down">Visualization</span>
             </a>
             <div class="collapse show sub-menu" id="menu-visualization">
-              <a class="list-group-item" routerLinkActive="active" routerLink="/visualization" data-parent="#menu-visualization"><i class="fa fa-tags" aria-hidden="true"></i>Tags</a>              
+              <a class="list-group-item" routerLinkActive="active" routerLink="/visualization" data-parent="#menu-visualization"><i class="fa fa-tags" aria-hidden="true"></i>Tags</a>
+              <a class="list-group-item" routerLinkActive="active" routerLink="/gauges" data-parent="#menu-visualization"><i class="fa fa-tachometer" aria-hidden="true"></i>Gauges</a>
+              <a class="list-group-item" href="/grafana/login/generic_oauth" data-parent="#menu-visualization"><i class="fa fa-columns" aria-hidden="true"></i>Dashboards</a>              
             </div>  
             <div class="mx-auto logo-hurence" >
                 <span>

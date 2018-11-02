@@ -19,9 +19,11 @@
         <field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
         <field name="lastModified" type="long" indexed="true" stored="true" multiValued="false"/>
         <field name="modificationReason" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="lastPingDateTime" type="date" indexed="true" stored="true" multiValued="false"/>
+        <!-- string Json fields -->
         <field name="services" type="string" indexed="true" stored="true" multiValued="false"/>
         <field name="streams" type="string" indexed="true" stored="true" multiValued="false"/>
-        <field name="lastPingDateTime" type="date" indexed="true" stored="true" multiValued="false"/>
+
 
 
     </fields>

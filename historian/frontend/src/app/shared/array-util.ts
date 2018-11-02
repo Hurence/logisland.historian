@@ -9,12 +9,27 @@ export class ArrayUtil {
     return (index !== -1);
   }
 
-  remove<T>(array: T[], find: (T) => boolean) {
+  remove<T>(array: T[], find: (T) => boolean): T {
       const index = array.findIndex(find);
       if (index !== -1) {
+          const deleted = array[index];
           array.splice(index, 1);
+          return deleted;
+      } else {
+        return undefined;
       }
   }
+
+
+  removeIndex<T>(array: T[], index: number): T {
+    if (index >= 0 && index < array.length) {
+        const deleted = array[index];
+        array.splice(index, 1);
+        return deleted;
+    } else {
+      return undefined;
+    }
+}
 
        /** group the array by a key
    *

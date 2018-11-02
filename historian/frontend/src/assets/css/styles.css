@@ -85,15 +85,10 @@ mark, .mark {
   padding: auto;
 }
 
-
 /*.ng-valid.required  */
 .ng-valid[required] {
   border-left: 5px solid #42A948;
 }
-
-/* .form-group.ng-invalid:not(form) {
-  border-left: 5px solid #a94442;
-} */
 
 .form-control.ng-invalid:not(form) {
   border-left: 5px solid #a94442;
@@ -304,4 +299,129 @@ mark, .mark {
 
 .pointer {
   cursor: pointer;
+}
+
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: green;
+}
+
+.orange {
+  background-color: orange;
+}
+
+h1 {
+  font-size: 1rem;
+  height: 100%;
+  padding: 15px 15px 0 15px;
+}
+
+text.minMarkerText,text.minValueText,path.minMarker {
+	stroke: #0091B2;
+	fill:  #0091B2;
+	opacity: 0.50;
+}
+
+text.avgMarkerText,text.avgValueText,path.avgMarker {
+	stroke: #E82DFF;
+	fill:  #E82DFF;
+	opacity: 0.50;
+}
+
+text.maxMarkerText,text.maxValueText,path.maxMarker {
+	stroke: #FF8314;
+	fill:  #FF8314;
+	opacity: 0.50;
+}
+path.zones{
+	opacity: 1.0;
+}
+path.greenZone{
+	fill: #109618;
+}
+path.yellowZone{
+	fill: #FF9900;
+}
+path.redZone{
+	fill: #DC3912;
+}
+line.ticks{
+	
+}
+line.minorTick{
+	stroke: #666;
+	stroke-width: 1px;
+}
+line.majorTick{
+	stroke: #333;
+	stroke-width: 2px;
+}
+text.labels{
+
+}
+text.lowerBoundLabel{
+	fill: #333;
+	stroke-width: 0px;
+}
+text.upperBoundLabel{
+	fill: #333;
+	stroke-width: 0px;
+}
+text.currentValueLabel{
+	stroke: #FFFFFF;
+	fill: #000000;
+	stroke-width: 0px;
+	opacity: 1.0;
+}
+text.minValueLabel{
+	stroke: #FFFFFF;
+	fill: #000000;
+	stroke-width: 0px;
+	opacity: 1.0;
+}
+text.avgValueLabel{
+	stroke: #FFFFFF;
+	fill: #000000;
+	stroke-width: 0px;
+	opacity: 1.0;
+}
+text.maxValueLabel{
+	stroke: #FFFFFF;
+	fill: #000000;
+	stroke-width: 0px;
+	opacity: 1.0;
+}
+text.gaugeLabel{
+	fill: #333;
+	stroke-width: 0px;
+}
+circle.outerRing{
+	fill: #ccc;
+	stroke-width: 0.5px;
+	stroke: #000;
+	opacity: 1.0;
+}
+circle.innerCircle{
+	fill: #fff;
+	stroke-width: 2px;
+	stroke: #e0e0e0;
+	opacity: 1.0;
+}
+text.currentValue{
+	fill: #000;
+	stroke-width: 0px;
+	opacity: 1;
+}
+path.dialPointer{
+	fill: #dc3912;
+	stroke: #c63310;
+	fill-opacity: 0.7;
+}
+circle.dialButton{
+	fill: #4684EE;
+	stroke: #666;
+	opacity: 1.0;
 }

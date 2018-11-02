@@ -1,6 +1,6 @@
 export interface IMeasuresRequest {
     itemId: string;
-    label: string; // label used in chart
+    label?: string; // label used in chart // TODO loook if we can remove that, this is not part of the request...
     /* Start date (inferior bound) can be expressed the following ways:
     timestamp : 4578965 date-time : 2015-11-25T12:06:57.330Z relatif : NOW-30DAYS */
     start?: string;
@@ -23,7 +23,7 @@ export interface CanBuildQuery {
 
 export class MeasuresRequest implements IMeasuresRequest, CanBuildQuery {
     itemId: string;
-    label: string;
+    label?: string;
     start?: string;
     end?: string;
     functions?: string;

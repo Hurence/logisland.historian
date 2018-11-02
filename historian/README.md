@@ -411,4 +411,28 @@ If this does not work you may have to rebuild
 
     ./mvnw clean install    
     
+# User interface
+
+## Import of csv tag
+
+You can import tag definition using the web ui by providing a
+csv file. 
+
+Here below, the exhaustive list of supported columns.
+
+
+| CSV HEADER | node_id | sampling_rate | read_mode | tag_monitored | description | type | server_scan_rate | group | datasource_id | tag_name |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| REQUIRED | true | true | false | true | false | true | false | false | true | false |
+| TYPE | string | integer | enum:[polling, subscribe] | boolean | string | enum:[int, long, float, double, string, array, bytes, boolean] | integer | string | string | string |
+| DESCRIPTION | Corresponds to id in opc server. | The sampling rate in milliseconds | When polling is used, the information is stored at fixed rate. When subscribe is used, the data is stored only if a change is detected. | If true, the tag will be monitored and its data will be stored. | A user friendly tag description | The tag type. At the moment only double is supported | The server side scan rate (informative) | The logical group the tag belongs to. Used to group tags in folders. | The id of the datasource the tag is defined. The datasource must already have been created before. | The user friendly tag name |
+
+An example:
+
+<pre>
+description;sampling_rate;read_mode;node_id;tag_monitored;datasource_id;type
+First tag;1000;polling;Sinusoid.PsFloat1;true;Prosys;double
+Second tag;1000;subscribe;Random.PsFloat1;true;Prosys;double
+</pre>
+
         

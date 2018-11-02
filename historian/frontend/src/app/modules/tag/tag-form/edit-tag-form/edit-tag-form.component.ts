@@ -13,7 +13,7 @@ import { Operation } from '../../../datasource/ConfigurationToApply';
   styleUrls: ['./edit-tag-form.component.css']
 })
 export class EditTagFormComponent extends BaseSingleTagForm implements OnInit {
-  protected formOperation: Operation = Operation.UPDATE;
+  formOperation: Operation = Operation.UPDATE;
 
   constructor(protected qcs: QuestionControlService,
               protected confirmationService: ConfirmationService,

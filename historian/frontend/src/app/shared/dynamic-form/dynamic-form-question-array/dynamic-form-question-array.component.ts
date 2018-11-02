@@ -3,6 +3,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 
 import { ArrayQuestion } from '../question-array';
 import { QuestionControlService } from '../question-control.service';
+import { QuestionBase } from '../question-base';
 
 @Component({
   selector: 'app-dynamic-form-question-array',
@@ -38,5 +39,9 @@ export class DynamicFormQuestionArrayComponent implements OnInit {
 
   private createAnArrayFormGroup(): FormGroup {
     return this.qcs.toFormGroup(this.question.questions);
+  }
+
+  calculName(subQuestion: QuestionBase<any>, index: number): string {
+    return `${subQuestion.key}-${index}`;
   }
 }

@@ -15,6 +15,8 @@ export class IQuestionBase<T> implements IQuestion {
   placeholder?: string;
   readonly?: boolean;
   hidden?: boolean;
+  labelHidden?: boolean;
+  errorHidden?: boolean;
   elementId?: string;
 }
 
@@ -30,6 +32,8 @@ export class QuestionBase<T> implements IQuestionBase<T> {
   elementId: string;
   value?: T;
   hidden?: boolean;
+  labelHidden?: boolean;
+  errorHidden?: boolean;
 
   constructor(options: IQuestionBase<T>) {
     this.value = options.value;
@@ -42,6 +46,8 @@ export class QuestionBase<T> implements IQuestionBase<T> {
     this.placeholder = options.placeholder || '';
     this.readonly = options.readonly || false;
     this.hidden = options.hidden || false;
+    this.labelHidden = options.labelHidden || options.hidden || false;
+    this.errorHidden = options.errorHidden || options.hidden || false;
     this.elementId = options.elementId || this.key;
   }
 

@@ -37,6 +37,10 @@ import { SearchComponent } from './search/search.component';
 import { TimeRangeSelectionComponent } from './time-range-selection/time-range-selection.component';
 import { CalendarModule } from 'primeng/calendar';
 import {MenubarModule} from 'primeng/menubar';
+import {ProgressBarModule} from 'primeng/progressbar';
+import { DynamicFormQuestionHistorianTagDropdownComponent } from
+  './dynamic-form/dynamic-form-question-historian-tag-dropdown/dynamic-form-question-historian-tag-dropdown.component';
+import { ConditionalQuestionComponent } from './dynamic-form/conditional-question/conditional-question.component';
 
 @NgModule({
   imports: [
@@ -65,6 +69,7 @@ import {MenubarModule} from 'primeng/menubar';
     RadioButtonModule,
     CalendarModule,
     MenubarModule,
+    ProgressBarModule
   ],
   exports: [
     CommonModule,
@@ -98,6 +103,7 @@ import {MenubarModule} from 'primeng/menubar';
     TimeRangeSelectionComponent,
     CalendarModule,
     MenubarModule,
+    ProgressBarModule
   ],
   providers: [
     TreeDragDropService,
@@ -111,6 +117,8 @@ import {MenubarModule} from 'primeng/menubar';
     RefreshRateSelectionComponent,
     DynamicFormQuestionRadioComponent,
     TimeRangeSelectionComponent,
+    DynamicFormQuestionHistorianTagDropdownComponent,
+    ConditionalQuestionComponent,
   ],
 })
 export class SharedModule { }

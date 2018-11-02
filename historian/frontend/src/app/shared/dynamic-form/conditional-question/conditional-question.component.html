@@ -1,0 +1,7 @@
+<div [formGroup]="form" class="conditional-question">  
+  <app-dynamic-form-question-radio [question]="this.question.conditionsQuestion" [form]="form" [name]="nameForConditional"
+  [showLabel]="false"></app-dynamic-form-question-radio>
+  <div *ngFor="let kv of this.question.conditionsResult">    
+    <app-question [question]="kv.thenQuestion" [form]="form" *ngIf="kv.ifKey === conditionControl.value"></app-question>
+  </div> 
+</div>

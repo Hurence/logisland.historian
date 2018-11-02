@@ -1,5 +1,4 @@
 import { environment } from '../../../../environments/environment';
-import { CanGetId } from '../../../shared/dynamic-form/BaseDynamicFormComponentEmitter';
 
 
 export interface ITag {
@@ -53,7 +52,7 @@ export const enum TagDataType {
 
 
 
-export abstract class Tag implements ITag, CanGetId {
+export abstract class Tag implements ITag {
     static TAG_UPDATE_RATE_DEFAUT: number = environment.TAG_UPDATE_RATE_DEFAUT;
 
     record_type: TagRecordType;

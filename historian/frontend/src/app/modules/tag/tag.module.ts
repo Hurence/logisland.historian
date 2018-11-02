@@ -10,6 +10,7 @@ import { OpcTagTreeAutomaticComponent } from './tag-tree/opc-tag-tree/opc-tag-tr
 import { OpcTagTreeManualComponent } from './tag-tree/opc-tag-tree/opc-tag-tree-manual/opc-tag-tree-manual.component';
 import { AddTagFormComponent } from './tag-form/add-tag-form/add-tag-form.component';
 import { EditTagFormComponent } from './tag-form/edit-tag-form/edit-tag-form.component';
+import { TagCsvImportComponent } from './tag-import/tag-csv-import.component';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import { EditTagFormComponent } from './tag-form/edit-tag-form/edit-tag-form.com
     OpcTagTreeManualComponent,
     AddTagFormComponent,
     EditTagFormComponent,
+    TagCsvImportComponent,
   ],
   providers: [],
 })

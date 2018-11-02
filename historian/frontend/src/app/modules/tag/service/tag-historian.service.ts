@@ -1,13 +1,15 @@
-import 'rxjs/add/observable/of';
 
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import {of,  Observable } from 'rxjs';
+
+
+import { HttpClient, HttpResponse, HttpRequest, HttpParams, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 import { RestTreeNode } from '../../../core/modele/RestTreeNode';
+import { IHeader, IDefaultHeader } from '../../../core/modele/rest/Header';
 import { IModelService } from '../../../shared/base-model-service';
 import { Utilities } from '../../../shared/utilities.service';
 import { HistorianTag, IHistorianTag } from '../modele/HistorianTag';
@@ -43,7 +45,7 @@ export class TagHistorianService implements IModelService<HistorianTag> {
 
   getAllWithIds(tagIds: string[]): Observable<HistorianTag[]> {
     if (tagIds.length === 0) {
-      return Observable.of([]);
+      return of([]);
     } else {
       const query = tagIds.map(id => `id:"${id}"`).join(' OR ');
       return this.getQuery(query);
@@ -191,5 +193,48 @@ export class TagHistorianService implements IModelService<HistorianTag> {
 
   getTreeTag(): Observable<RestTreeNode[]> {
     return this.http.get<RestTreeNode[]>(`${this.tagsUrl}tags/tree?limit=1`); // limit = 0 => solr facet only, return no tags
+  }
+  // (`${this.tagsUrl}tags/${encodeURIComponent(obj.id)}`, obj, { observe: 'response' })
+  // Observable<HttpEvent<{}>>
+  importTagCsv(csvFile: File, options?: {
+                                separator?: string,
+                                charset?: string,
+                                bulkSize?: number
+                                defaultValues?: IDefaultHeader[]
+                              }): Observable<HttpEvent<{}>> {
+    const formdata: FormData = new FormData();
+    formdata.append('file', csvFile, csvFile.name);
+    let params = new HttpParams();
+    if (options) {
+      if (options.separator !== null && options.separator !== undefined) {
+        params = params.set('separator', options.separator);
+      }
+      if (options.charset !== null && options.charset !== undefined) {
+        params = params.set('charset', options.charset);
+      }
+      if (options.bulkSize !== null && options.bulkSize !== undefined) {
+        params = params.set('bulkSize', options.bulkSize.toString());
+      }
+      if (options.defaultValues !== null && options.defaultValues !== undefined) {
+        formdata.append('default_headers', this.parseDefautValues(options.defaultValues));
+      }
+    }
+
+    const httpOptions = {
+      // headers: new HttpHeaders().set('Content-Type', 'multipart/form-data'),
+      reportProgress: true,
+      responseType: 'json' as 'json',
+      params: params
+    };
+    const req = new HttpRequest('POST', `${this.tagsUrl}tags/importcsv`, formdata, httpOptions);
+    return this.http.request(req);
+  }
+
+  getTagCsvHeaders(): Observable<IHeader[]> {
+    return this.http.get<IHeader[]>(`${this.tagsUrl}tags/importcsv`);
+  }
+
+  private parseDefautValues(defaultsValues: IDefaultHeader[]): string {
+    return defaultsValues.map(h => `${h.name}:${h.value}`).join(',');
   }
 }

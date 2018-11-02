@@ -1,0 +1,82 @@
+<div class="ui-g h-100">  
+  <div class='ui-g-12 no-padding-side'>
+    <!-- MENU FOR VIEW -->
+    <app-visualization-menu 
+    [dashboardSaving]="true"
+    (dashboardSaved)="onDashboardSave($event)"
+    [dashboardSelector]="true"
+    [dashboard]="dashboard"
+    (gaugeAdded)="onGaugeAdded()"
+    (dashboardChange)="onDashboardChanged($event)"
+    (dashboardUpdated)="onDashboardUpdated($event)"
+    (dashboardChangeAfterDelete)="onDashboardChangedAfterDelete($event)"    
+    [timeRangeSelector]="true"
+    [(timeRange)]="timeRange"     
+    [autoRefreshIntervalSelector] = "true"
+    [(autoRefreshInterval)]="autoRefreshInterval"></app-visualization-menu>
+  </div>     
+    
+  <ng-container [ngSwitch]="loadingDashboard">
+    <!-- LOADING DASHBOARD -->
+    <div class='ui-g-12 "center-text' *ngSwitchCase="true">
+      Loading dashboard...
+      <p-progressSpinner [style]="{width: '30px', height: '30px'}"
+                    strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
+    </div>
+    <!-- LOADED DASHBOARD -->
+    <div class='ui-g-12' *ngSwitchCase="false">
+      <!-- NORMAL DASHBOARD -->
+      <ng-container *ngIf="dashboard && gaugeConfigs.length !== 0">      
+        <div class='ui-g h-100'>
+          <div class='ui-g-12'>    
+              <ng-container *ngIf="!error">               
+                <div *ngFor="let dummy of ' '.repeat(gaugeRawParams.length).split(''), let i = index">
+                  <p-header class="panel-header-container">
+                    <button class="btn btn-success" (click)="showEditGaugeForm(i)">Edit</button>
+                    <button class="btn btn-danger" (click)="deleteGauge(i)">Delete</button>                
+                  </p-header>
+                  <div class="panel-main-container">
+                    <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
+                    [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
+                    [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
+                    [value]="gaugeRawParams[i].value" [idContainer]="'gaugeContainer' + i"
+                    [size]="600"></app-gauge-chart>
+                  </div>      
+                </div>
+              </ng-container>
+              <ng-container *ngIf="error && refreshingGauges">
+                Refreshing dashboard...
+                <p-progressSpinner [style]="{width: '30px', height: '30px'}"
+                    strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
+              </ng-container>
+              <ng-container *ngIf="error && !refreshingGauges">
+                Some value of tag could not be found.
+              </ng-container>
+            </div>       
+        </div>
+      </ng-container>
+      <!-- NO DASHBOARD SELECTED -->
+      <ng-container *ngIf="!dashboard">
+        No dashboard selected.
+      </ng-container>
+      <!-- EMPTY DASHBOARD -->
+      <ng-container *ngIf="dashboard && gaugeConfigs.length === 0">
+        Empty dashboard (you can add a new gauge in top rigth menu).
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <p-dialog [(visible)]="displayGaugeForm" [modal]="true" [responsive]="true" [resizable]="true" styleClass="gauge-form-dialog">    
+        <p-header>
+            Configure your new gauge
+        </p-header>
+        <!-- calc(100vh - 250px) class="ui-grid ui-grid-responsive ui-fluid"-->
+        <!-- <div style="overflow-y: auto; max-width: 900px;"> -->
+            <app-gauge-form [questions]="gaugeEditQuestions"  [formOperation]='gaugeFormOperation'
+            [item]="gaugeForForm" (submitted)="onGaugeConfigChange($event, selectedGaugeIndex)"></app-gauge-form>   
+        <!-- </div>            -->
+        <p-footer>
+        </p-footer>
+    
+  </p-dialog>
+</div>
