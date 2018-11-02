@@ -27,7 +27,6 @@
         <configuration>
           <nodeVersion>v8.12.0</nodeVersion>
           <yarnVersion>v1.9.4</yarnVersion>
-          <workingDirectory>src/main/resources/webapp</workingDirectory>
         </configuration>
         <executions>
           <execution>
