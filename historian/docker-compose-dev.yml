@@ -69,7 +69,7 @@ services:
       - ./conf/grafana/provisioning/:/etc/grafana/provisioning/
   keycloak:
     container_name: keycloak
-    image: 'hurence/historian-keycloak:1.0.1-SNAPSHOT'
+    image: 'hurence/historian-keycloak:1.0.1'
     environment:
       - PROXY_ADDRESS_FORWARDING=true
     networks:
