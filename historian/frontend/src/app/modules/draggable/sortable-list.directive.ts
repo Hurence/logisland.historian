@@ -1,5 +1,6 @@
 import { AfterContentInit, ContentChildren, Directive, EventEmitter, Output, QueryList } from '@angular/core';
 import { SortableDirective } from './sortable.directive';
+import { Subscription } from 'rxjs';
 
 export interface SortEvent {
   currentIndex: number;
@@ -30,12 +31,17 @@ export class SortableListDirective implements AfterContentInit {
   @Output() sort = new EventEmitter<SortEvent>();
 
   private clientRects: ClientRect[];
-
+  private subscriptions: Subscription[] = [];
+  
   ngAfterContentInit(): void {
-    this.sortables.forEach(sortable => {
-      sortable.dragStart.subscribe(() => this.measureClientRects());
-      sortable.dragMove.subscribe(event => this.detectSorting(sortable, event));
+    this.sortables.changes.subscribe(() => {
+      this.subscriptions.forEach(s => s.unsubscribe());
+      this.sortables.forEach(sortable => {
+        this.subscriptions.push(sortable.dragStart.subscribe(() => this.measureClientRects()));
+        this.subscriptions.push(sortable.dragMove.subscribe(event => this.detectSorting(sortable, event)));
+      })
     });
+    this.sortables.notifyOnChanges();
   }
 
   private measureClientRects() {
