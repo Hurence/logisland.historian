@@ -112,9 +112,9 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
               protected confirmationService: ConfirmationService,
               protected gaugeConverter: GaugeConverter) {
                 // TODO remove cookie and include timerange/autorefresh to dashboard config (including gauges)
-    super();    
+    super();
   }
- 
+
   sort(event: SortEvent) {
     console.log(`sort ${event.currentIndex}, ${event.newIndex}`);
     const currentBack = this.gaugeConfigs[event.currentIndex];
@@ -289,7 +289,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.arrayUtil.removeIndex(this.gaugeRawParams, index);
-        this.arrayUtil.removeIndex(this.gaugeConfigs, index);        
+        this.arrayUtil.removeIndex(this.gaugeConfigs, index);
         this.dashboardIsClean = false;
       },
       reject: () => { }
@@ -306,7 +306,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
       case Operation.CREATE:
         this.gaugeConfigs.push(gaugeConfModif.item);
         this.gaugeConverter.getGaugeRawParamsObs(gaugeConfModif.item, this.timeRange.start, this.timeRange.end).subscribe(rawParam => {
-          this.gaugeRawParams.push(rawParam);          
+          this.gaugeRawParams.push(rawParam);
           // TODO set gauge to loading ?
         });
         break;
@@ -358,7 +358,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
               lastTagsValue.set(`${m.datasource_id}|${m.tag_id}` , aggLast.value);
             }
           });
-          this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, lastTagsValue);          
+          this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, lastTagsValue);
           this.error = false;
           this.refreshingGauges = false;
         },
@@ -369,7 +369,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
         }
       );
     } else {
-      this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, new Map());      
+      this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, new Map());
       this.error = false;
       this.refreshingGauges = false;
     }

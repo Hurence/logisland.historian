@@ -27,7 +27,7 @@ export class MovableAreaDirective implements AfterContentInit, OnDestroy {
       this.movables.forEach(movable => {
         this.subscriptions.push(movable.dragStart.subscribe(() => this.measureBoundaries(movable)));
         this.subscriptions.push(movable.dragMove.subscribe(() => this.maintainBoundaries(movable)));
-      })
+      });
     });
     this.movables.notifyOnChanges();
   }
@@ -38,7 +38,7 @@ export class MovableAreaDirective implements AfterContentInit, OnDestroy {
     }
   }
 
-  private measureBoundaries(movable: MovableDirective): void {    
+  private measureBoundaries(movable: MovableDirective): void {
     const viewRect: ClientRect = this.element.nativeElement.getBoundingClientRect();
     const movableRect: ClientRect = movable.getBoundingClientRect();
     this.boundaries = {

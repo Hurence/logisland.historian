@@ -16,8 +16,10 @@ import { OverlayModule } from '@angular/cdk/overlay';
     CommonModule,
     OverlayModule
   ],
-  declarations: [DraggableDirective, MovableDirective, MovableAreaDirective, SortableDirective, SortableListDirective, DroppableDirective, DropzoneDirective, DraggableHelperDirective],
-  exports: [DraggableDirective, MovableDirective, MovableAreaDirective, SortableDirective, SortableListDirective, DroppableDirective, DropzoneDirective, DraggableHelperDirective],
+  declarations: [DraggableDirective, MovableDirective, MovableAreaDirective, SortableDirective, SortableListDirective,
+    DroppableDirective, DropzoneDirective, DraggableHelperDirective],
+  exports: [DraggableDirective, MovableDirective, MovableAreaDirective, SortableDirective, SortableListDirective,
+    DroppableDirective, DropzoneDirective, DraggableHelperDirective],
   providers: [
     DroppableService
   ]

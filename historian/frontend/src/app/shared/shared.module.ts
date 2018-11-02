@@ -121,7 +121,7 @@ import { DraggableModule } from '../modules/draggable/draggable.module';
     DynamicFormQuestionRadioComponent,
     TimeRangeSelectionComponent,
     DynamicFormQuestionHistorianTagDropdownComponent,
-    ConditionalQuestionComponent,    
+    ConditionalQuestionComponent,
   ],
 })
 export class SharedModule { }
