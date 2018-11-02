@@ -1,18 +1,22 @@
-.panel-header-container {
-  display: flex;
-  justify-content: center;  
-}
-.panel-main-container {
-  display: flex;
-  justify-content: center;  
-}
 ::ng-deep .ui-dialog.gauge-form-dialog {
   width: 100%;
   max-width: 1000px;
 }
-.box {
-  /* background-color: blueviolet; */
-  border: 1px solid black;
-  padding: 10px 20px;
-  display: inline-block;
+
+.panel-item {
+  padding: 20px 20px;
 }
+
+ul {
+  display: inline-flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+
+  &.horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+

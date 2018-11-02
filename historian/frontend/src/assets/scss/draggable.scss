@@ -2,7 +2,6 @@
 @include cdk-overlay();
 
 .draggable {
-  background-color: purple;
   cursor: move;
   user-select: none;
 }
