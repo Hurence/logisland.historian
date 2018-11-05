@@ -411,27 +411,28 @@ If this does not work you may have to rebuild
 
     ./mvnw clean install    
     
-# Pages of application explanation
+# User interface
 
 ## Import of csv tag
 
-  Csv can use any separator and any encoding (but you should specify them as input in application form).
-  Here the list of headers required or not. Non-listed headers would be ignored.
+You can import tag definition using the web ui by providing a
+csv file. 
 
-CSV HEADER | node_id | sampling_rate | read_mode | tag_monitored | description | type | server_scan_rate | group | datasource_id | tag_name
---- | --- | --- | --- |--- |--- |--- |--- |--- |--- |--- |---
-REQUIRED | true | true | false | true | false | true | false | false | true | false
-TYPE | string | integer | enum:[polling, subscribe] | boolean | string | enum:[int, long, float, double, string, array, bytes, boolean] | integer | string | string | string
-DESCRIPTION | correspond to id in opc server, it is the user responsability to enter the rigth value | number of milliseconds for fetching new values of the tag | polling mode will save a point even if there was none at each intervall of sampling_rate whereas subscribe mode will not | If this tag should be directly monitored by logisland or not | a description of the tag | type is only informative here as we only manage double tag at the moment, it is the user responsability to enter the rigth value | number of milliseconds that the opc server fetches new values for the tag, this is only an informative field, it is the user responsability to enter the rigth value | this field can be used to group tags in folders, tags with same group within a datasource will be grouped | datasource_id of the tag, corresponding datasource should already exist in historian (the value to use is the datasource name), it is the user responsability to enter the rigth value | It is an informative information that will be used in Web ui for labels.
-width | widthhhhhhhhhhhh | widthhhhhhhhhhhhhhhhhhhh | widthhhhhhhhhhhhhhhhhhhh |widthhhhhhhhhhhhhhhhhhhh |widthhhhhhhhhhhhhhhhhhhh | widthhhhhhhhhhhhhhhhhhhh | widthhhhhhhhhhhhhhhhhhhh | widthhhhhhhhhhhhhhhhhhhh | widthhhhhhhhhhhhhhhhhhhh |widthhhhhhhhhhhhhhhhhhhh |
+Here below, the exhaustive list of supported columns.
 
 
+| CSV HEADER | node_id | sampling_rate | read_mode | tag_monitored | description | type | server_scan_rate | group | datasource_id | tag_name |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| REQUIRED | true | true | false | true | false | true | false | false | true | false |
+| TYPE | string | integer | enum:[polling, subscribe] | boolean | string | enum:[int, long, float, double, string, array, bytes, boolean] | integer | string | string | string |
+| DESCRIPTION | Corresponds to id in opc server. | The sampling rate in milliseconds | When polling is used, the information is stored at fixed rate. When subscribe is used, the data is stored only if a change is detected. | If true, the tag will be monitored and its data will be stored. | A user friendly tag description | The tag type. At the moment only double is supported | The server side scan rate (informative) | The logical group the tag belongs to. Used to group tags in folders. | The id of the datasource the tag is defined. The datasource must already have been created before. | The user friendly tag name |
 
+An example:
 
-
-
-
-
-
+<pre>
+description;sampling_rate;read_mode;node_id;tag_monitored;datasource_id;type
+First tag;1000;polling;Sinusoid.PsFloat1;true;Prosys;double
+Second tag;1000;subscribe;Random.PsFloat1;true;Prosys;double
+</pre>
 
         

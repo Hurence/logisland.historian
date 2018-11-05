@@ -8,9 +8,6 @@ server:
 spring:
   application:
     name: logisland-historian
-  freemarker:
-    template-loader-path: classpath:/templates
-    suffix: .ftl
 
   data:
     solr:
@@ -47,6 +44,7 @@ keycloak:
   cors-allowed-methods: "*"
   cors-exposed-headers: "*"
   enable-basic-auth: true
+  proxy-url: ${keycloak_proxy_url:}
 
 
 

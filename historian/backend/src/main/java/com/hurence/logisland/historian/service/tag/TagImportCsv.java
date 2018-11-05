@@ -11,6 +11,7 @@ import com.hurence.logisland.historian.rest.v1.model.error.IOCsvException;
 import com.hurence.logisland.historian.rest.v1.model.error.RequiredHeaderMissingCsvException;
 import com.hurence.logisland.historian.service.DatasourcesApiService;
 import com.hurence.logisland.historian.service.TagsApiService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -222,6 +223,7 @@ public final class TagImportCsv {
             sb.append(io.getMessage());
             throw new IOCsvException(sb.toString());
         }
+
         if (!buffer.isEmpty()) {
             tagService.SaveOrUpdateMany(buffer);
             counter += buffer.size();
@@ -274,6 +276,9 @@ public final class TagImportCsv {
         fieldMappers.forEach(mapper -> {
             mapper.updateTag(map, tag);
         });
+        if (StringUtils.isBlank(tag.getTagName())) {
+            tag.setTagName(tag.getNodeId());
+        }
         return tag;
     }
 
