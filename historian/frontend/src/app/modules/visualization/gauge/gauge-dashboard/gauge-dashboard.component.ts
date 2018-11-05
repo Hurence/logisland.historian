@@ -30,11 +30,12 @@ import { BackGauge, BackendGaugeConfig, GaugeRawParams } from '../../../../core/
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ComponentCanDeactivate } from '../../../../shared/BaseCompoenentCanDeactivate';
 import { applyMixins } from '../../../../core/mixin/MixinBase';
+import { SortEvent } from '../../../draggable/sortable-list.directive';
 
 @Component({
   selector: 'app-gauge-dashboard',
   templateUrl: './gauge-dashboard.component.html',
-  styleUrls: ['./gauge-dashboard.component.css']
+  styleUrls: ['./gauge-dashboard.component.scss']
 })
 export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable implements OnInit, OnDestroy, ComponentCanDeactivate {
 
@@ -112,6 +113,19 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
               protected gaugeConverter: GaugeConverter) {
                 // TODO remove cookie and include timerange/autorefresh to dashboard config (including gauges)
     super();
+  }
+
+  sort(event: SortEvent) {
+    console.log(`sort ${event.currentIndex}, ${event.newIndex}`);
+    const currentBack = this.gaugeConfigs[event.currentIndex];
+    const swapWithBack = this.gaugeConfigs[event.newIndex];
+    this.gaugeConfigs[event.newIndex] = currentBack;
+    this.gaugeConfigs[event.currentIndex] = swapWithBack;
+
+    const currentRaw = this.gaugeRawParams[event.currentIndex];
+    const swapWithRaw = this.gaugeRawParams[event.newIndex];
+    this.gaugeRawParams[event.newIndex] = currentRaw;
+    this.gaugeRawParams[event.currentIndex] = swapWithRaw;
   }
 
   ngOnInit() {
