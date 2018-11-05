@@ -1,3 +1,7 @@
+/**
+ * Thanks to Dirk Luijk and his tutorial: https://www.youtube.com/watch?v=KeU83fCoW10&feature=youtu.be
+ */
+
 import { Directive, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { DraggableDirective } from './draggable.directive';
 import { GlobalPositionStrategy, Overlay, OverlayRef } from '@angular/cdk/overlay';

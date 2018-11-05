@@ -1,3 +1,6 @@
+/**
+ * Thanks to Dirk Luijk and his tutorial: https://www.youtube.com/watch?v=KeU83fCoW10&feature=youtu.be
+ */
 import { Directive, Output, EventEmitter, HostListener, HostBinding, ElementRef } from '@angular/core';
 
 @Directive({

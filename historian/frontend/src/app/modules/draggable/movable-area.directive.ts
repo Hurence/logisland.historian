@@ -1,3 +1,6 @@
+/**
+ * Thanks to Dirk Luijk and his tutorial: https://www.youtube.com/watch?v=KeU83fCoW10&feature=youtu.be
+ */
 import { Directive, AfterContentInit, ContentChildren, QueryList, ElementRef, OnDestroy } from '@angular/core';
 import { MovableDirective } from './movable.directive';
 import { Subscription } from 'rxjs';

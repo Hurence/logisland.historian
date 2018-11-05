@@ -1,3 +1,6 @@
+/**
+ * Thanks to Dirk Luijk and his tutorial: https://www.youtube.com/watch?v=KeU83fCoW10&feature=youtu.be
+ */
 import { AfterContentInit, ContentChildren, Directive, EventEmitter, Output, QueryList } from '@angular/core';
 import { SortableDirective } from './sortable.directive';
 import { Subscription } from 'rxjs';

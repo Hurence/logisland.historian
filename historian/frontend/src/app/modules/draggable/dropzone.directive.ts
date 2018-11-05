@@ -1,3 +1,6 @@
+/**
+ * Thanks to Dirk Luijk and his tutorial: https://www.youtube.com/watch?v=KeU83fCoW10&feature=youtu.be
+ */
 import { Directive, ElementRef, EventEmitter, HostBinding, HostListener, OnInit, Output, SkipSelf } from '@angular/core';
 import { DroppableService } from './droppable.service';
 
