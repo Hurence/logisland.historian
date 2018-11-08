@@ -20,7 +20,7 @@ except ImportError:
 
 
 from opcua import ua, uamethod, Server
-
+from opcua.server.history_sql import HistorySQLite
 
 class SubHandler(object):
 
@@ -113,7 +113,8 @@ if __name__ == "__main__":
     # create directly some objects and variables
     myobj = server.nodes.objects.add_object(idx, "MyObject")
     myvar = myobj.add_variable(idx, "MyVariable", 6.7)
-    mysin = myobj.add_variable(idx, "MySin", 0, ua.VariantType.Float)
+    mysin = myobj.add_variable(idx, "MySin", 0, ua.VariantType.Double)
+    mysin.set_writable()
     myvar.set_writable()    # Set MyVariable to be writable by clients
     mystringvar = myobj.add_variable(idx, "MyStringVariable", "Really nice string")
     mystringvar.set_writable()    # Set MyVariable to be writable by clients
@@ -131,28 +132,34 @@ if __name__ == "__main__":
     # creating a default event object
     # The event object automatically will have members for all events properties
     # you probably want to create a custom event type, see other examples
-    myevgen = server.get_event_generator()
-    myevgen.event.Severity = 300
+    # myevgen = server.get_event_generator()
+    # myevgen.event.Severity = 300
 
     # starting!
     server.start()
     print("Available loggers are: ", logging.Logger.manager.loggerDict.keys())
     # logger.log("Available loggers are (with logger): ")    
     
+    # Configure server to use sqlite as history database (default is a simple memory dict)
+    # server.iserver.history_manager.set_storage(HistorySQLite("my_datavalue_history.sql"))
+
+    # enable data change history for this particular node, must be called after start since it uses subscription
+    server.historize_node_data_change(mysin, period=None, count=10000)
+
     vup = VarUpdater(mysin)  # just  a stupide class update a variable
     vup.start()
     try:
         # enable following if you want to subscribe to nodes on server side
-        handler = SubHandler()
-        sub = server.create_subscription(500, handler)
-        handle = sub.subscribe_data_change(myvar)
+        # handler = SubHandler()
+        # sub = server.create_subscription(500, handler)
+        # handle = sub.subscribe_data_change(myvar)
         # trigger event, all subscribed clients wil receive it
         var = myarrayvar.get_value()  # return a ref to value in db server side! not a copy!
         var = copy.copy(var)  # WARNING: we need to copy before writting again otherwise no data change event will be generated
         var.append(9.3)
         myarrayvar.set_value(var)
         mydevice_var.set_value("Running")
-        myevgen.trigger(message="This is BaseEvent")
+        # myevgen.trigger(message="This is BaseEvent")
         server.set_attribute_value(myvar.nodeid, ua.DataValue(9.9))  # Server side write method which is a but faster than using set_value
 
         embed()
