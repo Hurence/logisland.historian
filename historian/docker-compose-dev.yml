@@ -3,6 +3,19 @@ networks:
   historian-be:
 
 services:
+  opcua:
+    container_name: opcua
+    environment:
+      - JAVA_MEMORY=1g
+    hostname: opcua
+    image: 'hurence/historian-opcua:1.1.0-SNAPSHOT'
+    ports:
+      - '4840:4840'
+    networks:
+      historian-be:
+        aliases:
+          - opcua    
+
   chronix:
     container_name: chronix
     environment:
