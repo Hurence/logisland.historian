@@ -45,8 +45,8 @@ export class TagOpcService {
 
   searchForTag(datasourceId: string, nodeId: string): Observable<OpcTag> {
     let params = new HttpParams();
-    if (nodeId) {      
-      params = params.set('tagId', nodeId);      
+    if (nodeId) {
+      params = params.set('tagId', nodeId);
     } else {
       console.error('nodeId should not be null');
     }
