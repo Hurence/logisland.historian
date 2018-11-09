@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,10 +80,11 @@ public class DatasourcesApiController implements DatasourcesApi {
 
 
     @Override
-    public ResponseEntity<Tag> fetchTagMetadataFromDatasource(@PathVariable("datasourceId") String datasourceId,
-                                                              @PathVariable("tagId") String tagId) {
-        return ResponseEntity.ok(opcService.fetchMetadata(datasourceId, tagId));
-    }
+    public ResponseEntity<Tag> fetchTagMetadataFromDatasource(
+            @PathVariable("datasourceId") String datasourceId,
+            @NotNull @Valid @RequestParam(value = "tagId", required = true) String tagId) {
+
+        return ResponseEntity.ok(opcService.fetchMetadata(datasourceId, tagId)); }
 
     @Override
     public ResponseEntity<List<Tag>> browseTagsFromDatasource(@PathVariable("datasourceId") String datasourceId,

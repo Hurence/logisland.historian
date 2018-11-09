@@ -62,10 +62,10 @@ import java.util.List;
             @ApiResponses(value = { 
                 @ApiResponse(code = 200, message = "Tag information", response = Tag.class),
                 @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
-            @RequestMapping(value = "/api/v1/datasources/{datasourceId}/tags/{tagId}",
+            @RequestMapping(value = "/api/v1/datasources/{datasourceId}/fetchtag",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        ResponseEntity<Tag> fetchTagMetadataFromDatasource(@ApiParam(value = "id of the Datasource to connect to",required=true) @PathVariable("datasourceId") String datasourceId,@ApiParam(value = "id of the tag to inspect",required=true) @PathVariable("tagId") String tagId);
+        ResponseEntity<Tag> fetchTagMetadataFromDatasource(@ApiParam(value = "id of the Datasource to connect to",required=true) @PathVariable("datasourceId") String datasourceId,@NotNull @ApiParam(value = "id of the tag to inspect", required = true) @Valid @RequestParam(value = "tagId", required = true) String tagId);
 
 
             @ApiOperation(value = "get all datasources", nickname = "getAllDatasources", notes = "retrieve all datasources", response = Datasource.class, responseContainer = "List", tags={ "datasource", })

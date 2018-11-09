@@ -168,7 +168,7 @@ paths:
            schema:
              $ref: '#/definitions/Error'
 
-  /datasources/{datasourceId}/tags/{tagId}:
+  /datasources/{datasourceId}/fetchtag:
     get:
        tags:
         - tag
@@ -185,7 +185,7 @@ paths:
            required: true
            type: string
          - name: tagId
-           in: path
+           in: query
            description: id of the tag to inspect
            required: true
            type: string

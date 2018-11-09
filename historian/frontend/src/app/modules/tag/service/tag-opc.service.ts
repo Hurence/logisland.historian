@@ -44,7 +44,13 @@ export class TagOpcService {
   }
 
   searchForTag(datasourceId: string, nodeId: string): Observable<OpcTag> {
-    return this.http.get<OpcTag>(`${this.tagsUrl}datasources/${encodeURIComponent(datasourceId)}/tags/${encodeURIComponent(nodeId)}`)
+    let params = new HttpParams();
+    if (nodeId) {      
+      params = params.set('tagId', nodeId);      
+    } else {
+      console.error('nodeId should not be null');
+    }
+    return this.http.get<OpcTag>(`${this.tagsUrl}datasources/${encodeURIComponent(datasourceId)}/fetchtag`, {params: params})
     .pipe(
       map(tag => new OpcTag(tag))
     );
