@@ -97,7 +97,7 @@
             <resource>
               <targetPath>/</targetPath>
               <directory>${project.basedir}</directory>
-              <include>*.json</include>
+              <include>*</include>
             </resource>
             <resource>
               <targetPath>/src</targetPath>
