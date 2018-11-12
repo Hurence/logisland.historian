@@ -224,6 +224,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   showEditGaugeForm(i: number): void {
     this.selectedGaugeIndex = i;
     this.gaugeForForm = this.gaugeConfigs[i];
+    this.gaugeFormOperation = Operation.UPDATE;
     this.displayGaugeForm = true;
   }
 
