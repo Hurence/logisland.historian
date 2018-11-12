@@ -1521,6 +1521,7 @@ definitions:
         type: string
       group:
         type: string
+        default: 'default'
       tag_name:
         type: string
       labels:
