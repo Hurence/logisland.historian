@@ -1,3 +1,10 @@
-<div>
+<div [hidden]='someValueUndefined'>
   <span [id]="idContainer"></span>
+</div>
+<div *ngIf='someValueUndefined'>
+  There is a problem with this gauge.
+  <ul>
+    <li>One or several tag may have been deleted.</li>
+    <li>One or several tag may not have value for the specified time range.</li>
+  </ul>  
 </div>

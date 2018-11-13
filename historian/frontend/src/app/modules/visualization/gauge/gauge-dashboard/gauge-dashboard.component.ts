@@ -47,8 +47,6 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   numberOfGauges: number = 0;
   gaugeRawParams: GaugeRawParams[] = [];
 
-  error: boolean = false;
-
   gaugeEditQuestions: QuestionBase<any>[];
 
   private measuresRefreshSubscription: Subscription;
@@ -346,18 +344,16 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
             }
           });
           this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, lastTagsValue);
-          this.error = false;
           this.refreshingGauges = false;
         },
         error => {
-          this.error = true;
           console.log('error requesting data', error);
+          this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, new Map());
           this.refreshingGauges = false;
         }
       );
     } else {
       this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, new Map());
-      this.error = false;
       this.refreshingGauges = false;
     }
   }
