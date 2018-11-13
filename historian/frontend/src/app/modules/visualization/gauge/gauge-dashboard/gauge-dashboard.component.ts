@@ -100,7 +100,6 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   dashboardInitialization: Subscription;
   redrawDashBoardSubscription: Subscription;
   loadingDashboard: boolean = false;
-  refreshingGauges: boolean = false;
 
   constructor(private measuresService: MeasuresService,
               private cookieService: CookieService,
@@ -321,7 +320,6 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
    * iterate all BackendGaugeConfig and update all GaugeParams accordingly
    */
   private updateGaugesData(gaugesConf: BackendGaugeConfig[]): void {
-    this.refreshingGauges = true;
     console.log('UPDATE GRAPH DATA');
     if (this.measuresRefreshSubscription && !this.measuresRefreshSubscription.closed) {
       this.measuresRefreshSubscription.unsubscribe();
@@ -344,17 +342,14 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
             }
           });
           this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, lastTagsValue);
-          this.refreshingGauges = false;
         },
         error => {
           console.log('error requesting data', error);
           this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, new Map());
-          this.refreshingGauges = false;
         }
       );
     } else {
       this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, new Map());
-      this.refreshingGauges = false;
     }
   }
 
