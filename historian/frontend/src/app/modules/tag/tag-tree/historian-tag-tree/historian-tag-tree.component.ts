@@ -52,7 +52,10 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
       });
     }
   }
-
+  /**
+   *
+   * @param tags currently selected tags (potentially not loaded yet)
+   */
   private loadNodeOfTags(tags: HistorianTag[]) {
     const groupedTags = this.arrayUtil.groupBy(tags, t => t.datasource_id + '##' + t.group);
     for (const key in groupedTags) {
@@ -150,6 +153,11 @@ export class HistorianTagTreeComponent extends BaseTagTreeComponent implements O
     return 'historian-tag';
   }
 
+  /**
+   *
+   * @param node
+   * @param initialization
+   */
   protected loadANodeIfNeeded(node: TreeNode, initialization: boolean): boolean {
     if (node && node.type === TypesName.FOLDER && (!node.children  || node.children.length === 0)) {
       this.loadChildren(node, !initialization);

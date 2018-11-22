@@ -26,38 +26,28 @@
     <!-- LOADED DASHBOARD -->
     <div class='ui-g-12' *ngSwitchCase="false">
       <!-- NORMAL DASHBOARD -->
-      <ng-container *ngIf="dashboard && gaugeConfigs.length !== 0">      
-        <div class='ui-g h-100'>          
-          <ng-container *ngIf="!error">               
-            <ul class='ui-g-12 horizontal' appSortableList (sort)="sort($event)">
-              <li *ngFor="let gaugeRaw of gaugeRawParams, let i = index" class='panel-item' appSortable>                
-                <p-header class="panel-header-container">
-                  <button class="btn btn-success" (click)="showEditGaugeForm(i)">Edit</button>
-                  <button class="btn btn-danger" (click)="deleteGauge(i)">Delete</button> 
-                </p-header>
-                <div class="panel-main-container">                    
-                  <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
-                  [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
-                  [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
-                  [value]="gaugeRawParams[i].value" [idContainer]="'gaugeContainer' + i"
-                  [size]="300"></app-gauge-chart>
-                </div>
-                <div class='panel-item-helper' *appDraggableHelper>
-                  Gauge {{ gaugeRaw.label }}
-                </div>
-              </li>
-            </ul> 
-          </ng-container>
-          <ng-container *ngIf="error && refreshingGauges">
-            Refreshing dashboard...
-            <p-progressSpinner [style]="{width: '30px', height: '30px'}"
-                strokeWidth="8" fill="#EEEEEE" animationDuration="1s"></p-progressSpinner>
-          </ng-container>
-          <ng-container *ngIf="error && !refreshingGauges">
-            Some value of tag could not be found.
-          </ng-container>              
+      <ng-container *ngIf="dashboard && gaugeConfigs.length !== 0">
+        <div class='ui-g h-100'>                              
+          <ul class='ui-g-12 horizontal' appSortableList (sort)="sort($event)">
+            <li *ngFor="let gaugeRaw of gaugeRawParams, let i = index" class='panel-item' appSortable>                
+              <p-header class="panel-header-container">
+                <button class="btn btn-success" (click)="showEditGaugeForm(i)">Edit</button>
+                <button class="btn btn-danger" (click)="deleteGauge(i)">Delete</button> 
+              </p-header>
+              <div class="panel-main-container">                    
+                <app-gauge-chart [min]="gaugeRawParams[i].min" [max]="gaugeRawParams[i].max" 
+                [greenZones]="gaugeRawParams[i].greenZones" [label]="gaugeRawParams[i].label"
+                [yellowZones]="gaugeRawParams[i].yellowZones" [redZones]="gaugeRawParams[i].redZones"
+                [value]="gaugeRawParams[i].value" [idContainer]="'gaugeContainer' + i"
+                [size]="300"></app-gauge-chart>
+              </div>
+              <div class='panel-item-helper' *appDraggableHelper>
+                Gauge {{ gaugeRaw.label }}
+              </div>
+            </li>
+          </ul>
         </div>
-      </ng-container>
+      </ng-container>      
       <!-- NO DASHBOARD SELECTED -->
       <ng-container *ngIf="!dashboard">
         No dashboard selected.
@@ -66,8 +56,8 @@
       <ng-container *ngIf="dashboard && gaugeConfigs.length === 0">
         Empty dashboard (you can add a new gauge in top rigth menu).
       </ng-container>
-    </div>
-  </ng-container>
+    </div>                      
+  </ng-container>    
 
   <p-dialog [(visible)]="displayGaugeForm" [modal]="true" [responsive]="true" [resizable]="true" styleClass="gauge-form-dialog">    
         <p-header>

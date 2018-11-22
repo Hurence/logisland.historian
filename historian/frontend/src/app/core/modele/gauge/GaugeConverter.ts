@@ -81,12 +81,18 @@ export class GaugeConverter {
     return neededTags;
   }
 
+  /**
+   * build gaugeConfig with tags depending on backend input gauge
+   * @param g
+   * @param tagMap
+   */
   private convertBackGaugeToBackendGaugeKnowingTags(g: BackGauge, tagMap: Map<string, HistorianTag>): BackendGaugeConfig {
     let zrs: ZoneRangeConfig[] = [];
     if (g.zoneranges && g.zoneranges.length !== 0) {
       zrs = g.zoneranges
         .map(z => this.getZoneRangeConfig(z, tagMap));
     }
+
     const bgc: BackendGaugeConfig = {
       value: tagMap.get(g['value']),
       label: g.name,
@@ -169,6 +175,11 @@ export class GaugeConverter {
     return gaugesConf.map(conf => this.getGaugeRawParams(conf, lastTagsValue));
   }
 
+  /**
+   * build GaugeRawParams putting
+   * @param gaugeConf
+   * @param lastTagsValue
+   */
   private getGaugeRawParams(gaugeConf: BackendGaugeConfig, lastTagsValue: Map<string, number>): GaugeRawParams {
     const rawParam: any = Object.assign({}, gaugeConf);
     rawParam.min = this.getRawOrTagVariable(gaugeConf, 'min', lastTagsValue);

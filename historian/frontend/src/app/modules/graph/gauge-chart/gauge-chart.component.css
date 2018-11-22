@@ -1,0 +1,16 @@
+.ko {
+  opacity: 0.3;
+}
+.problemBox {
+  background: #f90;
+  color: #fff;
+  text-align: center;
+  width: 300px;
+  height: 300px;
+  border-radius: 5px;
+}
+.problemBox .x {
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 6em;
+}

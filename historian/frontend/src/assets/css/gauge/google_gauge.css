@@ -15,17 +15,17 @@ text.maxMarkerText,text.maxValueText,path.maxMarker {
 	fill:  #FF8314;
 	opacity: 0.50;
 }
-path.zones{
-	opacity: 1.0;
+path.zones {
+	opacity: 0.50;
 }
 path.greenZone{
-	fill: #109618;
+  fill: #109618;  
 }
 path.yellowZone{
-	fill: #FF9900;
+  fill: #FF9900;  
 }
 path.redZone{
-	fill: #DC3912;
+  fill: #DC3912;  
 }
 line.ticks{
 	
