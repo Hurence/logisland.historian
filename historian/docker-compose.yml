@@ -16,7 +16,7 @@ services:
 
   frontend:
     container_name: historian-frontend
-    image: 'hurence/historian-frontend:1.0.1'
+    image: 'hurence/historian-frontend:1.0.2'
     ports:
       - 4200:80
     networks:
@@ -26,7 +26,7 @@ services:
 
   backend:
     container_name: historian-backend
-    image: 'hurence/historian-backend:1.0.1'
+    image: 'hurence/historian-backend:1.0.2'
     environment:
       - sorl_base_url=${ENTRY_POINT_URL:-http://historian.hurence.com:10080}/solr
       - keycloak_base_url=${ENTRY_POINT_URL:-http://historian.hurence.com:10080}/auth

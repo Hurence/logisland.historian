@@ -1,6 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
-
+/* TODO */
+@import "~primeicons/primeicons.css";
+@import "~primeng/resources/primeng.min.css";
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~font-awesome/css/font-awesome.css";
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "assets/css/theme.css";
+@import "assets/css/button.css";
+@import "assets/css/progress-bar.css";
+@import "assets/css/tooltip.css";
+@import "assets/css/gauge/current_gauge.css";
+
 html, body {
   height: 100%;
 }

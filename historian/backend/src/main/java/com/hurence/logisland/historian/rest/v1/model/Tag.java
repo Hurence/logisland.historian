@@ -44,7 +44,7 @@ public class Tag  implements Serializable {
 
         @JsonProperty("group")
         @Indexed(name = "group")
-        private String group = null;
+        private String group = "default";
 
         @JsonProperty("tag_name")
         @Indexed(name = "tag_name")

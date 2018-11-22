@@ -9,22 +9,15 @@ FROM node:8.12.0 as builder
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
-# add `/usr/src/app/node_modules/.bin` to $PATH
+# add `/usr/src/app/node_modules/.bin` to $PATH, not sure this is usefull but make sure of that before removing
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
-
-# install and cache app dependencies
-COPY package.json /usr/src/app/package.json
-RUN yarn install
-RUN yarn global add @angular/cli@6.2.1
 
 # add app
 COPY . /usr/src/app
-
-# run tests
-#RUN ng test --watch=false
+RUN yarn install
 
 # generate build
-RUN ng build --prod
+RUN yarn build
 
 ##################
 ### production ###

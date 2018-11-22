@@ -24,6 +24,8 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() transitionDuration?: number = 1000;
   @Input() idContainer: string;
   private gauge: Gauge;
+  initialized: boolean = false;
+  someValueUndefined: boolean = true;
 
   constructor() {}
 
@@ -31,9 +33,7 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     const config = this.createConfig();
-    this.gauge = new Gauge(this.idContainer, config);
-    this.gauge.render();
-    this.gauge.redraw(this.value, 1000);
+    this.initialized = this.tryToInitialized(config, this.value);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -57,11 +57,54 @@ export class GaugeChartComponent implements OnInit, AfterViewInit, OnChanges {
       if (changes.label) {
         gaugeUpdate.label = this.label;
       }
-      this.gauge.updateGauge(gaugeUpdate);
-      if (changes.value) {
-        this.gauge.redraw(this.value, 1000);
+      if (this.tryToInitialized(gaugeUpdate, this.value) && this.renderable()) {
+        this.gauge.updateGauge(gaugeUpdate);
+        if (changes.value) {
+          this.gauge.redraw(this.value, 1000);
+        }
+        this.someValueUndefined = false;
+      } else {
+        this.someValueUndefined = true;
+        console.error('does not update gauge');
       }
     }
+  }
+
+  private tryToInitialized(gaugeUpdate: GaugeConfigOptions, value?: number): boolean {
+    if (!this.initialized) {
+      if (this.renderable()) {
+        this.gauge = new Gauge(this.idContainer, gaugeUpdate);
+        this.gauge.render();
+        this.gauge.redraw(value, 1000);
+        this.someValueUndefined = false;
+        return true;
+      } else {
+        this.someValueUndefined = true;
+        console.warn('not renderable');
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  private renderable(): boolean {
+    if (this.value === undefined || this.value === null) return false;
+    if (this.min === undefined || this.min === null) return false;
+    if (this.max === undefined || this.max === null) return false;
+    if (!this.zonesAreRenderable(this.greenZones)) return false;
+    if (!this.zonesAreRenderable(this.yellowZones)) return false;
+    if (!this.zonesAreRenderable(this.redZones)) return false;
+    return true;
+  }
+
+  private zonesAreRenderable(zones: ZoneRange[]): boolean {
+    if (!zones) return true;
+    for (const zone of zones) {
+      if (zone.from === undefined || zone.from === null) return false;
+      if (zone.to === undefined || zone.to === null) return false;
+    }
+    return true;
   }
 
   private createConfig(): GaugeConfigOptions {

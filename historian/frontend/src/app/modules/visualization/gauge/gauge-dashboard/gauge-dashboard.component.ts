@@ -47,8 +47,6 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   numberOfGauges: number = 0;
   gaugeRawParams: GaugeRawParams[] = [];
 
-  error: boolean = false;
-
   gaugeEditQuestions: QuestionBase<any>[];
 
   private measuresRefreshSubscription: Subscription;
@@ -102,7 +100,6 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   dashboardInitialization: Subscription;
   redrawDashBoardSubscription: Subscription;
   loadingDashboard: boolean = false;
-  refreshingGauges: boolean = false;
 
   constructor(private measuresService: MeasuresService,
               private cookieService: CookieService,
@@ -224,6 +221,7 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
   showEditGaugeForm(i: number): void {
     this.selectedGaugeIndex = i;
     this.gaugeForForm = this.gaugeConfigs[i];
+    this.gaugeFormOperation = Operation.UPDATE;
     this.displayGaugeForm = true;
   }
 
@@ -322,7 +320,6 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
    * iterate all BackendGaugeConfig and update all GaugeParams accordingly
    */
   private updateGaugesData(gaugesConf: BackendGaugeConfig[]): void {
-    this.refreshingGauges = true;
     console.log('UPDATE GRAPH DATA');
     if (this.measuresRefreshSubscription && !this.measuresRefreshSubscription.closed) {
       this.measuresRefreshSubscription.unsubscribe();
@@ -345,19 +342,14 @@ export class GaugeDashboardComponent extends RefreshRateComponentAsInnerVariable
             }
           });
           this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, lastTagsValue);
-          this.error = false;
-          this.refreshingGauges = false;
         },
         error => {
-          this.error = true;
           console.log('error requesting data', error);
-          this.refreshingGauges = false;
+          this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, new Map());
         }
       );
     } else {
       this.gaugeRawParams = this.gaugeConverter.getGaugesRawParams(gaugesConf, new Map());
-      this.error = false;
-      this.refreshingGauges = false;
     }
   }
 
