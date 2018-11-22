@@ -1,0 +1,14 @@
+.ko {
+  opacity: 0.2;
+}
+#orangeBox {
+  background: #f90;
+  color: #fff;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-size: 24em;
+  font-weight: bold;
+  text-align: center;
+  width: 600px;
+  height: 600px;
+  border-radius: 5px;
+}
